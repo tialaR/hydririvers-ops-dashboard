@@ -1,0 +1,102 @@
+import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
+
+export const userCargosMock: Cargo[] = [
+  {
+    id: 'MY-CARGO-001',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Açaí congelado para entrega regional',
+    origin: 'Belém, PA',
+    destination: 'Santarém, PA',
+    volume: '18 m³',
+    window: 'Hoje e amanhã',
+    cargoType: 'Refrigerada',
+    status: 'boarded',
+    co2Saving: '-46% CO₂',
+    targetPrice: 'R$ 6.450',
+    visibility: 'private',
+    publishedAt: null
+  },
+  {
+    id: 'MY-CARGO-002',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Castanha beneficiada aguardando confirmação',
+    origin: 'Santarém, PA',
+    destination: 'Macapá, AP',
+    volume: '12 t',
+    window: 'Próxima semana',
+    cargoType: 'Fracionada',
+    status: 'contracting',
+    co2Saving: '-52% CO₂',
+    targetPrice: 'R$ 9.320',
+    visibility: 'private',
+    publishedAt: null
+  },
+  {
+    id: 'MY-CARGO-003',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Pescado refrigerado aguardando documento',
+    origin: 'Tefé, AM',
+    destination: 'Manaus, AM',
+    volume: '9 m³',
+    window: 'Em breve',
+    cargoType: 'Refrigerada',
+    status: 'reserved',
+    co2Saving: '-41% CO₂',
+    targetPrice: 'R$ 5.980',
+    visibility: 'private',
+    publishedAt: null
+  },
+  {
+    id: 'MY-CARGO-004',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Medicamentos em rota para atendimento regional',
+    origin: 'Manaus, AM',
+    destination: 'Parintins, AM',
+    volume: '4 t',
+    window: 'Hoje',
+    cargoType: 'Sensível',
+    status: 'open',
+    co2Saving: '-39% CO₂',
+    targetPrice: 'R$ 4.780',
+    visibility: 'private',
+    publishedAt: null
+  },
+  {
+    id: 'MY-CARGO-005',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Fardos de farinha em contratação',
+    origin: 'Cametá, PA',
+    destination: 'Belém, PA',
+    volume: '22 t',
+    window: 'Próximos 2 dias',
+    cargoType: 'Fracionada',
+    status: 'bidding',
+    co2Saving: '-34% CO₂',
+    targetPrice: 'R$ 3.940',
+    visibility: 'private',
+    publishedAt: null
+  },
+  {
+    id: 'MY-CARGO-006',
+    ownerId: 'u-shipper-1',
+    shipperId: 'u-shipper-1',
+    title: 'Insumos agrícolas em preparação de embarque',
+    origin: 'Porto Velho, RO',
+    destination: 'Manaus, AM',
+    volume: '16 t',
+    window: 'Semana atual',
+    cargoType: 'Fracionada',
+    status: 'contracting',
+    co2Saving: '-44% CO₂',
+    targetPrice: 'R$ 8.150',
+    visibility: 'private',
+    publishedAt: null
+  }
+];
+
+export const myCargosMock = userCargosMock;

@@ -1,0 +1,1748 @@
+{
+  "nav": {
+    "home": "Início",
+    "dashboard": "Dashboard",
+    "cargoes": "Cargas",
+    "myCargoes": "Minhas cargas",
+    "vessels": "Embarcações",
+    "negotiations": "Negociações",
+    "tracking": "Rastreio",
+    "impact": "Impacto",
+    "admin": "Admin",
+    "cta": "Publicar carga",
+    "login": "Entrar",
+    "signup": "Criar conta",
+    "more": "Mais",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu",
+    "mobileMenu": "Menu de navegação",
+    "mobileMenuTitle": "Menu de navegação",
+    "quickActions": "Ações rápidas",
+    "theme": "Tema",
+    "account": "Conta",
+    "language": "Idioma",
+    "publish": "Publicar carga",
+    "profile": "Perfil",
+    "primaryNavigation": "Navegação principal",
+    "government": "Governo",
+    "currentRoute": "Rota atual",
+    "subpageContext": "contexto operacional ativo",
+    "register": "Cadastrar",
+    "logout": "Sair"
+  },
+  "cargoStatusAi": {
+    "card": {
+      "eyebrow": "ASSISTENTE DA OPERAÇÃO",
+      "title": "Assistente da carga",
+      "greeting": "Olá! Sou seu assistente dessa carga.",
+      "collapsedTitle": "Estou acompanhando {cargoName} e organizei os pontos mais importantes para você.",
+      "collapsedDescription": "Preparei uma visão simples para mostrar o que já avançou, o que merece atenção e o que vale fazer agora.",
+      "expandedIntro": "Aqui vai um resumo claro para ajudar você a entender o momento da carga com mais tranquilidade.",
+      "expandAction": "Ver orientação",
+      "collapseAction": "Ocultar orientação",
+      "currentStage": "Etapa atual",
+      "nextStepsCount": "{count, plural, =0 {Sem próximos passos} one {# próximo passo} other {# próximos passos}}",
+      "alertsCount": "{count, plural, =0 {Sem alertas} one {# alerta} other {# alertas}}",
+      "blockersCount": "{count, plural, one {# bloqueador} other {# bloqueadores}}",
+      "noBlockers": "Sem bloqueadores",
+      "fallbackCargoName": "esta carga"
+    },
+    "sections": {
+      "timeline": "Linha da carga",
+      "summary": "Resumo da situação",
+      "explanation": "O que isso significa",
+      "nextSteps": "Próximos passos sugeridos",
+      "attentionPoints": "Pontos de atenção",
+      "blockers": "Bloqueadores",
+      "risks": "Riscos e alertas",
+      "meta": "Contexto da análise"
+    },
+    "stages": {
+      "open": "Aberta",
+      "bidding": "Em negociação",
+      "contracting": "Em contratação",
+      "reserved": "Reservada",
+      "boarded": "Embarcada",
+      "delivered": "Entregue",
+      "unknown": "Etapa não identificada"
+    },
+    "emptyStates": {
+      "noBlockers": "Nenhum bloqueador crítico identificado no momento.",
+      "noAlerts": "Nenhum ponto de atenção relevante por enquanto.",
+      "noNextSteps": "Nenhum próximo passo sugerido para esta etapa."
+    },
+    "states": {
+      "idleTitle": "Assistente pronto para analisar",
+      "idleDescription": "Abra o painel para ver um resumo claro da situação da carga.",
+      "loadingTitle": "Analisando a carga",
+      "loadingDescription": "Estou organizando os principais sinais operacionais para você.",
+      "unauthorizedTitle": "Faça login para continuar",
+      "unauthorizedDescription": "Entre na sua conta para acessar a análise desta carga.",
+      "forbiddenTitle": "Sem acesso a esta análise",
+      "forbiddenDescription": "Seu perfil não possui permissão para visualizar este assistente nesta carga.",
+      "errorTitle": "Não consegui concluir a análise",
+      "errorDescription": "Tente novamente em instantes para atualizar a leitura da carga.",
+      "retryAction": "Tentar novamente"
+    },
+    "meta": {
+      "basedOnCurrentData": "Baseado nos dados atuais da carga",
+      "confidence": "Confiança",
+      "confidenceLow": "Baixa",
+      "confidenceMedium": "Média",
+      "confidenceHigh": "Alta",
+      "mockSource": "Análise gerada por simulação interna",
+      "disclaimer": "Esta orientação não substitui validação operacional, contrato ou liberação documental."
+    },
+    "cardTitle": "Assistente de status da carga",
+    "cardHint": "Revise este painel para entender rapidamente a fase atual da carga e agir com mais confiança operacional.",
+    "disclaimerShort": "Assistência contextual (simulação interna).",
+    "assistantGreeting": "Sou seu assistente da carga {cargoName}.",
+    "assistantDescription": "Estou aqui para resumir a situação atual, sugerir próximos passos e destacar pontos de atenção.",
+    "expandCta": "Expandir assistência",
+    "collapseCta": "Recolher assistência",
+    "cargoFallbackName": "atual",
+    "currentStageLabel": "Etapa atual",
+    "timelineTitle": "Linha de progresso da carga",
+    "timeline": {
+      "hints": {
+        "open": "Sua carga está aberta no marketplace e pronta para atrair propostas qualificadas.",
+        "bidding": "Sua carga está em cotação. Este é o momento de comparar propostas com atenção.",
+        "contracting": "Sua carga entrou em contratação. Foque em validar cláusulas e documentos críticos.",
+        "reserved": "Sua carga já está reservada. Agora priorize a preparação final para embarque.",
+        "boarded": "Sua carga está em trânsito. Monitore ocorrências e mantenha contingências ativas.",
+        "delivered": "Sua carga foi entregue. O foco agora é fechamento documental e lições aprendidas.",
+        "unknown": "Não consegui identificar a etapa com precisão. Recomendo revisar o contexto desta carga."
+      }
+    },
+    "summaryLabel": "Resumo",
+    "headingLabel": "Título do status",
+    "explanationLabel": "Explicação do status atual",
+    "nextStepsLabel": "Próximos passos sugeridos",
+    "attentionPointsLabel": "Pontos de atenção",
+    "blockersLabel": "Bloqueadores",
+    "risksLabel": "Riscos e alertas",
+    "confidenceLabel": "Confiança da análise",
+    "sourceLabel": "Origem da resposta",
+    "confidence": {
+      "low": "Baixa",
+      "medium": "Média",
+      "high": "Alta"
+    },
+    "source": {
+      "mockAi": "Simulação interna (mock-ai)",
+      "fallbackRule": "Regra determinística (fallback-rule)"
+    },
+    "notAuthenticatedHint": "Entre na sua conta para carregar o assistente de status desta carga.",
+    "forbiddenHint": "Sua sessão não tem permissão para esta assistência nesta carga.",
+    "loadError": "Não foi possível carregar a assistência agora.",
+    "retry": "Atualizar assistência",
+    "idleHint": "Preparando a assistência de status desta carga.",
+    "loading": "Gerando resumo…",
+    "emptyList": "Nenhum item.",
+    "errors": {
+      "invalidCargoId": "Não foi possível solicitar assistência: identificador da carga ausente ou inválido.",
+      "badRequest": "Não foi possível solicitar assistência com os dados atuais da carga.",
+      "notFound": "Esta carga não foi encontrada para gerar assistência de status.",
+      "generic": "Não foi possível carregar a assistência agora."
+    },
+    "extra": {
+      "lowDocumentReadiness": "Prontidão documental baixa ({value}%) — pode atrasar reserva e checagens."
+    },
+    "fallback": {
+      "heading": "Status não mapeado",
+      "summary": "Estado da carga não mapeado nesta versão do assistente. Revise manualmente a ficha, documentos e negociações.",
+      "explanation": "Ainda não consegui identificar essa etapa com precisão. Vou te apoiar com uma orientação segura de fallback para você seguir sem perder contexto.",
+      "nextSteps": [
+        "Valide o status com o time operacional.",
+        "Confira documentação e próximos marcos no painel da carga."
+      ],
+      "blockers": [],
+      "risks": [
+        "Interpretação automática limitada — confirme em fonte oficial."
+      ],
+      "attentionPoints": []
+    },
+    "status": {
+      "open": {
+        "heading": "Status aberto",
+        "summary": "Carga publicada no marketplace; aguardando propostas alinhadas a rota, tipo e restrições declaradas.",
+        "explanation": "Ainda não há transporte confirmado. Agora o ideal é atrair propostas compatíveis e organizar as informações-chave para acelerar a próxima decisão.",
+        "nextSteps": [
+          "Conferir pacote documental sugerido e lacunas antes da primeira reserva.",
+          "Monitorar janela operacional e sinalização de interesse no corredor.",
+          "Registrar esclarecimentos na ficha se a operação exigir condições adicionais."
+        ],
+        "blockers": [],
+        "risks": [
+          "Propostas incompatíveis com calado, temperatura ou prazo podem atrasar o encaixe logístico.",
+          "Baixa conectividade na origem pode postergar atualização de status percebido pelo mercado."
+        ],
+        "attentionPoints": []
+      },
+      "bidding": {
+        "heading": "Status em cotação",
+        "summary": "Há cotações ou contrapropostas em análise; a decisão segue com o embarcador e as partes envolvidas.",
+        "explanation": "Sua carga já está em negociação. Este é o momento de comparar opções com calma para fechar a melhor combinação entre preço, prazo e segurança documental.",
+        "nextSteps": [
+          "Comparar termos, valores e compromissos documentais de cada proposta.",
+          "Pedir ajustes formais quando faltar evidência ou cláusula operacional.",
+          "Definir prazo interno para aceite ou recusa para não perder janela."
+        ],
+        "blockers": [],
+        "risks": [
+          "Estagnação na fase de lances pode expirar a janela de embarque planejada.",
+          "Ambiguidade em documentação fiscal ou sanitária pode reabrir negociação."
+        ],
+        "attentionPoints": []
+      },
+      "contracting": {
+        "heading": "Status em contratação",
+        "summary": "Negociação avançou para contratação; foco em formalização, documentos e reserva de capacidade.",
+        "explanation": "Você está perto do fechamento. O foco agora é validar os últimos detalhes contratuais e operacionais para seguir com confiança.",
+        "nextSteps": [
+          "Validar minutas, garantias e responsabilidades antes do aceite final.",
+          "Sincronizar embarque com disponibilidade real de cais e calado.",
+          "Planejar checklist de embarque e evidências exigidas pela rota."
+        ],
+        "blockers": [],
+        "risks": [
+          "Retrocesso contratual se exigências regulatórias não forem atendidas a tempo.",
+          "Dependência de terceiros (terminal, fiscalização) pode alongar prazos."
+        ],
+        "attentionPoints": []
+      },
+      "reserved": {
+        "heading": "Status reservado",
+        "summary": "Sua carga já está reservada. Agora vale alinhar os detalhes finais para seguir ao embarque com mais segurança.",
+        "explanation": "A operação já tem uma reserva confirmada. Para manter o fluxo sem atrasos, vale concluir as últimas pendências desta etapa.",
+        "nextSteps": [
+          "Vale confirmar lacres, temperatura e lotes com o transportador.",
+          "Agora é um bom momento para finalizar a documentação obrigatória.",
+          "Depois disso, recomenda-se agendar a janela de atracação e a conferência no cais."
+        ],
+        "blockers": [],
+        "risks": [
+          "Ainda existem ajustes documentais que podem atrasar a liberação da carga se não forem resolvidos a tempo.",
+          "Condições fluviais ou portuárias podem exigir pequenos ajustes no planejamento.",
+          "A janela de cadeia fria é curta e merece atenção extra.",
+          "O sinal entre terminais menores pode variar e reduzir a previsibilidade do acompanhamento."
+        ],
+        "attentionPoints": []
+      },
+      "boarded": {
+        "heading": "Status embarcada/em trânsito",
+        "summary": "Carga embarcada ou em trânsito fluvial; monitorar eventos, sincronização e provas operacionais.",
+        "explanation": "A operação está em movimento. O foco passa a ser visibilidade do trajeto, resposta rápida a ocorrências e comunicação clara com todos os envolvidos.",
+        "nextSteps": [
+          "Acompanhar rastreio e registros de ocorrência ao longo do corredor.",
+          "Garantir canal de contingência para atrasos ou desvios de rota.",
+          "Preparar validação de POD e encerramento fiscal."
+        ],
+        "blockers": [],
+        "risks": [
+          "Trechos com sinal limitado podem atrasar visibilidade em tempo quase real.",
+          "Variações sazonais podem impactar ETA e conexões cabotadas."
+        ],
+        "attentionPoints": []
+      },
+      "delivered": {
+        "heading": "Status entregue",
+        "summary": "Fluxo principal concluído do ponto de vista operacional simulado; foco em comprovações e encerramento.",
+        "explanation": "A entrega principal foi concluída. Agora vale finalizar documentos, registrar aprendizados e encerrar a operação com segurança.",
+        "nextSteps": [
+          "Arquivar comprovantes, POD e comunicações relevantes.",
+          "Registrar lições aprendidas e indicadores para próximos ciclos.",
+          "Validar baixa documental e faturamento conforme contrato."
+        ],
+        "blockers": [],
+        "risks": [
+          "Pendências pós-entrega (divergência de volume, avaria) podem surgir após o desembarque.",
+          "Retenção de documentos incompletos pode afetar auditoria futura."
+        ],
+        "attentionPoints": []
+      }
+    }
+  },
+  "auth": {
+    "login": "Entrar",
+    "signup": "Criar conta",
+    "logout": "Sair",
+    "profile": "Perfil",
+    "loginEyebrow": "Acesso seguro",
+    "loginTitle": "Entre na operação HydroRivers",
+    "loginDescription": "Entre com telefone e senha para receber um código OTP mock vinculado ao número informado.",
+    "registerEyebrow": "Nova conta",
+    "registerTitle": "Cadastre sua operação fluvial",
+    "registerDescription": "Crie sua conta com telefone obrigatório e valide o OTP mock antes de concluir o cadastro.",
+    "name": "Nome completo",
+    "company": "Empresa ou cooperativa",
+    "role": "Perfil",
+    "shipper": "Embarcador",
+    "carrier": "Transportador",
+    "admin": "Admin",
+    "email": "E-mail",
+    "password": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "invalidCredentials": "Credenciais inválidas. Verifique e tente novamente.",
+    "emailAlreadyRegistered": "Este e-mail já está cadastrado. Entre ou use outro endereço.",
+    "requiredFields": "Preencha os campos obrigatórios e tente novamente.",
+    "sessionEnded": "Sessão encerrada",
+    "logoutRedirecting": "Redirecionando…",
+    "loading": "Processando...",
+    "error": "Não foi possível concluir. Tente novamente.",
+    "sideEyebrow": "MVP operacional",
+    "sideTitle": "Do pedido à entrega, menos papel e mais rio.",
+    "sideOne": "Cadastro público para embarcador e transportador, com admin fora da UI pública.",
+    "sideTwo": "Cotação, aceite e reserva de espaço simulados via API/MSW.",
+    "sideThree": "Base pronta para aprovação manual, auditoria e offline-first.",
+    "saved": "Dados salvos no mock",
+    "avatar": "Foto do avatar",
+    "avatarHelp": "Escolha uma foto JPEG/JPG. A imagem será otimizada e salva no mock somente ao clicar em Atualizar perfil.",
+    "saveProfile": "Atualizar perfil",
+    "namePlaceholder": "Tiala Rocha",
+    "nameHint": "Obrigatório. Informe nome e sobrenome.",
+    "companyPlaceholder": "Cooperativa Açaí Norte",
+    "companyOptionalHint": "Opcional neste fluxo mock.",
+    "emailPlaceholder": "tiala@hydrorivers.com",
+    "emailHint": "Obrigatório. Use um e-mail válido.",
+    "avatarUpload": "Trocar foto",
+    "removeAvatar": "Remover foto",
+    "avatarUrlPlaceholder": "Cole uma URL ou carregue uma imagem",
+    "avatarInvalidType": "Envie uma foto em JPEG ou JPG.",
+    "avatarTooLarge": "A imagem deve ter até 1,5 MB.",
+    "avatarReadError": "Não foi possível ler essa foto. Tente outro JPEG.",
+    "avatarSaveError": "Não foi possível salvar a foto. Tente novamente.",
+    "otpEyebrow": "Validação OTP",
+    "otpTitle": "Validar código OTP",
+    "otpDescription": "Confirme o código enviado de forma mock para o telefone informado para concluir o login.",
+    "otpCodeLabel": "Código OTP (mock)",
+    "otpCodeHelp": "Copie o código acima e cole no campo abaixo para concluir a autenticação.",
+    "otpPlaceholder": "Digite o código de 6 dígitos",
+    "copyOtp": "Copiar código",
+    "copied": "Copiado!",
+    "otpCodeCopied": "Código copiado.",
+    "otpCodeUnavailable": "Código indisponível.",
+    "changeCredentials": "Alterar credenciais",
+    "otpSubmit": "Validar OTP",
+    "otpInvalid": "Código OTP inválido. Confira e tente novamente.",
+    "otpExpired": "Este código expirou. Gere um novo para continuar.",
+    "otpDescriptionRegister": "Confirme o código de 6 dígitos enviado de forma mock para o telefone informado para criar a conta.",
+    "mockCodeLabel": "Código mock",
+    "mockCodeHiddenHint": "Ative HYDRORIVERS_EXPOSE_OTP_CODE=true em produção para ver o código mock na tela.",
+    "otpInputLabel": "Código de verificação (6 dígitos)",
+    "otpDigitAria": "Dígito",
+    "otpExpiresIn": "Expira em {seconds} s",
+    "otpTimerExpired": "Tempo esgotado — gere um novo código.",
+    "resendOtp": "Gerar novo código",
+    "otpResent": "Código reenviado com sucesso.",
+    "otpResendHint": "Se o contador zerar ou você quiser um novo código, gere outro OTP para este telefone.",
+    "showPassword": "Mostrar senha",
+    "hidePassword": "Ocultar senha",
+    "passwordHint": "Obrigatório. Mínimo de 8 caracteres.",
+    "identifierLabel": "Telefone",
+    "identifierPlaceholder": "+5591999990000",
+    "loginPhoneLead": "Informe o e-mail da conta, sua senha e o telefone principal. O OTP mock será sempre gerado para esse telefone.",
+    "loginPhoneLabel": "Telefone da conta",
+    "phoneWithPrefix": "Telefone",
+    "countryPrefix": "Prefixo do país",
+    "countrySelectorLabel": "Selecionar país do telefone",
+    "phonePrefixReadonly": "Prefixo do país aplicado automaticamente ao telefone",
+    "phoneNational": "Número com DDD",
+    "phonePlaceholder": "11999990000",
+    "phoneHint": "Obrigatório. Informe seu celular com DDD.",
+    "countryBrazil": "Brasil",
+    "countryUnitedStates": "Estados Unidos",
+    "countrySpain": "Espanha",
+    "countryColombia": "Colômbia",
+    "countryPeru": "Peru",
+    "countryChile": "Chile",
+    "otpPhoneBadge": "Código enviado para",
+    "otpSentLoginTitle": "Confirme o login pelo telefone",
+    "otpSentLoginBody": "Mostramos o código mock abaixo para facilitar os testes. Cole os 6 dígitos para liberar a sessão.",
+    "otpSentRegisterTitle": "Confirme o cadastro pelo telefone",
+    "otpSentRegisterBody": "O código mock foi gerado para o telefone informado. Valide os 6 dígitos antes de criar a conta.",
+    "shipperLabel": "Embarcador",
+    "carrierLabel": "Transportador",
+    "shipperChoice": "Sou Embarcador",
+    "carrierChoice": "Sou Transportador",
+    "rolePlaceholder": "Selecione o perfil",
+    "roleHint": "Obrigatório. Escolha como você vai usar a plataforma.",
+    "shipperHint": "Dono da carga",
+    "carrierHint": "Quem transporta",
+    "phoneAlreadyRegistered": "Este telefone já está cadastrado. Entre ou use outro número.",
+    "userNotFound": "Não encontramos uma conta com esse telefone. Redirecionando para o cadastro…",
+    "registerSuccess": "Cadastro criado com sucesso.",
+    "loginSuccess": "Login realizado.",
+    "errorEmailInvalid": "Informe um e-mail válido.",
+    "errorPasswordMin": "A senha deve ter pelo menos 8 caracteres.",
+    "errorFullNameRequired": "Informe seu nome completo.",
+    "errorFullNameTwoWords": "Use nome e sobrenome (pelo menos duas palavras).",
+    "errorCountryCode": "Selecione um prefixo de país válido.",
+    "errorPhone": "Informe um celular válido para o país selecionado.",
+    "errorCompanyRequired": "Informe empresa ou cooperativa.",
+    "errorIdentifierRequired": "Informe um telefone.",
+    "errorIdentifierInvalid": "Use um telefone válido com código do país.",
+    "errorPhoneRequired": "Telefone obrigatório.",
+    "errorRoleRequired": "Perfil obrigatório.",
+    "errorValidation": "Revise os dados informados.",
+    "errorFixFields": "Corrija os campos destacados.",
+    "roleInvalidPublic": "Este tipo de perfil não pode ser criado pelo cadastro público.",
+    "otpHint": "Obrigatório. Digite o código de 6 dígitos.",
+    "continueToOtp": "Continuar",
+    "successContinue": "Ir para a plataforma",
+    "successLoginTitle": "Login confirmado",
+    "successLoginDescription": "Seu código OTP foi validado e a sessão mock já está pronta.",
+    "successRegisterTitle": "Conta pronta para navegar",
+    "successRegisterDescription": "Seu telefone foi validado e a conta mock foi criada com sucesso.",
+    "successLoginBadge": "Acesso liberado",
+    "successRegisterBadge": "Conta criada",
+    "successLoginHint": "Você será redirecionado automaticamente em instantes.",
+    "successRegisterHint": "Você será redirecionado automaticamente para continuar na HydroRivers."
+  },
+  "pages": {
+    "home": {
+      "hero": {
+        "eyebrow": "FRETE FLUVIAL E CABOTAGEM",
+        "title": "O marketplace que transforma rios em corredores digitais de carga.",
+        "description": "HydroRivers conecta pequenos produtores, operadores e embarcações para reduzir custo logístico, emissões e burocracia na Amazônia e na cabotagem brasileira.",
+        "primary": "Explorar cargas",
+        "secondary": "Ver impacto"
+      },
+      "visualCards": {
+        "aria": "Resumo visual da operação HydroRivers",
+        "routeTitle": "Belém → Santarém",
+        "routeDescription": "Capacidade regional encontrada para carga refrigerada em rota fluvial.",
+        "cargoTitle": "Açaí em paletes",
+        "cargoMeta": "18 t · Janela 08-12 maio",
+        "impactValue": "-64% CO₂",
+        "impactDescription": "Potencial de emissão evitada ao trocar rodovia longa por hidrovia."
+      },
+      "benefits": {
+        "cost": {
+          "title": "Custo e sustentabilidade",
+          "description": "Menos caminhões em longas distâncias e mais uso de rotas naturais com menor emissão."
+        },
+        "region": {
+          "title": "Necessidade regional",
+          "description": "Onde o rio é estrada, organizar capacidade fluvial reduz custo de vida e amplia mercado."
+        },
+        "automation": {
+          "title": "Desburocratização",
+          "description": "Cotação, contraproposta e documentos em fluxo digital preparado para automação."
+        }
+      }
+    },
+    "dashboard": {
+      "eyebrow": "Operação",
+      "title": "Dashboard",
+      "description": "Visão operacional das cargas, embarcações e rotas.",
+      "marketplaceEyebrow": "Atalho operacional",
+      "marketplaceTitle": "Abrir o marketplace de cargas",
+      "marketplaceDescription": "Consulte oportunidades públicas quando quiser ver a lista completa de cargas disponíveis.",
+      "marketplaceCta": "Ver cargas públicas",
+      "myCargoesCta": "Ver minhas cargas"
+    },
+    "login": {
+      "loading": "Carregando acesso…"
+    },
+    "cadastro": {
+      "loading": "Carregando cadastro…"
+    },
+    "logout": {
+      "mainAriaLabel": "Encerramento de sessão e redirecionamento"
+    },
+    "perfil": {
+      "mainAriaLabel": "Perfil da conta, dados pessoais e validação"
+    },
+    "devOnboarding": {
+      "eyebrow": "Desenvolvimento",
+      "metaTitle": "Onboarding para desenvolvedores · HydroRivers",
+      "metaDescription": "Jornada de onboarding para desenvolvedores: níveis, comandos npm e documentação essencial.",
+      "title": "Onboarding para desenvolvedores",
+      "mainAriaLabel": "Onboarding para desenvolvedores: níveis, comandos npm e documentação principal",
+      "description": "Use esta página como índice visual da jornada documentada em docs/DEVELOPER-AI-ONBOARDING.md: níveis progressivos, comandos de validação e leituras obrigatórias antes de contribuir.",
+      "levelsTitle": "Jornada em níveis",
+      "level0": "Nível 0 — Setup",
+      "level1": "Nível 1 — Entendimento do Produto",
+      "level2": "Nível 2 — Primeira contribuição segura",
+      "level3": "Nível 3 — Segurança e regras de negócio",
+      "level4": "Nível 4 — Testes e qualidade",
+      "level5": "Nível 5 — Arquitetura",
+      "level6": "Nível 6 — Produto avançado",
+      "level7": "Nível 7 — IA e agentes",
+      "commandsTitle": "Comandos principais",
+      "cmdCheckOnboarding": "npm run check:onboarding",
+      "cmdLint": "npm run lint",
+      "cmdTypecheck": "npm run typecheck",
+      "cmdI18n": "npm run check:i18n",
+      "cmdTest": "npm run test",
+      "docsTitle": "Documentos principais",
+      "docPathDeveloper": "docs/DEVELOPER-AI-ONBOARDING.md",
+      "docHintDeveloper": "Guia completo de onboarding e uso seguro de agentes/IA.",
+      "docPathProgress": "docs/ONBOARDING-PROGRESS-CHECK.md",
+      "docHintProgress": "O que valida o script check:onboarding e quando rodar.",
+      "docPathApiAudit": "docs/API-SECURITY-AUDIT.md",
+      "docHintApiAudit": "Matriz de rotas, sessão e riscos das APIs.",
+      "docPathSecurity": "docs/SECURITY-PRODUCT-DECISIONS.md",
+      "docHintSecurity": "Decisões de produto e segurança (roles, mock-mode, ownerId).",
+      "docPathE2e": "docs/E2E-PLAYWRIGHT.md",
+      "docHintE2e": "Estratégia de testes end-to-end e boas práticas.",
+      "disclaimerAria": "Nota sobre uso interno",
+      "disclaimer": "Esta tela é uma ferramenta interna/documental para orientar novos desenvolvedores e avaliadores do projeto. Ela não executa scripts nem lê arquivos do disco — apenas resume o que já está no repositório."
+    },
+    "cargoes": {
+      "eyebrow": "Marketplace",
+      "title": "Cargas públicas",
+      "description": "Marketplace de cargas fluviais e de cabotagem prontas para receber propostas.",
+      "loadingList": "Carregando cargas disponíveis…",
+      "listSectionAriaLabel": "Lista de cargas do marketplace com filtros e paginação",
+      "filterGroupAria": {
+        "query": "Opções de busca por texto",
+        "corridor": "Opções de corredor hidroviário",
+        "origin": "Opções de origem",
+        "destination": "Opções de destino",
+        "type": "Opções de tipo de carga",
+        "family": "Opções de família produtiva",
+        "document": "Opções de documento exigido"
+      }
+    },
+    "newCargo": {
+      "eyebrow": "Publicação",
+      "title": "Publicar nova carga",
+      "description": "Simule a abertura de uma carga para receber cotações de embarcações aptas.",
+      "breadcrumbCurrent": "Publicar nova carga"
+    },
+    "minhasCargas": {
+      "eyebrow": "Conta",
+      "title": "Minhas cargas",
+      "description": "Acompanhe as cargas que você cadastrou ou está negociando.",
+      "breadcrumbCurrent": "Minhas cargas",
+      "listSectionAriaLabel": "Suas cargas vinculadas à conta, com aviso de publicação recente quando aplicável",
+      "resultCount": "{count, plural, one {# carga sua} other {# cargas suas}}",
+      "showingCount": "Exibindo {visible} de {total} cargas",
+      "createdBanner": "Carga publicada e salva no mock. Ela aparece aqui e no marketplace.",
+      "emptyTitle": "Você ainda não cadastrou nenhuma carga.",
+      "emptyDescription": "Cadastre sua primeira carga para começar a acompanhar tudo por aqui.",
+      "newCargoCta": "Cadastrar minha primeira carga"
+    },
+    "vessels": {
+      "eyebrow": "Frota",
+      "title": "Embarcações disponíveis",
+      "description": "Capacidade regional para rotas fluviais, cabotagem e última milha ribeirinha.",
+      "listSectionAriaLabel": "Lista de embarcações disponíveis no marketplace"
+    },
+    "negotiations": {
+      "eyebrow": "Comercial",
+      "title": "Negociações",
+      "description": "Pipeline de cotações, contrapropostas, contratos e embarques.",
+      "listSectionAriaLabel": "Lista de negociações do pipeline comercial"
+    },
+    "tracking": {
+      "eyebrow": "Rastreio por eventos",
+      "title": "Rastreamento",
+      "description": "Linha do tempo manual para baixa conectividade, com eventos e comprovantes.",
+      "listSectionAriaLabel": "Rastreamento de frete, busca por código e linha do tempo de eventos",
+      "trackingCode": "Código de rastreio",
+      "track": "Rastrear",
+      "inRiverRoute": "Em trânsito",
+      "sampleRoute": "Belém, PA → Santarém, PA",
+      "sampleCargo": "Açaí congelado em paletes",
+      "progressAria": "Progresso de {progress}%",
+      "temperature": "Temperatura: -18 °C",
+      "eta": "Previsão de chegada: 10/05 09:30",
+      "insurance": "Seguro: ativo",
+      "operationalInfo": "Informações operacionais",
+      "vessel": "Embarcação",
+      "sampleVessel": "Barco Marituba",
+      "operator": "Operador",
+      "sampleOperator": "Coop. Ribeirinha",
+      "lastSync": "Última atualização",
+      "sampleLastSync": "Rio Amazonas, antena regional",
+      "proofs": "Comprovantes",
+      "sampleProofs": "Lacre, romaneio, checklist reefer",
+      "timelineTitle": "Linha do tempo",
+      "timelineEventAria": "Evento: {title}",
+      "progressLabel": "{progress}% concluído"
+    },
+    "admin": {
+      "eyebrow": "BACKOFFICE",
+      "title": "Painel administrativo",
+      "description": "Aprovação, suporte, auditoria e visão operacional do piloto.",
+      "unauthorizedTitle": "Acesso restrito",
+      "unauthorizedDescription": "Este painel é exclusivo para usuários administradores."
+    },
+    "impact": {
+      "eyebrow": "Valor",
+      "title": "Impacto",
+      "description": "Por que HydroRivers gera mais valor para produtores, transportadores e comunidades.",
+      "listSectionAriaLabel": "Indicadores de impacto, métricas por cartão e resumo narrativo",
+      "openImpactCard": "Ver detalhes: {title}",
+      "storyTitle": "Resumo",
+      "storyDescription": "Resumo narrativo dos ganhos ambientais, regulatórios e socioeconômicos gerados pelas operações fluviais priorizadas."
+    },
+    "profile": {
+      "eyebrow": "Conta",
+      "title": "Meu perfil",
+      "description": "Preferências, empresa, papel operacional e status de aprovação.",
+      "personalDetails": "Dados pessoais",
+      "loading": "Carregando perfil",
+      "loginRequired": "Entre para acessar seu perfil",
+      "loginRequiredDescription": "Use sua conta HydroRivers para editar dados da empresa e status operacional.",
+      "approved": "Aprovado",
+      "pending": "Em análise",
+      "role": "Perfil",
+      "manualValidation": "Validação manual",
+      "readyForPilot": "Pronto para piloto operacional",
+      "awaitingReview": "Aguardando revisão operacional",
+      "phone": "Telefone",
+      "phonePlaceholder": "(91) 99999-0000",
+      "baseCity": "Cidade/porto base",
+      "baseCityPlaceholder": "Belém, PA"
+    },
+    "vesselDetail": {
+      "eyebrow": "Embarcação",
+      "breadcrumb": "Embarcações"
+    },
+    "adminConsole": {
+      "carriersForApproval": "Transportadores para aprovação",
+      "openCargoes": "Cargas abertas",
+      "activeVessels": "Embarcações ativas",
+      "disputesUnderReview": "Disputas em análise",
+      "pilotPhase": "Fase piloto",
+      "queueTitle": "Fila operacional",
+      "approveDocs": "Aprovar documentação",
+      "validateProof": "Validar comprovante",
+      "contractAudit": "Auditoria de contrato",
+      "pending": "Pendente",
+      "underReview": "Em análise",
+      "ok": "OK"
+    },
+    "impactDetail": {
+      "eyebrow": "Impacto",
+      "breadcrumb": "Impacto",
+      "kicker": "HydroRivers + BR do Mar",
+      "description": "Este eixo conecta o valor de produto do HydroRivers à estratégia brasileira de cabotagem: ampliar concorrência, melhorar uso da frota, reduzir custo logístico e estimular embarcações mais sustentáveis.",
+      "details": {
+        "cost": [
+          "Consolidação de cargas fracionadas em rotas fluviais.",
+          "Maior ocupação das embarcações e menos retorno vazio.",
+          "Comparação de propostas e histórico auditável de preço."
+        ],
+        "sustainability": [
+          "Cabotagem e hidrovias emitem menos por tonelada transportada.",
+          "Indicadores de CO₂ evitado por carga.",
+          "Incentivo a operadores com embarcações mais eficientes."
+        ],
+        "regional": [
+          "Rotas piloto entre Belém, Santarém, Manaus e Porto Velho.",
+          "Foco em cooperativas, pequenos produtores e operadores locais.",
+          "Fluxos preparados para baixa conectividade."
+        ],
+        "automation": [
+          "Cotação, contraproposta e aceite em uma linha digital.",
+          "Documentos e comprovantes anexados à negociação.",
+          "Rastreio por eventos para operação assistida."
+        ],
+        "brdomar": [
+          "Aderência à Lei nº 14.301/2022 e ao estímulo à cabotagem.",
+          "Integração com portos brasileiros e outros modais.",
+          "Redução de dependência rodoviária e risco de roubo."
+        ],
+        "compliance": [
+          "Documentos fiscais, ambientais e sanitários deixam de ser checklist genérico.",
+          "Estados obrigatório, condicional e próxima fase reduzem risco de contratação.",
+          "A trilha mockada prepara o app para integrações reais com órgãos e sistemas."
+        ],
+        "connectivity": [
+          "O app reconhece que nem todo trecho tem sinal estável.",
+          "Eventos podem ser registrados como evidência operacional e sincronizados depois.",
+          "Isso cria narrativa realista para operação em comunidades e terminais menores."
+        ],
+        "government": [
+          "Painéis por corredor mostram abastecimento, bioeconomia, risco e documentação.",
+          "A leitura territorial ajuda priorização de política pública e fiscalização.",
+          "O HydroRivers passa a apoiar coordenação, não apenas cotação."
+        ]
+      }
+    },
+    "dashboardOverview": {
+      "heroEyebrow": "Resumo operacional",
+      "heroTitle": "A operação agora, sem precisar abrir o marketplace.",
+      "heroDescription": "Veja alertas, cargas ativas, documentos pendentes e corredores mais movimentados em um panorama rápido.",
+      "marketplaceCta": "Ver cargas públicas",
+      "myCargoesCta": "Abrir minhas cargas",
+      "activeCargoes": "Cargas ativas",
+      "activeMarketplace": "marketplace ativo",
+      "pendingDocuments": "Documentos pendentes",
+      "documentsNeedAttention": "exigem atenção imediata",
+      "availableVessels": "Embarcações disponíveis",
+      "riverRoutes": "rotas fluviais/cabotagem",
+      "activeNegotiations": "Negociações ativas",
+      "quotesAndBookings": "cotações e reservas",
+      "averageCo2Saving": "Economia média CO₂",
+      "roadComparison": "vs. rodoviário estimado",
+      "featuredCorridors": "Corredores em destaque",
+      "attentionPanel": "Painel de atenção",
+      "operation": "operação",
+      "busiestCorridors": "Corredores mais movimentados",
+      "corridorSummary": "{count} cargas no corredor",
+      "movement": "movimento",
+      "readiness": "prontidão documental: {value}%",
+      "watch": "revisar",
+      "liveMock": "mock vivo",
+      "recentActivity": "Atividade recente",
+      "activeCount": "{count} ativas",
+      "metricTrendOpenCargoes": "+18%",
+      "metricTrendVessels": "+7%",
+      "metricTrendNegotiations": "+12%",
+      "sectionAriaLabel": "Resumo operacional com métricas, painel de atenção, corredores e atividade recente"
+    },
+    "cargoDetail": {
+      "kicker": "Oportunidade aquaviária",
+      "impactDescription": "Estimativa visual de impacto ao usar rota aquaviária em vez de transporte rodoviário longo.",
+      "ownerAwaitingTitle": "Sua publicação está no marketplace",
+      "ownerAwaitingDescription": "Esta carga foi publicada por você. Aguarde propostas de transportadores aprovados.",
+      "carrierPendingTitle": "Perfil em aprovação",
+      "carrierPendingDescription": "Sua conta de transportador ainda não foi aprovada. Conclua o cadastro e aguarde a moderação para enviar propostas nesta carga.",
+      "adminNoProposalTitle": "Visualização administrativa",
+      "adminNoProposalDescription": "Administradores podem auditar a carga e o marketplace, mas não enviam proposta operacional por este fluxo.",
+      "sendProposal": "Enviar proposta",
+      "amount": "Valor",
+      "estimatedTime": "Tempo estimado",
+      "estimatedTimePlaceholder": "3 dias",
+      "notes": "Observações",
+      "notesPlaceholder": "Descreva riscos, exigências e observações da proposta.",
+      "simulateProposal": "Simular proposta",
+      "notFoundTitle": "Carga não encontrada no mock local.",
+      "notFoundDescription": "Volte para a listagem e publique novamente.",
+      "eyebrow": "CARGA",
+      "fallbackTitle": "Carga salva no mock",
+      "fallbackDescription": "Detalhe carregado pelo mock local",
+      "documentKicker": "Confiança documental",
+      "documentTitle": "Exigências por carga, rota e fase",
+      "riskTitle": "Riscos operacionais",
+      "originContext": "Contexto de origem",
+      "originFallback": "Origem operacional em validação",
+      "proposalCount": "Propostas simuladas",
+      "proposalUnit": "propostas",
+      "documentTooltip": "Documento exigido conforme tipo de carga, rota e fase da operação.",
+      "vesselCompatibility": "Compatibilidade da embarcação",
+      "vesselCompatibilityPlaceholder": "Ex.: comboio refrigerado, calado até 1,8 m",
+      "documentCommitment": "Prontidão documental",
+      "documentReady": "Documentos conferidos",
+      "documentPending": "Documento será regularizado",
+      "riskNote": "Observação de risco e operação",
+      "documentDescription": "Requisitos por tipo de carga, rota e fase operacional.",
+      "operationPlan": "Plano operacional",
+      "operationPlanPlaceholder": "Ex.: embarque em 2 lotes com conferência no cais.",
+      "contactChannel": "Canal de contato",
+      "contactChannelPlaceholder": "Ex.: WhatsApp da operação / e-mail do time."
+    },
+    "negotiationDetail": {
+      "terms": "Termos da negociação",
+      "parties": "Partes",
+      "partyListJoiner": " × ",
+      "payment": "Pagamento",
+      "insurance": "Seguro",
+      "nextStep": "Próximo passo",
+      "documents": "Documentos",
+      "history": "Histórico",
+      "eyebrow": "Negociação"
+    },
+    "governmentPage": {
+      "eyebrow": "Valor público",
+      "title": "Painel governamental",
+      "description": "Visão demonstrável para coordenação de corredores, documentação, abastecimento territorial e cadeias de sociobiodiversidade."
+    },
+    "government": {
+      "heroEyebrow": "Porto digital amazônico",
+      "heroTitle": "Camada operacional para política pública, fiscalização e desenvolvimento regional.",
+      "heroDescription": "O HydroRivers passa a tratar rota, rio, documentação, sazonalidade, conectividade e cadeia produtiva como dados operacionais. A proposta é apoiar governo, cooperativas e operadores com visibilidade prática sobre cargas amazônicas.",
+      "publicValueScore": "Índice de valor público",
+      "publicValueHint": "Sinaliza impacto combinado em formalização, previsibilidade e abastecimento.",
+      "bioeconomyLoads": "Cargas de sociobioeconomia",
+      "bioeconomyHint": "Açaí, castanha, cacau, cupuaçu, pescado e produtos florestais.",
+      "documentExceptions": "Documentos pendentes",
+      "documentHint": "Itens que precisam de análise antes da contratação.",
+      "seasonalRoutes": "Rotas sazonais",
+      "seasonalHint": "Corredores sensíveis a cheia, vazante ou baixa conectividade.",
+      "lowSignal": "Operações com sinal limitado",
+      "signalHint": "Trechos que exigem sincronização tardia de eventos.",
+      "corridorPanelEyebrow": "Inteligência territorial",
+      "corridorPanelTitle": "Corredores, rios e previsibilidade",
+      "governmentPilot": "Piloto gov",
+      "complianceEyebrow": "Conformidade",
+      "complianceTitle": "Fila de documentos e fiscalização",
+      "actionable": "Acionável",
+      "fleetEyebrow": "Capacidade regulada",
+      "fleetTitle": "Embarcações e compatibilidade",
+      "workflowEyebrow": "Fluxo transacional",
+      "workflowTitle": "Da publicação ao comprovante de entrega",
+      "workflow": {
+        "register": "Cadastro e aprovação do perfil",
+        "publish": "Publicação da carga com contexto territorial",
+        "match": "Matching por corredor, calado, temperatura e capacidade",
+        "documents": "Pacote documental sugerido por tipo de carga",
+        "boarding": "Checklist de embarque e evidência operacional",
+        "pod": "Rastreio, sincronização tardia e POD"
+      },
+      "corridorHint": "Cada corredor combina rio principal, tipo de operação e previsibilidade logística para apoiar decisões públicas.",
+      "predictabilityLabel": "Previsibilidade",
+      "fleetHint": "Acompanhe rapidamente o tipo de embarcação, calado operacional e situação documental de cada ativo.",
+      "fleetStatusLabel": "Status da frota",
+      "workflowHint": "Fluxo resumido da jornada operacional, do cadastro inicial ao comprovante de entrega.",
+      "dashboardSectionAria": "Painel governamental: indicadores, corredores, conformidade, frota e fluxo transacional",
+      "workflowNegotiationsBadge": "{count} negociações"
+    }
+  },
+  "forms": {
+    "origin": "Origem",
+    "destination": "Destino",
+    "cargoType": "Tipo de carga",
+    "volume": "Volume",
+    "window": "Janela",
+    "targetPrice": "Preço alvo",
+    "description": "Descrição",
+    "publish": "Publicar carga",
+    "simulate": "Simular publicação",
+    "trackingCode": "Código de rastreio",
+    "track": "Rastrear",
+    "reserve": "Reservar espaço",
+    "accept": "Aceitar cotação",
+    "counter": "Enviar contraproposta",
+    "fallbackCargoTitle": "Carga fluvial",
+    "originPlaceholder": "Belém, PA",
+    "destinationPlaceholder": "Santarém, PA",
+    "cargoTypePlaceholder": "Açaí refrigerado",
+    "volumePlaceholder": "18 t",
+    "windowPlaceholder": "08-12 maio",
+    "targetPricePlaceholder": "R$ 8.400",
+    "descriptionPlaceholder": "Carga refrigerada, com coleta em cooperativa e entrega no porto regional.",
+    "loading": "Publicando...",
+    "fillAllRequired": "Preencha todos os campos obrigatórios antes de publicar.",
+    "carrierCannotPublish": "Transportadores não podem publicar cargas neste fluxo.",
+    "publishFailed": "Não foi possível publicar a carga. Tente novamente."
+  },
+  "common": {
+    "co2": "CO₂ evitado",
+    "status": "Status",
+    "route": "Rota",
+    "capacity": "Capacidade",
+    "eta": "ETA",
+    "owner": "Operador",
+    "volume": "Volume",
+    "window": "Janela",
+    "price": "Preço",
+    "view": "Ver detalhes",
+    "published": "Publicado e salvo no mock",
+    "resultCount": "{count} cargas encontradas",
+    "filter": "Filtrar",
+    "search": "Buscar",
+    "clear": "Limpar filtros",
+    "brDoMar": "BR do Mar",
+    "proofs": "Comprovantes",
+    "documents": "Documentos",
+    "risk": "Risco operacional",
+    "timeline": "Linha do tempo",
+    "open": "Abrir",
+    "all": "Todos",
+    "pageIndicator": "Página {current} de {total}",
+    "pagination": "Paginação de cargas",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "breadcrumbHome": "Início",
+    "inlineListSeparator": " • ",
+    "routeArrow": " → ",
+    "emptyValue": "—",
+    "searchPlaceholder": "açaí, Manaus, reefer",
+    "activeFilters": "Filtros ativos",
+    "chipSearch": "Busca: {value}",
+    "chipOrigin": "Origem: {value}",
+    "chipDestination": "Destino: {value}",
+    "chipCargoType": "Tipo: {value}",
+    "emptyTitle": "Nenhuma carga encontrada",
+    "emptyDescription": "Remova alguns filtros ou tente uma rota/carga diferente.",
+    "mobileFiltersEyebrow": "Refine a lista",
+    "closeFilters": "Fechar filtros",
+    "showResults": "Mostrar {count} resultados",
+    "operator": "Operador",
+    "vesselOwner": "Proprietário",
+    "openVessel": "Abrir embarcação {name}",
+    "draft": "Calado",
+    "greenScore": "Score verde",
+    "documentsAndOperation": "Certificações",
+    "availableResources": "Recursos disponíveis",
+    "flag": "Bandeira",
+    "lastInspection": "Última inspeção",
+    "vesselStatus": {
+      "available": "Disponível",
+      "route": "Em rota",
+      "maintenance": "Em manutenção"
+    },
+    "mockUser": "Usuário HydroRivers",
+    "draftPublication": "Rascunho de publicação",
+    "openCargo": "Abrir carga {title}",
+    "openNegotiation": "Abrir negociação {title}",
+    "waterwayRoute": "Rota fluvial/cabotagem",
+    "target": "Alvo",
+    "viewCargo": "Ver carga",
+    "lightMode": "Modo claro",
+    "darkMode": "Modo escuro",
+    "cargoStatus": {
+      "open": "Aberta",
+      "bidding": "Em cotação",
+      "contracting": "Contratação",
+      "reserved": "Reservada",
+      "boarded": "Embarcada",
+      "delivered": "Entregue"
+    },
+    "toggleTheme": "Alternar tema",
+    "breadcrumb": "Caminho de navegação",
+    "socialRoutes": "Rotas",
+    "socialSupport": "Suporte",
+    "cargoTypes": {
+      "refrigerated": "Refrigerada",
+      "dry": "Seca",
+      "fractional": "Fracionada",
+      "project": "Projeto",
+      "cabotage": "Cabotagem",
+      "reefer": "Reefer",
+      "bulkLight": "Granel leve"
+    },
+    "productFamilies": {
+      "bioeconomy": "Sociobiodiversidade",
+      "perishable": "Alimentos regionais",
+      "territorialSupply": "Abastecimento territorial",
+      "industrialCabotage": "Cabotagem industrial"
+    },
+    "connectivity": {
+      "online": "Sinal online",
+      "delayedSync": "Sincronização tardia",
+      "lowSignal": "Baixa conectividade"
+    },
+    "predictability": {
+      "high": "Alta",
+      "medium": "Média",
+      "seasonal": "Sazonal"
+    },
+    "documentStatus": {
+      "required": "Obrigatório",
+      "conditional": "Condicional",
+      "nextPhase": "Próxima fase",
+      "ok": "Validado"
+    },
+    "vesselDocumentStatus": {
+      "verified": "Documento verificado",
+      "pending": "Pendente",
+      "review": "Em revisão"
+    },
+    "documentReadiness": "{value}% pronto",
+    "corridor": "Corredor",
+    "river": "Rio",
+    "etaConfidence": "ETA com confiança",
+    "connectivityLabel": "Conectividade",
+    "documentation": "Documentação",
+    "requiredDocument": "Documento exigido",
+    "cargoAndBioeconomy": "Carga e bioeconomia",
+    "productFamily": "Família produtiva",
+    "chipFamily": "Família: {value}",
+    "chipDocument": "Documento: {value}",
+    "nativeSearchPlaceholder": "Buscar carga, corredor ou produto",
+    "chipCorridor": "Corredor: {value}",
+    "waterwayCorridor": "Corredor hidroviário",
+    "originPortCommunity": "Origem, porto ou comunidade",
+    "destinationHub": "Destino ou hub logístico",
+    "activeFilterCount": "{count} filtros ativos",
+    "noActiveFilters": "sem filtros ativos",
+    "lowConnectivityReady": "Baixa conectividade pronta",
+    "lowConnectivityPending": "Baixa conectividade pendente",
+    "checklistReady": "Checklist digital pronto",
+    "checklistPending": "Checklist pendente",
+    "negotiationProgress": "Progresso da negociação: {progress}%",
+    "negotiationCardsSectionAria": "Cartões de negociações",
+    "dealStage": {
+      "quote": "Cotação",
+      "counteroffer": "Contraproposta",
+      "contract": "Contrato",
+      "boarding": "Embarque",
+      "delivered": "Entregue"
+    },
+    "origin": "Origem",
+    "destination": "Destino",
+    "documentNames": {
+      "nfe": "NF-e",
+      "cte": "CT-e",
+      "romaneio": "Romaneio",
+      "dof": "DOF",
+      "manifest": "Manifesto",
+      "originDeclaration": "Declaração de origem",
+      "healthReport": "Laudo sanitário",
+      "healthDocument": "Documento sanitário",
+      "gta": "GTA",
+      "temperatureControl": "Controle de temperatura",
+      "integrityChecklist": "Checklist de integridade"
+    }
+  },
+  "adminChrome": {
+    "brandAria": "Dashboard HydroRivers",
+    "session": "Sessão",
+    "cta": {
+      "newCargo": "Nova carga",
+      "myVessels": "Minhas embarcações",
+      "governmentLayer": "Camada Gov"
+    },
+    "roles": {
+      "shipper": "Embarcador",
+      "carrier": "Operador",
+      "admin": "Admin / Governo",
+      "operations": "Operações"
+    },
+    "theme": {
+      "sectionAria": "Controle de tema",
+      "appearance": "Aparência"
+    },
+    "language": {
+      "current": "Idioma atual: {locale}",
+      "select": "Selecionar idioma"
+    },
+    "settings": {
+      "theme": {
+        "toggleLabel": "Alternar entre tema claro e escuro"
+      },
+      "language": {
+        "selectLabel": "Selecionar idioma atual: {locale}",
+        "ptBR": "Português",
+        "en": "English",
+        "es": "Español"
+      },
+      "session": {
+        "logout": "Sair"
+      }
+    },
+    "header": {
+      "title": "Dashboard",
+      "subtitle": "Operações Fluviais",
+      "description": "Monitoramento inteligente das cargas, embarcações e rotas na Amazônia.",
+      "searchPlaceholder": "Buscar carga, rota, porto ou documento...",
+      "systemStatus": "Sistema operacional",
+      "notifications": "Notificações"
+    },
+    "mobile": {
+      "headerAria": "Cabeçalho mobile do HydroRivers",
+      "kicker": "HydroRivers no celular",
+      "menuTitle": "Mais opções",
+      "menuDescription": "Escolha o que você quer abrir agora.",
+      "searchTitle": "O que você quer encontrar?",
+      "searchDescription": "Você pode ir direto para uma área importante do app."
+    }
+  },
+  "notifications": {
+    "title": "Notificações",
+    "mobileTitle": "Avisos importantes",
+    "summary": "{count, plural, =0 {Nenhuma pendência nova} one {# notificação não lida} other {# notificações não lidas}}",
+    "markAllRead": "Marcar todas como lidas",
+    "viewAll": "Ver todas",
+    "empty": "Sem notificações no momento",
+    "emptyDescription": "As próximas atualizações operacionais aparecem aqui.",
+    "types": {
+      "documentPending": {
+        "title": "NF-e pendente na {cargoId}",
+        "message": "A conferência documental da carga precisa de validação antes da próxima janela."
+      },
+      "berthUpdated": {
+        "title": "Janela de atracação atualizada",
+        "message": "Nova previsão operacional: {eta}."
+      },
+      "negotiationReceived": {
+        "title": "Contraproposta recebida",
+        "message": "A operadora {operatorName} enviou uma nova condição comercial para revisão."
+      },
+      "routeMonitored": {
+        "title": "Rota monitorada no corredor Norte",
+        "message": "{cargoId} entrou no corredor {corridor} com sinal estável."
+      },
+      "operationalAlert": {
+        "title": "Alerta operacional próximo a {location}",
+        "message": "Sinal intermitente detectado na embarcação vinculada à operação em trânsito."
+      }
+    }
+  },
+  "operationsBoard": {
+    "tabs": {
+      "aria": "Abas de detalhe da carga",
+      "overview": "Visão geral",
+      "timeline": "Jornada",
+      "documents": "Documentos",
+      "cost": "Custos",
+      "priority": "Prioridade"
+    },
+    "list": {
+      "title": "Lista de cargas",
+      "newCargo": "Nova carga",
+      "searchPlaceholder": "Buscar por carga, origem, destino...",
+      "searchAria": "Buscar cargas",
+      "filterAria": "Filtrar cargas",
+      "showing": "Exibindo {pageCount} de {totalCount} cargas",
+      "empty": "Nenhuma carga disponível."
+    },
+    "filters": {
+      "eyebrow": "FILTROS",
+      "title": "Refinar operações",
+      "mobileTitle": "Escolha o que você quer ver",
+      "mobileDescription": "Você pode mudar isso quando quiser.",
+      "advancedRegion": "Filtros avançados",
+      "close": "Fechar filtros",
+      "results": "{count} resultados",
+      "activeCount": "{count} filtros ativos",
+      "inactive": "Nenhum filtro avançado ativo",
+      "corridor": "Corredor",
+      "origin": "Origem",
+      "destination": "Destino",
+      "cargoType": "Tipo de carga",
+      "document": "Documento",
+      "allOptions": "Todos",
+      "closeAction": "Fechar",
+      "mobileApplyAction": "Ver cargas filtradas",
+      "mobileClearAction": "Limpar escolhas"
+    },
+    "statusFilters": {
+      "all": "Todas",
+      "open": "Abertas",
+      "bidding": "Cotação",
+      "contracting": "Contratando",
+      "reserved": "Em operação",
+      "boarded": "Em trânsito"
+    },
+    "map": {
+      "inTransitCargoes": "Cargas em trânsito",
+      "inOperation": "Em operação",
+      "toggleLayers": "Alternar camadas ({layer})",
+      "layers": {
+        "all": "Completo",
+        "route": "Somente rota",
+        "network": "Rede hidroviária"
+      },
+      "closeExpanded": "Fechar mapa expandido",
+      "expand": "Expandir mapa",
+      "rotateHint": "Gire o celular para ver a rota com mais espaço.",
+      "zoomIn": "Aumentar zoom",
+      "zoomOut": "Diminuir zoom",
+      "resetView": "Reiniciar enquadramento",
+      "waterwayMap": "Mapa hidroviário",
+      "legend": "Legenda",
+      "planned": "Planejado",
+      "delayed": "Atrasado",
+      "expanded": "Mapa expandido",
+      "originTitle": "Origem: {location}",
+      "destinationTitle": "Destino: {location}",
+      "vesselTransit": "Embarcação em trânsito de {origin} para {destination}",
+      "statusSummary": "{river} · Status: {status} · {layer} · zoom {zoom}%",
+      "fullRoute": "Completo",
+      "poi": {
+        "cityHub": "Cidade-polo",
+        "regionalCity": "Cidade regional",
+        "monitoringPoint": "Ponto de monitoramento",
+        "localChannel": "Canal local",
+        "waterwayHub": "Hub hidroviário",
+        "operationalSegment": "Trecho operacional",
+        "regionalChannel": "Canal regional",
+        "secondaryConnection": "Conexão secundária",
+        "portTerminal": "Terminal portuário",
+        "regionalCapital": "Capital regional",
+        "logisticsCorridor": "Corredor logístico",
+        "regionalInfluence": "Influência regional",
+        "region": "Região"
+      }
+    },
+    "overview": {
+      "vesselOperation": "Embarcação / Operação",
+      "estimatedDistance": "Distância estimada: 804 km via {river}",
+      "etaArrival": "ETA de chegada",
+      "temperature": "Temperatura",
+      "idealRange": "Faixa ideal: -20 °C a -15 °C",
+      "documentReadiness": "Documentos prontos",
+      "co2Savings": "Economia de CO₂",
+      "roadComparison": "vs. transporte rodoviário",
+      "operationalIndicators": "Indicadores operacionais da carga",
+      "berthForecast": "Previsão de atracação",
+      "onSchedule": "No horário",
+      "pendingDocuments": "Pendentes: {count} documentos",
+      "estimatedCost": "Custo estimado",
+      "estimatedMargin": "Margem estimada: 18%",
+      "avoidedCo2": "-8,2 t CO₂e evitadas",
+      "routeProgress": "{progress}% do trajeto",
+      "vesselImageAria": "Embarcação fluvial"
+    },
+    "timeline": {
+      "aria": "Linha do tempo operacional da carga",
+      "journey": "Jornada hidroviária",
+      "completedPhases": "{completed}/{total} fases concluídas",
+      "contextAria": "Contexto operacional da fase",
+      "operationalMission": "Missão operacional",
+      "phaseFallback": "Fase {index}",
+      "phase": {
+        "planning": "Planejamento",
+        "compliance": "Compliance",
+        "operation": "Operação",
+        "monitoring": "Monitoramento",
+        "arrival": "Chegada"
+      },
+      "status": {
+        "done": "Concluído",
+        "current": "Em curso",
+        "pending": "Próxima fase"
+      },
+      "labels": {
+        "package": "Pacote",
+        "terminal": "Terminal",
+        "corridor": "Corredor",
+        "destination": "Destino",
+        "origin": "Origem",
+        "stage": "Etapa"
+      },
+      "checklist": {
+        "planning": "Briefing operacional pronto",
+        "compliance": "Compliance documental em validação",
+        "operation": "Equipe e terminal sincronizados",
+        "monitoring": "Monitoramento hidroviário ativo",
+        "arrival": "Janela de atracação acompanhada",
+        "done": "Etapa operacional concluída",
+        "ongoing": "Acompanhamento em andamento"
+      },
+      "tags": {
+        "xpCollected": "XP coletado",
+        "activeOperation": "Operação ativa",
+        "operationalQueue": "Fila operacional"
+      },
+      "fallback": {
+        "createdTitle": "Carga criada e rota sugerida",
+        "createdTimestamp": "Hoje · 08:30",
+        "createdDescription": "Carga registrada para navegação no corredor {river}.",
+        "documentsTitle": "Documentos em conferência",
+        "documentsLocation": "Operação documental",
+        "documentsTimestamp": "Hoje · 09:10",
+        "documentsDescription": "Nota fiscal, romaneio e checklist sanitário sendo validados antes do embarque.",
+        "boardingTitle": "Janela de embarque reservada",
+        "boardingTimestamp": "Hoje · 11:20",
+        "boardingDescription": "Equipe operacional sincronizada com embarcação, operador e terminal de origem.",
+        "routeTitle": "Navegação monitorada",
+        "routeTimestamp": "ETA 36–44h",
+        "routeDescription": "Trajeto acompanhado em tempo real até {destination}, com atenção a calado, clima e temperatura.",
+        "arrivalTitle": "Previsão de atracação",
+        "arrivalDescription": "Atracação prevista dentro da janela operacional, sem atraso crítico identificado."
+      }
+    },
+    "documents": {
+      "aria": "Documentação operacional da carga",
+      "defaultNote": "Documento operacional vinculado à carga.",
+      "code": "Código",
+      "owner": "Responsável",
+      "due": "Prazo operacional",
+      "evidence": "Evidência",
+      "ownerShipper": "Embarcador",
+      "ownerCarrier": "Operador",
+      "dueBooking": "Antes da reserva",
+      "dueBerthing": "Antes da atracação",
+      "evidenceChecked": "Arquivo conferido",
+      "evidenceWaitContract": "Aguardar contratação",
+      "evidencePending": "Anexação pendente",
+      "fallback": {
+        "cargoDocument": "Documento operacional vinculado à carga.",
+        "fiscal": "Documento fiscal da mercadoria.",
+        "cte": "Emitir na contratação do transporte.",
+        "manifest": "Lista de volumes por lote/cooperativa.",
+        "health": "Recomendado para polpas congeladas."
+      }
+    },
+    "cost": {
+      "title": "Resumo de custo da operação",
+      "targetPrice": "Preço alvo",
+      "co2Savings": "Economia CO₂",
+      "readiness": "Documentos prontos",
+      "estimatedTotal": "Custo estimado",
+      "margin": "Margem estimada",
+      "marginDetail": "Margem prevista para essa operação.",
+      "savings": "Economia no fluvial",
+      "savingsDetail": "Comparado com a rota rodoviária.",
+      "perTon": "Custo por tonelada",
+      "perTonDetail": "Estimativa com base no volume atual.",
+      "breakdown": "Onde esse custo se divide",
+      "riverTransport": "Transporte fluvial",
+      "documentation": "Documentação",
+      "insurance": "Seguro e cadeia fria",
+      "portOperation": "Operação portuária",
+      "contingency": "Reserva de segurança",
+      "comparison": "Comparativo da operação",
+      "river": "No fluvial",
+      "road": "No rodoviário",
+      "alerts": "Avisos que pedem atenção",
+      "alertsHint": "Esses pontos ajudam você a antecipar risco.",
+      "healthyMargin": "Margem saudável",
+      "healthyMarginDetail": "A margem prevista está confortável para seguir a operação.",
+      "seasonalityRisk": "Risco de sazonalidade",
+      "seasonalityRiskDetailHigh": "O tempo do rio pode mexer nesse custo se a janela mudar.",
+      "seasonalityRiskDetailLow": "O corredor está estável e o risco sazonal está controlado.",
+      "documentImpact": "Documento pode mexer no custo",
+      "documentImpactDetailHigh": "Se algum documento atrasar, a operação pode ficar mais cara.",
+      "documentImpactDetailLow": "A conferência documental está em dia e reduz risco de custo extra.",
+      "costTimeline": "Quando o custo acontece",
+      "timelineHint": "Cada etapa libera uma parte da operação.",
+      "timeline": {
+        "quote": "Cotação",
+        "reserve": "Reserva",
+        "operation": "Operação",
+        "delivery": "Entrega"
+      }
+    },
+    "priority": {
+      "title": "Prioridade operacional",
+      "fallbackA": "Monitorar janela fluvial.",
+      "fallbackB": "Conferir documentação operacional.",
+      "fallbackC": "Sincronizar transportador e embarcador.",
+      "badges": {
+        "monitoring": "Monitorando",
+        "attention": "Atenção média",
+        "high": "Alta prioridade"
+      },
+      "status": {
+        "monitoring": "Em monitoramento",
+        "inReview": "Em revisão",
+        "inProgress": "Em andamento",
+        "done": "Concluída"
+      },
+      "scoreLabel": "de score operacional",
+      "subtitle": "Esses pontos ajudam você a decidir o que precisa de atenção primeiro.",
+      "scoreNote": "Quanto maior o score, menor o risco operacional.",
+      "scoreNoteLow": "O fluxo está mais estável, mas vale acompanhar mudanças de janela.",
+      "summaryAria": "Resumo operacional da prioridade",
+      "actionsAria": "Prioridades acionáveis",
+      "severity": {
+        "low": "Baixa",
+        "medium": "Média",
+        "high": "Alta"
+      },
+      "actionStatus": {
+        "monitoring": "Em monitoramento",
+        "inReview": "Em revisão",
+        "pending": "Pendente",
+        "stable": "Estável"
+      },
+      "actionButton": "Abrir ação",
+      "checklistTitle": "Próximas ações",
+      "checklistStatus": {
+        "done": "Concluída",
+        "progress": "Em andamento",
+        "pending": "Pendente"
+      },
+      "impactTitle": "Impacto se nada for feito",
+      "empty": {
+        "title": "Esta carga ainda não tem alertas de prioridade.",
+        "description": "Continue acompanhando a jornada para receber recomendações.",
+        "cta": "Ver jornada"
+      },
+      "cards": {
+        "operationalRisk": {
+          "title": "Risco operacional",
+          "low": "Baixo",
+          "medium": "Médio",
+          "high": "Alto"
+        },
+        "coldChain": {
+          "title": "Janela logística",
+          "windowOpen": "36–44h",
+          "windowBidding": "30–42h",
+          "windowTight": "24–36h",
+          "normal": "Normal",
+          "short": "Curta"
+        },
+        "trackingSignal": {
+          "title": "Sinal de rastreio",
+          "intermitent": "Intermitente",
+          "delayed": "Sincronizando",
+          "stable": "Estável"
+        },
+        "criticalDocuments": {
+          "title": "Documentos críticos",
+          "pending": "Pendentes",
+          "review": "Em revisão",
+          "ready": "Em dia"
+        }
+      },
+      "actions": {
+        "coldChain": {
+          "category": "Cadeia fria",
+          "title": "Janela curta para carga refrigerada",
+          "description": "A carga precisa seguir dentro da previsão para evitar perda de qualidade.",
+          "recommendation": "Confirme a janela de atracação e mantenha o operador informado."
+        },
+        "tracking": {
+          "category": "Rastreio",
+          "title": "Sinal intermitente em trecho regional",
+          "description": "A sincronização pode atrasar em áreas de baixa conectividade.",
+          "recommendation": "Permitir atualização offline e validar o último ponto recebido."
+        },
+        "documents": {
+          "category": "Documentação",
+          "title": "Documentos próximos da etapa crítica",
+          "descriptionWithPending": "Alguns documentos precisam estar prontos antes da contratação final.",
+          "descriptionFallback": "A documentação está em acompanhamento para a próxima etapa.",
+          "recommendation": "Conferir NF-e, CT-e e romaneio antes da próxima fase."
+        }
+      },
+      "checklist": {
+        "confirmDockWindow": "Confirmar janela de atracação",
+        "validateDocuments": "Validar documentos obrigatórios",
+        "confirmOperator": "Conferir operador responsável",
+        "monitorSignal": "Monitorar sinal no corredor hidroviário",
+        "updateDelay": "Atualizar previsão se houver atraso"
+      },
+      "impacts": {
+        "dockingDelay": "Possível atraso na atracação",
+        "coldChainLoss": "Risco de perda de qualidade na cadeia fria",
+        "documentRevalidation": "Revalidação documental pode ser necessária"
+      }
+    },
+    "rightRail": {
+      "avoidanceCompact": "-8,2 tCO₂e evitadas"
+    },
+    "misc": {
+      "arrivalLabel": "Chegada: {value}",
+      "docsCount": "{count} docs",
+      "etaMissing": "ETA não informada"
+    }
+  },
+  "impactCards": {
+    "cost": {
+      "metric": "-28%",
+      "title": "Redução de custo logístico",
+      "description": "Cabotagem e rios organizados reduzem dependência rodoviária e melhoram ocupação."
+    },
+    "sustainability": {
+      "metric": "-38% CO₂ evitado",
+      "title": "Menos CO₂ por tonelada",
+      "description": "Rotas aquaviárias evitam emissões e apoiam embarcações mais eficientes."
+    },
+    "regional": {
+      "metric": "+12 rotas otimizadas",
+      "title": "Amazônia conectada",
+      "description": "Onde o rio é estrada, frete digital alavanca produtores e comunidades."
+    },
+    "automation": {
+      "metric": "72% pronto",
+      "title": "Menos burocracia",
+      "description": "Cotação, reserva, documentos e rastreio viram um fluxo operacional auditável."
+    },
+    "brdomar": {
+      "metric": "BR do Mar",
+      "title": "Aderência ao BR do Mar",
+      "description": "Amplia competitividade, frota e integração modal para cabotagem brasileira."
+    },
+    "compliance": {
+      "metric": "DOF/NF-e/CT-e",
+      "title": "Confiança documental",
+      "description": "Documentos obrigatórios, condicionais e de próxima fase ficam claros antes da contratação."
+    },
+    "connectivity": {
+      "metric": "offline-first",
+      "title": "Operação com baixa conectividade",
+      "description": "Eventos podem ser registrados em campo e sincronizados quando houver sinal."
+    },
+    "government": {
+      "metric": "piloto Gov",
+      "title": "Valor governamental",
+      "description": "Indicadores de corredor, abastecimento, bioeconomia e risco ajudam decisões públicas."
+    }
+  },
+  "layout": {
+    "footer": {
+      "description": "Marketplace de frete fluvial e cabotagem para reduzir custo, ampliar previsibilidade e tornar a logística regional mais sustentável.",
+      "copyrightLine": "© 2026 HydroRivers. Todos os direitos reservados.",
+      "social": "Redes e canais do HydroRivers",
+      "product": {
+        "title": "Produto"
+      },
+      "platform": {
+        "title": "Plataforma"
+      },
+      "support": {
+        "title": "Suporte"
+      },
+      "company": {
+        "title": "Contexto"
+      },
+      "socialRoutes": "Rotas e operações",
+      "socialSupport": "Suporte HydroRivers",
+      "fakeSocialTitle": "Canal demonstrativo",
+      "socials": {
+        "whatsapp": {
+          "label": "WhatsApp demo",
+          "message": "Canal WhatsApp fake para demonstrar atendimento operacional."
+        },
+        "instagram": {
+          "label": "Instagram demo",
+          "message": "Perfil Instagram fake para demonstração institucional."
+        },
+        "twitter": {
+          "label": "X/Twitter demo",
+          "message": "Canal social fake para atualizações de rota e operação."
+        },
+        "support": {
+          "label": "Suporte demo",
+          "message": "Suporte fake: em produção abriria chat ou central de atendimento."
+        }
+      }
+    }
+  },
+  "errors": {
+    "notFound": {
+      "eyebrow": "404",
+      "title": "Página não encontrada",
+      "description": "O endereço pode estar incorreto ou o recurso não existe mais neste ambiente mock.",
+      "linkHome": "Ir para o início",
+      "linkCargoes": "Ver cargas no marketplace"
+    }
+  },
+  "toasts": {
+    "close": "Fechar",
+    "http": {
+      "buckets": {
+        "success": {
+          "title": "Tudo certo",
+          "description": "A operação foi concluída."
+        },
+        "badRequest": {
+          "title": "Dados inválidos",
+          "description": "Revise os campos enviados e tente novamente."
+        },
+        "unauthorized": {
+          "title": "Sessão necessária",
+          "description": "Faça login para continuar."
+        },
+        "forbidden": {
+          "title": "Sem permissão",
+          "description": "Você não tem acesso a esta ação."
+        },
+        "notFound": {
+          "title": "Não encontrado",
+          "description": "O recurso não está disponível ou não existe neste ambiente."
+        },
+        "conflict": {
+          "title": "Conflito",
+          "description": "A operação conflita com o estado atual. Atualize a página e tente de novo."
+        },
+        "unprocessableEntity": {
+          "title": "Regras de negócio",
+          "description": "Os dados não passaram nas validações de domínio."
+        },
+        "serverError": {
+          "title": "Erro inesperado",
+          "description": "Tente novamente em instantes. Se persistir, avise o suporte."
+        }
+      },
+      "cargoPublish": {
+        "success": {
+          "title": "Carga publicada",
+          "description": "Sua carga entrou no marketplace mock."
+        }
+      },
+      "cargoProposal": {
+        "success": {
+          "title": "Proposta simulada enviada",
+          "description": "A carga “{title}” recebeu uma nova proposta mockada."
+        }
+      },
+      "authLogin": {
+        "unauthorized": {
+          "title": "Login necessário",
+          "description": "Sua sessão expirou ou você não está autenticado."
+        },
+        "forbidden": {
+          "title": "Acesso negado",
+          "description": "Esta conta não pode concluir o login neste contexto."
+        }
+      }
+    }
+  },
+  "metadata": {
+    "title": "HydroRivers",
+    "description": "Marketplace de frete fluvial e cabotagem para corredores digitais de carga."
+  },
+  "mockMode": {
+    "triggerMark": "M",
+    "title": "Modo mock · QA",
+    "subtitle": "Ambiente de teste: cenários, personas e validações rápidas do produto.",
+    "button": "Modo mock",
+    "close": "Fechar painel QA",
+    "casesTitle": "Cenários",
+    "openCase": "Abrir caso",
+    "passwordLabel": "Senha",
+    "roles": {
+      "shipper": "Embarcador",
+      "carrier": "Transportador",
+      "admin": "Administrador"
+    },
+    "qaHub": {
+      "sectionTitle": "Hub de QA — personas demo",
+      "sectionLead": "Cartões para testes em dados mock. “Simular usuário no login” preenche o formulário (fluxo normal com OTP). “Entrar como este usuário” chama POST /api/mock-mode/login-as e redireciona (sem OTP). Visível só fora de production ou com flag de CI.",
+      "fieldLabels": {
+        "name": "Nome",
+        "email": "E-mail",
+        "password": "Senha fake",
+        "role": "Papel",
+        "approved": "Aprovado",
+        "company": "Empresa",
+        "testsWhat": "O que testa",
+        "mustValidate": "O que deve ser validado",
+        "expectedResult": "Resultado esperado"
+      },
+      "useOnLogin": "Simular usuário no login",
+      "signInAs": "Entrar como este usuário",
+      "signingIn": "Entrando…",
+      "approvedYes": "sim",
+      "approvedNo": "não",
+      "feedbackError": "Não foi possível entrar como este usuário fake. Use ambiente dev/mock; em production só com flag de CI. Verifique também se o userId existe na massa mock.",
+      "personas": {
+        "tiala": {
+          "cardName": "Tiala Rocha",
+          "represents": "Embarcadora aprovada da Cooperativa Açaí Norte.",
+          "testsWhat": "Publicação e gestão das próprias cargas; fluxos de embarcador com conta liberada.",
+          "validateLine": "Validar que rotas privadas carregam e que cargas ligadas ao owner aparecem.",
+          "expectedLine": "Esperado: experiência completa de shipper sem bloqueio por moderação.",
+          "assistantNote": "Cargo Status Assistant: use uma carga em que você é owner (ex.: cenário marketplace). Esperado: card com resumo, próximos passos, riscos e origem mock-ai quando aplicável.",
+          "feedbackSuccess": "Você entrou como Tiala Rocha, embarcadora aprovada. Agora teste cargas próprias e o Assistente de Status da Carga."
+        },
+        "joao": {
+          "cardName": "João Navegante",
+          "represents": "Transportador aprovado da Navega Norte.",
+          "testsWhat": "Propostas e negociações onde o transportador está vinculado à carga.",
+          "validateLine": "Validar listas de negociação e acesso a cargas com vínculo.",
+          "expectedLine": "Esperado: transportador ativo sem trava de moderação.",
+          "assistantNote": "Cargo Status Assistant: teste uma carga em que existe negociação com este carrierId. Esperado: assistente autorizado; em carga sem vínculo, bloqueio.",
+          "feedbackSuccess": "Você entrou como João Navegante, transportador aprovado. Teste negociações vinculadas e o assistente onde houver escopo."
+        },
+        "carlos": {
+          "cardName": "Carlos Hidrovias Madeira",
+          "represents": "Transportador aprovado da Hidrovias Madeira.",
+          "testsWhat": "Permitir comparar acesso autorizado vs bloqueado conforme negociação/carga escolhida.",
+          "validateLine": "Em carga sem vínculo com Carlos, espere bloqueio; com vínculo, acesso.",
+          "expectedLine": "Esperado: reforço do controle de escopo do assistente e APIs.",
+          "assistantNote": "Use para validar bloqueio em carga alheia: não deve ver dados sensíveis nem assistant autorizado fora do escopo.",
+          "feedbackSuccess": "Você entrou como Carlos (Hidrovias Madeira). Compare cargas com e sem negociação vinculada."
+        },
+        "ana": {
+          "cardName": "Ana RiosLog",
+          "represents": "Transportadora em moderação (conta não aprovada).",
+          "testsWhat": "Fluxos onde carrier pendente encontra restrições (ex.: assistant, áreas privadas).",
+          "validateLine": "Validar mensagens de bloqueio ou perfil pendente conforme UI atual.",
+          "expectedLine": "Esperado: bloqueios por approved=false onde o produto aplicar.",
+          "assistantNote": "Cargo Status Assistant: com Ana logada, espere bloqueio por conta não aprovada antes mesmo do escopo da carga.",
+          "feedbackSuccess": "Você entrou como Ana RiosLog (moderação). Valide restrições de transportador pendente."
+        },
+        "admin": {
+          "cardName": "Admin HydroRivers",
+          "represents": "Operação administrativa interna HydroRivers.",
+          "testsWhat": "Painel admin, troca de cenário mock e ferramentas restritas.",
+          "validateLine": "Validar autorização à rota /admin e POST mock-mode quando aplicável.",
+          "expectedLine": "Esperado: controle total sobre datasets demo.",
+          "assistantNote": "Admin ignora escopo no assistant — útil para smoke rápido em qualquer cargo.",
+          "feedbackSuccess": "Você entrou como administrador. Use mock-mode e validações amplas."
+        }
+      }
+    },
+    "cases": {
+      "cargoList": {
+        "title": "Lista de cargas (30+ itens)",
+        "description": "Valida busca, filtros, hover, estados e scroll infinito visual."
+      },
+      "cargoDetail": {
+        "title": "Detalhe da carga",
+        "description": "Valida documentação, contexto operacional e envio de proposta fake."
+      },
+      "vessels": {
+        "title": "Lista de embarcações",
+        "description": "Valida layout, cards e dados complementares de frota."
+      },
+      "vesselDetail": {
+        "title": "Detalhe da embarcação",
+        "description": "Valida destaque de capacidades, certificações e disponibilidade."
+      },
+      "negotiations": {
+        "title": "Negociações",
+        "description": "Valida estágios, etiquetas e cenários de contraproposta/contrato."
+      },
+      "tracking": {
+        "title": "Rastreio",
+        "description": "Valida steps, ícones, estados done/current/pending e contexto de operação."
+      },
+      "impact": {
+        "title": "Impacto",
+        "description": "Valida cards, internacionalização e links de histórias de impacto."
+      },
+      "profile": {
+        "title": "Perfil",
+        "description": "Valida sessão, dados persistidos e edição de preferências."
+      },
+      "lightMode": {
+        "title": "Light mode",
+        "description": "Valida contraste, legibilidade e consistência visual fora do dark mode."
+      },
+      "i18n": {
+        "title": "Internacionalização",
+        "description": "Valida traduções de componentes, labels, mocks e navegação."
+      }
+    },
+    "scenarioControlTitle": "Cenário mock (dataset)",
+    "scenarioActive": "Ativo: {label}",
+    "scenarioBase": "Base do projeto",
+    "scenarioSelectLabel": "Cenário",
+    "applyScenario": "Executar cenário",
+    "scenarioApplying": "Aplicando…",
+    "scenarioReset": "Resetar base",
+    "scenarioResetting": "Resetando…",
+    "applyScenarioError": "Não foi possível aplicar o cenário.",
+    "qaAssistant": {
+      "sectionTitle": "Assistente de QA",
+      "sectionLead": "Catálogo orientado a fluxos reais. Pesquise por rota, risco, tags ou contexto, copie os passos e abra a rota inicial para reproduzir o cenário.",
+      "searchLabel": "Buscar cenário",
+      "searchPlaceholder": "Login, cargas vazias, mapa, notificações…",
+      "summary": "{count} de {total} cenários",
+      "emptyStateTitle": "Nenhum cenário encontrado",
+      "emptyStateDescription": "Tente outra palavra-chave ou limpe a busca para ver todos os fluxos.",
+      "priorityLabel": "Prioridade",
+      "statusLabel": "Status",
+      "priorityLabels": {
+        "high": "Alta",
+        "medium": "Média",
+        "low": "Baixa"
+      },
+      "statusLabels": {
+        "ready": "Pronto",
+        "partial": "Parcial",
+        "planned": "Proposto"
+      },
+      "objectiveLabel": "Objetivo",
+      "riskLabel": "Risco coberto",
+      "personaLabel": "Persona",
+      "routeLabel": "Rota inicial",
+      "datasetLabel": "Dataset sugerido",
+      "areasLabel": "Áreas cobertas",
+      "tagsLabel": "Tags",
+      "stepsLabel": "Passos recomendados",
+      "expectedLabel": "Resultado esperado",
+      "openRoute": "Abrir rota",
+      "copySteps": "Copiar passos",
+      "copied": "Copiado",
+      "copyError": "Não foi possível copiar os passos.",
+      "resetScenarioSuccess": "Dataset retornado para a base do projeto.",
+      "resetScenarioError": "Não foi possível resetar o dataset."
+    },
+    "scenarioIds": {
+      "empty-state": "Base vazia",
+      "market-active": "Marketplace ativo",
+      "negotiation-flow": "Fluxo de negociação",
+      "in-transit": "Em trânsito",
+      "completed": "Concluído",
+      "error-scenarios": "Erros e pendências"
+    }
+  }
+}

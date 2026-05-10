@@ -1,0 +1,65 @@
+
+.shell {
+  width: 100%;
+  display: grid;
+  gap: 1rem;
+  animation: rise .28s ease both;
+}
+
+.header {
+  display: grid;
+  gap: .38rem;
+  padding: 1rem 1.05rem 1.05rem;
+  border: 1px solid var(--hx-line-soft, var(--line));
+  border-radius: calc(var(--hx-radius-lg, var(--radius-xl)) + 2px);
+  background:
+    radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 10%, transparent), transparent 10rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 80%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 92%, transparent));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--hx-text, var(--text)) 4%, transparent), var(--hx-shadow, var(--shadow-soft));
+}
+
+.header p {
+  margin: 0;
+  color: var(--hx-cyan, var(--brand-strong));
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  margin: 0;
+  color: var(--hx-text, var(--text));
+  font-size: clamp(1.18rem, 1.7vw, 1.82rem);
+  line-height: 1.02;
+  letter-spacing: -.035em;
+  text-wrap: balance;
+}
+
+.header span {
+  max-width: 58rem;
+  color: var(--hx-muted, var(--muted));
+  font-size: .84rem;
+  line-height: 1.5;
+}
+
+.body {
+  display: grid;
+  gap: 1rem;
+  min-width: 0;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 720px) {
+  .header {
+    padding: .92rem .9rem .95rem;
+  }
+
+  .header h1 {
+    font-size: clamp(1.05rem, 5.2vw, 1.42rem);
+  }
+}

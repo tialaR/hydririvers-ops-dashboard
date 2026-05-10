@@ -1,0 +1,82 @@
+.button {
+  display: inline-grid;
+  place-items: center;
+  width: fit-content;
+  height: 2.45rem;
+  border: 1px solid var(--hx-line-soft, var(--line-strong));
+  border-radius: 12px;
+  color: var(--hx-cyan-2, var(--brand-strong));
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 88%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .18rem;
+  width: fit-content;
+  min-width: 4.2rem;
+  height: 2.45rem;
+  padding: .2rem;
+  border: 1px solid var(--hx-line-soft, var(--line-strong));
+  border-radius: 999px;
+  color: var(--hx-cyan-2, var(--brand-strong));
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 88%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 26%, var(--hx-line-soft, var(--line-strong)));
+  background: color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 90%, transparent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .16), inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.pill:focus-visible {
+  outline: 2px solid var(--hx-cyan, var(--brand));
+  outline-offset: 3px;
+}
+
+.iconActive,
+.iconInactive {
+  width: 1.85rem;
+  height: 1.85rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  transition: background 180ms ease, color 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.iconActive {
+  color: var(--text, var(--hx-text));
+  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 12%, transparent);
+}
+
+.iconInactive {
+  color: var(--muted, var(--hx-muted));
+  opacity: .58;
+}
+
+.button[data-mode='light'] {
+  color: var(--hx-yellow, #d0a23c);
+}
+
+.button[data-mode='dark'] {
+  color: var(--hx-blue, #5aa9ff);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 26%, var(--hx-line-soft, var(--line-strong)));
+  background: color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 90%, transparent);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .16), inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--hx-cyan, var(--brand));
+  outline-offset: 3px;
+}

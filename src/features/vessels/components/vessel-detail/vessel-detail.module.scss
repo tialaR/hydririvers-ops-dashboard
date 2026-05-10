@@ -1,0 +1,166 @@
+
+.layout {
+  display: grid;
+  gap: .9rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: .9rem;
+  align-items: stretch;
+  overflow: hidden;
+  border: 1px solid var(--hx-line-soft, var(--line)) !important;
+  border-radius: var(--hx-radius-lg, var(--radius-xl));
+  background:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 12%, transparent), transparent 10rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 84%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+}
+
+.image {
+  min-height: 260px;
+  border-radius: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: color-mix(in srgb, var(--hx-bg, #05080b) 90%, transparent);
+  border: 1px solid var(--hx-line-soft, var(--line));
+}
+
+.info {
+  display: grid;
+  align-content: end;
+  gap: .56rem;
+}
+
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  width: fit-content;
+  min-height: 2.05rem;
+  padding: 0 .68rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--hx-yellow, var(--brand)) 11%, var(--hx-card, var(--surface)));
+  border: 1px solid color-mix(in srgb, var(--hx-yellow, var(--brand)) 22%, transparent);
+  color: var(--hx-yellow, var(--brand));
+  font-size: .8rem;
+  font-weight: 760;
+}
+
+.info h2 {
+  margin: 0;
+  color: var(--hx-text, var(--text));
+  font-size: clamp(1.7rem, 3.2vw, 3rem);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+.info p {
+  margin: 0;
+  color: var(--hx-muted, var(--muted));
+  font-size: .9rem;
+  font-weight: 650;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: .9rem;
+}
+
+.stat {
+  display: grid;
+  gap: .5rem;
+  min-height: 7.8rem;
+  align-content: start;
+  border: 1px solid var(--hx-line-soft, var(--line)) !important;
+  border-radius: var(--hx-radius-lg, var(--radius-xl));
+  background:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 12%, transparent), transparent 7rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 84%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+}
+
+.statIcon {
+  width: 2.35rem;
+  height: 2.35rem;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--hx-yellow, var(--brand));
+  background: color-mix(in srgb, var(--hx-yellow, var(--brand)) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--hx-yellow, var(--brand)) 18%, transparent);
+}
+
+.stat span:last-of-type,
+.stat > span:nth-of-type(2) {
+  color: var(--hx-muted, var(--muted));
+  font-size: .76rem;
+  font-weight: 760;
+}
+
+.stat strong {
+  color: var(--hx-text, var(--text));
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  letter-spacing: -.06em;
+}
+
+.capacity .statIcon { color: var(--hx-blue, var(--river)); background: color-mix(in srgb, var(--hx-blue, var(--river)) 12%, transparent); }
+.eta .statIcon { color: var(--hx-yellow, var(--warning)); background: color-mix(in srgb, var(--hx-yellow, var(--warning)) 13%, transparent); }
+.draft .statIcon { color: var(--hx-cyan, var(--blue)); background: color-mix(in srgb, var(--hx-cyan, var(--blue)) 11%, transparent); }
+.green .statIcon { color: var(--hx-green, var(--leaf)); background: color-mix(in srgb, var(--hx-green, var(--leaf)) 11%, transparent); }
+
+.panel {
+  display: grid;
+  gap: .8rem;
+  border: 1px solid var(--hx-line-soft, var(--line)) !important;
+  border-radius: var(--hx-radius-lg, var(--radius-xl));
+  background:
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 10%, transparent), transparent 9rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 84%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+}
+
+.panel h3 {
+  margin: 0;
+  color: var(--hx-text, var(--text));
+  font-size: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .46rem;
+}
+
+.chips span {
+  min-height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .36rem;
+  padding: 0 .66rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hx-line-soft, var(--line));
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 78%, transparent);
+  color: var(--hx-text, var(--text));
+  font-size: .78rem;
+  font-weight: 720;
+}
+
+.chips span svg { color: var(--hx-yellow, var(--brand)); }
+
+.panel p {
+  margin: 0;
+  color: var(--hx-muted, var(--muted));
+  font-size: .8rem;
+}
+
+.panel p strong { color: var(--hx-text, var(--text)); }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  .stats { grid-template-columns: 1fr; }
+  .image { min-height: 220px; }
+}

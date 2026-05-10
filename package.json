@@ -1,0 +1,47 @@
+{
+  "name": "hydrorivers-v056-template",
+  "version": "0.8.7",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "verify": "npm run lint && npm run typecheck && npm run check:i18n && npm run test",
+    "verify:ci": "npm run audit:docs && npm run verify",
+    "audit:quality": "npm run verify",
+    "audit:docs": "node scripts/audit-docs.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "check:i18n:hardcoded": "node scripts/check-hardcoded-i18n.mjs",
+    "audit:i18n": "node scripts/audit-i18n-hardcoded.mjs",
+    "audit:i18n:rendered": "node scripts/audit-i18n-rendered.mjs",
+    "check:onboarding": "node scripts/check-onboarding-progress.mjs",
+    "test:mock-mode": "vitest run tests/unit/shared/ui/mock-qa-scenarios.test.ts tests/unit/shared/server/mock-scenarios.test.ts tests/unit/features/notifications.client.test.ts tests/integration/api/mock-mode.post.test.ts tests/integration/api/mock-mode.login-as.post.test.ts",
+    "test": "vitest run",
+    "test:unit": "vitest run tests/unit",
+    "test:integration": "vitest run tests/integration",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0",
+    "lucide-react": "^0.468.0",
+    "next": "16.2.4",
+    "next-intl": "^4.3.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "sass": "^1.83.0",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.17.0",
+    "eslint-config-next": "16.2.4",
+    "typescript": "^5.7.2",
+    "vitest": "^4.1.5"
+  }
+}

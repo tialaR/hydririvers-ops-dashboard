@@ -1,0 +1,22 @@
+HydroRivers UI refinement patch summary
+
+Changed files:
+- src/features/dashboard/components/operations-board/operations-board.tsx
+- src/shared/layout/admin-chrome/admin-chrome.tsx
+- src/shared/ui/page-shell/page-shell.tsx
+- src/app/globals.scss
+
+Summary:
+- Replaced remaining hardcoded overview values with cargo-derived values for documents, readiness, cost and arrival details.
+- Added nowrap protection for critical operational values like ETA ranges, timestamps, CO2 deltas and currency.
+- Kept vessel imagery integrated with the card and migrated overview vessel rendering to next/image.
+- Improved collapsed sidebar usability: theme remains actionable, locale button expands the rail, and footer actions now expose titles/aria labels.
+- Updated role copy for admin users to match the government/admin operational layer.
+- Connected PageShell to its module styles so legacy pages inherit the tighter dashboard-style header treatment.
+- Added sidebar/footer and nowrap utility rules in globals.scss to support the refined shell behavior.
+
+Validation status at generation time:
+- npm run typecheck: passed
+- npm run lint: passed
+- npm run check:i18n: passed
+- npm run build: inconclusive in this local environment because Next build stayed running without returning output, even after an isolated rerun.

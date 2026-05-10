@@ -1,0 +1,147 @@
+
+.linkWrap { display: block; height: 100%; }
+
+.card {
+  height: 100%;
+  min-height: 22.8rem;
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border-radius: var(--hx-radius-lg, var(--radius-xl));
+  border-color: var(--hx-line-soft, var(--line)) !important;
+  background:
+    radial-gradient(circle at 88% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 13%, transparent), transparent 9rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 82%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.linkWrap:hover .card,
+.linkWrap:focus-visible .card {
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 38%, transparent) !important;
+  box-shadow: 0 20px 52px rgba(0,0,0,.28);
+}
+
+.media {
+  min-height: 8.6rem;
+  padding: .85rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: color-mix(in srgb, var(--hx-bg, #05080b) 86%, transparent);
+  border-bottom: 1px solid var(--hx-line-soft, var(--line));
+}
+
+.body {
+  display: grid;
+  gap: .76rem;
+  padding-top: .9rem;
+}
+
+.title {
+  display: flex;
+  gap: .72rem;
+  align-items: center;
+}
+
+.title > span {
+  width: 2.55rem;
+  height: 2.55rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--hx-yellow, var(--brand));
+  background: color-mix(in srgb, var(--hx-yellow, var(--brand)) 13%, var(--hx-card, var(--surface)));
+  border: 1px solid color-mix(in srgb, var(--hx-yellow, var(--brand)) 20%, transparent);
+}
+
+.title h2 {
+  margin: 0;
+  color: var(--hx-text, var(--text));
+  font-size: clamp(.98rem, 1.15vw, 1.16rem);
+  line-height: 1.12;
+  font-weight: 800;
+  text-wrap: balance;
+}
+
+.title p {
+  margin: .12rem 0 0;
+  color: var(--hx-muted, var(--muted));
+  font-size: .78rem;
+  font-weight: 650;
+}
+
+.route {
+  min-height: 2.1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .46rem;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0 .68rem;
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 80%, transparent);
+  border: 1px solid var(--hx-line-soft, var(--line));
+  color: var(--hx-text, var(--text));
+  font-size: .8rem;
+  font-weight: 750;
+}
+
+.route svg { color: var(--hx-blue, var(--blue)); }
+
+.meta {
+  display: flex;
+  gap: .45rem;
+  flex-wrap: wrap;
+}
+
+.meta span,
+.readiness span {
+  min-height: 2.05rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .38rem;
+  padding: 0 .64rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hx-line-soft, var(--line));
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 82%, transparent);
+  font-size: .78rem;
+  font-weight: 750;
+}
+
+.meta span:nth-child(1) svg { color: var(--hx-blue, var(--blue)); }
+.meta span:nth-child(2) svg { color: var(--hx-yellow, var(--warning)); }
+.meta span:nth-child(3) svg { color: var(--hx-cyan, var(--brand)); }
+
+.readiness {
+  display: grid;
+  gap: .42rem;
+}
+
+.ok {
+  color: var(--hx-text, var(--text));
+  background: color-mix(in srgb, var(--hx-green, var(--leaf)) 9%, var(--hx-card, var(--surface))) !important;
+  border-color: color-mix(in srgb, var(--hx-green, var(--leaf)) 24%, var(--hx-line-soft, var(--line))) !important;
+}
+.ok svg { color: var(--hx-green, var(--leaf)); }
+
+.warn {
+  color: var(--hx-text, var(--text));
+  background: color-mix(in srgb, var(--hx-yellow, var(--warning)) 10%, var(--hx-card, var(--surface))) !important;
+  border-color: color-mix(in srgb, var(--hx-yellow, var(--warning)) 30%, var(--hx-line-soft, var(--line))) !important;
+}
+.warn svg { color: var(--hx-yellow, var(--warning)); }
+
+.body > small {
+  color: var(--hx-muted, var(--muted));
+  font-size: .76rem;
+  font-weight: 650;
+}
+
+@media (max-width: 720px) {
+  .media { min-height: 8.2rem; }
+}

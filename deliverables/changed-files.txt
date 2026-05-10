@@ -1,0 +1,4 @@
+src/features/dashboard/components/operations-board/operations-board.tsx
+src/shared/layout/admin-chrome/admin-chrome.tsx
+src/shared/ui/page-shell/page-shell.tsx
+src/app/globals.scss

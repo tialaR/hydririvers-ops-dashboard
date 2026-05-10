@@ -1,0 +1,16 @@
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/app/globals.scss
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/features/dashboard/components/operations-board/operations-board.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/features/government/components/government-dashboard/government-dashboard.module.scss
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/features/negotiations/components/negotiation-board/negotiation-board.module.scss
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/features/vessels/components/vessel-card/vessel-card.module.scss
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/i18n/mock-format.ts
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/layout/admin-chrome/admin-chrome.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/preferences/client-preferences.ts
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/providers/theme-provider.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/ui/locale-switcher/locale-switcher.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/ui/page-shell/page-shell.module.scss
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/ui/page-shell/page-shell.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/src/shared/ui/theme-toggle/theme-toggle.tsx
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/messages/pt-BR.json
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/messages/en-US.json
+/Users/tialarocha/Desktop/hydrorivers-dashboard-v27-sidebar-controls/messages/es.json

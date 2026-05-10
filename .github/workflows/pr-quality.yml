@@ -1,0 +1,35 @@
+name: PR Quality
+
+on:
+  pull_request:
+
+concurrency:
+  group: pr-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Onboarding check
+        run: npm run check:onboarding
+
+      - name: Docs audit
+        run: npm run audit:docs
+
+      - name: Verify
+        run: npm run verify
