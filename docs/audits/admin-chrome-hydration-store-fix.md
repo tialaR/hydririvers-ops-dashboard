@@ -1,80 +1,63 @@
-# Auditoria de correção — AdminChrome, hydration e store de notificações
+# Auditoria — AdminChrome, hidratação da sidebar e store de notificações
 
-## Causa raiz do `getServerSnapshot`
+## Causa raiz do hydration mismatch na sidebar
 
-- `useSyncExternalStore` em `src/shared/layout/admin-chrome/admin-chrome.tsx` usava `() => []` como `getServerSnapshot`.
-- Isso criava uma nova referência em cada chamada e quebrava a expectativa de snapshot cacheado.
-- Além disso, o snapshot de notificações podia disparar geração/leitura com efeitos colaterais quando a sessão do usuário ainda não estava estável.
+- A lista da sidebar em `AdminChrome` filtrava itens com base em `user` vindo de `useAuthSession()`.
+- No SSR, `useAuthSession` inicia com `user = null` e `ready = false` (estado inicial de `useState`).
+- No primeiro render do cliente, **antes** da correção, qualquer valor de `user` disponível antes de `ready === true` (por exemplo resposta antecipada de cache ou timing de efeito) podia divergir do SSR.
+- O caso mais visível: **visitante** (`user === null`) mantém **Embarcações** (`/embarcacoes`) e oculta **Minhas cargas**; **shipper** autenticado inverte (mostra Minhas cargas, oculta Embarcações). A troca na mesma posição da lista gera mismatch de `href`, `aria-label`, `title` e ícone entre HTML do servidor e a árvore hidratada no cliente.
 
-## Causa raiz do hydration mismatch da sidebar
+## Causa raiz de `getServerSnapshot` / loops
 
-- `useAuthSession()` iniciava com `getCachedUser()` durante o primeiro render do cliente.
-- No SSR, a árvore era renderizada sem depender de `localStorage`.
-- No primeiro render do cliente, a sessão já podia existir localmente, mudando a filtragem da navegação antes da hidratação concluir.
-- Isso alterava a sidebar entre servidor e cliente: por exemplo, `Embarcações` no SSR e `Minhas cargas` no cliente.
+- O React 19 exige que `getServerSnapshot` devolva **a mesma referência** quando o estado lógico não muda; o projeto já usa `EMPTY_NOTIFICATIONS_SNAPSHOT` congelado e `getNotificationsServerSnapshot()` estável.
+- O `getSnapshot` do `useSyncExternalStore` dependia de `authReady` e `user`; alinhar leitura de notificações ao mesmo `navigationUser` usado na sidebar evita leitura com identidade de usuário inconsistente entre subsistemas.
+- `readNotifications` já cacheia por `userId` e não dispara evento só na leitura; `markAllNotificationsRead` persiste e notifica uma vez.
 
-## Causa raiz do `Maximum update depth exceeded`
+## Causa secundária — tempo relativo nas notificações
 
-- A store de notificações retornava um novo array a cada snapshot.
-- A leitura de notificações podia criar estado e persistência no caminho do snapshot.
-- Isso fazia o `useSyncExternalStore` entender que havia mudança constante e re-renderizar em loop.
+- `formatNotificationTime` usava `Date.now()` durante o render (instável e proibido pelas regras do projeto). Passou a usar apenas **`Intl.DateTimeFormat`** com data/hora absoluta derivada de `createdAt`, idêntica no servidor e no cliente para o mesmo `locale`.
 
 ## Arquivos alterados
 
-- `src/shared/layout/admin-chrome/admin-chrome.tsx`
-- `src/features/auth/hooks/use-auth-session.ts`
-- `src/features/notifications/services/notifications.client.ts`
-- `tests/unit/features/notifications.client.test.ts`
-- `tests/unit/shared/config/navigation.test.ts`
+- `src/shared/config/navigation.ts` — `filterMainNavigationForUser`, comentários em `resolveActiveNavigationHref`.
+- `src/shared/layout/admin-chrome/admin-chrome.tsx` — `navigationUser`, relógio das notificações, store alinhada, labels de sessão na chrome alinhadas ao mesmo usuário efetivo.
+- `src/shared/layout/app-header/app-header.tsx` — `navigationUser = ready ? user : null` na filtragem de “Minhas cargas”.
+- `tests/unit/shared/config/navigation.test.ts` — filtros por papel, rotas ativas em `/embarcacoes`.
+- `docs/audits/admin-chrome-hydration-store-fix.md` — este documento.
 
-## Solução aplicada
+## Como a sidebar ficou estável
 
-- `useAuthSession()` passou a iniciar com `user = null` e só hidratar a sessão após o mount. O cache local só entra como fallback se a requisição falhar por erro de rede, não quando o servidor responde `401`.
-- `AdminChrome` agora usa `emptyNotificationsSnapshot` como snapshot inicial estável.
-- O `getServerSnapshot` passou a usar `getNotificationsServerSnapshot()`, que retorna a mesma referência congelada.
-- A store de notificações ganhou cache por usuário, evitando recriação de array em toda leitura.
-- `persistNotifications`, `markAllNotificationsRead` e `resetNotifications` atualizam o cache de forma previsível.
-- A navegação canônica foi coberta por teste para garantir que `Cargas`, `Minhas cargas` e `Embarcações` mantêm paths e ordem estáveis.
+- Enquanto `authReady === false`, `navigationUser` é forçado a `null`, reproduzindo a mesma regra de filtro do visitante usada no SSR.
+- Após o efeito em `useAuthSession` marcar `ready === true`, a lista passa a refletir o papel real (`shipper` / `carrier` / `admin`), **só depois** da hidratação do primeiro frame estável.
 
-## Como a sidebar ficou estável entre SSR e client
+## Como os snapshots de notificações ficaram estáveis
 
-- A primeira renderização do cliente agora começa com a mesma estrutura do SSR.
-- Diferenças de sessão e notificações aparecem só depois que o componente monta.
-- Isso elimina a troca de item visual durante a hidratação.
+- `getServerSnapshot`: continua retornando `EMPTY_NOTIFICATIONS_SNAPSHOT` (referência única).
+- `getSnapshot` com `!authReady`: mesmo array vazio congelado.
+- `getSnapshot` com `authReady`: `readNotifications(navigationUser?.id)` usa cache por chave; sem mudança de dados, mesma referência.
 
-## Como as notificações ficaram estáveis
+## Testes criados ou ajustados
 
-- O badge passa a usar snapshot cacheado por usuário.
-- O snapshot do servidor é constante e vazio.
-- A geração fake por usuário continua determinística, mas não recria arrays em todo render.
-- `markAllAsRead` continua funcionando e atualiza a contagem imediatamente.
-
-## Testes criados ou alterados
-
-- `tests/unit/features/notifications.client.test.ts`
-- `tests/unit/shared/config/navigation.test.ts`
+- `tests/unit/shared/config/navigation.test.ts` — `filterMainNavigationForUser` (visitante, shipper, carrier, admin), `resolveActiveNavigationHref` para `/embarcacoes`.
+- `tests/unit/features/notifications.client.test.ts` — sem alteração funcional neste ciclo (mantém cobertura de snapshot estável existente).
 
 ## Comandos executados
 
-- `npm run test:mock-mode`
 - `npm run typecheck`
 - `npm run lint`
-- `npm test`
 - `npm run check:i18n`
+- `npm test`
 - `npm run build`
-- `ps -Ao pid,command | rg "next build|Creating an optimized production build|turbopack|webpack"` com `require_escalated`
-- `kill 76192`
 
-## Resultados
+## Resultados (execução local)
 
-- `test:mock-mode` passou.
-- `typecheck` passou.
-- `lint` passou.
-- `check:i18n` passou com 1263 chaves alinhadas em pt-BR, en-US e es.
-- `npm test` passou.
-- `build` travou em `Creating an optimized production build ...`; o processo `next build` ficou com PID `76192` e foi encerrado manualmente.
+- `npm run typecheck` — passou.
+- `npm run lint` — passou.
+- `npm run check:i18n` — passou (`1279` chaves alinhadas em pt-BR, en-US, es).
+- `npm test` — passou (`38` arquivos, `231` testes).
+- `npm run build` — passou (Next.js 16.2.4 / Turbopack).
 
 ## Pendências
 
-- Validação visual em navegador real para confirmar que a hidratação não troca a sidebar e que o badge de notificações permanece coerente em runtime.
-- O `build` segue apresentando o travamento recorrente do ambiente.
+- Smoke manual: abrir `/pt-BR/dashboard` (ou rota autenticada) e confirmar ausência de aviso de hidratação no console.
+- Se no futuro a sessão for injetada no servidor (cookies → props), alinhar o “usuário efetivo” da sidebar ao mesmo contrato (`null` até haver dado de servidor estável).

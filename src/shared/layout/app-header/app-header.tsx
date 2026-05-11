@@ -54,6 +54,7 @@ export function AppHeader() {
   const dragDeltaRef = useRef(0);
   const dragPointerRef = useRef<number | null>(null);
   const { user, ready } = useAuthSession();
+  const navigationUser = ready ? user : null;
   const desktopNavigation = useMemo(
     () =>
       mainNavigation
@@ -61,9 +62,9 @@ export function AppHeader() {
         .filter(
           (item) =>
             item.href !== intlAppPaths.cargos.myCargos ||
-            Boolean(user && (user.role === 'shipper' || user.role === 'carrier'))
+            Boolean(navigationUser && (navigationUser.role === 'shipper' || navigationUser.role === 'carrier'))
         ),
-    [user]
+    [navigationUser]
   );
   const primary = useMemo(() => desktopNavigation.slice(0, 4), [desktopNavigation]);
   const overflow = useMemo(() => desktopNavigation.slice(4), [desktopNavigation]);

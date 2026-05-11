@@ -1,3 +1,4 @@
+import type { HydroUser } from '@/features/auth/domain/auth.types';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
 function normalizeCurrentPath(pathname: string) {
@@ -5,6 +6,11 @@ function normalizeCurrentPath(pathname: string) {
   return withoutLocale.replace(/\/$/, '') || '/';
 }
 
+/**
+ * Resolve qual item da navegação está ativo.
+ * Usa prefixo com `/${href}/` (nunca substring solta) e prioriza hrefs mais longos
+ * para `/minhas-cargas/...` não colidir com `/cargas/...`.
+ */
 export function resolveActiveNavigationHref(pathname: string, navigation = appNavigationItems) {
   const current = normalizeCurrentPath(pathname);
   const candidates = navigation
@@ -13,6 +19,27 @@ export function resolveActiveNavigationHref(pathname: string, navigation = appNa
     .sort((a, b) => b.href.length - a.href.length);
 
   return candidates[0]?.href ?? (current === '/' ? '/' : '');
+}
+
+/**
+ * Filtra itens da sidebar/header para um usuário autenticado.
+ * Para SSR e primeiro render do cliente alinhados, passe `null` até `authReady === true`.
+ */
+export function filterMainNavigationForUser(user: HydroUser | null) {
+  return mainNavigation.filter((item) => {
+    if (item.href === intlAppPaths.admin.home) return user?.role === 'admin';
+    if (item.href === intlAppPaths.government.home) return user?.role === 'admin';
+    if (item.href === intlAppPaths.cargos.myCargos) {
+      return Boolean(user && (user.role === 'shipper' || user.role === 'carrier'));
+    }
+    if (item.href === intlAppPaths.vessels.marketplace) {
+      return !user || user.role === 'carrier' || user.role === 'admin';
+    }
+    if (item.href === intlAppPaths.negotiations.home) {
+      return !user || user.role === 'shipper' || user.role === 'carrier' || user.role === 'admin';
+    }
+    return item.href !== intlAppPaths.home;
+  });
 }
 
 export const appNavigationItems = [

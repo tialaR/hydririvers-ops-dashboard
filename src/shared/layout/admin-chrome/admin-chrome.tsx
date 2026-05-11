@@ -43,7 +43,7 @@ import {
   readNotifications,
   type HydroNotification
 } from '@/features/notifications/services/notifications.client';
-import { mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
+import { filterMainNavigationForUser, mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
 import { persistStoredLocale, type StoredLocale } from '@/shared/preferences/client-preferences';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
@@ -99,24 +99,11 @@ function roleLabel(role?: UserRole) {
   return 'operations';
 }
 
+/** Formatação estável entre SSR e cliente (sem `Date.now` no render). */
 function formatNotificationTime(createdAt: string, locale: string) {
-  const timestamp = new Date(createdAt).getTime();
-  if (Number.isNaN(timestamp)) return '';
-
-  const diffMinutes = Math.round((timestamp - Date.now()) / (1000 * 60));
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-
-  if (Math.abs(diffMinutes) < 60) {
-    return formatter.format(diffMinutes, 'minute');
-  }
-
-  const diffHours = Math.round(diffMinutes / 60);
-  if (Math.abs(diffHours) < 24) {
-    return formatter.format(diffHours, 'hour');
-  }
-
-  const diffDays = Math.round(diffHours / 24);
-  return formatter.format(diffDays, 'day');
+  const d = new Date(createdAt);
+  if (Number.isNaN(d.getTime())) return '';
+  return new Intl.DateTimeFormat(locale, { dateStyle: 'short', timeStyle: 'short' }).format(d);
 }
 
 function notificationIcon(notification: HydroNotification) {
@@ -176,6 +163,8 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const searchParams = useSearchParams();
   const activeHref = useMemo(() => resolveActiveHref(pathname), [pathname]);
   const { user, ready: authReady } = useAuthSession();
+  /** Só aplica papel na sidebar após a sessão resolver — evita divergência SSR vs 1º paint client. */
+  const navigationUser = authReady ? user : null;
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [localeOpen, setLocaleOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -189,7 +178,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const localePanelId = 'hx-sidebar-language-panel';
   const notificationsPanelId = 'hx-header-notifications-panel';
   const currentLocale = SIDEBAR_LOCALES.find((item) => item.value === locale) ?? SIDEBAR_LOCALES[0];
-  const profileAction = profileActionFor(user);
+  const profileAction = profileActionFor(navigationUser);
   const notifications = useSyncExternalStore(
     (onStoreChange) => {
       if (typeof window === 'undefined') return () => {};
@@ -204,7 +193,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
         window.removeEventListener('hydrorivers:mock-changed', syncNotifications);
       };
     },
-    () => (authReady ? readNotifications(user?.id) : emptyNotificationsSnapshot),
+    () => (authReady ? readNotifications(navigationUser?.id) : emptyNotificationsSnapshot),
     getNotificationsServerSnapshot
   );
   const unreadNotificationsCount = useMemo(
@@ -219,18 +208,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   }[profileAction];
   const ProfileActionIcon = profileActionConfig.icon;
 
-  const navigation = useMemo(
-    () =>
-      mainNavigation.filter((item) => {
-        if (item.href === intlAppPaths.admin.home) return user?.role === 'admin';
-        if (item.href === intlAppPaths.government.home) return user?.role === 'admin';
-        if (item.href === intlAppPaths.cargos.myCargos) return Boolean(user && (user.role === 'shipper' || user.role === 'carrier'));
-        if (item.href === intlAppPaths.vessels.marketplace) return !user || user.role === 'carrier' || user.role === 'admin';
-        if (item.href === intlAppPaths.negotiations.home) return !user || user.role === 'shipper' || user.role === 'carrier' || user.role === 'admin';
-        return item.href !== intlAppPaths.home;
-      }),
-    [user]
-  );
+  const navigation = useMemo(() => filterMainNavigationForUser(navigationUser), [navigationUser]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
   const mobilePrimaryHrefs = [
     intlAppPaths.dashboard.home,
@@ -327,7 +305,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   }
 
   function handleNotificationClick(notification: HydroNotification) {
-    markNotificationRead(notification.id, user?.id);
+    markNotificationRead(notification.id, navigationUser?.id);
     setNotificationsOpen(false);
 
     if (notification.actionHref) {
@@ -336,7 +314,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   }
 
   function handleMarkAllNotificationsRead() {
-    markAllNotificationsRead(user?.id);
+    markAllNotificationsRead(navigationUser?.id);
   }
 
   const notificationsContent = (
@@ -497,7 +475,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                 ) : null}
               </div>
 
-              {user ? (
+              {navigationUser ? (
                 <button type="button" className="hx-sidebar-setting-row hx-sidebar-logout" onClick={handleSidebarLogout} title={t('logout')} aria-label={t('logout')}>
                   <span className="hx-sidebar-setting-icon"><LogOut size={18} /></span>
                   <div className="hx-sidebar-setting-copy">
@@ -540,8 +518,12 @@ export function AdminChrome({ children }: AdminChromeProps) {
                     <span className="hx-bell-badge" aria-hidden>{unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}</span>
                   ) : null}
                 </button>
-                <Link href={user ? intlAppPaths.auth.profile : intlAppPaths.auth.login} className="hx-mobile-avatar" aria-label={t('profile')}>
-                  {user?.avatarUrl ? <Image src={user.avatarUrl} alt="" width={38} height={38} unoptimized /> : initials(user?.name)}
+                <Link href={navigationUser ? intlAppPaths.auth.profile : intlAppPaths.auth.login} className="hx-mobile-avatar" aria-label={t('profile')}>
+                  {navigationUser?.avatarUrl ? (
+                    <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} unoptimized />
+                  ) : (
+                    initials(navigationUser?.name)
+                  )}
                 </Link>
               </div>
             </div>
@@ -610,15 +592,24 @@ export function AdminChrome({ children }: AdminChromeProps) {
                   ), document.body)
                 ) : null}
               </div>
-              <Link href={user ? intlAppPaths.auth.profile : intlAppPaths.auth.login} className={user?.avatarUrl ? 'hx-profile has-avatar' : 'hx-profile'}>
+              <Link
+                href={navigationUser ? intlAppPaths.auth.profile : intlAppPaths.auth.login}
+                className={navigationUser?.avatarUrl ? 'hx-profile has-avatar' : 'hx-profile'}
+              >
                 <span className="hx-profile-avatar">
-                  {user?.avatarUrl ? <Image src={user.avatarUrl} alt="" width={44} height={44} unoptimized /> : initials(user?.name)}
+                  {navigationUser?.avatarUrl ? (
+                    <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} unoptimized />
+                  ) : (
+                    initials(navigationUser?.name)
+                  )}
                 </span>
                 <div>
-                  <strong>{user?.name ?? 'Carlos Almeida'}</strong>
-                  <small>{user ? tChrome(`roles.${roleLabel(user.role)}`) : tChrome('roles.operations')}</small>
+                  <strong>{navigationUser?.name ?? 'Carlos Almeida'}</strong>
+                  <small>
+                    {navigationUser ? tChrome(`roles.${roleLabel(navigationUser.role)}`) : tChrome('roles.operations')}
+                  </small>
                 </div>
-                {user ? <UserRound size={16} /> : <LogIn size={16} />}
+                {navigationUser ? <UserRound size={16} /> : <LogIn size={16} />}
               </Link>
             </div>
           </header>
