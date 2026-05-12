@@ -1,49 +1,52 @@
 
 .shell {
-  width: min(980px, calc(100% - 1.5rem));
-  margin: .25rem auto 2rem;
+  width: min(1180px, calc(100% - 2rem));
+  max-width: 100%;
+  margin: 0 auto;
   display: grid;
   gap: .75rem;
+  min-width: 0;
+  padding-bottom: calc(var(--mobile-bottom-nav-height, 88px) + 12px + env(safe-area-inset-bottom, 0px));
 }
 
-.eyebrow {
-  margin: 0;
-  color: var(--hx-yellow, var(--brand));
-  font-size: .72rem;
-  font-weight: 850;
-  text-transform: uppercase;
-  letter-spacing: .14em;
+@media (min-width: 901px) {
+  .shell {
+    padding-bottom: 1.5rem;
+  }
 }
 
-.shell h1 {
+.inlineStatus,
+.inlineLead {
   margin: 0;
   color: var(--hx-text, var(--text));
-  font-size: clamp(1.8rem, 3.6vw, 3.3rem);
-  line-height: .96;
-  letter-spacing: -.075em;
+  font-size: .95rem;
+  font-weight: 700;
 }
 
-.shell > span {
+.inlineMuted {
+  margin: 0;
   color: var(--hx-muted, var(--muted));
   font-size: .86rem;
   font-weight: 620;
+  line-height: 1.45;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: .78fr 1.22fr;
-  gap: .9rem;
-  margin-top: .7rem;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.45fr);
+  gap: 1rem;
+  margin-top: .35rem;
 }
 
 .identity,
 .details,
-.formCard {
+.formCard,
+.guidanceCard {
   border: 1px solid var(--hx-line-soft, var(--line)) !important;
   border-radius: var(--hx-radius-lg, var(--radius-xl));
   background:
-    radial-gradient(circle at 90% 0%, color-mix(in srgb, var(--hx-yellow, var(--brand)) 12%, transparent), transparent 9rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 84%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--hx-cyan, var(--river)) 8%, transparent), transparent 10rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 82%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
 }
 
 .identity {
@@ -51,12 +54,15 @@
   place-items: center;
   text-align: center;
   gap: .78rem;
-  align-content: center;
+  align-content: start;
+  padding: 1rem .85rem 1.1rem;
 }
 
 .avatar {
-  width: 8.8rem;
-  height: 8.8rem;
+  width: min(8.8rem, 42vw);
+  height: min(8.8rem, 42vw);
+  max-width: 8.8rem;
+  max-height: 8.8rem;
   border-radius: 18px;
   overflow: hidden;
   display: grid;
@@ -81,18 +87,50 @@
   border-color: var(--hx-cyan, var(--brand));
 }
 
-.identity h2 {
+.identityName {
   margin: 0;
+  max-width: 100%;
   color: var(--hx-text, var(--text));
   font-size: 1.18rem;
+  font-weight: 800;
   letter-spacing: -.04em;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
 }
 
-.identity p {
+.identityCompany {
   margin: 0;
   color: var(--hx-muted, var(--muted));
   font-size: .82rem;
   font-weight: 620;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.identityStatus {
+  display: grid;
+  gap: .45rem;
+  justify-items: center;
+  max-width: min(22rem, 100%);
+  text-align: center;
+}
+
+.identityStatusTitle {
+  margin: 0;
+  font-size: .88rem;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  color: var(--hx-text, var(--text));
+  line-height: 1.25;
+}
+
+.identityStatusBody {
+  margin: 0;
+  font-size: .74rem;
+  font-weight: 620;
+  color: var(--hx-muted, var(--muted));
+  line-height: 1.45;
 }
 
 .avatarActions {
@@ -107,22 +145,31 @@
   display: grid;
   gap: .62rem;
   align-content: start;
+  padding: .85rem .9rem 1rem;
 }
 
 .row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: .72rem;
   padding: .68rem .72rem;
   border: 1px solid var(--hx-line-soft, var(--line));
   border-radius: 13px;
   background: color-mix(in srgb, var(--hx-card, var(--surface)) 78%, transparent);
+  min-width: 0;
 }
 
-.row svg {
-  color: var(--hx-yellow, var(--brand));
+.rowIcon {
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--hx-cyan, var(--river)) 88%, var(--hx-muted, var(--muted)));
   width: 1.2rem;
   height: 1.2rem;
+  margin-top: .12rem;
+}
+
+.rowText {
+  min-width: 0;
+  flex: 1;
 }
 
 .row small {
@@ -131,23 +178,207 @@
   font-weight: 700;
 }
 
-.row strong {
+.rowHint {
+  margin: .18rem 0 .12rem;
+  color: var(--hx-muted, var(--muted));
+  font-size: .72rem;
+  font-weight: 620;
+  line-height: 1.35;
+}
+
+.rowValue {
   display: block;
-  margin-top: .12rem;
+  margin: 0;
   color: var(--hx-text, var(--text));
   font-size: .84rem;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.guidanceCard {
+  grid-column: 1 / -1;
+  padding: 0;
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+}
+
+.guidanceCardOpen {
+  position: relative;
+}
+
+.guidanceTrigger {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: .65rem;
+  padding: .72rem .85rem;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: var(--hx-radius-lg, var(--radius-xl));
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.guidanceCardOpen .guidanceTrigger {
+  border-radius: var(--hx-radius-lg, var(--radius-xl)) var(--hx-radius-lg, var(--radius-xl)) 0 0;
+}
+
+.guidanceTrigger:hover {
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 45%, transparent);
+}
+
+.guidanceTrigger:focus-visible {
+  outline: none;
+  background: transparent;
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--hx-cyan, var(--river)) 52%, transparent);
+}
+
+.guidanceTrigger:focus-visible:hover {
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 22%, transparent);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--hx-cyan, var(--river)) 55%, transparent);
+}
+
+.guidanceTriggerIcon {
+  display: grid;
+  place-items: center;
+  color: var(--hx-muted, var(--muted));
+}
+
+.guidanceTriggerText {
+  min-width: 0;
+  display: grid;
+  gap: .22rem;
+}
+
+.guidanceTriggerTitle {
+  font-size: .88rem;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+  color: var(--hx-text, var(--text));
+  line-height: 1.2;
+}
+
+.guidanceTriggerLead {
+  font-size: .74rem;
+  font-weight: 620;
+  color: var(--hx-muted, var(--muted));
+  line-height: 1.35;
+}
+
+.guidanceChevron {
+  flex-shrink: 0;
+  color: var(--hx-muted, var(--muted));
+  transition: transform 200ms ease, color 160ms ease;
+}
+
+.guidanceChevronOpen {
+  transform: rotate(180deg);
+  color: var(--hx-cyan-2, var(--brand-strong));
+}
+
+.guidancePanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 220ms ease;
+}
+
+.guidanceCardOpen .guidancePanel {
+  grid-template-rows: 1fr;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guidancePanel {
+    transition: none;
+  }
+
+  .guidanceChevron,
+  .guidanceChevronOpen {
+    transition: none;
+  }
+}
+
+.guidancePanelInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.guidanceList {
+  padding: var(--hr-page-padding, 1rem) .85rem .85rem;
+  display: grid;
+  gap: .62rem;
+  border-top: 1px solid color-mix(in srgb, var(--hx-line-soft, var(--line)) 92%, transparent);
+}
+
+.guidanceItem {
+  display: flex;
+  align-items: flex-start;
+  gap: .62rem;
+  padding: .55rem .6rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent);
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 72%, transparent);
+}
+
+.guidanceItemIcon {
+  flex-shrink: 0;
+  width: 1.1rem;
+  height: 1.1rem;
+  margin-top: .08rem;
+  color: color-mix(in srgb, var(--hx-cyan, var(--river)) 75%, var(--hx-muted, var(--muted)));
+}
+
+.guidanceItemText {
+  min-width: 0;
+  flex: 1;
+  display: grid;
+  gap: .18rem;
+}
+
+.guidanceItemTitle {
+  margin: 0;
+  font-size: .78rem;
+  font-weight: 780;
+  color: var(--hx-text, var(--text));
+}
+
+.guidanceItemBody {
+  margin: 0;
+  font-size: .72rem;
+  font-weight: 620;
+  color: var(--hx-muted, var(--muted));
+  line-height: 1.4;
 }
 
 .formCard {
   grid-column: 1 / -1;
   display: grid;
-  gap: .82rem;
+  gap: .75rem;
+  padding: 1rem 1rem 1.15rem;
 }
 
-.formCard h2 {
+.formHeading {
   margin: 0;
   color: var(--hx-text, var(--text));
-  font-size: 1.08rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -.03em;
+}
+
+.formLead {
+  margin: 0;
+  color: var(--hx-muted, var(--muted));
+  font-size: .84rem;
+  font-weight: 650;
+  line-height: 1.45;
 }
 
 .form {
@@ -156,12 +387,24 @@
   gap: .75rem;
 }
 
-.form label {
+.field {
   display: grid;
-  gap: .35rem;
+  gap: .28rem;
   color: var(--hx-text, var(--text));
+  min-width: 0;
+}
+
+.fieldLabel {
   font-size: .78rem;
-  font-weight: 700;
+  font-weight: 750;
+}
+
+.fieldHint {
+  margin: 0;
+  font-size: .7rem;
+  font-weight: 620;
+  color: var(--hx-muted, var(--muted));
+  line-height: 1.35;
 }
 
 .form input {
@@ -172,28 +415,17 @@
   color: var(--hx-text, var(--text));
   padding: 0 .78rem;
   font-size: .84rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form input:focus {
-  outline: 0;
+  outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--river)) 55%, transparent);
+  outline-offset: 1px;
   border-color: var(--hx-cyan, var(--brand));
 }
 
-.form small { color: var(--hx-muted, var(--muted)); }
 .full { grid-column: 1 / -1; }
-
-.avatarUpload {
-  display: grid;
-  gap: .55rem;
-  font-weight: 540;
-}
-
-.uploadRow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .6rem;
-  align-items: center;
-}
 
 .uploadButton,
 .removeAvatar {
@@ -215,7 +447,6 @@
 
 .uploadButton:hover,
 .removeAvatar:hover { border-color: var(--hx-cyan, var(--brand)); }
-.uploadButton input { display: none; }
 .removeAvatar { color: var(--hx-muted, var(--muted)); }
 
 .error { color: #ff8a8a !important; font-weight: 680; }

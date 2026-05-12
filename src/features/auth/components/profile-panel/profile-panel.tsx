@@ -1,7 +1,19 @@
 'use client';
 
-import { FormEvent, useRef, useState } from 'react';
-import { Building2, Camera, CheckCircle2, Mail, ShieldCheck } from 'lucide-react';
+import { FormEvent, useEffect, useId, useRef, useState } from 'react';
+import {
+  BellRing,
+  Building2,
+  Camera,
+  CheckCircle2,
+  ChevronDown,
+  CircleHelp,
+  Mail,
+  MapPin,
+  Shield,
+  ShieldCheck
+} from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import NextImage from 'next/image';
 import { useTranslations } from 'next-intl';
 import { Card } from '@/shared/ui/card/card';
@@ -11,6 +23,7 @@ import { useAuthSession } from '../../hooks/use-auth-session';
 import { updateProfile } from '../../services/auth.client';
 import type { HydroUser } from '../../domain/auth.types';
 import { profileFormSchema } from '../../domain/profile.schema';
+import { getCompactUserDisplayName } from '../../domain/user-display-name';
 import styles from './profile-panel.module.scss';
 
 type ProfileFormState = Pick<HydroUser, 'name' | 'email' | 'company' | 'phone' | 'city' | 'avatarUrl'>;
@@ -23,6 +36,8 @@ const emptyProfile: ProfileFormState = {
   city: '',
   avatarUrl: ''
 };
+
+const PROFILE_GUIDANCE_PANEL_ID = 'profile-guidance-panel';
 
 async function fileToOptimizedJpegDataUrl(file: File) {
   const objectUrl = URL.createObjectURL(file);
@@ -54,7 +69,6 @@ async function fileToOptimizedJpegDataUrl(file: File) {
   }
 }
 
-
 function getInitials(name: string) {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (!parts.length) return 'HR';
@@ -63,10 +77,42 @@ function getInitials(name: string) {
   return `${first}${last}`.toUpperCase();
 }
 
+function DetailRow({ icon: Icon, label, hint, value }: { icon: LucideIcon; label: string; hint: string; value: string }) {
+  return (
+    <div className={styles.row}>
+      <Icon aria-hidden className={styles.rowIcon} />
+      <div className={styles.rowText}>
+        <small>{label}</small>
+        <p className={styles.rowHint}>{hint}</p>
+        <strong className={styles.rowValue}>{value}</strong>
+      </div>
+    </div>
+  );
+}
+
+function GuidanceItem({ icon: Icon, title, body }: { icon: LucideIcon; title: string; body: string }) {
+  return (
+    <div className={styles.guidanceItem}>
+      <Icon aria-hidden className={styles.guidanceItemIcon} />
+      <div className={styles.guidanceItemText}>
+        <strong className={styles.guidanceItemTitle}>{title}</strong>
+        <p className={styles.guidanceItemBody}>{body}</p>
+      </div>
+    </div>
+  );
+}
+
 export function ProfilePanel() {
   const t = useTranslations('pages.profile');
   const perfil = useTranslations('pages.perfil');
   const auth = useTranslations('auth');
+  const formIds = useId();
+  const nameId = `${formIds}-name`;
+  const emailId = `${formIds}-email`;
+  const companyId = `${formIds}-company`;
+  const phoneId = `${formIds}-phone`;
+  const cityId = `${formIds}-city`;
+
   const { user, ready } = useAuthSession();
   const [draftByUser, setDraftByUser] = useState<Record<string, ProfileFormState>>({});
   const [saved, setSaved] = useState(false);
@@ -75,19 +121,23 @@ export function ProfilePanel() {
   const [profileError, setProfileError] = useState('');
   const [avatarPreviewFailedSrc, setAvatarPreviewFailedSrc] = useState<string | null>(null);
   const [isAvatarViewerOpen, setIsAvatarViewerOpen] = useState(false);
+  const [guidanceOpen, setGuidanceOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const baseProfile: ProfileFormState = user ? {
-    name: user.name,
-    email: user.email,
-    company: user.company,
-    phone: user.phone ?? '',
-    city: user.city ?? '',
-    avatarUrl: user.avatarUrl ?? ''
-  } : emptyProfile;
+  const baseProfile: ProfileFormState = user
+    ? {
+        name: user.name,
+        email: user.email,
+        company: user.company,
+        phone: user.phoneE164 ?? user.phone ?? '',
+        city: user.city ?? '',
+        avatarUrl: user.avatarUrl ?? ''
+      }
+    : emptyProfile;
 
   const profile = user ? (draftByUser[user.id] ?? baseProfile) : emptyProfile;
   const avatarPreviewAvailable = Boolean(profile.avatarUrl) && avatarPreviewFailedSrc !== profile.avatarUrl;
+  const displayName = getCompactUserDisplayName(profile.name) || profile.name;
 
   function updateField(field: keyof ProfileFormState, value: string) {
     if (!user) return;
@@ -112,7 +162,7 @@ export function ProfilePanel() {
         name: updated.name,
         email: updated.email,
         company: updated.company,
-        phone: updated.phone ?? '',
+        phone: updated.phoneE164 ?? updated.phone ?? '',
         city: updated.city ?? '',
         avatarUrl: updated.avatarUrl ?? ''
       }
@@ -163,6 +213,18 @@ export function ProfilePanel() {
     resetFileInput();
   }
 
+  function mapProfileIssueToMessage(code: string | undefined) {
+    if (code === 'invalid-email') return auth('errorEmailInvalid');
+    if (code === 'profile-name-required') return auth('errorValidation');
+    if (code === 'profile-company-required') return auth('errorValidation');
+    if (code === 'profile-phone-required') return auth('errorProfilePhoneRequired');
+    if (code === 'profile-phone-no-country' || code === 'profile-phone-invalid' || code === 'invalid-phone-e164') {
+      return auth('errorProfilePhoneCountryCode');
+    }
+    if (code === 'profile-city-required') return auth('errorProfileCityRequired');
+    return auth('errorValidation');
+  }
+
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!user) return;
@@ -173,10 +235,7 @@ export function ProfilePanel() {
     const parsed = profileFormSchema.safeParse(profile);
     if (!parsed.success) {
       const issue = parsed.error.issues[0];
-      const code = issue?.message;
-      if (code === 'invalid-email') setProfileError(auth('errorEmailInvalid'));
-      else if (code === 'profile-name-required' || code === 'profile-company-required') setProfileError(auth('errorValidation'));
-      else setProfileError(auth('errorValidation'));
+      setProfileError(mapProfileIssueToMessage(issue?.message));
       setSaved(false);
       return;
     }
@@ -192,11 +251,21 @@ export function ProfilePanel() {
     }
   }
 
+  useEffect(() => {
+    if (!guidanceOpen) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setGuidanceOpen(false);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [guidanceOpen]);
+
   if (!ready) {
     return (
       <main className={styles.shell} aria-label={perfil('mainAriaLabel')}>
-        <p className={styles.eyebrow}>{t('eyebrow')}</p>
-        <h1>{t('loading')}</h1>
+        <p className={styles.inlineStatus}>{t('loading')}</p>
       </main>
     );
   }
@@ -204,16 +273,14 @@ export function ProfilePanel() {
   if (!user) {
     return (
       <main className={styles.shell} aria-label={perfil('mainAriaLabel')}>
-        <p className={styles.eyebrow}>{t('eyebrow')}</p>
-        <h1>{t('loginRequired')}</h1>
-        <span>{t('loginRequiredDescription')}</span>
+        <p className={styles.inlineLead}>{t('loginRequired')}</p>
+        <p className={styles.inlineMuted}>{t('loginRequiredDescription')}</p>
       </main>
     );
   }
 
   return (
     <main className={styles.shell} aria-label={perfil('mainAriaLabel')}>
-      <p className={styles.eyebrow}>{t('eyebrow')}</p><h1>{t('title')}</h1><span>{t('description')}</span>
       <section className={styles.grid}>
         <Card className={styles.identity}>
           <button
@@ -243,36 +310,153 @@ export function ProfilePanel() {
               <Camera size={18} />
               <span>{auth('avatarUpload')}</span>
             </button>
-            <input ref={fileInputRef} className={styles.hiddenFileInput} type="file" accept="image/jpeg,.jpg,.jpeg" onChange={(event) => handleAvatarUpload(event.target.files?.[0])} />
-            {profile.avatarUrl ? <button type="button" className={styles.removeAvatar} onClick={removeAvatar}>{auth('removeAvatar')}</button> : null}
+            <input
+              ref={fileInputRef}
+              className={styles.hiddenFileInput}
+              type="file"
+              accept="image/jpeg,.jpg,.jpeg"
+              onChange={(event) => handleAvatarUpload(event.target.files?.[0])}
+            />
+            {profile.avatarUrl ? (
+              <button type="button" className={styles.removeAvatar} onClick={removeAvatar}>
+                {auth('removeAvatar')}
+              </button>
+            ) : null}
           </div>
           {avatarError ? <small className={styles.error}>{avatarError}</small> : null}
-          <h2>{profile.name}</h2>
-          <p>{profile.company}</p>
-          <Badge tone={user.approved ? 'success' : 'warning'}>{user.approved ? t('approved') : t('pending')}</Badge>
+          <h2 className={styles.identityName} title={profile.name}>
+            {displayName}
+          </h2>
+          <p className={styles.identityCompany}>{profile.company}</p>
+          <div className={styles.identityStatus}>
+            <Badge tone={user.approved ? 'success' : 'warning'}>
+              {user.approved ? t('identityAccessBadgeApproved') : t('identityAccessBadgePending')}
+            </Badge>
+            <p className={styles.identityStatusTitle}>{user.approved ? t('identityReleasedTitle') : t('identityPendingTitle')}</p>
+            <p className={styles.identityStatusBody}>{user.approved ? t('identityReleasedBody') : t('identityPendingBody')}</p>
+          </div>
         </Card>
         <Card className={styles.details}>
-          <div className={styles.row}><Mail /><div><small>{auth('email')}</small><strong>{profile.email}</strong></div></div>
-          <div className={styles.row}><Building2 /><div><small>{auth('company')}</small><strong>{profile.company}</strong></div></div>
-          <div className={styles.row}><ShieldCheck /><div><small>{t('role')}</small><strong>{auth(user.role)}</strong></div></div>
-          <div className={styles.row}><CheckCircle2 /><div><small>{t('manualValidation')}</small><strong>{user.approved ? t('readyForPilot') : t('awaitingReview')}</strong></div></div>
+          <DetailRow icon={Mail} label={t('detailEmailLabel')} hint={t('detailEmailHint')} value={profile.email} />
+          <DetailRow
+            icon={Building2}
+            label={t('detailCompanyLabel')}
+            hint={t('detailCompanyHint')}
+            value={profile.company}
+          />
+          <DetailRow icon={ShieldCheck} label={t('detailRoleLabel')} hint={t('detailRoleHint')} value={auth(user.role)} />
+          <DetailRow
+            icon={CheckCircle2}
+            label={t('detailAreasLabel')}
+            hint={t('detailAreasHint')}
+            value={user.approved ? t('accessAreasApproved') : t('accessAreasPending')}
+          />
         </Card>
         <Card className={styles.formCard}>
-          <h2>{t('personalDetails')}</h2>
-          <form className={styles.form} onSubmit={onSubmit}>
-            <label><span>{auth('name')}</span><input name="name" value={profile.name} onChange={(event) => updateField('name', event.target.value)} /></label>
-            <label><span>{auth('email')}</span><input name="email" type="email" value={profile.email} onChange={(event) => updateField('email', event.target.value)} /></label>
-            <label><span>{auth('company')}</span><input name="company" value={profile.company} onChange={(event) => updateField('company', event.target.value)} /></label>
-            <label><span>{t('phone')}</span><input name="phone" value={profile.phone ?? ''} onChange={(event) => updateField('phone', event.target.value)} placeholder={t('phonePlaceholder')} /></label>
-            <label><span>{t('baseCity')}</span><input name="city" value={profile.city ?? ''} onChange={(event) => updateField('city', event.target.value)} placeholder={t('baseCityPlaceholder')} /></label>
-            {profileError ? <p className={styles.error} role="alert">{profileError}</p> : null}
-            <Button className={styles.full} loading={pending} loadingLabel={auth('loading')}>{saved ? auth('saved') : auth('saveProfile')}</Button>
+          <h2 className={styles.formHeading}>{t('formSectionTitle')}</h2>
+          <p className={styles.formLead}>{t('formSectionLead')}</p>
+          <form className={styles.form} onSubmit={onSubmit} noValidate>
+            <label className={styles.field} htmlFor={nameId}>
+              <span className={styles.fieldLabel}>{t('formNameLabel')}</span>
+              <span className={styles.fieldHint}>{t('formNameHint')}</span>
+              <input id={nameId} name="name" value={profile.name} onChange={(event) => updateField('name', event.target.value)} />
+            </label>
+            <label className={styles.field} htmlFor={emailId}>
+              <span className={styles.fieldLabel}>{t('formEmailLabel')}</span>
+              <span className={styles.fieldHint}>{t('formEmailHint')}</span>
+              <input
+                id={emailId}
+                name="email"
+                type="email"
+                autoComplete="email"
+                value={profile.email}
+                onChange={(event) => updateField('email', event.target.value)}
+              />
+            </label>
+            <label className={styles.field} htmlFor={companyId}>
+              <span className={styles.fieldLabel}>{t('formCompanyLabel')}</span>
+              <span className={styles.fieldHint}>{t('formCompanyHint')}</span>
+              <input id={companyId} name="company" value={profile.company} onChange={(event) => updateField('company', event.target.value)} />
+            </label>
+            <label className={styles.field} htmlFor={phoneId}>
+              <span className={styles.fieldLabel}>{t('formPhoneLabel')}</span>
+              <span className={styles.fieldHint}>{t('formPhoneHint')}</span>
+              <input
+                id={phoneId}
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                inputMode="tel"
+                value={profile.phone ?? ''}
+                onChange={(event) => updateField('phone', event.target.value)}
+                placeholder={t('phonePlaceholder')}
+              />
+            </label>
+            <label className={styles.field} htmlFor={cityId}>
+              <span className={styles.fieldLabel}>{t('formCityLabel')}</span>
+              <span className={styles.fieldHint}>{t('formCityHint')}</span>
+              <input
+                id={cityId}
+                name="city"
+                value={profile.city ?? ''}
+                onChange={(event) => updateField('city', event.target.value)}
+                placeholder={t('baseCityPlaceholder')}
+              />
+            </label>
+            {profileError ? (
+              <p className={styles.error} role="alert" id={`${formIds}-form-error`}>
+                {profileError}
+              </p>
+            ) : null}
+            <Button className={styles.full} loading={pending} loadingLabel={auth('loading')} aria-describedby={profileError ? `${formIds}-form-error` : undefined}>
+              {saved ? auth('saved') : auth('saveProfile')}
+            </Button>
           </form>
+        </Card>
+        <Card className={`${styles.guidanceCard} ${guidanceOpen ? styles.guidanceCardOpen : ''}`}>
+          <button
+            type="button"
+            className={styles.guidanceTrigger}
+            aria-expanded={guidanceOpen}
+            aria-controls={PROFILE_GUIDANCE_PANEL_ID}
+            onClick={() => setGuidanceOpen((open) => !open)}
+          >
+            <span className={styles.guidanceTriggerIcon} aria-hidden>
+              <CircleHelp size={18} />
+            </span>
+            <span className={styles.guidanceTriggerText}>
+              <span className={styles.guidanceTriggerTitle}>{t('guidanceAccordionTitle')}</span>
+              <span className={styles.guidanceTriggerLead}>{t('guidanceAccordionLead')}</span>
+            </span>
+            <ChevronDown size={18} className={`${styles.guidanceChevron} ${guidanceOpen ? styles.guidanceChevronOpen : ''}`} aria-hidden />
+          </button>
+          <div
+            id={PROFILE_GUIDANCE_PANEL_ID}
+            className={styles.guidancePanel}
+            role="region"
+            aria-label={t('guidanceAccordionAria')}
+            {...(!guidanceOpen ? { inert: true } : {})}
+          >
+            <div className={styles.guidancePanelInner}>
+              <div className={styles.guidanceList}>
+                <GuidanceItem icon={Shield} title={t('guidanceItemAccessTitle')} body={t('guidanceItemAccessBody')} />
+                <GuidanceItem icon={Building2} title={t('guidanceItemCompanyTitle')} body={t('guidanceItemCompanyBody')} />
+                <GuidanceItem icon={BellRing} title={t('guidanceItemContactTitle')} body={t('guidanceItemContactBody')} />
+                <GuidanceItem icon={MapPin} title={t('guidanceItemBaseTitle')} body={t('guidanceItemBaseBody')} />
+              </div>
+            </div>
+          </div>
         </Card>
       </section>
       {isAvatarViewerOpen && avatarPreviewAvailable ? (
         <div className={styles.viewerOverlay} role="presentation" onClick={() => setIsAvatarViewerOpen(false)}>
-          <div className={styles.viewerDialog} role="dialog" aria-modal="true" aria-label={auth('avatar')} onClick={(event) => event.stopPropagation()}>
+          <div
+            className={styles.viewerDialog}
+            role="dialog"
+            aria-modal="true"
+            aria-label={auth('avatar')}
+            onClick={(event) => event.stopPropagation()}
+          >
             <button type="button" className={styles.viewerClose} onClick={() => setIsAvatarViewerOpen(false)} aria-label={auth('removeAvatar')}>
               ×
             </button>

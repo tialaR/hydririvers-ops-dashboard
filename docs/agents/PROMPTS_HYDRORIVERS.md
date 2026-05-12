@@ -2,10 +2,21 @@
 
 Este arquivo centraliza prompts em portugues para uso no Cursor e no Codex.
 
+## 0) Quality gates (apos mudancas)
+
+```text
+Na raiz do repo, rode apenas scripts que existem no package.json. Minimo tipico:
+npm run lint && npm run typecheck && npm run check:i18n && npm test
+Para regressao Mock Mode: npm run test:mock-mode (ja incluido em npm run verify).
+Bundle: npm run build (obrigatorio no CI principal ci.yml; o job de PR usa verify sem build).
+Scripts verify:qa e check:mock-data NAO existem neste projeto ate serem adicionados ao package.json.
+```
+
 ## 1) Diagnostico no Cursor Ask
 
 ```text
-Leia AGENTS.md, docs/agents/PROMPTS_HYDRORIVERS.md e todos os arquivos em .cursor/rules.
+Leia AGENTS.md, docs/agents/PROMPTS_HYDRORIVERS.md, docs/CI-QUALITY-GATES.md e docs/adr/README.md.
+Se existir pasta .cursor/rules no workspace, leia tambem.
 Nao altere arquivos.
 Mapeie riscos, lacunas e inconsistencias no contexto HydroRivers (arquitetura, i18n, testes, seguranca e permissao).
 Entregue:
@@ -87,7 +98,7 @@ Explique em 1-2 linhas o motivo da mudanca.
 ## 10) Revisao no Codex
 
 ```text
-Leia AGENTS.md, docs/agents/PROMPTS_HYDRORIVERS.md e todos os arquivos em .cursor/rules.
+Leia AGENTS.md, docs/agents/PROMPTS_HYDRORIVERS.md e docs/CI-QUALITY-GATES.md (e .cursor/rules se existir).
 Nao altere arquivos.
 Confirme entendimento de:
 1. contexto do projeto

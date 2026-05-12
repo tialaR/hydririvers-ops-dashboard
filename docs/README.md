@@ -27,9 +27,18 @@ Este diretório reúne as decisões, regras e guias do produto.
 - [i18n/i18n-guidelines.md](./i18n/i18n-guidelines.md)
 - [testing/testing-strategy.md](./testing/testing-strategy.md)
 - [ONBOARDING.md](./ONBOARDING.md)
-- [automation/automation-workflows-audit.md](./audits/automation-workflows-audit.md)
+- [audits/automation-workflows-audit.md](./audits/automation-workflows-audit.md)
 - [agent-cargas.md](./agent-cargas.md)
 - [feature-scope-audit.md](./feature-scope-audit.md)
+
+## Instruções para agentes e CI
+
+- [AGENTS.md](../AGENTS.md) (raiz do repositório): regras para assistentes de código, quality gates mínimos e limites de escopo.
+- [CI — Quality gates](./CI-QUALITY-GATES.md): o que roda em `ci.yml` vs `pr-quality.yml` e como espelhar localmente.
+- [ADRs](./adr/README.md): decisões arquiteturais e de produto.
+- Mock Mode / QA: [MOCK-MODE-QA-HUB.md](./MOCK-MODE-QA-HUB.md), [MOCK-MODE-USE-CASES.md](./MOCK-MODE-USE-CASES.md), [automation/mock-mode-qa-assistant.md](./automation/mock-mode-qa-assistant.md).
+- Papéis e permissões (produto): [product/roles-and-permissions.md](./product/roles-and-permissions.md) (quando presente no branch).
+- Dados mock e limites: [TEST-DATA.md](./TEST-DATA.md), [automation/mock-data-privacy-workflow.md](./automation/mock-data-privacy-workflow.md).
 
 ## Automação
 

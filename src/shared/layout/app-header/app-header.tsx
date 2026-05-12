@@ -13,6 +13,7 @@ import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
 import { LocaleSwitcher } from '@/shared/ui/locale-switcher/locale-switcher';
 import { AuthActions } from '@/features/auth/components/auth-actions/auth-actions';
+import { getCompactDisplayInitials } from '@/features/auth/domain/user-display-name';
 import { logout } from '@/features/auth/services/auth.client';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import styles from './app-header.module.scss';
@@ -24,15 +25,6 @@ const MENU_SHEET_FULL_THRESHOLD = 72;
 
 type MenuSheetState = 'closed' | 'open' | 'closing';
 type MenuSheetSnap = 'half' | 'full';
-
-function initials(name?: string) {
-  return (name ?? 'HR')
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('') || 'HR';
-}
 
 function resolveActiveHref(pathname: string) {
   return resolveActiveNavigationHref(pathname, mainNavigation);
@@ -386,7 +378,11 @@ export function AppHeader() {
           <div className={styles.headerSession}><AuthActions /></div>
           {user ? (
             <Link href={intlAppPaths.auth.profile} className={styles.mobileAvatar} aria-label={t('profile')}>
-              {user.avatarUrl ? <Image src={user.avatarUrl} alt="" width={40} height={40} unoptimized /> : <span>{initials(user.name)}</span>}
+              {user.avatarUrl ? (
+                <Image src={user.avatarUrl} alt="" width={40} height={40} unoptimized />
+              ) : (
+                <span>{getCompactDisplayInitials(user.name)}</span>
+              )}
             </Link>
           ) : null}
           <div className={styles.mobileActions}>

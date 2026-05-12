@@ -7,8 +7,10 @@ Garantir que o Dashboard continue sendo um cockpit operacional e não volte a pa
 ## Checklist de produto
 
 - O Dashboard responde “como está a operação agora?”.
+- O topo explica, em linguagem humana, para que serve a tela e o que ela resume.
 - O Dashboard não domina a experiência com uma listagem completa de cargas.
-- Há caminho claro para `Cargas` e `Minhas cargas`.
+- Ha um unico bloco guia de CTAs (evitar atalhos duplicados para o mesmo destino).
+- Ha caminho claro para `Cargas` (publico) e `Minhas cargas` (privado).
 - A copy deixa clara a diferença entre as três áreas.
 
 ## Checklist de UI

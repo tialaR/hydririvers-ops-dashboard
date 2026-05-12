@@ -1,5 +1,11 @@
 import 'server-only';
 
+/**
+ * Persistência mock em `.mock-data/*.json` (somente desenvolvimento).
+ * Os arquivos JSON são gitignored — não versionar dados reais de QA.
+ * Seeds determinísticos: `auth.mock`, `marketplace.mock`, `mock-scenarios.ts`.
+ */
+
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { defaultUsers } from '@/features/auth/data/auth.mock';

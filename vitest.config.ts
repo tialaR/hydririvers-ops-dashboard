@@ -10,6 +10,10 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['tests/unit/**/*.test.ts', 'tests/integration/**/*.test.ts']
+    include: [
+      'tests/unit/**/*.test.ts',
+      'tests/unit/features/negotiations/negotiation-board-render.test.tsx',
+      'tests/integration/**/*.test.ts'
+    ]
   }
 });

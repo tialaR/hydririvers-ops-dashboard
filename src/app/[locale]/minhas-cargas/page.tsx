@@ -7,7 +7,8 @@ import { MyCargoesList } from '@/features/cargo-market/components/my-cargoes-lis
 import type { AppLocale } from '@/shared/routing/route-types';
 import { appRoutes, intlAppPaths } from '@/shared/routing/app-routes';
 import { routeSearchParams } from '@/shared/routing/route-search-params';
-import { getCurrentUserCargos } from '@/features/cargo/services/cargo.service';
+import { getMyCargoesForUser } from '@/features/cargo/services/cargo.service';
+import { canCreateCargo } from '@/features/auth/domain/access-control';
 
 export default async function MinhasCargasPage({
   params,
@@ -30,19 +31,23 @@ export default async function MinhasCargasPage({
     redirect(appRoutes.admin.home(loc));
   }
 
-  const mine = await getCurrentUserCargos(user.id);
+  const mine = await getMyCargoesForUser(user.id, user.role);
+  const canCreate = canCreateCargo(user);
 
   const spRecord = sp as Record<string, string | undefined>;
   const createdRaw = spRecord[routeSearchParams.created];
   const createdCargoId = typeof createdRaw === 'string' && createdRaw.trim() ? createdRaw.trim() : undefined;
 
+  const title = user.role === 'carrier' ? t('titleCarrier') : t('title');
+  const description = user.role === 'carrier' ? t('descriptionCarrier') : t('description');
+
   return (
-    <PageShell eyebrow={t('eyebrow')} title={t('title')} description={t('description')}>
+    <PageShell eyebrow={t('eyebrow')} title={title} description={description}>
       <Breadcrumb
         locale={locale}
         items={[{ label: nav('dashboard'), href: intlAppPaths.dashboard.home }, { label: t('breadcrumbCurrent') }]}
       />
-      <MyCargoesList cargoes={mine} createdCargoId={createdCargoId} />
+      <MyCargoesList cargoes={mine} createdCargoId={createdCargoId} canCreateCargo={canCreate} />
     </PageShell>
   );
 }

@@ -4,27 +4,30 @@ import Image from 'next/image';
 import { createPortal } from 'react-dom';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties } from 'react';
 import {
+  Activity,
+  Anchor,
   Bell,
-  BriefcaseBusiness,
+  Boxes,
   Check,
   ChevronDown,
   CirclePlus,
-  Compass,
   FileWarning,
   Gauge,
   Handshake,
   Landmark,
+  LayoutDashboard,
   Leaf,
   LogIn,
   LogOut,
   Menu,
   Map,
+  Package,
   RadioTower,
+  Route,
   Search,
   ShieldCheck,
   Ship,
   TriangleAlert,
-  UserRound,
   Waves
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -33,6 +36,7 @@ import { Link, usePathname, useRouter } from '@/core/i18n/navigation';
 import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
 import { logout } from '@/features/auth/services/auth.client';
 import type { HydroUser, UserRole } from '@/features/auth/domain/auth.types';
+import { getCompactDisplayInitials, getCompactUserDisplayName } from '@/features/auth/domain/user-display-name';
 import {
   emptyNotificationsSnapshot,
   getUnreadNotificationsCount,
@@ -66,13 +70,13 @@ type NavIconKey =
   | 'admin';
 
 const iconByKey: Record<NavIconKey, typeof Gauge> = {
-  home: Compass,
+  home: LayoutDashboard,
   dashboard: Gauge,
-  cargoes: BriefcaseBusiness,
-  myCargos: Map,
-  vessels: Ship,
-  negotiations: Waves,
-  tracking: Compass,
+  cargoes: Package,
+  myCargos: Boxes,
+  vessels: Anchor,
+  negotiations: Handshake,
+  tracking: Route,
   impact: Leaf,
   government: Landmark,
   admin: ShieldCheck
@@ -82,15 +86,9 @@ function resolveActiveHref(pathname: string) {
   return resolveActiveNavigationHref(pathname, mainNavigation);
 }
 
-function initials(name?: string) {
-  return (name ?? 'Carlos Almeida')
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join('');
+function profileDisplayName(name?: string) {
+  return getCompactUserDisplayName(name ?? '') || 'Carlos Almeida';
 }
-
 
 function roleLabel(role?: UserRole) {
   if (role === 'shipper') return 'shipper';
@@ -175,6 +173,12 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
   const notificationsPanelRef = useRef<HTMLDivElement>(null);
   const [notificationsPanelStyle, setNotificationsPanelStyle] = useState<CSSProperties>({});
+  const dashboardScrollRef = useRef<HTMLDivElement>(null);
+  const [isDashboardHeaderScrolled, setIsDashboardHeaderScrolled] = useState(false);
+  const systemStatusButtonRef = useRef<HTMLButtonElement>(null);
+  const [systemStatusTipVisible, setSystemStatusTipVisible] = useState(false);
+  const [systemStatusTipStyle, setSystemStatusTipStyle] = useState<CSSProperties>({});
+  const systemStatusHideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const localePanelId = 'hx-sidebar-language-panel';
   const notificationsPanelId = 'hx-header-notifications-panel';
   const currentLocale = SIDEBAR_LOCALES.find((item) => item.value === locale) ?? SIDEBAR_LOCALES[0];
@@ -210,7 +214,15 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
   const navigation = useMemo(() => filterMainNavigationForUser(navigationUser), [navigationUser]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
+  const activeNavLabel = activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title');
+  const activeNavSubtitle = activeHref === intlAppPaths.home
+    ? tChrome('header.homeSubtitle')
+    : tChrome('header.subtitle');
+  const headerDescriptionText = activeHref === intlAppPaths.home ? tChrome('header.homeDescription') : tChrome('header.description');
+  const headerFullTitleLabel = `${activeNavLabel} • ${activeNavSubtitle}`;
+  const hasUnreadNotifications = unreadNotificationsCount > 0;
   const mobilePrimaryHrefs = [
+    intlAppPaths.home,
     intlAppPaths.dashboard.home,
     intlAppPaths.cargos.marketplace,
     intlAppPaths.tracking.home,
@@ -227,6 +239,94 @@ export function AdminChrome({ children }: AdminChromeProps) {
     window.addEventListener('resize', updateViewport);
     return () => window.removeEventListener('resize', updateViewport);
   }, []);
+
+  useEffect(() => {
+    const el = dashboardScrollRef.current;
+    const syncScroll = () => {
+      const inner = el ? el.scrollTop > 8 : false;
+      const win = typeof window !== 'undefined' && window.scrollY > 8;
+      setIsDashboardHeaderScrolled(inner || win);
+    };
+
+    syncScroll();
+    el?.addEventListener('scroll', syncScroll, { passive: true });
+    window.addEventListener('scroll', syncScroll, { passive: true });
+    return () => {
+      el?.removeEventListener('scroll', syncScroll);
+      window.removeEventListener('scroll', syncScroll);
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!localeOpen) return undefined;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLocaleOpen(false);
+    };
+
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [localeOpen]);
+
+  function clearSystemStatusHideTimer() {
+    if (systemStatusHideTimerRef.current !== null) {
+      clearTimeout(systemStatusHideTimerRef.current);
+      systemStatusHideTimerRef.current = null;
+    }
+  }
+
+  function openSystemStatusTip() {
+    clearSystemStatusHideTimer();
+    setSystemStatusTipVisible(true);
+  }
+
+  function scheduleCloseSystemStatusTip() {
+    clearSystemStatusHideTimer();
+    systemStatusHideTimerRef.current = setTimeout(() => {
+      setSystemStatusTipVisible(false);
+      systemStatusHideTimerRef.current = null;
+    }, 140);
+  }
+
+  useLayoutEffect(() => {
+    if (!systemStatusTipVisible || typeof window === 'undefined' || !systemStatusButtonRef.current) {
+      return;
+    }
+    const rect = systemStatusButtonRef.current.getBoundingClientRect();
+    const panelWidth = 228;
+    const left = Math.min(
+      Math.max(12, rect.left + rect.width / 2 - panelWidth / 2),
+      window.innerWidth - panelWidth - 12
+    );
+    const top = rect.bottom + 10;
+    setSystemStatusTipStyle({
+      position: 'fixed',
+      top,
+      left,
+      width: panelWidth,
+      zIndex: 1260
+    });
+  }, [systemStatusTipVisible]);
+
+  useEffect(() => {
+    if (!systemStatusTipVisible) return undefined;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        clearSystemStatusHideTimer();
+        setSystemStatusTipVisible(false);
+        systemStatusButtonRef.current?.blur();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [systemStatusTipVisible]);
+
+  useEffect(
+    () => () => {
+      clearSystemStatusHideTimer();
+    },
+    []
+  );
 
   useEffect(() => {
     if (!notificationsOpen) return undefined;
@@ -324,14 +424,15 @@ export function AdminChrome({ children }: AdminChromeProps) {
           <strong>{tNotifications('title')}</strong>
           <small>{tNotifications('summary', { count: unreadNotificationsCount })}</small>
         </div>
-        <button
-          type="button"
-          className="hx-notifications-mark-all"
-          onClick={handleMarkAllNotificationsRead}
-          disabled={unreadNotificationsCount === 0}
-        >
-          {tNotifications('markAllRead')}
-        </button>
+        {hasUnreadNotifications ? (
+          <button
+            type="button"
+            className="hx-notifications-mark-all"
+            onClick={handleMarkAllNotificationsRead}
+          >
+            {tNotifications('markAllRead')}
+          </button>
+        ) : null}
       </div>
 
       <div className="hx-notifications-list">
@@ -382,7 +483,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
           <div className="hx-sidebar-toggle-zone">
             <button
               type="button"
-              className={sidebarCollapsed ? 'hx-collapse-button is-collapsed' : 'hx-collapse-button'}
+              className={sidebarCollapsed ? 'hx-collapse-button is-collapsed hx-sidebar-interactive' : 'hx-collapse-button hx-sidebar-interactive'}
               aria-label={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
               title={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
               onClick={() => setSidebarCollapsed((current) => !current)}
@@ -399,7 +500,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={active ? 'hx-sidebar-link is-active' : 'hx-sidebar-link'}
+                  className={active ? 'hx-sidebar-link is-active hx-sidebar-interactive' : 'hx-sidebar-link hx-sidebar-interactive'}
                   title={t(item.labelKey)}
                   aria-label={t(item.labelKey)}
                 >
@@ -412,27 +513,17 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
             <div className="hx-sidebar-footer hr-sidebar-footer">
               <div className="hx-sidebar-footer-tools">
-                {sidebarCollapsed ? (
-                  <div className="hx-sidebar-setting-row hx-sidebar-theme-row is-theme-toggle-only">
-                    <span className="hx-sidebar-theme-toggle">
-                      <ThemeToggle ariaLabel={tChrome('settings.theme.toggleLabel')} />
-                    </span>
-                  </div>
-                ) : (
-                  <div className="hx-sidebar-setting-row hx-sidebar-theme-row is-theme-toggle-only" aria-label={tChrome('settings.theme.toggleLabel')}>
-                    <span className="hx-sidebar-theme-toggle">
-                      <ThemeToggle
-                        variant="pill"
-                        ariaLabel={tChrome('settings.theme.toggleLabel')}
-                      />
-                    </span>
-                  </div>
-                )}
+                <div className="hx-sidebar-theme-row" role="group" aria-label={tChrome('settings.theme.toggleLabel')}>
+                  <ThemeToggle
+                    variant={sidebarCollapsed ? 'icon' : 'pill'}
+                    ariaLabel={tChrome('settings.theme.toggleLabel')}
+                  />
+                </div>
 
                 <div className={localeOpen ? 'hx-sidebar-locale is-open' : 'hx-sidebar-locale'}>
                   <button
                     type="button"
-                    className="hx-sidebar-setting-row hx-sidebar-locale-trigger"
+                    className="hx-sidebar-setting-row hx-sidebar-locale-trigger hx-sidebar-interactive"
                     aria-expanded={localeOpen}
                     aria-controls={localePanelId}
                     aria-label={tChrome('settings.language.selectLabel', { locale: currentLocale.label })}
@@ -449,34 +540,56 @@ export function AdminChrome({ children }: AdminChromeProps) {
                     <div className="hx-sidebar-setting-copy">
                       <strong>{currentLocale.label}</strong>
                     </div>
-                    <ChevronDown size={16} className="hx-sidebar-footer-chevron" />
+                    <ChevronDown size={16} className="hx-sidebar-footer-chevron" aria-hidden />
                   </button>
 
-                {localeOpen ? (
-                  <div id={localePanelId} className="hx-sidebar-locale-panel" role="menu" aria-label={tChrome('language.select')}>
-                    {SIDEBAR_LOCALES.map((item) => {
-                      const selected = item.value === locale;
-                      return (
-                        <button
-                          key={item.value}
-                          type="button"
-                          role="menuitem"
-                          aria-current={selected ? 'true' : undefined}
-                          className={selected ? 'is-active' : ''}
-                          onClick={() => changeSidebarLocale(item.value)}
-                        >
-                          <span aria-hidden>{item.flag}</span>
-                          <strong>{item.label}</strong>
-                          {selected ? <Check size={15} aria-hidden /> : <small>{item.value}</small>}
-                        </button>
-                      );
-                    })}
+                  <div
+                    id={localePanelId}
+                    className="hx-sidebar-locale-accordion"
+                    role="region"
+                    aria-label={tChrome('language.select')}
+                    {...(!localeOpen ? { inert: true } : {})}
+                  >
+                    <div className="hx-sidebar-locale-accordion-inner">
+                      <div className="hx-sidebar-locale-options">
+                        {SIDEBAR_LOCALES.map((item) => {
+                          const selected = item.value === locale;
+                          return (
+                            <button
+                              key={item.value}
+                              type="button"
+                              aria-current={selected ? 'true' : undefined}
+                              aria-label={`${item.label} (${item.value})`}
+                              title={`${item.label} (${item.value})`}
+                              className={
+                                selected
+                                  ? 'hx-sidebar-locale-option hx-sidebar-interactive is-active'
+                                  : 'hx-sidebar-locale-option hx-sidebar-interactive'
+                              }
+                              onClick={() => changeSidebarLocale(item.value)}
+                            >
+                              <span className="hx-sidebar-locale-option-flag" aria-hidden>
+                                {item.flag}
+                              </span>
+                              <span className="hx-sidebar-locale-option-copy">
+                                <strong>{item.label}</strong>
+                                <small>{item.value}</small>
+                              </span>
+                              {selected ? (
+                                <Check size={15} className="hx-sidebar-locale-option-check" aria-hidden />
+                              ) : (
+                                <span className="hx-sidebar-locale-option-spacer" aria-hidden />
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
                   </div>
-                ) : null}
-              </div>
+                </div>
 
               {navigationUser ? (
-                <button type="button" className="hx-sidebar-setting-row hx-sidebar-logout" onClick={handleSidebarLogout} title={t('logout')} aria-label={t('logout')}>
+                <button type="button" className="hx-sidebar-setting-row hx-sidebar-logout hx-sidebar-interactive" onClick={handleSidebarLogout} title={t('logout')} aria-label={t('logout')}>
                   <span className="hx-sidebar-setting-icon"><LogOut size={18} /></span>
                   <div className="hx-sidebar-setting-copy">
                     <small>{tChrome('session')}</small>
@@ -484,7 +597,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                   </div>
                 </button>
               ) : (
-                <Link href={intlAppPaths.auth.login} className="hx-sidebar-setting-row hx-sidebar-login" title={t('login')} aria-label={t('login')}>
+                <Link href={intlAppPaths.auth.login} className="hx-sidebar-setting-row hx-sidebar-login hx-sidebar-interactive" title={t('login')} aria-label={t('login')}>
                   <span className="hx-sidebar-setting-icon"><LogIn size={18} /></span>
                   <div className="hx-sidebar-setting-copy">
                     <small>{tChrome('session')}</small>
@@ -499,6 +612,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
       <div className="hx-main hr-main">
         <main className="hx-content hr-dashboard-page">
+          <div ref={dashboardScrollRef} className="hr-dashboard-scroll">
           <header className="hx-mobile-topbar" aria-label={tChrome('mobile.headerAria')}>
             <div className="hx-mobile-topbar__row">
               <Link href={intlAppPaths.dashboard.home} className="hx-mobile-brand" aria-label={tChrome('brandAria')}>
@@ -510,7 +624,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                 <button
                   type="button"
                   className="hx-bell"
-                  aria-label={tChrome('header.notifications')}
+                  aria-label={tChrome('header.notificationsAria', { count: unreadNotificationsCount })}
                   onClick={() => setNotificationsOpen(true)}
                 >
                   <Bell size={18} />
@@ -522,7 +636,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                   {navigationUser?.avatarUrl ? (
                     <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} unoptimized />
                   ) : (
-                    initials(navigationUser?.name)
+                    getCompactDisplayInitials(navigationUser?.name ?? '')
                   )}
                 </Link>
               </div>
@@ -531,7 +645,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
             <div className="hx-mobile-topbar__row is-secondary">
               <div className="hx-mobile-title">
                 <small>{tChrome('mobile.kicker')}</small>
-                <strong>{activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title')}</strong>
+                <strong>{activeNavLabel}</strong>
               </div>
               <div className="hx-mobile-quick-actions">
                 <button type="button" className="hx-mobile-ghost-button" onClick={() => setMobileSearchOpen(true)} aria-label={tCommon('search')}>
@@ -541,10 +655,23 @@ export function AdminChrome({ children }: AdminChromeProps) {
             </div>
           </header>
 
-          <header className="hx-topbar hr-topbar">
+          <header
+            className={`hx-topbar hr-topbar${isDashboardHeaderScrolled ? ' hx-topbar--scrolled' : ''}`}
+            data-scrolled={isDashboardHeaderScrolled ? 'true' : 'false'}
+          >
             <div className="hx-title-block">
-              <h1>{tChrome('header.title')} <span /> {tChrome('header.subtitle')}</h1>
-              <p>{tChrome('header.description')}</p>
+              <h1 className="hx-title-block__heading" title={headerFullTitleLabel} aria-label={headerFullTitleLabel}>
+                <span className="hx-title-block__heading-inner">
+                  <span className="hx-title-block__kicker">
+                    <span className="hx-title-block__context">{activeNavLabel}</span>
+                    <span className="hx-title-block__bullet" aria-hidden />
+                  </span>
+                  <span className="hx-title-block__section">{activeNavSubtitle}</span>
+                </span>
+              </h1>
+              <p className="hx-title-block__description" title={headerDescriptionText}>
+                {headerDescriptionText}
+              </p>
             </div>
 
             <label className="hx-top-search">
@@ -554,13 +681,45 @@ export function AdminChrome({ children }: AdminChromeProps) {
             </label>
 
             <div className="hx-top-actions">
-              <span className="hx-system-pill"><i /> {tChrome('header.systemStatus')}</span>
+              <button
+                ref={systemStatusButtonRef}
+                type="button"
+                className="hx-system-pill hx-system-pill--icon-only"
+                aria-label={tChrome('header.systemStatus')}
+                aria-describedby={systemStatusTipVisible ? 'hx-header-system-status-tooltip' : undefined}
+                onPointerEnter={openSystemStatusTip}
+                onPointerLeave={scheduleCloseSystemStatusTip}
+                onFocus={() => openSystemStatusTip()}
+                onBlur={() => {
+                  clearSystemStatusHideTimer();
+                  setSystemStatusTipVisible(false);
+                }}
+              >
+                <i aria-hidden />
+                <Activity className="hx-system-pill__glyph" size={17} aria-hidden />
+              </button>
+              {systemStatusTipVisible && typeof document !== 'undefined'
+                ? createPortal(
+                    <div
+                      id="hx-header-system-status-tooltip"
+                      role="tooltip"
+                      className="hx-system-status-tooltip"
+                      style={systemStatusTipStyle}
+                      onPointerEnter={openSystemStatusTip}
+                      onPointerLeave={scheduleCloseSystemStatusTip}
+                    >
+                      <strong className="hx-system-status-tooltip__title">{tChrome('header.systemStatusTooltipTitle')}</strong>
+                      <p className="hx-system-status-tooltip__desc">{tChrome('header.systemStatusTooltipDescription')}</p>
+                    </div>,
+                    document.body
+                  )
+                : null}
               <div className="hx-notifications" ref={notificationsRef}>
                 <button
                   ref={notificationsButtonRef}
                   type="button"
                   className={notificationsOpen ? 'hx-bell is-open' : 'hx-bell'}
-                  aria-label={tChrome('header.notifications')}
+                  aria-label={tChrome('header.notificationsAria', { count: unreadNotificationsCount })}
                   aria-expanded={notificationsOpen}
                   aria-haspopup="dialog"
                   aria-controls={notificationsPanelId}
@@ -595,26 +754,29 @@ export function AdminChrome({ children }: AdminChromeProps) {
               <Link
                 href={navigationUser ? intlAppPaths.auth.profile : intlAppPaths.auth.login}
                 className={navigationUser?.avatarUrl ? 'hx-profile has-avatar' : 'hx-profile'}
+                aria-label={navigationUser ? tChrome('profile.openAria', { name: profileDisplayName(navigationUser?.name) }) : t('login')}
               >
                 <span className="hx-profile-avatar">
                   {navigationUser?.avatarUrl ? (
                     <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} unoptimized />
                   ) : (
-                    initials(navigationUser?.name)
+                    getCompactDisplayInitials(navigationUser?.name ?? '')
                   )}
                 </span>
-                <div>
-                  <strong>{navigationUser?.name ?? 'Carlos Almeida'}</strong>
+                <div className="hx-profile-text">
+                  <strong title={navigationUser?.name ?? 'Carlos Almeida'}>{profileDisplayName(navigationUser?.name)}</strong>
                   <small>
                     {navigationUser ? tChrome(`roles.${roleLabel(navigationUser.role)}`) : tChrome('roles.operations')}
                   </small>
                 </div>
-                {navigationUser ? <UserRound size={16} /> : <LogIn size={16} />}
               </Link>
             </div>
           </header>
 
-          <div className="hr-dashboard-content-root">{children}</div>
+          <div className="hr-dashboard-content-root">
+            {children}
+          </div>
+          </div>
         </main>
       </div>
 
@@ -664,6 +826,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
           <input type="search" placeholder={tChrome('header.searchPlaceholder')} aria-label={tCommon('search')} />
         </label>
         <div className="hx-mobile-sheet-links">
+          <Link href={intlAppPaths.home} onClick={() => setMobileSearchOpen(false)}>{t('home')}</Link>
           <Link href={intlAppPaths.dashboard.home} onClick={() => setMobileSearchOpen(false)}>{t('dashboard')}</Link>
           <Link href={intlAppPaths.cargos.marketplace} onClick={() => setMobileSearchOpen(false)}>{t('cargoes')}</Link>
           <Link href={intlAppPaths.tracking.home} onClick={() => setMobileSearchOpen(false)}>{t('tracking')}</Link>

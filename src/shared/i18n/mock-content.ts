@@ -1,6 +1,34 @@
 type Localized = Partial<Record<'pt-BR' | 'en-US' | 'es', string>>;
 
 const exact: Record<string, Localized> = {
+  'Castanha-do-pará refrigerada — cooperativa ribeirinha': {
+    'en-US': 'Refrigerated Brazil nuts — riverside cooperative',
+    'es': 'Castaña de Brasil refrigerada — cooperativa ribereña'
+  },
+  'Insumos hospitalares — abastecimento territorial': {
+    'en-US': 'Hospital supplies — territorial distribution',
+    'es': 'Insumos hospitalarios — abastecimiento territorial'
+  },
+  'Equipamentos para obra ribeirinha': {
+    'en-US': 'Equipment for riverside construction',
+    'es': 'Equipos para obra ribereña'
+  },
+  'Bebidas e alimentos não perecíveis': {
+    'en-US': 'Beverages and non-perishable foods',
+    'es': 'Bebidas y alimentos no perecederos'
+  },
+  'Peças industriais — manutenção de frota': {
+    'en-US': 'Industrial parts — fleet maintenance',
+    'es': 'Piezas industriales — mantenimiento de flota'
+  },
+  'Carga consolidada — abastecimento regional': {
+    'en-US': 'Consolidated cargo — regional supply',
+    'es': 'Carga consolidada — abastecimiento regional'
+  },
+  'Fertilizante mineral — safra verão (entregue)': {
+    'en-US': 'Mineral fertilizer — summer crop (delivered)',
+    'es': 'Fertilizante mineral — campaña de verano (entregado)'
+  },
   'Polpa de açaí congelada — cooperativa ribeirinha': {
     'en-US': 'Frozen açaí pulp — riverside cooperative',
     'es': 'Pulpa de açaí congelada — cooperativa ribereña'

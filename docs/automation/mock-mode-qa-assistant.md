@@ -41,6 +41,14 @@ Cada cenário mostra:
 - tags;
 - passos recomendados;
 - resultado esperado.
+- Quando o cenário envolve notificações, a quantidade total e a quantidade de não lidas precisam estar declaradas para evitar divergência entre lista, badge e popover.
+
+O painel também organiza a leitura por persona e por jornada:
+
+- Personas: Embarcador, Transportador, Admin, Governo, Visitante, QA e Operação.
+- Jornadas: Auth e onboarding, Dashboard, Cargas públicas, Minhas cargas, Negociações, Rastreio, Notificações, Mobile, Tema e idioma, Impacto, Governo, Embarcações e Outros fluxos.
+
+No topo, há uma jornada recomendada para QA humano seguir a sequência principal de validação sem precisar adivinhar o próximo passo.
 
 Use a busca para filtrar por rota, risco, tags ou palavras-chave operacionais.
 
@@ -63,6 +71,7 @@ O reset depende de sessão admin e da flag `HYDRORIVERS_ALLOW_MOCK_MODE_RESET=tr
 - Reaproveite datasets existentes quando possível.
 - Evite gerar estado novo em cada render.
 - Mantenha coerência entre usuário, cargas, notificações, negociação e rastreio.
+- Badge e texto do popover de notificações devem sempre derivar do mesmo `unreadCount`.
 
 ## Como o QA deve usar
 

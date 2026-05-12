@@ -1,6 +1,6 @@
 {
   "nav": {
-    "home": "Home",
+    "home": "Overview",
     "dashboard": "Dashboard",
     "cargoes": "Cargoes",
     "myCargoes": "My cargoes",
@@ -374,6 +374,9 @@
     "registerSuccess": "Account created successfully.",
     "loginSuccess": "Signed in successfully.",
     "errorEmailInvalid": "Enter a valid email address.",
+    "errorProfilePhoneRequired": "Enter your phone number with a country code.",
+    "errorProfilePhoneCountryCode": "Enter a phone number with a country code, such as +55 71 99999-9999.",
+    "errorProfileCityRequired": "Enter your city or home port.",
     "errorPasswordMin": "Password must be at least 8 characters.",
     "errorFullNameRequired": "Enter your full name.",
     "errorFullNameTwoWords": "Use first and last name (at least two words).",
@@ -435,7 +438,7 @@
     "dashboard": {
       "eyebrow": "Operations",
       "title": "Dashboard",
-      "description": "Operational view of cargoes, vessels, and routes.",
+      "description": "Your daily snapshot: what’s moving, what’s pending, and where to act first.",
       "marketplaceEyebrow": "Operational shortcut",
       "marketplaceTitle": "Open the cargo marketplace",
       "marketplaceDescription": "Check public opportunities whenever you need the full list of available cargoes.",
@@ -452,7 +455,7 @@
       "mainAriaLabel": "Signing out and redirecting"
     },
     "perfil": {
-      "mainAriaLabel": "Account profile, personal details, and validation status"
+      "mainAriaLabel": "Operational identity, contact details, and access status"
     },
     "devOnboarding": {
       "eyebrow": "Development",
@@ -510,32 +513,100 @@
       "eyebrow": "Publishing",
       "title": "Publish new cargo",
       "description": "Simulate opening a cargo to receive quotes from eligible vessels.",
-      "breadcrumbCurrent": "Publish new cargo"
+      "breadcrumbCurrent": "Publish new cargo",
+      "unauthorizedTitle": "You cannot publish this cargo",
+      "unauthorizedDescription": "This area is reserved for profiles that can create cargoes or operate the publishing flow."
     },
     "minhasCargas": {
       "eyebrow": "Account",
       "title": "My cargoes",
-      "description": "Track the cargoes you created or are negotiating.",
+      "description": "Track your cargoes, received proposals, pending items, and next steps in one place.",
+      "titleCarrier": "My assigned cargoes",
+      "descriptionCarrier": "Track the cargoes accepted by your operation and see the next step for each route.",
       "breadcrumbCurrent": "My cargoes",
       "listSectionAriaLabel": "Your account-linked cargoes, with a recent publish notice when applicable",
-      "resultCount": "{count, plural, one {# cargo of yours} other {# cargoes of yours}}",
-      "showingCount": "Showing {visible} of {total} cargoes",
+      "resultCount": "{count, plural, =0 {No cargoes found} one {1 cargo found} other {# cargoes found}}",
+      "showingCount": "Showing {visible} of {total} {total, plural, one {cargo} other {cargoes}}",
+      "summaryTitle": "Your operation at a glance",
+      "summaryActiveLabel": "Active cargoes",
+      "summaryActiveHint": "Publishing, negotiation, or transport in progress",
+      "summaryProposalsLabel": "Received proposals",
+      "summaryProposalsHint": "Total offers across cargoes",
+      "summaryPendingLabel": "Pending items",
+      "summaryPendingHint": "Documents or details to complete",
+      "summaryTransitLabel": "In transit",
+      "summaryTransitHint": "Already boarded in this view",
+      "myCard": {
+        "routeWaterLabel": "Planned route",
+        "nextStepLabel": "Next step",
+        "documentsLabel": "Documentation",
+        "proposalsLine": "{count, plural, =0 {No proposals yet} one {1 proposal received} other {# proposals received}}",
+        "ctaFallback": "View details",
+        "ctaComplete": "Complete registration",
+        "ctaProposals": "View proposals",
+        "ctaDocuments": "Review documents",
+        "ctaTrack": "Track operation"
+      },
       "createdBanner": "Cargo published and saved in the mock. It appears here and in the marketplace.",
-      "emptyTitle": "You have not created any cargoes yet.",
-      "emptyDescription": "Create your first cargo to start tracking everything here.",
-      "newCargoCta": "Create my first cargo"
+      "emptyTitle": "You don’t have any cargoes linked to your profile yet.",
+      "emptyDescription": "Create your first cargo to start receiving proposals and tracking the operation here.",
+      "newCargoCta": "Create my first cargo",
+      "emptyTitleCarrier": "No assigned cargoes yet.",
+      "emptyDescriptionCarrier": "When you accept an operation, it will appear here with status, next steps, and tracking.",
+      "marketplaceCta": "View public opportunities"
     },
     "vessels": {
       "eyebrow": "Fleet",
       "title": "Available vessels",
       "description": "Regional capacity for inland routes, cabotage, and riverside last mile.",
-      "listSectionAriaLabel": "List of vessels available on the marketplace"
+      "listSectionAriaLabel": "List of vessels available on the marketplace",
+      "unauthorizedTitle": "You do not have access to the fleet",
+      "unauthorizedDescription": "Viewing vessels on this screen is reserved for profiles with fleet operations."
     },
     "negotiations": {
-      "eyebrow": "Commercial",
+      "eyebrow": "Commercial decisions",
       "title": "Negotiations",
-      "description": "Pipeline of quotes, counteroffers, contracts, and shipments.",
-      "listSectionAriaLabel": "List of negotiations in the commercial pipeline"
+      "description": "Track proposals, counteroffers, and contracts linked to your cargoes.",
+      "listSectionAriaLabel": "Negotiations with status, amounts, and next steps",
+      "guideTitle": "See where to act first",
+      "guideDescription": "Use this screen to follow amounts, review counteroffers, and spot which deals are ready to move forward.",
+      "guideBadge": "{count, plural, =0 {None waiting} one {# needs a reply} other {# need a reply}}",
+      "summary": {
+        "metricsRegionAria": "Commercial snapshot: priorities and totals",
+        "active": "Active negotiations",
+        "activeHint": "Ongoing conversations",
+        "quote": "Open quotes",
+        "quoteHint": "Waiting for proposals",
+        "counteroffer": "Counteroffers",
+        "counterofferHint": "Need your review",
+        "contractsInProgress": "Contracts in progress",
+        "contractsHint": "Ready to move forward",
+        "amountTotal": "Value in negotiation",
+        "amountHint": "Amount under discussion",
+        "respondBadge": "Reply"
+      },
+      "stageMeaning": {
+        "quote": "Waiting for price review",
+        "counteroffer": "Needs a reply",
+        "contract": "Deal advanced",
+        "boarding": "Preparing shipment",
+        "delivered": "Completed"
+      },
+      "actionRequiredBadge": "Needs a reply",
+      "card": {
+        "operatorLabel": "Suggested vessel",
+        "routeLabel": "Route",
+        "valueLabel": "Estimated value",
+        "nextStepLabel": "Next step",
+        "partiesLabel": "Parties involved",
+        "updatedLabel": "Updated"
+      },
+      "empty": {
+        "title": "No negotiations yet",
+        "description": "When there are proposals linked to your cargoes, they will appear here with clear status and comparable amounts."
+      },
+      "unauthorizedTitle": "You cannot view this negotiation",
+      "unauthorizedDescription": "This detail is restricted to the involved parties and administration."
     },
     "tracking": {
       "eyebrow": "Event-based tracking",
@@ -572,31 +643,64 @@
       "unauthorizedDescription": "This panel is exclusive to administrator users."
     },
     "impact": {
-      "eyebrow": "VALUE",
-      "title": "Impact",
-      "description": "Why HydroRivers creates more value for producers, carriers and communities.",
+      "eyebrow": "Value delivered",
+      "title": "River operation impact",
+      "description": "See how river routes and cabotage can reduce logistics friction, organize documents, and support more sustainable decisions.",
+      "introTitle": "How to read these indicators",
+      "intro": "The numbers and comparisons below are product demo scenarios meant to train priorities and decisions.",
+      "introFootnote": "When a figure is an estimate or mock, labels on the cards say so. Public evidence adds context but does not replace a feasibility study.",
       "listSectionAriaLabel": "Impact indicators, per-card metrics, and narrative summary",
       "openImpactCard": "View details: {title}",
       "storyTitle": "Summary",
       "storyDescription": "Narrative summary of environmental, regulatory and socioeconomic gains generated by prioritized river operations."
     },
     "profile": {
-      "eyebrow": "Account",
+      "eyebrow": "Your account",
       "title": "My profile",
-      "description": "Preferences, company, operational role, and approval status.",
-      "personalDetails": "Personal details",
+      "description": "See who you are in the operation, which organization is linked, and which details to keep up to date.",
       "loading": "Loading profile",
       "loginRequired": "Sign in to access your profile",
-      "loginRequiredDescription": "Use your HydroRivers account to edit company data and operational status.",
-      "approved": "Approved",
-      "pending": "Under review",
-      "role": "Role",
-      "manualValidation": "Manual validation",
-      "readyForPilot": "Ready for operational pilot",
-      "awaitingReview": "Awaiting operational review",
-      "phone": "Phone",
-      "phonePlaceholder": "(91) 99999-0000",
-      "baseCity": "Home city / port",
+      "loginRequiredDescription": "Use your HydroRivers account to review and update your details.",
+      "identityAccessBadgeApproved": "Approved to operate",
+      "identityAccessBadgePending": "Access under review",
+      "identityReleasedTitle": "Your profile is ready to access the available areas",
+      "identityReleasedBody": "Your main details already let you use the features enabled for your profile in this environment. Some workflows may still need extra checks before sensitive operational steps.",
+      "identityPendingTitle": "Your profile is still going through checks",
+      "identityPendingBody": "Until that finishes, some areas may stay limited. When everything is in order, this status will show as Approved to operate. Commercial and contract validation still follows your organization’s process.",
+      "detailEmailLabel": "Sign-in email",
+      "detailEmailHint": "Used for sign-in, important notices, and account recovery.",
+      "detailCompanyLabel": "Company or cooperative",
+      "detailCompanyHint": "Identifies the organization tied to your cargoes, proposals, and contracts.",
+      "detailRoleLabel": "Role in the operation",
+      "detailRoleHint": "Shows which parts of the product you typically see for your role.",
+      "detailAreasLabel": "Available areas",
+      "detailAreasHint": "Shows whether you can use the main screens with your profile right now.",
+      "accessAreasApproved": "You can use the screens enabled for your role.",
+      "accessAreasPending": "Some areas may stay limited until the review is complete.",
+      "guidanceAccordionTitle": "Why keep my profile up to date?",
+      "guidanceAccordionLead": "This information helps unlock access, tie cargoes to you, and support operational notices.",
+      "guidanceAccordionAria": "Information about profile data",
+      "guidanceItemAccessTitle": "Correct access",
+      "guidanceItemAccessBody": "Your role defines which areas and actions are available to you.",
+      "guidanceItemCompanyTitle": "Organization on record",
+      "guidanceItemCompanyBody": "Your company appears on cargoes, proposals, and contracts.",
+      "guidanceItemContactTitle": "Operational contact",
+      "guidanceItemContactBody": "Your phone helps with important notices and quick confirmations.",
+      "guidanceItemBaseTitle": "Logistics base",
+      "guidanceItemBaseBody": "Your city or home port helps contextualize routes and operations.",
+      "formSectionTitle": "Profile details",
+      "formSectionLead": "Update the information used in your operations in this environment.",
+      "formNameLabel": "Full name",
+      "formNameHint": "Use the name that identifies you in documents and operational messages.",
+      "formEmailLabel": "Sign-in email",
+      "formEmailHint": "Used for sign-in, important notices, and account recovery.",
+      "formCompanyLabel": "Company or cooperative",
+      "formCompanyHint": "Identifies the organization tied to your cargoes, proposals, and contracts.",
+      "formPhoneLabel": "Phone with country code",
+      "formPhoneHint": "Used as your main contact identifier and for important operational confirmations.",
+      "formCityLabel": "City or home port",
+      "formCityHint": "Helps contextualize your routes, cargoes, and operations.",
+      "phonePlaceholder": "+55 71 99999-9999",
       "baseCityPlaceholder": "Belém, PA"
     },
     "vesselDetail": {
@@ -618,10 +722,155 @@
       "ok": "OK"
     },
     "impactDetail": {
-      "eyebrow": "Impact",
+      "eyebrow": "Value delivered",
       "breadcrumb": "Impact",
-      "kicker": "HydroRivers + BR do Mar",
-      "description": "This axis connects HydroRivers product value to Brazil’s cabotage strategy: broaden competition, improve fleet utilization, cut logistics cost, and encourage more sustainable vessels.",
+      "kicker": "Impact in context",
+      "description": "This detail explains what the indicator means, which public sources contextualize it, and which limits should be considered.",
+      "meaningTitle": "What it means",
+      "valueTitle": "How it delivers value",
+      "evidenceTitle": "Public evidence and context",
+      "evidenceDescription": "Public sources help contextualize waterways, cabotage, and Amazon logistics. When something is a demo estimate, it will be labeled as such.",
+      "evidenceMissing": "No public evidence is registered for this indicator yet. To be validated with a public source.",
+      "evidenceMeta": "{sourceName}{year, select,  { } other { · {year}}}",
+      "openEvidenceSource": "Open public source",
+      "limitsTitle": "Estimation limits",
+      "operationTitle": "What to watch in operations",
+      "evidenceStubBadge": "Demo scenario",
+      "evidenceSource": {
+        "government": "Public source",
+        "public-agency": "Public source",
+        "policy": "Public policy",
+        "research": "Research context",
+        "mock-estimate": "Demonstrative estimate"
+      },
+      "evidenceStubs": {
+        "cost": [
+          {
+            "id": "stub-cost-benchmark",
+            "title": "Cost benchmark (no public series linked yet)",
+            "summary": "Before claiming savings, cross-check distances, tariffs, and utilization with agreed public references for your operation.",
+            "sourceName": "To validate with a public source",
+            "disclaimer": "Placeholder until a reference dataset or study is attached."
+          }
+        ],
+        "sustainability": [],
+        "regional": [],
+        "automation": [
+          {
+            "id": "stub-automation-docs",
+            "title": "Document automation (product scenario)",
+            "summary": "The mock shows terms and pending items in the flow; agency integrations need their own phase and official validation.",
+            "sourceName": "To validate with a public source",
+            "disclaimer": "UX demonstration; does not replace government systems."
+          }
+        ],
+        "brdomar": [],
+        "compliance": [
+          {
+            "id": "stub-compliance-checklist",
+            "title": "Compliance checklist (demonstrative)",
+            "summary": "Document states in the app are illustrative until integration and validation against official bases exist.",
+            "sourceName": "To validate with a public source",
+            "disclaimer": "Product mock; not tax or environmental validation."
+          }
+        ],
+        "connectivity": [
+          {
+            "id": "stub-connectivity-offline",
+            "title": "Connectivity and sync (product hypothesis)",
+            "summary": "The narrative covers unstable signal; real behavior depends on local queue implementation and sync policies.",
+            "sourceName": "To validate with a public source",
+            "disclaimer": "Do not claim full offline operation without a release that proves it."
+          }
+        ],
+        "government": []
+      },
+      "meaning": {
+        "cost": "This indicator shows how consolidating cargoes and improving route predictability can reduce friction and operational cost over time.",
+        "sustainability": "This indicator describes the potential for lower emissions when water transport replaces long road segments, varying by route and operation.",
+        "regional": "This indicator contextualizes the relevance of navigable waterways in the North, where rivers are core logistics infrastructure.",
+        "automation": "This indicator summarizes how standardizing terms, documents, and history helps reduce rework and delays before shipment.",
+        "brdomar": "This indicator connects the product to Brazil’s cabotage institutional context (BR do Mar), without claiming official participation.",
+        "compliance": "This indicator shows how organizing tax, environmental, and sanitary requirements reduces contracting risk and improves auditability.",
+        "connectivity": "This indicator explains why capturing events and evidence under low connectivity supports operational traceability.",
+        "government": "This indicator shows how territorial reading and aggregated indicators can support institutional coordination and decisions."
+      },
+      "valuePoints": {
+        "cost": [
+          "Improves comparison of proposals and an auditable pricing trail.",
+          "Reduces empty backhauls by aligning routes and utilization.",
+          "Increases predictability and reduces operational rework."
+        ],
+        "sustainability": [
+          "Helps prioritize more efficient operations per ton transported.",
+          "Supports choices that reduce low-efficiency displacement.",
+          "Makes estimation limits explicit before communicating impact."
+        ],
+        "regional": [
+          "Helps plan operations in Amazon corridors with seasonality and limited connectivity.",
+          "Supports cooperatives and local operators with predictability.",
+          "Adds regional context without absolute promises."
+        ],
+        "automation": [
+          "Organizes terms and documents before contracting.",
+          "Avoids delays by making pending items explicit in the flow.",
+          "Creates a simple trail for auditing and support."
+        ],
+        "brdomar": [
+          "Clarifies the institutional guidelines around cabotage in Brazil.",
+          "Avoids mixing public policy context with product promises.",
+          "Supports plain-language communication for non-expert users."
+        ],
+        "compliance": [
+          "Makes required and conditional requirements visible before shipment.",
+          "Reduces the risk of contracting without essential documents.",
+          "Facilitates auditing and coordination among parties."
+        ],
+        "connectivity": [
+          "Supports recording evidence and events in low-signal segments.",
+          "Helps preserve traceability when syncing happens later.",
+          "Supports operations in communities and smaller terminals."
+        ],
+        "government": [
+          "Helps visualize corridor indicators and document risk.",
+          "Supports enforcement and territorial coordination priorities.",
+          "Maintains separation between aggregated and private data."
+        ]
+      },
+      "limits": {
+        "cost": [
+          "Demo indicator: may vary by route, cargo, utilization, and operational conditions.",
+          "It does not represent real cost without consolidated operational data."
+        ],
+        "sustainability": [
+          "Demo indicator: depends on the replaced mode, distance, utilization, and river seasonality.",
+          "There is no single universal CO₂ percentage for all routes."
+        ],
+        "regional": [
+          "Demo indicator: routes and volumes may vary by seasonality and local infrastructure.",
+          "It does not imply full coverage of the North Region."
+        ],
+        "automation": [
+          "Demo indicator: depends on which documents and steps are in scope.",
+          "It does not equal automatic compliance with public agencies."
+        ],
+        "brdomar": [
+          "Institutional context: it does not imply partnership, certification, or a running government program inside the product.",
+          "This indicator describes conceptual alignment, not regulatory compliance."
+        ],
+        "compliance": [
+          "Demo indicator: document status does not replace official validation.",
+          "External integrations may require a dedicated implementation phase."
+        ],
+        "connectivity": [
+          "Product hypothesis: behavior depends on real sync and local storage implementation.",
+          "Do not claim full offline operation if it is not implemented."
+        ],
+        "government": [
+          "Demo indicator: data here is aggregated and does not replace official bases.",
+          "Avoid inferring real environmental status without a specific source."
+        ]
+      },
       "details": {
         "cost": [
           "Consolidation of less-than-load cargoes on inland waterway routes.",
@@ -629,9 +878,9 @@
           "Comparable proposals and an auditable price history."
         ],
         "sustainability": [
-          "Cabotage and inland waterways emit less per ton-mile.",
-          "Indicators of CO₂ avoided per cargo.",
-          "Incentives for operators with more efficient vessels."
+          "Cabotage and inland waterways can be more efficient per ton in many scenarios; real gains depend on the route.",
+          "Visual indicators treat emission potential as a demo scenario, not field measurement.",
+          "Encourages comparing operators and routes before communicating environmental impact."
         ],
         "regional": [
           "Pilot routes among Belém, Santarém, Manaus, and Porto Velho.",
@@ -667,34 +916,35 @@
     },
     "dashboardOverview": {
       "heroEyebrow": "Operational summary",
-      "heroTitle": "See the operation at a glance, without opening the marketplace.",
-      "heroDescription": "Review alerts, active cargoes, pending documents, and the busiest corridors in a quick operational snapshot.",
-      "marketplaceCta": "View public cargoes",
-      "myCargoesCta": "Open my cargoes",
-      "activeCargoes": "Active cargoes",
-      "activeMarketplace": "active marketplace",
+      "heroTitle": "Start here: a snapshot of what needs your attention.",
+      "heroDescription": "See cargoes, documents, and negotiations at a glance. For details, open the marketplace or your cargoes.",
+      "marketplaceCta": "Explore public cargoes",
+      "myCargoesCta": "Track my cargoes",
+      "activeCargoes": "Cargoes in progress",
+      "activeMarketplace": "being tracked now",
       "pendingDocuments": "Pending documents",
-      "documentsNeedAttention": "need immediate attention",
+      "documentsNeedAttention": "items to review",
       "availableVessels": "Available vessels",
-      "riverRoutes": "inland / cabotage routes",
-      "activeNegotiations": "Active negotiations",
-      "quotesAndBookings": "quotes and bookings",
+      "riverRoutes": "capacity for new routes",
+      "activeNegotiations": "Negotiations in progress",
+      "quotesAndBookings": "proposals and deals",
       "averageCo2Saving": "Average CO₂ savings",
-      "roadComparison": "vs. estimated road haul",
+      "roadComparison": "estimate vs. road freight",
       "featuredCorridors": "Featured corridors",
-      "attentionPanel": "Attention panel",
-      "operation": "operation",
-      "busiestCorridors": "Busiest corridors",
+      "attentionPanel": "What needs attention",
+      "operation": "priority",
+      "busiestCorridors": "Corridors with more movement",
       "corridorSummary": "{count} cargoes in the corridor",
       "movement": "movement",
       "readiness": "document readiness: {value}%",
       "watch": "review",
-      "liveMock": "live mock",
+      "liveMock": "demo data",
       "recentActivity": "Recent activity",
-      "activeCount": "{count} active",
-      "metricTrendOpenCargoes": "+18%",
-      "metricTrendVessels": "+7%",
-      "metricTrendNegotiations": "+12%",
+      "activeCount": "{count} in progress",
+      "metricTrendOpenCargoes": "trend: +18%",
+      "metricTrendPendingDocs": "pending: +4%",
+      "metricTrendVessels": "trend: +7%",
+      "metricTrendNegotiations": "trend: +12%",
       "sectionAriaLabel": "Operational summary with metrics, attention panel, corridors, and recent activity"
     },
     "cargoDetail": {
@@ -736,23 +986,80 @@
       "operationPlan": "Operations plan",
       "operationPlanPlaceholder": "E.g., loading in two batches with dock inspection.",
       "contactChannel": "Contact channel",
-      "contactChannelPlaceholder": "E.g., operations WhatsApp / team email."
+      "contactChannelPlaceholder": "E.g., operations WhatsApp / team email.",
+      "overview": {
+        "sectionAria": "Cargo overview with operational summary and route",
+        "sectionKicker": "Overview",
+        "cargoCode": "Code",
+        "operation": "Vessel / operation",
+        "operator": "Operator",
+        "routeGroupAria": "Cargo route between origin and destination",
+        "routeProgress": "{progress}% along the route",
+        "estimatedDistance": "Estimated distance: {distanceKm} km via {river}",
+        "vesselImageAria": "Vessel visual panel on the corridor",
+        "vesselImageAlt": "Illustrative vessel for cargo {title}"
+      }
     },
     "negotiationDetail": {
+      "eyebrow": "Commercial agreement",
+      "descriptionPlain": "Review value, documents, and next steps before the operation moves forward.",
+      "descriptionWithVessel": "{vessel} · Review value, documents, and next steps before the operation moves forward.",
+      "whatNowTitle": "What needs to happen now",
+      "whatNowDescription": "To move this negotiation forward, attach pending documents and confirm the agreed terms. Status: {stage}.",
+      "whatNowNoNextStep": "No next step was defined for this negotiation.",
+      "whyItMatters": "Resolving pending items now reduces delay risk and avoids rework before shipment.",
+      "nextStepNow": "Next step",
+      "routeLabel": "Route",
+      "operatorLabel": "Suggested vessel",
+      "viewCargoLink": "Open cargo record in the marketplace",
+      "negotiatedValueLabel": "Negotiated value",
+      "negotiatedValueHint": "This is the amount under review to move this cargo on this route.",
       "terms": "Negotiation terms",
-      "parties": "Parties",
+      "termsDescription": "Each block explains operational impact: who participates, how payment flows, and how cargo is protected.",
+      "partiesTitle": "Who participates",
       "partyListJoiner": " × ",
-      "payment": "Payment",
-      "insurance": "Insurance",
-      "nextStep": "Next step",
-      "documents": "Documents",
-      "history": "History",
-      "eyebrow": "Negotiation"
+      "partiesHint": "Shipper and operator involved in this negotiation.",
+      "paymentTitle": "How payment works",
+      "paymentHint": "Shows when each part of the payment should happen.",
+      "insuranceTitle": "Cargo protection",
+      "insuranceHint": "Indicates whether the operation has coverage for this type of cargo.",
+      "nextStepTitle": "Next step",
+      "nextStepHint": "Shows what is still missing for the negotiation to advance.",
+      "documents": "Negotiation documents",
+      "documentsDescription": "See what is already verified and what could still delay shipment.",
+      "documentStatus": {
+        "pending": "Pending",
+        "verified": "Verified",
+        "attention": "Needs review",
+        "unknown": "Under review"
+      },
+      "documentImpact": {
+        "pending": "May block booking or loading until resolved.",
+        "verified": "Lower risk of operational stops.",
+        "attention": "Needs a decision before proceeding.",
+        "unknown": "Check with your operations team."
+      },
+      "history": "Negotiation timeline",
+      "historyDescription": "Follow what already happened and what is still pending for the deal to move forward.",
+      "stageMeaning": {
+        "quote": "Quote received",
+        "counteroffer": "Counteroffer to review",
+        "contract": "Contract in progress",
+        "boarding": "Preparing shipment",
+        "delivered": "Completed"
+      },
+      "accessDeniedTitle": "You do not have access to this negotiation",
+      "accessDeniedDescription": "Only participants in the deal or administrators can view this level of detail.",
+      "accessDeniedBody": "This detail is restricted to the involved parties and administration.",
+      "notFoundTitle": "We could not find this negotiation",
+      "notFoundDescription": "Check the link or return to the negotiations list to pick another record."
     },
     "governmentPage": {
       "eyebrow": "Public value",
       "title": "Government dashboard",
-      "description": "Demonstrable view to coordinate corridors, documentation, territorial supply, and sociobiodiversity chains."
+      "description": "Demonstrable view to coordinate corridors, documentation, territorial supply, and sociobiodiversity chains.",
+      "unauthorizedTitle": "You do not have access to the government dashboard",
+      "unauthorizedDescription": "This area is reserved for administration and institutional visibility."
     },
     "government": {
       "heroEyebrow": "Amazon digital port",
@@ -907,7 +1214,10 @@
       "project": "Project",
       "cabotage": "Cabotage",
       "reefer": "Reefer",
-      "bulkLight": "Light bulk"
+      "bulkLight": "Light bulk",
+      "sensitive": "Sensitive",
+      "territorial": "Territorial",
+      "industrial": "Industrial"
     },
     "productFamilies": {
       "bioeconomy": "Sociobiodiversity",
@@ -997,6 +1307,9 @@
       "admin": "Admin / Government",
       "operations": "Operations"
     },
+    "profile": {
+      "openAria": "Open {name}'s profile"
+    },
     "theme": {
       "sectionAria": "Theme control",
       "appearance": "Appearance"
@@ -1023,9 +1336,15 @@
       "title": "Dashboard",
       "subtitle": "Waterway Operations",
       "description": "Smart monitoring for cargoes, vessels, and routes across the Amazon.",
-      "searchPlaceholder": "Search cargo, route, port, or document...",
+      "homeSubtitle": "Waterway freight marketplace",
+      "homeDescription": "Connect cargoes, routes, and operators in an integrated operational experience.",
+      "searchPlaceholder": "Search",
       "systemStatus": "System operational",
-      "notifications": "Notifications"
+      "systemStatusTooltipTitle": "System operational",
+      "systemStatusTooltipDescription": "Operational environment status",
+      "notifications": "Notifications",
+      "notificationsAria": "Open notifications, {count, plural, =0 {no unread notifications} one {# unread} other {# unread}}",
+      "profileOpenAria": "Open profile for {name}"
     },
     "mobile": {
       "headerAria": "HydroRivers mobile header",
@@ -1039,7 +1358,7 @@
   "notifications": {
     "title": "Notifications",
     "mobileTitle": "Important updates",
-    "summary": "{count, plural, =0 {No new operational updates} one {# unread notification} other {# unread notifications}}",
+    "summary": "{count, plural, =0 {No unread notifications} one {# unread notification} other {# unread notifications}}",
     "markAllRead": "Mark all as read",
     "viewAll": "View all",
     "empty": "No notifications right now",
@@ -1078,6 +1397,7 @@
     },
     "list": {
       "title": "Cargo list",
+      "trackingTitle": "Tracked operations",
       "newCargo": "New cargo",
       "searchPlaceholder": "Search by cargo, origin, destination...",
       "searchAria": "Search cargoes",
@@ -1114,6 +1434,19 @@
       "boarded": "In transit"
     },
     "map": {
+      "radarSectionAria": "Hydro radar for the selected cargo",
+      "radarMobileSummaryAria": "Quick route and progress summary",
+      "routeOnRiver": "Route on the {river}",
+      "nextMonitored": "Next monitored segment",
+      "hudAria": "Indicators for the selected route",
+      "hud": {
+        "selectedCargo": "Selected cargo",
+        "origin": "Origin",
+        "destination": "Destination",
+        "river": "Waterway / corridor",
+        "routeStatus": "Route status",
+        "progress": "Progress"
+      },
       "inTransitCargoes": "Cargoes in transit",
       "inOperation": "In operation",
       "toggleLayers": "Toggle layers ({layer})",
@@ -1171,20 +1504,28 @@
       "estimatedMargin": "Estimated margin: 18%",
       "avoidedCo2": "-8.2 t CO₂e avoided",
       "routeProgress": "{progress}% of route",
-      "vesselImageAria": "Waterway vessel"
+      "vesselImageAria": "Waterway vessel",
+      "documentsReadyRatio": "{count} of {total} documents"
     },
     "timeline": {
       "aria": "Cargo operational timeline",
-      "journey": "Waterway journey",
+      "pageTitle": "Cargo journey",
+      "pageSubtitle": "Follow the operation path, what is already done, and what comes next.",
+      "hereNow": "We are here now.",
+      "nextStep": "Next step: {title}.",
+      "nextStepNone": "Next step: finish the current stage to unlock the next one.",
+      "boatAtCurrent": "Cargo position on the journey",
+      "badgeNow": "Now",
+      "journey": "Operation route",
       "completedPhases": "{completed}/{total} completed phases",
       "contextAria": "Operational phase context",
       "operationalMission": "Operational mission",
       "phaseFallback": "Phase {index}",
       "phase": {
         "planning": "Planning",
-        "compliance": "Compliance",
-        "operation": "Operation",
-        "monitoring": "Monitoring",
+        "compliance": "Documentation",
+        "operation": "Boarding",
+        "monitoring": "Tracking",
         "arrival": "Arrival"
       },
       "status": {
@@ -1201,13 +1542,13 @@
         "stage": "Stage"
       },
       "checklist": {
-        "planning": "Operational briefing ready",
-        "compliance": "Document compliance under validation",
-        "operation": "Team and terminal synchronized",
-        "monitoring": "Waterway monitoring active",
-        "arrival": "Berthing window under watch",
-        "done": "Operational stage completed",
-        "ongoing": "Monitoring in progress"
+        "planning": "Initial route set with origin, destination, and baseline forecast.",
+        "compliance": "The team checks that paperwork is ready to move forward.",
+        "operation": "Boarding aligned with terminal and reserved window.",
+        "monitoring": "The river route is being watched along the way.",
+        "arrival": "Expected arrival within the berthing window.",
+        "done": "Stage completed on this journey.",
+        "ongoing": "Monitoring in progress."
       },
       "tags": {
         "xpCollected": "XP collected",
@@ -1215,25 +1556,60 @@
         "operationalQueue": "Operational queue"
       },
       "fallback": {
-        "createdTitle": "Cargo created and route suggested",
+        "createdTitle": "Initial route created",
         "createdTimestamp": "Today · 08:30",
-        "createdDescription": "Cargo registered for navigation in the {river} corridor.",
-        "documentsTitle": "Documents under review",
-        "documentsLocation": "Document operation",
+        "createdDescription": "The trip already has a start point, destination, and baseline forecast on the {river} corridor.",
+        "documentsTitle": "Documents in validation",
+        "documentsLocation": "Document review",
         "documentsTimestamp": "Today · 09:10",
-        "documentsDescription": "Invoice, manifest, and sanitary checklist are being validated before boarding.",
-        "boardingTitle": "Boarding window reserved",
+        "documentsDescription": "The team is checking everything is ready to move forward (invoice, manifest, sanitary checklist).",
+        "boardingTitle": "Boarding aligned",
         "boardingTimestamp": "Today · 11:20",
-        "boardingDescription": "Operations team synchronized with vessel, operator, and origin terminal.",
-        "routeTitle": "Navigation monitored",
+        "boardingDescription": "The window was reserved to reduce port wait; team and terminal are aligned.",
+        "routeTitle": "Cargo under tracking",
         "routeTimestamp": "ETA 36–44h",
-        "routeDescription": "Route tracked in real time to {destination}, with attention to draft, weather, and temperature.",
-        "arrivalTitle": "Berthing forecast",
-        "arrivalDescription": "Berthing expected within the operating window, with no critical delay identified."
+        "routeDescription": "The route is being monitored to {destination}, watching draft, weather, and temperature.",
+        "arrivalTitle": "Expected arrival",
+        "arrivalDescription": "The operation is heading to berth within the expected window, with no critical delay flagged."
       }
     },
     "documents": {
       "aria": "Cargo operational documentation",
+      "pageTitle": "Cargo documents",
+      "pageSubtitle": "See what is ready, what still needs an attachment, and what can block the next step.",
+      "progressAria": "Document readiness summary",
+      "progressSummary": "{ready} of {total} documents ready",
+      "readinessLine": "{pct}% document readiness",
+      "valueLine": "Resolving this document lowers the risk of documentation delays.",
+      "factsAria": "Document details",
+      "statusChip": {
+        "required": "Needs to be ready",
+        "nextPhase": "Prepare next",
+        "conditional": "Depends on the cargo",
+        "ok": "Ready to validate"
+      },
+      "shortDesc": {
+        "nfe": "Fiscally proves the goods.",
+        "cte": "Formalizes the contracted transport.",
+        "romaneio": "Lists volumes shipped by batch or cooperative.",
+        "laudo": "Recommended for sensitive or frozen food cargoes.",
+        "generic": "Document needed to keep the operation on track."
+      },
+      "microcopy": {
+        "nfe": "Helps unlock fiscal review and avoids a block at contracting.",
+        "cte": "Moves to the next phase to register the transport operation.",
+        "romaneio": "Helps verify what shipped and reduces mismatch at delivery.",
+        "laudo": "May be requested to evidence quality conditions.",
+        "generic": "Keep it attached to reduce rework and team questions."
+      },
+      "panel": {
+        "whatIs": "What it is",
+        "whyMatters": "Why it matters",
+        "whoHandles": "Who handles it",
+        "whenDue": "When it must be ready",
+        "whatsMissing": "What is missing now",
+        "codeLabel": "Internal code"
+      },
       "defaultNote": "Operational document linked to this cargo.",
       "code": "Code",
       "owner": "Owner",
@@ -1259,6 +1635,41 @@
       "co2Savings": "CO₂ savings",
       "readiness": "Document readiness",
       "title": "Operational cost summary",
+      "pageTitle": "Operation costs",
+      "pageSubtitle": "See where money shows up on the route, what weighs on the budget, and how much river transport saves.",
+      "heroValueCaption": "Estimated total cost",
+      "narrativeLine": "The river route reduces cost and emissions compared with road haulage.",
+      "summaryMicro": {
+        "estimatedTotal": "Full forecast to run this operation.",
+        "margin": "Headroom planned to absorb route variation.",
+        "savings": "Compared with the road alternative.",
+        "perTon": "Helps compare efficiency across cargoes."
+      },
+      "breakdownTitle": "What weighs most on cost",
+      "chart": {
+        "title": "Operational savings comparison",
+        "aria": "Chart comparing estimated cumulative cost on river vs road",
+        "subtitle": "See how much the river route saves versus the road scenario.",
+        "badgeSavings": "Estimated savings: {pct}",
+        "caption": "The wider the gap between the curves, the more the river route saves. The highlighted band is the estimated gain from choosing the waterway.",
+        "floatTitle": "Savings on this operation",
+        "floatRiver": "River: {value}",
+        "floatRoad": "Road: {value}",
+        "floatDiff": "Difference: {value}",
+        "chipRiver": "River {value}",
+        "chipRoad": "Road {value}",
+        "chipSavings": "Savings {value}",
+        "insightTitle": "River route is more efficient",
+        "insightBody": "Lower operating cost and lower environmental impact ({co2})."
+      },
+      "scoreboardTitle": "Route scoreboard",
+      "scoreboardBadge": "Most efficient route",
+      "economyLabel": "Estimated savings",
+      "timelineTitle": "When each cost appears",
+      "timelineNarrative": "Each step unlocks part of the operation.",
+      "stepCurrent": "Current step",
+      "alertsTitle": "What can move the cost",
+      "alertsSubtitle": "These signals help you anticipate changes before they become surprises.",
       "estimatedTotal": "Estimated total",
       "margin": "Estimated margin",
       "marginDetail": "Expected margin for this operation.",
@@ -1295,7 +1706,14 @@
       }
     },
     "priority": {
-      "title": "Operational priority",
+      "intro": "This tab highlights what deserves attention first to avoid delays, quality loss, or document rework.",
+      "nowPrefix": "Priority right now:",
+      "signalsTitle": "Three signals to scan first",
+      "scoreExplained": "The score summarizes the moment on a 0–100 scale: higher usually means more slack and fewer surprises. It guides where you look, not the details below.",
+      "scoreHint": "The higher the score, the calmer the operation tends to be.",
+      "secondaryActionsTitle": "Other helpful actions",
+      "impactLead": "None of this is guaranteed—these are common outcomes when the steps above stop being followed.",
+      "title": "What needs your attention right now",
       "fallbackA": "Monitor the river window.",
       "fallbackB": "Review operational documentation.",
       "fallbackC": "Synchronize carrier and shipper.",
@@ -1310,8 +1728,8 @@
         "inProgress": "In progress",
         "done": "Done"
       },
-      "scoreLabel": "operational score",
-      "subtitle": "These points help you decide what needs attention first.",
+      "scoreLabel": "Operational calm (0–100)",
+      "subtitle": "This tab organizes signals that can affect timing, quality, or paperwork.",
       "scoreNote": "The higher the score, the lower the operational risk.",
       "scoreNoteLow": "The flow is more stable, but it is still worth watching window changes.",
       "summaryAria": "Operational priority summary",
@@ -1328,13 +1746,20 @@
         "stable": "Stable"
       },
       "actionButton": "Open action",
-      "checklistTitle": "Next actions",
+      "checklistTitle": "Recommended next actions",
+      "checklistWhy": {
+        "confirmDockWindow": "Reduces port queue risk and makes delays less likely.",
+        "validateDocuments": "Speeds clearance and avoids last-minute rework.",
+        "confirmOperator": "Makes sure someone clearly owns the next step.",
+        "monitorSignal": "Helps you spot route drift or idle time a bit earlier.",
+        "updateDelay": "Keeps the team aligned when the forecast shifts."
+      },
       "checklistStatus": {
         "done": "Done",
         "progress": "In progress",
         "pending": "Pending"
       },
-      "impactTitle": "Impact if nothing is done",
+      "impactTitle": "What could happen if nothing changes",
       "empty": {
         "title": "This cargo does not have priority alerts yet.",
         "description": "Keep following the journey to get recommendations.",
@@ -1342,51 +1767,73 @@
       },
       "cards": {
         "operationalRisk": {
-          "title": "Operational risk",
-          "low": "Low",
-          "medium": "Medium",
-          "high": "High"
+          "title": "Overall situation",
+          "low": "Calm",
+          "medium": "Moderate attention",
+          "high": "Higher attention",
+          "detail": {
+            "low": "The flow is in a more comfortable band; keep routine monitoring.",
+            "medium": "There are signals worth watching—without a crisis tone.",
+            "high": "A few items need quick decisions so they do not become bottlenecks."
+          }
         },
         "coldChain": {
-          "title": "Logistics window",
+          "title": "Berthing window",
           "windowOpen": "36–44h",
           "windowBidding": "30–42h",
           "windowTight": "24–36h",
-          "normal": "Normal",
-          "short": "Short"
+          "normal": "Comfortable",
+          "short": "Tight",
+          "detail": {
+            "windowOpen": "There is still useful slack in the arrival outlook.",
+            "windowBidding": "Berthing slack got smaller. Worth aligning with the port.",
+            "windowTight": "The window is tight—confirming dates cuts queues and delay.",
+            "normal": "Transit time looks within expectations for this stage.",
+            "short": "Useful time is shorter—prioritize confirmations with the terminal."
+          }
         },
         "trackingSignal": {
-          "title": "Tracking signal",
-          "intermitent": "Intermittent",
+          "title": "River tracking",
+          "intermitent": "Uneven in stretches",
           "delayed": "Syncing",
-          "stable": "Stable"
+          "stable": "Stable",
+          "detail": {
+            "intermitent": "Tracking can be uneven in some stretches of the river.",
+            "delayed": "Updates may arrive a bit late while data syncs.",
+            "stable": "Readings in sequence, no meaningful gaps."
+          }
         },
         "criticalDocuments": {
-          "title": "Critical documents",
-          "pending": "Pending",
+          "title": "Documentation",
+          "pending": "Needs progress",
           "review": "Under review",
-          "ready": "Up to date"
+          "ready": "On track for this step",
+          "detail": {
+            "pending": "Some documents should be ready before the next phase.",
+            "review": "Reviews are open—worth watching for feedback.",
+            "ready": "Nothing critical pending in paperwork for this step."
+          }
         }
       },
       "actions": {
         "coldChain": {
           "category": "Cold chain",
-          "title": "Short window for refrigerated cargo",
-          "description": "The cargo needs to move within the forecast to avoid quality loss.",
-          "recommendation": "Confirm the docking window and keep the operator informed."
+          "title": "Limited time to protect quality",
+          "description": "The cargo should follow the forecast to avoid temperature and quality issues.",
+          "recommendation": "Confirm the berthing window and tell the operator about any change."
         },
         "tracking": {
           "category": "Tracking",
-          "title": "Intermittent signal in a regional stretch",
-          "description": "Syncing may lag in low-connectivity areas.",
-          "recommendation": "Allow offline updates and validate the latest point received."
+          "title": "Readings may fluctuate along the route",
+          "description": "In low-signal stretches, updates can take a little longer.",
+          "recommendation": "Allow offline updates when needed and verify the latest received point."
         },
         "documents": {
           "category": "Documentation",
-          "title": "Documents near the critical step",
+          "title": "Documents near the next step",
           "descriptionWithPending": "Some documents need to be ready before final contracting.",
           "descriptionFallback": "Documentation is being tracked for the next step.",
-          "recommendation": "Check NF-e, CT-e, and the manifest before the next phase."
+          "recommendation": "Review NF-e, CT-e, and the manifest before moving to the next phase."
         }
       },
       "checklist": {
@@ -1397,9 +1844,9 @@
         "updateDelay": "Update the forecast if there is a delay"
       },
       "impacts": {
-        "dockingDelay": "Possible docking delay",
-        "coldChainLoss": "Risk of cold-chain quality loss",
-        "documentRevalidation": "Document revalidation may be needed"
+        "dockingDelay": "Berthing could be delayed.",
+        "coldChainLoss": "The cold chain may need an extra check.",
+        "documentRevalidation": "Paperwork might need rework."
       }
     },
     "rightRail": {
@@ -1413,44 +1860,61 @@
   },
   "impactCards": {
     "cost": {
-      "metric": "-28%",
+      "metric": "Demonstrative estimate",
       "title": "Logistics cost reduction",
-      "description": "Organized cabotage and rivers reduce reliance on trucking and improve utilization."
+      "description": "Potential to reduce friction and cost by consolidating routes, proposals, and pricing history.",
+      "kindLabel": "Economic value",
+      "confidenceLabel": "Demonstrative estimate"
     },
     "sustainability": {
-      "metric": "-38% CO₂ avoided",
-      "title": "Less CO₂ per ton",
-      "description": "Waterway routes curb emissions and support more efficient vessels."
+      "metric": "Potential for lower emissions",
+      "metricSubline": "Demo scenario; varies by route, utilization, and replaced mode.",
+      "title": "Lower emissions per ton",
+      "description": "Water transport tends to be more efficient per ton in many scenarios. Percentages are not universal.",
+      "kindLabel": "Environmental value",
+      "confidenceLabel": "Public source + scenario"
     },
     "regional": {
-      "metric": "+12 optimized routes",
-      "title": "Optimized routes",
-      "description": "Where the river is the road, digital freight lifts producers and communities."
+      "metric": "Amazon corridors",
+      "title": "Amazon-connected logistics",
+      "description": "Regional context for navigable waterways, seasonality, and low connectivity.",
+      "kindLabel": "Institutional value",
+      "confidenceLabel": "Public source"
     },
     "automation": {
-      "metric": "72% ready",
+      "metric": "Auditable flow",
       "title": "Less bureaucracy",
-      "description": "Quoting, booking, documents, and tracking become one auditable operational flow."
+      "description": "Terms, documents, and history become clearer to reduce rework before shipment.",
+      "kindLabel": "Operational value",
+      "confidenceLabel": "Demo scenario"
     },
     "brdomar": {
       "metric": "BR do Mar",
-      "title": "BR do Mar alignment",
-      "description": "Expands competitiveness, fleet, and modal integration for Brazilian cabotage."
+      "title": "Cabotage context",
+      "description": "Institutional context for Brazil’s cabotage policy (Law 14.301/2022).",
+      "kindLabel": "Institutional value",
+      "confidenceLabel": "Public source (law)"
     },
     "compliance": {
-      "metric": "DOF/NF-e/CT-e",
+      "metric": "Key documents",
       "title": "Documentary trust",
-      "description": "Mandatory and conditional documents and next steps become clear before contracting."
+      "description": "Tax, environmental, and sanitary requirements become clearer before contracting.",
+      "kindLabel": "Operational value",
+      "confidenceLabel": "Demo scenario"
     },
     "connectivity": {
-      "metric": "offline-first",
-      "title": "Low-connectivity operation",
-      "description": "Events can be captured in the field and synced when signal returns."
+      "metric": "Low connectivity",
+      "title": "Unstable-signal operation",
+      "description": "Events and evidence can be designed for limited connectivity (without claiming full offline).",
+      "kindLabel": "Operational value",
+      "confidenceLabel": "Product hypothesis"
     },
     "government": {
-      "metric": "Gov pilot",
+      "metric": "Aggregated indicators",
       "title": "Public-sector value",
-      "description": "Corridor, supply, bioeconomy, and risk indicators support public decisions."
+      "description": "Territorial reading and corridor indicators support institutional decisions (demo scenario).",
+      "kindLabel": "Institutional value",
+      "confidenceLabel": "Demo scenario"
     }
   },
   "layout": {
@@ -1567,19 +2031,74 @@
     "title": "HydroRivers",
     "description": "River and cabotage freight marketplace for digital cargo corridors."
   },
+  "accessControl": {
+    "accessDeniedTitle": "Access denied",
+    "accessDeniedDescription": "This route is not available for your profile.",
+    "shipper": "Shipper",
+    "carrier": "Carrier",
+    "admin": "Admin/QA",
+    "persona": "Persona"
+  },
   "mockMode": {
     "triggerMark": "M",
-    "title": "Mock mode · QA",
-    "subtitle": "Test environment: scenarios, personas, and quick product validations.",
+    "title": "Mock mode · QA Assistant",
+    "subtitle": "Flow catalog, personas, and deterministic datasets. Files under `.mock-data/*.json` are local and gitignored — run npm run mock-data:reset to discard test data.",
     "button": "Mock mode",
+    "qaAssistantShortTitle": "QA Assistant",
+    "scenarioCatalogHeading": "About this dataset:",
     "close": "Close QA panel",
     "casesTitle": "Scenarios",
     "openCase": "Open case",
+    "filterAll": "All",
+    "personaFilterLabel": "Filter by persona",
+    "journeyFilterLabel": "Filter by journey",
+    "resetFilters": "Clear filters",
+    "recommendedJourneyTitle": "Recommended QA journey",
+    "recommendedJourneyLead": "Follow this sequence to validate the main flow end to end.",
     "passwordLabel": "Password",
     "roles": {
       "shipper": "Shipper",
       "carrier": "Carrier",
       "admin": "Administrator"
+    },
+    "personaGroups": {
+      "shipper": "Shipper",
+      "carrier": "Carrier",
+      "admin": "Admin",
+      "government": "Government",
+      "visitor": "Visitor",
+      "qa": "QA",
+      "operations": "Operations"
+    },
+    "journeyGroups": {
+      "auth": "Auth and onboarding",
+      "dashboard": "Dashboard",
+      "cargoes": "Public cargoes",
+      "my-cargoes": "My cargoes",
+      "negotiations": "Negotiations",
+      "tracking": "Tracking",
+      "notifications": "Notifications",
+      "mobile": "Mobile",
+      "theme": "Theme and language",
+      "impact": "Impact",
+      "government": "Government",
+      "vessels": "Vessels",
+      "other": "Other flows"
+    },
+    "journeyGroupDescriptions": {
+      "auth": "Sign-in, account creation, and access confirmation.",
+      "dashboard": "Operational summary and context overview.",
+      "cargoes": "Public marketplace and opportunity discovery.",
+      "my-cargoes": "Private user area and owned cargoes.",
+      "negotiations": "Proposals, counteroffers, and contracts.",
+      "tracking": "Map, events, and operational tracking.",
+      "notifications": "Badge, popover, and bulk read state.",
+      "mobile": "Bottom sheets, navigation, and smaller screens.",
+      "theme": "Dark/light theme, language, and readability.",
+      "impact": "Value indicators and social/environmental reading.",
+      "government": "Institutional view and governance.",
+      "vessels": "Fleet, capacity, and availability.",
+      "other": "Flows outside the primary journeys."
     },
     "qaHub": {
       "sectionTitle": "QA hub — demo personas",
@@ -1731,10 +2250,74 @@
       "expectedLabel": "Expected result",
       "openRoute": "Open route",
       "copySteps": "Copy steps",
+      "applyScenario": "Apply scenario",
+      "resetScenario": "Reset scenario",
       "copied": "Copied",
       "copyError": "Could not copy the steps.",
       "resetScenarioSuccess": "Dataset restored to the project base.",
-      "resetScenarioError": "Could not reset the dataset."
+      "resetScenarioError": "Could not reset the dataset.",
+      "applyDataset": "Apply suggested dataset",
+      "applyingDataset": "Applying dataset…",
+      "datasetApplyError": "Could not apply the dataset. Admin role and an environment that allows mock reset are required.",
+      "datasetApplyAdminOnly": "Direct dataset apply: admins only. Other roles can copy steps and ask an admin to switch the scenario.",
+      "journeyFilterLabel": "Filter by journey",
+      "filterAll": "All",
+      "journeyGroups": {
+        "auth": "Access",
+        "dashboard": "Dashboard",
+        "cargoes": "Cargoes",
+        "my-cargoes": "My cargoes",
+        "negotiations": "Negotiations",
+        "tracking": "Tracking",
+        "notifications": "Notifications",
+        "mobile": "Mobile",
+        "theme": "Theme",
+        "impact": "Impact",
+        "government": "Government",
+        "vessels": "Vessels",
+        "other": "Other"
+      },
+      "journeyGroupDescriptions": {
+        "auth": "Login, registration, session and access recovery.",
+        "dashboard": "Operational overview, filters and quick status reading.",
+        "cargoes": "Cargo creation, publishing and monitoring.",
+        "my-cargoes": "Cargoes linked to the profile and next steps.",
+        "negotiations": "Offers, counteroffers and agreements.",
+        "tracking": "Tracking, status and low-connectivity behavior.",
+        "notifications": "Alerts, notices and pending items.",
+        "mobile": "Navigation and experience on smaller screens.",
+        "theme": "Visual theme, contrast and interface preferences.",
+        "impact": "Impact and sustainability indicators.",
+        "government": "Institutional and public validation flows.",
+        "vessels": "Vessels, operators and availability.",
+        "other": "Additional QA scenarios."
+      }
+    },
+    "scenarioCatalog": {
+      "empty-state": {
+        "summary": "Nearly empty base — best for empty states and no marketplace cargoes.",
+        "explanation": "Rewrites `.mock-data` with minimal records: no public cargoes/negotiations, few vessels. Deterministic from `mock-scenarios.ts`."
+      },
+      "market-active": {
+        "summary": "Marketplace with many offers and mixed statuses.",
+        "explanation": "Open and bidding cargoes, available fleet, early negotiations — good for lists, filters, and happy-path discovery."
+      },
+      "negotiation-flow": {
+        "summary": "Negotiations in quote and contract stages.",
+        "explanation": "Emphasizes commercial stages (quote, contract, pending) to validate negotiation screens and status labels."
+      },
+      "in-transit": {
+        "summary": "In-transit operation with tracking.",
+        "explanation": "Boarded cargoes and timeline events; pair with tracking/map scenarios in the assistant."
+      },
+      "completed": {
+        "summary": "Completed and delivered operations.",
+        "explanation": "Delivered end states — useful for impact, government views, and closing reads without open items."
+      },
+      "error-scenarios": {
+        "summary": "Pending work, maintenance, and simulated failures.",
+        "explanation": "Document gaps, fleet maintenance, rejected negotiations, and operational risks — for alerts and error messaging."
+      }
     },
     "scenarioIds": {
       "empty-state": "Empty base",

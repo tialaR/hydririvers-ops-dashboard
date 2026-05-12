@@ -1,6 +1,7 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
+import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Card } from '@/shared/ui/card/card';
 import { Button } from '@/shared/ui/button/button';
@@ -9,13 +10,32 @@ import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
 import { httpStatus } from '@/shared/http/http-status';
 import { useHumanizedHttpToast } from '@/shared/ui/toast/use-humanized-http-toast';
-import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
+import type { Cargo, CargoStatus } from '@/features/marketplace/domain/marketplace.types';
 import type { CargoViewer } from '@/features/cargo-market/utils/cargo-proposal-visibility';
 import { getCargoProposalVisibility } from '@/features/cargo-market/utils/cargo-proposal-visibility';
 import { CargoStatusAssistantCard } from '@/features/ai-assist/components/CargoStatusAssistantCard';
 import { cargoProposalSchema } from '@/features/cargo-market/domain/cargo-proposal.schema';
 import { translateMock } from '@/shared/i18n/mock-content';
 import styles from './cargo-detail.module.scss';
+import { getCargoDetailOverviewVisuals } from './cargo-detail-overview-visuals';
+import type { BadgeProps } from '@/shared/ui/badge/badge';
+
+function cargoStatusBadgeTone(status: CargoStatus): NonNullable<BadgeProps['tone']> {
+  switch (status) {
+    case 'open':
+      return 'river';
+    case 'bidding':
+    case 'contracting':
+      return 'warning';
+    case 'reserved':
+      return 'neutral';
+    case 'boarded':
+    case 'delivered':
+      return 'success';
+    default:
+      return 'neutral';
+  }
+}
 
 function translateCargoType(t: ReturnType<typeof useTranslations>, cargoType: string) {
   switch (cargoType) {
@@ -57,6 +77,9 @@ export function CargoDetail({ cargo, viewer }: { cargo: Cargo; viewer?: CargoVie
 
   const cargoType = translateCargoType(common, cargo.cargoType);
   const proposalVisibility = getCargoProposalVisibility(viewer ?? null, cargo);
+  const overviewVisuals = getCargoDetailOverviewVisuals(cargo);
+  const vesselVisual = overviewVisuals.vesselVisual;
+  const riverLabel = cargo.mainRiver ?? common('emptyValue');
 
   async function submitProposal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -105,40 +128,114 @@ export function CargoDetail({ cargo, viewer }: { cargo: Cargo; viewer?: CargoVie
   return (
     <section className={styles.layout}>
       <Card className={styles.heroCard}>
-        <div className={styles.heroHeader}>
-          <div>
-            <span className={styles.kicker}><HydroIcon name="cargo" /> {page('kicker')}</span>
-            <h2>{translateMock(locale, cargo.title)}</h2>
-            <p className={styles.subtitle}>
-              {cargo.origin}
-              {common('routeArrow')}
-              {cargo.destination}
+        <section className={styles.cargoOverviewHero} aria-label={page('overview.sectionAria')}>
+          <div
+            className={styles.cargoHeroMedia}
+            data-treatment={vesselVisual.treatment}
+          >
+            <Image
+              src={vesselVisual.src}
+              alt={vesselVisual.alt}
+              fill
+              className={styles.cargoHeroMediaImg}
+              style={{ objectPosition: vesselVisual.objectPosition }}
+              sizes="100vw"
+              unoptimized
+            />
+            <div className={styles.cargoHeroMediaBlend} aria-hidden />
+            <div className={styles.cargoHeroMediaVignette} aria-hidden />
+            <div className={styles.cargoHeroMediaTone} aria-hidden />
+          </div>
+
+          <div className={styles.cargoHeroInfo}>
+            <div
+              className={styles.cargoHeroKickRow}
+              aria-label={`${cargoType}${cargo.mainRiver ? `, ${cargo.mainRiver}` : ''}`}
+            >
+              <span className={styles.cargoHeroKick}>{cargoType}</span>
+              {cargo.mainRiver ? (
+                <span className={styles.cargoHeroKick}>{cargo.mainRiver}</span>
+              ) : null}
+            </div>
+            <div className={styles.cargoHeroIdRow}>
+              <span className={styles.cargoHeroId}>{cargo.id}</span>
+              <Badge tone={cargoStatusBadgeTone(cargo.status)}>{common(`cargoStatus.${cargo.status}`)}</Badge>
+            </div>
+            <p className={styles.cargoHeroLead}>
+              {cargo.description
+                ? translateMock(locale, cargo.description)
+                : translateMock(locale, cargo.title)}
+            </p>
+            <div
+              className={styles.heroMetaRow}
+              role="group"
+              aria-label={`${page('overview.operation')}; ${page('overview.operator')}`}
+            >
+              <div className={styles.heroMetaItem}>
+                <HydroIcon name="ship" size={15} className={styles.heroMetaIcon} aria-hidden />
+                <div className={styles.heroMetaCopy}>
+                  <span className={styles.heroMetaLbl}>{page('overview.operation')}</span>
+                  <strong className={styles.heroMetaStrong}>{overviewVisuals.vesselName}</strong>
+                </div>
+              </div>
+              <span className={styles.heroMetaDivider} aria-hidden />
+              <div className={styles.heroMetaItem}>
+                <HydroIcon name="users" size={15} className={styles.heroMetaIcon} aria-hidden />
+                <div className={styles.heroMetaCopy}>
+                  <span className={styles.heroMetaLbl}>{page('overview.operator')}</span>
+                  <strong className={styles.heroMetaStrong}>{cargo.producer ?? common('emptyValue')}</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.cargoHeroRoute} role="group" aria-label={page('overview.routeGroupAria')}>
+            {cargo.corridor ? (
+              <p className={styles.cargoHeroCorridorLine}>
+                <HydroIcon name="route" size={15} aria-hidden />
+                {cargo.corridor}
+              </p>
+            ) : null}
+            <div className={styles.routeHeroHeader}>
+              <div className={`${styles.routeHeroEndpoint} ${styles.routeHeroEndpointOrigin}`}>
+                <strong className={styles.routeHeroPlace}>{cargo.origin}</strong>
+                <span className={styles.routeHeroMarker} aria-hidden />
+                <small className={styles.routeHeroRole}>{common('origin')}</small>
+              </div>
+              <div className={styles.routeHeroCenter}>
+                <span className={styles.routeHeroProgressText}>
+                  {page('overview.routeProgress', { progress: overviewVisuals.routeProgressPercent })}
+                </span>
+              </div>
+              <div className={`${styles.routeHeroEndpoint} ${styles.routeHeroEndpointDest}`}>
+                <strong className={styles.routeHeroPlace}>{cargo.destination}</strong>
+                <span className={`${styles.routeHeroMarker} ${styles.routeHeroMarkerDest}`} aria-hidden />
+                <small className={styles.routeHeroRole}>{common('destination')}</small>
+              </div>
+            </div>
+            <div className={styles.routeHeroTrack} aria-hidden="true">
+              <div className={styles.routeBarWrap}>
+                <div className={styles.routeBar}>
+                  <span
+                    className={styles.routeBarFill}
+                    style={{ width: `${overviewVisuals.routeProgressPercent}%` }}
+                  />
+                  <i className={styles.routeKnob} style={{ left: `${overviewVisuals.routeProgressPercent}%` }} />
+                </div>
+              </div>
+            </div>
+            <p className={styles.routeDistance}>
+              {page('overview.estimatedDistance', {
+                distanceKm: overviewVisuals.estimatedDistanceKm,
+                river: riverLabel
+              })}
             </p>
           </div>
-          <Badge tone="success"><HydroIcon name="leaf" size={14} /> {cargo.co2Saving}</Badge>
-        </div>
+        </section>
 
-        <div className={styles.routeSpotlight}>
-          <div className={styles.routeTopline}>
-            <strong>
-              <HydroIcon name="route" size={18} />{' '}
-              {cargo.corridor ?? `${cargo.origin}${common('routeArrow')}${cargo.destination}`}
-            </strong>
-            {cargo.mainRiver ? <span><HydroIcon name="waves" size={16} /> {common('river')}: {cargo.mainRiver}</span> : null}
-          </div>
-          <div className={styles.routeFlow}>
-            <div className={styles.node}>
-              <span className={styles.nodeIcon}><HydroIcon name="dock" size={16} /></span>
-              <div><small>{common('origin')}</small><strong>{cargo.origin}</strong></div>
-            </div>
-            <div className={styles.flowLine} aria-hidden="true"><HydroIcon name="ship" size={18} /><span /></div>
-            <div className={styles.node}>
-              <span className={`${styles.nodeIcon} ${styles.nodeDestination}`}><HydroIcon name="map" size={16} /></span>
-              <div><small>{common('destination')}</small><strong>{cargo.destination}</strong></div>
-            </div>
-          </div>
-          <p className={styles.serviceNote}><HydroIcon name="river" size={16} /> {cargo.serviceType ? translateMock(locale, cargo.serviceType) : cargoType}</p>
-        </div>
+        <p className={styles.serviceNote}>
+          <HydroIcon name="river" size={16} /> {cargo.serviceType ? translateMock(locale, cargo.serviceType) : cargoType}
+        </p>
 
         <div className={styles.impact}>
           <strong>{cargo.co2Saving}</strong>
@@ -151,8 +248,6 @@ export function CargoDetail({ cargo, viewer }: { cargo: Cargo; viewer?: CargoVie
           <span><HydroIcon name="ship" /> {cargo.serviceType ? translateMock(locale, cargo.serviceType) : cargoType}</span>
           <span><HydroIcon name="coin" /> {cargo.targetPrice}</span>
         </div>
-
-        {cargo.description ? <p className={styles.description}>{translateMock(locale, cargo.description)}</p> : null}
 
         <div className={styles.contextGrid}>
           <div>

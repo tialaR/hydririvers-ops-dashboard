@@ -16,7 +16,7 @@ export async function DashboardOverview({ locale }: { locale: string }) {
 
   const stats = [
     { icon: 'cargo' as const, label: t('activeCargoes'), value: summary.activeCargoes, hint: t('activeMarketplace'), trend: t('metricTrendOpenCargoes'), tone: 'cargoTone' },
-    { icon: 'info' as const, label: t('pendingDocuments'), value: summary.pendingDocuments, hint: t('documentsNeedAttention'), trend: t('metricTrendOpenCargoes'), tone: 'dealTone' },
+    { icon: 'info' as const, label: t('pendingDocuments'), value: summary.pendingDocuments, hint: t('documentsNeedAttention'), trend: t('metricTrendPendingDocs'), tone: 'dealTone' },
     { icon: 'ship' as const, label: t('availableVessels'), value: summary.availableVessels, hint: t('riverRoutes'), trend: t('metricTrendVessels'), tone: 'shipTone' },
     { icon: 'document' as const, label: t('activeNegotiations'), value: summary.activeNegotiations, hint: t('quotesAndBookings'), trend: t('metricTrendNegotiations'), tone: 'dealTone' },
     { icon: 'leaf' as const, label: t('averageCo2Saving'), value: summary.averageSaving, hint: t('roadComparison'), trend: common('brDoMar'), tone: 'impactTone' }

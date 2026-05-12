@@ -25,6 +25,23 @@ Domínios principais:
 - rotas protegidas
 - i18n: `pt-BR`, `en`, `es`
 
+## Dados mock e privacidade
+
+- Usar apenas **dados fictícios e determinísticos** em mocks, fixtures e `.mock-data`.
+- Não introduzir e-mails, telefones, documentos ou credenciais reais em código, testes ou documentação versionada.
+- Preferir domínios claramente fictícios (ex.: `example.com`) e identificadores estáveis para testes.
+
+## SSR, hidratação e render
+
+- Evitar `Date.now()`, `Math.random()` e outros valores **não determinísticos** em componentes que renderizam no servidor e no cliente sem isolamento (risco de mismatch de hidratação).
+- Preservar semântica e atributos de acessibilidade ao alterar layout compartilhado (shell).
+
+## Commits, branches e artefatos
+
+- Um PR por escopo; evitar misturar documentação ampla com correção pontual sem necessidade.
+- Não versionar: `node_modules/`, `.next/`, `dist/`, `build/`, `coverage/`, `test-results/`, `playwright-report/`, ficheiros `.env*` com segredos.
+- Dados persistidos em `.mock-data/*.json` são **dev-only** e estão no `.gitignore`; não commitar alterações manuais de QA com PII.
+
 ## Regras globais
 
 1. Fazer mudanças pequenas e incrementais.
@@ -48,9 +65,16 @@ Quando a mudança tocar regras de negócio, fluxos de usuário ou integrações,
 
 ```bash
 npm test
+npm run test:mock-mode
 npm run test:unit
 npm run test:integration
 npm run test:e2e
+```
+
+Antes de merge ou release, validar também o bundle:
+
+```bash
+npm run build
 ```
 
 ## Política de PR
@@ -72,7 +96,11 @@ npm test
 npm run test:unit
 npm run test:integration
 npm run test:e2e
+npm run test:mock-mode
+npm run build
 ```
+
+O script `npm run verify` agrega lint, typecheck, i18n, testes completos e `test:mock-mode` (não inclui `build`).
 
 ## Proibições importantes
 

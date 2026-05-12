@@ -11,6 +11,8 @@ export type MockQaScenario = {
   objective: string;
   riskCovered: string;
   persona: string;
+  personaGroup?: 'shipper' | 'carrier' | 'admin' | 'government' | 'visitor' | 'qa' | 'operations';
+  expectedCargoCount?: number;
   startRoute: string;
   datasetScenarioId: MockScenarioId;
   steps: readonly string[];
@@ -19,6 +21,10 @@ export type MockQaScenario = {
   priority: MockQaScenarioPriority;
   status: MockQaScenarioStatus;
   tags: readonly string[];
+  totalNotifications?: number;
+  expectedUnreadCount?: number;
+  notificationCount?: number;
+  unreadNotificationCount?: number;
 };
 
 export const mockQaScenarios = [
@@ -194,8 +200,10 @@ export const mockQaScenarios = [
     objective: 'Confirmar que a área privada respeita o vínculo do usuário e não mistura dados públicos.',
     riskCovered: 'Mistura entre cargas públicas e privadas, ou ausência de vínculo do owner.',
     persona: 'Embarcador aprovado',
+    personaGroup: 'shipper',
     startRoute: intlAppPaths.cargos.myCargos,
     datasetScenarioId: 'market-active',
+    expectedCargoCount: 6,
     steps: [
       'Abrir Minhas cargas.',
       'Validar que só itens do usuário aparecem.',
@@ -215,8 +223,10 @@ export const mockQaScenarios = [
     objective: 'Garantir empty state honesto e útil quando o usuário ainda não publicou nada.',
     riskCovered: 'Sem dados, sem contexto e sem próximo passo visível.',
     persona: 'Embarcador novo',
+    personaGroup: 'shipper',
     startRoute: intlAppPaths.cargos.myCargos,
     datasetScenarioId: 'empty-state',
+    expectedCargoCount: 0,
     steps: [
       'Abrir Minhas cargas como um usuário sem itens próprios.',
       'Conferir texto de empty state.',
@@ -227,6 +237,51 @@ export const mockQaScenarios = [
     priority: 'medium',
     status: 'ready',
     tags: ['my-cargos', 'empty-state', 'cta']
+  },
+  {
+    id: 'my-cargos-carrier-with-items',
+    title: 'Minhas cargas (transportador) com itens',
+    description: 'Mostra apenas as cargas atribuídas ao transportador e evita confusão com o marketplace público.',
+    objective: 'Validar que o transportador vê apenas operações vinculadas ao seu usuário (carrierId).',
+    riskCovered: 'Mistura de cargas públicas e privadas, ou cargas atribuídas aparecendo para o perfil errado.',
+    persona: 'Transportador aprovado',
+    personaGroup: 'carrier',
+    startRoute: intlAppPaths.cargos.myCargos,
+    datasetScenarioId: 'market-active',
+    expectedCargoCount: 4,
+    steps: [
+      'Entrar como transportador (persona carrier).',
+      'Abrir Minhas cargas.',
+      'Validar que apenas itens atribuídos aparecem.',
+      'Abrir um detalhe e confirmar o vínculo.'
+    ],
+    expectedResult: 'O transportador vê apenas as cargas atribuídas/operadas pelo seu usuário.',
+    areas: ['my-cargos', 'ownership', 'routing'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['my-cargos', 'carrier', 'private', 'separation']
+  },
+  {
+    id: 'my-cargos-carrier-empty',
+    title: 'Minhas cargas (transportador) vazias',
+    description: 'Empty state do transportador sem cargas atribuídas, com CTA coerente para oportunidades públicas.',
+    objective: 'Garantir que o transportador não recebe CTA de “publicar carga” quando estiver sem operações.',
+    riskCovered: 'CTA incoerente por perfil e confusão de onboarding operacional.',
+    persona: 'Transportador sem operações',
+    personaGroup: 'carrier',
+    startRoute: intlAppPaths.cargos.myCargos,
+    datasetScenarioId: 'empty-state',
+    expectedCargoCount: 0,
+    steps: [
+      'Entrar como transportador (persona carrier).',
+      'Abrir Minhas cargas com dataset vazio.',
+      'Validar empty state e CTA para o marketplace público.'
+    ],
+    expectedResult: 'O transportador entende que ainda não há operações atribuídas e consegue voltar ao marketplace.',
+    areas: ['my-cargos', 'empty-state', 'onboarding'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['my-cargos', 'carrier', 'empty-state', 'cta']
   },
   {
     id: 'new-cargo-form-validation',
@@ -298,6 +353,7 @@ export const mockQaScenarios = [
     objective: 'Garantir badge real, persistência por usuário e feedback imediato no desktop e no mobile.',
     riskCovered: 'Badge fake, estado inconsistente e ação de leitura sem efeito real.',
     persona: 'Admin ou operação interna',
+    personaGroup: 'admin',
     startRoute: intlAppPaths.dashboard.home,
     datasetScenarioId: 'market-active',
     steps: [
@@ -310,7 +366,11 @@ export const mockQaScenarios = [
     areas: ['notifications', 'badge', 'popover'],
     priority: 'high',
     status: 'ready',
-    tags: ['notifications', 'badge', 'read-state', 'mobile']
+    tags: ['notifications', 'badge', 'read-state', 'mobile'],
+    totalNotifications: 5,
+    expectedUnreadCount: 5,
+    notificationCount: 5,
+    unreadNotificationCount: 5
   },
   {
     id: 'notifications-zero-unread',
@@ -319,6 +379,7 @@ export const mockQaScenarios = [
     objective: 'Garantir que o estado zerado seja estável e não deixe resíduos visuais no badge.',
     riskCovered: 'Badge fixo, contador desatualizado ou lista lida sem atualização visual imediata.',
     persona: 'Admin ou operação interna',
+    personaGroup: 'admin',
     startRoute: intlAppPaths.dashboard.home,
     datasetScenarioId: 'market-active',
     steps: [
@@ -331,7 +392,11 @@ export const mockQaScenarios = [
     areas: ['notifications', 'badge', 'persistence'],
     priority: 'medium',
     status: 'ready',
-    tags: ['notifications', 'zero', 'persisted-state']
+    tags: ['notifications', 'zero', 'persisted-state'],
+    totalNotifications: 5,
+    expectedUnreadCount: 0,
+    notificationCount: 5,
+    unreadNotificationCount: 0
   },
   {
     id: 'notifications-one-unread',
@@ -340,6 +405,7 @@ export const mockQaScenarios = [
     objective: 'Confirmar que um único item pendente continua visível sem confundir o usuário.',
     riskCovered: 'Badge incorreto para 1 item, leitura parcial que não atualiza o contador e estados pouco claros.',
     persona: 'QA mobile',
+    personaGroup: 'qa',
     startRoute: intlAppPaths.dashboard.home,
     datasetScenarioId: 'market-active',
     steps: [
@@ -352,7 +418,37 @@ export const mockQaScenarios = [
     areas: ['notifications', 'badge', 'persistence'],
     priority: 'low',
     status: 'partial',
-    tags: ['notifications', 'single-unread', 'badge']
+    tags: ['notifications', 'single-unread', 'badge'],
+    totalNotifications: 5,
+    expectedUnreadCount: 1,
+    notificationCount: 5,
+    unreadNotificationCount: 1
+  },
+  {
+    id: 'notifications-four-unread',
+    title: 'Quatro notificações não lidas',
+    description: 'Valida o número intermediário exibido no sino e no texto do popover com o mesmo valor.',
+    objective: 'Garantir que badge e texto compartilham exatamente a mesma contagem de não lidas.',
+    riskCovered: 'Badge desatualizado, contagem divergente e leitura parcial fora de sincronia.',
+    persona: 'QA mobile',
+    personaGroup: 'qa',
+    startRoute: intlAppPaths.dashboard.home,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir notificações.',
+      'Deixar quatro itens como não lidos.',
+      'Confirmar que o badge mostra 4.',
+      'Conferir que o texto do popover também mostra 4.'
+    ],
+    expectedResult: 'Badge e texto exibem 4, sem divergência entre lista e contador.',
+    areas: ['notifications', 'badge', 'persistence'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['notifications', 'unread-count', 'badge'],
+    totalNotifications: 5,
+    expectedUnreadCount: 4,
+    notificationCount: 5,
+    unreadNotificationCount: 4
   },
   {
     id: 'negotiations-flow',
@@ -418,6 +514,170 @@ export const mockQaScenarios = [
     tags: ['impact', 'government', 'indicators', 'public-view']
   },
   {
+    id: 'impact-overview-layperson',
+    title: 'Impacto: visão geral para usuário leigo',
+    description: 'Confere o texto introdutório, chips de tipo e avisos de estimativa/mock na grade de Impacto.',
+    objective: 'Garantir que a página explica propósito, limites e linguagem acessível sem prometer medição real.',
+    riskCovered: 'Leitura técnica demais ou números tratados como medição de campo.',
+    persona: 'Visitante ou embarcador sem familiaridade com hidrovias',
+    startRoute: intlAppPaths.impact.home,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir Impacto em pt-BR.',
+      'Ler o bloco “Como ler estes indicadores” e a nota de rodapé.',
+      'Conferir chips de categoria (valor econômico, ambiental, operacional, institucional) e rótulos de confiança.',
+      'Repetir em en-US e es para checar i18n.'
+    ],
+    expectedResult: 'A pessoa entende que os indicadores são demonstrativos e onde há fonte pública versus mock.',
+    areas: ['impact', 'i18n', 'copy'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['impact', 'onboarding', 'trust', 'labels']
+  },
+  {
+    id: 'impact-environmental-estimate',
+    title: 'Impacto: indicador ambiental com estimativa',
+    description: 'Valida o card de sustentabilidade com sublinha de cenário e o detalhe com limites da estimativa.',
+    objective: 'Assegurar que emissão potencial não é comunicada como percentual universal nem medição oficial.',
+    riskCovered: 'Claim ambiental absoluto sem limites ou fonte.',
+    persona: 'QA de produto',
+    startRoute: intlAppPaths.impact.home,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir Impacto e localizar o card ambiental.',
+      'Ler a métrica, a sublinha de cenário e o chip de confiança.',
+      'Abrir o detalhe do indicador e rolar até “Limites da estimativa” e “Evidências e contexto público”.'
+    ],
+    expectedResult: 'Textos deixam claro cenário demonstrativo, variáveis da rota e presença de fonte pública onde cadastrada.',
+    areas: ['impact', 'sustainability', 'compliance-copy'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['impact', 'environment', 'estimate', 'evidence']
+  },
+  {
+    id: 'impact-detail-estimate-limits',
+    title: 'Impacto: detalhe com limites da estimativa',
+    description: 'Cobre o detalhe de um indicador econômico ou operacional com seção obrigatória de limites.',
+    objective: 'Confirmar que números fortes ou narrativas de ganho aparecem com limites e sem promessa absoluta.',
+    riskCovered: 'Detalhe sem limites ou sem conexão com fluxos do produto.',
+    persona: 'Operação comercial',
+    startRoute: intlAppPaths.impact.impactDetail('cost'),
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir o detalhe do indicador de custo (rota /impacto/cost no app router).',
+      'Ler “O que isso significa” e “Como isso entrega valor”.',
+      'Validar “Limites da estimativa” e “O que observar na operação”.',
+      'Conferir evidência em modo stub com aviso de validação.'
+    ],
+    expectedResult: 'O detalhe lista limites, observações operacionais e evidência marcada como mock ou a validar.',
+    areas: ['impact', 'detail', 'risk'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['impact', 'detail', 'limits', 'stub-evidence']
+  },
+  {
+    id: 'impact-public-context-to-validate',
+    title: 'Impacto: contexto público a validar',
+    description: 'Garante que placeholders “a validar com fonte pública” aparecem quando não há série vinculada.',
+    objective: 'Evitar falsa sensação de pesquisa ou benchmark oficial sem fonte cadastrada.',
+    riskCovered: 'Stub de evidência lido como estudo validado.',
+    persona: 'Auditoria ou parceiro institucional',
+    startRoute: intlAppPaths.impact.impactDetail('compliance'),
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir detalhe de conformidade documental.',
+      'Na seção de evidências, localizar texto de “a validar” ou badge de cenário mock.',
+      'Confirmar que não há link externo apresentado como validação oficial do produto.'
+    ],
+    expectedResult: 'A UI deixa explícito que a evidência é placeholder até fonte pública ou integração existir.',
+    areas: ['impact', 'evidence', 'trust'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['impact', 'evidence', 'stub', 'public-source']
+  },
+  {
+    id: 'profile-operational-identity-review',
+    title: 'Perfil: revisar identidade operacional',
+    description: 'Valida o texto de topo, cartão de identidade, status e nota de ambiente demo.',
+    objective: 'Garantir que a página explica papel, empresa e acesso sem parecer só formulário burocrático.',
+    riskCovered: 'Perfil ilegível ou status confundido com validação oficial em produção.',
+    persona: 'Embarcadora ou transportadora',
+    startRoute: intlAppPaths.auth.profile,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir Perfil autenticado.',
+      'Ler o título, subtítulo e nota sobre ambiente de demonstração.',
+      'Conferir cartão com nome legível, empresa e badge de acesso.',
+      'Validar bloco “Por que manter isso atualizado?” e dicas nos campos.'
+    ],
+    expectedResult: 'A pessoa entende identidade operacional, o que está aprovado e por que os dados importam.',
+    areas: ['profile', 'identity', 'copy'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['profile', 'onboarding', 'trust']
+  },
+  {
+    id: 'profile-edit-basic-fields',
+    title: 'Perfil: editar dados básicos',
+    description: 'Cobre edição de nome completo, empresa, telefone e cidade com salvamento e feedback.',
+    objective: 'Confirmar que o formulário continua persistindo e que labels de apoio não confundem.',
+    riskCovered: 'Salvar perfil quebrado ou campos sem contexto.',
+    persona: 'Operação comercial',
+    startRoute: intlAppPaths.auth.profile,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir Perfil.',
+      'Alterar um campo opcional (telefone ou cidade) e salvar.',
+      'Confirmar mensagem de sucesso ou estado “Salvo”.',
+      'Recarregar e verificar persistência no mock.'
+    ],
+    expectedResult: 'Atualização conclui sem erro e o usuário reconhece o que foi salvo.',
+    areas: ['profile', 'forms', 'session'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['profile', 'save', 'validation']
+  },
+  {
+    id: 'profile-long-name-header',
+    title: 'Perfil: nome longo não quebra header',
+    description: 'Garante nome compacto e reticências no chrome e avatar com iniciais corretas.',
+    objective: 'Evitar overflow do nome no header desktop/mobile após login com nome extenso em caixa alta.',
+    riskCovered: 'Layout quebrado no topbar ou avatar com iniciais erradas.',
+    persona: 'QA de layout',
+    startRoute: intlAppPaths.dashboard.home,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Entrar com usuário mock cujo nome completo seja longo e em maiúsculas.',
+      'Observar o nome exibido no header (sidebar/topbar) e no link de perfil.',
+      'Abrir Perfil e conferir nome legível no cartão sem estourar a largura.'
+    ],
+    expectedResult: 'O nome aparece compacto, com reticências quando necessário, e iniciais batem com primeiro e último nome.',
+    areas: ['profile', 'layout', 'chrome'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['profile', 'header', 'ellipsis', 'initials']
+  },
+  {
+    id: 'profile-access-status-explained',
+    title: 'Perfil: status de acesso explicado',
+    description: 'Checa textos de status de acesso, valores aprovado/pendente e rodapé de demo.',
+    objective: 'Assegurar que “aprovado” não soa como certificação externa sem o aviso de demonstração.',
+    riskCovered: 'Promessa indevida de validação regulatória ou comercial.',
+    persona: 'Auditoria interna',
+    startRoute: intlAppPaths.auth.profile,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir Perfil com usuário aprovado e ler “Status de acesso” e badge.',
+      'Repetir ou simular usuário pendente e comparar textos.',
+      'Confirmar presença da nota de ambiente de demonstração.'
+    ],
+    expectedResult: 'Status e descrições deixam claro o que é acesso à plataforma versus validação real.',
+    areas: ['profile', 'trust', 'copy'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['profile', 'access', 'demo-disclaimer']
+  },
+  {
     id: 'mobile-overlays-and-bottom-sheets',
     title: 'Mobile com bottom sheets e overlays',
     description: 'Cobre menu mobile, filtros, notificações, bottom nav, safe area e mapa fullscreen em landscape.',
@@ -458,6 +718,174 @@ export const mockQaScenarios = [
     priority: 'medium',
     status: 'ready',
     tags: ['theme', 'i18n', 'contrast', 'translations']
+  },
+  {
+    id: 'negotiations-counteroffer-review',
+    title: 'Negociações: revisar contraproposta',
+    description: 'Valida cartões com alerta de resposta, resumo de contrapropostas e próximo passo legível.',
+    objective: 'Garantir que contrapropostas apareçam como prioridade visual sem perder contexto de rota e valor.',
+    riskCovered: 'Usuário não percebe que precisa responder ou confunde estágio comercial.',
+    persona: 'Embarcadora revisando propostas',
+    startRoute: intlAppPaths.negotiations.home,
+    datasetScenarioId: 'completed',
+    steps: [
+      'Abrir /negociacoes com dataset que mantenha contrapropostas na lista.',
+      'Conferir o bloco “Entenda onde agir primeiro” e o contador de pendências.',
+      'Localizar cartão em contraproposta com selo “Precisa de resposta”.',
+      'Abrir o detalhe e validar histórico e próximos passos.'
+    ],
+    expectedResult: 'A lista destaca contrapropostas, mostra próximo passo claro e o resumo reflete pendências.',
+    areas: ['negotiations', 'commercial', 'copy'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['negotiations', 'counteroffer', 'action-required']
+  },
+  {
+    id: 'negotiations-quote-waiting',
+    title: 'Negociações: cotação aguardando análise',
+    description: 'Cobre cotações abertas com linguagem acessível e sem ruído de pipeline técnico.',
+    objective: 'Confirmar que estágio “Cotação” explica espera de análise de preço e mantém hierarquia de valor.',
+    riskCovered: 'Status técnico sem explicação e valores ilegíveis em mobile.',
+    persona: 'Transportador acompanhando oportunidades',
+    startRoute: intlAppPaths.negotiations.home,
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir /negociacoes com dataset de cotações em aberto.',
+      'Ler o subtítulo e o resumo de “Cotações abertas”.',
+      'Validar microcopy do estágio e o valor estimado no cartão.',
+      'Checar layout em coluna única no mobile.'
+    ],
+    expectedResult: 'Cotações comunicam espera de análise de preço e valores permanecem legíveis.',
+    areas: ['negotiations', 'mobile', 'copy'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['negotiations', 'quote', 'pricing']
+  },
+  {
+    id: 'negotiations-contract-advanced',
+    title: 'Negociações: contrato avançado',
+    description: 'Garante leitura clara de acordos em contrato com contrapartes e rota visíveis.',
+    objective: 'Validar estágio “Contrato” com explicação de acordo avançado e resumo de contratos em andamento.',
+    riskCovered: 'Confusão entre contrato e embarque ou perda de contexto comercial.',
+    persona: 'Operação comercial',
+    startRoute: intlAppPaths.negotiations.home,
+    datasetScenarioId: 'negotiation-flow',
+    steps: [
+      'Abrir /negociacoes com dataset de fluxo de negociação.',
+      'Identificar cartões em contrato e o contador de contratos em andamento.',
+      'Conferir contrapartes e rota no cartão.',
+      'Abrir detalhe para validar documentos e próximo passo.'
+    ],
+    expectedResult: 'Contratos em andamento aparecem no resumo e os cartões explicam o avanço do acordo.',
+    areas: ['negotiations', 'contract', 'commercial'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['negotiations', 'contract', 'deal-stage']
+  },
+  {
+    id: 'negotiations-empty-list',
+    title: 'Negociações: lista vazia',
+    description: 'Confirma estado vazio amigável quando não há negociações no dataset.',
+    objective: 'Evitar impressão de erro quando a lista está vazia e orientar o usuário leigo.',
+    riskCovered: 'Grade vazia sem contexto ou layout quebrado com bottom navigation.',
+    persona: 'Nova conta sem operações',
+    startRoute: intlAppPaths.negotiations.home,
+    datasetScenarioId: 'empty-state',
+    steps: [
+      'Aplicar dataset vazio com negociações zeradas.',
+      'Abrir /negociacoes e ler o cartão de orientação com contadores zerados.',
+      'Validar mensagem de lista vazia e ausência de cards.',
+      'Confirmar espaço inferior para a bottom nav no mobile.'
+    ],
+    expectedResult: 'A página explica a ausência de negociações e mantém hierarquia visual sem cards fantasmas.',
+    areas: ['negotiations', 'empty-state', 'mobile'],
+    priority: 'low',
+    status: 'ready',
+    tags: ['negotiations', 'empty-state', 'onboarding']
+  },
+  {
+    id: 'negotiation-detail-quote-received',
+    title: 'Detalhe de negociação: cotação recebida',
+    description: 'Valida guia de decisão, valor negociado e timeline em estágio de cotação.',
+    objective: 'Garantir que o detalhe explique o que fazer agora sem depender de ações falsas.',
+    riskCovered: 'Detalhe técnico sem contexto comercial ou próximo passo ilegível.',
+    persona: 'Embarcadora acompanhando proposta',
+    startRoute: intlAppPaths.negotiations.negotiationDetail('neg-001'),
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir o detalhe de uma negociação em cotação.',
+      'Ler o bloco “O que precisa acontecer agora” e o próximo passo sugerido.',
+      'Conferir termos humanizados e documentos com status.',
+      'Revisar a linha do tempo e o link para a carga relacionada.'
+    ],
+    expectedResult: 'A tela orienta a revisão de documentos e termos com hierarquia clara e sem botões falsos.',
+    areas: ['negotiations', 'detail', 'copy'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['negotiations', 'detail', 'quote']
+  },
+  {
+    id: 'negotiation-detail-counteroffer-review',
+    title: 'Detalhe de negociação: contraproposta para revisar',
+    description: 'Cobre estágio de contraproposta e linguagem de urgência responsável.',
+    objective: 'Confirmar que contrapropostas comunicam necessidade de resposta sem alarmismo.',
+    riskCovered: 'Usuário ignora contraproposta ou confunde com contrato fechado.',
+    persona: 'Operação comercial',
+    startRoute: intlAppPaths.negotiations.negotiationDetail('neg-002'),
+    datasetScenarioId: 'completed',
+    steps: [
+      'Abrir neg-002 com dataset que mantenha contraproposta.',
+      'Validar significado do estágio e próximo passo destacado.',
+      'Checar documentos com alerta ou pendência.',
+      'Registrar decisão em notas internas de QA.'
+    ],
+    expectedResult: 'O detalhe destaca contraproposta e próximos passos com microcopy consistente.',
+    areas: ['negotiations', 'detail', 'commercial'],
+    priority: 'high',
+    status: 'ready',
+    tags: ['negotiations', 'counteroffer', 'detail']
+  },
+  {
+    id: 'negotiation-detail-document-pending',
+    title: 'Detalhe de negociação: documento pendente',
+    description: 'Garante leitura de documentos pendentes com impacto operacional.',
+    objective: 'Assegurar que chips de documento mostrem status e impacto em pt-BR/en-US/es.',
+    riskCovered: 'Documentação tratada como lista técnica sem prioridade.',
+    persona: 'Transportador revisando compliance',
+    startRoute: intlAppPaths.negotiations.negotiationDetail('neg-001'),
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Abrir detalhe com NF-e ou manifesto pendente no mock.',
+      'Ler o impacto descrito abaixo do nome do documento.',
+      'Alternar idioma e validar rótulos de status.',
+      'Confirmar contraste em tema claro e escuro.'
+    ],
+    expectedResult: 'Documentos pendentes aparecem com status visível e texto de impacto.',
+    areas: ['negotiations', 'documents', 'i18n'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['negotiations', 'documents', 'detail']
+  },
+  {
+    id: 'negotiation-detail-access-denied',
+    title: 'Detalhe de negociação: sem acesso',
+    description: 'Confirma mensagem amigável quando o perfil não pode ver o detalhe.',
+    objective: 'Evitar página vazia ou erro genérico quando a regra de acesso bloqueia.',
+    riskCovered: 'Vazamento de contexto ou mensagem agressiva para usuário leigo.',
+    persona: 'Conta sem vínculo com a negociação',
+    startRoute: intlAppPaths.negotiations.negotiationDetail('neg-001'),
+    datasetScenarioId: 'market-active',
+    steps: [
+      'Entrar com usuário sem vínculo com a negociação alvo.',
+      'Abrir o ID da negociação diretamente pela URL.',
+      'Validar título e descrição de acesso negado.',
+      'Confirmar ausência de dados sensíveis no corpo.'
+    ],
+    expectedResult: 'A UI comunica falta de acesso sem expor detalhes da negociação.',
+    areas: ['negotiations', 'access-control', 'copy'],
+    priority: 'medium',
+    status: 'ready',
+    tags: ['negotiations', 'access', 'detail']
   }
 ] satisfies readonly MockQaScenario[];
 

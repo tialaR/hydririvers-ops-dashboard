@@ -37,6 +37,7 @@ describe('shared/config/navigation', () => {
   });
 
   it('respeita rotas filhas ao resolver item ativo da sidebar', () => {
+    expect(resolveActiveNavigationHref('/')).toBe('/');
     expect(resolveActiveNavigationHref('/pt-BR/dashboard')).toBe('/dashboard');
     expect(resolveActiveNavigationHref('/pt-BR/cargas')).toBe('/cargas');
     expect(resolveActiveNavigationHref('/pt-BR/minhas-cargas')).toBe('/minhas-cargas');
@@ -49,27 +50,52 @@ describe('shared/config/navigation', () => {
     expect(resolveActiveNavigationHref('/en-US/embarcacoes/vessel-01')).toBe('/embarcacoes');
   });
 
-  it('visitante (user null / sessão ainda não pronta) vê Embarcações e não vê Minhas cargas', () => {
+  it('visitante (user null / sessão ainda não pronta) vê apenas Home e Cargas públicas', () => {
     const guest = filterMainNavigationForUser(null).map((item) => item.href);
-    expect(guest).toContain(intlAppPaths.vessels.marketplace);
+    expect(guest).toContain(intlAppPaths.home);
+    expect(guest).toContain(intlAppPaths.cargos.marketplace);
+    expect(guest).not.toContain(intlAppPaths.dashboard.home);
+    expect(guest).not.toContain(intlAppPaths.vessels.marketplace);
     expect(guest).not.toContain(intlAppPaths.cargos.myCargos);
   });
 
   it('para shipper autenticado, inclui Minhas cargas e omite Embarcações', () => {
     const nav = filterMainNavigationForUser(shipper).map((item) => item.href);
+    expect(nav).toContain(intlAppPaths.dashboard.home);
+    expect(nav).toContain(intlAppPaths.cargos.marketplace);
     expect(nav).toContain(intlAppPaths.cargos.myCargos);
+    expect(nav).toContain(intlAppPaths.negotiations.home);
+    expect(nav).toContain(intlAppPaths.tracking.home);
+    expect(nav).toContain(intlAppPaths.impact.home);
     expect(nav).not.toContain(intlAppPaths.vessels.marketplace);
+    expect(nav).not.toContain(intlAppPaths.government.home);
+    expect(nav).not.toContain(intlAppPaths.admin.home);
   });
 
   it('para carrier autenticado, inclui Minhas cargas e Embarcações', () => {
     const nav = filterMainNavigationForUser(carrier).map((item) => item.href);
+    expect(nav).toContain(intlAppPaths.dashboard.home);
+    expect(nav).toContain(intlAppPaths.cargos.marketplace);
     expect(nav).toContain(intlAppPaths.cargos.myCargos);
     expect(nav).toContain(intlAppPaths.vessels.marketplace);
+    expect(nav).toContain(intlAppPaths.negotiations.home);
+    expect(nav).toContain(intlAppPaths.tracking.home);
+    expect(nav).toContain(intlAppPaths.impact.home);
+    expect(nav).not.toContain(intlAppPaths.government.home);
+    expect(nav).not.toContain(intlAppPaths.admin.home);
   });
 
   it('para admin autenticado, inclui rotas administrativas', () => {
     const nav = filterMainNavigationForUser(admin).map((item) => item.href);
-    expect(nav).toContain(intlAppPaths.admin.home);
+    expect(nav).toContain(intlAppPaths.home);
+    expect(nav).toContain(intlAppPaths.dashboard.home);
+    expect(nav).toContain(intlAppPaths.cargos.marketplace);
+    expect(nav).toContain(intlAppPaths.cargos.myCargos);
+    expect(nav).toContain(intlAppPaths.vessels.marketplace);
+    expect(nav).toContain(intlAppPaths.negotiations.home);
+    expect(nav).toContain(intlAppPaths.tracking.home);
+    expect(nav).toContain(intlAppPaths.impact.home);
     expect(nav).toContain(intlAppPaths.government.home);
+    expect(nav).toContain(intlAppPaths.admin.home);
   });
 });

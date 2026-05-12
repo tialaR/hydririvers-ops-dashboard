@@ -48,25 +48,20 @@ describe('dashboard page', () => {
         return Promise.resolve({
           eyebrow: 'Operação',
           title: 'Dashboard',
-          description: 'Visão operacional das cargas, embarcações e rotas.',
-          marketplaceEyebrow: 'Atalho operacional',
-          marketplaceTitle: 'Abrir o marketplace de cargas',
-          marketplaceDescription: 'Consulte oportunidades públicas.',
-          marketplaceCta: 'Ver cargas públicas',
-          myCargoesCta: 'Ver minhas cargas'
+          description: 'Aqui você acompanha o que merece atenção na sua operação.'
         });
       }
       return Promise.resolve({});
     });
   });
 
-  it('prioriza visão operacional e CTA para o marketplace', async () => {
+  it('renderiza um resumo guiado (sem card redundante) e carrega o overview', async () => {
     const tree = await DashboardPage({ params: Promise.resolve({ locale: 'pt-BR' }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
 
     expect(html).toContain('Dashboard');
-    expect(html).toContain('Visão operacional das cargas, embarcações e rotas.');
-    expect(html).toContain('Ver cargas públicas');
+    expect(html).toContain('Aqui você acompanha o que merece atenção na sua operação.');
+    expect(html).not.toContain('Atalho operacional');
     expect(html).toContain('dashboard-overview');
   });
 });

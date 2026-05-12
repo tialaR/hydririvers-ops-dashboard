@@ -27,6 +27,22 @@ describe('shared/ui/mock-mode/mock-qa-scenarios', () => {
     }
   });
 
+  it('declara contagem esperada para cenários de notificações', () => {
+    const notificationScenarios = mockQaScenarios.filter((scenario) => scenario.id.startsWith('notifications-'));
+
+    expect(notificationScenarios).toHaveLength(4);
+    expect(notificationScenarios.map((scenario) => scenario.totalNotifications)).toEqual([5, 5, 5, 5]);
+    expect(notificationScenarios.map((scenario) => scenario.expectedUnreadCount)).toEqual([5, 0, 1, 4]);
+  });
+
+  it('declara expectedCargoCount para cenários de Minhas cargas', () => {
+    const myCargoesScenarios = mockQaScenarios.filter((scenario) => scenario.areas.includes('my-cargos'));
+    expect(myCargoesScenarios.length).toBeGreaterThan(0);
+    for (const scenario of myCargoesScenarios) {
+      expect(typeof scenario.expectedCargoCount).toBe('number');
+    }
+  });
+
   it('filtra cenários por termos relevantes', () => {
     const results = filterMockQaScenarios('mapa');
     expect(results.some((scenario) => scenario.id === 'tracking-map-active-and-overlay')).toBe(true);
@@ -45,4 +61,3 @@ describe('shared/ui/mock-mode/mock-qa-scenarios', () => {
     expect(text).toContain(scenario.expectedResult);
   });
 });
-
