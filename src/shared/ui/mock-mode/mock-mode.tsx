@@ -26,9 +26,9 @@ export function MockMode() {
             </button>
           </div>
 
-          <MockScenarioControl />
-
           <MockQaAssistant />
+
+          <MockScenarioControl />
 
           <section className={styles.section}>
             <div className={styles.sectionTitle}>
@@ -50,7 +50,7 @@ export function MockMode() {
         aria-label={t('button')}
       >
         <span className={styles.triggerMark}>{t('triggerMark')}</span>
-        <span>{t('button')}</span>
+        <span>{t('qaAssistantShortTitle')}</span>
       </button>
     </aside>
   );

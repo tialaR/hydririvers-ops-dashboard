@@ -48,6 +48,7 @@ export default async function LocaleLayout({
   const cookieStore = await cookies();
   const initialTheme = resolveServerTheme(cookieStore.get(cookieNames.theme)?.value);
   const htmlClassName = `${geist.variable}${initialTheme === 'dark' ? ' dark' : ''}`;
+  const shouldRenderAnalytics = process.env.NODE_ENV === 'production';
 
   return (
     <html
@@ -64,7 +65,7 @@ export default async function LocaleLayout({
             <ToastProvider>
               <AdminChrome>{children}</AdminChrome>
               {isMockQaUiEnabled() ? <MockMode /> : null}
-              <Analytics />
+              {shouldRenderAnalytics ? <Analytics /> : null}
             </ToastProvider>
           </ThemeProvider>
         </NextIntlClientProvider>

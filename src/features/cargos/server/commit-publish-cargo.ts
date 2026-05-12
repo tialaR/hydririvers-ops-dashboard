@@ -8,6 +8,7 @@ import { appRoutes } from '@/shared/routing/app-routes';
 import { isNonEmptyText } from '@/shared/server/auth';
 import { upsertCargo } from '@/shared/server/mock-db';
 import { revalidatePath, revalidateTag } from 'next/cache';
+import { canCreateCargo } from '@/features/auth/domain/access-control';
 
 const allowedStatuses: CargoStatus[] = ['open', 'bidding', 'contracting', 'reserved', 'boarded', 'delivered'];
 
@@ -26,8 +27,10 @@ export type PublishCargoCommitResult =
  */
 export function commitPublishCargo(user: HydroUser | null, payload: Partial<Cargo>): PublishCargoCommitResult {
   if (!user) return { ok: false, reason: 'unauthenticated' };
-  if (user.role === 'carrier') return { ok: false, reason: 'forbidden-role' };
-  if (!user.approved) return { ok: false, reason: 'forbidden-unapproved' };
+  if (!canCreateCargo(user)) {
+    if (!user.approved) return { ok: false, reason: 'forbidden-unapproved' };
+    return { ok: false, reason: 'forbidden-role' };
+  }
 
   if (!isNonEmptyText(payload.origin) || !isNonEmptyText(payload.destination) || !isNonEmptyText(payload.cargoType)) {
     return { ok: false, reason: 'missing-required-fields' };

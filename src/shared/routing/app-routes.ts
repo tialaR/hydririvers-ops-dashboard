@@ -78,10 +78,14 @@ export const intlAppPaths = {
 /** Rotas que exigem cookie `hydrorivers_session` (mesma ordem semântica que `proxy.ts`). */
 export const middlewarePrivateIntlPaths: readonly string[] = [
   intlAppPaths.dashboard.home,
+  intlAppPaths.cargos.myCargos,
   intlAppPaths.cargos.publishCargo,
   intlAppPaths.auth.profile,
   intlAppPaths.negotiations.home,
   intlAppPaths.tracking.home,
+  intlAppPaths.vessels.marketplace,
+  intlAppPaths.impact.home,
+  intlAppPaths.government.home,
   intlAppPaths.admin.home
 ];
 

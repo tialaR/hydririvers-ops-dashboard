@@ -1,31 +1,58 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  Activity,
+  AlertCircle,
   Anchor,
-  CalendarDays,
+  BadgeCheck,
+  BadgePercent,
   ArrowRight,
+  ArrowRightCircle,
+  CalendarCheck,
+  CalendarClock,
+  CalendarDays,
   Check,
+  CheckCircle2,
   ChevronDown,
+  ClipboardCheck,
+  ClipboardList,
   Circle,
   CircleDollarSign,
-  ClipboardList,
   Clock3,
+  CloudRain,
+  Coins,
+  FileCheck2,
   FileText,
+  FileWarning,
   Filter,
+  Info,
   Layers,
   Leaf,
+  ListChecks,
   MapPin,
+  MapPinned,
   MoreVertical,
-  Package,
+  Navigation,
+  PackageCheck,
+  PiggyBank,
   Plus,
+  Radar,
+  ReceiptText,
+  Route,
   Search,
+  ShieldCheck,
   Ship,
   Snowflake,
   TrendingUp,
+  TrendingDown,
+  Truck,
+  User,
+  Wallet,
   Waves,
+  Warehouse,
   X
 } from 'lucide-react';
 import { Link } from '@/core/i18n/navigation';
@@ -34,6 +61,8 @@ import { formatLocaleCurrency, formatLocaleNumber, formatLocalePercent, formatMo
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { PriorityTab } from '@/features/dashboard/components/priority-tab/priority-tab';
+import { getVesselVisual } from '@/features/cargo-market/components/cargo-detail/cargo-vessel-visual';
+import styles from './operations-board.module.scss';
 
 const PAGE_SIZE = 5;
 
@@ -76,28 +105,17 @@ const tabs: Array<{ key: DashboardTab; labelKey: string }> = [
   { key: 'priority', labelKey: 'tabs.priority' }
 ];
 
-const OVERVIEW_VESSEL_IMAGES = [
-  '/vessels/overview/vessel-01.jpg',
-  '/vessels/overview/vessel-02.png',
-  '/vessels/overview/vessel-03.png',
-  '/vessels/overview/vessel-04.jpg',
-  '/vessels/overview/vessel-05.png',
-  '/vessels/overview/vessel-06.jpg',
-  '/vessels/overview/vessel-07.png',
-  '/vessels/overview/vessel-08.jpg',
-  '/vessels/overview/vessel-09.jpg',
-  '/vessels/overview/vessel-10.jpg',
-  '/vessels/overview/vessel-11.png',
-  '/vessels/overview/vessel-12.jpg',
-  '/vessels/overview/vessel-13.png',
-  '/vessels/overview/vessel-14.png',
-  '/vessels/overview/vessel-15.png',
-  '/vessels/overview/vessel-16.png',
-  '/vessels/overview/vessel-17.png',
-  '/vessels/overview/vessel-18.png',
-  '/vessels/overview/vessel-19.png',
-  '/vessels/overview/vessel-20.png'
-] as const;
+type OverviewVesselVisual = ReturnType<typeof getVesselVisual>;
+
+const DEFAULT_OVERVIEW_VESSEL_IMAGE = '/mock/vessels/cargo-vessel-real-water-01.webp';
+
+function cx(...classNames: Array<string | false | null | undefined>) {
+  return classNames.filter(Boolean).join(' ');
+}
+
+function overviewStatusClass(status: CargoStatus) {
+  return cx(styles.overviewStatus, styles[`overviewStatus_${status}`]);
+}
 
 type MapPoint = { x: number; y: number };
 type CubicRoute = {
@@ -251,18 +269,6 @@ function buildVisualCargoPool(cargoes: Cargo[]) {
   });
 }
 
-function getLegacyStatusTone(status: CargoStatus) {
-  const legacy: Record<CargoStatus, string> = {
-    boarded: 'is-transit',
-    reserved: 'is-operation',
-    contracting: 'is-contracting',
-    bidding: 'is-quote',
-    open: 'is-open',
-    delivered: 'is-delivered'
-  };
-  return legacy[status];
-}
-
 function formatMoney(locale: string, value: string) {
   return formatMockBrl(locale, value) || value.replace('R$', 'R$ ').replace(/\s+/g, ' ').trim();
 }
@@ -377,6 +383,19 @@ function tangentAngleInBezier(route: CubicRoute, t: number) {
   return (Math.atan2(dy, dx) * 180) / Math.PI;
 }
 
+/** Comprimento aproximado da curva (amostragem fixa; determinístico). */
+function approximateCubicBezierPathLength(route: CubicRoute, samples = 36) {
+  let len = 0;
+  let prev = route.start;
+  for (let i = 1; i <= samples; i += 1) {
+    const t = i / samples;
+    const p = pointInCubicBezier(route, t);
+    len += Math.hypot(p.x - prev.x, p.y - prev.y);
+    prev = p;
+  }
+  return Math.max(len, 1);
+}
+
 function parseStateTag(location: string) {
   const match = location.match(/,\s*([A-Za-z]{2})\b/);
   return match?.[1]?.toUpperCase() ?? '';
@@ -421,24 +440,6 @@ function cargoType(cargo: Cargo) {
 }
 
 
-function stableIndexFromCargoId(value: string, modulo: number) {
-  if (!modulo) return 0;
-
-  const hash = Array.from(value || 'cargo').reduce((acc, char) => {
-    return ((acc << 5) - acc + char.charCodeAt(0)) | 0;
-  }, 0);
-
-  return Math.abs(hash) % modulo;
-}
-
-function getFallbackOverviewVesselImage(cargo?: Cargo | null) {
-  const key = cargo ? `${cargo.id}-${cargo.origin}-${cargo.destination}` : 'default-cargo';
-  return OVERVIEW_VESSEL_IMAGES[stableIndexFromCargoId(key, OVERVIEW_VESSEL_IMAGES.length)] ?? OVERVIEW_VESSEL_IMAGES[0];
-}
-
-function getRandomVesselImage() {
-  return OVERVIEW_VESSEL_IMAGES[Math.floor(Math.random() * OVERVIEW_VESSEL_IMAGES.length)] ?? OVERVIEW_VESSEL_IMAGES[0];
-}
 
 function getTimelineSource(event: TrackingEvent) {
   return normalize(`${event.kind ?? ''} ${event.title} ${event.description} ${event.location}`);
@@ -462,16 +463,32 @@ function getTimelineStatusLabel(status: TrackingEvent['status'], tBoard: (key: s
   return tBoard('timeline.status.pending');
 }
 
-function getTimelineIcon(event: TrackingEvent, index: number) {
+function timelineStatusGlyph(status: TrackingEvent['status']) {
+  if (status === 'done') return <CheckCircle2 size={15} strokeWidth={2.25} aria-hidden />;
+  if (status === 'current') return <Activity size={15} strokeWidth={2.25} aria-hidden />;
+  return <ArrowRightCircle size={15} strokeWidth={2.25} aria-hidden />;
+}
+
+function getTimelineIcon(event: TrackingEvent, index: number, iconSize = 22) {
   const source = getTimelineSource(event);
 
-  if (event.kind === 'cargo_created' || source.includes('carga criada') || source.includes('coleta') || source.includes('lote')) return <Package size={18} />;
-  if (event.kind === 'documentation_pending' || source.includes('document') || source.includes('nota') || source.includes('romaneio')) return <ClipboardList size={18} />;
-  if (event.kind === 'shipment_confirmed' || source.includes('janela') || source.includes('embarque') || source.includes('reserva')) return <CalendarDays size={18} />;
-  if (event.kind === 'in_transit' || source.includes('transito') || source.includes('embarc') || source.includes('rota') || source.includes('rio')) return <Ship size={18} />;
-  if (event.kind === 'delivered' || source.includes('porto') || source.includes('atrac') || source.includes('destino')) return <Anchor size={18} />;
+  if (event.kind === 'cargo_created' || source.includes('carga criada') || source.includes('coleta') || source.includes('lote')) {
+    return <PackageCheck size={iconSize} />;
+  }
+  if (event.kind === 'documentation_pending' || source.includes('document') || source.includes('nota') || source.includes('romaneio')) {
+    return <FileCheck2 size={iconSize} />;
+  }
+  if (event.kind === 'shipment_confirmed' || source.includes('janela') || source.includes('embarque') || source.includes('reserva')) {
+    return <CalendarCheck size={iconSize} />;
+  }
+  if (event.kind === 'in_transit' || source.includes('transito') || source.includes('embarc') || source.includes('rota') || source.includes('rio')) {
+    return <Radar size={iconSize} />;
+  }
+  if (event.kind === 'delivered' || source.includes('porto') || source.includes('atrac') || source.includes('destino')) {
+    return <MapPinned size={iconSize} />;
+  }
 
-  return event.status === 'done' ? <Check size={18} /> : index === 0 ? <Clock3 size={18} /> : <Circle size={16} />;
+  return event.status === 'done' ? <Check size={iconSize} /> : index === 0 ? <Clock3 size={iconSize} /> : <Circle size={Math.max(14, iconSize - 6)} />;
 }
 
 function getTimelineTone(event: TrackingEvent, index: number) {
@@ -613,6 +630,7 @@ function HydroMapPanel({
   tBoard: BoardTranslator;
   tCommon: CommonTranslator;
 }) {
+  const svgUid = useId().replace(/:/g, '');
   const [zoomLevel, setZoomLevel] = useState(1);
   const [expanded, setExpanded] = useState(false);
   const [layerMode, setLayerMode] = useState<'all' | 'route' | 'network'>('all');
@@ -622,6 +640,7 @@ function HydroMapPanel({
   const [viewportSize, setViewportSize] = useState({ width: 1000, height: 470 });
   const dragState = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
   const viewportRef = useRef<HTMLDivElement | null>(null);
+  const modalViewportRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!expanded) return undefined;
@@ -634,8 +653,9 @@ function HydroMapPanel({
 
   useEffect(() => {
     const updateSize = () => {
-      if (!viewportRef.current) return;
-      const rect = viewportRef.current.getBoundingClientRect();
+      const el = expanded ? modalViewportRef.current : viewportRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
       setViewportSize({ width: rect.width, height: rect.height });
     };
@@ -652,6 +672,7 @@ function HydroMapPanel({
   const originPoint = getPointFromLocation(cargo.origin);
   const destinationPoint = getPointFromLocation(cargo.destination);
   const route = buildRoute(originPoint, destinationPoint);
+  const routePathLength = approximateCubicBezierPathLength(route);
   const progress = mapProgressByStatus(cargo.status);
   const routeMidPoint = pointInCubicBezier(route, 0.5);
   const directionPoint = pointInCubicBezier(route, clamp(progress + 0.08, 0.18, 0.92));
@@ -787,198 +808,386 @@ function HydroMapPanel({
 
   const renderViewport = (mode: 'card' | 'modal') => {
     const isModal = mode === 'modal';
+    const idSuffix = `${svgUid}-${mode}`;
+    const progressPct = Math.round(progress * 100);
 
     return (
-      <div ref={viewportRef} className={`hx-map-viewport ${isModal ? 'is-modal' : ''} ${isCompactViewport ? 'is-compact' : ''}`}>
-        <div className="hx-map-stats">
-          <article><Ship size={14} /><span>{tBoard('map.inTransitCargoes')}</span><strong>{inTransitCount}</strong></article>
-          <article><Snowflake size={14} /><span>{tBoard('map.inOperation')}</span><strong>{operationCount}</strong></article>
-        </div>
-
-        <div className="hx-map-tools">
-          <button type="button" onClick={cycleLayers} title={tBoard('map.toggleLayers', { layer: layerLabel })}><Layers size={16} /> {tCommon('filter')}</button>
-          <button type="button" aria-label={isModal ? tBoard('map.closeExpanded') : tBoard('map.expand')} onClick={toggleExpandedMap}>{isModal ? <X size={16} /> : '↗'}</button>
-        </div>
-
-        <div className="hx-map-controls">
-          <button type="button" aria-label={tBoard('map.zoomIn')} onClick={() => changeZoom(0.18)}>+</button>
-          <button type="button" aria-label={tBoard('map.zoomOut')} onClick={() => changeZoom(-0.18)}>−</button>
-          <button type="button" aria-label={tBoard('map.resetView')} onClick={resetView}>⌾</button>
-        </div>
-
-        <div
-          className={`hx-map-scene ${zoomLevel > 1 ? 'is-draggable' : ''} ${isDragging ? 'is-dragging' : ''}`}
-          style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})` }}
-          onPointerDown={startDrag}
-          onPointerMove={moveDrag}
-          onPointerUp={endDrag}
-          onPointerLeave={endDrag}
-          onPointerCancel={endDrag}
-        >
-          <svg className="hx-amazon-map" viewBox="0 0 1000 470" preserveAspectRatio="none" aria-label={tBoard('map.waterwayMap')}>
-            <defs>
-              <filter id="hxRouteGlowMonoV14">
-                <feGaussianBlur stdDeviation="2.8" result="blur" />
-                <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 0.9 0" result="softGlow" />
-                <feMerge>
-                  <feMergeNode in="softGlow" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-              <linearGradient id="hxRouteBandV14" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="rgba(195, 236, 234, .58)" />
-                <stop offset=".48" stopColor="rgba(255,255,255,.98)" />
-                <stop offset="1" stopColor="rgba(195, 236, 234, .58)" />
-              </linearGradient>
-              <radialGradient id="hxPointGlowV14" cx="50%" cy="50%" r="50%">
-                <stop offset="0" stopColor="rgba(255,255,255,.95)" />
-                <stop offset="1" stopColor="rgba(255,255,255,0)" />
-              </radialGradient>
-            </defs>
-
-            <g className="hx-map-grid">
-              {Array.from({ length: 16 }, (_, index) => <line key={`v-${index}`} x1={index * 70} x2={index * 70} y1="0" y2="470" />)}
-              {Array.from({ length: 9 }, (_, index) => <line key={`h-${index}`} x1="0" x2="1000" y1={index * 58} y2={index * 58} />)}
-            </g>
-
-            {showNetwork ? (
-              <>
-                <g className="hx-map-water-areas">
-                  <path style={{ fill: 'color-mix(in srgb, var(--hx-blue) 12%, transparent)', stroke: 'color-mix(in srgb, var(--hx-map-line, var(--hx-blue)) 20%, transparent)', strokeWidth: 1.2 }} d="M18 306 C104 262 194 228 296 212 C398 194 514 190 612 194 C728 198 842 178 986 122 L986 166 C842 214 732 236 624 234 C520 232 410 240 316 260 C210 282 118 314 18 356 Z" />
-                  <path style={{ fill: 'color-mix(in srgb, var(--hx-blue) 9%, transparent)', stroke: 'color-mix(in srgb, var(--hx-map-line, var(--hx-blue)) 16%, transparent)', strokeWidth: 1.1 }} d="M18 170 C116 146 198 136 278 138 C366 140 432 160 486 194 C550 234 630 226 706 194 C792 158 882 116 986 78 L986 116 C884 154 796 188 714 220 C634 252 544 262 476 230 C424 206 360 194 278 194 C202 194 122 208 18 238 Z" />
-                  <path style={{ fill: 'color-mix(in srgb, var(--hx-blue) 7%, transparent)', stroke: 'color-mix(in srgb, var(--hx-map-line, var(--hx-blue)) 14%, transparent)', strokeWidth: 1 }} d="M170 360 C246 332 308 318 366 326 C426 334 474 326 536 288 C598 248 652 204 720 160 L742 176 C674 222 620 270 560 312 C490 360 424 380 356 374 C290 368 236 372 170 392 Z" />
-                </g>
-                <g className="hx-river-network hx-river-network--secondary">
-                  <path d="M242 138 C292 154 338 182 384 226 C430 270 480 292 544 286 C604 280 674 242 742 186" />
-                  <path d="M504 60 C528 112 562 146 612 154 C680 164 756 154 834 110" />
-                  <path d="M258 206 C284 248 292 290 300 330 C306 364 328 394 376 414" />
-                  <path d="M636 216 C680 254 728 306 790 356 C846 402 914 420 990 420" />
-                  <path d="M120 98 C220 86 328 98 406 142 C468 176 548 182 628 168 C710 154 804 112 930 64" />
-                  <path d="M146 422 C232 388 314 374 394 384 C476 394 560 370 640 316 C716 264 786 198 868 154" />
-                </g>
-              </>
-            ) : null}
-
-            {showLabels ? (
-              <g className="hx-city-dots">
-                {pointsOfInterest.map((item) => (
-                  <g key={item.name} className={`is-${item.tone || 'city'}`}>
-                    <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 4.4 : 4.1} fill="url(#hxPointGlowV14)" />
-                    <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 1.4 : 1.8} />
-                  </g>
-                ))}
-              </g>
-            ) : null}
-
-            {showRoute ? (
-              <>
-                <path className="hx-route-tail" d={route.path} />
-                <path className="hx-active-route" filter="url(#hxRouteGlowMonoV14)" d={route.path} />
-              </>
-            ) : null}
-
-            {showLabels ? labelItems.map((item) => {
-              const placement = MAP_LABEL_POSITIONS[item.name] || { dx: 8, dy: item.role === 'state' ? -8 : -10, anchor: 'start' as const };
-              return (
-                <text
-                  key={`label-${item.name}`}
-                  x={item.point.x + placement.dx}
-                  y={item.point.y + placement.dy}
-                  textAnchor={placement.anchor}
-                  className={item.role === 'state' ? 'hx-map-state-label' : ''}
-                >
-                  {item.name}
-                </text>
-              );
-            }) : null}
-          </svg>
-
-          {showRoute ? (
-            <>
-              <div className="hx-map-route-chip" style={overlayPosition(routeMidPoint, routeChipOffset.x, routeChipOffset.y)}>
-                <span>{mainRiver}</span>
-                <strong>{shortOrigin} → {shortDestination}</strong>
-              </div>
-
-              <button type="button" className="hx-map-marker hx-map-marker--origin" style={overlayPosition(originPoint, originMarkerOffset.x, originMarkerOffset.y)} title={tBoard('map.originTitle', { location: cargo.origin })}>
-                <Anchor size={11} />
-                <span>{shortOrigin}</span>
-              </button>
-
-              <button type="button" className="hx-map-marker hx-map-marker--destination" style={overlayPosition(destinationPoint, destinationMarkerOffset.x, destinationMarkerOffset.y)} title={tBoard('map.destinationTitle', { location: cargo.destination })}>
-                <MapPin size={11} />
-                <span>{shortDestination}</span>
-              </button>
-
-              <div className="hx-map-direction-badge" style={{ ...overlayPosition(directionPoint, -1.05, -2.45), transform: `rotate(${directionAngle}deg)` }} aria-hidden="true">
-                <ArrowRight size={11} />
-              </div>
-
-              <div
-                className="hx-map-vessel"
-                style={{
-                  left: `${vesselDisplayPoint.x / 10}%`,
-                  top: `${vesselDisplayPoint.y / 4.7}%`,
-                  transform: `translate(-50%, -50%) rotate(${vesselDisplayAngle}deg)`
-                }}
-                aria-label={tBoard('map.vesselTransit', { origin: cargo.origin, destination: cargo.destination })}
-              >
-                <svg viewBox="0 0 126 44" role="presentation">
-                  <path d="M8 28 L86 28 L114 23 L106 35 L18 36 Z" className="hx-vessel-hull" />
-                  <rect x="36" y="12" width="22" height="8" rx="1.4" className="hx-vessel-cabin" />
-                  <rect x="61" y="11" width="18" height="9" rx="1.2" className="hx-vessel-container" />
-                  <rect x="82" y="10" width="15" height="10" rx="1.2" className="hx-vessel-container is-alt" />
-                  <path d="M114 22 L124 18 L124 27 Z" className="hx-vessel-arrow" />
-                </svg>
-              </div>
-            </>
-          ) : null}
-
-          {showLabels ? pointsOfInterest.map((item) => (
-            <button
-              key={`poi-${item.name}`}
-              type="button"
-              className="hx-map-poi-hotspot"
-              style={overlayPosition(item.point, -1.35, -2.05)}
-              onPointerEnter={() => setHoveredPlace(item)}
-              onPointerMove={() => setHoveredPlace(item)}
-              onFocus={() => setHoveredPlace(item)}
-              onPointerLeave={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
-              onBlur={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
-              aria-label={`${item.name}: ${item.note}`}
-            />
-          )) : null}
-
-          {hoveredPlace ? (
-            <div className="hx-map-tooltip" style={tooltipPosition(hoveredPlace.point)}>
-              <small>{hoveredPlace.category}</small>
-              <strong>{hoveredPlace.name}</strong>
-              <span>{hoveredPlace.note}</span>
+      <div
+        ref={isModal ? modalViewportRef : viewportRef}
+        className={cx(
+          styles.hydroRadarViewport,
+          isModal && styles.hydroRadarViewportModal,
+          isCompactViewport && styles.hydroRadarViewportCompact
+        )}
+      >
+        <div className={styles.hydroRadarMobileBand} aria-label={tBoard('map.radarMobileSummaryAria')}>
+          <div className={styles.hydroRadarMobileBandTop}>
+            <span className={styles.hydroRadarMobileIcon} aria-hidden>
+              <Radar size={22} strokeWidth={2} />
+            </span>
+            <div className={styles.hydroRadarMobileText}>
+              <p className={styles.hydroRadarMobileRoute}>{shortOrigin} → {shortDestination}</p>
+              <p className={styles.hydroRadarMobileTitle}>{cargo.title}</p>
             </div>
-          ) : null}
+            <span className={styles.hydroRadarMobilePct}>{tBoard('overview.routeProgress', { progress: progressPct })}</span>
+          </div>
+          <p className={styles.hydroRadarMobileRiver}>{tBoard('map.routeOnRiver', { river: mainRiver })}</p>
         </div>
 
-        <div className="hx-map-legend">
-          <span>{tBoard('map.legend')}</span>
-          <i className="is-transit" /> {tBoard('statusFilters.boarded')}
-          <i className="is-operation" /> {tBoard('statusFilters.reserved')}
-          <i className="is-late" /> {tBoard('map.delayed')}
-          <i className="is-planned" /> {tBoard('map.planned')}
+        <div className={styles.hydroRadarTopBar}>
+          <div className={styles.hydroRadarStats}>
+            <article className={styles.hydroRadarStat}>
+              <Ship size={16} strokeWidth={2} aria-hidden />
+              <span>{tBoard('map.inTransitCargoes')}</span>
+              <strong>{inTransitCount}</strong>
+            </article>
+            <article className={styles.hydroRadarStat}>
+              <Snowflake size={16} strokeWidth={2} aria-hidden />
+              <span>{tBoard('map.inOperation')}</span>
+              <strong>{operationCount}</strong>
+            </article>
+          </div>
+
+          <div className={styles.hydroRadarTools}>
+            <button
+              type="button"
+              className={styles.hydroRadarToolBtn}
+              onClick={cycleLayers}
+              title={tBoard('map.toggleLayers', { layer: layerLabel })}
+            >
+              <Layers size={18} strokeWidth={2} aria-hidden />
+              <span>{tCommon('filter')}</span>
+            </button>
+            <button
+              type="button"
+              className={styles.hydroRadarIconBtn}
+              aria-label={isModal ? tBoard('map.closeExpanded') : tBoard('map.expand')}
+              onClick={toggleExpandedMap}
+            >
+              {isModal ? <X size={18} strokeWidth={2} /> : <Navigation size={18} strokeWidth={2} />}
+            </button>
+          </div>
         </div>
 
-        <div className="hx-map-caption">
+        <div className={styles.hydroRadarMapShell}>
+          <div
+            className={cx(
+              styles.hydroRadarScene,
+              zoomLevel > 1 && styles.hydroRadarSceneDraggable,
+              isDragging && styles.hydroRadarSceneDragging
+            )}
+            style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoomLevel})` }}
+            onPointerDown={startDrag}
+            onPointerMove={moveDrag}
+            onPointerUp={endDrag}
+            onPointerLeave={endDrag}
+            onPointerCancel={endDrag}
+          >
+            <div className={styles.hydroRadarMapInner}>
+              <svg
+                className={styles.hydroRadarSvg}
+                viewBox="0 0 1000 470"
+                preserveAspectRatio="xMidYMid meet"
+                aria-label={tBoard('map.waterwayMap')}
+              >
+                <defs>
+                  <filter id={`${idSuffix}-glow`} x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3.2" result="blur" />
+                    <feColorMatrix
+                      in="blur"
+                      type="matrix"
+                      values="0 0.95 0.85 0 0  0 0.55 0.95 0 0  0 0.35 1 0 0  0 0 0 0.85 0"
+                      result="softGlow"
+                    />
+                    <feMerge>
+                      <feMergeNode in="softGlow" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                  <linearGradient id={`${idSuffix}-route`} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="#2fe0d0" />
+                    <stop offset="50%" stopColor="#4fffd3" />
+                    <stop offset="100%" stopColor="#46d8e7" />
+                  </linearGradient>
+                  <linearGradient id={`${idSuffix}-routeDim`} x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="#3a4a5c" />
+                    <stop offset="100%" stopColor="#58a9ff" stopOpacity="0.35" />
+                  </linearGradient>
+                  <radialGradient id={`${idSuffix}-dot`} cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#e8fbff" stopOpacity="0.95" />
+                    <stop offset="100%" stopColor="#2fe0d0" stopOpacity="0" />
+                  </radialGradient>
+                </defs>
+
+                <g className={styles.hydroRadarGrid}>
+                  {Array.from({ length: 21 }, (_, index) => (
+                    <line key={`v-${index}`} x1={index * 50} x2={index * 50} y1="0" y2="470" className={styles.hydroRadarGridLine} />
+                  ))}
+                  {Array.from({ length: 10 }, (_, index) => (
+                    <line key={`h-${index}`} x1="0" x2="1000" y1={index * 52 + 10} y2={index * 52 + 10} className={styles.hydroRadarGridLine} />
+                  ))}
+                </g>
+
+                {showNetwork ? (
+                  <>
+                    <g className={styles.hydroRadarWaterMass}>
+                      <path d="M18 306 C104 262 194 228 296 212 C398 194 514 190 612 194 C728 198 842 178 986 122 L986 166 C842 214 732 236 624 234 C520 232 410 240 316 260 C210 282 118 314 18 356 Z" />
+                      <path d="M18 170 C116 146 198 136 278 138 C366 140 432 160 486 194 C550 234 630 226 706 194 C792 158 882 116 986 78 L986 116 C884 154 796 188 714 220 C634 252 544 262 476 230 C424 206 360 194 278 194 C202 194 122 208 18 238 Z" />
+                      <path d="M170 360 C246 332 308 318 366 326 C426 334 474 326 536 288 C598 248 652 204 720 160 L742 176 C674 222 620 270 560 312 C490 360 424 380 356 374 C290 368 236 372 170 392 Z" />
+                    </g>
+                    <g className={styles.hydroRadarRiverSecondary}>
+                      <path d="M242 138 C292 154 338 182 384 226 C430 270 480 292 544 286 C604 280 674 242 742 186" />
+                      <path d="M504 60 C528 112 562 146 612 154 C680 164 756 154 834 110" />
+                      <path d="M258 206 C284 248 292 290 300 330 C306 364 328 394 376 414" />
+                      <path d="M636 216 C680 254 728 306 790 356 C846 402 914 420 990 420" />
+                      <path d="M120 98 C220 86 328 98 406 142 C468 176 548 182 628 168 C710 154 804 112 930 64" />
+                      <path d="M146 422 C232 388 314 374 394 384 C476 394 560 370 640 316 C716 264 786 198 868 154" />
+                    </g>
+                  </>
+                ) : null}
+
+                {showLabels ? (
+                  <g className={styles.hydroRadarCityDots}>
+                    {pointsOfInterest.map((item) => (
+                      <g key={item.name} className={styles.hydroRadarCityDot}>
+                        <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 5.2 : 5} fill={`url(#${idSuffix}-dot)`} />
+                        <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 1.6 : 2} className={styles.hydroRadarCityDotCore} />
+                      </g>
+                    ))}
+                  </g>
+                ) : null}
+
+                {showRoute ? (
+                  <g className={styles.hydroRadarRouteGroup}>
+                    <path
+                      className={styles.hydroRadarRouteRiverBed}
+                      d={route.path}
+                      fill="none"
+                      stroke={`url(#${idSuffix}-routeDim)`}
+                      strokeWidth={20}
+                      strokeLinecap="round"
+                      opacity={0.5}
+                    />
+                    <path
+                      className={styles.hydroRadarRouteFullDim}
+                      d={route.path}
+                      fill="none"
+                      stroke="#2b3d4f"
+                      strokeWidth={6}
+                      strokeLinecap="round"
+                      strokeOpacity={0.55}
+                    />
+                    <path
+                      className={styles.hydroRadarRouteFuture}
+                      d={route.path}
+                      fill="none"
+                      stroke="#58a9ff"
+                      strokeWidth={5}
+                      strokeLinecap="round"
+                      strokeOpacity={0.22}
+                      strokeDasharray={`${routePathLength * (1 - progress)} ${routePathLength}`}
+                      strokeDashoffset={-routePathLength * progress}
+                    />
+                    <path
+                      className={styles.hydroRadarRouteGlow}
+                      d={route.path}
+                      fill="none"
+                      stroke={`url(#${idSuffix}-route)`}
+                      strokeWidth={7}
+                      strokeLinecap="round"
+                      filter={`url(#${idSuffix}-glow)`}
+                      strokeDasharray={`${routePathLength * progress} ${routePathLength}`}
+                    />
+                    <path
+                      className={styles.hydroRadarRouteCore}
+                      d={route.path}
+                      fill="none"
+                      stroke={`url(#${idSuffix}-route)`}
+                      strokeWidth={3.6}
+                      strokeLinecap="round"
+                      strokeDasharray={`${routePathLength * progress} ${routePathLength}`}
+                    />
+                  </g>
+                ) : null}
+
+                {showLabels
+                  ? labelItems.map((item) => {
+                    const placement = MAP_LABEL_POSITIONS[item.name] || { dx: 8, dy: item.role === 'state' ? -8 : -10, anchor: 'start' as const };
+                    return (
+                      <text
+                        key={`label-${item.name}`}
+                        x={item.point.x + placement.dx}
+                        y={item.point.y + placement.dy}
+                        textAnchor={placement.anchor}
+                        className={cx(styles.hydroRadarMapLabel, item.role === 'state' && styles.hydroRadarMapLabelState)}
+                      >
+                        {item.name}
+                      </text>
+                    );
+                  })
+                  : null}
+              </svg>
+
+              <div className={styles.hydroRadarOverlayLayer}>
+                {showRoute ? (
+                  <>
+                    <div className={styles.hydroRadarRouteChip} style={overlayPosition(routeMidPoint, routeChipOffset.x, routeChipOffset.y)}>
+                      <span className={styles.hydroRadarRouteChipRiver}>{mainRiver}</span>
+                      <strong>{shortOrigin} → {shortDestination}</strong>
+                    </div>
+
+                    <button
+                      type="button"
+                      className={cx(styles.hydroRadarMarker, styles.hydroRadarMarkerOrigin)}
+                      style={overlayPosition(originPoint, originMarkerOffset.x, originMarkerOffset.y)}
+                      title={tBoard('map.originTitle', { location: cargo.origin })}
+                    >
+                      <Anchor size={14} strokeWidth={2} aria-hidden />
+                      <span>{shortOrigin}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      className={cx(styles.hydroRadarMarker, styles.hydroRadarMarkerDestination)}
+                      style={overlayPosition(destinationPoint, destinationMarkerOffset.x, destinationMarkerOffset.y)}
+                      title={tBoard('map.destinationTitle', { location: cargo.destination })}
+                    >
+                      <MapPin size={14} strokeWidth={2} aria-hidden />
+                      <span>{shortDestination}</span>
+                    </button>
+
+                    <div
+                      className={styles.hydroRadarCourseBadge}
+                      style={{ ...overlayPosition(directionPoint, -1.05, -2.45), transform: `rotate(${directionAngle}deg)` }}
+                      aria-hidden
+                    >
+                      <Route size={12} strokeWidth={2} />
+                    </div>
+
+                    <div
+                      className={styles.hydroRadarVessel}
+                      style={{
+                        left: `${vesselDisplayPoint.x / 10}%`,
+                        top: `${vesselDisplayPoint.y / 4.7}%`,
+                        transform: `translate(-50%, -50%) rotate(${vesselDisplayAngle}deg)`
+                      }}
+                      aria-label={tBoard('map.vesselTransit', { origin: cargo.origin, destination: cargo.destination })}
+                    >
+                      <svg viewBox="0 0 126 44" role="presentation" aria-hidden>
+                        <path d="M8 28 L86 28 L114 23 L106 35 L18 36 Z" className={styles.hydroRadarVesselHull} />
+                        <rect x="36" y="12" width="22" height="8" rx="1.4" className={styles.hydroRadarVesselCabin} />
+                        <rect x="61" y="11" width="18" height="9" rx="1.2" className={styles.hydroRadarVesselContainer} />
+                        <rect x="82" y="10" width="15" height="10" rx="1.2" className={cx(styles.hydroRadarVesselContainer, styles.hydroRadarVesselContainerAlt)} />
+                        <path d="M114 22 L124 18 L124 27 Z" className={styles.hydroRadarVesselArrow} />
+                      </svg>
+                    </div>
+                  </>
+                ) : null}
+
+                {showLabels
+                  ? pointsOfInterest.map((item) => (
+                    <button
+                      key={`poi-${item.name}`}
+                      type="button"
+                      className={styles.hydroRadarPoiHotspot}
+                      style={overlayPosition(item.point, -1.35, -2.05)}
+                      onPointerEnter={() => setHoveredPlace(item)}
+                      onPointerMove={() => setHoveredPlace(item)}
+                      onFocus={() => setHoveredPlace(item)}
+                      onPointerLeave={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
+                      onBlur={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
+                      aria-label={`${item.name}: ${item.note}`}
+                    />
+                  ))
+                  : null}
+
+                {hoveredPlace ? (
+                  <div className={styles.hydroRadarTooltip} style={tooltipPosition(hoveredPlace.point)}>
+                    <small>{hoveredPlace.category}</small>
+                    <strong>{hoveredPlace.name}</strong>
+                    <span>{hoveredPlace.note}</span>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.hydroRadarEyebrow}>
+            <Waves size={14} strokeWidth={2} aria-hidden />
+            <span>{tBoard('map.nextMonitored')}</span>
+          </div>
+
+          <div className={styles.hydroRadarHud} aria-label={tBoard('map.hudAria')}>
+            <div className={styles.hydroRadarHudCard}>
+              <small>{tBoard('map.hud.selectedCargo')}</small>
+              <strong>{cargo.id.toUpperCase()}</strong>
+              <span className={styles.hydroRadarHudMuted}>{cargo.title}</span>
+            </div>
+            <div className={styles.hydroRadarHudCard}>
+              <small>{tBoard('map.hud.origin')}</small>
+              <strong>{cargo.origin}</strong>
+            </div>
+            <div className={styles.hydroRadarHudCard}>
+              <small>{tBoard('map.hud.destination')}</small>
+              <strong>{cargo.destination}</strong>
+            </div>
+            <div className={styles.hydroRadarHudCard}>
+              <small>{tBoard('map.hud.river')}</small>
+              <strong>{mainRiver}</strong>
+              {cargo.riverRoute ? <span className={styles.hydroRadarHudMuted}>{cargo.riverRoute}</span> : null}
+            </div>
+            <div className={styles.hydroRadarHudCard}>
+              <small>{tBoard('map.hud.routeStatus')}</small>
+              <strong>{routeSummaryStatus}</strong>
+            </div>
+            <div className={cx(styles.hydroRadarHudCard, styles.hydroRadarHudCardProgress)}>
+              <small>{tBoard('map.hud.progress')}</small>
+              <strong>{tBoard('overview.routeProgress', { progress: progressPct })}</strong>
+            </div>
+          </div>
+
+          <div className={styles.hydroRadarZoomRail}>
+            <button type="button" className={styles.hydroRadarZoomBtn} aria-label={tBoard('map.zoomIn')} onClick={() => changeZoom(0.18)}>
+              +
+            </button>
+            <button type="button" className={styles.hydroRadarZoomBtn} aria-label={tBoard('map.zoomOut')} onClick={() => changeZoom(-0.18)}>
+              −
+            </button>
+            <button type="button" className={styles.hydroRadarZoomBtn} aria-label={tBoard('map.resetView')} onClick={resetView}>
+              ⌾
+            </button>
+          </div>
+        </div>
+
+        <div className={styles.hydroRadarLegend}>
+          <span className={styles.hydroRadarLegendTitle}>{tBoard('map.legend')}</span>
+          <div className={styles.hydroRadarLegendChips}>
+            <span className={styles.hydroRadarLegendChip}>
+              <i className={styles.hydroRadarSwatchTransit} aria-hidden />
+              {tBoard('statusFilters.boarded')}
+            </span>
+            <span className={styles.hydroRadarLegendChip}>
+              <i className={styles.hydroRadarSwatchOperation} aria-hidden />
+              {tBoard('statusFilters.reserved')}
+            </span>
+            <span className={styles.hydroRadarLegendChip}>
+              <i className={styles.hydroRadarSwatchLate} aria-hidden />
+              {tBoard('map.delayed')}
+            </span>
+            <span className={styles.hydroRadarLegendChip}>
+              <i className={styles.hydroRadarSwatchPlanned} aria-hidden />
+              {tBoard('map.planned')}
+            </span>
+          </div>
+        </div>
+
+        <div className={styles.hydroRadarFooter}>
           <strong>{cargo.origin} → {cargo.destination}</strong>
           <span>{tBoard('map.statusSummary', { river: mainRiver, status: routeSummaryStatus, layer: layerLabel, zoom: Math.round(zoomLevel * 100) })}</span>
         </div>
 
-        <div className="hx-map-route-summary" aria-label={tBoard('map.fullRoute')}>
-          <span>{tBoard('map.fullRoute')}</span>
-          <strong>{shortOrigin} → {shortDestination}</strong>
-          <small>{routeSummaryStatus} · {Math.round(progress * 100)}% · {tBoard('map.legend')}</small>
-        </div>
-
         {isModal ? (
-          <div className="hx-map-fullscreen-hint" aria-live="polite">
+          <div className={styles.hydroRadarFullscreenHint} aria-live="polite">
             <span>{tBoard('map.rotateHint')}</span>
           </div>
         ) : null}
@@ -988,13 +1197,13 @@ function HydroMapPanel({
 
   return (
     <>
-      <section className={`hx-map-card hx-map-card--hydro ${expanded ? 'is-expanded' : ''}`}>
+      <section className={cx(styles.hydroRadarSection, expanded && styles.hydroRadarSectionExpanded)} aria-label={tBoard('map.radarSectionAria')}>
         {renderViewport('card')}
       </section>
 
       {expanded ? (
-        <div className="hx-map-modal-backdrop" role="dialog" aria-modal="true" aria-label={tBoard('map.expanded')} onClick={closeExpandedMap}>
-          <div className="hx-map-modal" onClick={(event) => event.stopPropagation()}>
+        <div className={styles.hydroRadarBackdrop} role="dialog" aria-modal="true" aria-label={tBoard('map.expanded')} onClick={closeExpandedMap}>
+          <div className={styles.hydroRadarModal} onClick={(event) => event.stopPropagation()}>
             {renderViewport('modal')}
           </div>
         </div>
@@ -1005,13 +1214,6 @@ function HydroMapPanel({
 
 
 type DocumentRequirement = NonNullable<Cargo['requiredDocuments']>[number];
-
-function getDocumentStatusLabel(status: DocumentRequirement['status'] | undefined, tCommon: (key: string) => string) {
-  if (status === 'ok') return tCommon('documentStatus.ok');
-  if (status === 'conditional') return tCommon('documentStatus.conditional');
-  if (status === 'nextPhase') return tCommon('documentStatus.nextPhase');
-  return tCommon('documentStatus.required');
-}
 
 function getDocumentStatusTone(status?: DocumentRequirement['status']) {
   if (status === 'ok') return 'is-ok';
@@ -1063,6 +1265,45 @@ function buildDocumentItems(cargo: Cargo, tBoard: BoardTranslator) {
     due: index < 2 ? tBoard('documents.dueBooking') : tBoard('documents.dueBerthing'),
     evidence: document.status === 'ok' ? tBoard('documents.evidenceChecked') : document.status === 'nextPhase' ? tBoard('documents.evidenceWaitContract') : tBoard('documents.evidencePending')
   }));
+}
+
+type DocumentVisualKind = 'nfe' | 'cte' | 'romaneio' | 'laudo' | 'generic';
+
+function normalizeDocumentNameKey(name: string) {
+  return name.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+}
+
+function getDocumentVisualKind(name: string): DocumentVisualKind {
+  const n = normalizeDocumentNameKey(name);
+  if (n.includes('nf-e') || /\bnfe\b/.test(n) || n.includes('nota fiscal')) return 'nfe';
+  if (n.includes('ct-e') || /\bcte\b/.test(n) || n.includes('conhecimento')) return 'cte';
+  if (n.includes('romaneio')) return 'romaneio';
+  if (n.includes('laudo') || n.includes('sanit')) return 'laudo';
+  return 'generic';
+}
+
+function getDocumentStatusChip(status: DocumentRequirement['status'] | undefined, tBoard: BoardTranslator) {
+  if (status === 'ok') return tBoard('documents.statusChip.ok');
+  if (status === 'conditional') return tBoard('documents.statusChip.conditional');
+  if (status === 'nextPhase') return tBoard('documents.statusChip.nextPhase');
+  return tBoard('documents.statusChip.required');
+}
+
+function renderDocumentCardIcon(name: string, size = 24) {
+  const kind = getDocumentVisualKind(name);
+  const stroke = 2;
+  switch (kind) {
+    case 'nfe':
+      return <ReceiptText size={size} strokeWidth={stroke} aria-hidden />;
+    case 'cte':
+      return <Truck size={size} strokeWidth={stroke} aria-hidden />;
+    case 'romaneio':
+      return <ListChecks size={size} strokeWidth={stroke} aria-hidden />;
+    case 'laudo':
+      return <ShieldCheck size={size} strokeWidth={stroke} aria-hidden />;
+    default:
+      return <FileCheck2 size={size} strokeWidth={stroke} aria-hidden />;
+  }
 }
 
 function getArrivalEvent(timelineItems: TrackingEvent[]) {
@@ -1137,6 +1378,261 @@ function buildCostModel(cargo: Cargo) {
   };
 }
 
+type CostModel = ReturnType<typeof buildCostModel>;
+
+function getCostDominantBreakdown(costModel: CostModel) {
+  return costModel.breakdown.reduce((best, row) => (row.share > best.share ? row : best));
+}
+
+function getCostTimelineActiveIndex(progress: number) {
+  if (progress <= 24) return 0;
+  if (progress <= 48) return 1;
+  if (progress <= 76) return 2;
+  return 3;
+}
+
+function renderCostBreakdownIcon(key: string) {
+  const size = 18;
+  const stroke = 2;
+  switch (key) {
+    case 'riverTransport':
+      return <Ship size={size} strokeWidth={stroke} aria-hidden />;
+    case 'documentation':
+      return <FileText size={size} strokeWidth={stroke} aria-hidden />;
+    case 'insurance':
+      return <Snowflake size={size} strokeWidth={stroke} aria-hidden />;
+    case 'portOperation':
+      return <Warehouse size={size} strokeWidth={stroke} aria-hidden />;
+    case 'contingency':
+      return <PiggyBank size={size} strokeWidth={stroke} aria-hidden />;
+    default:
+      return <CircleDollarSign size={size} strokeWidth={stroke} aria-hidden />;
+  }
+}
+
+function renderCostTimelineIcon(stepKey: string) {
+  const size = 17;
+  const stroke = 2;
+  switch (stepKey) {
+    case 'quote':
+      return <Search size={size} strokeWidth={stroke} aria-hidden />;
+    case 'reserve':
+      return <CalendarCheck size={size} strokeWidth={stroke} aria-hidden />;
+    case 'operation':
+      return <Ship size={size} strokeWidth={stroke} aria-hidden />;
+    case 'delivery':
+      return <PackageCheck size={size} strokeWidth={stroke} aria-hidden />;
+    default:
+      return <Activity size={size} strokeWidth={stroke} aria-hidden />;
+  }
+}
+
+function renderCostAlertIcon(alertKey: string) {
+  switch (alertKey) {
+    case 'healthyMargin':
+      return <BadgeCheck size={20} strokeWidth={2.1} aria-hidden />;
+    case 'seasonalityRisk':
+      return <CloudRain size={20} strokeWidth={2.1} aria-hidden />;
+    case 'documentImpact':
+      return <FileWarning size={20} strokeWidth={2.1} aria-hidden />;
+    default:
+      return <ShieldCheck size={20} strokeWidth={2.1} aria-hidden />;
+  }
+}
+
+function CostSimulationChart({
+  costModel,
+  tBoard,
+  locale,
+  co2Label
+}: {
+  costModel: CostModel;
+  tBoard: BoardTranslator;
+  locale: string;
+  co2Label: string;
+}) {
+  const gid = useId().replace(/:/g, '');
+  const road = Math.max(1, costModel.roadEstimate);
+  const river = costModel.total;
+  const ratio = river / road;
+  const savingsAbs = Math.max(0, road - river);
+  const savingsPct = road > 0 ? savingsAbs / road : 0;
+
+  const riverFmt = formatLocaleCurrency(locale, river);
+  const roadFmt = formatLocaleCurrency(locale, road);
+  const diffFmt = formatLocaleCurrency(locale, savingsAbs);
+  const pctFmt = formatLocalePercent(locale, savingsPct, { maximumFractionDigits: 0 });
+
+  const vbW = 720;
+  const vbH = 260;
+  const padL = 44;
+  const padR = 20;
+  const padT = 44;
+  const padB = 68;
+  const innerW = vbW - padL - padR;
+  const innerH = vbH - padT - padB;
+
+  const n = 9;
+  const xs: number[] = [];
+  const yRiver: number[] = [];
+  const yRoad: number[] = [];
+  for (let i = 0; i < n; i++) {
+    const t = i / (n - 1);
+    const x = padL + t * innerW;
+    xs.push(x);
+    yRiver.push(padT + 38 + t * innerH * 0.56 + (1 - ratio) * 44);
+    yRoad.push(padT + 22 + t * innerH * 0.66 + (1 - ratio) * 26);
+  }
+
+  const lineToPath = (ys: number[]) => xs.map((x, i) => `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${ys[i].toFixed(2)}`).join(' ');
+  const riverD = lineToPath(yRiver);
+  const roadD = lineToPath(yRoad);
+
+  let economyD = `${roadD}`;
+  for (let i = n - 1; i >= 0; i--) {
+    economyD += ` L ${xs[i].toFixed(2)} ${yRiver[i].toFixed(2)}`;
+  }
+  economyD += ' Z';
+
+  const stageXs = [0, 1, 2, 3].map((k) => padL + (k / 3) * innerW);
+  const stageKeys = ['quote', 'reserve', 'operation', 'delivery'] as const;
+
+  return (
+    <figure className={styles.costSimPremium} aria-label={tBoard('cost.chart.aria')}>
+      <header className={styles.costSimPremium__head}>
+        <div className={styles.costSimPremium__headText}>
+          <h3 id="hx-cost-chart-title" className={styles.costSimPremium__title}>
+            {tBoard('cost.chart.title')}
+          </h3>
+          <p className={styles.costSimPremium__subtitle}>{tBoard('cost.chart.subtitle')}</p>
+        </div>
+        <span className={styles.costSimPremium__badge}>{tBoard('cost.chart.badgeSavings', { pct: pctFmt })}</span>
+      </header>
+
+      <div className={styles.costSimPremium__body}>
+        <div className={styles.costSimPremium__svgWrap}>
+          <svg
+            className={styles.costSimPremium__svg}
+            viewBox={`0 0 ${vbW} ${vbH}`}
+            preserveAspectRatio="xMidYMid meet"
+            aria-hidden
+          >
+            <defs>
+              <linearGradient id={`${gid}-economy`} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="rgba(116, 243, 107, 0.42)" />
+                <stop offset="55%" stopColor="rgba(47, 224, 208, 0.22)" />
+                <stop offset="100%" stopColor="rgba(47, 224, 208, 0.04)" />
+              </linearGradient>
+              <filter id={`${gid}-glow`} x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="b" />
+                <feMerge>
+                  <feMergeNode in="b" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width={vbW} height={vbH} rx="14" className={styles.costSimPremium__frame} />
+
+            {[0, 0.25, 0.5, 0.75, 1].map((g) => {
+              const y = padT + g * innerH;
+              return <line key={g} className={styles.costSimPremium__gridH} x1={padL} x2={vbW - padR} y1={y} y2={y} />;
+            })}
+
+            {stageXs.map((sx) => (
+              <line key={sx} className={styles.costSimPremium__gridV} x1={sx} x2={sx} y1={padT} y2={padT + innerH} />
+            ))}
+
+            <path d={economyD} fill={`url(#${gid}-economy)`} className={styles.costSimPremium__economyArea} />
+
+            <path
+              d={roadD}
+              fill="none"
+              className={styles.costSimPremium__lineRoad}
+            />
+            <path
+              d={riverD}
+              fill="none"
+              className={styles.costSimPremium__lineRiver}
+              pathLength={100}
+              filter={`url(#${gid}-glow)`}
+            />
+
+            <circle cx={xs[n - 1]} cy={yRiver[n - 1]} r="6" className={styles.costSimPremium__dotRiver} />
+            <circle cx={xs[n - 1]} cy={yRoad[n - 1]} r="5.5" className={styles.costSimPremium__dotRoad} />
+
+            <text
+              x={vbW - padR}
+              y={yRiver[n - 1] + 5}
+              textAnchor="end"
+              className={styles.costSimPremium__endLabelRiver}
+            >
+              {riverFmt}
+            </text>
+            <text
+              x={vbW - padR}
+              y={yRoad[n - 1] - 10}
+              textAnchor="end"
+              className={styles.costSimPremium__endLabelRoad}
+            >
+              {roadFmt}
+            </text>
+
+            {stageXs.map((sx, k) => (
+              <text key={stageKeys[k]} x={sx} y={vbH - 22} textAnchor="middle" className={styles.costSimPremium__axisLabel}>
+                {tBoard(`cost.timeline.${stageKeys[k]}`)}
+              </text>
+            ))}
+          </svg>
+
+          <div className={styles.costSimPremium__floatCard} role="note">
+            <strong className={styles.costSimPremium__floatTitle}>{tBoard('cost.chart.floatTitle')}</strong>
+            <div className={styles.costSimPremium__floatRow}>
+              <span className={styles.costSimPremium__swatchRiver} aria-hidden />
+              <span>{tBoard('cost.chart.floatRiver', { value: riverFmt })}</span>
+            </div>
+            <div className={styles.costSimPremium__floatRow}>
+              <span className={styles.costSimPremium__swatchRoad} aria-hidden />
+              <span>{tBoard('cost.chart.floatRoad', { value: roadFmt })}</span>
+            </div>
+            <div className={styles.costSimPremium__floatRow}>
+              <span className={styles.costSimPremium__swatchDiff} aria-hidden />
+              <span className={styles.costSimPremium__floatDiff}>{tBoard('cost.chart.floatDiff', { value: diffFmt })}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.costSimPremium__chips} role="group" aria-label={tBoard('cost.chart.floatTitle')}>
+          <span className={styles.costSimPremium__chip}>
+            <Ship size={13} strokeWidth={2} aria-hidden />
+            {tBoard('cost.chart.chipRiver', { value: riverFmt })}
+          </span>
+          <span className={styles.costSimPremium__chip}>
+            <Truck size={13} strokeWidth={2} aria-hidden />
+            {tBoard('cost.chart.chipRoad', { value: roadFmt })}
+          </span>
+          <span className={cx(styles.costSimPremium__chip, styles.costSimPremium__chipSavings)}>
+            <BadgePercent size={13} strokeWidth={2} aria-hidden />
+            {tBoard('cost.chart.chipSavings', { value: diffFmt })}
+          </span>
+        </div>
+
+        <div className={styles.costSimPremium__insight}>
+          <span className={styles.costSimPremium__insightIcon} aria-hidden>
+            <Leaf size={18} strokeWidth={2} />
+          </span>
+          <div>
+            <strong>{tBoard('cost.chart.insightTitle')}</strong>
+            <p>{tBoard('cost.chart.insightBody', { co2: co2Label })}</p>
+          </div>
+        </div>
+      </div>
+
+      <figcaption className={styles.costSimPremium__srOnly}>{tBoard('cost.chart.caption')}</figcaption>
+    </figure>
+  );
+}
+
 
 export function OperationsBoard({
   cargoes,
@@ -1160,11 +1656,11 @@ export function OperationsBoard({
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const listRef = useRef<HTMLDivElement | null>(null);
   const visualCargoes = useMemo(() => buildVisualCargoPool(cargoes), [cargoes]);
-  const vesselImageMap = useMemo(
+  const vesselVisualMap = useMemo(
     () =>
       Object.fromEntries(
-        visualCargoes.map((cargo) => [cargo.id, getRandomVesselImage()])
-      ) as Record<string, string>,
+        visualCargoes.map((cargo) => [cargo.id, getVesselVisual(cargo)])
+      ) as Record<string, OverviewVesselVisual>,
     [visualCargoes]
   );
 
@@ -1212,15 +1708,22 @@ export function OperationsBoard({
     : (filteredCargoes[0]?.id ?? selectedId);
   const selectedCargo = filteredCargoes.find((cargo) => cargo.id === selectedCargoId) ?? pageItems[0] ?? visualCargoes[0] ?? null;
   const selectedEvents = trackingEvents.filter((event) => event.cargoId === selectedCargo?.id);
-  const selectedVesselImage = selectedCargo
-    ? (vesselImageMap[selectedCargo.id] ?? getFallbackOverviewVesselImage(selectedCargo))
-    : OVERVIEW_VESSEL_IMAGES[0];
+  const selectedVesselVisual = selectedCargo
+    ? (vesselVisualMap[selectedCargo.id] ?? getVesselVisual(selectedCargo))
+    : null;
+  const selectedVesselImage = selectedVesselVisual?.src ?? DEFAULT_OVERVIEW_VESSEL_IMAGE;
   const timelineItems = selectedCargo
     ? (selectedEvents.length ? selectedEvents : buildTimelineFallback(selectedCargo, tBoard))
     : trackingEvents.slice(0, 5);
   const completedTimelineSteps = timelineItems.filter((event) => event.status === 'done').length;
+  const timelineCurrentIndex = timelineItems.findIndex((event) => event.status === 'current');
+  const timelineNextEvent =
+    timelineCurrentIndex >= 0 && timelineCurrentIndex < timelineItems.length - 1
+      ? timelineItems[timelineCurrentIndex + 1]
+      : null;
   const selectedProgress = selectedCargo ? statusProgress(selectedCargo.status) : 0;
   const selectedDocumentItems = selectedCargo ? buildDocumentItems(selectedCargo, tBoard) : [];
+  const docsReadyCount = selectedDocumentItems.filter((d) => d.status === 'ok').length;
   const arrivalEvent = getArrivalEvent(timelineItems);
 
   const docsCount = selectedCargo?.requiredDocuments?.length ?? selectedCargo?.documents?.length ?? 13;
@@ -1276,6 +1779,10 @@ export function OperationsBoard({
   const targetPriceLabel = formatMoney(locale, selectedCargo.targetPrice);
   const routeProgressLabel = tBoard('overview.routeProgress', { progress: selectedProgress });
   const costModel = buildCostModel(selectedCargo);
+  const costSavingsAbs = Math.max(0, costModel.roadEstimate - costModel.total);
+  const costSavingsPct = costModel.roadEstimate > 0 ? costSavingsAbs / costModel.roadEstimate : 0;
+  const dominantCostRow = getCostDominantBreakdown(costModel);
+  const costTimelineActiveIndex = getCostTimelineActiveIndex(selectedProgress);
   const filtersPanel = (
     <>
       <div className="hx-drawer-head">
@@ -1489,135 +1996,173 @@ export function OperationsBoard({
           </div>
 
           {activeTab === 'overview' ? (
-            <div id="hx-panel-overview" role="tabpanel" aria-labelledby="hx-tab-overview" className="hx-overview hx-overview--split">
-              <section className="hx-overview-main-card">
-                <div className="hx-overview-hero">
-                  <div className="hx-overview-info">
-                    <div className="hx-overview-kicker-row">
-                      <span className="hx-overview-kicker">{selectedCargo.cargoType}</span>
-                      <span className="hx-overview-kicker">{selectedRiver}</span>
-                    </div>
-                    <div className="hx-title-row">
-                      <h2>{selectedCargo.id.toUpperCase()}</h2>
-                      <span className={`hx-status ${getLegacyStatusTone(selectedCargo.status)}`}>{getCargoStatusLabel(selectedCargo.status, tCommon)}</span>
-                    </div>
-                    <p>{selectedCargo.title}</p>
-
-                    <div className="hx-operation-meta">
-                      <span><Ship size={16} /> <em>{tBoard('overview.vesselOperation')}</em> <b>{selectedVessel}</b></span>
-                      <span><Waves size={16} /> <em>{tCommon('operator')}</em> <b>{selectedCarrier}</b></span>
-                    </div>
-                  </div>
-
-                  <div className="hx-vessel-photo" aria-label={tBoard('overview.vesselImageAria')}>
+            <div id="hx-panel-overview" role="tabpanel" aria-labelledby="hx-tab-overview" className={styles.overviewPanel}>
+              <div className={styles.overviewGrid}>
+                <section className={styles.heroCard} aria-label={tBoard('overview.vesselImageAria')}>
+                  <div className={styles.heroMedia} data-treatment={selectedVesselVisual?.treatment ?? 'real-water-dark'}>
                     <Image
                       src={selectedVesselImage}
-                      alt={`Embarcação associada à carga ${selectedCargo.id}`}
-                      className="hx-vessel-photo__image"
-                      width={560}
-                      height={280}
+                      alt={selectedVesselVisual?.alt ?? `Embarcação associada à carga ${selectedCargo.id}`}
+                      className={styles.heroImage}
+                      loading="eager"
+                      fill
                       unoptimized
+                      sizes="(max-width: 860px) 100vw, 860px"
+                      style={{ objectPosition: selectedVesselVisual?.objectPosition ?? 'center right' }}
                     />
+                    <div className={styles.heroScrim} aria-hidden="true" />
                   </div>
-                </div>
 
-                <div className="hx-route-progress">
-                  <div className="hx-route-points">
-                    <div><strong>{selectedCargo.origin}</strong><span>{tCommon('origin')}</span></div>
-                    <b>{routeProgressLabel}</b>
-                    <div><strong>{selectedCargo.destination}</strong><span>{tCommon('destination')}</span></div>
-                  </div>
-                  <div className="hx-long-progress">
-                    <span style={{ width: `${selectedProgress}%` }} />
-                    <i style={{ left: `${selectedProgress}%` }} aria-hidden="true" />
-                  </div>
-                  <p>{tBoard('overview.estimatedDistance', { river: selectedRiver })}</p>
-                </div>
+                  <div className={styles.heroInner}>
+                    <div className={styles.heroCopy}>
+                      <div className={styles.idRow}>
+                        <h2>{selectedCargo.id.toUpperCase()}</h2>
+                        <span className={overviewStatusClass(selectedCargo.status)}>{getCargoStatusLabel(selectedCargo.status, tCommon)}</span>
+                      </div>
+                      <p className={styles.cargoTitle}>{selectedCargo.title}</p>
 
-                <div className="hx-bottom-kpis">
-                  <article>
-                    <small>{tBoard('overview.etaArrival')}</small>
-                    <strong className="hx-nowrap">36–44h</strong>
-                    <span className="hx-arrival-inline">
-                      {arrivalDateTime.dateLabel ? <span className="hx-arrival-inline__date">{arrivalDateTime.dateLabel}</span> : null}
-                      {arrivalDateTime.timeLabel ? <span className="hx-arrival-inline__time">{arrivalDateTime.timeLabel}</span> : null}
-                    </span>
-                  </article>
-                  <article><small>{tBoard('overview.temperature')}</small><strong><Snowflake size={22} /> -18 °C</strong><span>{tBoard('overview.idealRange')}</span></article>
-                  <article><small>{tBoard('overview.documentReadiness')}</small><strong><FileText size={20} /> <span className="hx-nowrap">{documentReadiness}%</span></strong><span>{docsCount} de {docsTotal} {tCommon('documents').toLowerCase()}</span></article>
-                  <article><small>{tBoard('overview.co2Savings')}</small><strong><Leaf size={22} /> <span className="hx-nowrap">{selectedCargo.co2Saving}</span></strong><span>{tBoard('overview.roadComparison')}</span></article>
-                </div>
-              </section>
-
-              <aside className="hx-overview-side-cards" aria-label={tBoard('overview.operationalIndicators')}>
-                <article className="hx-side-metric hx-side-metric--arrival">
-                  <span className="hx-side-metric__icon"><Anchor size={24} /></span>
-                  <div className="hx-arrival-copy">
-                    <small>{tBoard('overview.berthForecast')}</small>
-                    <div className="hx-arrival-inline">
-                      {arrivalDateTime.dateLabel ? <strong>{arrivalDateTime.dateLabel}</strong> : null}
-                      {arrivalDateTime.timeLabel ? <span className="hx-arrival-inline__time">{arrivalDateTime.timeLabel}</span> : null}
+                      <div className={styles.metaGrid}>
+                        <div className={styles.metaItem}>
+                          <span><Ship size={16} /> {tBoard('overview.vesselOperation')}</span>
+                          <strong>{selectedVessel}</strong>
+                        </div>
+                        <div className={styles.metaItem}>
+                          <span><Waves size={16} /> {tCommon('operator')}</span>
+                          <strong>{selectedCarrier}</strong>
+                        </div>
+                      </div>
                     </div>
-                    <p>{arrivalLocation}</p>
-                  </div>
-                  <b>{tBoard('overview.onSchedule')}</b>
-                </article>
 
-                <article className="hx-side-metric hx-side-metric--documents">
-                  <span className="hx-side-metric__icon"><FileText size={24} /></span>
-                  <div>
-                    <small>{tCommon('documents')}</small>
-                    <strong><span>{docsCount}</span> / {docsTotal}</strong>
-                    <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
-                    <div className="hx-side-progress"><i style={{ width: `${documentReadiness}%` }} /></div>
+                    <div className={styles.routeBlock}>
+                      <div className={styles.routeHead}>
+                        <div><strong>{selectedCargo.origin}</strong><span>{tCommon('origin')}</span></div>
+                        <b>{routeProgressLabel}</b>
+                        <div><strong>{selectedCargo.destination}</strong><span>{tCommon('destination')}</span></div>
+                      </div>
+                      <div className={styles.routeTrack}>
+                        <span className={styles.routeNode} aria-hidden="true" />
+                        <div className={styles.routeLine}>
+                          <span style={{ width: `${selectedProgress}%` }} />
+                          <i style={{ left: `${selectedProgress}%` }} aria-hidden="true" />
+                        </div>
+                        <span className={cx(styles.routeNode, styles.routeNodeDest)} aria-hidden="true" />
+                      </div>
+                      <p>{tBoard('overview.estimatedDistance', { river: selectedRiver })}</p>
+                    </div>
                   </div>
-                  <b>{documentReadiness}%</b>
-                </article>
+                </section>
 
-                <article className="hx-side-metric hx-side-metric--cost">
-                  <span className="hx-side-metric__icon"><CircleDollarSign size={24} /></span>
-                  <div>
-                    <small>{tBoard('overview.estimatedCost')}</small>
-                    <strong className="hx-nowrap">{targetPriceLabel}</strong>
-                    <p>{tBoard('overview.estimatedMargin')}</p>
-                  </div>
-                  <svg className="hx-side-sparkline" viewBox="0 0 120 54" aria-hidden="true">
-                    <polyline points="6,42 20,40 34,36 48,32 62,28 76,24 90,20 104,15 116,12" />
-                    <g><circle cx="6" cy="42" /><circle cx="34" cy="36" /><circle cx="62" cy="28" /><circle cx="90" cy="20" /><circle cx="116" cy="12" /></g>
-                  </svg>
-                </article>
+                <aside className={styles.sideStack} aria-label={tBoard('overview.operationalIndicators')}>
+                  <article className={styles.sideCard}>
+                    <span className={cx(styles.sideIcon, styles.sideIconCyan)}><Anchor size={22} /></span>
+                    <div className={styles.sideCopy}>
+                      <small>{tBoard('overview.berthForecast')}</small>
+                      <strong>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</strong>
+                      <p>{arrivalLocation}</p>
+                      <b>{tBoard('overview.onSchedule')}</b>
+                    </div>
+                  </article>
 
-                <article className="hx-side-metric hx-side-metric--co2">
-                  <span className="hx-side-metric__icon"><Leaf size={24} /></span>
-                  <div>
+                  <article className={styles.sideCard}>
+                    <span className={cx(styles.sideIcon, styles.sideIconBlue)}><FileText size={22} /></span>
+                    <div className={styles.sideCopy}>
+                      <small>{tCommon('documents')}</small>
+                      <strong>{docsCount} / {docsTotal}</strong>
+                      <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
+                      <div className={styles.sideProgressMeta}>
+                        <span>{documentReadiness}%</span>
+                        <b>{tBoard('overview.documentReadiness')}</b>
+                      </div>
+                      <div className={styles.sideProgress}><i style={{ width: `${documentReadiness}%` }} /></div>
+                    </div>
+                  </article>
+
+                  <article className={styles.sideCard}>
+                    <span className={cx(styles.sideIcon, styles.sideIconGold)}><CircleDollarSign size={22} /></span>
+                    <div className={styles.sideCopy}>
+                      <small>{tBoard('overview.estimatedCost')}</small>
+                      <strong>{targetPriceLabel}</strong>
+                      <p>{tBoard('overview.estimatedMargin')}</p>
+                      <svg viewBox="0 0 120 32" className={styles.miniChart} aria-hidden="true">
+                        <path d="M4 24 L20 20 L35 21 L50 16 L64 18 L78 12 L92 14 L116 4" />
+                      </svg>
+                    </div>
+                  </article>
+
+                  <article className={styles.sideCard}>
+                    <span className={cx(styles.sideIcon, styles.sideIconGreen)}><Leaf size={22} /></span>
+                    <div className={styles.sideCopy}>
+                      <small>{tBoard('overview.co2Savings')}</small>
+                      <strong>{selectedCargo.co2Saving}</strong>
+                      <p>{tBoard('overview.roadComparison')}</p>
+                      <svg viewBox="0 0 120 32" className={cx(styles.miniChart, styles.miniChartGreen)} aria-hidden="true">
+                        <path d="M4 25 L18 27 L30 18 L46 21 L58 13 L72 19 L86 10 L102 13 L116 6" />
+                      </svg>
+                    </div>
+                  </article>
+                </aside>
+
+                <section className={styles.metricStrip} aria-label={tBoard('overview.operationalIndicators')}>
+                  <article className={styles.metricCard}>
+                    <small>{tBoard('overview.etaArrival')}</small>
+                    <strong>36–44h</strong>
+                    <span>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</span>
+                  </article>
+                  <article className={styles.metricCard}>
+                    <small>{tBoard('overview.temperature')}</small>
+                    <strong className={styles.metricValueBlue}><Snowflake size={20} /> -18 °C</strong>
+                    <span>{tBoard('overview.idealRange')}</span>
+                  </article>
+                  <article className={styles.metricCard}>
+                    <small>{tBoard('overview.documentReadiness')}</small>
+                    <strong className={styles.metricValueCyan}><FileText size={18} /> {documentReadiness}%</strong>
+                    <span>{tBoard('overview.documentsReadyRatio', { count: docsCount, total: docsTotal })}</span>
+                  </article>
+                  <article className={styles.metricCard}>
                     <small>{tBoard('overview.co2Savings')}</small>
-                    <strong className="hx-nowrap">{selectedCargo.co2Saving}</strong>
-                    <p>{tBoard('overview.avoidedCo2')}</p>
-                  </div>
-                  <svg className="hx-side-sparkline" viewBox="0 0 120 54" aria-hidden="true">
-                    <polyline points="6,42 20,39 34,35 48,31 62,26 76,22 90,18 104,14 116,10" />
-                    <g><circle cx="6" cy="42" /><circle cx="34" cy="35" /><circle cx="62" cy="26" /><circle cx="90" cy="18" /><circle cx="116" cy="10" /></g>
-                  </svg>
-                </article>
-              </aside>
+                    <strong className={styles.metricValueGreen}><Leaf size={20} /> {selectedCargo.co2Saving}</strong>
+                    <span>{tBoard('overview.roadComparison')}</span>
+                  </article>
+                </section>
+              </div>
             </div>
           ) : null}
 
           {activeTab === 'timeline' ? (
-            <div id="hx-panel-timeline" role="tabpanel" aria-labelledby="hx-tab-timeline" className="hx-timeline-game" aria-label={tBoard('timeline.aria')}>
-              <div className="hx-timeline-game__summary">
-                <span><Ship size={18} /></span>
-                <div>
-                  <strong>{tBoard('timeline.journey')}</strong>
-                  <p>{selectedCargo.origin} → {selectedCargo.destination} · {selectedRiver}</p>
-                  <i className="hx-timeline-game__progress"><b style={{ width: `${selectedProgress}%` }} /></i>
-                </div>
-                <b>{selectedProgress}%</b>
-                <small>{tBoard('timeline.completedPhases', { completed: completedTimelineSteps, total: timelineItems.length })}</small>
-              </div>
+            <div className={styles.timelineShell}>
+              <div id="hx-panel-timeline" role="tabpanel" aria-labelledby="hx-tab-timeline" className="hx-timeline-game" aria-label={tBoard('timeline.aria')}>
+                <header className="hx-timeline-game__hero">
+                  <h2 className="hx-timeline-game__pageTitle">{tBoard('timeline.pageTitle')}</h2>
+                  <p className="hx-timeline-game__pageSubtitle">{tBoard('timeline.pageSubtitle')}</p>
+                </header>
 
-              <div className="hx-timeline-track">
-                {timelineItems.map((event, index) => {
+                <div className="hx-timeline-game__summary">
+                  <span className="hx-timeline-game__summaryIcon"><Navigation size={22} strokeWidth={2.1} aria-hidden /></span>
+                  <div className="hx-timeline-game__summaryMain">
+                    <strong>{tBoard('timeline.journey')}</strong>
+                    <p className="hx-timeline-game__route">{selectedCargo.origin} → {selectedCargo.destination}</p>
+                    <p className="hx-timeline-game__river">{selectedRiver}</p>
+                    <i className="hx-timeline-game__progress"><b style={{ width: `${selectedProgress}%` }} /></i>
+                  </div>
+                  <div className="hx-timeline-game__pctCol">
+                    <b>{selectedProgress}%</b>
+                    <small>{tBoard('timeline.completedPhases', { completed: completedTimelineSteps, total: timelineItems.length })}</small>
+                  </div>
+                </div>
+
+                {timelineCurrentIndex >= 0 ? (
+                  <div className="hx-timeline-nowBand" role="status">
+                    <span className="hx-timeline-nowBand__eyebrow">{tBoard('timeline.hereNow')}</span>
+                    <p className="hx-timeline-nowBand__next">
+                      {timelineNextEvent
+                        ? tBoard('timeline.nextStep', { title: timelineNextEvent.title })
+                        : tBoard('timeline.nextStepNone')}
+                    </p>
+                  </div>
+                ) : null}
+
+                <div className="hx-timeline-track">
+                  {timelineItems.map((event, index) => {
                   const isOpen = expandedTimelineEventId === event.id;
                   const phaseLabel = getTimelinePhaseLabel(event, index, tBoard);
                   const highlights = getTimelineHighlights(event, selectedCargo, index, tBoard, tCommon);
@@ -1628,6 +2173,11 @@ export function OperationsBoard({
                     <article key={event.id} className={`hx-timeline-node ${timelineTone} ${isOpen ? 'is-open' : ''}`}>
                       <div className="hx-timeline-node__rail">
                         <span className="hx-timeline-node__step">{String(index + 1).padStart(2, '0')}</span>
+                        {event.status === 'current' ? (
+                          <span className="hx-timeline-node__boat" aria-label={tBoard('timeline.boatAtCurrent')}>
+                            <Ship size={22} strokeWidth={2.2} aria-hidden />
+                          </span>
+                        ) : null}
                         {index < timelineItems.length - 1 ? <i aria-hidden="true" /> : null}
                       </div>
 
@@ -1639,14 +2189,22 @@ export function OperationsBoard({
                           aria-expanded={isOpen}
                           aria-controls={`hx-timeline-body-${event.id}`}
                         >
-                          <span className="hx-timeline-node__icon">{getTimelineIcon(event, index)}</span>
+                          <span className="hx-timeline-node__icon">{getTimelineIcon(event, index, 26)}</span>
                           <span className="hx-timeline-node__copy">
                             <small>{phaseLabel}</small>
                             <strong>{event.title}</strong>
                             <em>{event.location} · {event.timestamp}</em>
                           </span>
-                          <span className="hx-timeline-node__status">{getTimelineStatusLabel(event.status, tBoard)}</span>
-                          <span className="hx-timeline-node__xp">+{(index + 1) * 120} XP</span>
+                          <span className="hx-timeline-node__meta">
+                            {event.status === 'current' ? (
+                              <span className="hx-timeline-node__nowBadge">{tBoard('timeline.badgeNow')}</span>
+                            ) : null}
+                            <span className="hx-timeline-node__status" data-timeline-status={event.status}>
+                              {timelineStatusGlyph(event.status)}
+                              {getTimelineStatusLabel(event.status, tBoard)}
+                            </span>
+                            <span className="hx-timeline-node__xp">+{(index + 1) * 120} XP</span>
+                          </span>
                           <ChevronDown size={18} />
                         </button>
 
@@ -1668,9 +2226,12 @@ export function OperationsBoard({
                             <ul className="hx-timeline-node__tags" aria-label={tBoard('timeline.contextAria')}>
                               {tags.map((tag) => <li key={`${event.id}-${tag}`}>{tag}</li>)}
                             </ul>
-                            <div className="hx-timeline-node__footer">
+                            <div className="hx-timeline-node__footer hx-timeline-node__footer--mission">
                               <span>{tBoard('timeline.operationalMission')}</span>
-                              <strong>{getTimelineChecklistLabel(event, index, tBoard)}</strong>
+                              <strong className="hx-timeline-mission-confirm">
+                                <CheckCircle2 size={17} strokeWidth={2.25} aria-hidden />
+                                {getTimelineChecklistLabel(event, index, tBoard)}
+                              </strong>
                             </div>
                           </div>
                         </div>
@@ -1678,165 +2239,332 @@ export function OperationsBoard({
                     </article>
                   );
                 })}
+                </div>
               </div>
             </div>
           ) : null}
 
           {activeTab === 'documents' ? (
-            <div id="hx-panel-documents" role="tabpanel" aria-labelledby="hx-tab-documents" className="hx-documents-accordion" aria-label={tBoard('documents.aria')}>
-              {selectedDocumentItems.map((document) => {
-                const isOpen = expandedDocumentName === document.name;
-                const statusLabel = getDocumentStatusLabel(document.status, tCommon);
-                const statusTone = getDocumentStatusTone(document.status);
+            <div
+              id="hx-panel-documents"
+              role="tabpanel"
+              aria-labelledby="hx-tab-documents"
+              className={styles.documentsShell}
+              aria-label={tBoard('documents.aria')}
+            >
+              <header className="hx-docs-game">
+                <div className="hx-docs-game__heroText">
+                  <h2 className="hx-docs-game__title">{tBoard('documents.pageTitle')}</h2>
+                  <p className="hx-docs-game__subtitle">{tBoard('documents.pageSubtitle')}</p>
+                </div>
+                <div className="hx-docs-game__heroMeter" role="group" aria-label={tBoard('documents.progressAria')}>
+                  <span className="hx-docs-game__heroIcon" aria-hidden>
+                    <ClipboardCheck size={24} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-docs-game__meterCopy">
+                    <p className="hx-docs-game__progressLine">
+                      {tBoard('documents.progressSummary', { ready: docsReadyCount, total: docsTotal })}
+                    </p>
+                    <p className="hx-docs-game__readinessLine">
+                      {tBoard('documents.readinessLine', { pct: documentReadiness })}
+                    </p>
+                    <span className="hx-docs-game__progressTrack" aria-hidden>
+                      <i style={{ width: `${documentReadiness}%` }} />
+                    </span>
+                  </div>
+                </div>
+              </header>
 
-                return (
-                  <article key={document.name} className={`hx-document-card ${statusTone} ${isOpen ? 'is-open' : ''}`}>
-                    <button
-                      type="button"
-                      className="hx-document-card__head"
-                      onClick={() => setExpandedDocumentName(isOpen ? null : document.name)}
-                      aria-expanded={isOpen}
+              <div className="hx-documents-accordion">
+                {selectedDocumentItems.map((document) => {
+                  const isOpen = expandedDocumentName === document.name;
+                  const statusChip = getDocumentStatusChip(document.status, tBoard);
+                  const statusTone = getDocumentStatusTone(document.status);
+                  const docKind = getDocumentVisualKind(document.name);
+                  const kindClass = `hx-document-card--${docKind}`;
+
+                  return (
+                    <article
+                      key={document.name}
+                      className={`hx-document-card ${statusTone} ${kindClass} ${isOpen ? 'is-open' : ''}`.trim()}
                     >
-                      <span className="hx-document-card__icon"><FileText size={18} /></span>
-                      <span className="hx-document-card__copy">
-                        <strong>{document.name}</strong>
-                        <em>{document.note ?? tBoard('documents.defaultNote')}</em>
-                      </span>
-                      <span className="hx-document-card__status">{statusLabel}</span>
-                      <ChevronDown size={18} />
-                    </button>
+                      <button
+                        type="button"
+                        className="hx-document-card__head"
+                        onClick={() => setExpandedDocumentName(isOpen ? null : document.name)}
+                        aria-expanded={isOpen}
+                      >
+                        <span className="hx-document-card__icon">{renderDocumentCardIcon(document.name, 24)}</span>
+                        <span className="hx-document-card__copy">
+                          <strong>{document.name}</strong>
+                          <span className="hx-document-card__lede">{tBoard(`documents.shortDesc.${docKind}`)}</span>
+                          <em className="hx-document-card__micro">{tBoard(`documents.microcopy.${docKind}`)}</em>
+                        </span>
+                        <span className="hx-document-card__status">{statusChip}</span>
+                        <ChevronDown size={18} />
+                      </button>
 
-                    {isOpen ? (
-                      <div className="hx-document-card__body">
-                        <div className="hx-document-card__meta">
-                          <span><small>{tBoard('documents.code')}</small><strong>{document.code}</strong></span>
-                          <span><small>{tBoard('documents.owner')}</small><strong>{document.owner}</strong></span>
-                          <span><small>{tBoard('documents.due')}</small><strong>{document.due}</strong></span>
-                          <span><small>{tBoard('documents.evidence')}</small><strong>{document.evidence}</strong></span>
+                      {isOpen ? (
+                        <div className="hx-document-card__body">
+                          <ul className="hx-document-card__facts" aria-label={tBoard('documents.factsAria')}>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <Info size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.whatIs')}</small>
+                                <strong>{document.name}</strong>
+                              </span>
+                            </li>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <ClipboardCheck size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.whyMatters')}</small>
+                                <strong>{tBoard(`documents.shortDesc.${docKind}`)}</strong>
+                              </span>
+                            </li>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <User size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.whoHandles')}</small>
+                                <strong>{document.owner}</strong>
+                              </span>
+                            </li>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <CalendarClock size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.whenDue')}</small>
+                                <strong>{document.due}</strong>
+                              </span>
+                            </li>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <AlertCircle size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.whatsMissing')}</small>
+                                <strong>{document.evidence}</strong>
+                              </span>
+                            </li>
+                            <li className="hx-document-card__fact">
+                              <span className="hx-document-card__factIcon" aria-hidden>
+                                <FileText size={16} strokeWidth={2.1} />
+                              </span>
+                              <span className="hx-document-card__factCopy">
+                                <small>{tBoard('documents.panel.codeLabel')}</small>
+                                <strong>{document.code}</strong>
+                              </span>
+                            </li>
+                          </ul>
+                          <p className="hx-document-card__valueLine">{tBoard('documents.valueLine')}</p>
+                          <p className="hx-document-card__note">{document.note ?? tBoard('documents.defaultNote')}</p>
                         </div>
-                        <p>{document.note ?? tBoard('documents.defaultNote')}</p>
-                      </div>
-                    ) : null}
-                  </article>
-                );
-              })}
+                      ) : null}
+                    </article>
+                  );
+                })}
+              </div>
             </div>
           ) : null}
 
           {activeTab === 'cost' ? (
-            <div id="hx-panel-cost" role="tabpanel" aria-labelledby="hx-tab-cost" className="hx-cost-board">
-              <div className="hx-cost-board__hero">
-                <article className="hx-cost-summary-card is-primary">
-                  <small>{tBoard('cost.estimatedTotal')}</small>
-                  <strong>{formatLocaleCurrency(locale, costModel.total)}</strong>
-                  <p>{tBoard('cost.title')}</p>
+            <div
+              id="hx-panel-cost"
+              role="tabpanel"
+              aria-labelledby="hx-tab-cost"
+              className={styles.costTabShell}
+              aria-label={tBoard('cost.title')}
+            >
+              <header className="hx-cost-game__hero">
+                <div className="hx-cost-game__heroIntro">
+                  <h2 className="hx-cost-game__title">{tBoard('cost.pageTitle')}</h2>
+                  <p className="hx-cost-game__subtitle">{tBoard('cost.pageSubtitle')}</p>
+                </div>
+                <div className="hx-cost-game__heroValue">
+                  <span className="hx-cost-game__heroIcon" aria-hidden>
+                    <CircleDollarSign size={28} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-cost-game__heroNumbers">
+                    <small>{tBoard('cost.heroValueCaption')}</small>
+                    <strong>{formatLocaleCurrency(locale, costModel.total)}</strong>
+                  </div>
+                </div>
+                <p className="hx-cost-game__narrative">{tBoard('cost.narrativeLine')}</p>
+              </header>
+
+              <div className="hx-cost-game__summaryGrid">
+                <article className="hx-cost-game-card hx-cost-game-card--cyan">
+                  <span className="hx-cost-game-card__icon" aria-hidden>
+                    <Wallet size={22} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-cost-game-card__body">
+                    <small>{tBoard('cost.estimatedTotal')}</small>
+                    <strong>{formatLocaleCurrency(locale, costModel.total)}</strong>
+                    <p>{tBoard('cost.summaryMicro.estimatedTotal')}</p>
+                  </div>
                 </article>
-                <article className="hx-cost-summary-card">
-                  <small>{tBoard('cost.margin')}</small>
-                  <strong>{formatLocalePercent(locale, costModel.marginRate)}</strong>
-                  <p>{tBoard('cost.marginDetail')}</p>
+                <article className="hx-cost-game-card hx-cost-game-card--blue">
+                  <span className="hx-cost-game-card__icon" aria-hidden>
+                    <BadgePercent size={22} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-cost-game-card__body">
+                    <small>{tBoard('cost.margin')}</small>
+                    <strong>{formatLocalePercent(locale, costModel.marginRate)}</strong>
+                    <p>{tBoard('cost.summaryMicro.margin')}</p>
+                  </div>
                 </article>
-                <article className="hx-cost-summary-card is-success">
-                  <small>{tBoard('cost.savings')}</small>
-                  <strong>{formatLocalePercent(locale, costModel.savingsRate)}</strong>
-                  <p>{tBoard('cost.savingsDetail')}</p>
+                <article className="hx-cost-game-card hx-cost-game-card--green">
+                  <span className="hx-cost-game-card__icon" aria-hidden>
+                    <Leaf size={22} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-cost-game-card__body">
+                    <small>{tBoard('cost.savings')}</small>
+                    <strong>{formatLocalePercent(locale, costModel.savingsRate)}</strong>
+                    <p>{tBoard('cost.summaryMicro.savings')}</p>
+                  </div>
                 </article>
-                <article className="hx-cost-summary-card">
-                  <small>{tBoard('cost.perTon')}</small>
-                  <strong>{formatLocaleCurrency(locale, costModel.costPerTon)}</strong>
-                  <p>{tBoard('cost.perTonDetail')}</p>
+                <article className="hx-cost-game-card hx-cost-game-card--split">
+                  <span className="hx-cost-game-card__icon" aria-hidden>
+                    <Coins size={22} strokeWidth={2.1} />
+                  </span>
+                  <div className="hx-cost-game-card__body">
+                    <small>{tBoard('cost.perTon')}</small>
+                    <strong>{formatLocaleCurrency(locale, costModel.costPerTon)}</strong>
+                    <p>{tBoard('cost.summaryMicro.perTon')}</p>
+                  </div>
                 </article>
               </div>
 
-              <div className="hx-cost-board__grid">
-                <section className="hx-cost-panel">
-                  <div className="hx-cost-panel__head">
-                    <strong>{tBoard('cost.breakdown')}</strong>
+              <div className="hx-cost-game__split">
+                <section className="hx-cost-game__breakdown" aria-labelledby="hx-cost-breakdown-title">
+                  <div className="hx-cost-game__sectionHead">
+                    <h3 id="hx-cost-breakdown-title">{tBoard('cost.breakdownTitle')}</h3>
                     <span>{formatLocaleCurrency(locale, costModel.total)}</span>
                   </div>
-                  <div className="hx-cost-breakdown">
-                    {costModel.breakdown.map((item) => (
-                      <article key={item.key} className="hx-cost-breakdown__row">
-                        <div className="hx-cost-breakdown__copy">
-                          <strong>{tBoard(`cost.${item.key}`)}</strong>
-                          <small>{formatLocaleCurrency(locale, item.value)}</small>
-                        </div>
-                        <div className="hx-cost-breakdown__bar" aria-hidden="true">
-                          <i className={item.tone} style={{ width: `${Math.max(10, Math.round(item.share * 100))}%` }} />
-                        </div>
-                        <span>{formatLocalePercent(locale, item.share, { maximumFractionDigits: 0 })}</span>
-                      </article>
-                    ))}
+                  <div className="hx-cost-br-list">
+                    {costModel.breakdown.map((item) => {
+                      const isDominant = item.key === dominantCostRow.key;
+                      return (
+                        <article
+                          key={item.key}
+                          className={`hx-cost-br-row ${isDominant ? 'hx-cost-br-row--dominant' : ''}`.trim()}
+                        >
+                          <span className="hx-cost-br-row__glyph">{renderCostBreakdownIcon(item.key)}</span>
+                          <div className="hx-cost-br-row__main">
+                            <div className="hx-cost-br-row__top">
+                              <strong>{tBoard(`cost.${item.key}`)}</strong>
+                              <span className="hx-cost-br-row__pct">
+                                {formatLocalePercent(locale, item.share, { maximumFractionDigits: 0 })}
+                              </span>
+                            </div>
+                            <span className="hx-cost-br-row__bar" aria-hidden>
+                              <i className={item.tone} style={{ width: `${Math.max(8, Math.round(item.share * 100))}%` }} />
+                            </span>
+                            <small className="hx-cost-br-row__money">{formatLocaleCurrency(locale, item.value)}</small>
+                          </div>
+                        </article>
+                      );
+                    })}
                   </div>
                 </section>
 
-                <section className="hx-cost-panel">
-                  <div className="hx-cost-panel__head">
-                    <strong>{tBoard('cost.comparison')}</strong>
-                    <span>{selectedCargo.co2Saving}</span>
-                  </div>
-                  <div className="hx-cost-comparison">
-                    <article>
-                      <small>{tBoard('cost.river')}</small>
-                      <strong>{formatLocaleCurrency(locale, costModel.total)}</strong>
-                    </article>
-                    <article>
-                      <small>{tBoard('cost.road')}</small>
-                      <strong>{formatLocaleCurrency(locale, costModel.roadEstimate)}</strong>
-                    </article>
-                    <article>
-                      <small>{tBoard('cost.co2Savings')}</small>
-                      <strong>{selectedCargo.co2Saving}</strong>
-                    </article>
-                  </div>
-                  <div className="hx-cost-trend" aria-hidden="true">
-                    <svg viewBox="0 0 160 64">
-                      <polyline points="6,45 26,42 46,38 66,33 86,28 106,24 126,18 154,12" />
-                      <path d="M6 55 C28 50 52 48 72 42 C92 36 120 28 154 18 L154 60 L6 60 Z" />
-                    </svg>
-                  </div>
+                <section className="hx-cost-game__chart">
+                  <CostSimulationChart
+                    costModel={costModel}
+                    tBoard={tBoard}
+                    locale={locale}
+                    co2Label={selectedCargo.co2Saving}
+                  />
                 </section>
               </div>
 
-              <div className="hx-cost-board__grid">
-                <section className="hx-cost-panel">
-                  <div className="hx-cost-panel__head">
-                    <strong>{tBoard('cost.costTimeline')}</strong>
-                    <span>{tBoard('cost.timelineHint')}</span>
+              <section className="hx-cost-game__scoreboard" aria-labelledby="hx-cost-score-title">
+                <div className="hx-cost-game__sectionHead">
+                  <h3 id="hx-cost-score-title">{tBoard('cost.scoreboardTitle')}</h3>
+                  <span className="hx-cost-game__badge">{tBoard('cost.scoreboardBadge')}</span>
+                </div>
+                <div className="hx-cost-score-grid">
+                  <article className="hx-cost-score-tile hx-cost-score-tile--river">
+                    <span className="hx-cost-score-tile__icon" aria-hidden>
+                      <Ship size={24} strokeWidth={2.1} />
+                    </span>
+                    <small>{tBoard('cost.river')}</small>
+                    <strong>{formatLocaleCurrency(locale, costModel.total)}</strong>
+                  </article>
+                  <article className="hx-cost-score-tile hx-cost-score-tile--road">
+                    <span className="hx-cost-score-tile__icon" aria-hidden>
+                      <Truck size={24} strokeWidth={2.1} />
+                    </span>
+                    <small>{tBoard('cost.road')}</small>
+                    <strong>{formatLocaleCurrency(locale, costModel.roadEstimate)}</strong>
+                  </article>
+                  <article className="hx-cost-score-tile hx-cost-score-tile--eco">
+                    <span className="hx-cost-score-tile__icon" aria-hidden>
+                      <TrendingDown size={22} strokeWidth={2.1} />
+                    </span>
+                    <small>{tBoard('cost.economyLabel')}</small>
+                    <strong>{formatLocaleCurrency(locale, costSavingsAbs)}</strong>
+                    <em>{selectedCargo.co2Saving}</em>
+                  </article>
+                </div>
+              </section>
+
+              <section className="hx-cost-game__timeline" aria-labelledby="hx-cost-tl-title">
+                <div className="hx-cost-game__sectionHead">
+                  <div>
+                    <h3 id="hx-cost-tl-title">{tBoard('cost.timelineTitle')}</h3>
+                    <p className="hx-cost-game__timelineLead">{tBoard('cost.timelineNarrative')}</p>
                   </div>
-                  <div className="hx-cost-milestones">
-                    {costModel.timeline.map((step, index) => (
-                      <article key={step.key}>
-                        <span>{String(index + 1).padStart(2, '0')}</span>
-                        <div>
-                          <strong>{tBoard(`cost.timeline.${step.key}`)}</strong>
-                          <i><b style={{ width: `${Math.round(step.progress * 100)}%` }} /></i>
+                </div>
+                <div className="hx-cost-tl-track">
+                  {costModel.timeline.map((step, index) => {
+                    const isCurrent = index === costTimelineActiveIndex;
+                    return (
+                      <article key={step.key} className={`hx-cost-tl-step ${isCurrent ? 'hx-cost-tl-step--current' : ''}`.trim()}>
+                        <span className="hx-cost-tl-step__icon">{renderCostTimelineIcon(step.key)}</span>
+                        <div className="hx-cost-tl-step__copy">
+                          <div className="hx-cost-tl-step__head">
+                            <strong>{tBoard(`cost.timeline.${step.key}`)}</strong>
+                            {isCurrent ? <span className="hx-cost-tl-step__pill">{tBoard('cost.stepCurrent')}</span> : null}
+                          </div>
+                          <span className="hx-cost-tl-step__meter" aria-hidden>
+                            <i style={{ width: `${Math.round(step.progress * 100)}%` }} />
+                          </span>
                         </div>
                       </article>
-                    ))}
-                  </div>
-                </section>
+                    );
+                  })}
+                </div>
+              </section>
 
-                <section className="hx-cost-panel">
-                  <div className="hx-cost-panel__head">
-                    <strong>{tBoard('cost.alerts')}</strong>
-                    <span>{tBoard('cost.alertsHint')}</span>
-                  </div>
-                  <div className="hx-cost-alerts">
-                    {costModel.alerts.map((alert) => (
-                      <article key={alert.key} className={alert.tone}>
+              <section className="hx-cost-game__alerts" aria-labelledby="hx-cost-alerts-title">
+                <div className="hx-cost-game__sectionHead hx-cost-game__sectionHead--stack">
+                  <h3 id="hx-cost-alerts-title">{tBoard('cost.alertsTitle')}</h3>
+                  <p>{tBoard('cost.alertsSubtitle')}</p>
+                </div>
+                <div className="hx-cost-alert-deck">
+                  {costModel.alerts.map((alert) => (
+                    <article key={alert.key} className={`hx-cost-alert-card ${alert.tone}`.trim()}>
+                      <span className="hx-cost-alert-card__icon">{renderCostAlertIcon(alert.key)}</span>
+                      <div className="hx-cost-alert-card__copy">
                         <strong>{tBoard(`cost.${alert.key}`)}</strong>
                         <p>{tBoard(`cost.${alert.detailKey}`)}</p>
-                      </article>
-                    ))}
-                  </div>
-                </section>
-              </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </section>
             </div>
           ) : null}
 
           {activeTab === 'priority' ? (
-            <div id="hx-panel-priority" role="tabpanel" aria-labelledby="hx-tab-priority">
+            <div id="hx-panel-priority" role="tabpanel" aria-labelledby="hx-tab-priority" className={styles.priorityTabShell}>
               <PriorityTab cargo={selectedCargo} />
             </div>
           ) : null}

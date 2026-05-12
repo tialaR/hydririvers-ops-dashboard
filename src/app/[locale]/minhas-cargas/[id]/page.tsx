@@ -6,7 +6,7 @@ import { CargoDetailLoader } from '@/features/cargo-market/components/cargo-deta
 import { getSessionUser } from '@/shared/server/auth';
 import { appRoutes, intlAppPaths } from '@/shared/routing/app-routes';
 import type { AppLocale } from '@/shared/routing/route-types';
-import { getCurrentUserCargoById } from '@/features/cargo/services/cargo.service';
+import { getMyCargoByIdForUser } from '@/features/cargo/services/cargo.service';
 import { translateMock } from '@/shared/i18n/mock-content';
 
 export default async function MyCargoDetailPage({ params }: { params: Promise<{ id: string; locale: string }> }) {
@@ -21,7 +21,7 @@ export default async function MyCargoDetailPage({ params }: { params: Promise<{ 
     redirect(appRoutes.admin.home(loc));
   }
 
-  const cargo = await getCurrentUserCargoById(user.id, id);
+  const cargo = await getMyCargoByIdForUser(id, user.id, user.role);
   if (!cargo) notFound();
 
   const t = await getTranslations({ locale, namespace: 'pages.cargoDetail' });

@@ -3,6 +3,14 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: .9rem;
+  min-width: 0;
+  padding-bottom: calc(var(--mobile-bottom-nav-height, 88px) + 12px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 901px) {
+  .grid {
+    padding-bottom: 1rem;
+  }
 }
 .linkWrap { display: block; height: 100%; }
 
@@ -63,9 +71,64 @@
   line-height: 1.5;
 }
 
+.introFootnote {
+  margin: .55rem 0 0;
+  color: var(--hx-muted, var(--muted));
+  font-size: .76rem;
+  font-weight: 620;
+  line-height: 1.45;
+}
+
+.metricSub {
+  display: block;
+  margin-top: .28rem;
+  font-size: .72rem;
+  font-weight: 650;
+  line-height: 1.35;
+  color: color-mix(in srgb, var(--hx-cyan, var(--river)) 72%, var(--hx-muted, var(--muted)));
+}
+
+.meta {
+  margin-top: .25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: 0 .62rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--hx-line-soft, var(--line));
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 78%, transparent);
+  color: var(--hx-text, var(--text));
+  font-size: .74rem;
+  font-weight: 720;
+}
+
+.confidence {
+  border-color: color-mix(in srgb, var(--hx-cyan, var(--river)) 28%, var(--hx-line-soft, var(--line)));
+  color: color-mix(in srgb, var(--hx-text, var(--text)) 85%, var(--hx-cyan, var(--river)));
+}
+
 .storyBox {
   grid-column: span 2;
 }
 
+.introBox {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: .8rem;
+  border-color: var(--hx-line-soft, var(--line)) !important;
+  border-width: 1px !important;
+  background:
+    radial-gradient(circle at 12% 20%, color-mix(in srgb, var(--hx-cyan, var(--river)) 14%, transparent), transparent 12rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 84%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 92%, transparent)) !important;
+}
+
 @media (max-width: 1180px) { .grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 620px) { .grid { grid-template-columns: 1fr; } .storyBox { grid-column: auto; } }
+@media (max-width: 620px) { .grid { grid-template-columns: 1fr; } .storyBox { grid-column: auto; } .introBox { grid-column: auto; } }

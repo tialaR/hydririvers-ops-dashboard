@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockGetSessionUser = vi.hoisted(() => vi.fn());
-const mockGetCurrentUserCargoById = vi.hoisted(() => vi.fn());
+const mockGetMyCargoByIdForUser = vi.hoisted(() => vi.fn());
 const mockGetTranslations = vi.hoisted(() => vi.fn());
 const mockNotFound = vi.hoisted(() => vi.fn());
 const mockRedirect = vi.hoisted(() => vi.fn());
@@ -21,7 +21,7 @@ vi.mock('@/shared/server/auth', () => ({
 }));
 
 vi.mock('@/features/cargo/services/cargo.service', () => ({
-  getCurrentUserCargoById: mockGetCurrentUserCargoById
+  getMyCargoByIdForUser: mockGetMyCargoByIdForUser
 }));
 
 vi.mock('@/shared/ui/page-shell/page-shell', () => ({
@@ -63,7 +63,7 @@ const cargo = {
 describe('minhas-cargas/[id] page', () => {
   beforeEach(() => {
     mockGetSessionUser.mockReset();
-    mockGetCurrentUserCargoById.mockReset();
+    mockGetMyCargoByIdForUser.mockReset();
     mockGetTranslations.mockReset();
     mockNotFound.mockReset();
     mockRedirect.mockReset();
@@ -97,7 +97,7 @@ describe('minhas-cargas/[id] page', () => {
       role: 'shipper',
       approved: true
     });
-    mockGetCurrentUserCargoById.mockResolvedValue(cargo);
+    mockGetMyCargoByIdForUser.mockResolvedValue(cargo);
 
     const tree = await MyCargoDetailPage({ params: Promise.resolve({ locale: 'pt-BR', id: cargo.id }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
@@ -114,7 +114,7 @@ describe('minhas-cargas/[id] page', () => {
       role: 'shipper',
       approved: true
     });
-    mockGetCurrentUserCargoById.mockResolvedValue(undefined);
+    mockGetMyCargoByIdForUser.mockResolvedValue(undefined);
     mockNotFound.mockImplementation(() => {
       throw new Error('notFound');
     });

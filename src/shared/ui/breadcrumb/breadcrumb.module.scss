@@ -4,6 +4,8 @@
   flex-wrap: wrap;
   gap: .4rem;
   margin-bottom: 1rem;
+  max-width: 100%;
+  min-width: 0;
   color: var(--muted);
   font-size: .88rem;
   font-weight: 570;
@@ -18,6 +20,8 @@
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: .35rem .65rem;
+  max-width: min(100%, 18rem);
+  overflow-wrap: anywhere;
   background: color-mix(in srgb, var(--surface-glass) 82%, transparent);
   transition: color 160ms ease, border-color 160ms ease, background 160ms ease, transform 160ms ease;
 }

@@ -1,4 +1,5 @@
 import type { HydroUser } from '@/features/auth/domain/auth.types';
+import { canSeeNavigationItem } from '@/features/auth/domain/access-control';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
 function normalizeCurrentPath(pathname: string) {
@@ -14,8 +15,7 @@ function normalizeCurrentPath(pathname: string) {
 export function resolveActiveNavigationHref(pathname: string, navigation = appNavigationItems) {
   const current = normalizeCurrentPath(pathname);
   const candidates = navigation
-    .filter((item) => item.href !== '/')
-    .filter((item) => current === item.href || current.startsWith(`${item.href}/`))
+    .filter((item) => current === item.href || (item.href !== '/' && current.startsWith(`${item.href}/`)))
     .sort((a, b) => b.href.length - a.href.length);
 
   return candidates[0]?.href ?? (current === '/' ? '/' : '');
@@ -27,18 +27,8 @@ export function resolveActiveNavigationHref(pathname: string, navigation = appNa
  */
 export function filterMainNavigationForUser(user: HydroUser | null) {
   return mainNavigation.filter((item) => {
-    if (item.href === intlAppPaths.admin.home) return user?.role === 'admin';
-    if (item.href === intlAppPaths.government.home) return user?.role === 'admin';
-    if (item.href === intlAppPaths.cargos.myCargos) {
-      return Boolean(user && (user.role === 'shipper' || user.role === 'carrier'));
-    }
-    if (item.href === intlAppPaths.vessels.marketplace) {
-      return !user || user.role === 'carrier' || user.role === 'admin';
-    }
-    if (item.href === intlAppPaths.negotiations.home) {
-      return !user || user.role === 'shipper' || user.role === 'carrier' || user.role === 'admin';
-    }
-    return item.href !== intlAppPaths.home;
+    if (item.href === intlAppPaths.home) return true;
+    return canSeeNavigationItem(user, item.href);
   });
 }
 

@@ -33,10 +33,23 @@ export type Cargo = {
   shipperId?: string;
   /** Transportador atualmente vinculado no modelo mock (opcional). */
   carrierId?: string;
-  visibility?: 'public' | 'private';
+  visibility?: 'public' | 'private' | 'restricted';
   publishedAt?: string | null;
   negotiationIds?: string[];
   priority?: import('@/features/cargo/types/cargo-priority.types').CargoPriority;
+  /** Rota fluvial amigável (mock / exibição em “Minhas cargas”). */
+  riverRoute?: string;
+  weight?: string;
+  /** Resumo curto para leigos (ex.: documentação). */
+  documentsStatusSummary?: string;
+  /** Contagem de propostas recebidas (mock). */
+  proposalsCount?: number;
+  /** Próximo passo operacional em linguagem humana (mock). */
+  operationalNextStep?: string;
+  /** CTA sugerida na lista “Minhas cargas” (chave i18n). */
+  myCargoesCta?: 'detail' | 'complete' | 'proposals' | 'documents' | 'track';
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type GovernmentIndicator = {

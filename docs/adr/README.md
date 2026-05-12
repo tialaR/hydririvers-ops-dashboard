@@ -24,6 +24,16 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0009 - Dashboard exibe cargas públicas; Minhas Cargas exibe cargas do usuário logado](./0009-dashboard-public-cargos-vs-my-cargos.md) _(superseded by 0016)_
 - [0016 - Fronteiras entre Dashboard, Cargas e Minhas cargas](./0016-dashboard-cargas-minhas-cargas-boundaries.md)
 - [0017 - Dashboard como cockpit operacional](./0017-dashboard-as-operational-cockpit.md)
+- [0019 - Home navigation boundaries](./0019-home-navigation-boundaries.md)
+- [0020 - Matriz central de papéis e permissões](./0020-roles-permissions-access-control.md)
+- [0021 - Role-based access e QA personas (mock-friendly)](./0021-role-based-access-and-qa-personas.md)
+- [0022 - Minhas cargas: mock data por perfil (shipper vs carrier)](./0022-my-cargoes-role-based-mock-data.md)
+- [0023 - Padrão de layout mobile (bottom nav aware + bottom sheets)](./0023-mobile-layout-and-bottom-navigation-pattern.md)
+- [0024 - Dashboard como resumo operacional guiado](./0024-dashboard-as-guided-operational-summary.md)
+- [0025 - Header responsivo (busca nao pode esmagar acoes)](./0025-header-responsive-actions-pattern.md)
+- [0026 - Negociações como central de decisões comerciais](./0026-negotiations-as-commercial-decision-center.md)
+- [0027 - Detalhe de negociação como guia de decisão](./0027-negotiation-detail-as-decision-guide.md)
+- [0028 - Impacto com storytelling baseado em evidências](./0028-impact-page-evidence-based-storytelling.md)
 - [0010 - Mapa visual com alternativa textual acessível](./0010-map-accessibility-and-alternative-route-summary.md)
 - [0012 - Priority Tab Operational Design](./0012-priority-tab-operational-design.md)
 - [0013 - Feature Mocks and Business Scope](./0013-feature-mocks-and-business-scope.md)
@@ -33,6 +43,7 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0011 - Code quality and performance guidelines](./0011-code-quality-and-performance-guidelines.md)
 - [0014 - Form Validation with Zod and React Hook Form](./0014-form-validation-zod-react-hook-form.md)
 - [0015 - Estratégia de validação e testes para mudanças críticas](./0015-validation-and-test-strategy.md)
+- [0029 - Dados mock fictícios e determinísticos](./0029-mock-data-fictional-deterministic.md)
 
 ## Overlays e mobile
 

@@ -1,0 +1,15 @@
+{
+  "name": "hydririvers-final-overview-layout",
+  "files": [
+    "scripts/apply-final-overview-layout.mjs",
+    "public/mock/vessels/hr-vessel-hero-01.webp ... hr-vessel-hero-12.webp",
+    "README_APLICAR_PATCH.md"
+  ],
+  "scope": [
+    "src/features/dashboard/components/operations-board/operations-board.tsx",
+    "src/features/cargo-market/components/cargo-detail/cargo-vessel-visual.ts",
+    "src/features/marketplace/data/marketplace.mock.ts",
+    "src/app/globals.scss",
+    "public/mock/vessels/"
+  ]
+}

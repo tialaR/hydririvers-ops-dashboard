@@ -19,6 +19,7 @@ export type BottomSheetProps = {
   footer?: ReactNode;
   snapPoints?: BottomSheetSnapPoint[];
   snap?: 40 | 60 | 90;
+  enableSnapDrag?: boolean;
   closeOnOverlayClick?: boolean;
   labelledById?: string;
   describedById?: string;
@@ -62,6 +63,7 @@ export function BottomSheet({
   footer,
   snapPoints = ['90vh'],
   snap,
+  enableSnapDrag = true,
   closeOnOverlayClick = true,
   labelledById,
   describedById,
@@ -75,9 +77,17 @@ export function BottomSheet({
   const lastFocusedRef = useRef<HTMLElement | null>(null);
   const dragStateRef = useRef({ active: false, startY: 0, offset: 0 });
   const [dragOffset, setDragOffset] = useState(0);
-  const close = useMemo(() => {
-    if (onOpenChange) return () => onOpenChange(false);
-    return onClose ?? (() => undefined);
+  const [snapIndex, setSnapIndex] = useState(0);
+  const requestClose = useMemo(() => {
+    return () => {
+      setDragOffset(0);
+      setSnapIndex(0);
+      if (onOpenChange) {
+        onOpenChange(false);
+        return;
+      }
+      onClose?.();
+    };
   }, [onClose, onOpenChange]);
 
   useLockBodyScroll(open);
@@ -95,7 +105,7 @@ export function BottomSheet({
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         event.preventDefault();
-        close();
+        requestClose();
       }
 
       if (event.key !== 'Tab') return;
@@ -123,39 +133,59 @@ export function BottomSheet({
       window.removeEventListener('keydown', onKeyDown);
       lastFocusedRef.current?.focus?.();
     };
-  }, [close, open]);
+  }, [open, requestClose]);
 
   const sheetStyle = useMemo<CSSProperties>(() => ({
     ['--sheet-offset' as string]: `${dragOffset}px`,
-    ['--sheet-snap' as string]: snap ? `${snap}vh` : resolveSnapPoint(snapPoints),
+    ['--sheet-snap' as string]: snap
+      ? `${snap}vh`
+      : resolveSnapPoint(snapPoints[snapIndex] ? [snapPoints[snapIndex]] : snapPoints),
     zIndex: zIndex.bottomSheet
-  }), [dragOffset, snap, snapPoints]);
+  }), [dragOffset, snap, snapIndex, snapPoints]);
+
+  const overlayStyle = useMemo<CSSProperties>(() => ({
+    zIndex: zIndex.overlay
+  }), []);
 
   function handleOverlayClick() {
-    if (closeOnOverlayClick) close();
+    if (closeOnOverlayClick) requestClose();
   }
 
   function resetAndClose() {
-    setDragOffset(0);
-    close();
+    requestClose();
   }
 
   function startDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!enableSnapDrag) return;
     dragStateRef.current = { active: true, startY: event.clientY, offset: dragOffset };
     event.currentTarget.setPointerCapture(event.pointerId);
   }
 
   function moveDrag(event: ReactPointerEvent<HTMLDivElement>) {
+    if (!enableSnapDrag) return;
     if (!dragStateRef.current.active) return;
     const delta = event.clientY - dragStateRef.current.startY;
-    setDragOffset(Math.max(0, dragStateRef.current.offset + delta));
+    // allow a small negative drag to "expand" to the next snap point
+    const next = dragStateRef.current.offset + delta;
+    setDragOffset(Math.max(-140, next));
   }
 
   function endDrag() {
+    if (!enableSnapDrag) return;
     if (!dragStateRef.current.active) return;
     dragStateRef.current.active = false;
-    if (dragOffset > 120) {
-      resetAndClose();
+    if (dragOffset < -80) {
+      setSnapIndex((current) => Math.min(snapPoints.length - 1, current + 1));
+      setDragOffset(0);
+      return;
+    }
+    if (dragOffset > 80 && snapIndex > 0) {
+      setSnapIndex((current) => Math.max(0, current - 1));
+      setDragOffset(0);
+      return;
+    }
+    if (dragOffset > 120 && snapIndex === 0) {
+      requestClose();
       return;
     }
     setDragOffset(0);
@@ -169,6 +199,7 @@ export function BottomSheet({
       onClick={handleOverlayClick}
       data-open={open ? 'true' : 'false'}
       role="presentation"
+      style={overlayStyle}
     >
       <section
         ref={sheetRef}

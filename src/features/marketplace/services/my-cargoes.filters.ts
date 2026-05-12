@@ -1,4 +1,5 @@
 import type { HydroUser } from '@/features/auth/domain/auth.types';
+import { isCarrierRole, isShipperRole } from '@/features/auth/domain/access-control';
 import type { Cargo, Negotiation } from '@/features/marketplace/domain/marketplace.types';
 
 /** Embarcador: cargas onde é dono/registrador ou participa como shipper na negociação mock. */
@@ -14,10 +15,10 @@ export function cargoMatchesCarrier(userId: string, cargo: Cargo, negotiations: 
 }
 
 export function filterMyCargoes(user: HydroUser, cargoes: Cargo[], negotiations: Negotiation[]): Cargo[] {
-  if (user.role === 'shipper') {
+  if (isShipperRole(user.role)) {
     return cargoes.filter((c) => cargoMatchesShipper(user.id, c, negotiations));
   }
-  if (user.role === 'carrier') {
+  if (isCarrierRole(user.role)) {
     return cargoes.filter((c) => cargoMatchesCarrier(user.id, c, negotiations));
   }
   return cargoes.filter((c) => c.ownerId === user.id || c.shipperId === user.id);
