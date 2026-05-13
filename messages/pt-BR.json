@@ -1358,11 +1358,29 @@
     },
     "mobile": {
       "headerAria": "Cabeçalho mobile do HydroRivers",
-      "kicker": "HydroRivers no celular",
-      "menuTitle": "Mais opções",
-      "menuDescription": "Escolha o que você quer abrir agora.",
-      "searchTitle": "O que você quer encontrar?",
-      "searchDescription": "Você pode ir direto para uma área importante do app."
+      "bottomNav": {
+        "overview": "Visão",
+        "dashboard": "Dashboard",
+        "cargos": "Cargas",
+        "negotiations": "Negociações",
+        "tracking": "Rastreio"
+      },
+      "accountSheet": {
+        "title": "Conta",
+        "description": "Ajustes rápidos e atalhos da sua operação.",
+        "guestName": "Convidado",
+        "guestHint": "Entre para sincronizar cargas e notificações.",
+        "sectionPrimary": "Atalhos",
+        "profile": "Meu perfil",
+        "preferences": "Preferências",
+        "sectionExperience": "Experiência",
+        "language": "Idioma",
+        "theme": "Tema",
+        "help": "Ajuda",
+        "sectionMore": "Mais áreas",
+        "sectionMock": "Ambiente de teste",
+        "openMockPanel": "Abrir painel mock / QA"
+      }
     }
   },
   "notifications": {

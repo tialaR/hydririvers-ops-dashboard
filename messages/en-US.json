@@ -1358,11 +1358,29 @@
     },
     "mobile": {
       "headerAria": "HydroRivers mobile header",
-      "kicker": "HydroRivers on mobile",
-      "menuTitle": "More options",
-      "menuDescription": "Choose what you want to open now.",
-      "searchTitle": "What are you looking for?",
-      "searchDescription": "You can jump straight to an important area of the app."
+      "bottomNav": {
+        "overview": "Overview",
+        "dashboard": "Dashboard",
+        "cargos": "Cargo",
+        "negotiations": "Deals",
+        "tracking": "Tracking"
+      },
+      "accountSheet": {
+        "title": "Account",
+        "description": "Quick settings and shortcuts for your operation.",
+        "guestName": "Guest",
+        "guestHint": "Sign in to sync cargos and notifications.",
+        "sectionPrimary": "Shortcuts",
+        "profile": "My profile",
+        "preferences": "Preferences",
+        "sectionExperience": "Experience",
+        "language": "Language",
+        "theme": "Theme",
+        "help": "Help",
+        "sectionMore": "More areas",
+        "sectionMock": "Test environment",
+        "openMockPanel": "Open mock / QA panel"
+      }
     }
   },
   "notifications": {

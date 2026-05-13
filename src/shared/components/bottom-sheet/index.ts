@@ -1,2 +1,2 @@
 export { BottomSheet } from './BottomSheet';
-export type { BottomSheetProps, BottomSheetSnapPoint } from './BottomSheet';
+export type { BottomSheetProps, BottomSheetSnapPoint, BottomSheetVariant } from './BottomSheet';
