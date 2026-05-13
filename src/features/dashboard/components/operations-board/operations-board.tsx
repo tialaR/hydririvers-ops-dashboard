@@ -32,7 +32,6 @@ import {
   Layers,
   Leaf,
   ListChecks,
-  MapPin,
   MapPinned,
   MoreVertical,
   Navigation,
@@ -41,7 +40,6 @@ import {
   Plus,
   Radar,
   ReceiptText,
-  Route,
   Search,
   ShieldCheck,
   Ship,
@@ -61,6 +59,15 @@ import { formatLocaleCurrency, formatLocaleNumber, formatLocalePercent, formatMo
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { PriorityTab } from '@/features/dashboard/components/priority-tab/priority-tab';
+import {
+  buildTrackingRoute,
+  getPointFromLocation
+} from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking.helpers';
+import {
+  HydroRouteTrackingMapHeader,
+  HydroRouteTrackingMapLegend,
+  HydroRouteTrackingMapSvg
+} from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking-map';
 import { getVesselVisual } from '@/features/cargo-market/components/cargo-detail/cargo-vessel-visual';
 import styles from './operations-board.module.scss';
 
@@ -116,35 +123,6 @@ function cx(...classNames: Array<string | false | null | undefined>) {
 function overviewStatusClass(status: CargoStatus) {
   return cx(styles.overviewStatus, styles[`overviewStatus_${status}`]);
 }
-
-type MapPoint = { x: number; y: number };
-type CubicRoute = {
-  start: MapPoint;
-  controlA: MapPoint;
-  controlB: MapPoint;
-  end: MapPoint;
-  path: string;
-};
-
-const LOCATION_COORDINATES: Record<string, MapPoint> = {
-  'belem pa': { x: 890, y: 176 },
-  'belem para': { x: 890, y: 176 },
-  'santarem pa': { x: 610, y: 228 },
-  'manaus am': { x: 350, y: 238 },
-  'tabatinga am': { x: 110, y: 238 },
-  'tefe am': { x: 245, y: 244 },
-  'vila do conde pa': { x: 920, y: 198 },
-  'suape pe': { x: 980, y: 348 },
-  'coari am': { x: 300, y: 250 },
-  'macapa ap': { x: 865, y: 116 },
-  'itacoatiara am': { x: 430, y: 224 },
-  'porto velho ro': { x: 220, y: 362 },
-  'breves pa': { x: 770, y: 222 },
-  'obidos pa': { x: 570, y: 218 },
-  'abaetetuba pa': { x: 860, y: 222 },
-  'itaituba pa': { x: 520, y: 316 },
-  'altamira pa': { x: 650, y: 300 }
-};
 
 function normalize(value: string) {
   return value.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
@@ -284,116 +262,8 @@ function riverName(cargo: Cargo) {
   return cargo.mainRiver || cargo.corridor || 'Rio Amazonas';
 }
 
-function mapProgressByStatus(status: CargoStatus) {
-  switch (status) {
-    case 'open': return 0.15;
-    case 'bidding': return 0.25;
-    case 'contracting': return 0.35;
-    case 'reserved': return 0.5;
-    case 'boarded': return 0.65;
-    case 'delivered': return 1;
-    default: return 0.25;
-  }
-}
-
 function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
-}
-
-function resolveKnownPoint(location: string) {
-  const key = normalize(location).replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
-  if (LOCATION_COORDINATES[key]) {
-    return LOCATION_COORDINATES[key];
-  }
-  const withoutState = key.replace(/\b[a-z]{2}\b/g, '').replace(/\s+/g, ' ').trim();
-  if (LOCATION_COORDINATES[withoutState]) {
-    return LOCATION_COORDINATES[withoutState];
-  }
-  return null;
-}
-
-function fallbackPoint(location: string): MapPoint {
-  const source = normalize(location);
-  let hash = 0;
-  for (let index = 0; index < source.length; index += 1) {
-    hash = ((hash << 5) - hash + source.charCodeAt(index)) | 0;
-  }
-  const positive = Math.abs(hash);
-  const x = 140 + (positive % 760);
-  const y = 90 + (Math.floor(positive / 13) % 270);
-  return { x, y };
-}
-
-function getPointFromLocation(location: string): MapPoint {
-  return resolveKnownPoint(location) ?? fallbackPoint(location);
-}
-
-function buildRoute(origin: MapPoint, destination: MapPoint): CubicRoute {
-  const start = origin;
-  const end = destination;
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
-  const distance = Math.hypot(dx, dy) || 1;
-  const normalX = -dy / distance;
-  const normalY = dx / distance;
-  const curvature = clamp(distance * 0.22, 58, 130);
-  const riverBias = end.y < start.y ? -0.9 : 0.9;
-
-  const controlA = {
-    x: start.x + dx * 0.3 + normalX * curvature * riverBias,
-    y: start.y + dy * 0.24 + normalY * curvature * riverBias
-  };
-  const controlB = {
-    x: start.x + dx * 0.72 - normalX * curvature * (riverBias * 0.76),
-    y: start.y + dy * 0.78 - normalY * curvature * (riverBias * 0.76)
-  };
-
-  return {
-    start,
-    controlA,
-    controlB,
-    end,
-    path: `M ${start.x} ${start.y} C ${controlA.x} ${controlA.y}, ${controlB.x} ${controlB.y}, ${end.x} ${end.y}`
-  };
-}
-
-function pointInCubicBezier(route: CubicRoute, t: number): MapPoint {
-  const safeT = clamp(t, 0, 1);
-  const inv = 1 - safeT;
-  const x = (inv ** 3) * route.start.x
-    + 3 * (inv ** 2) * safeT * route.controlA.x
-    + 3 * inv * (safeT ** 2) * route.controlB.x
-    + (safeT ** 3) * route.end.x;
-  const y = (inv ** 3) * route.start.y
-    + 3 * (inv ** 2) * safeT * route.controlA.y
-    + 3 * inv * (safeT ** 2) * route.controlB.y
-    + (safeT ** 3) * route.end.y;
-  return { x, y };
-}
-
-function tangentAngleInBezier(route: CubicRoute, t: number) {
-  const safeT = clamp(t, 0.02, 1);
-  const inv = 1 - safeT;
-  const dx = 3 * (inv ** 2) * (route.controlA.x - route.start.x)
-    + 6 * inv * safeT * (route.controlB.x - route.controlA.x)
-    + 3 * (safeT ** 2) * (route.end.x - route.controlB.x);
-  const dy = 3 * (inv ** 2) * (route.controlA.y - route.start.y)
-    + 6 * inv * safeT * (route.controlB.y - route.controlA.y)
-    + 3 * (safeT ** 2) * (route.end.y - route.controlB.y);
-  return (Math.atan2(dy, dx) * 180) / Math.PI;
-}
-
-/** Comprimento aproximado da curva (amostragem fixa; determinístico). */
-function approximateCubicBezierPathLength(route: CubicRoute, samples = 36) {
-  let len = 0;
-  let prev = route.start;
-  for (let i = 1; i <= samples; i += 1) {
-    const t = i / samples;
-    const p = pointInCubicBezier(route, t);
-    len += Math.hypot(p.x - prev.x, p.y - prev.y);
-    prev = p;
-  }
-  return Math.max(len, 1);
 }
 
 function parseStateTag(location: string) {
@@ -636,7 +506,7 @@ function HydroMapPanel({
   const [layerMode, setLayerMode] = useState<'all' | 'route' | 'network'>('all');
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
-  const [hoveredPlace, setHoveredPlace] = useState<null | { name: string; point: MapPoint; note: string; category: string; tone?: string }>(null);
+  const [hoveredPlace, setHoveredPlace] = useState<null | { name: string; point: { x: number; y: number }; note: string; category: string; tone?: string }>(null);
   const [viewportSize, setViewportSize] = useState({ width: 1000, height: 470 });
   const dragState = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
   const viewportRef = useRef<HTMLDivElement | null>(null);
@@ -669,23 +539,14 @@ function HydroMapPanel({
     };
   }, [expanded]);
 
-  const originPoint = getPointFromLocation(cargo.origin);
-  const destinationPoint = getPointFromLocation(cargo.destination);
-  const route = buildRoute(originPoint, destinationPoint);
-  const routePathLength = approximateCubicBezierPathLength(route);
-  const progress = mapProgressByStatus(cargo.status);
-  const routeMidPoint = pointInCubicBezier(route, 0.5);
-  const directionPoint = pointInCubicBezier(route, clamp(progress + 0.08, 0.18, 0.92));
-  const directionAngle = tangentAngleInBezier(route, clamp(progress + 0.08, 0.18, 0.92));
-  const mainRiver = cargo.mainRiver || cargo.corridor || 'Rio Amazonas';
-  const inTransitCount = Math.max(1, Math.round(progress * 18));
-  const operationCount = Math.max(1, Math.round((1 - progress) * 10));
+  const trackingRoute = useMemo(() => buildTrackingRoute(cargo), [cargo]);
+  const progress01 = trackingRoute.progress / 100;
+  const mainRiver = trackingRoute.river;
+  const inTransitCount = Math.max(1, Math.round(progress01 * 18));
+  const operationCount = Math.max(1, Math.round((1 - progress01) * 10));
   const layerLabel = layerMode === 'all' ? tBoard('map.layers.all') : layerMode === 'route' ? tBoard('map.layers.route') : tBoard('map.layers.network');
-  const vesselProgress = clamp(progress, 0.14, 0.86);
-  const vesselDisplayPoint = pointInCubicBezier(route, vesselProgress);
-  const vesselDisplayAngle = tangentAngleInBezier(route, vesselProgress);
 
-  const pointsOfInterest: Array<{ name: string; point: MapPoint; note: string; category: string; role?: 'state'; tone?: string }> = [
+  const pointsOfInterest: Array<{ name: string; point: { x: number; y: number }; note: string; category: string; role?: 'state'; tone?: string }> = [
     { name: 'Manaus', point: getPointFromLocation('Manaus, AM'), note: 'Capital amazonense, principal polo logístico do Médio Amazonas.', category: 'Cidade-polo', tone: 'city' },
     { name: 'Parintins', point: { x: 430, y: 202 }, note: 'Referência fluvial entre Manaus e Santarém.', category: 'Cidade regional', tone: 'city' },
     { name: 'Óbidos', point: getPointFromLocation('Óbidos, PA'), note: 'Trecho estreito do Rio Amazonas com monitoramento de calado.', category: 'Ponto de monitoramento', tone: 'warning' },
@@ -779,12 +640,12 @@ function HydroMapPanel({
     setIsDragging(false);
   };
 
-  const overlayPosition = (point: MapPoint, offsetX: number, offsetY: number) => ({
+  const overlayPosition = (point: { x: number; y: number }, offsetX: number, offsetY: number) => ({
     left: `${clamp(point.x / 10 + offsetX, 1.4, 96.2)}%`,
     top: `${clamp(point.y / 4.7 + offsetY, 3, 93)}%`
   });
 
-  const tooltipPosition = (point: MapPoint) => {
+  const tooltipPosition = (point: { x: number; y: number }) => {
     const xPercent = point.x / 10;
     const yPercent = point.y / 4.7;
     const offsetX = xPercent > 80 ? -17.5 : xPercent < 18 ? 1.8 : -6.8;
@@ -794,10 +655,6 @@ function HydroMapPanel({
 
   const shortOrigin = cargo.origin.split(',')[0];
   const shortDestination = cargo.destination.split(',')[0];
-  const isRouteForward = destinationPoint.x >= originPoint.x;
-  const originMarkerOffset = isRouteForward ? { x: 1.2, y: 2.2 } : { x: -8.6, y: 2.1 };
-  const destinationMarkerOffset = isRouteForward ? { x: 1.1, y: -7.4 } : { x: -8.4, y: -7.2 };
-  const routeChipOffset = isRouteForward ? { x: -5.8, y: -13.4 } : { x: -9.6, y: -13.4 };
   const showNetwork = layerMode !== 'route';
   const showRoute = layerMode !== 'network';
   const showLabels = layerMode !== 'route';
@@ -809,7 +666,6 @@ function HydroMapPanel({
   const renderViewport = (mode: 'card' | 'modal') => {
     const isModal = mode === 'modal';
     const idSuffix = `${svgUid}-${mode}`;
-    const progressPct = Math.round(progress * 100);
 
     return (
       <div
@@ -820,20 +676,6 @@ function HydroMapPanel({
           isCompactViewport && styles.hydroRadarViewportCompact
         )}
       >
-        <div className={styles.hydroRadarMobileBand} aria-label={tBoard('map.radarMobileSummaryAria')}>
-          <div className={styles.hydroRadarMobileBandTop}>
-            <span className={styles.hydroRadarMobileIcon} aria-hidden>
-              <Radar size={22} strokeWidth={2} />
-            </span>
-            <div className={styles.hydroRadarMobileText}>
-              <p className={styles.hydroRadarMobileRoute}>{shortOrigin} → {shortDestination}</p>
-              <p className={styles.hydroRadarMobileTitle}>{cargo.title}</p>
-            </div>
-            <span className={styles.hydroRadarMobilePct}>{tBoard('overview.routeProgress', { progress: progressPct })}</span>
-          </div>
-          <p className={styles.hydroRadarMobileRiver}>{tBoard('map.routeOnRiver', { river: mainRiver })}</p>
-        </div>
-
         <div className={styles.hydroRadarTopBar}>
           <div className={styles.hydroRadarStats}>
             <article className={styles.hydroRadarStat}>
@@ -869,6 +711,8 @@ function HydroMapPanel({
           </div>
         </div>
 
+        <HydroRouteTrackingMapHeader route={trackingRoute} />
+
         <div className={styles.hydroRadarMapShell}>
           <div
             className={cx(
@@ -884,265 +728,67 @@ function HydroMapPanel({
             onPointerCancel={endDrag}
           >
             <div className={styles.hydroRadarMapInner}>
-              <svg
-                className={styles.hydroRadarSvg}
-                viewBox="0 0 1000 470"
-                preserveAspectRatio="xMidYMid meet"
-                aria-label={tBoard('map.waterwayMap')}
-              >
-                <defs>
-                  <filter id={`${idSuffix}-glow`} x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="3.2" result="blur" />
-                    <feColorMatrix
-                      in="blur"
-                      type="matrix"
-                      values="0 0.95 0.85 0 0  0 0.55 0.95 0 0  0 0.35 1 0 0  0 0 0 0.85 0"
-                      result="softGlow"
-                    />
-                    <feMerge>
-                      <feMergeNode in="softGlow" />
-                      <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                  </filter>
-                  <linearGradient id={`${idSuffix}-route`} x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#2fe0d0" />
-                    <stop offset="50%" stopColor="#4fffd3" />
-                    <stop offset="100%" stopColor="#46d8e7" />
-                  </linearGradient>
-                  <linearGradient id={`${idSuffix}-routeDim`} x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="#3a4a5c" />
-                    <stop offset="100%" stopColor="#58a9ff" stopOpacity="0.35" />
-                  </linearGradient>
-                  <radialGradient id={`${idSuffix}-dot`} cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="#e8fbff" stopOpacity="0.95" />
-                    <stop offset="100%" stopColor="#2fe0d0" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-
-                <g className={styles.hydroRadarGrid}>
-                  {Array.from({ length: 21 }, (_, index) => (
-                    <line key={`v-${index}`} x1={index * 50} x2={index * 50} y1="0" y2="470" className={styles.hydroRadarGridLine} />
-                  ))}
-                  {Array.from({ length: 10 }, (_, index) => (
-                    <line key={`h-${index}`} x1="0" x2="1000" y1={index * 52 + 10} y2={index * 52 + 10} className={styles.hydroRadarGridLine} />
-                  ))}
-                </g>
-
-                {showNetwork ? (
+              <HydroRouteTrackingMapSvg
+                route={trackingRoute}
+                layerMode={layerMode}
+                poiGradientId={`${idSuffix}-dot`}
+                svgDecoration={
                   <>
-                    <g className={styles.hydroRadarWaterMass}>
-                      <path d="M18 306 C104 262 194 228 296 212 C398 194 514 190 612 194 C728 198 842 178 986 122 L986 166 C842 214 732 236 624 234 C520 232 410 240 316 260 C210 282 118 314 18 356 Z" />
-                      <path d="M18 170 C116 146 198 136 278 138 C366 140 432 160 486 194 C550 234 630 226 706 194 C792 158 882 116 986 78 L986 116 C884 154 796 188 714 220 C634 252 544 262 476 230 C424 206 360 194 278 194 C202 194 122 208 18 238 Z" />
-                      <path d="M170 360 C246 332 308 318 366 326 C426 334 474 326 536 288 C598 248 652 204 720 160 L742 176 C674 222 620 270 560 312 C490 360 424 380 356 374 C290 368 236 372 170 392 Z" />
-                    </g>
-                    <g className={styles.hydroRadarRiverSecondary}>
-                      <path d="M242 138 C292 154 338 182 384 226 C430 270 480 292 544 286 C604 280 674 242 742 186" />
-                      <path d="M504 60 C528 112 562 146 612 154 C680 164 756 154 834 110" />
-                      <path d="M258 206 C284 248 292 290 300 330 C306 364 328 394 376 414" />
-                      <path d="M636 216 C680 254 728 306 790 356 C846 402 914 420 990 420" />
-                      <path d="M120 98 C220 86 328 98 406 142 C468 176 548 182 628 168 C710 154 804 112 930 64" />
-                      <path d="M146 422 C232 388 314 374 394 384 C476 394 560 370 640 316 C716 264 786 198 868 154" />
-                    </g>
-                  </>
-                ) : null}
-
-                {showLabels ? (
-                  <g className={styles.hydroRadarCityDots}>
-                    {pointsOfInterest.map((item) => (
-                      <g key={item.name} className={styles.hydroRadarCityDot}>
-                        <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 5.2 : 5} fill={`url(#${idSuffix}-dot)`} />
-                        <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 1.6 : 2} className={styles.hydroRadarCityDotCore} />
+                    {showLabels ? (
+                      <g className={styles.hydroRadarCityDots}>
+                        {pointsOfInterest.map((item) => (
+                          <g key={item.name} className={styles.hydroRadarCityDot}>
+                            <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 5.2 : 5} fill={`url(#${idSuffix}-dot)`} />
+                            <circle cx={item.point.x} cy={item.point.y} r={item.role === 'state' ? 1.6 : 2} className={styles.hydroRadarCityDotCore} />
+                          </g>
+                        ))}
                       </g>
-                    ))}
-                  </g>
-                ) : null}
-
-                {showRoute ? (
-                  <g className={styles.hydroRadarRouteGroup}>
-                    <path
-                      className={styles.hydroRadarRouteRiverBed}
-                      d={route.path}
-                      fill="none"
-                      stroke={`url(#${idSuffix}-routeDim)`}
-                      strokeWidth={20}
-                      strokeLinecap="round"
-                      opacity={0.5}
-                    />
-                    <path
-                      className={styles.hydroRadarRouteFullDim}
-                      d={route.path}
-                      fill="none"
-                      stroke="#2b3d4f"
-                      strokeWidth={6}
-                      strokeLinecap="round"
-                      strokeOpacity={0.55}
-                    />
-                    <path
-                      className={styles.hydroRadarRouteFuture}
-                      d={route.path}
-                      fill="none"
-                      stroke="#58a9ff"
-                      strokeWidth={5}
-                      strokeLinecap="round"
-                      strokeOpacity={0.22}
-                      strokeDasharray={`${routePathLength * (1 - progress)} ${routePathLength}`}
-                      strokeDashoffset={-routePathLength * progress}
-                    />
-                    <path
-                      className={styles.hydroRadarRouteGlow}
-                      d={route.path}
-                      fill="none"
-                      stroke={`url(#${idSuffix}-route)`}
-                      strokeWidth={7}
-                      strokeLinecap="round"
-                      filter={`url(#${idSuffix}-glow)`}
-                      strokeDasharray={`${routePathLength * progress} ${routePathLength}`}
-                    />
-                    <path
-                      className={styles.hydroRadarRouteCore}
-                      d={route.path}
-                      fill="none"
-                      stroke={`url(#${idSuffix}-route)`}
-                      strokeWidth={3.6}
-                      strokeLinecap="round"
-                      strokeDasharray={`${routePathLength * progress} ${routePathLength}`}
-                    />
-                  </g>
-                ) : null}
-
-                {showLabels
-                  ? labelItems.map((item) => {
-                    const placement = MAP_LABEL_POSITIONS[item.name] || { dx: 8, dy: item.role === 'state' ? -8 : -10, anchor: 'start' as const };
-                    return (
-                      <text
-                        key={`label-${item.name}`}
-                        x={item.point.x + placement.dx}
-                        y={item.point.y + placement.dy}
-                        textAnchor={placement.anchor}
-                        className={cx(styles.hydroRadarMapLabel, item.role === 'state' && styles.hydroRadarMapLabelState)}
-                      >
-                        {item.name}
-                      </text>
-                    );
-                  })
-                  : null}
-              </svg>
-
-              <div className={styles.hydroRadarOverlayLayer}>
-                {showRoute ? (
-                  <>
-                    <div className={styles.hydroRadarRouteChip} style={overlayPosition(routeMidPoint, routeChipOffset.x, routeChipOffset.y)}>
-                      <span className={styles.hydroRadarRouteChipRiver}>{mainRiver}</span>
-                      <strong>{shortOrigin} → {shortDestination}</strong>
-                    </div>
-
-                    <button
-                      type="button"
-                      className={cx(styles.hydroRadarMarker, styles.hydroRadarMarkerOrigin)}
-                      style={overlayPosition(originPoint, originMarkerOffset.x, originMarkerOffset.y)}
-                      title={tBoard('map.originTitle', { location: cargo.origin })}
-                    >
-                      <Anchor size={14} strokeWidth={2} aria-hidden />
-                      <span>{shortOrigin}</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      className={cx(styles.hydroRadarMarker, styles.hydroRadarMarkerDestination)}
-                      style={overlayPosition(destinationPoint, destinationMarkerOffset.x, destinationMarkerOffset.y)}
-                      title={tBoard('map.destinationTitle', { location: cargo.destination })}
-                    >
-                      <MapPin size={14} strokeWidth={2} aria-hidden />
-                      <span>{shortDestination}</span>
-                    </button>
-
-                    <div
-                      className={styles.hydroRadarCourseBadge}
-                      style={{ ...overlayPosition(directionPoint, -1.05, -2.45), transform: `rotate(${directionAngle}deg)` }}
-                      aria-hidden
-                    >
-                      <Route size={12} strokeWidth={2} />
-                    </div>
-
-                    <div
-                      className={styles.hydroRadarVessel}
-                      style={{
-                        left: `${vesselDisplayPoint.x / 10}%`,
-                        top: `${vesselDisplayPoint.y / 4.7}%`,
-                        transform: `translate(-50%, -50%) rotate(${vesselDisplayAngle}deg)`
-                      }}
-                      aria-label={tBoard('map.vesselTransit', { origin: cargo.origin, destination: cargo.destination })}
-                    >
-                      <svg viewBox="0 0 126 44" role="presentation" aria-hidden>
-                        <path d="M8 28 L86 28 L114 23 L106 35 L18 36 Z" className={styles.hydroRadarVesselHull} />
-                        <rect x="36" y="12" width="22" height="8" rx="1.4" className={styles.hydroRadarVesselCabin} />
-                        <rect x="61" y="11" width="18" height="9" rx="1.2" className={styles.hydroRadarVesselContainer} />
-                        <rect x="82" y="10" width="15" height="10" rx="1.2" className={cx(styles.hydroRadarVesselContainer, styles.hydroRadarVesselContainerAlt)} />
-                        <path d="M114 22 L124 18 L124 27 Z" className={styles.hydroRadarVesselArrow} />
-                      </svg>
-                    </div>
+                    ) : null}
+                    {showLabels
+                      ? labelItems.map((item) => {
+                        const placement = MAP_LABEL_POSITIONS[item.name] || { dx: 8, dy: item.role === 'state' ? -8 : -10, anchor: 'start' as const };
+                        return (
+                          <text
+                            key={`label-${item.name}`}
+                            x={item.point.x + placement.dx}
+                            y={item.point.y + placement.dy}
+                            textAnchor={placement.anchor}
+                            className={cx(styles.hydroRadarMapLabel, item.role === 'state' && styles.hydroRadarMapLabelState)}
+                          >
+                            {item.name}
+                          </text>
+                        );
+                      })
+                      : null}
                   </>
-                ) : null}
-
-                {showLabels
-                  ? pointsOfInterest.map((item) => (
-                    <button
-                      key={`poi-${item.name}`}
-                      type="button"
-                      className={styles.hydroRadarPoiHotspot}
-                      style={overlayPosition(item.point, -1.35, -2.05)}
-                      onPointerEnter={() => setHoveredPlace(item)}
-                      onPointerMove={() => setHoveredPlace(item)}
-                      onFocus={() => setHoveredPlace(item)}
-                      onPointerLeave={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
-                      onBlur={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
-                      aria-label={`${item.name}: ${item.note}`}
-                    />
-                  ))
-                  : null}
-
-                {hoveredPlace ? (
-                  <div className={styles.hydroRadarTooltip} style={tooltipPosition(hoveredPlace.point)}>
-                    <small>{hoveredPlace.category}</small>
-                    <strong>{hoveredPlace.name}</strong>
-                    <span>{hoveredPlace.note}</span>
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.hydroRadarEyebrow}>
-            <Waves size={14} strokeWidth={2} aria-hidden />
-            <span>{tBoard('map.nextMonitored')}</span>
-          </div>
-
-          <div className={styles.hydroRadarHud} aria-label={tBoard('map.hudAria')}>
-            <div className={styles.hydroRadarHudCard}>
-              <small>{tBoard('map.hud.selectedCargo')}</small>
-              <strong>{cargo.id.toUpperCase()}</strong>
-              <span className={styles.hydroRadarHudMuted}>{cargo.title}</span>
-            </div>
-            <div className={styles.hydroRadarHudCard}>
-              <small>{tBoard('map.hud.origin')}</small>
-              <strong>{cargo.origin}</strong>
-            </div>
-            <div className={styles.hydroRadarHudCard}>
-              <small>{tBoard('map.hud.destination')}</small>
-              <strong>{cargo.destination}</strong>
-            </div>
-            <div className={styles.hydroRadarHudCard}>
-              <small>{tBoard('map.hud.river')}</small>
-              <strong>{mainRiver}</strong>
-              {cargo.riverRoute ? <span className={styles.hydroRadarHudMuted}>{cargo.riverRoute}</span> : null}
-            </div>
-            <div className={styles.hydroRadarHudCard}>
-              <small>{tBoard('map.hud.routeStatus')}</small>
-              <strong>{routeSummaryStatus}</strong>
-            </div>
-            <div className={cx(styles.hydroRadarHudCard, styles.hydroRadarHudCardProgress)}>
-              <small>{tBoard('map.hud.progress')}</small>
-              <strong>{tBoard('overview.routeProgress', { progress: progressPct })}</strong>
+                }
+              >
+                <div className={styles.hydroRadarOverlayLayer}>
+                  {showLabels
+                    ? pointsOfInterest.map((item) => (
+                      <button
+                        key={`poi-${item.name}`}
+                        type="button"
+                        className={styles.hydroRadarPoiHotspot}
+                        style={overlayPosition(item.point, -1.35, -2.05)}
+                        onPointerEnter={() => setHoveredPlace(item)}
+                        onPointerMove={() => setHoveredPlace(item)}
+                        onFocus={() => setHoveredPlace(item)}
+                        onPointerLeave={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
+                        onBlur={() => setHoveredPlace((current) => (current?.name === item.name ? null : current))}
+                        aria-label={`${item.name}: ${item.note}`}
+                      />
+                    ))
+                    : null}
+                  {hoveredPlace ? (
+                    <div className={styles.hydroRadarTooltip} style={tooltipPosition(hoveredPlace.point)}>
+                      <small>{hoveredPlace.category}</small>
+                      <strong>{hoveredPlace.name}</strong>
+                      <span>{hoveredPlace.note}</span>
+                    </div>
+                  ) : null}
+                </div>
+              </HydroRouteTrackingMapSvg>
             </div>
           </div>
 
@@ -1159,30 +805,9 @@ function HydroMapPanel({
           </div>
         </div>
 
-        <div className={styles.hydroRadarLegend}>
-          <span className={styles.hydroRadarLegendTitle}>{tBoard('map.legend')}</span>
-          <div className={styles.hydroRadarLegendChips}>
-            <span className={styles.hydroRadarLegendChip}>
-              <i className={styles.hydroRadarSwatchTransit} aria-hidden />
-              {tBoard('statusFilters.boarded')}
-            </span>
-            <span className={styles.hydroRadarLegendChip}>
-              <i className={styles.hydroRadarSwatchOperation} aria-hidden />
-              {tBoard('statusFilters.reserved')}
-            </span>
-            <span className={styles.hydroRadarLegendChip}>
-              <i className={styles.hydroRadarSwatchLate} aria-hidden />
-              {tBoard('map.delayed')}
-            </span>
-            <span className={styles.hydroRadarLegendChip}>
-              <i className={styles.hydroRadarSwatchPlanned} aria-hidden />
-              {tBoard('map.planned')}
-            </span>
-          </div>
-        </div>
+        <HydroRouteTrackingMapLegend />
 
         <div className={styles.hydroRadarFooter}>
-          <strong>{cargo.origin} → {cargo.destination}</strong>
           <span>{tBoard('map.statusSummary', { river: mainRiver, status: routeSummaryStatus, layer: layerLabel, zoom: Math.round(zoomLevel * 100) })}</span>
         </div>
 

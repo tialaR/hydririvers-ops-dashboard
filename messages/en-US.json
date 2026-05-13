@@ -1487,6 +1487,45 @@
         "region": "Region"
       }
     },
+    "mapTracking": {
+      "title": "Hydro route",
+      "subtitle": "Schematic corridor and progress view.",
+      "nextMonitoredLabel": "Next segment",
+      "nextMonitoredCorridorLine": "Following the {river} corridor",
+      "nextMonitoredPairLine": "{from} → {to}",
+      "waypointCheckpoint": "Checkpoint {index}",
+      "headerMetaDesktopAria": "Detailed cargo and route summary",
+      "selectedCargo": "Cargo",
+      "origin": "Origin",
+      "destination": "Destination",
+      "corridor": "Waterway / corridor",
+      "status": "Status",
+      "progress": "Progress",
+      "progressValue": "{value}%",
+      "distanceKm": "Distance (estimated)",
+      "distanceValue": "{km} km",
+      "eta": "ETA",
+      "waterwayMap": "Waterway map for the selected route",
+      "vesselTransit": "Vessel in transit from {origin} to {destination}",
+      "originTitle": "Origin: {location}",
+      "destinationTitle": "Destination: {location}",
+      "legendTitle": "Legend",
+      "legendAria": "Tracking status legend",
+      "statusNames": {
+        "planned": "Planned",
+        "inTransit": "In transit",
+        "inOperation": "In operation",
+        "delayed": "Delayed",
+        "completed": "Completed"
+      },
+      "legend": {
+        "planned": "Planned",
+        "inTransit": "In transit",
+        "inOperation": "In operation",
+        "delayed": "Delayed",
+        "completed": "Completed"
+      }
+    },
     "overview": {
       "vesselOperation": "Vessel / Operation",
       "estimatedDistance": "Estimated distance: 804 km via {river}",

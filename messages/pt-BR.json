@@ -1487,6 +1487,45 @@
         "region": "Região"
       }
     },
+    "mapTracking": {
+      "title": "Rota hidroviária",
+      "subtitle": "Visualização esquemática do corredor e do progresso.",
+      "nextMonitoredLabel": "Próximo trecho",
+      "nextMonitoredCorridorLine": "Seguindo pelo corredor {river}",
+      "nextMonitoredPairLine": "{from} → {to}",
+      "waypointCheckpoint": "Checkpoint {index}",
+      "headerMetaDesktopAria": "Resumo detalhado da carga e da rota",
+      "selectedCargo": "Carga",
+      "origin": "Origem",
+      "destination": "Destino",
+      "corridor": "Hidrovia / corredor",
+      "status": "Status",
+      "progress": "Progresso",
+      "progressValue": "{value}%",
+      "distanceKm": "Distância (estimada)",
+      "distanceValue": "{km} km",
+      "eta": "ETA",
+      "waterwayMap": "Mapa hidroviário da rota selecionada",
+      "vesselTransit": "Embarcação em trânsito de {origin} para {destination}",
+      "originTitle": "Origem: {location}",
+      "destinationTitle": "Destino: {location}",
+      "legendTitle": "Legenda",
+      "legendAria": "Legenda dos status de rastreamento",
+      "statusNames": {
+        "planned": "Planejado",
+        "inTransit": "Em trânsito",
+        "inOperation": "Em operação",
+        "delayed": "Atrasado",
+        "completed": "Concluído"
+      },
+      "legend": {
+        "planned": "Planejado",
+        "inTransit": "Em trânsito",
+        "inOperation": "Em operação",
+        "delayed": "Atrasado",
+        "completed": "Concluído"
+      }
+    },
     "overview": {
       "vesselOperation": "Embarcação / Operação",
       "estimatedDistance": "Distância estimada: 804 km via {river}",
