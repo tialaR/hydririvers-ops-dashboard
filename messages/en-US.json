@@ -367,9 +367,9 @@
     "carrierChoice": "I am a Carrier",
     "rolePlaceholder": "Select a role",
     "roleHint": "Required. Choose how you will use the platform.",
-    "shipperHint": "Cargo owner",
-    "carrierHint": "Moves the cargo",
-    "phoneAlreadyRegistered": "This phone number is already registered. Sign in or use another number.",
+    "shipperHint": "Adds loads in the app and follows their progress (shipper).",
+    "carrierHint": "Carries the load from place to place (carrier).",
+    "phoneAlreadyRegistered": "This phone number is already registered. Redirecting to sign in with the same number…",
     "userNotFound": "We could not find an account with this phone number. Redirecting to sign-up…",
     "registerSuccess": "Account created successfully.",
     "loginSuccess": "Signed in successfully.",
@@ -400,7 +400,17 @@
     "successLoginBadge": "Access granted",
     "successRegisterBadge": "Account created",
     "successLoginHint": "You will be redirected automatically in a moment.",
-    "successRegisterHint": "You will be redirected automatically so you can continue in HydroRivers."
+    "successRegisterHint": "You will be redirected automatically so you can continue in HydroRivers.",
+    "goToRegisterCta": "No account? Register",
+    "goToLoginCta": "Already have an account? Sign in",
+    "authSwitchNavAria": "Switch between sign-in and sign-up",
+    "authShellTagline": "River operations and cabotage",
+    "otpMockBlockEyebrow": "Mock environment",
+    "otpMockBlockTitle": "Mock OTP code",
+    "otpMockBlockLead": "Use this 6-digit code to continue.",
+    "otpProductionHint": "In production, the code will be sent through the configured channel (SMS or email).",
+    "otpMockDevNote": "In the mock environment, the code is shown here to make testing easier.",
+    "registerPhoneOtpHint": "Mobile number with area code is required: the mock OTP is always generated for this number."
   },
   "pages": {
     "home": {

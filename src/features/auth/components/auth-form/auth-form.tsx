@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import type { ClipboardEvent } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   Anchor,
   ArrowLeft,
@@ -11,14 +12,14 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
-  Phone,
   ShieldCheck,
   ShipWheel,
-  UserRound
+  UserRound,
+  Waves
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useRouter } from '@/core/i18n/navigation';
+import { Link, useRouter } from '@/core/i18n/navigation';
 import { Button } from '@/shared/ui/button/button';
 import { QA_LOGIN_PREFILL_STORAGE_KEY } from '@/shared/qa/login-prefill';
 import { routeSearchParams } from '@/shared/routing/route-search-params';
@@ -54,6 +55,8 @@ type Mode = 'login' | 'register';
 type AuthFormProps = {
   mode: Mode;
   registerPrefill?: string;
+  /** Query `prefill` on login (digits or email), same shape as cadastro. */
+  loginPrefill?: string;
 };
 
 function isOtpChallengeResult(value: unknown): value is OtpChallengeResponse {
@@ -131,7 +134,7 @@ function formatPhoneLabel(countryCode: string, phone: string) {
   return `${countryCode} ${national}`.trim();
 }
 
-export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
+export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps) {
   const t = useTranslations('auth');
   const locale = useLocale();
   const router = useRouter();
@@ -153,15 +156,22 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
   const [fullName, setFullName] = useState('');
   const [company, setCompany] = useState('');
   const [role, setRole] = useState<RoleOption>('');
-  const [email, setEmail] = useState(() => (mode === 'register' ? initialRegisterContact(registerPrefill).email : ''));
+  const [email, setEmail] = useState(() =>
+    mode === 'register' ? initialRegisterContact(registerPrefill).email : initialRegisterContact(loginPrefill).email
+  );
   const [countryCode, setCountryCode] = useState<AuthDialCode>('+55');
-  const [phone, setPhone] = useState(() => (mode === 'register' ? initialRegisterContact(registerPrefill).phone : ''));
+  const [phone, setPhone] = useState(() =>
+    mode === 'register' ? initialRegisterContact(registerPrefill).phone : initialRegisterContact(loginPrefill).phone
+  );
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const reduceMotion = useReducedMotion();
 
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const roleMenuRef = useRef<HTMLDivElement>(null);
   const registerRedirectRef = useRef(false);
+  const loginFromRegisterPhoneRef = useRef(false);
   const completionTimeoutRef = useRef<number | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
@@ -399,6 +409,7 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
       return;
     }
 
+    loginFromRegisterPhoneRef.current = false;
     setPending(true);
     clearInlineMessages();
     try {
@@ -422,7 +433,15 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
     } catch (nextError) {
       const code = nextError instanceof Error ? nextError.message : 'request-failed';
       if (code === 'email-already-registered') setError(t('emailAlreadyRegistered'));
-      else if (code === 'phone-already-registered') setError(t('phoneAlreadyRegistered'));
+      else if (code === 'phone-already-registered') {
+        setError(t('phoneAlreadyRegistered'));
+        if (phoneNormalized && !loginFromRegisterPhoneRef.current) {
+          loginFromRegisterPhoneRef.current = true;
+          window.setTimeout(() => {
+            router.replace(`${intlAppPaths.auth.login}?prefill=${encodeURIComponent(phoneNormalized)}`);
+          }, 900);
+        }
+      }
       else if (code === 'forbidden') setError(t('roleInvalidPublic'));
       else setError(t('error'));
     } finally {
@@ -602,10 +621,20 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
 
   return (
     <section className={styles.shell}>
-      <div className={styles.panel}>
-        <div className={styles.brandIcon}>
-          <Anchor />
-          <ShipWheel />
+      <motion.div
+        className={styles.panel}
+        initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={reduceMotion ? { duration: 0 } : { duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className={styles.brandRow}>
+          <div className={styles.brandIcon} aria-hidden>
+            <Waves size={22} />
+          </div>
+          <div className={styles.brandMeta}>
+            <strong className={styles.wordmark}>HydroRivers</strong>
+            <span className={styles.brandTagline}>{t('authShellTagline')}</span>
+          </div>
         </div>
         <p className={styles.eyebrow}>{eyebrow}</p>
         <h1>{title}</h1>
@@ -840,7 +869,10 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
                 {(fieldErrors.phone || fieldErrors.phoneE164 || fieldErrors.countryCode) ? (
                   <p className={styles.fieldIssue}>{fieldErrors.phone ?? fieldErrors.phoneE164 ?? fieldErrors.countryCode}</p>
                 ) : (
-                  <p className={styles.fieldHint}>{t('phoneHint')}</p>
+                  <div className={styles.fieldHintStack}>
+                    <p className={styles.fieldHint}>{t('phoneHint')}</p>
+                    {mode === 'register' ? <p className={styles.fieldHintMuted}>{t('registerPhoneOtpHint')}</p> : null}
+                  </div>
                 )}
               </div>
             </>
@@ -869,17 +901,30 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
               </div>
 
               <div className={styles.otpBox}>
+                <p className={styles.otpMockEyebrow}>{t('otpMockBlockEyebrow')}</p>
+                <p className={styles.otpMockLead}>{t('otpMockBlockLead')}</p>
                 <div className={styles.otpHeader}>
-                  <strong>{t('mockCodeLabel')}</strong>
-                  <button type="button" className={styles.copyButton} onClick={copyOtpCode} aria-live="polite">
-                    {copied ? t('copied') : t('copyOtp')} <Copy size={15} aria-hidden />
-                  </button>
+                  <strong>{t('otpMockBlockTitle')}</strong>
+                  <motion.button
+                    type="button"
+                    className={styles.copyButton}
+                    onClick={copyOtpCode}
+                    disabled={!otpCodeHint}
+                    aria-label={t('copyOtp')}
+                    animate={copied && !reduceMotion ? { scale: [1, 1.05, 1] } : { scale: 1 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {copied ? t('otpCodeCopied') : t('copyOtp')} <Copy size={15} aria-hidden />
+                  </motion.button>
                 </div>
                 <div className={styles.otpCode} aria-live="polite">
                   {otpCodeHint || t('otpCodeUnavailable')}
                 </div>
-                {copied ? <p className={styles.success}>{t('otpCodeCopied')}</p> : null}
-                <p>{t('otpCodeHelp')}</p>
+                <p className={styles.otpCodeHelp}>{t('otpCodeHelp')}</p>
+                <div className={styles.otpMockNotes}>
+                  <p>{t('otpProductionHint')}</p>
+                  <p>{t('otpMockDevNote')}</p>
+                </div>
               </div>
 
               <div className={styles.otpStageCard}>
@@ -889,13 +934,19 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
                 </div>
                 <p className={styles.fieldHint}>{t('otpHint')}</p>
 
-                <div className={styles.otpRow} role="group" aria-label={t('otpInputLabel')}>
+                <div
+                  className={styles.otpRow}
+                  role="group"
+                  aria-label={t('otpInputLabel')}
+                  aria-describedby={error ? 'auth-form-error' : undefined}
+                >
                   {Array.from({ length: 6 }, (_, index) => (
                     <input
                       key={`otp-slot-${index}`}
                       ref={otpInputRefCallbacks[index]}
                       className={styles.otpCell}
                       inputMode="numeric"
+                      autoComplete={index === 0 ? 'one-time-code' : 'off'}
                       maxLength={1}
                       pattern="\d*"
                       aria-label={`${t('otpDigitAria')} ${index + 1}`}
@@ -928,7 +979,11 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
             </div>
           ) : null}
 
-          {error ? <p className={styles.error}>{error}</p> : null}
+          {error ? (
+            <p className={styles.error} id="auth-form-error" role="alert">
+              {error}
+            </p>
+          ) : null}
           {success ? <p className={styles.success}>{success}</p> : null}
 
           <Button className={styles.submit} disabled={primaryDisabled} loading={pending} loadingLabel={t('loading')}>
@@ -941,7 +996,21 @@ export function AuthForm({ mode, registerPrefill }: AuthFormProps) {
                   : t('signup')}
           </Button>
         </form>
-      </div>
+
+        {!completedMode ? (
+          <nav className={styles.authSwitchNav} aria-label={t('authSwitchNavAria')}>
+            {mode === 'login' ? (
+              <Link href={intlAppPaths.auth.register} className={styles.authSwitchLink}>
+                {t('goToRegisterCta')}
+              </Link>
+            ) : (
+              <Link href={intlAppPaths.auth.login} className={styles.authSwitchLink}>
+                {t('goToLoginCta')}
+              </Link>
+            )}
+          </nav>
+        ) : null}
+      </motion.div>
 
       <aside className={styles.story}>
         <p>{t('sideEyebrow')}</p>

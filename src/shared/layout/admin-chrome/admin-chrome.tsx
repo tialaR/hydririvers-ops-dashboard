@@ -49,7 +49,8 @@ import {
 } from '@/features/notifications/services/notifications.client';
 import { filterMainNavigationForUser, mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
 import { persistStoredLocale, type StoredLocale } from '@/shared/preferences/client-preferences';
-import { intlAppPaths } from '@/shared/routing/app-routes';
+import { intlAppPaths, isAuthPublicShellPathname } from '@/shared/routing/app-routes';
+import styles from './admin-chrome.module.scss';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
 
@@ -470,6 +471,10 @@ export function AdminChrome({ children }: AdminChromeProps) {
       </div>
     </>
   );
+
+  if (isAuthPublicShellPathname(pathname)) {
+    return <div className={styles.publicAuthWrap}>{children}</div>;
+  }
 
   return (
     <div className={sidebarCollapsed ? 'hx-shell hr-shell is-sidebar-collapsed' : 'hx-shell hr-shell'}>

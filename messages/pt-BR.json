@@ -367,9 +367,9 @@
     "carrierChoice": "Sou Transportador",
     "rolePlaceholder": "Selecione o perfil",
     "roleHint": "Obrigatório. Escolha como você vai usar a plataforma.",
-    "shipperHint": "Dono da carga",
-    "carrierHint": "Quem transporta",
-    "phoneAlreadyRegistered": "Este telefone já está cadastrado. Entre ou use outro número.",
+    "shipperHint": "Quem cadastra e acompanha cargas no app (embarcador).",
+    "carrierHint": "Quem faz o transporte da carga (transportador).",
+    "phoneAlreadyRegistered": "Este telefone já está cadastrado. Redirecionando para o login com o mesmo número…",
     "userNotFound": "Não encontramos uma conta com esse telefone. Redirecionando para o cadastro…",
     "registerSuccess": "Cadastro criado com sucesso.",
     "loginSuccess": "Login realizado.",
@@ -400,7 +400,17 @@
     "successLoginBadge": "Acesso liberado",
     "successRegisterBadge": "Conta criada",
     "successLoginHint": "Você será redirecionado automaticamente em instantes.",
-    "successRegisterHint": "Você será redirecionado automaticamente para continuar na HydroRivers."
+    "successRegisterHint": "Você será redirecionado automaticamente para continuar na HydroRivers.",
+    "goToRegisterCta": "Não tem conta? Cadastre-se",
+    "goToLoginCta": "Já tem conta? Entrar",
+    "authSwitchNavAria": "Alternar entre login e cadastro",
+    "authShellTagline": "Operações fluviais e cabotagem",
+    "otpMockBlockEyebrow": "Ambiente mock",
+    "otpMockBlockTitle": "Código OTP mock",
+    "otpMockBlockLead": "Use este código de 6 dígitos para continuar.",
+    "otpProductionHint": "Em produção, o código será enviado pelo canal configurado (SMS ou e-mail).",
+    "otpMockDevNote": "No ambiente mock, o código aparece aqui para facilitar testes.",
+    "registerPhoneOtpHint": "O celular com DDD é obrigatório: o OTP mock é sempre gerado para este número."
   },
   "pages": {
     "home": {

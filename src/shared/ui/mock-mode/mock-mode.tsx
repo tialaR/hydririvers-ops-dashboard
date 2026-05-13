@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { isAuthPublicShellPathname } from '@/shared/routing/app-routes';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import { MockScenarioControl } from './mock-scenario-control';
 import { MockQaHubPersonas } from './mock-qa-hub';
@@ -9,8 +11,13 @@ import { MockQaAssistant } from './mock-qa-assistant';
 import styles from './mock-mode.module.scss';
 
 export function MockMode() {
+  const pathname = usePathname();
   const t = useTranslations('mockMode');
   const [open, setOpen] = useState(false);
+
+  if (isAuthPublicShellPathname(pathname)) {
+    return null;
+  }
 
   return (
     <aside className={`${styles.shell} ${open ? styles.open : ''}`} aria-label={t('title')}>
