@@ -2246,7 +2246,8 @@ export function OperationsBoard({
         onOpenChange={setDrawerOpen}
         title={tBoard('filters.mobileTitle')}
         description={tBoard('filters.mobileDescription')}
-        snapPoints={["90vh"]}
+        snapPoints={['fullscreen']}
+        variant="fullscreen"
       >
         <div className="hx-filter-drawer hx-filter-drawer--mobile" role="region" aria-label={tBoard('filters.advancedRegion')}>
           {filtersPanel}
@@ -2355,7 +2356,8 @@ function FilterSelect({
         onOpenChange={setPickerOpen}
         title={label}
         description={allLabel}
-        snapPoints={["90vh"]}
+        snapPoints={['75vh']}
+        variant="strong"
       >
         <div className="hx-filter-select__picker" role="listbox" aria-label={label}>
           {entries.map((optionValue) => {

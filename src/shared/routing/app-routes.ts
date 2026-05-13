@@ -75,6 +75,23 @@ export const intlAppPaths = {
   }
 } as const;
 
+const localePathPrefix = /^\/(pt-BR|en-US|es)(?=\/|$)/;
+
+/**
+ * Caminho após o segmento de locale (ex.: `/login`, `/cadastro`).
+ * Usado para detectar páginas públicas de auth sem depender do locale.
+ */
+export function stripLocaleSegmentPath(pathname: string): string {
+  const normalized = pathname.replace(localePathPrefix, '') || '/';
+  return normalized.length > 1 && normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
+}
+
+/** Login e cadastro: fluxo público sem chrome logado (sidebar, nav mobile, FAB do shell). */
+export function isAuthPublicShellPathname(pathname: string): boolean {
+  const stripped = stripLocaleSegmentPath(pathname);
+  return stripped === intlAppPaths.auth.login || stripped === intlAppPaths.auth.register;
+}
+
 /** Rotas que exigem cookie `hydrorivers_session` (mesma ordem semântica que `proxy.ts`). */
 export const middlewarePrivateIntlPaths: readonly string[] = [
   intlAppPaths.dashboard.home,

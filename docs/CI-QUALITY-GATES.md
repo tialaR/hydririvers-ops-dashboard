@@ -58,7 +58,7 @@ O script **`verify`** no `package.json` corresponde a:
 - **`audit:docs`**: executa `scripts/audit-docs.mjs` para manter a documentação mínima alinhada ao repositório.
 - **`lint`**: mantém padrões de código e captura problemas comuns sem executar a aplicação.
 - **`typecheck`**: garante que o TypeScript compila semanticamente (`tsc --noEmit`).
-- **`check:i18n`**: verifica consistência das traduções entre locales (`pt-BR`, `en`, `es`).
+- **`check:i18n`**: verifica consistência das traduções entre locales (`pt-BR`, `en-US`, `es`).
 - **`test`**: executa a suíte Vitest completa.
 - **`test:mock-mode`**: executa subconjunto crítico de testes ligados a mock mode, cenários mock e APIs relacionadas (definido em `package.json`).
 - **`build`**: valida o bundle Next.js em modo produção (apenas no `ci.yml`).

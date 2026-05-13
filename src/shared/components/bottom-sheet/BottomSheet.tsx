@@ -9,6 +9,8 @@ import styles from './BottomSheet.module.scss';
 
 export type BottomSheetSnapPoint = 'auto' | '60vh' | '75vh' | '90vh' | 'fullscreen';
 
+export type BottomSheetVariant = 'default' | 'strong' | 'fullscreen';
+
 export type BottomSheetProps = {
   open: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -25,6 +27,7 @@ export type BottomSheetProps = {
   describedById?: string;
   className?: string;
   bodyClassName?: string;
+  variant?: BottomSheetVariant;
 };
 
 function resolveSnapPoint(snapPoints: BottomSheetSnapPoint[] | undefined) {
@@ -68,7 +71,8 @@ export function BottomSheet({
   labelledById,
   describedById,
   className,
-  bodyClassName
+  bodyClassName,
+  variant = 'default'
 }: BottomSheetProps) {
   const titleId = useId();
   const descriptionId = useId();
@@ -196,6 +200,7 @@ export function BottomSheet({
   return createPortal(
     <div
       className={styles.overlay}
+      data-variant={variant}
       onClick={handleOverlayClick}
       data-open={open ? 'true' : 'false'}
       role="presentation"
@@ -204,6 +209,7 @@ export function BottomSheet({
       <section
         ref={sheetRef}
         className={[styles.sheet, className].filter(Boolean).join(' ')}
+        data-variant={variant}
         style={sheetStyle}
         role="dialog"
         aria-modal="true"

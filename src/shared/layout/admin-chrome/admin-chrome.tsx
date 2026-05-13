@@ -17,17 +17,18 @@ import {
   Landmark,
   LayoutDashboard,
   Leaf,
+  LifeBuoy,
   LogIn,
   LogOut,
-  Menu,
-  Map,
   Package,
   RadioTower,
   Route,
   Search,
+  Settings,
   ShieldCheck,
   Ship,
   TriangleAlert,
+  User,
   Waves
 } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
@@ -49,9 +50,12 @@ import {
 } from '@/features/notifications/services/notifications.client';
 import { filterMainNavigationForUser, mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
 import { persistStoredLocale, type StoredLocale } from '@/shared/preferences/client-preferences';
-import { intlAppPaths } from '@/shared/routing/app-routes';
+import { intlAppPaths, isAuthPublicShellPathname } from '@/shared/routing/app-routes';
+import styles from './admin-chrome.module.scss';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
+import { OPEN_MOCK_PANEL_EVENT } from '@/shared/ui/mock-mode/mock-mode';
+import { isMockQaUiEnabled } from '@/shared/qa/mock-qa-ui-env';
 
 type AdminChromeProps = {
   children: React.ReactNode;
@@ -81,6 +85,14 @@ const iconByKey: Record<NavIconKey, typeof Gauge> = {
   government: Landmark,
   admin: ShieldCheck
 };
+
+const MOBILE_BOTTOM_NAV: ReadonlyArray<{ href: string; iconKey: NavIconKey; labelKey: string }> = [
+  { href: intlAppPaths.home, iconKey: 'home', labelKey: 'overview' },
+  { href: intlAppPaths.dashboard.home, iconKey: 'dashboard', labelKey: 'dashboard' },
+  { href: intlAppPaths.cargos.marketplace, iconKey: 'cargoes', labelKey: 'cargos' },
+  { href: intlAppPaths.negotiations.home, iconKey: 'negotiations', labelKey: 'negotiations' },
+  { href: intlAppPaths.tracking.home, iconKey: 'tracking', labelKey: 'tracking' }
+];
 
 function resolveActiveHref(pathname: string) {
   return resolveActiveNavigationHref(pathname, mainNavigation);
@@ -130,26 +142,6 @@ const SIDEBAR_LOCALES: Array<{ value: SidebarLocale; label: string; flag: string
   { value: 'es', label: 'Español', flag: '🇪🇸' }
 ];
 
-function profileActionFor(user: HydroUser | null): 'login' | 'myCargos' | 'myVessels' | 'governmentLayer' {
-  if (!user) {
-    return 'login';
-  }
-
-  if (user.role === 'shipper') {
-    return 'myCargos';
-  }
-
-  if (user.role === 'carrier') {
-    return 'myVessels';
-  }
-
-  if (user.role === 'admin') {
-    return 'governmentLayer';
-  }
-
-  return 'login';
-}
-
 export function AdminChrome({ children }: AdminChromeProps) {
   const t = useTranslations('nav');
   const tCommon = useTranslations('common');
@@ -166,8 +158,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [localeOpen, setLocaleOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [accountSheetOpen, setAccountSheetOpen] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
@@ -182,7 +173,6 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const localePanelId = 'hx-sidebar-language-panel';
   const notificationsPanelId = 'hx-header-notifications-panel';
   const currentLocale = SIDEBAR_LOCALES.find((item) => item.value === locale) ?? SIDEBAR_LOCALES[0];
-  const profileAction = profileActionFor(navigationUser);
   const notifications = useSyncExternalStore(
     (onStoreChange) => {
       if (typeof window === 'undefined') return () => {};
@@ -204,15 +194,13 @@ export function AdminChrome({ children }: AdminChromeProps) {
     () => getUnreadNotificationsCount(notifications),
     [notifications]
   );
-  const profileActionConfig = {
-    login: { href: intlAppPaths.auth.login, label: t('login'), icon: LogIn },
-    myCargos: { href: intlAppPaths.cargos.myCargos, label: t('myCargoes'), icon: Map },
-    myVessels: { href: intlAppPaths.vessels.marketplace, label: tChrome('cta.myVessels'), icon: Ship },
-    governmentLayer: { href: intlAppPaths.government.home, label: tChrome('cta.governmentLayer'), icon: Landmark }
-  }[profileAction];
-  const ProfileActionIcon = profileActionConfig.icon;
 
   const navigation = useMemo(() => filterMainNavigationForUser(navigationUser), [navigationUser]);
+  const mobileBottomHrefSet = useMemo(() => new Set(MOBILE_BOTTOM_NAV.map((item) => item.href)), []);
+  const accountSheetMoreNav = useMemo(() => {
+    const primaryExtra = new Set<string>([intlAppPaths.auth.profile, intlAppPaths.cargos.myCargos]);
+    return navigation.filter((item) => !mobileBottomHrefSet.has(item.href) && !primaryExtra.has(item.href));
+  }, [navigation, mobileBottomHrefSet]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
   const activeNavLabel = activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title');
   const activeNavSubtitle = activeHref === intlAppPaths.home
@@ -221,17 +209,8 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const headerDescriptionText = activeHref === intlAppPaths.home ? tChrome('header.homeDescription') : tChrome('header.description');
   const headerFullTitleLabel = `${activeNavLabel} • ${activeNavSubtitle}`;
   const hasUnreadNotifications = unreadNotificationsCount > 0;
-  const mobilePrimaryHrefs = [
-    intlAppPaths.home,
-    intlAppPaths.dashboard.home,
-    intlAppPaths.cargos.marketplace,
-    intlAppPaths.tracking.home,
-    intlAppPaths.negotiations.home
-  ];
-  const mobilePrimaryNavigation = navigation.filter((item) => mobilePrimaryHrefs.some((href) => href === item.href));
-  const mobileMoreNavigation = navigation.filter((item) => !mobilePrimaryNavigation.some((primary) => primary.href === item.href));
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
-  const hideMobileFab = notificationsOpen || mobileMenuOpen || mobileSearchOpen;
+  const showMockTools = isMockQaUiEnabled();
 
   useEffect(() => {
     const updateViewport = () => setIsMobileViewport(window.innerWidth <= 860);
@@ -395,6 +374,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   }
 
   async function handleSidebarLogout() {
+    setAccountSheetOpen(false);
     await logout();
     router.push(intlAppPaths.auth.login as never);
   }
@@ -415,6 +395,23 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
   function handleMarkAllNotificationsRead() {
     markAllNotificationsRead(navigationUser?.id);
+  }
+
+  function openMobileAccountSheet() {
+    setNotificationsOpen(false);
+    setAccountSheetOpen(true);
+  }
+
+  function toggleMobileNotificationsSheet() {
+    setAccountSheetOpen(false);
+    setNotificationsOpen((current) => !current);
+  }
+
+  function handleOpenMockFromAccount() {
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent(OPEN_MOCK_PANEL_EVENT));
+    }
+    setAccountSheetOpen(false);
   }
 
   const notificationsContent = (
@@ -470,6 +467,10 @@ export function AdminChrome({ children }: AdminChromeProps) {
       </div>
     </>
   );
+
+  if (isAuthPublicShellPathname(pathname)) {
+    return <div className={styles.publicAuthWrap}>{children}</div>;
+  }
 
   return (
     <div className={sidebarCollapsed ? 'hx-shell hr-shell is-sidebar-collapsed' : 'hx-shell hr-shell'}>
@@ -625,33 +626,33 @@ export function AdminChrome({ children }: AdminChromeProps) {
                   type="button"
                   className="hx-bell"
                   aria-label={tChrome('header.notificationsAria', { count: unreadNotificationsCount })}
-                  onClick={() => setNotificationsOpen(true)}
+                  aria-expanded={notificationsOpen}
+                  onClick={toggleMobileNotificationsSheet}
                 >
                   <Bell size={18} />
                   {unreadNotificationsCount > 0 ? (
                     <span className="hx-bell-badge" aria-hidden>{unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}</span>
                   ) : null}
                 </button>
-                <Link href={navigationUser ? intlAppPaths.auth.profile : intlAppPaths.auth.login} className="hx-mobile-avatar" aria-label={t('profile')}>
+                <button
+                  type="button"
+                  className="hx-mobile-avatar"
+                  aria-label={navigationUser ? tChrome('profile.openAria', { name: profileDisplayName(navigationUser?.name) }) : t('login')}
+                  onClick={openMobileAccountSheet}
+                >
                   {navigationUser?.avatarUrl ? (
                     <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} unoptimized />
                   ) : (
                     getCompactDisplayInitials(navigationUser?.name ?? '')
                   )}
-                </Link>
+                </button>
               </div>
             </div>
 
-            <div className="hx-mobile-topbar__row is-secondary">
-              <div className="hx-mobile-title">
-                <small>{tChrome('mobile.kicker')}</small>
+            <div className="hx-mobile-topbar__row hx-mobile-topbar__row--page-title">
+              <h1 className="hx-mobile-title">
                 <strong>{activeNavLabel}</strong>
-              </div>
-              <div className="hx-mobile-quick-actions">
-                <button type="button" className="hx-mobile-ghost-button" onClick={() => setMobileSearchOpen(true)} aria-label={tCommon('search')}>
-                  <Search size={16} />
-                </button>
-              </div>
+              </h1>
             </div>
           </header>
 
@@ -781,82 +782,170 @@ export function AdminChrome({ children }: AdminChromeProps) {
       </div>
 
       <nav className="hx-mobile-nav" aria-label={t('mobileMenu')}>
-        {mobilePrimaryNavigation.map((item) => {
-          const Icon = iconByKey[item.labelKey as NavIconKey] ?? Gauge;
-          const active = activeHref === item.href;
+        {MOBILE_BOTTOM_NAV.map((slot) => {
+          const Icon = iconByKey[slot.iconKey];
+          const active = activeHref === slot.href;
           return (
-            <Link key={item.href} href={item.href} className={active ? 'hx-mobile-nav__item is-active' : 'hx-mobile-nav__item'} aria-current={active ? 'page' : undefined}>
-              <Icon size={18} />
-              <span>{t(item.labelKey)}</span>
+            <Link
+              key={slot.href}
+              href={slot.href}
+              className={active ? 'hx-mobile-nav__item is-active' : 'hx-mobile-nav__item'}
+              aria-current={active ? 'page' : undefined}
+            >
+              <Icon size={17} />
+              <span>{tChrome(`mobile.bottomNav.${slot.labelKey}`)}</span>
             </Link>
           );
         })}
-
-        <button type="button" className="hx-mobile-nav__item" onClick={() => setMobileMenuOpen(true)} aria-label={t('more')}>
-          <Menu size={18} />
-          <span>{t('more')}</span>
-        </button>
       </nav>
-
-      {hideMobileFab ? null : (
-        <Link href={profileActionConfig.href} className="hx-mobile-fab" aria-label={profileActionConfig.label}>
-          <ProfileActionIcon size={20} />
-        </Link>
-      )}
 
       <BottomSheet
         open={isMobileViewport && notificationsOpen}
-        onOpenChange={setNotificationsOpen}
+        onOpenChange={(next) => {
+          setNotificationsOpen(next);
+          if (next) setAccountSheetOpen(false);
+        }}
         title={tNotifications('mobileTitle')}
         description={tNotifications('emptyDescription')}
-        snapPoints={["90vh"]}
+        snapPoints={['90vh']}
+        variant="strong"
+        footer={
+          <Link href={intlAppPaths.negotiations.home} onClick={() => setNotificationsOpen(false)}>
+            {tNotifications('viewAll')}
+          </Link>
+        }
       >
         {notificationsContent}
       </BottomSheet>
 
       <BottomSheet
-        open={mobileSearchOpen}
-        onOpenChange={setMobileSearchOpen}
-        title={tChrome('mobile.searchTitle')}
-        description={tChrome('mobile.searchDescription')}
-        snapPoints={["60vh"]}
+        open={isMobileViewport && accountSheetOpen}
+        onOpenChange={(next) => {
+          setAccountSheetOpen(next);
+          if (next) setNotificationsOpen(false);
+        }}
+        title={tChrome('mobile.accountSheet.title')}
+        description={tChrome('mobile.accountSheet.description')}
+        snapPoints={['90vh']}
+        variant="strong"
       >
-        <label className="hx-mobile-sheet-search">
-          <Search size={16} />
-          <input type="search" placeholder={tChrome('header.searchPlaceholder')} aria-label={tCommon('search')} />
-        </label>
-        <div className="hx-mobile-sheet-links">
-          <Link href={intlAppPaths.home} onClick={() => setMobileSearchOpen(false)}>{t('home')}</Link>
-          <Link href={intlAppPaths.dashboard.home} onClick={() => setMobileSearchOpen(false)}>{t('dashboard')}</Link>
-          <Link href={intlAppPaths.cargos.marketplace} onClick={() => setMobileSearchOpen(false)}>{t('cargoes')}</Link>
-          <Link href={intlAppPaths.tracking.home} onClick={() => setMobileSearchOpen(false)}>{t('tracking')}</Link>
-          <Link href={intlAppPaths.negotiations.home} onClick={() => setMobileSearchOpen(false)}>{t('negotiations')}</Link>
-        </div>
-      </BottomSheet>
+        <div className={styles.accountSheet}>
+          <div className={styles.accountSheetUser}>
+            <div className={styles.accountSheetAvatar}>
+              {navigationUser?.avatarUrl ? (
+                <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} unoptimized />
+              ) : (
+                getCompactDisplayInitials(navigationUser?.name ?? '')
+              )}
+            </div>
+            <div className={styles.accountSheetMeta}>
+              <strong>{navigationUser ? profileDisplayName(navigationUser.name) : tChrome('mobile.accountSheet.guestName')}</strong>
+              <small>
+                {navigationUser ? tChrome(`roles.${roleLabel(navigationUser.role)}`) : tChrome('mobile.accountSheet.guestHint')}
+              </small>
+            </div>
+          </div>
 
-      <BottomSheet
-        open={mobileMenuOpen}
-        onOpenChange={setMobileMenuOpen}
-        title={tChrome('mobile.menuTitle')}
-        description={tChrome('mobile.menuDescription')}
-        snapPoints={["90vh"]}
-      >
-        {showPublishCargoContext ? (
-          <Link href={intlAppPaths.cargos.publishCargo} className="hx-mobile-primary-button" onClick={() => setMobileMenuOpen(false)}>
-            <CirclePlus size={16} />
-            <span>{tChrome('cta.newCargo')}</span>
-          </Link>
-        ) : null}
-        <div className="hx-mobile-menu-list">
-          {mobileMoreNavigation.map((item) => {
-            const Icon = iconByKey[item.labelKey as NavIconKey] ?? Gauge;
-            return (
-              <Link key={item.href} href={item.href} className="hx-mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
-                <span><Icon size={18} /></span>
-                <strong>{t(item.labelKey)}</strong>
+          {showPublishCargoContext ? (
+            <Link href={intlAppPaths.cargos.publishCargo} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+              <CirclePlus size={18} aria-hidden />
+              {tChrome('cta.newCargo')}
+            </Link>
+          ) : null}
+
+          <div className={styles.accountSheetSection}>
+            <p className={styles.accountSheetSectionTitle}>{tChrome('mobile.accountSheet.sectionPrimary')}</p>
+            <div className={styles.accountSheetLinks}>
+              <Link href={intlAppPaths.auth.profile} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+                <User size={18} aria-hidden />
+                {tChrome('mobile.accountSheet.profile')}
               </Link>
-            );
-          })}
+              <Link href={intlAppPaths.cargos.myCargos} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+                <Boxes size={18} aria-hidden />
+                {t('myCargoes')}
+              </Link>
+              <Link href={intlAppPaths.auth.profile} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+                <Settings size={18} aria-hidden />
+                {tChrome('mobile.accountSheet.preferences')}
+              </Link>
+            </div>
+          </div>
+
+          <div className={styles.accountSheetSection}>
+            <p className={styles.accountSheetSectionTitle}>{tChrome('mobile.accountSheet.sectionExperience')}</p>
+            <div className={styles.accountSheetRow} role="group" aria-label={tChrome('settings.language.selectLabel', { locale: currentLocale.label })}>
+              <span>{tChrome('mobile.accountSheet.language')}</span>
+              <div className={styles.accountSheetLocaleFlags}>
+                {SIDEBAR_LOCALES.map((item) => {
+                  const selected = item.value === locale;
+                  return (
+                    <button
+                      key={item.value}
+                      type="button"
+                      aria-current={selected ? 'true' : undefined}
+                      className={selected ? 'hx-mobile-ghost-button' : 'hx-mobile-ghost-button'}
+                      style={{ opacity: selected ? 1 : 0.72 }}
+                      onClick={() => changeSidebarLocale(item.value)}
+                    >
+                      <span aria-hidden>{item.flag}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            <div className={styles.accountSheetRow} role="group" aria-label={tChrome('settings.theme.toggleLabel')}>
+              <span>{tChrome('mobile.accountSheet.theme')}</span>
+              <ThemeToggle variant="icon" ariaLabel={tChrome('settings.theme.toggleLabel')} />
+            </div>
+          </div>
+
+          <a
+            className={styles.accountSheetLink}
+            href="https://example.com/help"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => setAccountSheetOpen(false)}
+          >
+            <LifeBuoy size={18} aria-hidden />
+            {tChrome('mobile.accountSheet.help')}
+          </a>
+
+          {accountSheetMoreNav.length ? (
+            <div className={styles.accountSheetSection}>
+              <p className={styles.accountSheetSectionTitle}>{tChrome('mobile.accountSheet.sectionMore')}</p>
+              <div className={styles.accountSheetLinks}>
+                {accountSheetMoreNav.map((item) => {
+                  const NavIcon = iconByKey[item.labelKey as NavIconKey] ?? Gauge;
+                  return (
+                    <Link key={item.href} href={item.href} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+                      <NavIcon size={18} aria-hidden />
+                      {t(item.labelKey)}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ) : null}
+
+          {showMockTools ? (
+            <div className={styles.accountSheetSection}>
+              <p className={styles.accountSheetSectionTitle}>{tChrome('mobile.accountSheet.sectionMock')}</p>
+              <button type="button" className={styles.accountSheetMockButton} onClick={handleOpenMockFromAccount}>
+                {tChrome('mobile.accountSheet.openMockPanel')}
+              </button>
+            </div>
+          ) : null}
+
+          {navigationUser ? (
+            <button type="button" className={styles.accountSheetLogout} onClick={handleSidebarLogout}>
+              {t('logout')}
+            </button>
+          ) : (
+            <Link href={intlAppPaths.auth.login} className={styles.accountSheetLink} onClick={() => setAccountSheetOpen(false)}>
+              <LogIn size={18} aria-hidden />
+              {t('login')}
+            </Link>
+          )}
         </div>
       </BottomSheet>
     </div>

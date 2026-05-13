@@ -367,9 +367,9 @@
     "carrierChoice": "Soy Transportista",
     "rolePlaceholder": "Selecciona el perfil",
     "roleHint": "Obligatorio. Elige cómo usarás la plataforma.",
-    "shipperHint": "Dueño de la carga",
-    "carrierHint": "Quien transporta",
-    "phoneAlreadyRegistered": "Este teléfono ya está registrado. Inicia sesión o usa otro número.",
+    "shipperHint": "Registra y sigue las cargas en la app (embarcador).",
+    "carrierHint": "Lleva la carga de un punto a otro (transportador).",
+    "phoneAlreadyRegistered": "Este teléfono ya está registrado. Redirigiendo al inicio de sesión con el mismo número…",
     "userNotFound": "No encontramos una cuenta con ese teléfono. Redirigiendo al registro…",
     "registerSuccess": "Cuenta creada correctamente.",
     "loginSuccess": "Sesión iniciada.",
@@ -400,7 +400,17 @@
     "successLoginBadge": "Acceso liberado",
     "successRegisterBadge": "Cuenta creada",
     "successLoginHint": "Serás redirigido automáticamente en unos instantes.",
-    "successRegisterHint": "Serás redirigido automáticamente para continuar en HydroRivers."
+    "successRegisterHint": "Serás redirigido automáticamente para continuar en HydroRivers.",
+    "goToRegisterCta": "¿No tienes cuenta? Regístrate",
+    "goToLoginCta": "¿Ya tienes cuenta? Entrar",
+    "authSwitchNavAria": "Cambiar entre inicio de sesión y registro",
+    "authShellTagline": "Operaciones fluviales y cabotaje",
+    "otpMockBlockEyebrow": "Entorno mock",
+    "otpMockBlockTitle": "Código OTP mock",
+    "otpMockBlockLead": "Usa este código de 6 dígitos para continuar.",
+    "otpProductionHint": "En producción, el código se enviará por el canal configurado (SMS o correo).",
+    "otpMockDevNote": "En el entorno mock, el código se muestra aquí para facilitar las pruebas.",
+    "registerPhoneOtpHint": "El móvil con prefijo es obligatorio: el OTP mock se genera siempre para este número."
   },
   "pages": {
     "home": {
@@ -1348,11 +1358,29 @@
     },
     "mobile": {
       "headerAria": "Encabezado móvil de HydroRivers",
-      "kicker": "HydroRivers en el móvil",
-      "menuTitle": "Más opciones",
-      "menuDescription": "Elige lo que quieres abrir ahora.",
-      "searchTitle": "¿Qué quieres encontrar?",
-      "searchDescription": "Puedes ir directo a una parte importante de la app."
+      "bottomNav": {
+        "overview": "Visión",
+        "dashboard": "Dashboard",
+        "cargos": "Cargas",
+        "negotiations": "Negocios",
+        "tracking": "Rastreo"
+      },
+      "accountSheet": {
+        "title": "Cuenta",
+        "description": "Ajustes rápidos y accesos de tu operación.",
+        "guestName": "Invitado",
+        "guestHint": "Inicia sesión para sincronizar cargas y avisos.",
+        "sectionPrimary": "Accesos",
+        "profile": "Mi perfil",
+        "preferences": "Preferencias",
+        "sectionExperience": "Experiencia",
+        "language": "Idioma",
+        "theme": "Tema",
+        "help": "Ayuda",
+        "sectionMore": "Más áreas",
+        "sectionMock": "Entorno de prueba",
+        "openMockPanel": "Abrir panel mock / QA"
+      }
     }
   },
   "notifications": {
