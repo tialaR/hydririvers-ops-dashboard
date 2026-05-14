@@ -367,11 +367,13 @@
   flex-direction: column;
   overflow-x: clip;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   background:
     radial-gradient(120% 85% at 50% 0%, color-mix(in srgb, #14d8c4 16%, transparent) 0%, transparent 48%),
     radial-gradient(90% 55% at 85% 100%, color-mix(in srgb, #45a6ff 14%, transparent) 0%, transparent 42%),
     linear-gradient(180deg, #05080b 0%, #020407 100%);
   color: #eef7f6;
+  padding-top: max(0.5rem, env(safe-area-inset-top));
   padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
 }
 

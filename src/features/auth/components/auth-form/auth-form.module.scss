@@ -705,6 +705,9 @@
   .story {
     display: none;
   }
+  .panel {
+    max-height: min(100dvh - 3.75rem, 58rem);
+  }
 }
 @media (max-width: 640px) {
   .otpCell {

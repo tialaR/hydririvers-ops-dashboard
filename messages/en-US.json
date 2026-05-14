@@ -409,7 +409,7 @@
     "otpMockBlockTitle": "Mock OTP code",
     "otpMockBlockLead": "Use this 6-digit code to continue.",
     "otpProductionHint": "In production, the code will be sent through the configured channel (SMS or email).",
-    "otpMockDevNote": "In the mock environment, the code is shown here to make testing easier.",
+    "otpMockDevNote": "Demo / development: the mock code appears here for local testing only; it is not a real delivery.",
     "registerPhoneOtpHint": "Mobile number with area code is required: the mock OTP is always generated for this number."
   },
   "pages": {
@@ -1367,6 +1367,7 @@
       },
       "accountSheet": {
         "title": "Account",
+        "closeSheet": "Close account panel",
         "description": "Quick settings and shortcuts for your operation.",
         "guestName": "Guest",
         "guestHint": "Sign in to sync cargos and notifications.",
@@ -1385,6 +1386,7 @@
   },
   "notifications": {
     "title": "Notifications",
+    "closeSheet": "Close notifications",
     "mobileTitle": "Important updates",
     "summary": "{count, plural, =0 {No unread notifications} one {# unread notification} other {# unread notifications}}",
     "markAllRead": "Mark all as read",

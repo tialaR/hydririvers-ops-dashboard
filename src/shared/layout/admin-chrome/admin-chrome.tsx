@@ -807,6 +807,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
         }}
         title={tNotifications('mobileTitle')}
         description={tNotifications('emptyDescription')}
+        closeAriaLabel={tNotifications('closeSheet')}
         snapPoints={['90vh']}
         variant="strong"
         footer={
@@ -826,6 +827,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
         }}
         title={tChrome('mobile.accountSheet.title')}
         description={tChrome('mobile.accountSheet.description')}
+        closeAriaLabel={tChrome('mobile.accountSheet.closeSheet')}
         snapPoints={['90vh']}
         variant="strong"
       >

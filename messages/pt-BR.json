@@ -409,7 +409,7 @@
     "otpMockBlockTitle": "Código OTP mock",
     "otpMockBlockLead": "Use este código de 6 dígitos para continuar.",
     "otpProductionHint": "Em produção, o código será enviado pelo canal configurado (SMS ou e-mail).",
-    "otpMockDevNote": "No ambiente mock, o código aparece aqui para facilitar testes.",
+    "otpMockDevNote": "Demonstração / desenvolvimento: o código mock aparece aqui só para testes locais; não representa envio real.",
     "registerPhoneOtpHint": "O celular com DDD é obrigatório: o OTP mock é sempre gerado para este número."
   },
   "pages": {
@@ -1367,6 +1367,7 @@
       },
       "accountSheet": {
         "title": "Conta",
+        "closeSheet": "Fechar painel de conta",
         "description": "Ajustes rápidos e atalhos da sua operação.",
         "guestName": "Convidado",
         "guestHint": "Entre para sincronizar cargas e notificações.",
@@ -1385,6 +1386,7 @@
   },
   "notifications": {
     "title": "Notificações",
+    "closeSheet": "Fechar notificações",
     "mobileTitle": "Avisos importantes",
     "summary": "{count, plural, =0 {Nenhuma notificação não lida} one {# notificação não lida} other {# notificações não lidas}}",
     "markAllRead": "Marcar todas como lidas",
