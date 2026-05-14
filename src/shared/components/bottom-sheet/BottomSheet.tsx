@@ -27,6 +27,8 @@ export type BottomSheetProps = {
   describedById?: string;
   className?: string;
   bodyClassName?: string;
+  /** Accessible label for the close control (defaults to `title` when omitted). */
+  closeAriaLabel?: string;
   variant?: BottomSheetVariant;
 };
 
@@ -72,6 +74,7 @@ export function BottomSheet({
   describedById,
   className,
   bodyClassName,
+  closeAriaLabel,
   variant = 'default'
 }: BottomSheetProps) {
   const titleId = useId();
@@ -232,7 +235,7 @@ export function BottomSheet({
             <h2 id={labelledById ?? titleId} className={styles.title}>{title}</h2>
             {description ? <p id={describedById ?? descriptionId} className={styles.description}>{description}</p> : null}
           </div>
-          <button ref={closeButtonRef} type="button" className={styles.closeButton} onClick={resetAndClose} aria-label={title}>
+          <button ref={closeButtonRef} type="button" className={styles.closeButton} onClick={resetAndClose} aria-label={closeAriaLabel ?? title}>
             <X size={18} />
           </button>
         </header>

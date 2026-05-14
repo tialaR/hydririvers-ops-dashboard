@@ -61,7 +61,8 @@
   border-left: 0;
   border-right: 0;
   border-bottom: 0;
-  padding-bottom: env(safe-area-inset-bottom);
+  /* safe-area no rodapé fica no .footer — evita dobrar inset com padding do sheet */
+  padding-bottom: 0;
 }
 
 .handleZone {
@@ -134,9 +135,11 @@
 }
 
 .footer {
+  flex-shrink: 0;
   padding: .9rem 1rem calc(.9rem + env(safe-area-inset-bottom));
   border-top: 1px solid var(--hx-line-soft, rgba(255,255,255,.1));
   background: linear-gradient(180deg, color-mix(in srgb, var(--hx-card, #071015) 0%, transparent), color-mix(in srgb, var(--hx-card, #071015) 92%, transparent));
+  box-shadow: 0 -0.5rem 1.25rem rgba(0, 0, 0, 0.28);
 }
 
 @media (orientation: landscape) and (max-height: 600px) {

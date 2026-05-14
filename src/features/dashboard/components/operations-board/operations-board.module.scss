@@ -918,6 +918,57 @@
   font-weight: 800;
 }
 
+/*
+ * Mobile filter sheet body: avoid wrapping with .hx-filter-drawer — globals.scss
+ * sets height: 100vh + grid on that class, which fights BottomSheet scroll layout.
+ */
+.filterSheetRoot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  padding-bottom: 0.35rem;
+}
+
+/* Footer row inside BottomSheet .footer — grid keeps two equal columns without squashing */
+.filterSheetFooter {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  width: 100%;
+  gap: 0.75rem;
+  align-items: stretch;
+}
+
+.filterSheetFooterSecondary,
+.filterSheetFooterPrimary {
+  min-height: 3rem;
+  border-radius: 0.875rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 0.65rem;
+  touch-action: manipulation;
+}
+
+.filterSheetFooterSecondary {
+  color: rgba(235, 239, 242, 0.92);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.filterSheetFooterPrimary {
+  color: #090b0e;
+  background: linear-gradient(135deg, #f8df9a, #d7a945);
+}
+
+.filterSheetFooterSecondary:focus-visible,
+.filterSheetFooterPrimary:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--hx-cyan, #14d8c4) 85%, transparent);
+  outline-offset: 2px;
+}
+
 @media (max-width: 1220px) {
   .board,
   .boardExpanded {

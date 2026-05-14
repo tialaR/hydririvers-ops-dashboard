@@ -1410,14 +1410,14 @@ export function OperationsBoard({
   const costTimelineActiveIndex = getCostTimelineActiveIndex(selectedProgress);
   const filtersPanel = (
     <>
-      <div className="hx-drawer-head">
-        <div><small>{tBoard('filters.eyebrow')}</small><h2>{tBoard('filters.title')}</h2></div>
-        {!isMobileViewport ? (
+      {!isMobileViewport ? (
+        <div className="hx-drawer-head">
+          <div><small>{tBoard('filters.eyebrow')}</small><h2>{tBoard('filters.title')}</h2></div>
           <button type="button" onClick={() => setDrawerOpen(false)} aria-label={tBoard('filters.close')}>
             <X size={18} />
           </button>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
       <div className="hx-drawer-count">
         <strong>{tBoard('filters.results', { count: filteredCargoes.length })}</strong>
         <span>{activeFilters ? tBoard('filters.activeCount', { count: activeFilters }) : tBoard('filters.inactive')}</span>
@@ -2248,8 +2248,19 @@ export function OperationsBoard({
         description={tBoard('filters.mobileDescription')}
         snapPoints={['fullscreen']}
         variant="fullscreen"
+        closeAriaLabel={tBoard('filters.close')}
+        footer={
+          <div className={styles.filterSheetFooter}>
+            <button type="button" className={styles.filterSheetFooterSecondary} onClick={resetFilters}>
+              {tBoard('filters.mobileClearAction')}
+            </button>
+            <button type="button" className={styles.filterSheetFooterPrimary} onClick={() => setDrawerOpen(false)}>
+              {tBoard('filters.mobileApplyAction')}
+            </button>
+          </div>
+        }
       >
-        <div className="hx-filter-drawer hx-filter-drawer--mobile" role="region" aria-label={tBoard('filters.advancedRegion')}>
+        <div className={styles.filterSheetRoot} role="region" aria-label={tBoard('filters.advancedRegion')}>
           {filtersPanel}
         </div>
       </BottomSheet>
