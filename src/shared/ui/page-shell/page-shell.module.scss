@@ -54,6 +54,17 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Com chrome mobile (admin): título já na topbar — evita segundo h1 + faixa pesada. */
+@media (max-width: 860px) {
+  .header {
+    display: none;
+  }
+
+  .shell {
+    gap: 0.5rem;
+  }
+}
+
 @media (max-width: 720px) {
   .header {
     padding: .92rem .9rem .95rem;

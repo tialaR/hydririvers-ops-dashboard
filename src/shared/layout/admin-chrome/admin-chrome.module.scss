@@ -499,3 +499,96 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* Esconde o chrome desktop (topbar + busca + ações) no mobile — uma única camada no header mobile. */
+.desktopChromeShell {
+  display: block;
+  flex-shrink: 0;
+}
+
+@media (max-width: 860px) {
+  .desktopChromeShell {
+    display: none;
+  }
+}
+
+.mobileSearchTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  padding: 0;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: color-mix(in srgb, var(--hx-card, #071015) 82%, transparent);
+  color: var(--hx-cyan, #14d8c4);
+  cursor: pointer;
+}
+
+.mobileSearchTrigger:focus-visible {
+  outline: 2px solid var(--hx-cyan, #14d8c4);
+  outline-offset: 2px;
+}
+
+.mobileSearchSheet {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 0;
+}
+
+.mobileSearchField {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 3.25rem;
+  padding: 0 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(235, 239, 242, 0.75);
+}
+
+.mobileSearchField input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  color: var(--hx-text, #eef7f6);
+  font-size: 1.05rem;
+  outline: 0;
+}
+
+.mobileSearchShortcutsLabel {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(235, 239, 242, 0.55);
+}
+
+.mobileSearchShortcuts {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.mobileSearchShortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.85rem;
+  padding: 0 0.85rem;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 650;
+}
+
+.mobileSearchShortcut:focus-visible {
+  outline: 2px solid var(--hx-cyan, #14d8c4);
+  outline-offset: 2px;
+}

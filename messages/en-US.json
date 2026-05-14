@@ -1365,6 +1365,15 @@
         "negotiations": "Deals",
         "tracking": "Tracking"
       },
+      "searchSheet": {
+        "title": "Search and go",
+        "closeSheet": "Close search",
+        "description": "Demo: use shortcuts for main areas. On Cargas, contextual search filters the list.",
+        "placeholder": "Reference or term…",
+        "inputAria": "Search field (demo)",
+        "openAria": "Open search and shortcuts",
+        "shortcutsTitle": "Go to"
+      },
       "accountSheet": {
         "title": "Account",
         "closeSheet": "Close account panel",

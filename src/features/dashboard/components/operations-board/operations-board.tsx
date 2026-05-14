@@ -1460,7 +1460,8 @@ export function OperationsBoard({
             </div>
           </div>
 
-          <div className="hr-cargo-list-search">
+          <div className={styles.cargoSearchWrap}>
+            <div className="hr-cargo-list-search">
             <Search size={16} />
             <input
               value={query}
@@ -1472,6 +1473,7 @@ export function OperationsBoard({
               placeholder={tBoard('list.searchPlaceholder')}
               aria-label={tBoard('list.searchAria')}
             />
+            </div>
           </div>
 
           <div className="hr-cargo-status-filters">
