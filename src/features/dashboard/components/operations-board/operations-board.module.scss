@@ -4470,3 +4470,59 @@
     animation: none;
   }
 }
+
+@media (max-width: 860px) {
+  .hydroRadarSection {
+    margin-bottom: calc(var(--mobile-bottom-nav-height, 4.5rem) + 0.85rem);
+  }
+}
+
+/* Lista Cargas: busca contextual em formato mobile (pill), sem “barra desktop” espremida. */
+@media (max-width: 860px) {
+  .cargoSearchWrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .cargoSearchWrap :global(.hr-cargo-list-search) {
+    width: 100%;
+    min-height: 2.85rem;
+    border-radius: 999px;
+    padding: 0 1rem;
+    gap: 0.6rem;
+    background: color-mix(in srgb, var(--hx-card, #071015) 82%, transparent);
+    border: 1px solid color-mix(in srgb, var(--hx-cyan, #14d8c4) 22%, var(--hx-line-soft, rgba(255, 255, 255, 0.1)));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      0 0.4rem 1.2rem rgba(0, 0, 0, 0.22);
+  }
+
+  .cargoSearchWrap :global(.hr-cargo-list-search input) {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+}
+
+/* HYDRI_OPERATIONS_MOBILE_DOCK_RESCUE_V6
+   Evita cards/ABs atrás do dock e melhora respiro das listas mobile. */
+@media (max-width: 860px) {
+  :global(.hr-cargo-card:last-child),
+  :global(.hx-card:last-child) {
+    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 2.5rem + env(safe-area-inset-bottom));
+  }
+
+  :global(.hx-map-fab),
+  :global(.hr-map-fab),
+  :global(.hydro-map-fab),
+  :global(.rastreio-map-fab),
+  :global([data-mobile-fab="map"]),
+  :global([data-map-fab]) {
+    bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 1.25rem + env(safe-area-inset-bottom));
+    right: 1rem;
+    z-index: 53;
+  }
+
+  .hydroRadarSection {
+    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 2.5rem + env(safe-area-inset-bottom));
+  }
+}

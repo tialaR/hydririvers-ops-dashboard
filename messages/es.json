@@ -1365,6 +1365,15 @@
         "negotiations": "Negocios",
         "tracking": "Rastreo"
       },
+      "searchSheet": {
+        "title": "Buscar e ir",
+        "closeSheet": "Cerrar búsqueda",
+        "description": "Demo: usa los accesos a las áreas principales. En Cargas, la búsqueda contextual filtra la lista.",
+        "placeholder": "Referencia o término…",
+        "inputAria": "Campo de búsqueda (demo)",
+        "openAria": "Abrir búsqueda y accesos",
+        "shortcutsTitle": "Ir a"
+      },
       "accountSheet": {
         "title": "Cuenta",
         "closeSheet": "Cerrar panel de cuenta",

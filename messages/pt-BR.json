@@ -1365,6 +1365,15 @@
         "negotiations": "Negociações",
         "tracking": "Rastreio"
       },
+      "searchSheet": {
+        "title": "Buscar e navegar",
+        "closeSheet": "Fechar busca",
+        "description": "Demo: use os atalhos para as áreas principais. Na página Cargas, a busca contextual filtra a lista.",
+        "placeholder": "Referência ou termo…",
+        "inputAria": "Campo de busca (demo)",
+        "openAria": "Abrir busca e atalhos",
+        "shortcutsTitle": "Ir para"
+      },
       "accountSheet": {
         "title": "Conta",
         "closeSheet": "Fechar painel de conta",

@@ -159,6 +159,8 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const [localeOpen, setLocaleOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [accountSheetOpen, setAccountSheetOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [mobileSearchQuery, setMobileSearchQuery] = useState('');
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
@@ -211,6 +213,19 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const hasUnreadNotifications = unreadNotificationsCount > 0;
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
   const showMockTools = isMockQaUiEnabled();
+
+  const mobileSearchShortcutList = useMemo(
+    () => [
+      { href: intlAppPaths.home, label: tChrome('mobile.bottomNav.overview'), Icon: LayoutDashboard },
+      { href: intlAppPaths.dashboard.home, label: tChrome('mobile.bottomNav.dashboard'), Icon: Gauge },
+      { href: intlAppPaths.cargos.marketplace, label: tChrome('mobile.bottomNav.cargos'), Icon: Package },
+      { href: intlAppPaths.negotiations.home, label: tChrome('mobile.bottomNav.negotiations'), Icon: Handshake },
+      { href: intlAppPaths.tracking.home, label: tChrome('mobile.bottomNav.tracking'), Icon: Route },
+      { href: intlAppPaths.cargos.myCargos, label: t('myCargoes'), Icon: Boxes },
+      { href: intlAppPaths.auth.profile, label: tChrome('mobile.accountSheet.profile'), Icon: User }
+    ],
+    [t, tChrome]
+  );
 
   useEffect(() => {
     const updateViewport = () => setIsMobileViewport(window.innerWidth <= 860);
@@ -399,12 +414,20 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
   function openMobileAccountSheet() {
     setNotificationsOpen(false);
+    setMobileSearchOpen(false);
     setAccountSheetOpen(true);
   }
 
   function toggleMobileNotificationsSheet() {
     setAccountSheetOpen(false);
+    setMobileSearchOpen(false);
     setNotificationsOpen((current) => !current);
+  }
+
+  function openMobileSearchSheet() {
+    setAccountSheetOpen(false);
+    setNotificationsOpen(false);
+    setMobileSearchOpen(true);
   }
 
   function handleOpenMockFromAccount() {
@@ -624,6 +647,15 @@ export function AdminChrome({ children }: AdminChromeProps) {
               <div className="hx-mobile-topbar__actions">
                 <button
                   type="button"
+                  className={styles.mobileSearchTrigger}
+                  aria-label={tChrome('mobile.searchSheet.openAria')}
+                  aria-expanded={mobileSearchOpen}
+                  onClick={openMobileSearchSheet}
+                >
+                  <Search size={18} />
+                </button>
+                <button
+                  type="button"
                   className="hx-bell"
                   aria-label={tChrome('header.notificationsAria', { count: unreadNotificationsCount })}
                   aria-expanded={notificationsOpen}
@@ -641,7 +673,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
                   onClick={openMobileAccountSheet}
                 >
                   {navigationUser?.avatarUrl ? (
-                    <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} unoptimized />
+                    <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} sizes="38px" unoptimized />
                   ) : (
                     getCompactDisplayInitials(navigationUser?.name ?? '')
                   )}
@@ -656,6 +688,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
             </div>
           </header>
 
+          <div className={styles.desktopChromeShell}>
           <header
             className={`hx-topbar hr-topbar${isDashboardHeaderScrolled ? ' hx-topbar--scrolled' : ''}`}
             data-scrolled={isDashboardHeaderScrolled ? 'true' : 'false'}
@@ -759,7 +792,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
               >
                 <span className="hx-profile-avatar">
                   {navigationUser?.avatarUrl ? (
-                    <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} unoptimized />
+                    <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} sizes="44px" unoptimized />
                   ) : (
                     getCompactDisplayInitials(navigationUser?.name ?? '')
                   )}
@@ -773,6 +806,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
               </Link>
             </div>
           </header>
+          </div>
 
           <div className="hr-dashboard-content-root">
             {children}
@@ -803,7 +837,10 @@ export function AdminChrome({ children }: AdminChromeProps) {
         open={isMobileViewport && notificationsOpen}
         onOpenChange={(next) => {
           setNotificationsOpen(next);
-          if (next) setAccountSheetOpen(false);
+          if (next) {
+            setAccountSheetOpen(false);
+            setMobileSearchOpen(false);
+          }
         }}
         title={tNotifications('mobileTitle')}
         description={tNotifications('emptyDescription')}
@@ -823,7 +860,10 @@ export function AdminChrome({ children }: AdminChromeProps) {
         open={isMobileViewport && accountSheetOpen}
         onOpenChange={(next) => {
           setAccountSheetOpen(next);
-          if (next) setNotificationsOpen(false);
+          if (next) {
+            setNotificationsOpen(false);
+            setMobileSearchOpen(false);
+          }
         }}
         title={tChrome('mobile.accountSheet.title')}
         description={tChrome('mobile.accountSheet.description')}
@@ -835,7 +875,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
           <div className={styles.accountSheetUser}>
             <div className={styles.accountSheetAvatar}>
               {navigationUser?.avatarUrl ? (
-                <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} unoptimized />
+                <Image src={navigationUser.avatarUrl} alt="" width={44} height={44} sizes="44px" unoptimized />
               ) : (
                 getCompactDisplayInitials(navigationUser?.name ?? '')
               )}
@@ -948,6 +988,46 @@ export function AdminChrome({ children }: AdminChromeProps) {
               {t('login')}
             </Link>
           )}
+        </div>
+      </BottomSheet>
+
+      <BottomSheet
+        open={isMobileViewport && mobileSearchOpen}
+        onOpenChange={(next) => {
+          setMobileSearchOpen(next);
+          if (!next) setMobileSearchQuery('');
+          if (next) {
+            setAccountSheetOpen(false);
+            setNotificationsOpen(false);
+          }
+        }}
+        title={tChrome('mobile.searchSheet.title')}
+        description={tChrome('mobile.searchSheet.description')}
+        closeAriaLabel={tChrome('mobile.searchSheet.closeSheet')}
+        snapPoints={['75vh']}
+        variant="strong"
+      >
+        <div className={styles.mobileSearchSheet}>
+          <label className={styles.mobileSearchField}>
+            <Search size={18} aria-hidden />
+            <input
+              type="search"
+              value={mobileSearchQuery}
+              onChange={(event) => setMobileSearchQuery(event.target.value)}
+              placeholder={tChrome('mobile.searchSheet.placeholder')}
+              aria-label={tChrome('mobile.searchSheet.inputAria')}
+              autoComplete="off"
+            />
+          </label>
+          <p className={styles.mobileSearchShortcutsLabel}>{tChrome('mobile.searchSheet.shortcutsTitle')}</p>
+          <nav className={styles.mobileSearchShortcuts} aria-label={tChrome('mobile.searchSheet.shortcutsTitle')}>
+            {mobileSearchShortcutList.map(({ href, label, Icon }) => (
+              <Link key={href} href={href} className={styles.mobileSearchShortcut} onClick={() => setMobileSearchOpen(false)}>
+                <Icon size={18} aria-hidden />
+                <span>{label}</span>
+              </Link>
+            ))}
+          </nav>
         </div>
       </BottomSheet>
     </div>
