@@ -1,29 +1,77 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
-import { PageShell } from '@/shared/ui/page-shell/page-shell';
+
 import { Breadcrumb } from '@/shared/ui/breadcrumb/breadcrumb';
+import { PageShell } from '@/shared/ui/page-shell/page-shell';
 import { CargoDetailLoader } from '@/features/cargo-market/components/cargo-detail/cargo-detail-loader';
 import { getCargoById } from '@/features/marketplace/services/marketplace.service';
-import { getSessionUser } from '@/shared/server/auth';
-import { intlAppPaths } from '@/shared/routing/app-routes';
+import { createCargoWaterwayTrackingScenario } from '@/features/waterway-tracking';
 import { translateMock } from '@/shared/i18n/mock-content';
+import { intlAppPaths } from '@/shared/routing/app-routes';
+import { getSessionUser } from '@/shared/server/auth';
 
-export default async function CargoDetailPage({ params }: { params: Promise<{ id: string; locale: string }> }) {
+import CargoMapImmersiveClient from './cargo-map-immersive-client';
+
+type CargoDetailPageProps = {
+  params: Promise<{
+    id: string;
+    locale: string;
+  }>;
+  searchParams?: Promise<{
+    view?: string;
+  }>;
+};
+
+const VISUAL_OVERVIEW_VIEW = 'visao-geral';
+
+export default async function CargoDetailPage({
+  params,
+  searchParams,
+}: CargoDetailPageProps) {
   const { id, locale } = await params;
+  const resolvedSearchParams = searchParams ? await searchParams : {};
   const cargo = await getCargoById(id);
-  if (!cargo) notFound();
+
+  if (!cargo) {
+    notFound();
+  }
+
+  const title = translateMock(locale, cargo.title);
+  const currentView = resolvedSearchParams.view;
+
+  if (currentView === VISUAL_OVERVIEW_VIEW) {
+    const trackingScenario = createCargoWaterwayTrackingScenario({
+      cargoId: id,
+      title,
+      origin: cargo.origin,
+      destination: cargo.destination,
+    });
+
+    return (
+      <CargoMapImmersiveClient
+        locale={locale}
+        cargoId={id}
+        trackingScenario={trackingScenario}
+      />
+    );
+  }
 
   const user = await getSessionUser();
   const viewer = user ? { id: user.id, role: user.role, approved: user.approved } : null;
   const t = await getTranslations({ locale, namespace: 'pages.cargoDetail' });
   const nav = await getTranslations({ locale, namespace: 'nav' });
   const common = await getTranslations({ locale, namespace: 'common' });
-  const title = translateMock(locale, cargo.title);
   const routeDescription = `${cargo.origin}${common('routeArrow')}${cargo.destination}`;
 
   return (
     <PageShell eyebrow={t('eyebrow')} title={title} description={routeDescription}>
-      <Breadcrumb locale={locale} items={[{ label: nav('cargoes'), href: intlAppPaths.cargos.marketplace }, { label: title }]} />
+      <Breadcrumb
+        locale={locale}
+        items={[
+          { label: nav('cargoes'), href: intlAppPaths.cargos.marketplace },
+          { label: title },
+        ]}
+      />
       <CargoDetailLoader id={id} initialCargo={cargo} viewer={viewer} />
     </PageShell>
   );

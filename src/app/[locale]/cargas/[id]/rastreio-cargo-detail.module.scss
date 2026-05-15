@@ -1,0 +1,1585 @@
+:global(html.hx-rastreio-immersive),
+:global(body.hx-rastreio-immersive) {
+  overflow: hidden;
+  background: #031018;
+}
+
+.page {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  overflow: hidden;
+  isolation: isolate;
+  color: #eef7f7;
+  background:
+    radial-gradient(circle at 54% 38%, rgba(38, 205, 188, 0.14), transparent 30%),
+    radial-gradient(circle at 24% 74%, rgba(38, 205, 188, 0.08), transparent 24%),
+    linear-gradient(180deg, #031018 0%, #06141b 48%, #041017 100%);
+}
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.viewport::before,
+.viewport::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+}
+
+.viewport::before {
+  background-image:
+    linear-gradient(rgba(99, 201, 195, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 201, 195, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(99, 201, 195, 0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 201, 195, 0.026) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem, 4.5rem 4.5rem, 0.9rem 0.9rem, 0.9rem 0.9rem;
+  opacity: 0.74;
+}
+
+.viewport::after {
+  background:
+    radial-gradient(circle at 50% 48%, rgba(121, 244, 230, 0.1), transparent 18%),
+    linear-gradient(180deg, rgba(2, 10, 13, 0.08), rgba(2, 10, 13, 0.34));
+}
+
+.routeCanvas {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: mapEnter 620ms ease-out both;
+}
+
+.svgBackground {
+  fill: transparent;
+}
+
+.waterwaySecondaryPath,
+.waterwaySecondaryPathMuted,
+.waterwayTertiaryPath,
+.waterwayDashedPath {
+  fill: none;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.waterwaySecondaryPath {
+  stroke: rgba(159, 214, 211, 0.12);
+  stroke-width: 13;
+}
+
+.waterwaySecondaryPathMuted {
+  stroke: rgba(159, 214, 211, 0.075);
+  stroke-width: 9;
+}
+
+.waterwayTertiaryPath {
+  stroke: rgba(159, 214, 211, 0.09);
+  stroke-width: 7;
+}
+
+.waterwayDashedPath {
+  stroke: rgba(159, 214, 211, 0.13);
+  stroke-width: 3;
+  stroke-dasharray: 6 13;
+  opacity: 0.42;
+}
+
+.mapLabelStrong,
+.mapLabel,
+.mapLabelRotated {
+  fill: rgba(220, 243, 243, 0.24);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  user-select: none;
+  pointer-events: none;
+}
+
+.mapLabelStrong {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.mapLabel {
+  font-size: 10px;
+  opacity: 0.58;
+}
+
+.mapLabelRotated {
+  font-size: 10px;
+  transform: rotate(-28deg);
+  transform-origin: 110px 808px;
+  opacity: 0.56;
+}
+
+.portDot,
+.portDotMuted {
+  fill: rgba(226, 245, 245, 0.72);
+  pointer-events: none;
+}
+
+.portDotMuted {
+  opacity: 0.36;
+}
+
+.routeUnderlayPath,
+.routeRemainingPath,
+.routeTravelledPath,
+.routeFlowPath {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+}
+
+.routeUnderlayPath {
+  stroke: rgba(191, 226, 223, 0.13);
+  stroke-width: 18;
+  filter: url('#routeSoftGlow');
+}
+
+.routeRemainingPath {
+  stroke: url('#remainingRouteGradient');
+  stroke-width: 6.8;
+  opacity: 0.5;
+}
+
+.routeTravelledPath {
+  stroke: url('#travelledRouteGradient');
+  stroke-width: 7.4;
+  opacity: 0.94;
+  filter: url('#routeSoftGlow');
+}
+
+.routeFlowPath {
+  stroke: rgba(238, 255, 252, 0.96);
+  stroke-width: 2.8;
+  stroke-dasharray: 7 13;
+  stroke-dashoffset: 0;
+  opacity: 0.86;
+  animation:
+    routeFlow 2.6s linear infinite,
+    routeReveal 900ms ease-out both;
+}
+
+.originMarker,
+.destinationMarker,
+.vesselMarker {
+  pointer-events: none;
+}
+
+.originPulse,
+.destinationPulse,
+.vesselPing {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.originPulse {
+  fill: rgba(108, 245, 226, 0.12);
+  stroke: rgba(108, 245, 226, 0.44);
+  stroke-width: 1.4;
+  animation: markerPulse 2.25s ease-in-out infinite;
+}
+
+.originRing {
+  fill: rgba(108, 245, 226, 0.18);
+  stroke: rgba(117, 250, 232, 0.7);
+  stroke-width: 2;
+}
+
+.originCore {
+  fill: #9ffff2;
+  filter: drop-shadow(0 0 10px rgba(108, 245, 226, 0.55));
+}
+
+.destinationPulse {
+  fill: rgba(255, 190, 88, 0.13);
+  stroke: rgba(255, 190, 88, 0.5);
+  stroke-width: 1.4;
+  animation: markerPulse 2.4s ease-in-out infinite;
+}
+
+.destinationRing {
+  fill: rgba(255, 190, 88, 0.2);
+  stroke: rgba(255, 207, 118, 0.76);
+  stroke-width: 2;
+}
+
+.destinationCore {
+  fill: #ffd17a;
+  filter: drop-shadow(0 0 12px rgba(255, 198, 94, 0.58));
+}
+
+.vesselMarker {
+  animation: vesselBob 3.3s ease-in-out infinite;
+}
+
+.vesselPing {
+  fill: rgba(111, 245, 231, 0.12);
+  stroke: rgba(111, 245, 231, 0.4);
+  stroke-width: 1.8;
+  animation: vesselRadar 2.05s ease-in-out infinite;
+}
+
+.vesselMarkerCore {
+  fill: rgba(11, 38, 43, 0.92);
+  stroke: rgba(111, 245, 231, 0.72);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 16px rgba(87, 238, 224, 0.42));
+}
+
+.vesselIcon path:first-child {
+  fill: rgba(119, 244, 231, 0.98);
+  stroke: rgba(232, 255, 252, 0.36);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+
+.vesselIcon path:not(:first-child) {
+  fill: none;
+  stroke: rgba(4, 18, 22, 0.72);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.topBar {
+  position: absolute;
+  z-index: 6;
+  top: max(0.9rem, env(safe-area-inset-top));
+  left: 1rem;
+  right: 1rem;
+  display: grid;
+  grid-template-columns: 3.3rem 1fr 3.3rem;
+  gap: 0.85rem;
+  align-items: start;
+}
+
+.iconButton {
+  width: 3.3rem;
+  height: 3.3rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  border: 1px solid rgba(137, 203, 201, 0.18);
+  background: rgba(4, 12, 18, 0.5);
+  backdrop-filter: blur(16px);
+  color: #f1f7f7;
+  text-decoration: none;
+}
+
+.iconButton svg {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.statusCapsule {
+  justify-self: center;
+  padding: 0.2rem 0.35rem;
+  text-align: center;
+  opacity: 0.68;
+}
+
+.statusCapsule span {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: rgba(111, 238, 228, 0.94);
+}
+
+.statusCapsule strong {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: rgba(242, 248, 248, 0.96);
+}
+
+.activeHud {
+  position: absolute;
+  z-index: 5;
+  top: calc(max(1rem, env(safe-area-inset-top)) + 4.6rem);
+  left: 1rem;
+  width: min(10.8rem, calc(100vw - 7.3rem));
+  padding: 0.56rem 0.64rem 0.6rem;
+  border-radius: 0.82rem;
+  border: 1px solid rgba(121, 204, 199, 0.1);
+  background: rgba(4, 12, 18, 0.34);
+  backdrop-filter: blur(12px);
+  opacity: 0.62;
+}
+
+.hudEyebrow {
+  display: block;
+  margin-bottom: 0.14rem;
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: #73ece2;
+  text-transform: uppercase;
+}
+
+.hudValue {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #eef7f7;
+}
+
+.hudDescription {
+  margin: 0.24rem 0 0;
+  font-size: 0.64rem;
+  line-height: 1.32;
+  color: rgba(227, 243, 243, 0.64);
+}
+
+.sideRail {
+  position: absolute;
+  z-index: 6;
+  right: 0.72rem;
+  top: 57%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transform: translateY(-50%);
+}
+
+.railButton {
+  width: 2.7rem;
+  height: 2.7rem;
+  display: grid;
+  place-items: center;
+  border-radius: 0.86rem;
+  border: 1px solid rgba(128, 205, 201, 0.16);
+  background: rgba(4, 12, 18, 0.46);
+  backdrop-filter: blur(16px);
+  color: rgba(238, 247, 247, 0.86);
+}
+
+.railButton svg {
+  width: 1.08rem;
+  height: 1.08rem;
+}
+
+.railButtonActive {
+  border-color: rgba(107, 238, 226, 0.42);
+  color: #74efe4;
+  box-shadow: 0 0 20px rgba(118, 239, 228, 0.12);
+}
+
+.mapHitbox {
+  position: absolute;
+  z-index: 7;
+  width: 3.2rem;
+  height: 3.2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
+.mapHitbox::after {
+  position: absolute;
+  inset: 1.1rem;
+  content: '';
+  border-radius: 999px;
+  background: rgba(126, 247, 235, 0.32);
+  box-shadow: 0 0 1rem rgba(126, 247, 235, 0.16);
+  opacity: 0.48;
+}
+
+.destinationHitbox::after {
+  background: rgba(255, 205, 118, 0.35);
+  box-shadow: 0 0 1rem rgba(255, 205, 118, 0.18);
+}
+
+.mapHitbox:focus-visible {
+  outline: 2px solid rgba(126, 247, 235, 0.78);
+  outline-offset: 0.18rem;
+}
+
+.mapTag {
+  position: absolute;
+  z-index: 8;
+  max-width: 8.4rem;
+  padding: 0.42rem 0.54rem 0.46rem;
+  border-radius: 0.76rem;
+  border: 1px solid rgba(125, 201, 196, 0.1);
+  background: rgba(4, 12, 18, 0.44);
+  backdrop-filter: blur(12px);
+  animation: tagEnter 160ms ease-out both;
+}
+
+.mapTag span {
+  display: block;
+  margin-bottom: 0.06rem;
+  font-size: 0.54rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #74ede2;
+}
+
+.mapTag strong {
+  display: block;
+  font-size: 0.72rem;
+  line-height: 1.14;
+  font-weight: 800;
+  color: #eef7f7;
+}
+
+.originTag {
+  left: 4.3rem;
+  top: 68.8%;
+}
+
+.vesselTag {
+  left: 48.5%;
+  top: 50.4%;
+  transform: translateX(-38%);
+}
+
+.destinationTag {
+  right: 4.7rem;
+  top: 39.6%;
+}
+
+.bottomHud {
+  position: absolute;
+  z-index: 5;
+  left: 0.85rem;
+  right: 0.85rem;
+  bottom: max(0.58rem, env(safe-area-inset-bottom));
+  padding: 0;
+  opacity: 0.64;
+  pointer-events: none;
+}
+
+.bottomHud::before {
+  position: absolute;
+  left: -0.2rem;
+  right: -0.2rem;
+  bottom: -0.35rem;
+  z-index: -1;
+  height: 4.8rem;
+  border-radius: 1.4rem;
+  content: '';
+  background:
+    linear-gradient(
+      180deg,
+      rgba(2, 10, 13, 0) 0%,
+      rgba(2, 10, 13, 0.28) 44%,
+      rgba(2, 10, 13, 0.58) 100%
+    );
+}
+
+.bottomHeader {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  margin-bottom: 0.28rem;
+}
+
+.bottomEyebrow {
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: rgba(118, 237, 227, 0.9);
+}
+
+.bottomTitle {
+  font-size: 0.74rem;
+  font-weight: 800;
+  line-height: 1;
+  color: rgba(241, 247, 247, 0.94);
+}
+
+.bottomMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: center;
+  overflow: hidden;
+}
+
+.metaItem {
+  min-height: 1.26rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0.18rem 0.34rem;
+  border-radius: 999px;
+  background: rgba(4, 12, 18, 0.22);
+  backdrop-filter: blur(8px);
+  font-size: 0.52rem;
+  font-weight: 700;
+  white-space: nowrap;
+  color: rgba(237, 247, 247, 0.78);
+}
+
+.metaItem svg {
+  width: 0.64rem;
+  height: 0.64rem;
+  color: #75eee3;
+}
+
+@keyframes mapEnter {
+  from {
+    opacity: 0;
+    transform: scale(1.018) translateY(0.55rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes routeReveal {
+  from {
+    stroke-dasharray: 0 100;
+  }
+
+  to {
+    stroke-dasharray: 7 13;
+  }
+}
+
+@keyframes routeFlow {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -40;
+  }
+}
+
+@keyframes markerPulse {
+  0%,
+  100% {
+    opacity: 0.48;
+    transform: scale(0.85);
+  }
+
+  50% {
+    opacity: 0.96;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes vesselRadar {
+  0%,
+  100% {
+    opacity: 0.42;
+    transform: scale(0.82);
+  }
+
+  50% {
+    opacity: 0.98;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes vesselBob {
+  0%,
+  100% {
+    transform: translate(218px, 520px) rotate(-42deg) translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate(218px, 520px) rotate(-42deg) translate3d(1.5px, -2px, 0);
+  }
+}
+
+@keyframes tagEnter {
+  from {
+    opacity: 0;
+    transform: translateY(0.18rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 420px) {
+  .topBar {
+    left: 0.82rem;
+    right: 0.82rem;
+  }
+
+  .sideRail {
+    right: 0.54rem;
+  }
+
+  .railButton {
+    width: 2.54rem;
+    height: 2.54rem;
+  }
+
+  .activeHud {
+    left: 0.82rem;
+    width: min(10rem, calc(100vw - 7rem));
+  }
+
+  .originTag {
+    left: 3.9rem;
+  }
+
+  .destinationTag {
+    right: 4.25rem;
+  }
+
+  .bottomTitle {
+    font-size: 0.7rem;
+  }
+
+  .metaItem {
+    font-size: 0.49rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .routeCanvas,
+  .routeFlowPath,
+  .originPulse,
+  .destinationPulse,
+  .vesselPing,
+  .vesselMarker,
+  .mapTag {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v8-fixed-only:start === */
+
+/* V8 FIXED ONLY:
+   1) navio com radar mais parecido com o anexo;
+   2) rail lateral mais baixo;
+   3) offsets dos labels coerentes com os novos pontos.
+*/
+
+.sideRail {
+  top: 63.5%;
+  transform: translateY(-50%);
+}
+
+.originTag {
+  left: 4rem;
+  top: 70.4%;
+}
+
+.destinationTag {
+  right: 4.35rem;
+  top: 38.4%;
+}
+
+.vesselTag {
+  left: 48.5%;
+  top: 49.5%;
+  transform: translateX(-38%);
+}
+
+.originMarker,
+.destinationMarker {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.originPulse {
+  animation: hydriEndpointPulseV8 2.45s ease-in-out infinite;
+}
+
+.destinationPulse {
+  animation: hydriEndpointPulseV8 2.65s ease-in-out infinite;
+}
+
+.vesselMarker {
+  pointer-events: none;
+  animation: none;
+}
+
+.vesselRadarOuter,
+.vesselRadarInner,
+.vesselDriftGroup {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.vesselRadarOuter {
+  fill: rgba(111, 245, 231, 0.08);
+  stroke: rgba(111, 245, 231, 0.24);
+  stroke-width: 1.4;
+  animation: hydriVesselRadarOuterV8 3.1s ease-out infinite;
+}
+
+.vesselRadarInner {
+  fill: rgba(111, 245, 231, 0.13);
+  stroke: rgba(111, 245, 231, 0.38);
+  stroke-width: 1.45;
+  animation: hydriVesselRadarInnerV8 2.35s ease-in-out infinite;
+}
+
+.vesselDriftGroup {
+  animation: hydriVesselFloatV8 3.2s ease-in-out infinite;
+}
+
+.vesselMarkerCore {
+  fill: rgba(9, 38, 43, 0.92);
+  stroke: rgba(123, 248, 238, 0.8);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 16px rgba(96, 240, 226, 0.46));
+}
+
+.vesselIcon path:first-child {
+  fill: rgba(121, 248, 237, 0.98);
+  stroke: rgba(236, 255, 252, 0.42);
+  stroke-width: 1.45;
+  stroke-linejoin: round;
+}
+
+.vesselIcon path:not(:first-child) {
+  fill: none;
+  stroke: rgba(3, 18, 22, 0.72);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@keyframes hydriVesselRadarOuterV8 {
+  0% {
+    opacity: 0.62;
+    transform: scale(0.76);
+  }
+
+  72% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+}
+
+@keyframes hydriVesselRadarInnerV8 {
+  0%,
+  100% {
+    opacity: 0.52;
+    transform: scale(0.94);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes hydriVesselFloatV8 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(1.4px, -1.8px, 0);
+  }
+}
+
+@keyframes hydriEndpointPulseV8 {
+  0%,
+  100% {
+    opacity: 0.46;
+    transform: scale(0.84);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.22);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .originPulse,
+  .destinationPulse,
+  .vesselRadarOuter,
+  .vesselRadarInner,
+  .vesselDriftGroup {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v8-fixed-only:end === */
+
+/* === hydri-map-v9-fixed-precision:start === */
+
+/* V9: somente micro-tuning visual. */
+
+.sideRail {
+  top: 72%;
+  transform: translateY(-50%);
+}
+
+.originTag {
+  left: 3.65rem;
+  top: 62.8%;
+}
+
+.destinationTag {
+  right: 3.9rem;
+  top: 30.4%;
+}
+
+.vesselTag {
+  left: 47.8%;
+  top: 41.8%;
+  transform: translateX(-38%);
+}
+
+.vesselMarker {
+  pointer-events: none;
+  animation: none;
+}
+
+.vesselRadarOuter,
+.vesselRadarInner,
+.vesselDriftGroup {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.vesselRadarOuter {
+  fill: rgba(111, 245, 231, 0.09);
+  stroke: rgba(111, 245, 231, 0.28);
+  stroke-width: 1.55;
+  animation: hydriVesselRadarOuterV9 3.05s ease-out infinite;
+}
+
+.vesselRadarInner {
+  fill: rgba(111, 245, 231, 0.15);
+  stroke: rgba(111, 245, 231, 0.42);
+  stroke-width: 1.55;
+  animation: hydriVesselRadarInnerV9 2.25s ease-in-out infinite;
+}
+
+.vesselDriftGroup {
+  animation: hydriVesselFloatV9 3.1s ease-in-out infinite;
+}
+
+.vesselMarkerCore {
+  fill: rgba(9, 38, 43, 0.94);
+  stroke: rgba(126, 250, 240, 0.84);
+  stroke-width: 2.1;
+  filter:
+    drop-shadow(0 0 12px rgba(96, 240, 226, 0.5))
+    drop-shadow(0 0 24px rgba(96, 240, 226, 0.24));
+}
+
+.vesselIcon path {
+  fill: none;
+  stroke: rgba(128, 255, 244, 0.96);
+  stroke-width: 2.15;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.vesselIcon path:first-child {
+  fill: none;
+  stroke: rgba(128, 255, 244, 0.98);
+}
+
+.routeUnderlayPath {
+  stroke-width: 16;
+  opacity: 0.9;
+}
+
+.routeRemainingPath {
+  stroke-width: 6.4;
+  opacity: 0.42;
+}
+
+.routeTravelledPath {
+  stroke-width: 7.6;
+  opacity: 0.96;
+}
+
+.routeFlowPath {
+  stroke-width: 2.6;
+  opacity: 0.9;
+}
+
+.originPulse,
+.destinationPulse {
+  animation: hydriEndpointPulseV9 2.55s ease-in-out infinite;
+}
+
+@keyframes hydriVesselRadarOuterV9 {
+  0% {
+    opacity: 0.68;
+    transform: scale(0.72);
+  }
+
+  72% {
+    opacity: 0;
+    transform: scale(1.24);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes hydriVesselRadarInnerV9 {
+  0%,
+  100% {
+    opacity: 0.56;
+    transform: scale(0.92);
+  }
+
+  50% {
+    opacity: 0.96;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes hydriVesselFloatV9 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(1.4px, -1.8px, 0);
+  }
+}
+
+@keyframes hydriEndpointPulseV9 {
+  0%,
+  100% {
+    opacity: 0.46;
+    transform: scale(0.84);
+  }
+
+  50% {
+    opacity: 0.96;
+    transform: scale(1.2);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .originPulse,
+  .destinationPulse,
+  .vesselRadarOuter,
+  .vesselRadarInner,
+  .vesselDriftGroup {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v9-fixed-precision:end === */
+
+/* === hydri-vessel-exact-v10:start === */
+
+/* V10:
+   - alterar somente o navio;
+   - deixar o conjunto identico ao aprovado: halo externo + anel interno + nucleo + icone neon;
+   - aumentar tamanho e manter radar continuo.
+*/
+
+.vesselMarker {
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 10px rgba(115, 246, 233, 0.24))
+    drop-shadow(0 0 24px rgba(115, 246, 233, 0.18));
+}
+
+.vesselRadarHalo,
+.vesselRadarRing,
+.vesselMarkerCore,
+.vesselIcon {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.vesselRadarHalo {
+  fill: rgba(108, 244, 233, 0.11);
+  stroke: rgba(126, 249, 240, 0.22);
+  stroke-width: 1.45;
+  animation: hydriVesselHaloPulseV10 2.9s ease-out infinite;
+}
+
+.vesselRadarRing {
+  fill: rgba(104, 240, 230, 0.14);
+  stroke: rgba(118, 247, 237, 0.48);
+  stroke-width: 1.8;
+  animation: hydriVesselRingBreathV10 2.2s ease-in-out infinite;
+}
+
+.vesselMarkerCore {
+  fill: rgba(7, 31, 37, 0.96);
+  stroke: rgba(136, 255, 245, 0.9);
+  stroke-width: 2.25;
+  animation: hydriVesselCoreFloatV10 3.1s ease-in-out infinite;
+}
+
+.vesselIcon {
+  animation: hydriVesselCoreFloatV10 3.1s ease-in-out infinite;
+}
+
+.vesselIcon path {
+  fill: none;
+  stroke: rgba(132, 255, 244, 0.98);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@keyframes hydriVesselHaloPulseV10 {
+  0% {
+    opacity: 0.62;
+    transform: scale(0.8);
+  }
+
+  72% {
+    opacity: 0;
+    transform: scale(1.26);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.32);
+  }
+}
+
+@keyframes hydriVesselRingBreathV10 {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes hydriVesselCoreFloatV10 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0.8px, -1.4px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vesselRadarHalo,
+  .vesselRadarRing,
+  .vesselMarkerCore,
+  .vesselIcon {
+    animation: none;
+  }
+}
+
+/* === hydri-vessel-exact-v10:end === */
+
+/* === hydri-map-v11-rewrite-safe:start === */
+
+.vesselMarker {
+  pointer-events: none;
+  filter:
+    drop-shadow(0 0 10px rgba(115, 246, 233, 0.24))
+    drop-shadow(0 0 24px rgba(115, 246, 233, 0.18));
+}
+
+.vesselRadarHalo,
+.vesselRadarRing,
+.vesselMarkerCore,
+.vesselIcon {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.vesselRadarHalo {
+  fill: rgba(108, 244, 233, 0.12);
+  stroke: rgba(126, 249, 240, 0.24);
+  stroke-width: 1.5;
+  animation: hydriVesselHaloPulseV11Rewrite 2.85s ease-out infinite;
+}
+
+.vesselRadarRing {
+  fill: rgba(104, 240, 230, 0.16);
+  stroke: rgba(118, 247, 237, 0.5);
+  stroke-width: 1.9;
+  animation: hydriVesselRingBreathV11Rewrite 2.18s ease-in-out infinite;
+}
+
+.vesselMarkerCore {
+  fill: rgba(7, 31, 37, 0.96);
+  stroke: rgba(136, 255, 245, 0.92);
+  stroke-width: 2.3;
+  filter:
+    drop-shadow(0 0 12px rgba(96, 240, 226, 0.5))
+    drop-shadow(0 0 24px rgba(96, 240, 226, 0.22));
+  animation: hydriVesselCoreFloatV11Rewrite 3.05s ease-in-out infinite;
+}
+
+.vesselIcon {
+  animation: hydriVesselCoreFloatV11Rewrite 3.05s ease-in-out infinite;
+}
+
+.vesselIcon path,
+.vesselIcon path:first-child,
+.vesselIcon path:not(:first-child) {
+  fill: none;
+  stroke: rgba(132, 255, 244, 0.98);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mapTag {
+  transform-origin: center bottom;
+  animation: hydriMapTagOpenV11Rewrite 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mapTagDescription {
+  display: block;
+  margin-top: 0.24rem;
+  max-width: 8.2rem;
+  font-size: 0.58rem;
+  line-height: 1.25;
+  color: rgba(228, 246, 245, 0.68);
+}
+
+.originTag {
+  transform-origin: left bottom;
+}
+
+.vesselTag {
+  transform-origin: center bottom;
+}
+
+.destinationTag {
+  transform-origin: right bottom;
+}
+
+@keyframes hydriVesselHaloPulseV11Rewrite {
+  0% {
+    opacity: 0.62;
+    transform: scale(0.8);
+  }
+
+  72% {
+    opacity: 0;
+    transform: scale(1.26);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.32);
+  }
+}
+
+@keyframes hydriVesselRingBreathV11Rewrite {
+  0%,
+  100% {
+    opacity: 0.74;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes hydriVesselCoreFloatV11Rewrite {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0.8px, -1.4px, 0);
+  }
+}
+
+@keyframes hydriMapTagOpenV11Rewrite {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.45rem, 0) scale(0.94);
+    filter: blur(4px);
+  }
+
+  64% {
+    opacity: 1;
+    transform: translate3d(0, -0.08rem, 0) scale(1.015);
+    filter: blur(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vesselRadarHalo,
+  .vesselRadarRing,
+  .vesselMarkerCore,
+  .vesselIcon,
+  .mapTag {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v11-rewrite-safe:end === */
+
+/* === hydri-map-v12-fixed-safe:start === */
+
+/* V12:
+   - rota mais fina e adulta;
+   - entrada de tela mais leve;
+   - barco visualmente alinhado com a screen;
+   - labels aparecem gradualmente e permanecem ate o usuario ocultar.
+*/
+
+.routeCanvas {
+  animation: hydriMapEnterLightV12 520ms ease-out both;
+}
+
+.routeUnderlayPath {
+  stroke-width: 12;
+  opacity: 0.42;
+}
+
+.routeRemainingPath {
+  stroke-width: 5.2;
+  opacity: 0.34;
+}
+
+.routeTravelledPath {
+  stroke-width: 5.8;
+  opacity: 0.86;
+}
+
+.routeFlowPath {
+  stroke-width: 1.45;
+  stroke-dasharray: 3 20;
+  stroke-dashoffset: 0;
+  opacity: 0.56;
+  animation:
+    hydriRouteFlowLightV12 5.2s linear infinite,
+    hydriRouteRevealLightV12 840ms ease-out both;
+}
+
+.vesselMarkerCore,
+.vesselIcon {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: hydriVesselScreenAlignedFloatV12 3.4s ease-in-out infinite;
+}
+
+.vesselIcon path,
+.vesselIcon path:first-child,
+.vesselIcon path:not(:first-child) {
+  stroke-width: 2.05;
+}
+
+.vesselRadarHalo {
+  animation: hydriVesselHaloLightV12 3.4s ease-out infinite;
+}
+
+.vesselRadarRing {
+  animation: hydriVesselRingLightV12 2.8s ease-in-out infinite;
+}
+
+.mapTag {
+  animation: hydriMapTagOpenSoftV12 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.mapTagDescription {
+  display: block;
+  margin-top: 0.24rem;
+  max-width: 8.2rem;
+  font-size: 0.58rem;
+  line-height: 1.25;
+  color: rgba(228, 246, 245, 0.68);
+  opacity: 0.78;
+}
+
+@keyframes hydriMapEnterLightV12 {
+  from {
+    opacity: 0;
+    transform: scale(1.006) translate3d(0, 0.22rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hydriRouteRevealLightV12 {
+  from {
+    stroke-dasharray: 0 100;
+    opacity: 0;
+  }
+
+  to {
+    stroke-dasharray: 3 20;
+    opacity: 0.56;
+  }
+}
+
+@keyframes hydriRouteFlowLightV12 {
+  from {
+    stroke-dashoffset: 0;
+  }
+
+  to {
+    stroke-dashoffset: -46;
+  }
+}
+
+/* Compensa o rotate(-42deg) do grupo, deixando nucleo/icone alinhados com a tela. */
+@keyframes hydriVesselScreenAlignedFloatV12 {
+  0%,
+  100% {
+    transform: rotate(42deg) translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: rotate(42deg) translate3d(0.7px, -1.1px, 0);
+  }
+}
+
+@keyframes hydriVesselHaloLightV12 {
+  0% {
+    opacity: 0.5;
+    transform: scale(0.82);
+  }
+
+  72% {
+    opacity: 0;
+    transform: scale(1.22);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.28);
+  }
+}
+
+@keyframes hydriVesselRingLightV12 {
+  0%,
+  100% {
+    opacity: 0.68;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.035);
+  }
+}
+
+@keyframes hydriMapTagOpenSoftV12 {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.32rem, 0) scale(0.97);
+    filter: blur(2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .routeCanvas,
+  .routeFlowPath,
+  .vesselRadarHalo,
+  .vesselRadarRing,
+  .vesselMarkerCore,
+  .vesselIcon,
+  .mapTag {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v12-fixed-safe:end === */
+
+/* === hydri-map-v13-soft-open:start === */
+
+/*
+  V13:
+  - manter tudo como esta;
+  - somente deixar a abertura das informacoes mais lenta e suave;
+  - reposicionar origin/vessel/destination tags para nao cobrirem os icones.
+*/
+
+.mapTag {
+  z-index: 6;
+  pointer-events: none;
+  will-change: opacity, transform, filter;
+  animation: hydriMapTagOpenSoftV13 980ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.originTag {
+  left: calc(12.56% + 1.35rem);
+  top: calc(66.74% - 1.15rem);
+  transform-origin: left center;
+}
+
+.vesselTag {
+  left: calc(50.7% + 1.05rem);
+  top: calc(46.14% - 2.15rem);
+  transform-origin: left bottom;
+}
+
+.destinationTag {
+  left: calc(84.19% - 12.1rem);
+  top: calc(33.48% - 1.15rem);
+  transform-origin: right center;
+}
+
+@keyframes hydriMapTagOpenSoftV13 {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0.6rem, 0) scale(0.975);
+    filter: blur(6px);
+  }
+
+  60% {
+    opacity: 0.94;
+    transform: translate3d(0, 0.08rem, 0) scale(0.995);
+    filter: blur(1px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mapTag {
+    animation: none;
+  }
+}
+
+/* === hydri-map-v13-soft-open:end === */
+
+/* === hydri-map-v13-1-destination-only:start === */
+
+/* ajuste cirurgico: mover apenas o label/tag de destino */
+.destinationTag {
+  left: calc(84.19% - 18.25rem);
+  top: calc(33.48% - 3.7rem);
+  transform-origin: left bottom;
+}
+
+/* === hydri-map-v13-1-destination-only:end === */
+
+/* === hydri-map-v13-2-destination-recenter:start === */
+
+/* ajuste cirurgico: recentralizar apenas o label de destino perto do marker */
+.destinationTag {
+  left: calc(84.19% - 9rem);
+  top: calc(33.48% - 5.9rem);
+  transform-origin: right bottom;
+}
+
+/* === hydri-map-v13-2-destination-recenter:end === */
+
+/* === hydri-map-v13-3-retry-progress-bg:start === */
+
+/*
+  V13.3 retry:
+  - nao mexe em rota, labels, navio, cards, rail ou layout;
+  - adiciona apenas percentual restante no canto inferior direito;
+  - reduz levemente a opacidade dos elementos de background do mapa.
+*/
+
+.page::after {
+  content: "32% para destino";
+  position: absolute;
+  right: 1.15rem;
+  bottom: max(1.08rem, env(safe-area-inset-bottom));
+  z-index: 4;
+  padding: 0.36rem 0.56rem;
+  border-radius: 0.72rem;
+  border: 1px solid rgba(132, 242, 234, 0.08);
+  background: rgba(3, 12, 18, 0.14);
+  color: rgba(176, 244, 239, 0.54);
+  backdrop-filter: blur(8px);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  line-height: 1;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.waterwaySecondaryPath {
+  opacity: 0.58;
+}
+
+.waterwaySecondaryPathMuted {
+  opacity: 0.5;
+}
+
+.waterwayTertiaryPath {
+  opacity: 0.5;
+}
+
+.waterwayDashedPath {
+  opacity: 0.32;
+}
+
+.mapLabelStrong {
+  opacity: 0.5;
+}
+
+.mapLabel,
+.mapLabelRotated {
+  opacity: 0.42;
+}
+
+.portDot,
+.portDotMuted {
+  opacity: 0.46;
+}
+
+/* === hydri-map-v13-3-retry-progress-bg:end === */
+
+/* === hydri-waterway-domain-v1:start === */
+
+/* Usa o percentual vindo do mock/domain no atributo data-remaining-label. */
+.page::after {
+  content: attr(data-remaining-label);
+}
+
+/* === hydri-waterway-domain-v1:end === */
