@@ -1,27 +1,28 @@
+import { createCargoWaterwayTrackingScenario } from './utils/cargo-scenario-adapter';
+
+export * from './domain/waterway-corridor.types';
+export * from './domain/waterway-tracking.types';
+
+export * from './data/waterway-corridors.mock';
+export * from './data/cargo-waterway-tracking.mock';
+
+export * from './utils/cargo-scenario-adapter';
+export * from './utils/waterway-tracking.utils';
+export * from './utils/waterway-progress.utils';
+
+export {
+  cargoWaterwayTrackingByCargoId,
+  cargoWaterwayTrackingMock,
+  getPrimaryWaterwayConstraint,
+  getWaterwayOperationalLabel,
+  waterwayCorridorsMock,
+} from './waterway-compat';
+
 export type {
-  CargoWaterwayTrackingScenario,
-  CargoWaterwayMetrics,
-  WaterwayCorridor,
-  WaterwayCorridorId,
-  WaterwayConstraint,
-  WaterwayOperationalStatus,
-  WaterwayRiskLevel,
-} from './domain/waterway-tracking.types';
+  CargoWaterwayTracking,
+  CargoWaterwayTrackingCompat,
+} from './waterway-compat';
 
-export {
-  CARGO_WATERWAY_TRACKING_SCENARIOS,
-  DEFAULT_CARGO_WATERWAY_TRACKING_SCENARIO,
-  getCargoWaterwayTrackingScenario,
-  getCargoWaterwayTrackingScenarioIds,
-} from './data/cargo-waterway-tracking.mock';
-
-export { WATERWAY_CORRIDORS } from './data/waterway-corridors.mock';
-
-export {
-  formatCurrencyBRL,
-  getOperationalStatusLabel,
-  getRemainingProgressLabel,
-  getRiskLabel,
-} from './utils/waterway-tracking.utils';
-
-export { createCargoWaterwayTrackingScenario } from './utils/cargo-scenario-adapter';
+export type CargoWaterwayTrackingScenario = ReturnType<
+  typeof createCargoWaterwayTrackingScenario
+>;

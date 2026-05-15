@@ -925,10 +925,237 @@
 .filterSheetRoot {
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.95rem;
   width: 100%;
   min-width: 0;
-  padding-bottom: 0.35rem;
+  padding-bottom: 0;
+}
+
+.mobileFilterSheet {
+  width: min(100%, 32rem);
+  min-height: 92dvh;
+  max-height: 92dvh;
+  border-radius: 2rem 2rem 0 0;
+  border: 1px solid rgba(70, 108, 118, 0.18);
+  border-bottom: 0;
+  background:
+    radial-gradient(circle at top right, rgba(20, 216, 196, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(8, 15, 22, 0.985), rgba(3, 8, 12, 0.997));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 -2rem 4rem rgba(0, 0, 0, 0.52);
+  transform-origin: bottom center;
+  animation: mobileFilterSheetEnter 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.mobileFilterSheetClosing {
+  animation: mobileFilterSheetExit 220ms cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.mobileFilterSheetBody {
+  padding: 0.7rem 1rem 0;
+  background:
+    linear-gradient(180deg, rgba(12, 24, 31, 0.26), rgba(8, 18, 25, 0.04));
+}
+
+.mobileFiltersPanel {
+  display: grid;
+  gap: 0.95rem;
+}
+
+.mobileFiltersMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  min-height: 1.4rem;
+  padding: 0.1rem 0 0.15rem;
+  color: rgba(204, 223, 230, 0.84);
+  font-size: 0.82rem;
+  line-height: 1.35;
+  font-weight: 650;
+}
+
+.mobileFiltersMeta span {
+  white-space: nowrap;
+}
+
+.mobileFiltersMeta span[aria-hidden="true"] {
+  color: rgba(135, 163, 173, 0.7);
+}
+
+.mobileFilterGroup {
+  display: grid;
+  gap: 0.68rem;
+  padding-top: 0.72rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.mobileFiltersPanel > .mobileFilterGroup:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.mobileFilterGroupToggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.mobileFilterGroupToggle:focus-visible {
+  outline: 2px solid rgba(92, 231, 220, 0.82);
+  outline-offset: 4px;
+  border-radius: 1rem;
+}
+
+.mobileFilterGroupHeader {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.mobileFilterGroupTitle {
+  color: rgba(242, 252, 255, 0.96);
+  font-size: 0.94rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.mobileFilterGroupCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.45rem;
+  min-height: 1.45rem;
+  padding: 0 0.45rem;
+  border: 1px solid rgba(83, 128, 138, 0.24);
+  border-radius: 999px;
+  background: rgba(12, 20, 27, 0.88);
+  color: rgba(178, 210, 220, 0.76);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mobileFilterGroupChevron {
+  color: rgba(166, 191, 201, 0.78);
+  transition: transform 180ms ease, color 180ms ease;
+}
+
+.mobileFilterGroupChevronExpanded {
+  transform: rotate(180deg);
+  color: rgba(217, 245, 241, 0.92);
+}
+
+.mobileFilterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.mobileFilterOption {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.6rem;
+  min-height: 2.7rem;
+  padding: 0 0.95rem;
+  border: 1px solid rgba(133, 186, 194, 0.16);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(18, 28, 36, 0.9), rgba(9, 16, 22, 0.96));
+  color: rgba(227, 244, 246, 0.84);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 180ms ease, background 180ms ease, color 180ms ease, transform 180ms ease, box-shadow 180ms ease;
+}
+
+.mobileFilterOptionSelected {
+  border-color: rgba(87, 219, 207, 0.34);
+  background:
+    linear-gradient(180deg, rgba(13, 61, 70, 0.94), rgba(8, 35, 41, 0.98));
+  color: rgba(244, 254, 255, 0.98);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0.9rem 1.9rem rgba(0, 0, 0, 0.2);
+}
+
+.mobileFilterOptionMark {
+  display: grid;
+  place-items: center;
+  width: 1.02rem;
+  height: 1.02rem;
+  border: 1px solid rgba(204, 242, 238, 0.26);
+  border-radius: 0.32rem;
+  background: rgba(255, 255, 255, 0.02);
+  flex: 0 0 1.02rem;
+}
+
+.mobileFilterOptionRadio {
+  border-radius: 999px;
+}
+
+.mobileFilterOptionCheckbox {
+  border-radius: 0.32rem;
+}
+
+.mobileFilterOptionMarkInner {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: inherit;
+  background: transparent;
+  transform: scale(0.72);
+  transition: transform 180ms ease, background 180ms ease;
+}
+
+.mobileFilterOptionSelected .mobileFilterOptionMark {
+  border-color: rgba(128, 245, 236, 0.82);
+  background: rgba(10, 29, 36, 0.68);
+}
+
+.mobileFilterOptionSelected .mobileFilterOptionMarkInner {
+  background: rgba(128, 245, 236, 0.92);
+  transform: scale(1);
+}
+
+.mobileFilterOption span:last-child {
+  line-height: 1.2;
+}
+
+@keyframes mobileFilterSheetEnter {
+  from {
+    opacity: 0.96;
+    transform: translateY(100%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mobileFilterSheetExit {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 0.98;
+    transform: translateY(100%);
+  }
 }
 
 /* Footer row inside BottomSheet .footer — grid keeps two equal columns without squashing */
@@ -938,35 +1165,180 @@
   width: 100%;
   gap: 0.75rem;
   align-items: stretch;
+  margin: 0;
 }
 
 .filterSheetFooterSecondary,
 .filterSheetFooterPrimary {
-  min-height: 3rem;
-  border-radius: 0.875rem;
+  min-height: 3.2rem;
+  border-radius: 1rem;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   line-height: 1.2;
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 0 0.65rem;
+  padding: 0 0.8rem;
   touch-action: manipulation;
 }
 
 .filterSheetFooterSecondary {
   color: rgba(235, 239, 242, 0.92);
-  background: rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(18, 28, 36, 0.92), rgba(9, 16, 22, 0.98));
 }
 
 .filterSheetFooterPrimary {
-  color: #090b0e;
-  background: linear-gradient(135deg, #f8df9a, #d7a945);
+  color: #061014;
+  background: linear-gradient(135deg, #7df2e8, #2ed2c0);
+  box-shadow: 0 0.75rem 1.45rem rgba(8, 172, 154, 0.22);
 }
 
 .filterSheetFooterSecondary:focus-visible,
 .filterSheetFooterPrimary:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--hx-cyan, #14d8c4) 85%, transparent);
   outline-offset: 2px;
+}
+
+.mobileBoard {
+  display: block;
+  width: 100%;
+}
+
+.mobileListShell {
+  display: grid;
+  gap: 1rem;
+}
+
+.mobileHeader {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.mobileHeaderTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  flex-wrap: nowrap;
+}
+
+.mobileHeaderCopy {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.mobileHeaderMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.mobileHeaderCopy p {
+  margin: 0;
+  color: rgba(188, 214, 224, 0.72);
+  font-size: 0.82rem;
+}
+
+.mobileClearFiltersButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.15rem;
+  padding: 0 0.82rem;
+  border: 1px solid rgba(91, 221, 210, 0.18);
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(14, 26, 33, 0.92), rgba(8, 17, 23, 0.98));
+  color: rgba(224, 244, 241, 0.9);
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.mobileHeaderActions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 0 0 auto;
+  min-width: 0;
+}
+
+.mobileFilterButton,
+.mobileFilterButtonActive {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 2.7rem;
+  padding: 0 0.9rem;
+  border-radius: 999px;
+  border: 1px solid rgba(104, 232, 222, 0.18);
+  background: rgba(8, 21, 28, 0.78);
+  color: rgba(235, 247, 250, 0.92);
+  font: inherit;
+  cursor: pointer;
+}
+
+.mobileFilterButtonActive {
+  border-color: rgba(104, 232, 222, 0.34);
+  background: rgba(11, 31, 38, 0.92);
+  box-shadow: 0 0.75rem 1.75rem rgba(0, 0, 0, 0.24);
+}
+
+.mobileFilterButton span,
+.mobileFilterButtonActive span {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.mobileAddLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.7rem;
+  padding: 0 0.95rem;
+  min-width: 8.35rem;
+  border-radius: 999px;
+  border: 1px solid rgba(244, 207, 121, 0.18);
+  background: linear-gradient(135deg, rgba(250, 223, 154, 0.92), rgba(215, 169, 69, 0.96));
+  color: #071015;
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+  flex: 0 0 auto;
+  box-shadow: 0 0.9rem 1.8rem rgba(0, 0, 0, 0.22);
+}
+
+.mobileAddLinkWrap {
+  flex: 0 0 auto;
+}
+
+.mobileStatusScroller {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0 0 0.15rem;
+  scrollbar-width: none;
+}
+
+.mobileStatusScroller::-webkit-scrollbar {
+  display: none;
+}
+
+.mobileList {
+  display: grid;
+  gap: 0;
+  align-content: start;
+  padding: 0;
+  margin: 0;
+}
+
+.mobileListSentinel {
+  width: 100%;
+  height: 0.125rem;
 }
 
 @media (max-width: 1220px) {
@@ -4461,6 +4833,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .mobileFilterSheet,
+  .mobileFilterSheetClosing {
+    animation: none;
+  }
+
   .hydroRadarVessel {
     animation: none;
     filter: drop-shadow(0 0 12px rgba(47, 224, 208, 0.35));
@@ -4472,6 +4849,10 @@
 }
 
 @media (max-width: 860px) {
+  .mobileBoard {
+    padding-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 0.25rem + env(safe-area-inset-bottom));
+  }
+
   .hydroRadarSection {
     margin-bottom: calc(var(--mobile-bottom-nav-height, 4.5rem) + 0.85rem);
   }
@@ -4508,7 +4889,7 @@
 @media (max-width: 860px) {
   :global(.hr-cargo-card:last-child),
   :global(.hx-card:last-child) {
-    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 2.5rem + env(safe-area-inset-bottom));
+    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 0.9rem + env(safe-area-inset-bottom));
   }
 
   :global(.hx-map-fab),
@@ -4523,6 +4904,252 @@
   }
 
   .hydroRadarSection {
-    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 2.5rem + env(safe-area-inset-bottom));
+    margin-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 0.9rem + env(safe-area-inset-bottom));
   }
 }
+
+
+/* === hydri-filter-sheet-v4:start === */
+
+.cargoMobileFilterIcon {
+  width: 1.24rem;
+  height: 1.24rem;
+  stroke-width: 2.15;
+}
+
+.mobileFilterBadge {
+  position: absolute;
+  top: -0.35rem;
+  right: -0.35rem;
+  display: grid;
+  min-width: 1.16rem;
+  height: 1.16rem;
+  place-items: center;
+  padding: 0 0.3rem;
+  border: 1px solid rgba(4, 17, 24, 0.94);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #7dfff2, #34dccb);
+  color: #041217;
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.desktopFilterButton {
+  position: relative;
+}
+
+.desktopFilterBadge {
+  position: absolute;
+  top: -0.32rem;
+  right: -0.32rem;
+  display: grid;
+  min-width: 1.1rem;
+  height: 1.1rem;
+  place-items: center;
+  padding: 0 0.28rem;
+  border: 1px solid rgba(4, 17, 24, 0.94);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #7dfff2, #34dccb);
+  color: #041217;
+  font-size: 0.66rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.mobileCargoListItem {
+  margin: 0 0 0.25rem;
+  padding: 0;
+  min-height: 0;
+  transform-origin: center top;
+}
+
+.mobileCargoListItem :global(.hr-cargo-card) {
+  margin: 0 !important;
+}
+
+@media (max-width: 767px) {
+  :global(.hx-filter-trigger) {
+   position: relative;
+    display: inline-grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid rgba(125, 239, 229, 0.24);
+    border-radius: 1rem;
+    background: linear-gradient(180deg, rgba(14, 35, 43, 0.9), rgba(4, 15, 21, 0.96));
+    color: rgba(232, 255, 252, 0.95);
+    box-shadow: 0 0.75rem 1.6rem rgba(0, 0, 0, 0.2);
+  }
+
+  .filterOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+    background: rgba(1, 8, 12, 0.78);
+    backdrop-filter: blur(18px);
+    animation: hydriFilterOverlayIn 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .filterDrawer {
+    width: min(100%, 31rem);
+    height: 96dvh;
+    max-height: 96dvh;
+    margin: 0;
+    border: 1px solid rgba(117, 239, 229, 0.18);
+    border-bottom: 0;
+    border-radius: 1.8rem 1.8rem 0 0;
+    background: linear-gradient(180deg, rgba(8, 29, 38, 0.98), rgba(3, 14, 20, 0.99));
+    box-shadow: 0 -1.4rem 4rem rgba(0, 0, 0, 0.38);
+    overflow: hidden;
+    animation: hydriFilterSheetIn 340ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .filterDrawer::before {
+    content: '';
+    display: block;
+    width: 4.6rem;
+    height: 0.28rem;
+    margin: 0.85rem auto 0.7rem;
+    border-radius: 999px;
+    background: rgba(218, 245, 242, 0.32);
+  }
+
+  .filterSheetRoot {
+    height: calc(96dvh - 8.25rem);
+    overflow-y: auto;
+    padding: 1.2rem 1.35rem 7.4rem;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+  }
+
+  .filterSheetRoot::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filterSheetFooter {
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.18fr);
+    gap: 0.8rem;
+    margin: 1.3rem -1.35rem -7.4rem;
+    padding: 1rem 1.35rem max(1.15rem, env(safe-area-inset-bottom));
+    border-top: 1px solid rgba(141, 238, 230, 0.12);
+    background: rgba(4, 18, 25, 0.98);
+    backdrop-filter: blur(16px);
+  }
+
+  .filterSheetFooterSecondary,
+  .filterSheetFooterPrimary {
+    min-height: 3.35rem;
+    border-radius: 1.05rem;
+    font-weight: 900;
+  }
+
+  .filterSheetFooterSecondary {
+    border: 1px solid rgba(141, 238, 230, 0.14);
+    background: rgba(255, 255, 255, 0.035);
+    color: rgba(234, 248, 247, 0.88);
+  }
+
+  .filterSheetFooterPrimary {
+    border: 0;
+    background: linear-gradient(180deg, #ffe69a, #e7b740);
+    color: #120d04;
+  }
+}
+
+@keyframes hydriFilterOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes hydriFilterSheetIn {
+  from {
+    opacity: 0.72;
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterOverlay,
+  .filterDrawer {
+    animation: none;
+  }
+}
+
+/* === hydri-filter-sheet-v4:end === */
+
+
+/* === hydri-waterway-card-context:start === */
+:global(.hr-cargo-card__waterway) {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 0.35rem 0.5rem !important;
+  min-width: 0 !important;
+  margin: -0.1rem 0 0 !important;
+  color: rgba(230, 238, 242, 0.66) !important;
+  font-size: 0.72rem !important;
+  line-height: 1.2 !important;
+}
+
+:global(.hr-cargo-card__waterwayCorridor) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 0.32rem !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  color: rgba(210, 233, 236, 0.74) !important;
+}
+
+:global(.hr-cargo-card__waterwayCorridor svg) {
+  flex: 0 0 auto !important;
+  color: rgba(39, 230, 207, 0.82) !important;
+}
+
+:global(.hr-cargo-card__waterwayCorridor span) {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+:global(.hr-cargo-card__waterwayRisk) {
+  display: inline-flex !important;
+  align-items: center !important;
+  max-width: 100% !important;
+  padding: 0.16rem 0.46rem !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(133, 158, 172, 0.18) !important;
+  background: rgba(255, 255, 255, 0.035) !important;
+  color: rgba(222, 235, 239, 0.72) !important;
+  font-weight: 750 !important;
+  letter-spacing: 0.01em !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+:global(.hr-cargo-card__waterwayRisk--warning) {
+  color: rgba(255, 218, 122, 0.92) !important;
+  border-color: rgba(255, 194, 77, 0.24) !important;
+  background: rgba(128, 82, 12, 0.2) !important;
+}
+
+:global(.hr-cargo-card__waterwayRisk--critical) {
+  color: rgba(255, 151, 151, 0.95) !important;
+  border-color: rgba(255, 95, 95, 0.24) !important;
+  background: rgba(128, 34, 34, 0.22) !important;
+}
+/* === hydri-waterway-card-context:end === */

@@ -1,33 +1,31 @@
 'use client';
-
-import Image from 'next/image';
-import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
   Activity,
   AlertCircle,
   Anchor,
-  BadgeCheck,
-  BadgePercent,
   ArrowRight,
   ArrowRightCircle,
+  BadgeCheck,
+  BadgePercent,
   CalendarCheck,
   CalendarClock,
   CalendarDays,
   Check,
   CheckCircle2,
   ChevronDown,
-  ClipboardCheck,
-  ClipboardList,
   Circle,
   CircleDollarSign,
+  ClipboardCheck,
+  ClipboardList,
   Clock3,
   CloudRain,
   Coins,
   FileCheck2,
   FileText,
   FileWarning,
-  Filter,
   Info,
   Layers,
   Leaf,
@@ -43,21 +41,23 @@ import {
   Search,
   ShieldCheck,
   Ship,
+  SlidersHorizontal,
   Snowflake,
-  TrendingUp,
   TrendingDown,
+  TrendingUp,
   Truck,
   User,
   Wallet,
-  Waves,
   Warehouse,
-  X
+  Waves,
+  X,
 } from 'lucide-react';
+import Image from 'next/image';
 import { Link } from '@/core/i18n/navigation';
 import type { Cargo, CargoStatus, Negotiation, TrackingEvent, Vessel } from '@/features/marketplace/domain/marketplace.types';
 import { formatLocaleCurrency, formatLocaleNumber, formatLocalePercent, formatMockBrl } from '@/shared/i18n/mock-format';
 import { intlAppPaths } from '@/shared/routing/app-routes';
-import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+import { BottomSheet } from '@/shared/ui';
 import { PriorityTab } from '@/features/dashboard/components/priority-tab/priority-tab';
 import {
   buildTrackingRoute,
@@ -69,18 +69,39 @@ import {
   HydroRouteTrackingMapSvg
 } from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking-map';
 import { getVesselVisual } from '@/features/cargo-market/components/cargo-detail/cargo-vessel-visual';
+import {
+  cargoWaterwayTrackingByCargoId,
+  getPrimaryWaterwayConstraint,
+  getWaterwayOperationalLabel,
+  waterwayCorridorsMock,
+} from '@/features/waterway-tracking/waterway-compat';
+import type { CargoWaterwayTrackingCompat as CargoWaterwayTracking } from '@/features/waterway-tracking/waterway-compat';
 import styles from './operations-board.module.scss';
 
 const PAGE_SIZE = 5;
+const MOBILE_INITIAL_VISIBLE_COUNT = 8;
+const MOBILE_VISIBLE_INCREMENT = 6;
+const MOBILE_VIEWPORT_MAX_WIDTH = 860;
+const MOBILE_MEDIA_QUERY = `(max-width: ${MOBILE_VIEWPORT_MAX_WIDTH}px)`;
+const MOBILE_FILTER_SHEET_EXIT_MS = 220;
+const MOBILE_FILTER_SHEET_SNAP_POINT: '92vh' = '92vh';
+const DEFAULT_MOBILE_FILTER_GROUPS = {
+  status: false,
+  corridor: false,
+  origin: false,
+  destination: false,
+  type: false,
+  document: false,
+} as const;
 
 type DashboardTab = 'overview' | 'timeline' | 'documents' | 'cost' | 'priority';
 type StatusFilter = 'all' | CargoStatus;
 type AdvancedFilters = {
-  corridor: string;
-  origin: string;
-  destination: string;
-  type: string;
-  document: string;
+  corridor: string[];
+  origin: string[];
+  destination: string[];
+  type: string[];
+  document: string[];
 };
 
 type TranslationValues = Record<string, string | number | Date>;
@@ -96,13 +117,46 @@ type OperationsBoardProps = {
   initialTab?: DashboardTab;
 };
 
-const emptyFilters: AdvancedFilters = {
-  corridor: '',
-  origin: '',
-  destination: '',
-  type: '',
-  document: ''
+type CargoListCardProps = {
+  arrivalLabel: string;
+  cargo: Cargo;
+  confidenceLabel: string;
+  etaLabel: string;
+  isSelected: boolean;
+  onClick: () => void;
+  showMenu: boolean;
+  statusLabel: string;
+  vesselLabel: string;
+  waterwayTracking?: CargoWaterwayTracking;
 };
+
+type MobileFilterOption = {
+  label: string;
+  value: string;
+};
+
+type MobileFilterGroupKey = keyof typeof DEFAULT_MOBILE_FILTER_GROUPS;
+
+type MobileFilterGroupProps = {
+  title: string;
+  options: MobileFilterOption[];
+  selectedValues: string[];
+  expanded: boolean;
+  onToggle: (value: string) => void;
+  onExpandToggle: () => void;
+};
+
+function createDefaultAdvancedFilters(): AdvancedFilters {
+  return {
+    corridor: [],
+    origin: [],
+    destination: [],
+    type: [],
+    document: [],
+  };
+}
+
+const emptyFilters: AdvancedFilters = createDefaultAdvancedFilters();
 
 const tabs: Array<{ key: DashboardTab; labelKey: string }> = [
   { key: 'overview', labelKey: 'tabs.overview' },
@@ -118,6 +172,96 @@ const DEFAULT_OVERVIEW_VESSEL_IMAGE = '/mock/vessels/cargo-vessel-real-water-01.
 
 function cx(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(' ');
+}
+
+function getActiveCargoFiltersCount(query: string, statusFilter: StatusFilter, filters: AdvancedFilters) {
+  return [
+    query.trim() ? 1 : 0,
+    statusFilter !== 'all' ? 1 : 0,
+    filters.corridor.length,
+    filters.origin.length,
+    filters.destination.length,
+    filters.type.length,
+    filters.document.length,
+  ].reduce((total, value) => total + value, 0);
+}
+
+function hasAppliedCargoFilters(query: string, statusFilter: StatusFilter, filters: AdvancedFilters) {
+  return getActiveCargoFiltersCount(query, statusFilter, filters) > 0;
+}
+
+function renderMobileFilterGroup(
+  title: string,
+  options: MobileFilterOption[],
+  selectedValues: string[],
+  onToggle: (value: string) => void,
+  controlClassName: string,
+  expanded: boolean,
+  onExpandToggle: () => void
+) {
+  if (!options.length) {
+    return null;
+  }
+
+  return (
+    <section className={styles.mobileFilterGroup} aria-label={title}>
+      <button
+        type="button"
+        className={styles.mobileFilterGroupToggle}
+        aria-expanded={expanded}
+        onClick={onExpandToggle}
+      >
+        <span className={styles.mobileFilterGroupHeader}>
+          <strong className={styles.mobileFilterGroupTitle}>{title}</strong>
+          <span className={styles.mobileFilterGroupCount}>
+            {selectedValues.length > 0 ? selectedValues.length : options.length}
+          </span>
+        </span>
+        <ChevronDown
+          className={cx(
+            styles.mobileFilterGroupChevron,
+            expanded && styles.mobileFilterGroupChevronExpanded
+          )}
+          size={18}
+          aria-hidden="true"
+        />
+      </button>
+
+      {expanded ? (
+        <div className={styles.mobileFilterChips} role="group" aria-label={title}>
+          {options.map((option) => {
+            const isSelected = selectedValues.includes(option.value);
+
+            return (
+              <button
+                key={option.value}
+                type="button"
+                className={cx(
+                  styles.mobileFilterOption,
+                  isSelected && styles.mobileFilterOptionSelected
+                )}
+                aria-pressed={isSelected}
+                onClick={() => onToggle(option.value)}
+              >
+                <span className={cx(styles.mobileFilterOptionMark, controlClassName)} aria-hidden="true">
+                  <span className={styles.mobileFilterOptionMarkInner} />
+                </span>
+                <span>{option.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function MobileSingleFilterGroup({ title, options, selectedValues, expanded, onToggle, onExpandToggle }: MobileFilterGroupProps) {
+  return renderMobileFilterGroup(title, options, selectedValues, onToggle, styles.mobileFilterOptionRadio, expanded, onExpandToggle);
+}
+
+function MobileMultiFilterGroup({ title, options, selectedValues, expanded, onToggle, onExpandToggle }: MobileFilterGroupProps) {
+  return renderMobileFilterGroup(title, options, selectedValues, onToggle, styles.mobileFilterOptionCheckbox, expanded, onExpandToggle);
 }
 
 function overviewStatusClass(status: CargoStatus) {
@@ -176,6 +320,111 @@ function getCargoProgressTone(status: CargoStatus) {
 
 function getCargoProgressPercent(cargo: Cargo) {
   return statusProgress(cargo.status);
+}
+
+function CargoListCard({
+  arrivalLabel,
+  cargo,
+  confidenceLabel,
+  etaLabel,
+  isSelected,
+  onClick,
+  showMenu,
+  statusLabel,
+  vesselLabel,
+  waterwayTracking,
+}: CargoListCardProps) {
+  const progress = getCargoProgressPercent(cargo);
+  const statusTone = cargo.status;
+  const waterwayCorridor = waterwayTracking
+    ? waterwayCorridorsMock.find((corridor) => corridor.id === waterwayTracking.corridorId)
+    : undefined;
+  const primaryWaterwayConstraint = getPrimaryWaterwayConstraint(waterwayTracking);
+  const waterwayStatusLabel = waterwayTracking
+    ? getWaterwayOperationalLabel(waterwayTracking.operationalStatus)
+    : '';
+  const waterwayRiskTone = primaryWaterwayConstraint?.severity ?? 'info';
+
+  return (
+    <button
+      type="button"
+      key={cargo.id}
+      className={`hr-cargo-card ${isSelected ? 'is-selected' : ''}`}
+      data-cargo-id={cargo.id}
+      data-cargo-label={cargo.title}
+      aria-label={`${cargo.id.toUpperCase()} ${cargo.title}`}
+      onClick={onClick}
+    >
+      <div className="hr-cargo-card__header">
+        <strong className="hr-cargo-card__code">{cargo.id.toUpperCase()}</strong>
+
+        <div className="hr-cargo-card__actions">
+          <span className={`hr-status-badge hr-status-badge--${statusTone}`}>
+            {statusLabel}
+          </span>
+          {showMenu ? <MoreVertical size={18} className="hr-cargo-card__menu" /> : null}
+        </div>
+      </div>
+
+      <p className="hr-cargo-card__title">{cargo.title}</p>
+
+      <div className="hr-cargo-card__route">
+        <span className="hr-cargo-card__city">
+          <span className="hr-cargo-card__dot" />
+          <span>{cargo.origin}</span>
+        </span>
+
+        <ArrowRight size={18} className="hr-cargo-card__arrow" />
+
+        <span className="hr-cargo-card__city">
+          <span>{cargo.destination}</span>
+        </span>
+      </div>
+
+      <div className="hr-cargo-card__operator">
+        <Ship size={18} />
+        <span>{vesselLabel}</span>
+      </div>
+
+      {waterwayTracking ? (
+        <div className="hr-cargo-card__waterway">
+          <span className="hr-cargo-card__waterwayCorridor">
+            <Waves size={14} aria-hidden="true" />
+            <span>{waterwayCorridor?.name ?? waterwayTracking.originTerminal}</span>
+          </span>
+
+          <span className={`hr-cargo-card__waterwayRisk hr-cargo-card__waterwayRisk--${waterwayRiskTone}`}>
+            {primaryWaterwayConstraint?.title ?? waterwayStatusLabel}
+          </span>
+        </div>
+      ) : null}
+
+      <div className="hr-cargo-card__progress">
+        <div className="hr-cargo-card__track">
+          <span
+            className={`hr-cargo-card__fill hr-cargo-card__fill--${statusTone}`}
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <strong className="hr-cargo-card__progressValue">{progress}%</strong>
+      </div>
+
+      <div className="hr-cargo-card__footer">
+        <span>
+          <CalendarDays size={14} />
+          {etaLabel}
+        </span>
+
+        {confidenceLabel ? (
+          <span>{confidenceLabel}</span>
+        ) : null}
+
+        {arrivalLabel ? (
+          <span>{arrivalLabel}</span>
+        ) : null}
+      </div>
+    </button>
+  );
 }
 
 function formatEtaLabel(value: string | undefined, tBoard: BoardTranslator) {
@@ -1269,17 +1518,23 @@ export function OperationsBoard({
 }: OperationsBoardProps) {
   const tCommon = useTranslations('common');
   const tBoard = useTranslations('operationsBoard');
+  const prefersReducedMotion = useReducedMotion();
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [advancedFilters, setAdvancedFilters] = useState<AdvancedFilters>(emptyFilters);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isMobileFilterClosing, setIsMobileFilterClosing] = useState(false);
+  const [expandedMobileFilterGroups, setExpandedMobileFilterGroups] = useState<Record<MobileFilterGroupKey, boolean>>(DEFAULT_MOBILE_FILTER_GROUPS);
   const [activeTab, setActiveTab] = useState<DashboardTab>(initialTab);
   const [expandedTimelineEventId, setExpandedTimelineEventId] = useState<string | null>(null);
   const [expandedDocumentName, setExpandedDocumentName] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState(cargoes[0]?.id ?? '');
   const [currentPage, setCurrentPage] = useState(1);
+  const [mobileVisibleCount, setMobileVisibleCount] = useState(() => MOBILE_INITIAL_VISIBLE_COUNT);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const mobileListSentinelRef = useRef<HTMLDivElement | null>(null);
+  const mobileFilterCloseTimerRef = useRef<number | null>(null);
   const visualCargoes = useMemo(() => buildVisualCargoPool(cargoes), [cargoes]);
   const vesselVisualMap = useMemo(
     () =>
@@ -1314,11 +1569,11 @@ export function OperationsBoard({
 
       return (!query || searchable.includes(normalize(query)))
         && (statusFilter === 'all' || cargo.status === statusFilter)
-        && (!advancedFilters.corridor || cargo.corridor === advancedFilters.corridor || cargo.mainRiver === advancedFilters.corridor)
-        && (!advancedFilters.origin || cargo.origin === advancedFilters.origin)
-        && (!advancedFilters.destination || cargo.destination === advancedFilters.destination)
-        && (!advancedFilters.type || cargo.cargoType === advancedFilters.type)
-        && (!advancedFilters.document || docs.includes(advancedFilters.document));
+        && (!advancedFilters.corridor.length || advancedFilters.corridor.includes(cargo.corridor ?? '') || advancedFilters.corridor.includes(cargo.mainRiver ?? ''))
+        && (!advancedFilters.origin.length || advancedFilters.origin.includes(cargo.origin))
+        && (!advancedFilters.destination.length || advancedFilters.destination.includes(cargo.destination))
+        && (!advancedFilters.type.length || advancedFilters.type.includes(cargo.cargoType))
+        && (!advancedFilters.document.length || advancedFilters.document.some((documentName) => docs.includes(documentName)));
     });
   }, [advancedFilters, query, statusFilter, visualCargoes]);
 
@@ -1327,6 +1582,8 @@ export function OperationsBoard({
   const pageStart = (safePage - 1) * PAGE_SIZE;
   const pageEnd = pageStart + PAGE_SIZE;
   const pageItems = filteredCargoes.slice(pageStart, pageEnd);
+  const visibleMobileCargoes = filteredCargoes.slice(0, mobileVisibleCount);
+  const hasMoreMobileCargoes = mobileVisibleCount < filteredCargoes.length;
 
   const selectedCargoId = filteredCargoes.some((cargo) => cargo.id === selectedId)
     ? selectedId
@@ -1355,27 +1612,62 @@ export function OperationsBoard({
   const docsTotal = Math.max(18, docsCount + 5);
   const documentReadiness = selectedCargo?.documentReadiness ?? Math.min(100, Math.round((docsCount / docsTotal) * 100));
   const pendingDocs = Math.max(0, docsTotal - docsCount);
-  const activeFilters = [
-    statusFilter !== 'all',
-    advancedFilters.corridor,
-    advancedFilters.origin,
-    advancedFilters.destination,
-    advancedFilters.type,
-    advancedFilters.document
-  ].filter(Boolean).length;
+  const activeFilters = getActiveCargoFiltersCount(query, statusFilter, advancedFilters);
+  const hasAppliedFilters = hasAppliedCargoFilters(query, statusFilter, advancedFilters);
+  const statusOptions = useMemo<MobileFilterOption[]>(() => ([
+    { value: 'all', label: tBoard('statusFilters.all') },
+    { value: 'open', label: tBoard('statusFilters.open') },
+    { value: 'bidding', label: tBoard('statusFilters.bidding') },
+    { value: 'contracting', label: tBoard('statusFilters.contracting') },
+    { value: 'reserved', label: tBoard('statusFilters.reserved') },
+    { value: 'boarded', label: tBoard('statusFilters.boarded') },
+  ]), [tBoard]);
 
-  function updateFilter(key: keyof AdvancedFilters, value: string) {
+  function syncListViewport() {
     setCurrentPage(1);
-    setAdvancedFilters((current) => ({ ...current, [key]: value }));
+    setMobileVisibleCount(MOBILE_INITIAL_VISIBLE_COUNT);
     listRef.current?.scrollTo({ top: 0, behavior: 'auto' });
   }
 
   function resetFilters() {
     setQuery('');
     setStatusFilter('all');
-    setAdvancedFilters(emptyFilters);
-    setCurrentPage(1);
-    listRef.current?.scrollTo({ top: 0, behavior: 'auto' });
+    setAdvancedFilters(createDefaultAdvancedFilters());
+    syncListViewport();
+  }
+
+  function handleStatusFilterChange(nextStatus: StatusFilter) {
+    syncListViewport();
+    setStatusFilter(nextStatus);
+  }
+
+  function updateDesktopFilter(key: keyof AdvancedFilters, value: string) {
+    syncListViewport();
+    setAdvancedFilters((current) => ({
+      ...current,
+      [key]: value ? [value] : [],
+    }));
+  }
+
+  function toggleMobileFilter(key: keyof AdvancedFilters, value: string, selection: 'multi' | 'single') {
+    syncListViewport();
+    setAdvancedFilters((current) => {
+      const currentValues = current[key];
+
+      if (selection === 'single') {
+        return {
+          ...current,
+          [key]: currentValues.includes(value) ? [] : [value],
+        };
+      }
+
+      return {
+        ...current,
+        [key]: currentValues.includes(value)
+          ? currentValues.filter((currentValue) => currentValue !== value)
+          : [...currentValues, value],
+      };
+    });
   }
 
   function goToPage(nextPage: number) {
@@ -1385,14 +1677,58 @@ export function OperationsBoard({
   }
 
   useEffect(() => {
-    const updateViewport = () => setIsMobileViewport(window.innerWidth <= 860);
+    const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
+    const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
+
     updateViewport();
-    window.addEventListener('resize', updateViewport);
-    return () => window.removeEventListener('resize', updateViewport);
+
+    mediaQuery.addEventListener('change', updateViewport);
+    return () => mediaQuery.removeEventListener('change', updateViewport);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobileViewport || !hasMoreMobileCargoes || !mobileListSentinelRef.current) {
+      return undefined;
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      const [entry] = entries;
+
+      if (!entry?.isIntersecting) {
+        return;
+      }
+
+      setMobileVisibleCount((current) =>
+        Math.min(filteredCargoes.length, current + MOBILE_VISIBLE_INCREMENT)
+      );
+    }, {
+      root: null,
+      rootMargin: '0px 0px 240px 0px',
+      threshold: 0.1,
+    });
+
+    observer.observe(mobileListSentinelRef.current);
+    return () => observer.disconnect();
+  }, [filteredCargoes.length, hasMoreMobileCargoes, isMobileViewport]);
+
+  useEffect(() => {
+    return () => {
+      if (mobileFilterCloseTimerRef.current !== null) {
+        window.clearTimeout(mobileFilterCloseTimerRef.current);
+      }
+    };
   }, []);
 
   if (!selectedCargo) {
-    return <section className="hx-dashboard hr-dashboard-grid"><div className="hx-empty-state">{tBoard('list.empty')}</div></section>;
+    return (
+      <section className={isMobileViewport ? styles.mobileBoard : 'hx-dashboard hr-dashboard-grid'}>
+        <div className={styles.emptyState} role="status">
+          <AlertCircle size={22} aria-hidden="true" />
+          <h3>{tBoard('list.emptyTitle')}</h3>
+          <p>{tBoard('list.emptyDescription')}</p>
+        </div>
+      </section>
+    );
   }
 
   const selectedVessel = vesselName(selectedCargo, negotiations, vessels);
@@ -1408,6 +1744,72 @@ export function OperationsBoard({
   const costSavingsPct = costModel.roadEstimate > 0 ? costSavingsAbs / costModel.roadEstimate : 0;
   const dominantCostRow = getCostDominantBreakdown(costModel);
   const costTimelineActiveIndex = getCostTimelineActiveIndex(selectedProgress);
+  const renderCargoCard = (cargo: Cargo) => {
+    const isSelected = cargo.id === selectedCargo.id;
+    const { etaLabel, confidenceLabel } = parseEtaMeta(cargo.etaConfidence, tBoard, tCommon);
+
+    return (
+      <CargoListCard
+        key={cargo.id}
+        arrivalLabel={cargo.window ? tBoard('misc.arrivalLabel', { value: cargo.window }) : ''}
+        cargo={cargo}
+        confidenceLabel={confidenceLabel}
+        etaLabel={etaLabel}
+        isSelected={isSelected}
+        onClick={() => {
+          setSelectedId(cargo.id);
+          setExpandedTimelineEventId(null);
+          setExpandedDocumentName(null);
+        }}
+        showMenu={!isMobileViewport}
+        statusLabel={getCargoStatusLabel(cargo.status, tCommon)}
+        vesselLabel={vesselName(cargo, negotiations, vessels)}
+        waterwayTracking={cargoWaterwayTrackingByCargoId.get(cargo.id)}
+      />
+    );
+  };
+
+  function openMobileFilterSheet() {
+    if (mobileFilterCloseTimerRef.current !== null) {
+      window.clearTimeout(mobileFilterCloseTimerRef.current);
+      mobileFilterCloseTimerRef.current = null;
+    }
+
+    setIsMobileFilterClosing(false);
+    setDrawerOpen(true);
+  }
+
+  function closeMobileFilterSheet() {
+    if (!drawerOpen || isMobileFilterClosing) {
+      return;
+    }
+
+    setIsMobileFilterClosing(true);
+    mobileFilterCloseTimerRef.current = window.setTimeout(() => {
+      setDrawerOpen(false);
+      setIsMobileFilterClosing(false);
+      mobileFilterCloseTimerRef.current = null;
+    }, MOBILE_FILTER_SHEET_EXIT_MS);
+  }
+
+  function handleMobileFilterSheetOpenChange(open: boolean) {
+    if (open) {
+      openMobileFilterSheet();
+      return;
+    }
+
+    closeMobileFilterSheet();
+  }
+
+  function toggleMobileFilterGroup(group: MobileFilterGroupKey) {
+    setExpandedMobileFilterGroups((current) => ({
+      ...current,
+      [group]: !current[group],
+    }));
+  }
+
+
+
   const filtersPanel = (
     <>
       {!isMobileViewport ? (
@@ -1418,19 +1820,250 @@ export function OperationsBoard({
           </button>
         </div>
       ) : null}
-      <div className="hx-drawer-count">
-        <strong>{tBoard('filters.results', { count: filteredCargoes.length })}</strong>
-        <span>{activeFilters ? tBoard('filters.activeCount', { count: activeFilters }) : tBoard('filters.inactive')}</span>
-      </div>
+      {!isMobileViewport ? (
+        <div className="hx-drawer-count">
+          <strong>{tBoard('filters.results', { count: filteredCargoes.length })}</strong>
+          <span>{activeFilters ? tBoard('filters.activeCount', { count: activeFilters }) : tBoard('filters.inactive')}</span>
+        </div>
+      ) : null}
       <div className="hx-filter-grid">
-        <FilterSelect label={tBoard('filters.corridor')} value={advancedFilters.corridor} options={options.corridor} onChange={(value) => updateFilter('corridor', value)} allLabel={tBoard('filters.allOptions')} />
-        <FilterSelect label={tBoard('filters.origin')} value={advancedFilters.origin} options={options.origin} onChange={(value) => updateFilter('origin', value)} allLabel={tBoard('filters.allOptions')} />
-        <FilterSelect label={tBoard('filters.destination')} value={advancedFilters.destination} options={options.destination} onChange={(value) => updateFilter('destination', value)} allLabel={tBoard('filters.allOptions')} />
-        <FilterSelect label={tBoard('filters.cargoType')} value={advancedFilters.type} options={options.type} onChange={(value) => updateFilter('type', value)} allLabel={tBoard('filters.allOptions')} />
-        <FilterSelect label={tBoard('filters.document')} value={advancedFilters.document} options={options.document} onChange={(value) => updateFilter('document', value)} allLabel={tBoard('filters.allOptions')} />
+        <FilterSelect label={tBoard('filters.corridor')} value={advancedFilters.corridor[0] ?? ''} options={options.corridor} onChange={(value) => updateDesktopFilter('corridor', value)} allLabel={tBoard('filters.allOptions')} />
+        <FilterSelect label={tBoard('filters.origin')} value={advancedFilters.origin[0] ?? ''} options={options.origin} onChange={(value) => updateDesktopFilter('origin', value)} allLabel={tBoard('filters.allOptions')} />
+        <FilterSelect label={tBoard('filters.destination')} value={advancedFilters.destination[0] ?? ''} options={options.destination} onChange={(value) => updateDesktopFilter('destination', value)} allLabel={tBoard('filters.allOptions')} />
+        <FilterSelect label={tBoard('filters.cargoType')} value={advancedFilters.type[0] ?? ''} options={options.type} onChange={(value) => updateDesktopFilter('type', value)} allLabel={tBoard('filters.allOptions')} />
+        <FilterSelect label={tBoard('filters.document')} value={advancedFilters.document[0] ?? ''} options={options.document} onChange={(value) => updateDesktopFilter('document', value)} allLabel={tBoard('filters.allOptions')} />
       </div>
     </>
   );
+  const mobileFiltersPanel = (
+    <div className={styles.mobileFiltersPanel}>
+      <div className={styles.mobileFiltersMeta}>
+        <span>{tBoard('filters.results', { count: filteredCargoes.length })}</span>
+        <span aria-hidden="true">·</span>
+        <span>{tBoard('filters.activeCount', { count: activeFilters })}</span>
+      </div>
+
+      <MobileSingleFilterGroup
+        title={tBoard('filters.status')}
+        options={statusOptions}
+        selectedValues={[statusFilter]}
+        expanded={expandedMobileFilterGroups.status}
+        onToggle={(value) => handleStatusFilterChange(statusFilter === value ? 'all' : (value as StatusFilter))}
+        onExpandToggle={() => toggleMobileFilterGroup('status')}
+      />
+
+      <MobileSingleFilterGroup
+        title={tBoard('filters.corridor')}
+        options={options.corridor.map((value) => ({ value, label: value }))}
+        selectedValues={advancedFilters.corridor}
+        expanded={expandedMobileFilterGroups.corridor}
+        onToggle={(value) => toggleMobileFilter('corridor', value, 'single')}
+        onExpandToggle={() => toggleMobileFilterGroup('corridor')}
+      />
+
+      <MobileMultiFilterGroup
+        title={tBoard('filters.origin')}
+        options={options.origin.map((value) => ({ value, label: value }))}
+        selectedValues={advancedFilters.origin}
+        expanded={expandedMobileFilterGroups.origin}
+        onToggle={(value) => toggleMobileFilter('origin', value, 'multi')}
+        onExpandToggle={() => toggleMobileFilterGroup('origin')}
+      />
+
+      <MobileMultiFilterGroup
+        title={tBoard('filters.destination')}
+        options={options.destination.map((value) => ({ value, label: value }))}
+        selectedValues={advancedFilters.destination}
+        expanded={expandedMobileFilterGroups.destination}
+        onToggle={(value) => toggleMobileFilter('destination', value, 'multi')}
+        onExpandToggle={() => toggleMobileFilterGroup('destination')}
+      />
+
+      <MobileMultiFilterGroup
+        title={tBoard('filters.cargoType')}
+        options={options.type.map((value) => ({ value, label: value }))}
+        selectedValues={advancedFilters.type}
+        expanded={expandedMobileFilterGroups.type}
+        onToggle={(value) => toggleMobileFilter('type', value, 'multi')}
+        onExpandToggle={() => toggleMobileFilterGroup('type')}
+      />
+
+      <MobileMultiFilterGroup
+        title={tBoard('filters.document')}
+        options={options.document.map((value) => ({ value, label: value }))}
+        selectedValues={advancedFilters.document}
+        expanded={expandedMobileFilterGroups.document}
+        onToggle={(value) => toggleMobileFilter('document', value, 'multi')}
+        onExpandToggle={() => toggleMobileFilterGroup('document')}
+      />
+    </div>
+  );
+  const mobileFilterSheet = (
+    <BottomSheet
+      open={drawerOpen}
+      onOpenChange={handleMobileFilterSheetOpenChange}
+      title={tBoard('filters.mobileTitle')}
+      description={tBoard('filters.mobileDescription')}
+      snapPoints={[MOBILE_FILTER_SHEET_SNAP_POINT]}
+      variant="strong"
+      closeAriaLabel={tBoard('filters.close')}
+      className={cx(
+        styles.mobileFilterSheet,
+        isMobileFilterClosing && styles.mobileFilterSheetClosing
+      )}
+      bodyClassName={styles.mobileFilterSheetBody}
+      footer={
+        <div className={styles.filterSheetFooter}>
+          <button type="button" className={styles.filterSheetFooterSecondary} onClick={resetFilters}>
+            {tBoard('filters.mobileClearAction')}
+          </button>
+          <button type="button" className={styles.filterSheetFooterPrimary} onClick={closeMobileFilterSheet}>
+            {tBoard('filters.mobileApplyActionCount', { count: filteredCargoes.length })}
+          </button>
+        </div>
+      }
+    >
+      <div className={styles.filterSheetRoot} role="region" aria-label={tBoard('filters.advancedRegion')}>
+        {mobileFiltersPanel}
+      </div>
+    </BottomSheet>
+  );
+
+  if (isMobileViewport) {
+    return (
+      <section className={styles.mobileBoard}>
+        <div className={styles.mobileListShell}>
+          <header className={styles.mobileHeader}>
+            <div className={styles.mobileHeaderTop}>
+              <div className={styles.mobileHeaderCopy}>
+                <div className={styles.mobileHeaderMeta}>
+                  <p>{tBoard('filters.results', { count: filteredCargoes.length })}</p>
+                  {hasAppliedFilters ? (
+                    <button
+                      type="button"
+                      className={styles.mobileClearFiltersButton}
+                      onClick={resetFilters}
+                    >
+                      {tBoard('filters.mobileClearAction')}
+                    </button>
+                  ) : null}
+                </div>
+              </div>
+
+              <div className={styles.mobileHeaderActions}>
+                <button
+                  type="button"
+                  className={drawerOpen ? styles.mobileFilterButtonActive : styles.mobileFilterButton}
+                  onClick={() => {
+                    if (drawerOpen) {
+                      closeMobileFilterSheet();
+                      return;
+                    }
+
+                    openMobileFilterSheet();
+                  }}
+                  aria-label={activeFilters > 0 ? tBoard('filters.activeCount', { count: activeFilters }) : tBoard('list.filterAria')}
+                  aria-expanded={drawerOpen}
+                >
+                  <SlidersHorizontal className={styles.cargoMobileFilterIcon} aria-hidden />
+                  {activeFilters > 0 ? (
+                    <span className={styles.mobileFilterBadge} aria-hidden>
+                      {activeFilters}
+                    </span>
+                  ) : null}
+                </button>
+
+                <div className={styles.mobileAddLinkWrap}>
+                  <Link href={intlAppPaths.cargos.publishCargo} className={styles.mobileAddLink}>
+                    <Plus size={15} />
+                    <span>{tBoard('list.newCargo')}</span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.cargoSearchWrap}>
+              <div className="hr-cargo-list-search">
+                <Search size={16} />
+                <input
+                  value={query}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    setCurrentPage(1);
+                    setMobileVisibleCount(MOBILE_INITIAL_VISIBLE_COUNT);
+                  }}
+                  placeholder={tBoard('list.searchPlaceholder')}
+                  aria-label={tBoard('list.searchAria')}
+                />
+              </div>
+            </div>
+
+            <div className={styles.mobileStatusScroller} aria-label={tBoard('tabs.aria')}>
+              <button type="button" className={statusFilter === 'all' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('all')}>
+                <Circle size={14} /> {tBoard('statusFilters.all')}
+              </button>
+              <button type="button" className={statusFilter === 'open' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('open')}>
+                <ClipboardList size={14} /> {tBoard('statusFilters.open')}
+              </button>
+              <button type="button" className={statusFilter === 'bidding' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('bidding')}>
+                <Clock3 size={14} /> {tBoard('statusFilters.bidding')}
+              </button>
+              <button type="button" className={statusFilter === 'contracting' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('contracting')}>
+                <FileText size={14} /> {tBoard('statusFilters.contracting')}
+              </button>
+              <button type="button" className={statusFilter === 'reserved' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('reserved')}>
+                <Anchor size={14} /> {tBoard('statusFilters.reserved')}
+              </button>
+              <button type="button" className={statusFilter === 'boarded' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('boarded')}>
+                <Ship size={14} /> {tBoard('statusFilters.boarded')}
+              </button>
+            </div>
+          </header>
+
+          <div className={styles.mobileList} ref={listRef}>
+            {visibleMobileCargoes.length ? (
+              <AnimatePresence initial={!prefersReducedMotion} mode="popLayout">
+                {visibleMobileCargoes.map((cargo) => (
+                  <motion.div
+                    key={cargo.id}
+                    layout={!prefersReducedMotion}
+                    className={styles.mobileCargoListItem}
+                    initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={prefersReducedMotion ? { opacity: 0, y: 0 } : { opacity: 0, y: -8 }}
+                    transition={{ duration: prefersReducedMotion ? 0 : 0.26, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {renderCargoCard(cargo)}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            ) : (
+              <div className={styles.emptyState} role="status">
+                <AlertCircle size={22} aria-hidden="true" />
+                <h3>
+                  {hasAppliedFilters ? tBoard('list.emptyFilteredTitle') : tBoard('list.emptyTitle')}
+                </h3>
+                <p>
+                  {hasAppliedFilters ? tBoard('list.emptyFilteredDescription') : tBoard('list.emptyDescription')}
+                </p>
+                {hasAppliedFilters ? (
+                  <button type="button" onClick={resetFilters}>
+                    {tBoard('list.clearFiltersAction')}
+                  </button>
+                ) : null}
+              </div>
+            )}
+
+            {hasMoreMobileCargoes ? (
+              <div ref={mobileListSentinelRef} className={styles.mobileListSentinel} aria-hidden />
+            ) : null}
+          </div>
+        </div>
+
+        {mobileFilterSheet}
+      </section>
+    );
+  }
 
   return (
     <section className="hx-dashboard hr-dashboard-grid">
@@ -1445,13 +2078,16 @@ export function OperationsBoard({
             <div className="hx-panel-actions hr-cargo-list-actions">
               <button
                 type="button"
-                className={drawerOpen ? 'hx-icon-button hx-filter-trigger is-active' : 'hx-icon-button hx-filter-trigger'}
+                className={cx(
+                  drawerOpen ? 'hx-icon-button hx-filter-trigger is-active' : 'hx-icon-button hx-filter-trigger',
+                  styles.desktopFilterButton
+                )}
                 onClick={() => setDrawerOpen((current) => !current)}
-                aria-label={tBoard('list.filterAria')}
+                aria-label={activeFilters > 0 ? tBoard('filters.activeCount', { count: activeFilters }) : tBoard('list.filterAria')}
                 aria-expanded={drawerOpen}
               >
-                <Filter size={17} />
-                {activeFilters ? <b>{activeFilters}</b> : null}
+                <SlidersHorizontal className={styles.cargoMobileFilterIcon} aria-hidden />
+                {activeFilters > 0 ? <span className={styles.desktopFilterBadge}>{activeFilters}</span> : null}
               </button>
               <Link href={intlAppPaths.cargos.publishCargo} className="hx-add-mini">
                 <Plus size={15} />
@@ -1508,81 +2144,7 @@ export function OperationsBoard({
           ) : null}
 
         <div className="hx-cargo-list hr-cargo-list-body" ref={listRef}>
-          {pageItems.map((cargo) => {
-            const progress = getCargoProgressPercent(cargo);
-            const isSelected = cargo.id === selectedCargo.id;
-            const statusTone = cargo.status;
-            const arrivalLabel = cargo.window || '';
-            const { etaLabel, confidenceLabel } = parseEtaMeta(cargo.etaConfidence, tBoard, tCommon);
-            return (
-              <button
-                type="button"
-                key={cargo.id}
-                className={`hr-cargo-card ${isSelected ? 'is-selected' : ''}`}
-                onClick={() => {
-                  setSelectedId(cargo.id);
-                  setExpandedTimelineEventId(null);
-                  setExpandedDocumentName(null);
-                }}
-              >
-                <div className="hr-cargo-card__header">
-                  <strong className="hr-cargo-card__code">{cargo.id.toUpperCase()}</strong>
-
-                  <div className="hr-cargo-card__actions">
-                    <span className={`hr-status-badge hr-status-badge--${statusTone}`}>
-                      {getCargoStatusLabel(cargo.status, tCommon)}
-                    </span>
-                    <MoreVertical size={18} className="hr-cargo-card__menu" />
-                  </div>
-                </div>
-
-                <p className="hr-cargo-card__title">{cargo.title}</p>
-
-                <div className="hr-cargo-card__route">
-                  <span className="hr-cargo-card__city">
-                    <span className="hr-cargo-card__dot" />
-                    <span>{cargo.origin}</span>
-                  </span>
-
-                  <ArrowRight size={18} className="hr-cargo-card__arrow" />
-
-                  <span className="hr-cargo-card__city">
-                    <span>{cargo.destination}</span>
-                  </span>
-                </div>
-
-                <div className="hr-cargo-card__operator">
-                  <Ship size={18} />
-                  <span>{vesselName(cargo, negotiations, vessels)}</span>
-                </div>
-
-                <div className="hr-cargo-card__progress">
-                  <div className="hr-cargo-card__track">
-                    <span
-                      className={`hr-cargo-card__fill hr-cargo-card__fill--${statusTone}`}
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
-                  <strong className="hr-cargo-card__progressValue">{progress}%</strong>
-                </div>
-
-                <div className="hr-cargo-card__footer">
-                  <span>
-                    <CalendarDays size={14} />
-                    {etaLabel}
-                  </span>
-
-                  {confidenceLabel ? (
-                    <span>{confidenceLabel}</span>
-                  ) : null}
-
-                  {arrivalLabel ? (
-                    <span>{tBoard('misc.arrivalLabel', { value: arrivalLabel })}</span>
-                  ) : null}
-                </div>
-              </button>
-            );
-          })}
+          {pageItems.map((cargo) => renderCargoCard(cargo))}
         </div>
 
         <div className="hx-list-footer hr-cargo-list-footer">
@@ -2243,29 +2805,7 @@ export function OperationsBoard({
         </article>
       </aside>
 
-      <BottomSheet
-        open={drawerOpen && isMobileViewport}
-        onOpenChange={setDrawerOpen}
-        title={tBoard('filters.mobileTitle')}
-        description={tBoard('filters.mobileDescription')}
-        snapPoints={['fullscreen']}
-        variant="fullscreen"
-        closeAriaLabel={tBoard('filters.close')}
-        footer={
-          <div className={styles.filterSheetFooter}>
-            <button type="button" className={styles.filterSheetFooterSecondary} onClick={resetFilters}>
-              {tBoard('filters.mobileClearAction')}
-            </button>
-            <button type="button" className={styles.filterSheetFooterPrimary} onClick={() => setDrawerOpen(false)}>
-              {tBoard('filters.mobileApplyAction')}
-            </button>
-          </div>
-        }
-      >
-        <div className={styles.filterSheetRoot} role="region" aria-label={tBoard('filters.advancedRegion')}>
-          {filtersPanel}
-        </div>
-      </BottomSheet>
+      {isMobileViewport ? mobileFilterSheet : null}
 
     </section>
   );
