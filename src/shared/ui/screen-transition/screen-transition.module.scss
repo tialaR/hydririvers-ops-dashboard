@@ -1,0 +1,47 @@
+$screen-enter-duration: 300ms;
+$screen-exit-duration: 180ms;
+$screen-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+$screen-ease-in: cubic-bezier(0.4, 0, 1, 1);
+
+.screen {
+  min-height: 100%;
+  animation: hydriScreenEnter $screen-enter-duration $screen-ease-out both;
+  will-change: opacity, transform;
+}
+
+.screenLeaving {
+  pointer-events: none;
+  animation: hydriScreenLeave $screen-exit-duration $screen-ease-in both;
+}
+
+@keyframes hydriScreenEnter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.55rem, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hydriScreenLeave {
+  from {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -0.25rem, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen,
+  .screenLeaving {
+    animation: none;
+    transform: none;
+  }
+}
