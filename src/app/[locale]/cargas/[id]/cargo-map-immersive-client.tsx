@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import {
   Anchor,
   ArrowLeft,
@@ -22,6 +23,8 @@ import {
   getRemainingProgressLabel,
   getRiskLabel,
 } from '@/features/waterway-tracking';
+import { appRoutes } from '@/shared/routing/app-routes';
+import type { AppLocale } from '@/shared/routing/route-types';
 import { useScreenTransitionNavigation } from '@/shared/ui/screen-transition';
 
 import styles from './rastreio-cargo-detail.module.scss';
@@ -58,63 +61,143 @@ type MapPoint = {
 const SVG_VIEWBOX_WIDTH = 430;
 const SVG_VIEWBOX_HEIGHT = 932;
 
-const BASE_MAP_POINTS = {
-  origin: {
-    x: 54,
-    y: 622,
-    xPercent: 12.56,
-    yPercent: 66.74,
-  },
-  vessel: {
-    x: 218,
-    y: 430,
-    xPercent: 50.7,
-    yPercent: 46.14,
-  },
-  destination: {
-    x: 362,
-    y: 312,
-    xPercent: 84.19,
-    yPercent: 33.48,
-  },
-} as const;
-
 const INTRO_POINT_SEQUENCE: ReadonlyArray<PointId> = ['origin', 'vessel', 'destination'];
 const INTRO_INITIAL_DELAY_MS = 680;
 const INTRO_STEP_DELAY_MS = 980;
 
-const ROUTE_TRAVELLED_PATH =
-  'M 54 622 C 90 590 122 560 150 524 C 176 490 194 452 218 430';
-
-const ROUTE_REMAINING_PATH =
-  'M 218 430 C 252 398 286 366 318 338 C 338 320 352 312 362 312';
-
-const ROUTE_FULL_PATH =
-  ROUTE_TRAVELLED_PATH + ' ' + ROUTE_REMAINING_PATH.replace('M 218 430', '');
-
-const WATERWAY_PRIMARY_PATH =
-  'M 38 728 C 86 692 132 662 168 620 C 206 574 230 504 280 452 C 320 410 350 394 392 366';
-
-const WATERWAY_SECONDARY_PATH =
-  'M 104 812 C 152 760 190 720 226 660 C 260 604 292 548 344 505';
-
-const WATERWAY_TERTIARY_PATH =
-  'M 42 248 C 92 302 156 304 218 274 C 276 244 326 172 386 104';
-
-const WATERWAY_DASHED_PATH =
-  'M 116 832 C 168 794 212 742 248 674 C 286 604 328 554 384 526';
-
 const ROUTE_PATH_LENGTH = 100;
+
+type RouteLayout = {
+  destinationLabel: { x: number; y: number };
+  originLabel: { x: number; y: number };
+  points: Record<PointId, Omit<MapPoint, 'ariaLabel' | 'description' | 'eyebrow' | 'id' | 'title'>>;
+  routeFullPath: string;
+  routeTitle: { x: number; y: number };
+  waterwayDashedPath: string;
+  waterwayPrimaryPath: string;
+  waterwaySecondaryPath: string;
+  waterwayTertiaryPath: string;
+};
+
+const ROUTE_LAYOUTS: Record<string, RouteLayout> = {
+  amazonas: {
+    points: {
+      origin: { x: 54, y: 622, xPercent: 12.56, yPercent: 66.74 },
+      vessel: { x: 218, y: 430, xPercent: 50.7, yPercent: 46.14 },
+      destination: { x: 362, y: 312, xPercent: 84.19, yPercent: 33.48 },
+    },
+    routeFullPath:
+      'M 54 622 C 90 590 122 560 150 524 C 176 490 194 452 218 430 C 252 398 286 366 318 338 C 338 320 352 312 362 312',
+    waterwayPrimaryPath:
+      'M 38 728 C 86 692 132 662 168 620 C 206 574 230 504 280 452 C 320 410 350 394 392 366',
+    waterwaySecondaryPath:
+      'M 104 812 C 152 760 190 720 226 660 C 260 604 292 548 344 505',
+    waterwayTertiaryPath:
+      'M 42 248 C 92 302 156 304 218 274 C 276 244 326 172 386 104',
+    waterwayDashedPath:
+      'M 116 832 C 168 794 212 742 248 674 C 286 604 328 554 384 526',
+    originLabel: { x: 70, y: 724 },
+    destinationLabel: { x: 302, y: 392 },
+    routeTitle: { x: 110, y: 808 },
+  },
+  madeira: {
+    points: {
+      origin: { x: 78, y: 728, xPercent: 18.14, yPercent: 78.11 },
+      vessel: { x: 176, y: 506, xPercent: 40.93, yPercent: 54.29 },
+      destination: { x: 330, y: 278, xPercent: 76.74, yPercent: 29.83 },
+    },
+    routeFullPath:
+      'M 78 728 C 96 680 124 620 150 564 C 164 536 170 522 176 506 C 206 454 242 398 276 350 C 300 316 318 292 330 278',
+    waterwayPrimaryPath:
+      'M 70 832 C 96 774 118 704 136 632 C 154 560 170 520 204 466 C 230 422 270 360 330 278',
+    waterwaySecondaryPath:
+      'M 34 684 C 74 650 108 604 136 548 C 160 500 188 438 236 376',
+    waterwayTertiaryPath:
+      'M 188 814 C 220 760 250 700 286 644 C 320 592 350 542 392 498',
+    waterwayDashedPath:
+      'M 44 606 C 96 580 136 526 160 470 C 192 398 236 332 310 254',
+    originLabel: { x: 46, y: 812 },
+    destinationLabel: { x: 276, y: 338 },
+    routeTitle: { x: 164, y: 842 },
+  },
+  'tapajos-teles-pires': {
+    points: {
+      origin: { x: 84, y: 666, xPercent: 19.53, yPercent: 71.46 },
+      vessel: { x: 222, y: 488, xPercent: 51.63, yPercent: 52.36 },
+      destination: { x: 350, y: 244, xPercent: 81.4, yPercent: 26.18 },
+    },
+    routeFullPath:
+      'M 84 666 C 128 642 162 604 188 552 C 204 520 212 504 222 488 C 248 438 280 382 312 326 C 330 292 342 262 350 244',
+    waterwayPrimaryPath:
+      'M 44 716 C 94 682 132 630 174 572 C 212 522 244 456 292 390 C 320 352 340 306 366 218',
+    waterwaySecondaryPath:
+      'M 126 842 C 170 780 202 724 230 654 C 256 588 286 526 340 432',
+    waterwayTertiaryPath:
+      'M 34 286 C 88 320 144 322 202 304 C 258 286 310 238 382 136',
+    waterwayDashedPath:
+      'M 72 784 C 132 744 178 692 214 622 C 246 558 284 500 352 402',
+    originLabel: { x: 68, y: 758 },
+    destinationLabel: { x: 288, y: 306 },
+    routeTitle: { x: 112, y: 828 },
+  },
+  'tocantins-araguaia': {
+    points: {
+      origin: { x: 86, y: 694, xPercent: 20, yPercent: 74.46 },
+      vessel: { x: 246, y: 476, xPercent: 57.21, yPercent: 51.07 },
+      destination: { x: 356, y: 226, xPercent: 82.79, yPercent: 24.25 },
+    },
+    routeFullPath:
+      'M 86 694 C 120 654 154 610 190 566 C 214 536 230 504 246 476 C 278 422 306 366 330 306 C 342 276 350 248 356 226',
+    waterwayPrimaryPath:
+      'M 58 776 C 108 734 154 690 192 634 C 228 584 264 516 300 438 C 332 370 352 308 372 190',
+    waterwaySecondaryPath:
+      'M 118 840 C 164 782 206 724 244 658 C 286 586 320 506 372 394',
+    waterwayTertiaryPath:
+      'M 32 326 C 98 330 154 312 210 270 C 268 230 322 168 392 66',
+    waterwayDashedPath:
+      'M 84 748 C 132 710 174 658 214 596 C 254 532 294 466 352 356',
+    originLabel: { x: 58, y: 784 },
+    destinationLabel: { x: 290, y: 274 },
+    routeTitle: { x: 108, y: 842 },
+  },
+  'barra-norte': {
+    points: {
+      origin: { x: 58, y: 564, xPercent: 13.49, yPercent: 60.51 },
+      vessel: { x: 210, y: 392, xPercent: 48.84, yPercent: 42.06 },
+      destination: { x: 360, y: 282, xPercent: 83.72, yPercent: 30.26 },
+    },
+    routeFullPath:
+      'M 58 564 C 98 540 132 508 164 462 C 184 434 198 412 210 392 C 250 360 286 332 320 308 C 340 294 352 286 360 282',
+    waterwayPrimaryPath:
+      'M 30 646 C 90 610 140 570 182 522 C 224 474 270 408 330 338 C 350 314 368 286 394 248',
+    waterwaySecondaryPath:
+      'M 86 742 C 134 700 176 648 214 594 C 248 544 286 486 350 396',
+    waterwayTertiaryPath:
+      'M 42 202 C 106 242 168 250 228 232 C 290 214 340 176 392 106',
+    waterwayDashedPath:
+      'M 124 812 C 172 770 220 712 258 650 C 300 582 338 526 390 468',
+    originLabel: { x: 66, y: 658 },
+    destinationLabel: { x: 300, y: 350 },
+    routeTitle: { x: 94, y: 760 },
+  },
+};
 
 function clampPercent(value: number): number {
   return Math.max(0, Math.min(ROUTE_PATH_LENGTH, value));
 }
 
-function buildMapPoints(scenario: CargoWaterwayTrackingScenario): Record<PointId, MapPoint> {
+function getRouteLayout(scenario: CargoWaterwayTrackingScenario): RouteLayout {
+  return ROUTE_LAYOUTS[scenario.corridorId] ?? ROUTE_LAYOUTS.amazonas;
+}
+
+function buildMapPoints(
+  scenario: CargoWaterwayTrackingScenario,
+  layout: RouteLayout,
+): Record<PointId, MapPoint> {
   return {
     origin: {
       id: 'origin',
-      ...BASE_MAP_POINTS.origin,
+      ...layout.points.origin,
       ariaLabel: `Alternar descricao da origem ${scenario.route.origin.city}`,
       eyebrow: 'ORIGEM',
       title: `${scenario.route.origin.city}, ${scenario.route.origin.state}`,
@@ -122,7 +205,7 @@ function buildMapPoints(scenario: CargoWaterwayTrackingScenario): Record<PointId
     },
     vessel: {
       id: 'vessel',
-      ...BASE_MAP_POINTS.vessel,
+      ...layout.points.vessel,
       ariaLabel: `Alternar descricao da embarcacao ${scenario.vessel.name}`,
       eyebrow: 'EM TRANSITO',
       title: scenario.vessel.name,
@@ -130,7 +213,7 @@ function buildMapPoints(scenario: CargoWaterwayTrackingScenario): Record<PointId
     },
     destination: {
       id: 'destination',
-      ...BASE_MAP_POINTS.destination,
+      ...layout.points.destination,
       ariaLabel: `Alternar descricao do destino ${scenario.route.destination.city}`,
       eyebrow: 'DESTINO',
       title: `${scenario.route.destination.city}, ${scenario.route.destination.state}`,
@@ -194,7 +277,8 @@ export default function CargoMapImmersiveClient({
   locale,
   trackingScenario,
 }: Props) {
-  const { navigateWithTransition, prefetchScreen } = useScreenTransitionNavigation();
+  const router = useRouter();
+  const { prefetchScreen } = useScreenTransitionNavigation();
   const [activeLayer, setActiveLayer] = useState<LayerId>('eta');
   const [visiblePoints, setVisiblePoints] = useState<ReadonlyArray<PointId>>([]);
 
@@ -226,14 +310,16 @@ export default function CargoMapImmersiveClient({
     };
   }, [trackingScenario.cargoId]);
 
-  const backHref = '/' + locale + '/cargas';
-  const closeHref = '/' + locale + '/cargas';
+  const cargoesHref = `/${locale}/cargas`;
   const routeProgressPercent = clampPercent(trackingScenario.metrics.progressPercent);
   const routeRemainingPercent = clampPercent(ROUTE_PATH_LENGTH - routeProgressPercent);
   const travelledDashArray = `${routeProgressPercent} ${ROUTE_PATH_LENGTH}`;
   const remainingDashArray = `${routeRemainingPercent} ${ROUTE_PATH_LENGTH}`;
-
-  const mapPoints = useMemo(() => buildMapPoints(trackingScenario), [trackingScenario]);
+  const routeLayout = useMemo(() => getRouteLayout(trackingScenario), [trackingScenario]);
+  const mapPoints = useMemo(
+    () => buildMapPoints(trackingScenario, routeLayout),
+    [routeLayout, trackingScenario],
+  );
   const layers = useMemo(() => buildLayerItems(trackingScenario), [trackingScenario]);
 
   const activeLayerData = useMemo(() => {
@@ -257,11 +343,18 @@ export default function CargoMapImmersiveClient({
   };
 
   const remainingLabel = getRemainingProgressLabel(trackingScenario);
-  const placeLabels = trackingScenario.map.placeLabels;
+  const operationalStatusLabel = getOperationalStatusLabel(
+    trackingScenario.operationalStatus ?? trackingScenario.status,
+  );
+  const placeLabels = trackingScenario.map.placeLabels ?? [];
+
+  const handleReturnToCargoes = () => {
+    router.replace(cargoesHref);
+  };
 
   useEffect(() => {
-    prefetchScreen(backHref);
-  }, [backHref, prefetchScreen]);
+    prefetchScreen(cargoesHref);
+  }, [cargoesHref, prefetchScreen]);
 
   return (
     <main
@@ -299,10 +392,10 @@ export default function CargoMapImmersiveClient({
 
           <rect className={styles.svgBackground} x="0" y="0" width="430" height="932" />
 
-          <path d={WATERWAY_TERTIARY_PATH} className={styles.waterwayTertiaryPath} />
-          <path d={WATERWAY_PRIMARY_PATH} className={styles.waterwaySecondaryPath} />
-          <path d={WATERWAY_SECONDARY_PATH} className={styles.waterwaySecondaryPathMuted} />
-          <path d={WATERWAY_DASHED_PATH} className={styles.waterwayDashedPath} />
+          <path d={routeLayout.waterwayTertiaryPath} className={styles.waterwayTertiaryPath} />
+          <path d={routeLayout.waterwayPrimaryPath} className={styles.waterwaySecondaryPath} />
+          <path d={routeLayout.waterwaySecondaryPath} className={styles.waterwaySecondaryPathMuted} />
+          <path d={routeLayout.waterwayDashedPath} className={styles.waterwayDashedPath} />
 
           <text x="232" y="384" className={styles.mapLabelStrong}>
             {trackingScenario.map.primaryRiverLabel}
@@ -310,10 +403,10 @@ export default function CargoMapImmersiveClient({
           <text x="178" y="594" className={styles.mapLabelStrong}>
             {trackingScenario.map.secondaryRiverLabel}
           </text>
-          <text x="70" y="724" className={styles.mapLabel}>
+          <text x={routeLayout.originLabel.x} y={routeLayout.originLabel.y} className={styles.mapLabel}>
             {placeLabels[0] ?? 'ORIGEM'}
           </text>
-          <text x="302" y="392" className={styles.mapLabel}>
+          <text x={routeLayout.destinationLabel.x} y={routeLayout.destinationLabel.y} className={styles.mapLabel}>
             {placeLabels[1] ?? 'DESTINO'}
           </text>
           <text x="232" y="506" className={styles.mapLabel}>
@@ -325,7 +418,7 @@ export default function CargoMapImmersiveClient({
           <text x="178" y="654" className={styles.mapLabel}>
             {placeLabels[4] ?? 'CORREDOR'}
           </text>
-          <text x="110" y="808" className={styles.mapLabelRotated}>
+          <text x={routeLayout.routeTitle.x} y={routeLayout.routeTitle.y} className={styles.mapLabelRotated}>
             {trackingScenario.title}
           </text>
 
@@ -333,9 +426,9 @@ export default function CargoMapImmersiveClient({
           <circle cx="322" cy="384" r="2.6" className={styles.portDotMuted} />
           <circle cx="224" cy="506" r="2.4" className={styles.portDotMuted} />
 
-          <path d={ROUTE_FULL_PATH} className={styles.routeUnderlayPath} />
+          <path d={routeLayout.routeFullPath} className={styles.routeUnderlayPath} />
           <path
-            d={ROUTE_FULL_PATH}
+            d={routeLayout.routeFullPath}
             className={styles.routeRemainingPath}
             pathLength={ROUTE_PATH_LENGTH}
             style={{
@@ -344,13 +437,13 @@ export default function CargoMapImmersiveClient({
             }}
           />
           <path
-            d={ROUTE_FULL_PATH}
+            d={routeLayout.routeFullPath}
             className={styles.routeTravelledPath}
             pathLength={ROUTE_PATH_LENGTH}
             style={{ strokeDasharray: travelledDashArray }}
           />
           <path
-            d={ROUTE_FULL_PATH}
+            d={routeLayout.routeFullPath}
             className={styles.routeFlowPath}
             pathLength={ROUTE_PATH_LENGTH}
             style={{ strokeDasharray: travelledDashArray }}
@@ -389,13 +482,13 @@ export default function CargoMapImmersiveClient({
             type="button"
             className={styles.iconButton}
             aria-label="Voltar para lista de cargas"
-            onClick={() => navigateWithTransition(backHref)}
+            onClick={handleReturnToCargoes}
           >
             <ArrowLeft aria-hidden />
           </button>
 
           <div className={styles.statusCapsule}>
-            <span>{getOperationalStatusLabel(trackingScenario.status).toUpperCase()}</span>
+            <span>{operationalStatusLabel.toUpperCase()}</span>
             <strong>{trackingScenario.cargoId}</strong>
           </div>
 
@@ -403,7 +496,7 @@ export default function CargoMapImmersiveClient({
             type="button"
             className={styles.iconButton}
             aria-label="Fechar mapa e voltar para lista de cargas"
-            onClick={() => navigateWithTransition(closeHref)}
+            onClick={handleReturnToCargoes}
           >
             <X aria-hidden />
           </button>

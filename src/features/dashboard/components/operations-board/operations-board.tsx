@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { useTranslations } from 'next-intl';
 import {
@@ -1636,9 +1636,15 @@ export function OperationsBoard({
     syncListViewport();
   }
 
-  function handleStatusFilterChange(nextStatus: StatusFilter) {
+  function handleStatusFilterToggle(nextStatus: StatusFilter) {
     syncListViewport();
-    setStatusFilter(nextStatus);
+    setStatusFilter((currentStatus) => {
+      if (nextStatus === 'all') {
+        return 'all';
+      }
+
+      return currentStatus === nextStatus ? 'all' : nextStatus;
+    });
   }
 
   function updateDesktopFilter(key: keyof AdvancedFilters, value: string) {
@@ -1721,7 +1727,7 @@ export function OperationsBoard({
 
   if (!selectedCargo) {
     return (
-      <section className={isMobileViewport ? styles.mobileBoard : 'hx-dashboard hr-dashboard-grid'}>
+      <section className={isMobileViewport ? `hx-dashboard ${styles.mobileBoard}` : 'hx-dashboard hr-dashboard-grid'}>
         <div className={styles.emptyState} role="status">
           <AlertCircle size={22} aria-hidden="true" />
           <h3>{tBoard('list.emptyTitle')}</h3>
@@ -1848,7 +1854,7 @@ export function OperationsBoard({
         options={statusOptions}
         selectedValues={[statusFilter]}
         expanded={expandedMobileFilterGroups.status}
-        onToggle={(value) => handleStatusFilterChange(statusFilter === value ? 'all' : (value as StatusFilter))}
+        onToggle={(value) => handleStatusFilterToggle(value as StatusFilter)}
         onExpandToggle={() => toggleMobileFilterGroup('status')}
       />
 
@@ -1931,7 +1937,7 @@ export function OperationsBoard({
 
   if (isMobileViewport) {
     return (
-      <section className={styles.mobileBoard}>
+      <section className={`hx-dashboard ${styles.mobileBoard}`}>
         <div className={styles.mobileListShell}>
           <header className={styles.mobileHeader}>
             <div className={styles.mobileHeaderTop}>
@@ -1999,22 +2005,22 @@ export function OperationsBoard({
             </div>
 
             <div className={styles.mobileStatusScroller} aria-label={tBoard('tabs.aria')}>
-              <button type="button" className={statusFilter === 'all' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('all')}>
+              <button type="button" className={statusFilter === 'all' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('all')} aria-pressed={statusFilter === 'all'}>
                 <Circle size={14} /> {tBoard('statusFilters.all')}
               </button>
-              <button type="button" className={statusFilter === 'open' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('open')}>
+              <button type="button" className={statusFilter === 'open' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('open')} aria-pressed={statusFilter === 'open'}>
                 <ClipboardList size={14} /> {tBoard('statusFilters.open')}
               </button>
-              <button type="button" className={statusFilter === 'bidding' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('bidding')}>
+              <button type="button" className={statusFilter === 'bidding' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('bidding')} aria-pressed={statusFilter === 'bidding'}>
                 <Clock3 size={14} /> {tBoard('statusFilters.bidding')}
               </button>
-              <button type="button" className={statusFilter === 'contracting' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('contracting')}>
+              <button type="button" className={statusFilter === 'contracting' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('contracting')} aria-pressed={statusFilter === 'contracting'}>
                 <FileText size={14} /> {tBoard('statusFilters.contracting')}
               </button>
-              <button type="button" className={statusFilter === 'reserved' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('reserved')}>
+              <button type="button" className={statusFilter === 'reserved' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('reserved')} aria-pressed={statusFilter === 'reserved'}>
                 <Anchor size={14} /> {tBoard('statusFilters.reserved')}
               </button>
-              <button type="button" className={statusFilter === 'boarded' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterChange('boarded')}>
+              <button type="button" className={statusFilter === 'boarded' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('boarded')} aria-pressed={statusFilter === 'boarded'}>
                 <Ship size={14} /> {tBoard('statusFilters.boarded')}
               </button>
             </div>
@@ -2023,15 +2029,20 @@ export function OperationsBoard({
           <div className={styles.mobileList} ref={listRef}>
             {visibleMobileCargoes.length ? (
               <AnimatePresence initial={!prefersReducedMotion} mode="popLayout">
-                {visibleMobileCargoes.map((cargo) => (
+                {visibleMobileCargoes.map((cargo, index) => (
                   <motion.div
                     key={cargo.id}
                     layout={!prefersReducedMotion}
                     className={styles.mobileCargoListItem}
+                    style={{ '--cargo-card-index': index } as CSSProperties}
                     initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={prefersReducedMotion ? { opacity: 0, y: 0 } : { opacity: 0, y: -8 }}
-                    transition={{ duration: prefersReducedMotion ? 0 : 0.26, ease: [0.22, 1, 0.36, 1] }}
+                    transition={{
+                      duration: prefersReducedMotion ? 0 : 0.22,
+                      delay: prefersReducedMotion ? 0 : Math.min(index, 5) * 0.028,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
                   >
                     {renderCargoCard(cargo)}
                   </motion.div>
@@ -2112,29 +2123,29 @@ export function OperationsBoard({
             </div>
           </div>
 
-          <div className="hr-cargo-status-filters">
-            <button type="button" className={statusFilter === 'all' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('all'); setCurrentPage(1); }}>
-              <Circle size={14} /> {tBoard('statusFilters.all')}
-            </button>
-            <button type="button" className={statusFilter === 'open' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('open'); setCurrentPage(1); }}>
-              <ClipboardList size={14} /> {tBoard('statusFilters.open')}
-            </button>
-            <button type="button" className={statusFilter === 'bidding' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('bidding'); setCurrentPage(1); }}>
-              <Clock3 size={14} /> {tBoard('statusFilters.bidding')}
-            </button>
-            <button type="button" className={statusFilter === 'contracting' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('contracting'); setCurrentPage(1); }}>
-              <FileText size={14} /> {tBoard('statusFilters.contracting')}
-            </button>
-            <button type="button" className={statusFilter === 'reserved' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('reserved'); setCurrentPage(1); }}>
-              <Anchor size={14} /> {tBoard('statusFilters.reserved')}
-            </button>
-            <button type="button" className={statusFilter === 'boarded' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => { setStatusFilter('boarded'); setCurrentPage(1); }}>
-              <Ship size={14} /> {tBoard('statusFilters.boarded')}
-            </button>
-          </div>
-          </div>
-
-          {drawerOpen && !isMobileViewport ? (
+	          <div className="hr-cargo-status-filters">
+	            <button type="button" className={statusFilter === 'all' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('all')} aria-pressed={statusFilter === 'all'}>
+	                <Circle size={14} /> {tBoard('statusFilters.all')}
+              </button>
+              <button type="button" className={statusFilter === 'open' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('open')} aria-pressed={statusFilter === 'open'}>
+                <ClipboardList size={14} /> {tBoard('statusFilters.open')}
+              </button>
+              <button type="button" className={statusFilter === 'bidding' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('bidding')} aria-pressed={statusFilter === 'bidding'}>
+                <Clock3 size={14} /> {tBoard('statusFilters.bidding')}
+              </button>
+              <button type="button" className={statusFilter === 'contracting' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('contracting')} aria-pressed={statusFilter === 'contracting'}>
+                <FileText size={14} /> {tBoard('statusFilters.contracting')}
+              </button>
+              <button type="button" className={statusFilter === 'reserved' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('reserved')} aria-pressed={statusFilter === 'reserved'}>
+                <Anchor size={14} /> {tBoard('statusFilters.reserved')}
+              </button>
+              <button type="button" className={statusFilter === 'boarded' ? 'hr-cargo-status-chip is-active' : 'hr-cargo-status-chip'} onClick={() => handleStatusFilterToggle('boarded')} aria-pressed={statusFilter === 'boarded'}>
+	                <Ship size={14} /> {tBoard('statusFilters.boarded')}
+	              </button>
+	            </div>
+	          </div>
+	
+	          {drawerOpen && !isMobileViewport ? (
             <div className="hx-filter-panel hx-filter-panel--desktop" role="region" aria-label={tBoard('filters.advancedRegion')}>
               {filtersPanel}
               <div className="hx-filter-panel__actions">

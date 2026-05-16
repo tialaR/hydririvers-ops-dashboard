@@ -1330,10 +1330,11 @@
 
 .mobileList {
   display: grid;
-  gap: 0;
+  gap: 0.45rem;
   align-content: start;
   padding: 0;
   margin: 0;
+  animation: cargoListEnter 220ms ease-out both;
 }
 
 .mobileListSentinel {
@@ -4958,14 +4959,40 @@
 }
 
 .mobileCargoListItem {
-  margin: 0 0 0.25rem;
+  margin: 0;
   padding: 0;
   min-height: 0;
   transform-origin: center top;
+  animation: cargoCardEnter 220ms ease-out both;
+  animation-delay: calc(var(--cargo-card-index, 0) * 28ms);
 }
 
 .mobileCargoListItem :global(.hr-cargo-card) {
   margin: 0 !important;
+}
+
+@keyframes cargoListEnter {
+  from {
+    opacity: 0;
+    transform: translateY(0.45rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cargoCardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(0.6rem) scale(0.995);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (max-width: 767px) {
@@ -5061,6 +5088,13 @@
     border: 0;
     background: linear-gradient(180deg, #ffe69a, #e7b740);
     color: #120d04;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobileList,
+  .mobileCargoListItem {
+    animation: none;
   }
 }
 

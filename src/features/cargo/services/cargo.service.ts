@@ -1,4 +1,5 @@
 import { readMock } from '@/shared/server/mock-db';
+import { normalizeCargoIdForLookup } from '@/shared/routing/normalize-cargo-id';
 import type { UserRole } from '@/features/auth/domain/auth.types';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import { publicCargosMock } from '@/features/cargo/mocks/publicCargos.mock';
@@ -70,12 +71,15 @@ export const getMyCargos = getCurrentUserCargos;
 
 export async function getCargoById(id: string): Promise<Cargo | undefined> {
   const cargoes = readMock('cargoes') as Cargo[];
-  return (
-    cargoes.find((cargo) => cargo.id === id) ??
-    publicCargosMock.find((cargo) => cargo.id === id) ??
-    userCargosMock.find((cargo) => cargo.id === id) ??
-    carrierCargosMock.find((cargo) => cargo.id === id) ??
-    shipper2CargosMock.find((cargo) => cargo.id === id) ??
-    carrier2CargosMock.find((cargo) => cargo.id === id)
-  );
+  const normalizedId = normalizeCargoIdForLookup(id);
+  const allCargoes = [
+    ...cargoes,
+    ...publicCargosMock,
+    ...userCargosMock,
+    ...carrierCargosMock,
+    ...shipper2CargosMock,
+    ...carrier2CargosMock,
+  ];
+
+  return allCargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
 }

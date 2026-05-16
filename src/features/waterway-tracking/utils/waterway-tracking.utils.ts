@@ -18,7 +18,7 @@ export function getRemainingProgressLabel(
   return `${scenario.metrics.remainingPercent}% para destino`;
 }
 
-export function getOperationalStatusLabel(status: WaterwayOperationalStatus): string {
+export function getOperationalStatusLabel(status?: WaterwayOperationalStatus | string): string {
   const labels: Record<WaterwayOperationalStatus, string> = {
     'on-time': 'Dentro do prazo',
     attention: 'Atencao',
@@ -27,7 +27,11 @@ export function getOperationalStatusLabel(status: WaterwayOperationalStatus): st
     contingency: 'Contingencia',
   };
 
-  return labels[status];
+  if (!status) {
+    return 'Operacao monitorada';
+  }
+
+  return labels[status as WaterwayOperationalStatus] ?? status;
 }
 
 export function getRiskLabel(riskLevel: WaterwayRiskLevel): string {

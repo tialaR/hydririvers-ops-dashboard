@@ -1434,6 +1434,16 @@
       "cost": "Costos",
       "priority": "Prioridad"
     },
+    "actionSheet": {
+      "ariaLabel": "Elegir vista de la carga",
+      "navigationAria": "Vistas de la carga",
+      "close": "Cerrar opciones de la carga",
+      "overviewDescription": "Mapa inmersivo, progreso y ruta hidroviaria.",
+      "timelineDescription": "Eventos, checkpoints y línea de tiempo.",
+      "documentsDescription": "Paquete documental, pendientes y validaciones.",
+      "costDescription": "Resumen financiero, ahorro y composición.",
+      "priorityDescription": "SLA operacional, urgencia y criticidad."
+    },
     "list": {
       "title": "Lista de cargas",
       "trackingTitle": "Operaciones rastreadas",

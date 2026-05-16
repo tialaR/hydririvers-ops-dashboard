@@ -12,6 +12,10 @@ import {
   getDefaultProgressForCargoStatus,
   getRemainingWaterwayPercent,
 } from './waterway-progress.utils';
+import {
+  normalizeCargoId as normalizeCanonicalCargoId,
+  normalizeCargoIdForLookup,
+} from '@/shared/routing/normalize-cargo-id';
 
 type CargoScenarioInput = {
   cargoId: string;
@@ -37,6 +41,10 @@ const CONNECTIVITY_TO_SIGNAL_PERCENT: Record<NonNullable<CargoScenarioInput['con
   delayedSync: 78,
   lowSignal: 61,
 };
+
+function normalizeCargoLookupId(cargoId: string): string {
+  return normalizeCargoIdForLookup(cargoId);
+}
 
 function clampPercent(value: number): number {
   return clampWaterwayPercent(value);
@@ -122,7 +130,8 @@ function splitCityState(value: string) {
 }
 
 function getStableScenarioIndex(cargoId: string): number {
-  const hash = Array.from(cargoId).reduce((total, char) => {
+  const normalizedCargoId = normalizeCargoLookupId(cargoId);
+  const hash = Array.from(normalizedCargoId).reduce((total, char) => {
     return total + char.charCodeAt(0);
   }, 0);
 
@@ -131,8 +140,9 @@ function getStableScenarioIndex(cargoId: string): number {
 
 function getBaseScenarioForCargo(cargoId: string): CargoWaterwayTrackingScenario {
   const exactScenario = getCargoWaterwayTrackingScenario(cargoId);
+  const normalizedCargoId = normalizeCargoLookupId(cargoId);
 
-  if (exactScenario.cargoId === cargoId) {
+  if (normalizeCargoLookupId(exactScenario.cargoId) === normalizedCargoId) {
     return exactScenario;
   }
 
@@ -143,6 +153,7 @@ export function createCargoWaterwayTrackingScenario(
   input: CargoScenarioInput,
 ): CargoWaterwayTrackingScenario {
   const baseScenario = getBaseScenarioForCargo(input.cargoId);
+  const canonicalCargoId = normalizeCanonicalCargoId(input.cargoId);
   const progressPercent = getProgressPercent(input, baseScenario.metrics.progressPercent);
   const operationalStatus = getOperationalStatus(input, baseScenario.status);
   const etaLabel = parseEtaLabel(input, baseScenario.metrics.etaLabel);
@@ -159,8 +170,8 @@ export function createCargoWaterwayTrackingScenario(
 
   return {
     ...baseScenario,
-    id: input.cargoId,
-    cargoId: input.cargoId,
+    id: canonicalCargoId,
+    cargoId: canonicalCargoId,
     cargoStatus: input.status ?? baseScenario.cargoStatus,
     title: input.title,
     cargoType: input.cargoType ?? baseScenario.cargoType,
@@ -189,7 +200,7 @@ export function createCargoWaterwayTrackingScenario(
       },
       currentDescription:
         baseScenario.route.currentDescription ||
-        `Carga ${input.cargoId} em navegacao hidroviaria monitorada.`,
+        `Carga ${canonicalCargoId} em navegacao hidroviaria monitorada.`,
     },
     metrics: {
       ...baseScenario.metrics,

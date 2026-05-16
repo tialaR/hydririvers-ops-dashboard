@@ -536,11 +536,19 @@ export const CARGO_WATERWAY_TRACKING_SCENARIOS: CargoWaterwayTrackingScenario[] 
 export const DEFAULT_CARGO_WATERWAY_TRACKING_SCENARIO =
   CARGO_WATERWAY_TRACKING_SCENARIOS[0];
 
+function normalizeCargoScenarioId(cargoId: string): string {
+  return cargoId.trim().toLowerCase();
+}
+
 export function getCargoWaterwayTrackingScenario(
   cargoId: string,
 ): CargoWaterwayTrackingScenario {
+  const normalizedCargoId = normalizeCargoScenarioId(cargoId);
+
   return (
-    CARGO_WATERWAY_TRACKING_SCENARIOS.find((scenario) => scenario.cargoId === cargoId) ??
+    CARGO_WATERWAY_TRACKING_SCENARIOS.find((scenario) => {
+      return normalizeCargoScenarioId(scenario.cargoId) === normalizedCargoId;
+    }) ??
     DEFAULT_CARGO_WATERWAY_TRACKING_SCENARIO
   );
 }

@@ -1434,6 +1434,16 @@
       "cost": "Cost",
       "priority": "Priority"
     },
+    "actionSheet": {
+      "ariaLabel": "Choose cargo view",
+      "navigationAria": "Cargo views",
+      "close": "Close cargo options",
+      "overviewDescription": "Immersive map, progress and waterway route.",
+      "timelineDescription": "Events, checkpoints and timeline.",
+      "documentsDescription": "Document package, pending items and validations.",
+      "costDescription": "Financial summary, savings and composition.",
+      "priorityDescription": "Operational SLA, urgency and criticality."
+    },
     "list": {
       "title": "Cargo list",
       "trackingTitle": "Tracked operations",

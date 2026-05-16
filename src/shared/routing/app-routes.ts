@@ -1,5 +1,6 @@
 import type { AppLocale } from './route-types';
 import { routeSearchParams } from './route-search-params';
+import { normalizeCargoId } from './normalize-cargo-id';
 
 /** Segmentos sem prefixo de locale (uso com next-intl Link / router + proxy). */
 const intlSegments = {
@@ -20,6 +21,21 @@ const intlSegments = {
   governo: '/governo'
 } as const;
 
+function splitPathSearchAndHash(value: string) {
+  const hashIndex = value.indexOf('#');
+  const hash = hashIndex >= 0 ? value.slice(hashIndex) : '';
+  const pathAndSearch = hashIndex >= 0 ? value.slice(0, hashIndex) : value;
+  const searchIndex = pathAndSearch.indexOf('?');
+  const pathname = searchIndex >= 0 ? pathAndSearch.slice(0, searchIndex) : pathAndSearch;
+  const search = searchIndex >= 0 ? pathAndSearch.slice(searchIndex) : '';
+
+  return {
+    pathname,
+    search,
+    hash
+  };
+}
+
 /**
  * Monta caminho absoluto com locale (`/{locale}/...`) para `redirect()` do Next,
  * `revalidatePath`, `window.location`, URLs completas em E2E, etc.
@@ -27,7 +43,13 @@ const intlSegments = {
 export function localizedAppPath(locale: AppLocale, pathname: string): string {
   if (pathname === '/') return `/${locale}`;
   const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  return `/${locale}${normalized}`;
+  const { pathname: cleanPathname, search, hash } = splitPathSearchAndHash(normalized);
+
+  if (localePathPrefix.test(cleanPathname)) {
+    return `${cleanPathname}${search}${hash}`;
+  }
+
+  return `/${locale}${cleanPathname}${search}${hash}`;
 }
 
 /**
@@ -49,8 +71,12 @@ export const intlAppPaths = {
     marketplace: intlSegments.cargasRoot,
     myCargos: intlSegments.minhasCargas,
     publishCargo: intlSegments.cargasNova,
-    cargoDetail: (cargoId: string) => `${intlSegments.cargasRoot}/${cargoId}`,
-    myCargoDetail: (cargoId: string) => `${intlSegments.minhasCargas}/${cargoId}`
+    cargoDetail: (cargoId: string) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
+    myCargoDetail: (cargoId: string) =>
+      `${intlSegments.minhasCargas}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
+    cargoView: (cargoId: string, view: string) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}?view=${encodeURIComponent(view)}`
   },
   admin: {
     home: intlSegments.admin
@@ -127,6 +153,8 @@ export const appRoutes = {
     publishCargo: (locale: AppLocale) => localizedAppPath(locale, intlAppPaths.cargos.publishCargo),
     cargoDetail: (locale: AppLocale, cargoId: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.cargoDetail(cargoId)),
+    cargoView: (locale: AppLocale, cargoId: string, view: string) =>
+      localizedAppPath(locale, intlAppPaths.cargos.cargoView(cargoId, view)),
     myCargoDetail: (locale: AppLocale, cargoId: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId))
   },

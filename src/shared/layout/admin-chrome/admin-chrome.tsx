@@ -154,6 +154,9 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const { navigateWithTransition, prefetchScreen } = useScreenTransitionNavigation();
   const searchParams = useSearchParams();
   const activeHref = useMemo(() => resolveActiveHref(pathname), [pathname]);
+  const normalizedPathname = useMemo(() => {
+    return pathname.replace(/^\/(pt-BR|en-US|es)(?=\/|$)/, '') || '/';
+  }, [pathname]);
   const { user, ready: authReady } = useAuthSession();
   /** Só aplica papel na sidebar após a sessão resolver — evita divergência SSR vs 1º paint client. */
   const navigationUser = authReady ? user : null;
@@ -214,19 +217,20 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const headerFullTitleLabel = `${activeNavLabel} • ${activeNavSubtitle}`;
   const hasUnreadNotifications = unreadNotificationsCount > 0;
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
+  const isCargoDetailPath = normalizedPathname.startsWith(`${intlAppPaths.cargos.marketplace}/`);
   const showMockTools = isMockQaUiEnabled();
 
   const mobileSearchShortcutList = useMemo(
     () => [
       { href: intlAppPaths.home, label: tChrome('mobile.bottomNav.overview'), Icon: LayoutDashboard },
       { href: intlAppPaths.dashboard.home, label: tChrome('mobile.bottomNav.dashboard'), Icon: Gauge },
-      { href: intlAppPaths.cargos.marketplace, label: tChrome('mobile.bottomNav.cargos'), Icon: Package },
+      { href: `/${locale}/cargas`, label: tChrome('mobile.bottomNav.cargos'), Icon: Package },
       { href: intlAppPaths.negotiations.home, label: tChrome('mobile.bottomNav.negotiations'), Icon: Handshake },
       { href: intlAppPaths.tracking.home, label: tChrome('mobile.bottomNav.tracking'), Icon: Route },
       { href: intlAppPaths.cargos.myCargos, label: t('myCargoes'), Icon: Boxes },
       { href: intlAppPaths.auth.profile, label: tChrome('mobile.accountSheet.profile'), Icon: User }
     ],
-    [t, tChrome]
+    [locale, t, tChrome]
   );
 
   useEffect(() => {
@@ -832,11 +836,20 @@ export function AdminChrome({ children }: AdminChromeProps) {
               aria-label={tChrome(`mobile.bottomNav.${slot.labelKey}`)}
               onMouseEnter={() => prefetchScreen(slot.href)}
               onClick={(event) => {
-                if (active) {
+                const shouldForceCargoListReturn =
+                  slot.href === intlAppPaths.cargos.marketplace && isCargoDetailPath;
+
+                if (active && !shouldForceCargoListReturn) {
                   return;
                 }
 
                 event.preventDefault();
+
+                if (shouldForceCargoListReturn) {
+                  router.replace(slot.href as never);
+                  return;
+                }
+
                 navigateWithTransition(slot.href);
               }}
             >
