@@ -12,9 +12,9 @@
 }
 
 .overlay[data-variant="strong"] {
-  background: color-mix(in srgb, #010508 94%, transparent);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(1, 7, 11, 0.58);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 }
 
 .overlay[data-variant="fullscreen"] {
@@ -45,10 +45,18 @@
 }
 
 .sheet[data-variant="strong"] {
-  border-color: color-mix(in srgb, var(--hx-line-soft, rgba(255,255,255,.1)) 120%, transparent);
+  border-color: rgba(70, 108, 118, 0.18);
   background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--hx-cyan, #14d8c4) 8%, transparent), transparent 10rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, #10191c) 96%, transparent), color-mix(in srgb, var(--hx-card, #071015) 99%, transparent));
+    radial-gradient(circle at 100% 0%, rgba(20, 216, 196, 0.06), transparent 10rem),
+    linear-gradient(180deg, rgba(8, 17, 24, 0.985), rgba(5, 11, 17, 0.992));
+}
+
+.sheet[data-variant="strong"] .closeButton {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(10, 20, 27, 0.94), rgba(6, 12, 18, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0.75rem 1.45rem rgba(0, 0, 0, 0.24);
 }
 
 .sheet[data-variant="fullscreen"] {

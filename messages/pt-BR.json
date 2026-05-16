@@ -1442,18 +1442,24 @@
       "searchAria": "Buscar cargas",
       "filterAria": "Filtrar cargas",
       "showing": "Exibindo {pageCount} de {totalCount} cargas",
-      "empty": "Nenhuma carga disponível."
+      "empty": "Nenhuma carga disponível.",
+      "emptyTitle": "Nenhuma carga encontrada",
+      "emptyDescription": "Ainda não há cargas disponíveis nesta visão. Assim que novas operações entrarem, elas aparecerão aqui.",
+      "emptyFilteredTitle": "Nenhuma carga encontrada",
+      "emptyFilteredDescription": "Não encontramos cargas com os filtros atuais. Você pode limpar os filtros e tentar novamente.",
+      "clearFiltersAction": "Limpar filtros"
     },
     "filters": {
       "eyebrow": "FILTROS",
       "title": "Refinar operações",
-      "mobileTitle": "Escolha o que você quer ver",
-      "mobileDescription": "Você pode mudar isso quando quiser.",
+      "mobileTitle": "Filtros",
+      "mobileDescription": "Refine a lista de cargas",
       "advancedRegion": "Filtros avançados",
       "close": "Fechar filtros",
       "results": "{count} resultados",
       "activeCount": "{count} filtros ativos",
       "inactive": "Nenhum filtro avançado ativo",
+      "status": "Status",
       "corridor": "Corredor",
       "origin": "Origem",
       "destination": "Destino",
@@ -1461,8 +1467,9 @@
       "document": "Documento",
       "allOptions": "Todos",
       "closeAction": "Fechar",
-      "mobileApplyAction": "Ver cargas filtradas",
-      "mobileClearAction": "Limpar escolhas"
+      "mobileApplyAction": "Visualizar cargas",
+      "mobileApplyActionCount": "Visualizar {count} cargas",
+      "mobileClearAction": "Limpar todos"
     },
     "statusFilters": {
       "all": "Todas",

@@ -23,6 +23,11 @@ type CargoDetailPageProps = {
 };
 
 const VISUAL_OVERVIEW_VIEW = 'visao-geral';
+const CARGO_PRIORITY_LEVEL_TO_TRACKING_PRIORITY = {
+  monitoring: 'low',
+  medium: 'normal',
+  high: 'high',
+} as const;
 
 export default async function CargoDetailPage({
   params,
@@ -40,11 +45,26 @@ export default async function CargoDetailPage({
   const currentView = resolvedSearchParams.view;
 
   if (currentView === VISUAL_OVERVIEW_VIEW) {
+    const trackingPriority = cargo.priority
+      ? CARGO_PRIORITY_LEVEL_TO_TRACKING_PRIORITY[cargo.priority.level]
+      : undefined;
+
     const trackingScenario = createCargoWaterwayTrackingScenario({
       cargoId: id,
       title,
+      cargoType: cargo.cargoType,
+      co2Saving: cargo.co2Saving,
+      connectivity: cargo.connectivity,
+      corridor: cargo.corridor,
+      documentReadiness: cargo.documentReadiness,
+      etaConfidence: cargo.etaConfidence,
+      mainRiver: cargo.mainRiver,
       origin: cargo.origin,
       destination: cargo.destination,
+      priority: trackingPriority,
+      status: cargo.status,
+      targetPrice: cargo.targetPrice,
+      window: cargo.window,
     });
 
     return (

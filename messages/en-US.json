@@ -1442,18 +1442,24 @@
       "searchAria": "Search cargoes",
       "filterAria": "Filter cargoes",
       "showing": "Showing {pageCount} of {totalCount} cargoes",
-      "empty": "No cargo available."
+      "empty": "No cargo available.",
+      "emptyTitle": "No cargo found",
+      "emptyDescription": "There are no cargoes available in this view yet. As soon as new operations arrive, they will appear here.",
+      "emptyFilteredTitle": "No cargo found",
+      "emptyFilteredDescription": "We couldn't find cargoes with the current filters. You can clear the filters and try again.",
+      "clearFiltersAction": "Clear filters"
     },
     "filters": {
       "eyebrow": "FILTERS",
       "title": "Refine operations",
-      "mobileTitle": "Choose what you want to see",
-      "mobileDescription": "You can change this whenever you want.",
+      "mobileTitle": "Filters",
+      "mobileDescription": "Refine the cargo list",
       "advancedRegion": "Advanced filters",
       "close": "Close filters",
       "results": "{count} results",
       "activeCount": "{count} active filters",
       "inactive": "No advanced filters active",
+      "status": "Status",
       "corridor": "Corridor",
       "origin": "Origin",
       "destination": "Destination",
@@ -1461,8 +1467,9 @@
       "document": "Document",
       "allOptions": "All",
       "closeAction": "Close",
-      "mobileApplyAction": "See filtered cargoes",
-      "mobileClearAction": "Clear choices"
+      "mobileApplyAction": "View cargoes",
+      "mobileApplyActionCount": "View {count} cargoes",
+      "mobileClearAction": "Clear all"
     },
     "statusFilters": {
       "all": "All",

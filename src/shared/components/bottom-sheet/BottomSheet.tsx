@@ -7,7 +7,7 @@ import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
 import { zIndex } from '@/shared/constants/z-index';
 import styles from './BottomSheet.module.scss';
 
-export type BottomSheetSnapPoint = 'auto' | '60vh' | '75vh' | '90vh' | 'fullscreen';
+export type BottomSheetSnapPoint = 'auto' | '60vh' | '75vh' | '90vh' | '92vh' | '96vh' | 'fullscreen';
 
 export type BottomSheetVariant = 'default' | 'strong' | 'fullscreen';
 
@@ -35,6 +35,8 @@ export type BottomSheetProps = {
 function resolveSnapPoint(snapPoints: BottomSheetSnapPoint[] | undefined) {
   const snap = snapPoints?.[0] ?? 'auto';
   if (snap === 'fullscreen') return '100dvh';
+  if (snap === '96vh') return '96dvh';
+  if (snap === '92vh') return '92dvh';
   if (snap === '90vh') return '90dvh';
   if (snap === '75vh') return '75dvh';
   if (snap === '60vh') return '60dvh';

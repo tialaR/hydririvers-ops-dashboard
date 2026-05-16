@@ -56,6 +56,7 @@ import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
 import { OPEN_MOCK_PANEL_EVENT } from '@/shared/ui/mock-mode/mock-mode';
 import { isMockQaUiEnabled } from '@/shared/qa/mock-qa-ui-env';
+import { ScreenTransition, useScreenTransitionNavigation } from '@/shared/ui/screen-transition';
 
 type AdminChromeProps = {
   children: React.ReactNode;
@@ -150,6 +151,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const locale = useLocale() as SidebarLocale;
   const pathname = usePathname();
   const router = useRouter();
+  const { navigateWithTransition, prefetchScreen } = useScreenTransitionNavigation();
   const searchParams = useSearchParams();
   const activeHref = useMemo(() => resolveActiveHref(pathname), [pathname]);
   const { user, ready: authReady } = useAuthSession();
@@ -808,14 +810,16 @@ export function AdminChrome({ children }: AdminChromeProps) {
           </header>
           </div>
 
-          <div className="hr-dashboard-content-root">
-            {children}
+          <div className={`hr-dashboard-content-root ${styles.mobileContentStage}`}>
+            <ScreenTransition>
+              {children}
+            </ScreenTransition>
           </div>
           </div>
         </main>
       </div>
 
-      <nav className="hx-mobile-nav" aria-label={t('mobileMenu')}>
+      <nav className={styles.mobileBottomNav} aria-label={t('mobileMenu')}>
         {MOBILE_BOTTOM_NAV.map((slot) => {
           const Icon = iconByKey[slot.iconKey];
           const active = activeHref === slot.href;
@@ -823,11 +827,25 @@ export function AdminChrome({ children }: AdminChromeProps) {
             <Link
               key={slot.href}
               href={slot.href}
-              className={active ? 'hx-mobile-nav__item is-active' : 'hx-mobile-nav__item'}
+              className={active ? `${styles.mobileBottomNavItem} ${styles.mobileBottomNavItemActive}` : styles.mobileBottomNavItem}
               aria-current={active ? 'page' : undefined}
+              aria-label={tChrome(`mobile.bottomNav.${slot.labelKey}`)}
+              onMouseEnter={() => prefetchScreen(slot.href)}
+              onClick={(event) => {
+                if (active) {
+                  return;
+                }
+
+                event.preventDefault();
+                navigateWithTransition(slot.href);
+              }}
             >
-              <Icon size={17} />
-              <span>{tChrome(`mobile.bottomNav.${slot.labelKey}`)}</span>
+              <span className={styles.mobileBottomNavItemInner}>
+                <span className={styles.mobileBottomNavIconBubble}>
+                  <Icon size={18} />
+                </span>
+                <span className={styles.mobileBottomNavLabel}>{tChrome(`mobile.bottomNav.${slot.labelKey}`)}</span>
+              </span>
             </Link>
           );
         })}

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import type { LucideIcon } from 'lucide-react';
 import {
@@ -23,6 +22,7 @@ import {
   getRemainingProgressLabel,
   getRiskLabel,
 } from '@/features/waterway-tracking';
+import { useScreenTransitionNavigation } from '@/shared/ui/screen-transition';
 
 import styles from './rastreio-cargo-detail.module.scss';
 
@@ -103,6 +103,12 @@ const WATERWAY_TERTIARY_PATH =
 
 const WATERWAY_DASHED_PATH =
   'M 116 832 C 168 794 212 742 248 674 C 286 604 328 554 384 526';
+
+const ROUTE_PATH_LENGTH = 100;
+
+function clampPercent(value: number): number {
+  return Math.max(0, Math.min(ROUTE_PATH_LENGTH, value));
+}
 
 function buildMapPoints(scenario: CargoWaterwayTrackingScenario): Record<PointId, MapPoint> {
   return {
@@ -186,9 +192,9 @@ function buildLayerItems(scenario: CargoWaterwayTrackingScenario): LayerItem[] {
 
 export default function CargoMapImmersiveClient({
   locale,
-  cargoId,
   trackingScenario,
 }: Props) {
+  const { navigateWithTransition, prefetchScreen } = useScreenTransitionNavigation();
   const [activeLayer, setActiveLayer] = useState<LayerId>('eta');
   const [visiblePoints, setVisiblePoints] = useState<ReadonlyArray<PointId>>([]);
 
@@ -220,9 +226,12 @@ export default function CargoMapImmersiveClient({
     };
   }, [trackingScenario.cargoId]);
 
-  const safeCargoId = cargoId || trackingScenario.cargoId;
-  const backHref = '/' + locale + '/cargas/' + encodeURIComponent(safeCargoId);
-  const closeHref= '/' + locale + '/cargas/' + encodeURIComponent(safeCargoId);
+  const backHref = '/' + locale + '/cargas';
+  const closeHref = '/' + locale + '/cargas';
+  const routeProgressPercent = clampPercent(trackingScenario.metrics.progressPercent);
+  const routeRemainingPercent = clampPercent(ROUTE_PATH_LENGTH - routeProgressPercent);
+  const travelledDashArray = `${routeProgressPercent} ${ROUTE_PATH_LENGTH}`;
+  const remainingDashArray = `${routeRemainingPercent} ${ROUTE_PATH_LENGTH}`;
 
   const mapPoints = useMemo(() => buildMapPoints(trackingScenario), [trackingScenario]);
   const layers = useMemo(() => buildLayerItems(trackingScenario), [trackingScenario]);
@@ -249,6 +258,10 @@ export default function CargoMapImmersiveClient({
 
   const remainingLabel = getRemainingProgressLabel(trackingScenario);
   const placeLabels = trackingScenario.map.placeLabels;
+
+  useEffect(() => {
+    prefetchScreen(backHref);
+  }, [backHref, prefetchScreen]);
 
   return (
     <main
@@ -321,9 +334,27 @@ export default function CargoMapImmersiveClient({
           <circle cx="224" cy="506" r="2.4" className={styles.portDotMuted} />
 
           <path d={ROUTE_FULL_PATH} className={styles.routeUnderlayPath} />
-          <path d={ROUTE_REMAINING_PATH} className={styles.routeRemainingPath} pathLength={100} />
-          <path d={ROUTE_TRAVELLED_PATH} className={styles.routeTravelledPath} pathLength={100} />
-          <path d={ROUTE_FULL_PATH} className={styles.routeFlowPath} pathLength={100} />
+          <path
+            d={ROUTE_FULL_PATH}
+            className={styles.routeRemainingPath}
+            pathLength={ROUTE_PATH_LENGTH}
+            style={{
+              strokeDasharray: remainingDashArray,
+              strokeDashoffset: `${-routeProgressPercent}`,
+            }}
+          />
+          <path
+            d={ROUTE_FULL_PATH}
+            className={styles.routeTravelledPath}
+            pathLength={ROUTE_PATH_LENGTH}
+            style={{ strokeDasharray: travelledDashArray }}
+          />
+          <path
+            d={ROUTE_FULL_PATH}
+            className={styles.routeFlowPath}
+            pathLength={ROUTE_PATH_LENGTH}
+            style={{ strokeDasharray: travelledDashArray }}
+          />
 
           <g className={styles.originMarker} transform={`translate(${mapPoints.origin.x} ${mapPoints.origin.y})`}>
             <circle r="17" className={styles.originPulse} />
@@ -354,18 +385,28 @@ export default function CargoMapImmersiveClient({
         </svg>
 
         <div className={styles.topBar}>
-          <Link href={backHref} className={styles.iconButton} aria-label="Voltar para a carga">
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-label="Voltar para lista de cargas"
+            onClick={() => navigateWithTransition(backHref)}
+          >
             <ArrowLeft aria-hidden />
-          </Link>
+          </button>
 
           <div className={styles.statusCapsule}>
             <span>{getOperationalStatusLabel(trackingScenario.status).toUpperCase()}</span>
             <strong>{trackingScenario.cargoId}</strong>
           </div>
 
-          <Link href={closeHref} className={styles.iconButton} aria-label="Fechar mapa">
+          <button
+            type="button"
+            className={styles.iconButton}
+            aria-label="Fechar mapa e voltar para lista de cargas"
+            onClick={() => navigateWithTransition(closeHref)}
+          >
             <X aria-hidden />
-          </Link>
+          </button>
         </div>
 
         <aside className={styles.activeHud} role="status" aria-live="polite">
