@@ -1023,6 +1023,545 @@
   min-width: 0;
 }
 
+.overviewGridDesktop {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "hero"
+    "metrics";
+  gap: 16px;
+}
+
+.desktopOverviewPanel {
+  width: 100%;
+  min-width: 0;
+}
+
+.desktopOverviewShell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
+  gap: 1.25rem;
+  align-items: start;
+  width: 100%;
+  min-width: 0;
+}
+
+.desktopOverviewMain,
+.desktopOverviewHero,
+.desktopOverviewRail,
+.desktopOverviewMetrics,
+.desktopOverviewMetricsGrid {
+  min-width: 0;
+}
+
+.desktopOverviewMain {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 1.25rem;
+  min-width: 0;
+}
+
+.desktopOverviewHero {
+  position: relative;
+  min-height: 420px;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(103, 185, 222, 0.22);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 76% 16%, rgba(72, 176, 255, 0.18), transparent 34%),
+    radial-gradient(circle at 16% 12%, rgba(44, 240, 218, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(6, 16, 27, 0.96), rgba(4, 12, 22, 0.99));
+  box-shadow:
+    0 20px 54px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.desktopOverviewHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(77, 240, 222, 0.08), transparent 1px) top left / 100% 1px no-repeat,
+    radial-gradient(circle at 100% 100%, rgba(49, 227, 215, 0.1), transparent 38%);
+}
+
+.desktopOverviewHeroMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.desktopOverviewHeroImage {
+  object-fit: cover;
+  filter: saturate(0.98) brightness(0.9) contrast(1.05);
+  transform: scale(1.01);
+}
+
+.desktopOverviewHeroMedia[data-treatment="foggy-cinematic"] .desktopOverviewHeroImage {
+  filter: saturate(1.05) brightness(0.95) contrast(1.08);
+}
+
+.desktopOverviewHeroMedia[data-treatment="port-sunset"] .desktopOverviewHeroImage {
+  filter: saturate(0.95) brightness(0.82) contrast(1.05);
+}
+
+.desktopOverviewHeroScrim {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5, 13, 22, 0.99) 0%, rgba(5, 13, 22, 0.9) 31%, rgba(5, 13, 22, 0.22) 61%, rgba(5, 13, 22, 0.42) 100%),
+    linear-gradient(180deg, rgba(5, 13, 22, 0.08) 0%, rgba(5, 13, 22, 0.12) 45%, rgba(5, 13, 22, 0.88) 100%);
+}
+
+.desktopOverviewHeroInner {
+  position: relative;
+  min-height: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1.35rem;
+  padding: 1rem 1.15rem 1.25rem;
+}
+
+.desktopOverviewHeroCopy {
+  width: 100%;
+  max-width: 470px;
+}
+
+.desktopOverviewIdRow {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.desktopOverviewIdRow h2 {
+  margin: 0;
+  color: #f2f8ff;
+  font-size: clamp(2rem, 1.48rem + 2.2vw, 3.05rem);
+  font-weight: 820;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.38);
+}
+
+.desktopOverviewCargoTitle {
+  max-width: 34ch;
+  margin: 0 0 26px;
+  color: rgba(238, 246, 255, 0.96);
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.36;
+  letter-spacing: -0.02em;
+}
+
+.desktopOverviewMetaGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(100%, 430px);
+  gap: 28px;
+}
+
+.desktopOverviewMetaItem {
+  position: relative;
+  min-width: 0;
+}
+
+.desktopOverviewMetaItem + .desktopOverviewMetaItem::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 3px;
+  left: -14px;
+  width: 1px;
+  background: rgba(178, 208, 232, 0.16);
+}
+
+.desktopOverviewMetaItem span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 9px;
+  color: rgba(194, 213, 230, 0.78);
+  font-size: 0.86rem;
+  line-height: 1.35;
+}
+
+.desktopOverviewMetaItem svg {
+  flex: 0 0 auto;
+  color: #2fe6d8;
+  filter: drop-shadow(0 0 10px rgba(47, 230, 216, 0.24));
+}
+
+.desktopOverviewMetaItem strong {
+  display: block;
+  min-width: 0;
+  color: #f7fbff;
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.2;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.desktopOverviewHeroRoute {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: auto;
+}
+
+.desktopOverviewHeroEndpoints {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: end;
+  gap: 0.85rem;
+}
+
+.desktopOverviewHeroEndpoint {
+  display: grid;
+  gap: 0.24rem;
+  min-width: 0;
+}
+
+.desktopOverviewHeroEndpoint strong {
+  color: #eff7ff;
+  font-size: clamp(0.875rem, 0.78rem + 0.45vw, 1.225rem);
+  font-weight: 780;
+  line-height: 1.02;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.desktopOverviewHeroEndpoint span {
+  color: rgba(188, 209, 229, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.desktopOverviewHeroEndpointDest {
+  text-align: right;
+}
+
+.desktopOverviewHeroProgressBadge {
+  align-self: center;
+  justify-self: center;
+  padding: 0.46rem 0.95rem;
+  border: 1px solid rgba(47, 230, 216, 0.28);
+  border-radius: 999px;
+  background: rgba(14, 56, 60, 0.72);
+  color: #67f1e4;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow:
+    0 0 24px rgba(47, 230, 216, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.desktopOverviewHeroTrack {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.desktopOverviewRouteNode {
+  width: 18px;
+  height: 18px;
+  border: 4px solid rgba(182, 236, 229, 0.24);
+  border-radius: 999px;
+  background: #78edd5;
+  box-shadow:
+    0 0 0 1px rgba(236, 255, 252, 0.42),
+    0 0 18px rgba(83, 239, 217, 0.35);
+}
+
+.desktopOverviewRouteNodeDest {
+  background: #85f072;
+  border-color: rgba(133, 240, 114, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(236, 255, 232, 0.4),
+    0 0 18px rgba(133, 240, 114, 0.34);
+}
+
+.desktopOverviewRouteLine {
+  position: relative;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(129, 151, 172, 0.28);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.28);
+}
+
+.desktopOverviewRouteLine > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3ee4d7 0%, #87f5bd 100%);
+  box-shadow: 0 0 18px rgba(54, 232, 218, 0.34);
+}
+
+.desktopOverviewRouteLine > i {
+  position: absolute;
+  top: 50%;
+  width: 15px;
+  height: 15px;
+  transform: translate(-50%, -50%);
+  border: 2px solid #62eddf;
+  border-radius: 999px;
+  background: #1a3038;
+  box-shadow:
+    0 0 0 4px rgba(16, 33, 42, 0.78),
+    0 0 20px rgba(47, 230, 216, 0.42);
+}
+
+.desktopOverviewHeroDistance {
+  margin: 0;
+  color: rgba(188, 209, 229, 0.78);
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.desktopOverviewRail {
+  display: grid;
+  grid-template-rows: repeat(4, minmax(0, auto));
+  gap: 1rem;
+  align-content: start;
+  min-width: 0;
+}
+
+.desktopOverviewRailCard,
+.desktopOverviewMetricCard {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(92, 176, 218, 0.22);
+  border-radius: 15px;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(31, 184, 197, 0.18), transparent 42%),
+    linear-gradient(180deg, rgba(7, 21, 35, 0.95), rgba(5, 15, 27, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 14px 34px rgba(0, 0, 0, 0.2);
+}
+
+.desktopOverviewRailCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 12px;
+  padding: 1rem 1.15rem 1.25rem;
+}
+
+.desktopOverviewRailIcon {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.045);
+  color: #2fe6d8;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.desktopOverviewRailIconCyan { color: #2fe6d8; }
+.desktopOverviewRailIconBlue { color: #4fb3ff; }
+.desktopOverviewRailIconGold { color: #efb94f; }
+.desktopOverviewRailIconGreen { color: #73f46c; }
+
+.desktopOverviewRailCopy {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.desktopOverviewRailCopy small,
+.desktopOverviewMetricCard small {
+  color: rgba(190, 210, 228, 0.74);
+  font-size: 0.79rem;
+  font-weight: 560;
+  line-height: 1.25;
+}
+
+.desktopOverviewRailCopy strong,
+.desktopOverviewMetricCard strong {
+  color: #f0f7ff;
+  font-size: clamp(1.05rem, 0.88rem + 0.58vw, 1.36rem);
+  font-weight: 820;
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.desktopOverviewRailCopy strong {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.desktopOverviewRailCopy p,
+.desktopOverviewMetricCard span {
+  margin: 0;
+  color: rgba(183, 204, 222, 0.74);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
+}
+
+.desktopOverviewRailCopy b {
+  color: #78f0d6;
+  font-size: 0.78rem;
+  font-weight: 760;
+  line-height: 1.25;
+}
+
+.desktopOverviewRailCardArrival .desktopOverviewRailCopy strong,
+.desktopOverviewRailCardArrival .desktopOverviewRailCopy b,
+.desktopOverviewMetricCardEta strong,
+.desktopOverviewMetricCardEta span {
+  color: #67f1e4;
+}
+
+.desktopOverviewRailCardDocuments .desktopOverviewRailCopy strong,
+.desktopOverviewRailCardDocuments .desktopOverviewRailProgressMeta span,
+.desktopOverviewRailCardDocuments .desktopOverviewRailProgressMeta b,
+.desktopOverviewMetricCardDocuments span {
+  color: #6ec3ff;
+}
+
+.desktopOverviewRailCardCost .desktopOverviewRailCopy strong,
+.desktopOverviewRailCardCost .desktopOverviewRailCopy p {
+  color: #efc86a;
+}
+
+.desktopOverviewRailCardCo2 .desktopOverviewRailCopy strong,
+.desktopOverviewRailCardCo2 .desktopOverviewRailCopy p,
+.desktopOverviewMetricCardCo2 span {
+  color: #7cf174;
+}
+
+.desktopOverviewMetricCardTemperature span {
+  color: #8cc9ff;
+}
+
+.desktopOverviewRailProgressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.desktopOverviewRailProgressMeta span {
+  color: #78d5ff;
+  font-size: 0.78rem;
+  font-weight: 780;
+}
+
+.desktopOverviewRailProgressMeta b {
+  color: rgba(191, 209, 226, 0.68);
+  font-size: 0.72rem;
+  font-weight: 620;
+  text-align: right;
+}
+
+.desktopOverviewRailProgress {
+  position: relative;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(139, 161, 182, 0.25);
+}
+
+.desktopOverviewRailProgress i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #52cfff, #87a9ff);
+  box-shadow: 0 0 14px rgba(82, 207, 255, 0.32);
+}
+
+.desktopOverviewMiniChart {
+  width: min(128px, 100%);
+  height: 32px;
+  margin-top: 1px;
+  color: #efb94f;
+  justify-self: end;
+  opacity: 0.92;
+}
+
+.desktopOverviewMiniChart path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 8px rgba(239, 185, 79, 0.22));
+}
+
+.desktopOverviewMiniChartGreen {
+  color: #73f46c;
+}
+
+.desktopOverviewMiniChartGreen path {
+  filter: drop-shadow(0 0 8px rgba(115, 244, 108, 0.22));
+}
+
+.desktopOverviewMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 1rem;
+  min-width: 0;
+}
+
+.desktopOverviewMetricCard {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-height: 104px;
+  min-width: 0;
+  padding: 1rem 1.15rem 1.25rem;
+}
+
+.desktopOverviewMetricCard small {
+  white-space: nowrap;
+}
+
+.desktopOverviewMetricCard strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.desktopOverviewMetricValueBlue {
+  color: #58adff;
+}
+
+.desktopOverviewMetricValueCyan {
+  color: #31e5d8;
+}
+
+.desktopOverviewMetricValueGreen {
+  color: #73f46c;
+}
+
+.desktopOperationsRail {
+  position: sticky;
+  top: calc(var(--hr-topbar-height) + var(--hr-page-padding));
+  align-self: start;
+}
+
 .mobileFilterGroupTitle {
   color: rgba(242, 252, 255, 0.96);
   font-size: 0.94rem;
@@ -1422,7 +1961,7 @@
 .heroCard {
   grid-area: hero;
   position: relative;
-  min-height: clamp(382px, 39vw, 438px);
+  min-height: clamp(336px, 35vw, 392px);
   overflow: hidden;
   isolation: isolate;
   border: 1px solid var(--overview-border);
@@ -1482,7 +2021,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 32px;
+  gap: 22px;
   padding: 1rem 1.15rem 1.25rem;
 }
 
@@ -1602,54 +2141,152 @@
   font-size: 0.9rem;
   font-weight: 760;
   line-height: 1.2;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
 .routeBlock {
+  display: grid;
+  gap: 14px;
   width: 100%;
+  align-self: flex-start;
 }
 
-.routeHead {
+.desktopHeroRoute {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: auto;
+}
+
+.desktopHeroEndpoints {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
-  gap: 18px;
-  margin-bottom: 12px;
+  gap: 0.85rem;
 }
 
-.routeHead strong {
-  display: block;
+.desktopHeroEndpoint {
+  display: grid;
+  gap: 0.24rem;
+  min-width: 0;
+}
+
+.desktopHeroEndpoint strong {
   color: #eff7ff;
-  font-size: clamp(0.94rem, 0.82rem + 0.44vw, 1.1rem);
-  font-weight: 760;
-  line-height: 1.18;
-  overflow-wrap: anywhere;
+  font-size: clamp(1.25rem, 1.08rem + 0.65vw, 1.75rem);
+  font-weight: 780;
+  line-height: 1.02;
+  overflow-wrap: normal;
+  word-break: normal;
 }
 
-.routeHead span {
-  display: block;
-  margin-top: 5px;
-  color: rgba(188, 209, 229, 0.72);
-  font-size: 0.86rem;
+.desktopHeroEndpoint span {
+  color: rgba(188, 209, 229, 0.76);
+  font-size: 0.82rem;
+  line-height: 1.2;
 }
 
-.routeHead b {
-  justify-self: center;
+.desktopHeroEndpointDest {
+  text-align: right;
+}
+
+.desktopHeroProgressBadge {
   align-self: center;
-  padding: 0.36rem 0.78rem;
+  justify-self: center;
+  padding: 0.46rem 0.95rem;
   border: 1px solid rgba(47, 230, 216, 0.28);
   border-radius: 999px;
-  background: rgba(16, 220, 207, 0.12);
+  background: rgba(14, 56, 60, 0.72);
+  color: #67f1e4;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow:
+    0 0 24px rgba(47, 230, 216, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.desktopHeroTrack {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+}
+
+.desktopHeroDistance {
+  margin: 0;
+  color: rgba(188, 209, 229, 0.78);
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.overviewSummaryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+}
+
+.overviewSummaryItem {
+  min-width: 0;
+  padding: 0.78rem 0.9rem;
+  border: 1px solid rgba(111, 190, 223, 0.18);
+  border-radius: 14px;
+  background: rgba(7, 18, 29, 0.58);
+  backdrop-filter: blur(10px);
+}
+
+.overviewSummaryItem small {
+  display: block;
+  margin-bottom: 0.42rem;
+  color: rgba(188, 209, 229, 0.7);
+  font-size: 0.74rem;
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+}
+
+.overviewSummaryItem strong {
+  display: block;
+  color: #eff7ff;
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.28;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+.overviewProgressCompact {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem 0.95rem;
+  border: 1px solid rgba(111, 190, 223, 0.18);
+  border-radius: 14px;
+  background: rgba(7, 18, 29, 0.58);
+  backdrop-filter: blur(10px);
+}
+
+.overviewProgressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.overviewProgressMeta span {
+  color: rgba(188, 209, 229, 0.72);
+  font-size: 0.8rem;
+  font-weight: 650;
+}
+
+.overviewProgressMeta strong {
   color: #65f2e3;
-  font-size: 0.76rem;
+  font-size: 0.82rem;
   font-weight: 820;
   line-height: 1.05;
   white-space: nowrap;
-  box-shadow: 0 0 26px rgba(47, 230, 216, 0.1);
-}
-
-.routeHead > div:last-child {
-  text-align: right;
 }
 
 .routeTrack {
@@ -1707,16 +2344,6 @@
   box-shadow:
     0 0 0 4px rgba(16, 33, 42, 0.78),
     0 0 20px rgba(47, 230, 216, 0.42);
-}
-
-.routeBlock p {
-  margin: 14px 0 0;
-  color: rgba(191, 209, 226, 0.76);
-  font-size: 0.88rem;
-  font-weight: 620;
-  line-height: 1.35;
-  text-align: center;
-  overflow-wrap: anywhere;
 }
 
 .sideStack {
@@ -1788,7 +2415,9 @@
   font-weight: 820;
   line-height: 1.06;
   letter-spacing: -0.03em;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .sideCopy p,
@@ -1797,7 +2426,9 @@
   color: rgba(183, 204, 222, 0.74);
   font-size: 0.8rem;
   line-height: 1.35;
-  overflow-wrap: anywhere;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .sideCopy b {
@@ -1873,9 +2504,10 @@
 .metricStrip {
   grid-area: metrics;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 12px;
   min-width: 0;
+  align-items: stretch;
 }
 
 .metricCard {
@@ -1883,7 +2515,59 @@
   align-content: center;
   gap: 8px;
   min-height: 104px;
+  min-width: 220px;
   padding: 1rem 1.15rem 1.25rem;
+}
+
+.metricCard small {
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .heroCard {
+    min-height: clamp(360px, 38vw, 430px);
+  }
+
+  .desktopOverviewHero .heroInner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 1.35rem;
+  }
+
+  .desktopOverviewHero .heroCopy {
+    width: 100%;
+    max-width: 470px;
+  }
+
+  .desktopOverviewHero .cargoTitle {
+    max-width: 34ch;
+  }
+
+  .desktopOverviewHero .metaGrid {
+    width: min(100%, 430px);
+  }
+
+  .desktopOverviewHero .routeBlock,
+  .desktopOverviewHero .overviewSummaryGrid,
+  .desktopOverviewHero .overviewProgressCompact {
+    display: none;
+  }
+
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+  }
+
+  .desktopOverviewMetricsGrid .metricCard {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 1480px) and (min-width: 1024px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
 }
 
 .metricCard strong {
@@ -4290,42 +4974,55 @@
   flex-wrap: wrap;
 }
 
-.hydroRadarStats {
-  display: flex;
-  gap: 0.45rem;
-  flex: 1;
-  min-width: 0;
-}
-
-.hydroRadarStat {
-  flex: 1;
-  min-width: 0;
+.hydroRadarSummary {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  gap: 0.42rem;
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.hydroRadarRouteChip {
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem 0.5rem;
-  padding: 0.55rem 0.65rem;
-  border-radius: 14px;
-  border: 1px solid rgba(88, 169, 255, 0.2);
-  background: rgba(12, 16, 22, 0.72);
-  color: rgba(230, 240, 250, 0.88);
-}
-
-.hydroRadarStat svg {
-  color: #58a9ff;
-}
-
-.hydroRadarStat span {
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.32rem 0.68rem;
+  border: 1px solid rgba(47, 224, 208, 0.2);
+  border-radius: 999px;
+  background: rgba(8, 20, 25, 0.76);
+  color: rgba(131, 246, 235, 0.92);
   font-size: 0.72rem;
-  line-height: 1.25;
-  color: rgba(200, 214, 228, 0.78);
+  font-weight: 720;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
-.hydroRadarStat strong {
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1;
-  color: rgba(250, 252, 255, 0.98);
+.hydroRadarRouteTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.48rem;
+  min-width: 0;
+  color: rgba(245, 250, 255, 0.98);
+  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.22rem);
+  font-weight: 780;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+.hydroRadarRouteTitle svg {
+  flex: 0 0 auto;
+  color: rgba(116, 235, 225, 0.9);
+}
+
+.hydroRadarRouteMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem 1rem;
+  flex-wrap: wrap;
+  color: rgba(200, 214, 228, 0.78);
+  font-size: 0.76rem;
+  line-height: 1.3;
 }
 
 .hydroRadarTools {
@@ -4386,11 +5083,21 @@
 .hydroRadarMapShell {
   position: relative;
   flex: 1;
-  min-height: clamp(200px, 28vw, 380px);
+  min-height: clamp(300px, 35vw, 460px);
   border-radius: 18px;
   border: 1px solid rgba(88, 169, 255, 0.18);
   background: linear-gradient(185deg, rgba(8, 11, 16, 0.96), rgba(4, 6, 10, 0.99));
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .hydroRadarSection {
+    min-height: clamp(340px, 42vh, 500px);
+  }
+
+  .hydroRadarMapShell {
+    min-height: clamp(360px, 40vw, 520px);
+  }
 }
 
 .hydroRadarScene {
@@ -5187,3 +5894,263 @@
   background: rgba(128, 34, 34, 0.22) !important;
 }
 /* === hydri-waterway-card-context:end === */
+
+
+/* HYDRI_DESKTOP_OVERVIEW_FINE_TUNE_START */
+/*
+  Desktop-only fine tune.
+  Regra global: mobile e desktop sao experiencias separadas.
+  Este bloco atua apenas em >= 1024px e apenas nas classes desktop da tab Visao geral.
+*/
+@media (min-width: 1024px) {
+  .desktopOverviewShell {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 320px);
+    gap: 1.25rem;
+    align-items: start;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .desktopOverviewMain {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 1.25rem;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .desktopOverviewHero {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .desktopOverviewRail {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: start;
+    display: grid;
+    gap: 1rem;
+    min-width: 300px;
+    max-width: 320px;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .desktopOverviewRailCard {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .desktopOverviewMetricsGrid {
+    grid-area: auto;
+    grid-column: 1;
+    grid-row: 2;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(160px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+
+  .desktopOverviewMetricCard {
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* Pontos marcados em vermelho: reduzir tipografia sem afetar mobile. */
+  .desktopOverviewHeroEndpoint strong {
+    font-size: clamp(0.72rem, 0.62rem + 0.36vw, 0.95rem);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .desktopOverviewHeroEndpoint span {
+    font-size: clamp(0.62rem, 0.55rem + 0.22vw, 0.78rem);
+    line-height: 1.15;
+  }
+
+  .desktopOverviewRailCopy strong,
+  .desktopOverviewMetricValue {
+    font-size: clamp(0.95rem, 0.82rem + 0.38vw, 1.22rem);
+    line-height: 1.08;
+    white-space: nowrap;
+  }
+
+  .desktopOverviewMetricCard strong,
+  .desktopOverviewMetricCard b,
+  .desktopOverviewRailCard strong,
+  .desktopOverviewRailCard b {
+    white-space: nowrap;
+  }
+
+  .desktopOverviewMetricCard span,
+  .desktopOverviewMetricCard p,
+  .desktopOverviewRailCard span,
+  .desktopOverviewRailCard p {
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+}
+
+/* Desktop menor: evita que o card inferior de CO2 entre por baixo da coluna lateral. */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .desktopOverviewShell {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 300px);
+    gap: 1rem;
+  }
+
+  .desktopOverviewRail {
+    min-width: 280px;
+    max-width: 300px;
+    gap: 0.875rem;
+  }
+
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
+  .desktopOverviewHeroEndpoint strong {
+    font-size: clamp(0.66rem, 0.56rem + 0.3vw, 0.84rem);
+  }
+
+  .desktopOverviewRailCopy strong,
+  .desktopOverviewMetricValue {
+    font-size: clamp(0.88rem, 0.78rem + 0.32vw, 1.08rem);
+  }
+}
+
+/* Desktop amplo: volta para a linha de 4 metricas como na referencia. */
+@media (min-width: 1441px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(4, minmax(180px, 1fr));
+  }
+}
+/* HYDRI_DESKTOP_OVERVIEW_FINE_TUNE_END */
+
+
+/* HYDRI_DESKTOP_REMOVE_DUPLICATE_BOTTOM_CO2_START */
+/*
+  Desktop-only:
+  Remove visualmente o card inferior redundante de Economia de CO2.
+  O CO2 principal permanece a coluna lateral direita.
+  Mobile permanece intocado.
+*/
+@media (min-width: 1024px) {
+  .desktopOverviewMetricsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+    gap: 1rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /*
+    Na grade inferior desktop, o ultimo item e o card redundante de CO2.
+    Mantemos ETA, Temperatura e Documentos prontos.
+  */
+  .desktopOverviewMetricsGrid > :last-child {
+    display: none !important;
+  }
+
+  .desktopOverviewMetricCard {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .desktopOverviewMetricCard strong,
+  .desktopOverviewMetricCard b,
+  .desktopOverviewMetricCard span,
+  .desktopOverviewMetricCard p {
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+  }
+}
+
+@media (min-width: 1441px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+  }
+}
+/* HYDRI_DESKTOP_REMOVE_DUPLICATE_BOTTOM_CO2_END */
+
+
+/* HYDRI_DESKTOP_OVERVIEW_PADDING_FILL_START */
+/*
+  Desktop-only fine tune.
+  Mobile e desktop sao experiencias separadas.
+  Este bloco ajusta apenas a tab Visao geral no desktop
+*/
+@media (min-width: 1024px) {
+  .desktopOverviewPanel {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    padding: 1rem 1.15rem 1.25rem;
+  }
+
+  .desktopOverviewShell {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .desktopOverviewMain {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /*
+    Itens inferiores destacados em azul claro:
+    devem preencher toda a largura disponivel da coluna principal.
+  */
+  .desktopOverviewMetricsGrid {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    justify-content: stretch;
+    align-items: stretch;
+  }
+
+  .desktopOverviewMetricsGrid > * {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .desktopOverviewMetricCard {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1441px) {
+  .desktopOverviewMetricsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+/* HYDRI_DESKTOP_OVERVIEW_PADDING_FILL_END */
+
