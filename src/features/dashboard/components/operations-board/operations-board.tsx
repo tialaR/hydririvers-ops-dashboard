@@ -64,7 +64,6 @@ import {
   getPointFromLocation
 } from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking.helpers';
 import {
-  HydroRouteTrackingMapHeader,
   HydroRouteTrackingMapLegend,
   HydroRouteTrackingMapSvg
 } from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking-map';
@@ -791,8 +790,6 @@ function HydroMapPanel({
   const trackingRoute = useMemo(() => buildTrackingRoute(cargo), [cargo]);
   const progress01 = trackingRoute.progress / 100;
   const mainRiver = trackingRoute.river;
-  const inTransitCount = Math.max(1, Math.round(progress01 * 18));
-  const operationCount = Math.max(1, Math.round((1 - progress01) * 10));
   const layerLabel = layerMode === 'all' ? tBoard('map.layers.all') : layerMode === 'route' ? tBoard('map.layers.route') : tBoard('map.layers.network');
 
   const pointsOfInterest: Array<{ name: string; point: { x: number; y: number }; note: string; category: string; role?: 'state'; tone?: string }> = [
@@ -926,17 +923,17 @@ function HydroMapPanel({
         )}
       >
         <div className={styles.hydroRadarTopBar}>
-          <div className={styles.hydroRadarStats}>
-            <article className={styles.hydroRadarStat}>
-              <Ship size={16} strokeWidth={2} aria-hidden />
-              <span>{tBoard('map.inTransitCargoes')}</span>
-              <strong>{inTransitCount}</strong>
-            </article>
-            <article className={styles.hydroRadarStat}>
-              <Snowflake size={16} strokeWidth={2} aria-hidden />
-              <span>{tBoard('map.inOperation')}</span>
-              <strong>{operationCount}</strong>
-            </article>
+          <div className={styles.hydroRadarSummary}>
+            <span className={styles.hydroRadarRouteChip}>{tBoard('map.routeOnRiver', { river: mainRiver })}</span>
+            <strong className={styles.hydroRadarRouteTitle}>
+              {shortOrigin}
+              <ArrowRight size={15} strokeWidth={2.2} aria-hidden />
+              {shortDestination}
+            </strong>
+            <div className={styles.hydroRadarRouteMeta}>
+              <span>{tBoard('map.hud.routeStatus')}: {routeSummaryStatus}</span>
+              <span>{tBoard('map.hud.progress')}: {trackingRoute.progress}%</span>
+            </div>
           </div>
 
           <div className={styles.hydroRadarTools}>
@@ -959,8 +956,6 @@ function HydroMapPanel({
             </button>
           </div>
         </div>
-
-        <HydroRouteTrackingMapHeader route={trackingRoute} />
 
         <div className={styles.hydroRadarMapShell}>
           <div
@@ -1504,6 +1499,198 @@ function CostSimulationChart({
 
       <figcaption className={styles.costSimPremium__srOnly}>{tBoard('cost.chart.caption')}</figcaption>
     </figure>
+  );
+}
+
+type DesktopCargoOverviewTabProps = {
+  arrivalDateTime: { dateLabel: string; timeLabel: string };
+  arrivalLocation: string;
+  documentReadiness: number;
+  docsCount: number;
+  docsTotal: number;
+  pendingDocs: number;
+  routeProgressLabel: string;
+  selectedCargo: Cargo;
+  selectedCarrier: string;
+  selectedProgress: number;
+  selectedRiver: string;
+  selectedVessel: string;
+  selectedVesselImage: string;
+  selectedVesselVisual: OverviewVesselVisual | null | undefined;
+  targetPriceLabel: string;
+  tBoard: BoardTranslator;
+  tCommon: CommonTranslator;
+};
+
+function DesktopCargoOverviewTab({
+  arrivalDateTime,
+  arrivalLocation,
+  documentReadiness,
+  docsCount,
+  docsTotal,
+  pendingDocs,
+  routeProgressLabel,
+  selectedCargo,
+  selectedCarrier,
+  selectedProgress,
+  selectedRiver,
+  selectedVessel,
+  selectedVesselImage,
+  selectedVesselVisual,
+  targetPriceLabel,
+  tBoard,
+  tCommon,
+}: DesktopCargoOverviewTabProps) {
+  const estimatedDistanceLabel = tBoard('overview.estimatedDistance', { river: selectedRiver });
+
+  return (
+    <section
+      id="hx-panel-overview"
+      role="tabpanel"
+      aria-labelledby="hx-tab-overview"
+      className={styles.desktopOverviewPanel}
+    >
+      <div className={styles.desktopOverviewShell}>
+        <div className={styles.desktopOverviewMain}>
+          <article className={styles.desktopOverviewHero} aria-label={tBoard('overview.vesselImageAria')}>
+            <div className={styles.desktopOverviewHeroMedia} data-treatment={selectedVesselVisual?.treatment ?? 'real-water-dark'}>
+              <Image
+                src={selectedVesselImage}
+                alt={selectedVesselVisual?.alt ?? `Embarcação associada à carga ${selectedCargo.id}`}
+                className={styles.desktopOverviewHeroImage}
+                loading="eager"
+                fill
+                unoptimized
+                sizes="(max-width: 860px) 100vw, 860px"
+                style={{ objectPosition: selectedVesselVisual?.objectPosition ?? 'center right' }}
+              />
+              <div className={styles.desktopOverviewHeroScrim} aria-hidden="true" />
+            </div>
+
+            <div className={styles.desktopOverviewHeroInner}>
+              <div className={styles.desktopOverviewHeroCopy}>
+                <div className={styles.desktopOverviewIdRow}>
+                  <h2>{selectedCargo.id.toUpperCase()}</h2>
+                  <span className={overviewStatusClass(selectedCargo.status)}>{getCargoStatusLabel(selectedCargo.status, tCommon)}</span>
+                </div>
+                <p className={styles.desktopOverviewCargoTitle}>{selectedCargo.title}</p>
+
+                <div className={styles.desktopOverviewMetaGrid}>
+                  <div className={styles.desktopOverviewMetaItem}>
+                    <span><Ship size={16} /> {tBoard('overview.vesselOperation')}</span>
+                    <strong>{selectedVessel}</strong>
+                  </div>
+                  <div className={styles.desktopOverviewMetaItem}>
+                    <span><Waves size={16} /> {tCommon('operator')}</span>
+                    <strong>{selectedCarrier}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div className={styles.desktopOverviewHeroRoute}>
+                <div className={styles.desktopOverviewHeroEndpoints}>
+                  <div className={styles.desktopOverviewHeroEndpoint}>
+                    <strong>{selectedCargo.origin}</strong>
+                    <span>{tCommon('origin')}</span>
+                  </div>
+                  <div className={styles.desktopOverviewHeroProgressBadge}>{routeProgressLabel}</div>
+                  <div className={cx(styles.desktopOverviewHeroEndpoint, styles.desktopOverviewHeroEndpointDest)}>
+                    <strong>{selectedCargo.destination}</strong>
+                    <span>{tCommon('destination')}</span>
+                  </div>
+                </div>
+
+                <div className={styles.desktopOverviewHeroTrack}>
+                  <span className={styles.desktopOverviewRouteNode} aria-hidden="true" />
+                  <div className={styles.desktopOverviewRouteLine}>
+                    <span style={{ width: `${selectedProgress}%` }} />
+                    <i style={{ left: `${selectedProgress}%` }} aria-hidden="true" />
+                  </div>
+                  <span className={cx(styles.desktopOverviewRouteNode, styles.desktopOverviewRouteNodeDest)} aria-hidden="true" />
+                </div>
+
+                <p className={styles.desktopOverviewHeroDistance}>{estimatedDistanceLabel}</p>
+              </div>
+            </div>
+          </article>
+
+          <div className={styles.desktopOverviewMetricsGrid} aria-label={tBoard('overview.operationalIndicators')}>
+            <article className={`${styles.desktopOverviewMetricCard} ${styles.desktopOverviewMetricCardEta}`}>
+              <small>{tBoard('overview.etaArrival')}</small>
+              <strong>36–44h</strong>
+              <span>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</span>
+            </article>
+            <article className={`${styles.desktopOverviewMetricCard} ${styles.desktopOverviewMetricCardTemperature}`}>
+              <small>{tBoard('overview.temperature')}</small>
+              <strong className={styles.desktopOverviewMetricValueBlue}><Snowflake size={20} /> -18 °C</strong>
+              <span>{tBoard('overview.idealRange')}</span>
+            </article>
+            <article className={`${styles.desktopOverviewMetricCard} ${styles.desktopOverviewMetricCardDocuments}`}>
+              <small>{tBoard('overview.documentReadiness')}</small>
+              <strong className={styles.desktopOverviewMetricValueCyan}><FileText size={18} /> {documentReadiness}%</strong>
+              <span>{tBoard('overview.documentsReadyRatio', { count: docsCount, total: docsTotal })}</span>
+            </article>
+            <article className={`${styles.desktopOverviewMetricCard} ${styles.desktopOverviewMetricCardCo2}`}>
+              <small>{tBoard('overview.co2Savings')}</small>
+              <strong className={styles.desktopOverviewMetricValueGreen}><Leaf size={20} /> {selectedCargo.co2Saving}</strong>
+              <span>{tBoard('overview.roadComparison')}</span>
+            </article>
+          </div>
+        </div>
+
+        <aside className={styles.desktopOverviewRail} aria-label={tBoard('overview.operationalIndicators')}>
+          <article className={`${styles.desktopOverviewRailCard} ${styles.desktopOverviewRailCardArrival}`}>
+            <span className={`${styles.desktopOverviewRailIcon} ${styles.desktopOverviewRailIconCyan}`}><Anchor size={18} /></span>
+            <div className={styles.desktopOverviewRailCopy}>
+              <small>{tBoard('overview.berthForecast')}</small>
+              <strong>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</strong>
+              <p>{arrivalLocation}</p>
+              <b>{tBoard('overview.onSchedule')}</b>
+            </div>
+          </article>
+
+          <article className={`${styles.desktopOverviewRailCard} ${styles.desktopOverviewRailCardDocuments}`}>
+            <span className={`${styles.desktopOverviewRailIcon} ${styles.desktopOverviewRailIconBlue}`}><FileText size={18} /></span>
+            <div className={styles.desktopOverviewRailCopy}>
+              <small>{tCommon('documents')}</small>
+              <strong>{docsCount} / {docsTotal}</strong>
+              <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
+              <div className={styles.desktopOverviewRailProgressMeta}>
+                <span>{documentReadiness}%</span>
+                <b>{tBoard('overview.documentReadiness')}</b>
+              </div>
+              <div className={styles.desktopOverviewRailProgress} aria-hidden="true">
+                <i style={{ width: `${documentReadiness}%` }} />
+              </div>
+            </div>
+          </article>
+
+          <article className={`${styles.desktopOverviewRailCard} ${styles.desktopOverviewRailCardCost}`}>
+            <span className={`${styles.desktopOverviewRailIcon} ${styles.desktopOverviewRailIconGold}`}><CircleDollarSign size={18} /></span>
+            <div className={styles.desktopOverviewRailCopy}>
+              <small>{tBoard('overview.estimatedCost')}</small>
+              <strong>{targetPriceLabel}</strong>
+              <p>{tBoard('overview.estimatedMargin')}</p>
+              <svg viewBox="0 0 120 32" className={styles.desktopOverviewMiniChart} aria-hidden="true">
+                <path d="M4 24 L20 20 L35 21 L50 16 L64 18 L78 12 L92 14 L116 4" />
+              </svg>
+            </div>
+          </article>
+
+          <article className={`${styles.desktopOverviewRailCard} ${styles.desktopOverviewRailCardCo2}`}>
+            <span className={`${styles.desktopOverviewRailIcon} ${styles.desktopOverviewRailIconGreen}`}><Leaf size={18} /></span>
+            <div className={styles.desktopOverviewRailCopy}>
+              <small>{tBoard('overview.co2Savings')}</small>
+              <strong>{selectedCargo.co2Saving}</strong>
+              <p>{tBoard('overview.roadComparison')}</p>
+              <svg viewBox="0 0 120 32" className={cx(styles.desktopOverviewMiniChart, styles.desktopOverviewMiniChartGreen)} aria-hidden="true">
+                <path d="M4 25 L18 27 L30 18 L46 21 L58 13 L72 19 L86 10 L102 13 L116 6" />
+              </svg>
+            </div>
+          </article>
+        </aside>
+      </div>
+    </section>
   );
 }
 
@@ -2196,136 +2383,25 @@ export function OperationsBoard({
           </div>
 
           {activeTab === 'overview' ? (
-            <div id="hx-panel-overview" role="tabpanel" aria-labelledby="hx-tab-overview" className={styles.overviewPanel}>
-              <div className={styles.overviewGrid}>
-                <section className={styles.heroCard} aria-label={tBoard('overview.vesselImageAria')}>
-                  <div className={styles.heroMedia} data-treatment={selectedVesselVisual?.treatment ?? 'real-water-dark'}>
-                    <Image
-                      src={selectedVesselImage}
-                      alt={selectedVesselVisual?.alt ?? `Embarcação associada à carga ${selectedCargo.id}`}
-                      className={styles.heroImage}
-                      loading="eager"
-                      fill
-                      unoptimized
-                      sizes="(max-width: 860px) 100vw, 860px"
-                      style={{ objectPosition: selectedVesselVisual?.objectPosition ?? 'center right' }}
-                    />
-                    <div className={styles.heroScrim} aria-hidden="true" />
-                  </div>
-
-                  <div className={styles.heroInner}>
-                    <div className={styles.heroCopy}>
-                      <div className={styles.idRow}>
-                        <h2>{selectedCargo.id.toUpperCase()}</h2>
-                        <span className={overviewStatusClass(selectedCargo.status)}>{getCargoStatusLabel(selectedCargo.status, tCommon)}</span>
-                      </div>
-                      <p className={styles.cargoTitle}>{selectedCargo.title}</p>
-
-                      <div className={styles.metaGrid}>
-                        <div className={styles.metaItem}>
-                          <span><Ship size={16} /> {tBoard('overview.vesselOperation')}</span>
-                          <strong>{selectedVessel}</strong>
-                        </div>
-                        <div className={styles.metaItem}>
-                          <span><Waves size={16} /> {tCommon('operator')}</span>
-                          <strong>{selectedCarrier}</strong>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.routeBlock}>
-                      <div className={styles.routeHead}>
-                        <div><strong>{selectedCargo.origin}</strong><span>{tCommon('origin')}</span></div>
-                        <b>{routeProgressLabel}</b>
-                        <div><strong>{selectedCargo.destination}</strong><span>{tCommon('destination')}</span></div>
-                      </div>
-                      <div className={styles.routeTrack}>
-                        <span className={styles.routeNode} aria-hidden="true" />
-                        <div className={styles.routeLine}>
-                          <span style={{ width: `${selectedProgress}%` }} />
-                          <i style={{ left: `${selectedProgress}%` }} aria-hidden="true" />
-                        </div>
-                        <span className={cx(styles.routeNode, styles.routeNodeDest)} aria-hidden="true" />
-                      </div>
-                      <p>{tBoard('overview.estimatedDistance', { river: selectedRiver })}</p>
-                    </div>
-                  </div>
-                </section>
-
-                <aside className={styles.sideStack} aria-label={tBoard('overview.operationalIndicators')}>
-                  <article className={styles.sideCard}>
-                    <span className={cx(styles.sideIcon, styles.sideIconCyan)}><Anchor size={22} /></span>
-                    <div className={styles.sideCopy}>
-                      <small>{tBoard('overview.berthForecast')}</small>
-                      <strong>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</strong>
-                      <p>{arrivalLocation}</p>
-                      <b>{tBoard('overview.onSchedule')}</b>
-                    </div>
-                  </article>
-
-                  <article className={styles.sideCard}>
-                    <span className={cx(styles.sideIcon, styles.sideIconBlue)}><FileText size={22} /></span>
-                    <div className={styles.sideCopy}>
-                      <small>{tCommon('documents')}</small>
-                      <strong>{docsCount} / {docsTotal}</strong>
-                      <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
-                      <div className={styles.sideProgressMeta}>
-                        <span>{documentReadiness}%</span>
-                        <b>{tBoard('overview.documentReadiness')}</b>
-                      </div>
-                      <div className={styles.sideProgress}><i style={{ width: `${documentReadiness}%` }} /></div>
-                    </div>
-                  </article>
-
-                  <article className={styles.sideCard}>
-                    <span className={cx(styles.sideIcon, styles.sideIconGold)}><CircleDollarSign size={22} /></span>
-                    <div className={styles.sideCopy}>
-                      <small>{tBoard('overview.estimatedCost')}</small>
-                      <strong>{targetPriceLabel}</strong>
-                      <p>{tBoard('overview.estimatedMargin')}</p>
-                      <svg viewBox="0 0 120 32" className={styles.miniChart} aria-hidden="true">
-                        <path d="M4 24 L20 20 L35 21 L50 16 L64 18 L78 12 L92 14 L116 4" />
-                      </svg>
-                    </div>
-                  </article>
-
-                  <article className={styles.sideCard}>
-                    <span className={cx(styles.sideIcon, styles.sideIconGreen)}><Leaf size={22} /></span>
-                    <div className={styles.sideCopy}>
-                      <small>{tBoard('overview.co2Savings')}</small>
-                      <strong>{selectedCargo.co2Saving}</strong>
-                      <p>{tBoard('overview.roadComparison')}</p>
-                      <svg viewBox="0 0 120 32" className={cx(styles.miniChart, styles.miniChartGreen)} aria-hidden="true">
-                        <path d="M4 25 L18 27 L30 18 L46 21 L58 13 L72 19 L86 10 L102 13 L116 6" />
-                      </svg>
-                    </div>
-                  </article>
-                </aside>
-
-                <section className={styles.metricStrip} aria-label={tBoard('overview.operationalIndicators')}>
-                  <article className={styles.metricCard}>
-                    <small>{tBoard('overview.etaArrival')}</small>
-                    <strong>36–44h</strong>
-                    <span>{arrivalDateTime.dateLabel} {arrivalDateTime.timeLabel}</span>
-                  </article>
-                  <article className={styles.metricCard}>
-                    <small>{tBoard('overview.temperature')}</small>
-                    <strong className={styles.metricValueBlue}><Snowflake size={20} /> -18 °C</strong>
-                    <span>{tBoard('overview.idealRange')}</span>
-                  </article>
-                  <article className={styles.metricCard}>
-                    <small>{tBoard('overview.documentReadiness')}</small>
-                    <strong className={styles.metricValueCyan}><FileText size={18} /> {documentReadiness}%</strong>
-                    <span>{tBoard('overview.documentsReadyRatio', { count: docsCount, total: docsTotal })}</span>
-                  </article>
-                  <article className={styles.metricCard}>
-                    <small>{tBoard('overview.co2Savings')}</small>
-                    <strong className={styles.metricValueGreen}><Leaf size={20} /> {selectedCargo.co2Saving}</strong>
-                    <span>{tBoard('overview.roadComparison')}</span>
-                  </article>
-                </section>
-              </div>
-            </div>
+            <DesktopCargoOverviewTab
+              arrivalDateTime={arrivalDateTime}
+              arrivalLocation={arrivalLocation}
+              documentReadiness={documentReadiness}
+              docsCount={docsCount}
+              docsTotal={docsTotal}
+              pendingDocs={pendingDocs}
+              routeProgressLabel={routeProgressLabel}
+              selectedCargo={selectedCargo}
+              selectedCarrier={selectedCarrier}
+              selectedProgress={selectedProgress}
+              selectedRiver={selectedRiver}
+              selectedVessel={selectedVessel}
+              selectedVesselImage={selectedVesselImage}
+              selectedVesselVisual={selectedVesselVisual}
+              targetPriceLabel={targetPriceLabel}
+              tBoard={tBoard}
+              tCommon={tCommon}
+            />
           ) : null}
 
           {activeTab === 'timeline' ? (
@@ -2771,50 +2847,52 @@ export function OperationsBoard({
         </section>
       </main>
 
-      <aside className="hx-right-rail hr-dashboard-right">
-        <article className="hx-rail-card">
-          <span><Anchor size={20} /></span>
-          <div className="hx-arrival-copy">
-            <small>{tBoard('overview.berthForecast')}</small>
-            <div className="hx-arrival-inline">
-              {arrivalDateTime.dateLabel ? <strong>{arrivalDateTime.dateLabel}</strong> : null}
-              {arrivalDateTime.timeLabel ? <span className="hx-arrival-inline__time">{arrivalDateTime.timeLabel}</span> : null}
+      {activeTab === 'overview' ? null : (
+        <aside className={`hx-right-rail hr-dashboard-right ${styles.desktopOperationsRail}`}>
+          <article className="hx-rail-card">
+            <span><Anchor size={20} /></span>
+            <div className="hx-arrival-copy">
+              <small>{tBoard('overview.berthForecast')}</small>
+              <div className="hx-arrival-inline">
+                {arrivalDateTime.dateLabel ? <strong>{arrivalDateTime.dateLabel}</strong> : null}
+                {arrivalDateTime.timeLabel ? <span className="hx-arrival-inline__time">{arrivalDateTime.timeLabel}</span> : null}
+              </div>
+              <p>{arrivalLocation} <b>{tBoard('overview.onSchedule')}</b></p>
             </div>
-            <p>{arrivalLocation} <b>{tBoard('overview.onSchedule')}</b></p>
-          </div>
-        </article>
-        <article className="hx-rail-card">
-          <span><FileText size={20} /></span>
-          <div>
-            <small>{tCommon('documents')}</small>
-            <strong>{docsCount} <em>/ {docsTotal}</em></strong>
-            <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
-            <i className="hx-rail-progress"><b style={{ width: `${documentReadiness}%` }} /></i>
-          </div>
-        </article>
-        <article className="hx-rail-card">
-          <span><CircleDollarSign size={20} /></span>
-          <div>
-            <small>{tBoard('overview.estimatedCost')}</small>
-            <strong className="hx-nowrap">{targetPriceLabel}</strong>
-            <p>{tBoard('overview.estimatedMargin')}</p>
-            <svg viewBox="0 0 120 32" className="hx-mini-chart" aria-hidden="true">
-              <path d="M4 24 L20 20 L35 21 L50 16 L64 18 L78 12 L92 14 L116 4" />
-            </svg>
-          </div>
-        </article>
-        <article className="hx-rail-card">
-          <span><Leaf size={20} /></span>
-          <div>
-            <small>{tBoard('overview.co2Savings')}</small>
-            <strong className="hx-nowrap">{selectedCargo.co2Saving}</strong>
-            <p>{tBoard('rightRail.avoidanceCompact')}</p>
-            <svg viewBox="0 0 120 32" className="hx-mini-chart is-green" aria-hidden="true">
-              <path d="M4 25 L18 27 L30 18 L46 21 L58 13 L72 19 L86 10 L102 13 L116 6" />
-            </svg>
-          </div>
-        </article>
-      </aside>
+          </article>
+          <article className="hx-rail-card">
+            <span><FileText size={20} /></span>
+            <div>
+              <small>{tCommon('documents')}</small>
+              <strong>{docsCount} <em>/ {docsTotal}</em></strong>
+              <p>{tBoard('overview.pendingDocuments', { count: pendingDocs })}</p>
+              <i className="hx-rail-progress"><b style={{ width: `${documentReadiness}%` }} /></i>
+            </div>
+          </article>
+          <article className="hx-rail-card">
+            <span><CircleDollarSign size={20} /></span>
+            <div>
+              <small>{tBoard('overview.estimatedCost')}</small>
+              <strong className="hx-nowrap">{targetPriceLabel}</strong>
+              <p>{tBoard('overview.estimatedMargin')}</p>
+              <svg viewBox="0 0 120 32" className="hx-mini-chart" aria-hidden="true">
+                <path d="M4 24 L20 20 L35 21 L50 16 L64 18 L78 12 L92 14 L116 4" />
+              </svg>
+            </div>
+          </article>
+          <article className="hx-rail-card">
+            <span><Leaf size={20} /></span>
+            <div>
+              <small>{tBoard('overview.co2Savings')}</small>
+              <strong className="hx-nowrap">{selectedCargo.co2Saving}</strong>
+              <p>{tBoard('rightRail.avoidanceCompact')}</p>
+              <svg viewBox="0 0 120 32" className="hx-mini-chart is-green" aria-hidden="true">
+                <path d="M4 25 L18 27 L30 18 L46 21 L58 13 L72 19 L86 10 L102 13 L116 6" />
+              </svg>
+            </div>
+          </article>
+        </aside>
+      )}
 
       {isMobileViewport ? mobileFilterSheet : null}
 

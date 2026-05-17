@@ -209,11 +209,18 @@ export function AdminChrome({ children }: AdminChromeProps) {
     return navigation.filter((item) => !mobileBottomHrefSet.has(item.href) && !primaryExtra.has(item.href));
   }, [navigation, mobileBottomHrefSet]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
-  const activeNavLabel = activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title');
+  const isCargoWorkspacePath =
+    normalizedPathname === intlAppPaths.cargos.marketplace
+    || normalizedPathname.startsWith(`${intlAppPaths.cargos.marketplace}/`);
+  const activeNavLabel = isCargoWorkspacePath
+    ? tChrome('header.title')
+    : (activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title'));
   const activeNavSubtitle = activeHref === intlAppPaths.home
     ? tChrome('header.homeSubtitle')
     : tChrome('header.subtitle');
-  const headerDescriptionText = activeHref === intlAppPaths.home ? tChrome('header.homeDescription') : tChrome('header.description');
+  const headerDescriptionText = activeHref === intlAppPaths.home
+    ? tChrome('header.homeDescription')
+    : tChrome('header.description');
   const headerFullTitleLabel = `${activeNavLabel} • ${activeNavSubtitle}`;
   const hasUnreadNotifications = unreadNotificationsCount > 0;
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
