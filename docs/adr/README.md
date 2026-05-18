@@ -34,6 +34,7 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0026 - Negociações como central de decisões comerciais](./0026-negotiations-as-commercial-decision-center.md)
 - [0027 - Detalhe de negociação como guia de decisão](./0027-negotiation-detail-as-decision-guide.md)
 - [0028 - Impacto com storytelling baseado em evidências](./0028-impact-page-evidence-based-storytelling.md)
+- [0001-desktop-expanded-map-route - Rota própria do mapa desktop expanded](./0001-desktop-expanded-map-route.md) _(Proposto; ver também [0001 feature-based](./0001-feature-based-architecture.md))_
 - [0010 - Mapa visual com alternativa textual acessível](./0010-map-accessibility-and-alternative-route-summary.md)
 - [0012 - Priority Tab Operational Design](./0012-priority-tab-operational-design.md)
 - [0013 - Feature Mocks and Business Scope](./0013-feature-mocks-and-business-scope.md)

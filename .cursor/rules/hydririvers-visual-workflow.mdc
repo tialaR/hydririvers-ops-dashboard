@@ -1,0 +1,51 @@
+---
+description: Fluxo obrigatório para trabalhos visuais (auditoria, fases, QA)
+globs: src/**/*.{tsx,scss}
+alwaysApply: false
+---
+
+# HydroRivers — workflow visual
+
+Aplicar em ajustes visuais, mapas, layout desktop/mobile e iterações com Codex.
+
+## Antes de editar
+
+1. **Auditoria primeiro** — modo somente leitura; diagnóstico visual e técnico
+2. **Nunca** implementar visual complexo em uma tacada
+3. Usar **prints, vídeos e referências** como evidência
+4. Separar chats: **auditoria** → **implementação** → **QA**
+5. Pedir e respeitar listas de **arquivos permitidos** e **proibidos**
+
+## Durante a implementação
+
+- uma **microfase** por rodada (ver `docs/workflows/codex-visual-iteration.md`)
+- **validar diff** (`git diff --stat`, escopo) **antes** de validar build
+- tarefa **desktop**: não tocar arquivos mobile
+- tarefa **mobile**: não tocar arquivos desktop
+
+## Proibições visuais
+
+- `src/app/globals.scss`
+- CSS global de feature
+- `!important`
+- misturar compact/expanded/mobile no mesmo diff sem escopo explícito
+
+## Rodadas
+
+| Rodada | Objetivo |
+|--------|----------|
+| A | Auditoria visual (sem editar) |
+| B | Implementação pequena |
+| C | Auditoria do diff |
+| D | Validação e teste visual |
+| E | Próxima microfase |
+
+## Validação mínima
+
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+```
+
+Mapa desktop expanded: seguir `docs/workflows/desktop-expanded-map-playbook.md`.

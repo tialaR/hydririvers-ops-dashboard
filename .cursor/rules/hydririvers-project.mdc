@@ -1,0 +1,50 @@
+---
+description: Regras obrigatórias de stack, arquitetura e fronteiras HydroRivers
+alwaysApply: true
+---
+
+# HydroRivers — regras de projeto
+
+## Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Sass/CSS Modules (`*.module.scss`)
+- next-intl: `pt-BR`, `en-US`, `es`
+- rotas localizadas em `/[locale]`
+
+## Arquitetura
+
+- **feature-based**: domínio, UI rica, hooks, services, utils, mocks, types e testes em `src/features/`
+- **`src/app/`**: routing, layouts, pages, RSC e server actions — páginas finas
+- **`src/shared/`**: apenas itens realmente compartilhados entre domínios
+- **mobile e desktop são experiências separadas**
+- mudança em desktop **não pode** quebrar mobile
+- mudança em mobile **não pode** quebrar desktop
+
+## CSS e estilo
+
+- **não** editar `src/app/globals.scss` para UI de feature
+- **não** usar CSS global para componentes de feature
+- **não** usar `!important`
+- estilos de feature ficam em CSS Modules da própria feature
+
+## Dependências e render
+
+- **não** instalar dependência sem justificativa explícita
+- **não** usar `Math.random()` ou `Date.now()` em render (risco de hidratação)
+- **não** usar `router.back()` / `window.history.back()` como fluxo principal de navegação
+
+## Preservar sem regressão
+
+- i18n e locale
+- mocks e auth
+- filtros, busca e lista de cargas existentes
+
+## Referências
+
+- `AGENTS.md`
+- `docs/workflows/codex-visual-iteration.md`
+- `docs/workflows/desktop-expanded-map-playbook.md`
+- `docs/adr/0001-desktop-expanded-map-route.md`
