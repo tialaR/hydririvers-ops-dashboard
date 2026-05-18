@@ -46,6 +46,12 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0015 - Estratégia de validação e testes para mudanças críticas](./0015-validation-and-test-strategy.md)
 - [0029 - Dados mock fictícios e determinísticos](./0029-mock-data-fictional-deterministic.md)
 
+## Mapa hidroviário (desktop expanded V2)
+
+- [0030 - Provider profissional do mapa hidroviário (MapLibre + fallback SVG)](./0030-professional-hydroway-map-provider.md) _(Proposto)_
+- [0031 - Pipeline geográfico do mapa hidroviário (GeoJSON mock → dados oficiais)](./0031-hydroway-geodata-pipeline.md) _(Proposto)_
+- [Plano operacional V2](../workflows/professional-hydroway-map-v2-plan.md)
+
 ## Overlays e mobile
 
 - [ADR-mobile-bottom-sheet-and-map-pattern](./ADR-mobile-bottom-sheet-and-map-pattern.md)
