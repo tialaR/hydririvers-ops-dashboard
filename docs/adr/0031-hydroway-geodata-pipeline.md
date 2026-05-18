@@ -2,7 +2,22 @@
 
 ## Status
 
-Proposto
+Accepted for spike (V2.1a — 2026-05-18)
+
+Aceitação limitada ao **estágio 1 (GeoJSON mock/local)** para o spike MapLibre e fases V2.1–V2.2. Estágios 2 (shapefile → GeoJSON/PMTiles) e 3 (BIT/GeoTransportes/DNIT) permanecem **planejados**, não autorizados nesta microfase.
+
+## Aceitação e escopo (V2.1a)
+
+| Escopo | V2.1a / spike (V2.1) | Futuro (não nesta microfase) |
+|--------|----------------------|------------------------------|
+| GeoJSON mock/local, fictício e determinístico | **Sim** ([ADR 0029](./0029-mock-data-fictional-deterministic.md)) | — |
+| Shapefile oficial, conversão offline, `scripts/geo/` | **Não** | V2.6+ |
+| BIT / GeoTransportes / DNIT em runtime ou repo | **Não** | Estágio 3; flag `hydrowayOfficialGeodataEnabled` |
+| Dados governamentais reais no repositório ou build | **Não** | Após checklist legal e `docs/geo/DATA-SOURCES.md` |
+
+**V2.1 (spike):** usar GeoJSON mock mínimo (inline na branch de spike ou artefato local temporário). Nenhum dado oficial será incorporado, convertido ou publicado nesta microfase.
+
+O pipeline completo (estágios 2–3) e a flag `hydrowayOfficialGeodataEnabled` seguem documentados abaixo como **decisão de direção**, com implementação reservada a fases posteriores (V2.2 commit de mocks versionados; V2.6 dados oficiais).
 
 ## Contexto
 

@@ -2,7 +2,22 @@
 
 ## Status
 
-Proposto
+Accepted (V2.1a — 2026-05-18)
+
+## Aceitação e escopo (V2.1a)
+
+Esta aceitação **autoriza apenas** o próximo spike técnico **isolado** com MapLibre (microfases V2.1b–V2.1c e critérios abaixo). Não autoriza, por si só, instalação de dependências, alteração de `src/` nem deploy na rota de produção.
+
+| Item | V2.1a (esta aceitação) | Próximas microfases |
+|------|------------------------|---------------------|
+| Decisão de provider MapLibre + fallback SVG | **Aceita** | — |
+| `npm install maplibre-gl` | **Não** | **V2.1c** (após spike isolado aprovado) |
+| `src/features/waterway-map/` | **Não** | V2.1b–V2.1c (spike) |
+| Rota `/<locale>/cargas/[id]/mapa` | **Mantém SVG foundation** | Substituição/integração MapLibre apenas em **V2.3** |
+| Cockpit `/<locale>/cargas` | **Intocado** | Fase futura própria |
+| Mobile immersive | **Intocado** | Fora do escopo V2 |
+
+**Rollback:** o fallback **SVG foundation** (`desktop-cargo-map/`) permanece plano de rollback obrigatório — feature flag `hydrowayMapLibreEnabled`, falha de WebGL ou timeout revertem para SVG sem redeploy de geometria.
 
 ## Contexto
 
@@ -160,7 +175,7 @@ Medição obrigatória no spike (V2.1) com `npm run build` e análise do chunk a
 
 ### Negativas / trade-offs
 
-- Nova dependência `maplibre-gl` após aprovação deste ADR e spike bem-sucedido.
+- Nova dependência `maplibre-gl` somente a partir da **V2.1c**, após spike isolado bem-sucedido (aceitação V2.1a não instala pacotes).
 - Aumento de bundle na rota `/mapa`; exige lazy load disciplinado.
 - Duplicação temporária de código (MapLibre + SVG) até deprecação controlada do fallback.
 - Curva de aprendizado (style JSON, sources, layers).
@@ -177,16 +192,18 @@ Medição obrigatória no spike (V2.1) com `npm run build` e análise do chunk a
 | Overengineering | Spike isolado (V2.1) antes de V2.3; uma rota piloto |
 | Lock-in de tiles | Documentar provedor OSS e atribuição; camadas hidroviárias em GeoJSON próprio |
 
-## Critérios para avançar ao spike (V2.1)
+## Critérios para avançar ao spike (V2.1b–V2.1c)
 
-Todos devem ser atendidos antes de `npm install maplibre-gl`:
+**V2.1a (concluída):** ADR 0030 e [ADR 0031](./0031-hydroway-geodata-pipeline.md) aceitos; sem alteração em `src/`, `messages/` ou `package.json`.
 
-1. Este ADR (0030) revisado e aceito pelo time.
-2. [ADR 0031](./0031-hydroway-geodata-pipeline.md) revisado (pipeline GeoJSON mock).
+**Antes de `npm install maplibre-gl` (V2.1c apenas):**
+
+1. ~~Este ADR (0030) revisado e aceito pelo time.~~ ✓ V2.1a
+2. ~~[ADR 0031](./0031-hydroway-geodata-pipeline.md) aceito para spike (GeoJSON mock/local).~~ ✓ V2.1a
 3. Branch de spike dedicada (`spike/maplibre-hydroway`), não misturada com outras features.
-4. Lista de arquivos permitidos/proibidos definida (sem `src` mobile, sem `operations-board` cockpit).
+4. Lista de arquivos permitidos/proibidos definida (sem `src` mobile, sem `operations-board` cockpit; **sem** substituir `/<locale>/cargas/[id]/mapa` até V2.3).
 5. Critérios de saída do spike documentados:
-   - basemap escuro renderiza em `/mapa` ou rota dev isolada;
+   - basemap escuro renderiza em rota dev isolada **ou** `/mapa` atrás de flag (integração em produção só V2.3);
    - pan, zoom, `fitBounds` funcionam;
    - 1 GeoJSON de rio mock + linha de rota;
    - fallback SVG acionado quando WebGL falha;

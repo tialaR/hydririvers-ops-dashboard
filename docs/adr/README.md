@@ -48,8 +48,8 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 
 ## Mapa hidroviário (desktop expanded V2)
 
-- [0030 - Provider profissional do mapa hidroviário (MapLibre + fallback SVG)](./0030-professional-hydroway-map-provider.md) _(Proposto)_
-- [0031 - Pipeline geográfico do mapa hidroviário (GeoJSON mock → dados oficiais)](./0031-hydroway-geodata-pipeline.md) _(Proposto)_
+- [0030 - Provider profissional do mapa hidroviário (MapLibre + fallback SVG)](./0030-professional-hydroway-map-provider.md) _(Accepted — V2.1a; spike isolado; `/mapa` e instalação MapLibre em microfases posteriores)_
+- [0031 - Pipeline geográfico do mapa hidroviário (GeoJSON mock → dados oficiais)](./0031-hydroway-geodata-pipeline.md) _(Accepted for spike — V2.1a; mock/local apenas; shapefile e BIT/DNIT em fase futura)_
 - [Plano operacional V2](../workflows/professional-hydroway-map-v2-plan.md)
 
 ## Overlays e mobile
