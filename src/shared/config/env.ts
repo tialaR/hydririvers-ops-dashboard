@@ -42,3 +42,13 @@ export function isMockModeLoginAsAllowed(): boolean {
   if (process.env.NODE_ENV !== 'production') return true;
   return process.env.HYDRORIVERS_FORCE_QA_DIRECT_LOGIN === 'true';
 }
+
+/**
+ * Rota dev isolada `/<locale>/dev/hydroway-map-spike` (spike MapLibre V2.1b–c).
+ * Default: habilitada fora de production; em production só com flag explícita.
+ */
+export function isHydrowayMapLibreSpikeRouteEnabled(): boolean {
+  if (process.env.HYDRORIVERS_HYDROWAY_MAP_SPIKE_ROUTE === 'true') return true;
+  if (process.env.HYDRORIVERS_HYDROWAY_MAP_SPIKE_ROUTE === 'false') return false;
+  return process.env.NODE_ENV !== 'production';
+}

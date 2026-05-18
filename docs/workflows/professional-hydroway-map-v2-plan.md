@@ -64,9 +64,9 @@ npm run check:i18n
 **Escopo:**
 
 - Branch `spike/maplibre-hydroway`
-- Instalar `maplibre-gl` **somente após** ADR 0030 aceito
-- Criar `src/features/waterway-map/` mínimo
-- Montar mapa em rota dev isolada **ou** `/mapa` atrás de `hydrowayMapLibreEnabled`
+- **V2.1b (concluída):** skeleton em `src/features/waterway-map/` + rota dev `/<locale>/dev/hydroway-map-spike` (SVG schematic, sem MapLibre)
+- Instalar `maplibre-gl` **somente na V2.1c**, após ADR 0030 aceito
+- Montar mapa em rota dev isolada **ou** `/mapa` atrás de `hydrowayMapLibreEnabled` (integração produção só V2.3)
 - Basemap escuro + 1 GeoJSON de rio mock + linha de rota
 - Pan, zoom, `fitBounds`
 - Fallback SVG quando WebGL falhar
