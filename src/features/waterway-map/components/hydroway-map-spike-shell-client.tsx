@@ -17,7 +17,7 @@ export function HydrowayMapSpikeShellClient({ model }: HydrowayMapSpikeShellClie
   const [preferredProvider, setPreferredProvider] = useState<HydrowaySpikeProviderMode>('maplibre');
 
   return (
-    <div className={styles.shell}>
+    <div className={styles.shell} data-testid="hydroway-map-spike">
       <header className={styles.banner}>
         <div>
           <h1 className={styles.bannerTitle}>Hydroway Map Spike — V2.3zzz MapLibre Native</h1>

@@ -150,6 +150,27 @@ npm run test:mock-mode
 
 Testes: `cargo-to-hydroway-geo.adapter.test.ts`, `resolve-spike-hydroway-model.test.ts`, `geo-to-schematic.test.ts`, `schematic-to-geo.test.ts`.
 
+## Smoke tests de rotas (Playwright)
+
+Com o app em `http://localhost:3000` (ou deixando o Playwright subir `npm run dev` automaticamente):
+
+```bash
+npm run test:hydroway-routes
+```
+
+O que valida:
+
+- Rotas dev do spike (`/dev/hydroway-map-spike`) para CARGO-001/002/004, locales `pt-BR` / `en-US` / `es`, e `?forceSvgFallback=1`
+- Rotas de produção `/pt-BR/cargas` e `/pt-BR/cargas/CARGO-001/mapa` (sem confundir com o spike)
+- Smoke mobile em `/pt-BR/cargas` (viewport Pixel 5)
+- Ausência de `pageerror`, erros de console MapLibre/Style Spec, HTTP 500 e 404 do documento
+- `401` conhecido em `/api/auth/me` é ignorado
+
+Evidências (screenshots e traces em falha):
+
+- Diretório: `test-results/hydroway-routes/` (por teste, via `outputPath` do Playwright)
+- São evidência de smoke (rota carregou, sem erro fatal), **não** baseline visual pixel-perfect para regressão de UI
+
 ## Rollback
 
 1. Desinstalar `maplibre-gl` (se remover o spike por completo).

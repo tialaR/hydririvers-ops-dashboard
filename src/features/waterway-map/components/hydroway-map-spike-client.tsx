@@ -212,7 +212,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       <div className={styles.hud}>
         <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
           <span className={styles.hudLabel}>Carga</span>
-          <span className={`${styles.hudValue} ${styles.hudValueMono}`}>{model.cargoId}</span>
+          <span className={`${styles.hudValue} ${styles.hudValueMono}`} data-testid="hydroway-map-cargo-id">
+            {model.cargoId}
+          </span>
           <div className={styles.progressTrack} role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100}>
             <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
           </div>
@@ -229,6 +231,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           <span className={styles.hudLabel}>Motor</span>
           <span
             className={`${styles.providerBadge} ${!isMapLibreActive ? styles.providerBadgeFallback : ''}`}
+            data-testid="hydroway-map-provider"
           >
             {isMapLibreActive ? 'MapLibre GL' : 'SVG schematic'}
           </span>
@@ -308,6 +311,12 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           <span className={styles.controlProviderLabel}>{isMapLibreActive ? 'MapLibre' : 'SVG'}</span>
         </div>
       </nav>
+
+      {fallbackNote ? (
+        <span hidden data-testid="hydroway-map-fallback">
+          {fallbackNote}
+        </span>
+      ) : null}
 
       {showMapLibre ? (
         <HydrowayMapSpikeMaplibreViewport

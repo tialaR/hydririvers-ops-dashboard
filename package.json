@@ -24,6 +24,7 @@
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
+    "test:hydroway-routes": "playwright test --config=playwright.hydroway-routes.config.ts",
     "visual:hero-check": "node scripts/phase-visual-check.mjs"
   },
   "dependencies": {
