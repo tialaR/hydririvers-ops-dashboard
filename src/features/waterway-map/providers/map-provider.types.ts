@@ -1,3 +1,9 @@
+export type {
+  HydrowayGeoJsonSources,
+  HydrowayMapModel,
+  HydrowayStaticGeoBundle,
+} from '../domain/hydroway-map-model.types';
+
 export type HydrowayMapPoint = { x: number; y: number };
 
 export type HydrowayMapViewBox = {

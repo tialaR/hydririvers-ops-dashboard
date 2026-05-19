@@ -1,0 +1,75 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-belem",
+        "name": "Porto Interior Belém (mock)",
+        "kind": "port",
+        "corridorId": "amazonas"
+      },
+      "geometry": { "type": "Point", "coordinates": [-48.51875, -1.65] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-santarem",
+        "name": "Porto Interior Santarém (mock)",
+        "kind": "port",
+        "corridorId": "amazonas"
+      },
+      "geometry": { "type": "Point", "coordinates": [-52.23125, -1.84] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-manaus",
+        "name": "Porto Interior Manaus (mock)",
+        "kind": "port",
+        "corridorId": "amazonas"
+      },
+      "geometry": { "type": "Point", "coordinates": [-56.1125, -1.79] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-maraba",
+        "name": "Porto Interior Marabá (mock)",
+        "kind": "port",
+        "corridorId": "tocantins-araguaia"
+      },
+      "geometry": { "type": "Point", "coordinates": [-51.725, -2.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-belem-norte",
+        "name": "Terminal Belém Norte (mock)",
+        "kind": "terminal",
+        "corridorId": "amazonas"
+      },
+      "geometry": { "type": "Point", "coordinates": [-48.45, -1.62] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-santarem-oeste",
+        "name": "Terminal Santarém Oeste (mock)",
+        "kind": "terminal",
+        "corridorId": "amazonas"
+      },
+      "geometry": { "type": "Point", "coordinates": [-52.15, -1.82] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-vila-conde",
+        "name": "Terminal Vila do Conde (mock)",
+        "kind": "terminal",
+        "corridorId": "tocantins-araguaia"
+      },
+      "geometry": { "type": "Point", "coordinates": [-48.0125, -1.46] }
+    }
+  ]
+}
