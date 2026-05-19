@@ -1,23 +1,35 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import type { HydrowayDemoCargoId } from '../domain/hydroway-entities.types';
 import type { HydrowayGeoFeatureCollection } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources, HydrowayStaticGeoBundle } from '../domain/hydroway-map-model.types';
 
-import amazonMainRiversJson from './amazon-main-rivers.mock.geojson';
-import amazonNavigableCorridorsJson from './amazon-navigable-corridors.mock.geojson';
-import amazonPortsTerminalsJson from './amazon-ports-terminals.mock.geojson';
-import cargoRoutesJson from './cargo-routes.mock.geojson';
 import { assertValidHydrowayGeoFeatureCollection } from './validate-mock-geojson';
 
-const amazonMainRivers = freezeValidatedCollection(amazonMainRiversJson, 'amazon-main-rivers.mock.geojson');
+const MOCK_GEOJSON_DIR = join(process.cwd(), 'src/features/waterway-map/data');
+
+function readMockGeoJsonFile(filename: string): unknown {
+  const raw = readFileSync(join(MOCK_GEOJSON_DIR, filename), 'utf8');
+  return JSON.parse(raw) as unknown;
+}
+
+const amazonMainRivers = freezeValidatedCollection(
+  readMockGeoJsonFile('amazon-main-rivers.mock.geojson'),
+  'amazon-main-rivers.mock.geojson',
+);
 const amazonNavigableCorridors = freezeValidatedCollection(
-  amazonNavigableCorridorsJson,
+  readMockGeoJsonFile('amazon-navigable-corridors.mock.geojson'),
   'amazon-navigable-corridors.mock.geojson',
 );
 const amazonPortsTerminals = freezeValidatedCollection(
-  amazonPortsTerminalsJson,
+  readMockGeoJsonFile('amazon-ports-terminals.mock.geojson'),
   'amazon-ports-terminals.mock.geojson',
 );
-const cargoRoutes = freezeValidatedCollection(cargoRoutesJson, 'cargo-routes.mock.geojson');
+const cargoRoutes = freezeValidatedCollection(
+  readMockGeoJsonFile('cargo-routes.mock.geojson'),
+  'cargo-routes.mock.geojson',
+);
 
 function freezeValidatedCollection(data: unknown, label: string): HydrowayGeoFeatureCollection {
   assertValidHydrowayGeoFeatureCollection(data, label);
@@ -87,7 +99,7 @@ export function createEmptyHydrowayDynamicGeoSources(): Pick<
 
 /**
  * Monta todas as fontes GeoJSON: estáticas + dinâmicas vazias.
- * Não altera o spike MapLibre até V2.2c.
+ * Fontes dinâmicas vazias — preenchidas pelo adapter; spike V2.2c usa `resolveSpikeHydrowayMapModel`.
  */
 export function loadHydrowayGeoJsonSources(): HydrowayGeoJsonSources {
   const staticBundle = loadHydrowayStaticGeoBundle();
@@ -102,10 +114,10 @@ export function loadHydrowayGeoJsonSources(): HydrowayGeoJsonSources {
 /** Bytes UTF-8 dos quatro artefatos mock (para testes de budget). */
 export function getHydrowayMockGeoJsonByteSizes(): Record<string, number> {
   const files = {
-    'amazon-main-rivers.mock.geojson': JSON.stringify(amazonMainRiversJson).length,
-    'amazon-navigable-corridors.mock.geojson': JSON.stringify(amazonNavigableCorridorsJson).length,
-    'amazon-ports-terminals.mock.geojson': JSON.stringify(amazonPortsTerminalsJson).length,
-    'cargo-routes.mock.geojson': JSON.stringify(cargoRoutesJson).length,
+    'amazon-main-rivers.mock.geojson': JSON.stringify(amazonMainRivers).length,
+    'amazon-navigable-corridors.mock.geojson': JSON.stringify(amazonNavigableCorridors).length,
+    'amazon-ports-terminals.mock.geojson': JSON.stringify(amazonPortsTerminals).length,
+    'cargo-routes.mock.geojson': JSON.stringify(cargoRoutes).length,
   };
   return files;
 }

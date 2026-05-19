@@ -4,6 +4,7 @@ export type {
   HydrowayMapModel,
   HydrowayStaticGeoBundle,
 } from '../domain/hydroway-map-model.types';
+import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 
 export type HydrowayMapPoint = { x: number; y: number };
 
@@ -61,8 +62,8 @@ export type HydrowayMapScene = {
 
 export type HydrowayMapProviderInit = {
   container: HTMLElement;
-  viewBox: HydrowayMapViewBox;
-  scene: HydrowayMapScene;
+  model: HydrowayMapModel;
+  viewBox?: HydrowayMapViewBox;
   camera?: HydrowayMapCamera;
 };
 
