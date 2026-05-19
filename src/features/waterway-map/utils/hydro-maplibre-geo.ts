@@ -1,7 +1,10 @@
+import type { HydrowayGeoRichMetadata } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
 import {
+  hydrowayImportanceSortKey,
   hydrowayPortLabelSortKey,
   resolveHydrowayPortDisplayLabel,
+  resolveHydrowayWaterwayDisplayLabel,
   sanitizeHydrowayDisplayLabel,
 } from './hydro-maplibre-labels';
 
@@ -27,6 +30,30 @@ function enrichFeatureCollection(
   };
 }
 
+function enrichLineFeatures(
+  collection: GeoJSON.FeatureCollection,
+  resolveLabel: (id: string, name: string, props: GeoProperties) => string,
+): GeoJSON.FeatureCollection {
+  return {
+    type: 'FeatureCollection',
+    features: collection.features.map((feature) => {
+      const props = (feature.properties ?? {}) as GeoProperties;
+      const id = String(props.id ?? '');
+      const name = String(props.name ?? props.displayLabel ?? '');
+      const importance = props.importance as HydrowayGeoRichMetadata['importance'];
+      const priority = typeof props.priority === 'number' ? props.priority : undefined;
+      return {
+        ...feature,
+        properties: {
+          ...props,
+          displayLabel: resolveLabel(id, name, props),
+          labelSortKey: hydrowayImportanceSortKey(importance, priority),
+        },
+      };
+    }),
+  };
+}
+
 function enrichPortsTerminals(collection: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
   return {
     type: 'FeatureCollection',
@@ -35,12 +62,14 @@ function enrichPortsTerminals(collection: GeoJSON.FeatureCollection): GeoJSON.Fe
       const id = String(props.id ?? '');
       const name = String(props.name ?? '');
       const kind = String(props.kind ?? 'port');
+      const importance = props.importance as HydrowayGeoRichMetadata['importance'];
+      const priority = typeof props.priority === 'number' ? props.priority : undefined;
       return {
         ...feature,
         properties: {
           ...props,
           displayLabel: resolveHydrowayPortDisplayLabel(id, name, kind),
-          labelSortKey: hydrowayPortLabelSortKey(id, kind),
+          labelSortKey: hydrowayPortLabelSortKey(id, kind, importance, priority),
         },
       };
     }),
@@ -60,8 +89,12 @@ export function enrichHydrowayGeoForMapLibre(
 
   return {
     ...geo,
-    mainRivers: geo.mainRivers,
-    navigableCorridors: geo.navigableCorridors,
+    mainRivers: enrichLineFeatures(geo.mainRivers, (id, name, props) =>
+      resolveHydrowayWaterwayDisplayLabel(id, name, String(props.waterwayCode ?? '')),
+    ),
+    navigableCorridors: enrichLineFeatures(geo.navigableCorridors, (id, name) =>
+      resolveHydrowayWaterwayDisplayLabel(id, name),
+    ),
     portsTerminals: enrichPortsTerminals(geo.portsTerminals),
     routeTrack,
     routeTraveled: enrichFeatureCollection(geo.routeTraveled),

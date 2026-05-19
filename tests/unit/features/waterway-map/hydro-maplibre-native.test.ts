@@ -2,8 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   abbreviateHydrowayPortLabel,
+  hydrowayImportanceSortKey,
   hydrowayPortLabelSortKey,
   resolveHydrowayPortDisplayLabel,
+  resolveHydrowayWaterwayDisplayLabel,
   sanitizeHydrowayDisplayLabel,
 } from '@/features/waterway-map/utils/hydro-maplibre-labels';
 import {
@@ -83,9 +85,17 @@ describe('hydro-maplibre-native', () => {
   });
 
   it('prioriza terminais em symbol-sort-key', () => {
-    expect(hydrowayPortLabelSortKey('terminal-belem-norte', 'terminal')).toBeGreaterThan(
-      hydrowayPortLabelSortKey('port-belem', 'port'),
+    expect(hydrowayPortLabelSortKey('terminal-belem-norte', 'terminal', 'critical')).toBeGreaterThan(
+      hydrowayPortLabelSortKey('port-belem', 'port', 'high'),
     );
+  });
+
+  it('resolve rótulos curtos de hidrovias para symbol-placement line', () => {
+    expect(resolveHydrowayWaterwayDisplayLabel('amazonas-solimoes', 'Rio Amazonas / Solimões (mock)')).toBe(
+      'Amazonas / Solimões',
+    );
+    expect(hydrowayImportanceSortKey('critical')).toBe(100);
+    expect(hydrowayImportanceSortKey('low')).toBe(40);
   });
 
   it('define enquadramento por carga demo', () => {
@@ -125,6 +135,9 @@ describe('hydro-maplibre-native', () => {
       expect('source' in layer && layer.source).toBeTruthy();
     }
     expect(HYDRO_MAPLIBRE_LAYER_GROUPS.route).toContain('route-traveled-core');
+    expect(HYDRO_MAPLIBRE_LAYER_GROUPS.labels).toContain('waterway-river-label');
+    expect(style.layers?.some((layer) => layer.id === 'waterway-corridor-label')).toBe(true);
+    expect(style.name).toContain('v27');
   });
 
   it('usa no máximo um interpolate/step baseado em zoom por propriedade paint/layout', () => {

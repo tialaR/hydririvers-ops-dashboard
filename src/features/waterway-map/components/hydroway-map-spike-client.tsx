@@ -208,7 +208,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         : null;
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.3zzz">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.7">
       <div className={styles.hud}>
         <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
           <span className={styles.hudLabel}>Carga</span>
@@ -268,6 +268,10 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       </aside>
 
       <nav className={styles.controlDock} aria-label="Controles do mapa">
+        <div className={styles.controlZoomReadout} aria-live="polite">
+          <span className={styles.controlZoomLabel}>Zoom</span>
+          <span className={styles.controlZoomValue}>{zoomPercent}%</span>
+        </div>
         <div className={styles.controlGroup} aria-label="Zoom e enquadramento">
           <button type="button" className={styles.controlBtn} onClick={handleZoomIn} aria-label="Aumentar zoom">
             <span className={styles.controlIcon} aria-hidden="true">+</span>
@@ -330,7 +334,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       )}
 
       <p className={styles.statusBar}>
-        {model.corridorId} • zoom {zoomPercent}%
+        {model.corridorId}
         {fallbackNote ? ` • ${fallbackNote}` : ''}
       </p>
     </section>

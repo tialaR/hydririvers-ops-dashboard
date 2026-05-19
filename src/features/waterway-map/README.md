@@ -1,4 +1,4 @@
-# waterway-map — spike MapLibre (V2.1b–V2.3zzz)
+# waterway-map — spike MapLibre (V2.1b–V2.7)
 
 Feature isolada para o mapa hidroviário profissional do desktop expanded. Complementa [ADR 0030](../../docs/adr/0030-professional-hydroway-map-provider.md) e [ADR 0031](../../docs/adr/0031-hydroway-geodata-pipeline.md).
 
@@ -16,7 +16,8 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.3z** | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
 | **V2.3zz** | Densidade hidrográfica, markers operacionais, leitura rota, labels, câmera por carga |
 | **V2.3zzz** | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
-| **V2.6** (atual) | GOV-enriched mock: rede hidroviária Arco Norte, nós logísticos, metadados e rotas demo plausíveis |
+| **V2.6** | GOV-enriched mock: rede hidroviária Arco Norte, nós logísticos, metadados e rotas demo plausíveis |
+| **V2.7** (atual) | Visual lift MapLibre-native: câmera em duas fases, stack hidroviária, labels por importance, HUD cockpit |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -73,7 +74,8 @@ src/features/waterway-map/
 - **line-gradient** na rota planejada (`lineMetrics: true`) + camada percorrida energética vs restante discreta.
 - **Symbol/circle layers** para origem, destino, embarcação, portos e terminais (ícones canvas distintos).
 - Rótulos curtos de porto via `displayLabel` / `labelSortKey` (sem “mock” no mapa; abreviação em clusters).
-- Câmera por carga demo (`hydro-maplibre-camera.ts`) — CARGO-001/002/004 com padding e maxZoom ajustados.
+- Câmera por carga demo (`hydro-maplibre-camera.ts`) — CARGO-001/002/004 com padding e maxZoom ajustados; entrada em duas fases (`fitBounds` instantâneo + `easeTo` curto; animação só após `moveend`).
+- Rótulos hidroviários (`symbol-placement: line`) e portos filtrados por `labelSortKey` / `importance` — sem texto “mock” no mapa.
 - Animação operacional (`hydro-maplibre-animation.ts` + `requestAnimationFrame`, respeita `prefers-reduced-motion`; pausa via controle no mapa).
 - Dados oficiais (shapefile BIT/DNIT/ANTAQ) ficam para pipeline futura (ADR 0031).
 

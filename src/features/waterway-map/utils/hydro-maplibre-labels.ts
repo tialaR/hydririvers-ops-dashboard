@@ -1,3 +1,5 @@
+import type { HydrowayGeoRichMetadata } from '../domain/hydroway-geo.types';
+
 /** Remove sufixos de fixture mock para exibição no mapa (dados continuam fictícios no backend). */
 export function sanitizeHydrowayDisplayLabel(name: string): string {
   return name
@@ -22,10 +24,60 @@ const PORT_LABEL_SHORT: Record<string, string> = {
   'port-santarem': 'Santarém',
   'port-manaus': 'Manaus',
   'port-maraba': 'Marabá',
+  'port-itacoatiara': 'Itacoatiara',
+  'port-porto-velho': 'Porto Velho',
+  'port-itaituba': 'Itaituba',
   'terminal-belem-norte': 'Belém N.',
   'terminal-santarem-oeste': 'Santarém O.',
   'terminal-vila-conde': 'Vila Conde',
+  'terminal-miritituba': 'Miritituba',
 };
+
+const WATERWAY_LABEL_SHORT: Record<string, string> = {
+  'amazonas-solimoes': 'Amazonas / Solimões',
+  madeira: 'Madeira',
+  tapajos: 'Tapajós',
+  tocantins: 'Tocantins',
+  'para-estuario': 'Estuário Pará',
+  araguaia: 'Araguaia',
+};
+
+/** symbol-sort-key a partir de importance/priority (V2.7 — evita embolo de rótulos). */
+export function hydrowayImportanceSortKey(
+  importance?: HydrowayGeoRichMetadata['importance'],
+  priority?: number,
+): number {
+  if (typeof priority === 'number' && Number.isFinite(priority)) {
+    return Math.round(priority);
+  }
+  switch (importance) {
+    case 'critical':
+      return 100;
+    case 'high':
+      return 80;
+    case 'medium':
+      return 60;
+    case 'low':
+      return 40;
+    default:
+      return 50;
+  }
+}
+
+/** Rótulo curto ao longo da hidrovia (symbol-placement: line). */
+export function resolveHydrowayWaterwayDisplayLabel(
+  featureId: string,
+  name: string,
+  waterwayCode?: string,
+): string {
+  const short = WATERWAY_LABEL_SHORT[featureId];
+  if (short) return short;
+  if (waterwayCode === 'HN-100') return 'Amazonas / Solimões';
+
+  const clean = sanitizeHydrowayDisplayLabel(name);
+  const withoutRio = clean.replace(/^Rio\s+/i, '').trim();
+  return abbreviateHydrowayPortLabel(withoutRio || clean, 26);
+}
 
 /** Rótulo curto para symbol layer — evita embolo em clusters operacionais. */
 export function resolveHydrowayPortDisplayLabel(
@@ -46,9 +98,15 @@ export function resolveHydrowayPortDisplayLabel(
 }
 
 /** symbol-sort-key: terminais e portos principais acima de secundários. */
-export function hydrowayPortLabelSortKey(featureId: string, kind: string): number {
-  if (kind === 'terminal') return 90;
-  if (featureId === 'port-belem' || featureId === 'port-santarem') return 80;
-  if (featureId === 'port-maraba' || featureId === 'port-manaus') return 70;
-  return 50;
+export function hydrowayPortLabelSortKey(
+  featureId: string,
+  kind: string,
+  importance?: HydrowayGeoRichMetadata['importance'],
+  priority?: number,
+): number {
+  const base = hydrowayImportanceSortKey(importance, priority);
+  if (kind === 'terminal') return base + 8;
+  if (featureId === 'port-belem' || featureId === 'port-santarem') return Math.max(base, 85);
+  if (featureId === 'port-maraba' || featureId === 'port-manaus') return Math.max(base, 78);
+  return base;
 }

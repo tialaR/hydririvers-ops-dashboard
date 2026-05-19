@@ -10,10 +10,10 @@ export type HydroMapLibreFitOptions = {
 };
 
 const DEFAULT_FIT: HydroMapLibreFitOptions = {
-  padding: { top: 128, bottom: 80, left: 288, right: 96 },
-  maxZoom: 9.6,
-  pitch: 28,
-  bearing: -12,
+  padding: { top: 132, bottom: 88, left: 292, right: 104 },
+  maxZoom: 9.5,
+  pitch: 26,
+  bearing: -10,
 };
 
 /** Enquadramento por carga demo — reduz espaço morto e evita rota espremida. */

@@ -21,7 +21,7 @@ import {
   HYDRO_MAPLIBRE_LAYER_GROUPS,
 } from '../utils/hydro-maplibre-style';
 import { HYDRO_MAP_INITIAL_CAMERA, HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
-import { hydroMapTransitionMs, prefersReducedMotion } from '../utils/hydro-motion';
+import { hydroMapIntroEaseMs, hydroMapTransitionMs, prefersReducedMotion } from '../utils/hydro-motion';
 import { schematicPointToLngLat } from '../utils/schematic-to-geo';
 import type {
   HydrowayMapCamera,
@@ -42,14 +42,26 @@ const ALL_LAYERS: HydrowayMapLayerId[] = [
 ];
 
 const STYLE_LAYER_BY_DOMAIN: Record<HydrowayMapLayerId, readonly string[]> = {
-  'waterway-main': HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayMain,
+  'waterway-main': [...HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayMain, 'waterway-river-label'],
   'waterway-tributary': [
     ...HYDRO_MAPLIBRE_LAYER_GROUPS.waterwaySecondary,
     ...HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayTributary,
   ],
-  'cargo-route': HYDRO_MAPLIBRE_LAYER_GROUPS.route,
-  ports: [...HYDRO_MAPLIBRE_LAYER_GROUPS.ports, ...HYDRO_MAPLIBRE_LAYER_GROUPS.corridors],
-  vessel: HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter((id) => id.includes('vessel')),
+  'cargo-route': [
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.route,
+    'ops-origin-label',
+    'ops-destination-label',
+  ],
+  ports: [
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.ports,
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.corridors,
+    'waterway-corridor-label',
+    'ports-label',
+  ],
+  vessel: [
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter((id) => id.includes('vessel')),
+    'ops-vessel-label',
+  ],
 };
 
 const OPS_ROUTE_LAYERS = HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter(
@@ -80,6 +92,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private animationStartMs = 0;
   private animationPaused = false;
   private reducedMotion = false;
+  private cameraSettled = false;
+  private introMoveHandler: (() => void) | null = null;
 
   mount(init: HydrowayMapProviderInit, hooks?: { onReady?: () => void }): void {
     this.destroy();
@@ -96,6 +110,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.reducedMotion = prefersReducedMotion();
     this.animationPaused = this.reducedMotion;
     this.animationStartMs = 0;
+    this.cameraSettled = false;
 
     const viewBox = init.viewBox ?? HYDRO_MAP_VIEWBOX;
     const style = createHydroMapLibreBaseStyle(init.model.progress01) as StyleSpecification;
@@ -129,12 +144,12 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
         this.applyGeoJson(map);
         this.syncLayerVisibility(map);
         this.applyAtmosphere(map);
-        this.startNativeAnimation(map);
 
         if (init.camera) {
           this.setCamera(init.camera);
+          this.onCameraSettled(map);
         } else {
-          this.fitRouteTrack(false);
+          this.applyInitialRouteCamera(map);
         }
         hooks?.onReady?.();
       });
@@ -226,6 +241,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     if (this.reducedMotion) return;
     this.animationPaused = false;
     this.animationStartMs = 0;
+    const map = this.map;
+    if (map?.loaded() && this.cameraSettled) {
+      this.startNativeAnimation(map);
+    }
   }
 
   toggleAnimationPause(): boolean {
@@ -246,6 +265,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   }
 
   destroy(): void {
+    this.clearIntroMoveHandler();
     this.stopNativeAnimation();
     this.map?.remove();
     this.map = null;
@@ -261,34 +281,78 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.fitOptions = resolveHydroMapLibreFitOptions('');
     this.animationStartMs = 0;
     this.animationPaused = false;
+    this.cameraSettled = false;
   }
 
-  private fitRouteTrack(cinematic: boolean): void {
+  private resolveRouteBounds(): LngLatBoundsLike | null {
     const coords = this.routeTrackCoords;
     if (coords.length >= 2) {
       const lngs = coords.map(([lng]) => lng);
       const lats = coords.map(([, lat]) => lat);
-      this.flyToBounds(
-        [
-          [Math.min(...lngs), Math.min(...lats)],
-          [Math.max(...lngs), Math.max(...lats)],
-        ],
-        cinematic,
-        this.fitOptions.padding,
-      );
-      return;
+      return [
+        [Math.min(...lngs), Math.min(...lats)],
+        [Math.max(...lngs), Math.max(...lats)],
+      ];
     }
 
     if (this.routeBbox) {
-      this.flyToBounds(
-        [
-          [this.routeBbox[0], this.routeBbox[1]],
-          [this.routeBbox[2], this.routeBbox[3]],
-        ],
-        cinematic,
-        this.fitOptions.padding,
-      );
+      return [
+        [this.routeBbox[0], this.routeBbox[1]],
+        [this.routeBbox[2], this.routeBbox[3]],
+      ];
     }
+
+    return null;
+  }
+
+  private applyInitialRouteCamera(map: Map): void {
+    const bounds = this.resolveRouteBounds();
+    if (!bounds) return;
+
+    this.cameraSettled = false;
+    this.stopNativeAnimation();
+    this.fitRouteBounds(bounds, false);
+
+    if (this.reducedMotion) {
+      this.onCameraSettled(map);
+      return;
+    }
+
+    this.clearIntroMoveHandler();
+    const onMoveEnd = () => {
+      this.clearIntroMoveHandler();
+      this.fitRouteBounds(bounds, true);
+      map.once('moveend', () => this.onCameraSettled(map));
+    };
+    this.introMoveHandler = onMoveEnd;
+    map.once('moveend', onMoveEnd);
+  }
+
+  private onCameraSettled(map: Map): void {
+    this.cameraSettled = true;
+    this.camera = boundsToSchematicCamera(map.getBounds());
+    if (!this.reducedMotion && !this.animationPaused) {
+      this.startNativeAnimation(map);
+    }
+  }
+
+  private clearIntroMoveHandler(): void {
+    if (!this.map || !this.introMoveHandler) {
+      this.introMoveHandler = null;
+      return;
+    }
+    this.map.off('moveend', this.introMoveHandler);
+    this.introMoveHandler = null;
+  }
+
+  private fitRouteTrack(cinematic: boolean): void {
+    const bounds = this.resolveRouteBounds();
+    if (!bounds) return;
+    this.fitRouteBounds(bounds, cinematic);
+  }
+
+  private fitRouteBounds(bounds: LngLatBoundsLike, cinematic: boolean): void {
+    this.flyToBounds(bounds, cinematic, this.fitOptions.padding);
   }
 
   private flyToBounds(
@@ -299,16 +363,15 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     const map = this.map;
     if (!map) return;
 
-    const duration = cinematic ? hydroMapTransitionMs() : 0;
     const { maxZoom, pitch, bearing } = this.fitOptions;
 
-    if (!cinematic) {
+    if (!cinematic || this.reducedMotion) {
       map.fitBounds(bounds, {
         padding,
         maxZoom,
         duration: 0,
-        pitch,
-        bearing,
+        pitch: this.reducedMotion ? pitch : 0,
+        bearing: this.reducedMotion ? bearing : 0,
         essential: true,
       });
       this.camera = boundsToSchematicCamera(map.getBounds());
@@ -317,18 +380,18 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
 
     const camera = map.cameraForBounds(bounds, { padding, maxZoom });
     if (!camera) {
-      map.fitBounds(bounds, { padding, duration, maxZoom, pitch, bearing });
+      map.fitBounds(bounds, { padding, duration: 0, maxZoom, pitch, bearing, essential: true });
       this.camera = boundsToSchematicCamera(map.getBounds());
       return;
     }
 
-    map.flyTo({
+    map.easeTo({
       center: camera.center,
       zoom: Math.min(camera.zoom ?? INITIAL_MAP_ZOOM, maxZoom),
       bearing,
       pitch,
       padding,
-      duration,
+      duration: hydroMapIntroEaseMs(),
       essential: true,
     });
   }
@@ -425,7 +488,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
 
   private startNativeAnimation(map: Map): void {
     this.stopNativeAnimation();
-    if (this.reducedMotion) return;
+    if (this.reducedMotion || !this.cameraSettled) return;
 
     const tick = (now: number) => {
       if (!this.map) {
