@@ -13,14 +13,17 @@ import {
   buildVesselGeoJson,
   resolveAnimatedRouteProgress,
 } from '@/features/waterway-map/utils/hydro-maplibre-animation';
+import { buildHydrowayCameraChapters } from '@/features/waterway-map/utils/hydro-maplibre-camera-chapters';
 import { resolveHydroMapLibreFitOptions } from '@/features/waterway-map/utils/hydro-maplibre-camera';
-import { buildRouteLineGradientExpression } from '@/features/waterway-map/utils/hydro-maplibre-route-style';
-import type { ExpressionSpecification, StyleSpecification } from 'maplibre-gl';
-
+import { DEV_BASEMAP_STYLE_URL } from '@/features/waterway-map/utils/hydro-maplibre-dev-basemap';
 import {
-  createHydroMapLibreBaseStyle,
-  HYDRO_MAPLIBRE_LAYER_GROUPS,
-} from '@/features/waterway-map/utils/hydro-maplibre-style';
+  buildRoutePointsGeoJson,
+  getHydrowayMvpOverlayLayerDefinitions,
+  HYDROWAY_MVP_OVERLAY_LAYER_IDS,
+} from '@/features/waterway-map/utils/hydro-maplibre-overlay';
+import { buildRouteLineGradientExpression } from '@/features/waterway-map/utils/hydro-maplibre-route-style';
+import { resolveSpikeHydrowayMapModel } from '@/features/waterway-map/data/resolve-spike-hydroway-model';
+import type { ExpressionSpecification } from 'maplibre-gl';
 
 const ZOOM_INPUT: ExpressionSpecification = ['zoom'];
 
@@ -47,13 +50,13 @@ function countZoomBasedScales(expr: unknown): number {
   return count;
 }
 
-function collectLayerExpressions(style: StyleSpecification): unknown[] {
+function collectLayerExpressions(layers: { paint?: Record<string, unknown>; layout?: Record<string, unknown> }[]): unknown[] {
   const values: unknown[] = [];
-  for (const layer of style.layers ?? []) {
-    if ('paint' in layer && layer.paint) {
+  for (const layer of layers) {
+    if (layer.paint) {
       values.push(...Object.values(layer.paint));
     }
-    if ('layout' in layer && layer.layout) {
+    if (layer.layout) {
       values.push(...Object.values(layer.layout));
     }
   }
@@ -126,24 +129,33 @@ describe('hydro-maplibre-native', () => {
     expect(vessel.features[0]?.properties?.heading).toBeTypeOf('number');
   });
 
-  it('expõe style válido com sky na raiz e layers com source', () => {
-    const style = createHydroMapLibreBaseStyle(0.2);
-    expect(style.sky).toBeDefined();
-    expect(style.layers?.some((layer) => layer.id === 'route-remaining')).toBe(true);
-    const nonBackground = style.layers?.filter((layer) => layer.type !== 'background') ?? [];
-    for (const layer of nonBackground) {
-      expect('source' in layer && layer.source).toBeTruthy();
-    }
-    expect(HYDRO_MAPLIBRE_LAYER_GROUPS.route).toContain('route-traveled-core');
-    expect(HYDRO_MAPLIBRE_LAYER_GROUPS.labels).toContain('waterway-river-label');
-    expect(style.layers?.some((layer) => layer.id === 'waterway-corridor-label')).toBe(true);
-    expect(style.name).toContain('v27');
+  it('usa basemap OpenFreeMap somente na rota dev (V2.7c)', () => {
+    expect(DEV_BASEMAP_STYLE_URL).toBe('https://tiles.openfreemap.org/styles/bright');
   });
 
-  it('usa no máximo um interpolate/step baseado em zoom por propriedade paint/layout', () => {
-    const style = createHydroMapLibreBaseStyle(0.2);
+  it('expõe overlay MVP com layers GeoJSON e pontos operacionais', () => {
+    const layers = getHydrowayMvpOverlayLayerDefinitions();
+    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeTrackCore)).toBe(true);
+    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeTraveledCore)).toBe(true);
+    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePoints)).toBe(true);
+    for (const layer of layers) {
+      expect('source' in layer && layer.source).toBeTruthy();
+    }
+  });
+
+  it('monta capítulos overview/origem/atual/destino por carga demo', () => {
+    const model = resolveSpikeHydrowayMapModel('CARGO-001');
+    const chapters = buildHydrowayCameraChapters(model.geo, model.bbox);
+    expect(chapters.overview?.kind).toBe('bounds');
+    expect(chapters.origin?.kind).toBe('point');
+    expect(chapters.current?.kind).toBe('point');
+    expect(chapters.destination?.kind).toBe('point');
+  });
+
+  it('usa no máximo um interpolate/step baseado em zoom por propriedade paint/layout (overlay MVP)', () => {
+    const layers = getHydrowayMvpOverlayLayerDefinitions();
     const invalid: string[] = [];
-    for (const expr of collectLayerExpressions(style)) {
+    for (const expr of collectLayerExpressions(layers)) {
       const zoomScales = countZoomBasedScales(expr);
       if (zoomScales > 1) {
         invalid.push(JSON.stringify(expr).slice(0, 120));
@@ -152,19 +164,21 @@ describe('hydro-maplibre-native', () => {
     expect(invalid, invalid.join('\n')).toEqual([]);
   });
 
-  it('ports-circle e ports-halo usam circle-radius com match nos outputs do zoom', () => {
-    const style = createHydroMapLibreBaseStyle(0.2);
-    const halo = style.layers?.find((layer) => layer.id === 'ports-halo');
-    const circle = style.layers?.find((layer) => layer.id === 'ports-circle');
-    expect(halo?.type).toBe('circle');
-    expect(circle?.type).toBe('circle');
-    if (halo?.type !== 'circle' || circle?.type !== 'circle') return;
+  it('route-points usa circle-radius com match nos outputs do zoom', () => {
+    const layers = getHydrowayMvpOverlayLayerDefinitions();
+    const points = layers.find((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePoints);
+    expect(points?.type).toBe('circle');
+    if (points?.type !== 'circle') return;
 
-    const haloRadius = halo.paint?.['circle-radius'];
-    const circleRadius = circle.paint?.['circle-radius'];
-    expect(Array.isArray(haloRadius) && haloRadius[0]).toBe('interpolate');
-    expect(Array.isArray(circleRadius) && circleRadius[0]).toBe('interpolate');
-    expect(countZoomBasedScales(haloRadius)).toBe(1);
-    expect(countZoomBasedScales(circleRadius)).toBe(1);
+    const radius = points.paint?.['circle-radius'];
+    expect(Array.isArray(radius) && radius[0]).toBe('interpolate');
+    expect(countZoomBasedScales(radius)).toBe(1);
+
+    const merged = buildRoutePointsGeoJson(
+      { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { kind: 'origin' }, geometry: { type: 'Point', coordinates: [-59, -2] } }] },
+      { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { kind: 'destination' }, geometry: { type: 'Point', coordinates: [-58, -1.5] } }] },
+      { type: 'FeatureCollection', features: [{ type: 'Feature', properties: { kind: 'vessel' }, geometry: { type: 'Point', coordinates: [-58.5, -1.8] } }] },
+    );
+    expect(merged.features).toHaveLength(3);
   });
 });

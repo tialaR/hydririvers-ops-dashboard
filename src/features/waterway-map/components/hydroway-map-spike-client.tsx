@@ -10,6 +10,7 @@ import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import {
   getMapLibreZoomPercent,
   MapLibreHydrowayProvider,
+  type HydrowayCameraChapterId,
 } from '../providers/maplibre-hydroway-provider';
 import { SvgSchematicHydrowayProvider } from '../providers/svg-schematic-hydroway-provider';
 import { detectWebGLSupport } from '../utils/detect-webgl';
@@ -169,10 +170,18 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     setAnimationPaused(paused);
   }, [getMapLibreProvider]);
 
+  const handleFlyToChapter = useCallback(
+    (chapterId: HydrowayCameraChapterId) => {
+      if (!showMapLibre) return;
+      getMapLibreProvider()?.flyToChapter(chapterId);
+      syncZoomLabel();
+    },
+    [getMapLibreProvider, showMapLibre, syncZoomLabel],
+  );
+
   const handleFitRoute = useCallback(() => {
     if (showMapLibre) {
-      getMapLibreProvider()?.resetView();
-      syncZoomLabel();
+      handleFlyToChapter('overview');
       return;
     }
 
@@ -181,7 +190,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     const { origin, destination, vessel } = schematicScene.route;
     provider.fitBounds([origin, destination, vessel]);
     syncZoomLabel();
-  }, [getMapLibreProvider, schematicScene.route, showMapLibre, syncZoomLabel]);
+  }, [handleFlyToChapter, schematicScene.route, showMapLibre, syncZoomLabel]);
 
   const selectCargo = useCallback(
     (cargoId: string) => {
@@ -208,7 +217,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         : null;
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.7">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.7c">
       <div className={styles.hud}>
         <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
           <span className={styles.hudLabel}>Carga</span>
@@ -282,7 +291,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
             <span className={styles.controlCaption}>Zoom</span>
           </button>
           <span className={styles.controlDivider} aria-hidden="true" />
-          <button type="button" className={styles.controlBtn} onClick={handleFitRoute} aria-label="Ajustar à rota completa">
+          <button type="button" className={styles.controlBtn} onClick={handleFitRoute} aria-label="Rota completa">
             <span className={styles.controlIcon} aria-hidden="true">⊡</span>
             <span className={styles.controlCaption}>Rota</span>
           </button>
@@ -291,6 +300,34 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
             <span className={styles.controlCaption}>Reset</span>
           </button>
         </div>
+        {showMapLibre && maplibreReady ? (
+          <div className={styles.controlGroup} aria-label="Capítulos de câmera">
+            <button
+              type="button"
+              className={styles.controlBtn}
+              onClick={() => handleFlyToChapter('origin')}
+              aria-label="Enquadrar origem"
+            >
+              <span className={styles.controlCaption}>Origem</span>
+            </button>
+            <button
+              type="button"
+              className={styles.controlBtn}
+              onClick={() => handleFlyToChapter('current')}
+              aria-label="Enquadrar posição atual"
+            >
+              <span className={styles.controlCaption}>Atual</span>
+            </button>
+            <button
+              type="button"
+              className={styles.controlBtn}
+              onClick={() => handleFlyToChapter('destination')}
+              aria-label="Enquadrar destino"
+            >
+              <span className={styles.controlCaption}>Destino</span>
+            </button>
+          </div>
+        ) : null}
         {showMapLibre && maplibreReady ? (
           <div className={styles.controlGroup} aria-label="Animação operacional">
             <button

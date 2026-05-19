@@ -17,7 +17,8 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.3zz** | Densidade hidrográfica, markers operacionais, leitura rota, labels, câmera por carga |
 | **V2.3zzz** | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
 | **V2.6** | GOV-enriched mock: rede hidroviária Arco Norte densa, nós logísticos, zonas, metadados de confiança e rotas demo plausíveis |
-| **V2.7** (atual) | Visual lift MapLibre-native: câmera em duas fases, stack hidroviária, labels por importance, HUD cockpit |
+| **V2.7** | Visual lift MapLibre-native: câmera em duas fases, stack hidroviária, labels por importance, HUD cockpit |
+| **V2.7c** (atual) | MVP mínimo aceitável: basemap OpenFreeMap (dev only), overlay rota/hidrovias, capítulos `flyTo`, controles simples |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -68,7 +69,8 @@ src/features/waterway-map/
 - CSS `maplibre-gl/dist/maplibre-gl.css` importado apenas em `maplibre-hydroway-provider.tsx` (chunk client).
 - Viewport carregado via `next/dynamic(..., { ssr: false })` em `hydroway-map-spike-client.tsx`.
 - `page.tsx` da rota dev permanece RSC fino — **sem** import de `maplibre-gl`.
-- Style local escuro (`hydro-maplibre-style.ts`): fundo + camadas GeoJSON + **sky/fog** na raiz do Style Spec; **sem** tiles raster comerciais pagos.
+- **V2.7c:** basemap público [OpenFreeMap Bright](https://tiles.openfreemap.org/styles/bright) (`DEV_BASEMAP_STYLE_URL` em `hydro-maplibre-dev-basemap.ts`) — **somente** rota dev; sem token Mapbox/Google/MapTiler. Overlay HydroRivers (rotas, hidrovias simplificadas, origem/destino/embarcação) adicionado após `map.on('load')` via `hydro-maplibre-overlay.ts`.
+- Style local legado (`hydro-maplibre-style.ts`) permanece para referência/testes; o provider dev usa basemap externo + overlay MVP.
 - Animação nativa: `routeTraveled` + `vessel` atualizados com `GeoJSONSource.setData()` (padrão “Animate a line” / “Animate point along route”).
 - **Sem** tiles/APIs pagas: estilo local + GeoJSON mock + ícones gerados em canvas (`hydro-maplibre-icons.ts`).
 - **line-gradient** na rota planejada (`lineMetrics: true`) + camada percorrida energética vs restante discreta.
@@ -139,7 +141,7 @@ Adapter: `adaptCargoToHydrowayMapModel`. Spike: `resolveSpikeHydrowayMapModel(ca
 
 ### Controles
 
-- Dock flutuante: zoom +/−, ajustar rota (`fitBounds` na track), reset, pausa/play animação (MapLibre), indicador de provider
+- Dock flutuante: zoom +/−, rota completa (`fitBounds` / capítulo overview), reset, capítulos Origem/Atual/Destino (`flyTo`), pausa/play animação (MapLibre), indicador de provider
 
 ### Fallback SVG
 
