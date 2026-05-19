@@ -21,8 +21,119 @@ import {
   zoomHydrowayMapCameraIn,
   zoomHydrowayMapCameraOut,
 } from '../utils/hydro-map-style';
+import type { HydrowayMapLayerId } from '../providers/map-provider.types';
 import type { HydrowayMapSpikeMaplibreViewportHandle } from './hydroway-map-spike-maplibre-viewport';
 import styles from './hydroway-map-spike.module.scss';
+
+const ALL_MAP_LAYERS: HydrowayMapLayerId[] = [
+  'waterway-main',
+  'waterway-tributary',
+  'cargo-route',
+  'ports',
+  'vessel',
+];
+
+const MINIMAL_MAP_LAYERS: HydrowayMapLayerId[] = ['cargo-route', 'vessel'];
+
+const CONTROL_ICON_PROPS = {
+  className: styles.controlIconSvg,
+  viewBox: '0 0 24 24',
+  width: 16,
+  height: 16,
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round' as const,
+  strokeLinejoin: 'round' as const,
+  'aria-hidden': true,
+};
+
+function ControlIconOrigin() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <circle cx="12" cy="12" r="7" />
+      <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function ControlIconDestination() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M8 4v16" />
+      <path d="M8 4h9.5a.9.9 0 0 1 .7 1.5L13.5 11l4.7 4.2a.9.9 0 0 1-.7 1.5H8" />
+    </svg>
+  );
+}
+
+function ControlIconZoomIn() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M12 7v10M7 12h10" />
+    </svg>
+  );
+}
+
+function ControlIconZoomOut() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M7 12h10" />
+    </svg>
+  );
+}
+
+function ControlIconLayers() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M12 4 4 8l8 4 8-4-8-4z" />
+      <path d="M4 12l8 4 8-4" />
+      <path d="M4 16l8 4 8-4" />
+    </svg>
+  );
+}
+
+function ControlIconPause() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M9 7v10M15 7v10" />
+    </svg>
+  );
+}
+
+function ControlIconPlay() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M9 7.5v9l8-4.5-8-4.5z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function ControlIconReset() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M4 12a8 8 0 0 1 13.5-5.7" />
+      <path d="M20 5v5h-5" />
+    </svg>
+  );
+}
+
+function ControlIconCurrent() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <circle cx="12" cy="12" r="7" />
+      <path d="M12 5v14M5 12h14" />
+    </svg>
+  );
+}
+
+function ControlIconRouteOverview() {
+  return (
+    <svg {...CONTROL_ICON_PROPS}>
+      <path d="M4 8V4h4M20 8V4h-4M4 16v4h4M20 16v4h-4" />
+      <path d="M8 12h8" />
+    </svg>
+  );
+}
 
 const HydrowayMapSpikeMaplibreViewport = dynamic(
   () =>
@@ -53,6 +164,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const [maplibreReady, setMaplibreReady] = useState(false);
   const [zoomPercent, setZoomPercent] = useState(100);
   const [animationPaused, setAnimationPaused] = useState(false);
+  const [mapLayersExpanded, setMapLayersExpanded] = useState(true);
 
   const webglReady = useSyncExternalStore(
     () => () => {},
@@ -179,6 +291,19 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     [getMapLibreProvider, showMapLibre, syncZoomLabel],
   );
 
+  const handleToggleLayers = useCallback(() => {
+    const nextExpanded = !mapLayersExpanded;
+    const layers = nextExpanded ? ALL_MAP_LAYERS : MINIMAL_MAP_LAYERS;
+
+    if (showMapLibre) {
+      getMapLibreProvider()?.setLayers(layers);
+    } else {
+      svgProviderRef.current?.setLayers(layers);
+    }
+
+    setMapLayersExpanded(nextExpanded);
+  }, [getMapLibreProvider, mapLayersExpanded, showMapLibre]);
+
   const handleFitRoute = useCallback(() => {
     if (showMapLibre) {
       handleFlyToChapter('overview');
@@ -216,6 +341,121 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         ? 'fallback sem WebGL'
         : null;
 
+  const mapChapterDisabled = !showMapLibre || !maplibreReady;
+  const animationDisabled = mapChapterDisabled;
+  const animationTooltip = animationPaused ? 'Retomar animação' : 'Pausar animação';
+  const animationAriaLabel = animationPaused ? 'Retomar animação' : 'Pausar animação';
+
+  const handleDockControlClick = useCallback(
+    (controlKey: string) => {
+      switch (controlKey) {
+        case 'origin':
+          handleFlyToChapter('origin');
+          break;
+        case 'destination':
+          handleFlyToChapter('destination');
+          break;
+        case 'zoom-in':
+          handleZoomIn();
+          break;
+        case 'zoom-out':
+          handleZoomOut();
+          break;
+        case 'layers':
+          handleToggleLayers();
+          break;
+        case 'animation':
+          handleToggleAnimation();
+          break;
+        case 'reset':
+          handleReset();
+          break;
+        case 'current':
+          handleFlyToChapter('current');
+          break;
+        case 'fit-route':
+          handleFitRoute();
+          break;
+        default:
+          break;
+      }
+    },
+    [
+      handleFitRoute,
+      handleFlyToChapter,
+      handleReset,
+      handleToggleAnimation,
+      handleToggleLayers,
+      handleZoomIn,
+      handleZoomOut,
+    ],
+  );
+
+  const dockControls = [
+    {
+      key: 'origin',
+      tooltip: 'Origem da viagem',
+      ariaLabel: 'Focar origem da viagem',
+      icon: <ControlIconOrigin />,
+      disabled: mapChapterDisabled,
+    },
+    {
+      key: 'destination',
+      tooltip: 'Destino da viagem',
+      ariaLabel: 'Focar destino da viagem',
+      icon: <ControlIconDestination />,
+      disabled: mapChapterDisabled,
+    },
+    {
+      key: 'zoom-in',
+      tooltip: 'Ampliar mapa',
+      ariaLabel: 'Ampliar mapa',
+      icon: <ControlIconZoomIn />,
+    },
+    {
+      key: 'zoom-out',
+      tooltip: 'Diminuir mapa',
+      ariaLabel: 'Diminuir mapa',
+      icon: <ControlIconZoomOut />,
+    },
+    {
+      key: 'layers',
+      tooltip: 'Camadas',
+      ariaLabel: 'Alternar camadas do mapa',
+      icon: <ControlIconLayers />,
+      ariaPressed: mapLayersExpanded,
+      active: mapLayersExpanded,
+    },
+    {
+      key: 'animation',
+      tooltip: animationTooltip,
+      ariaLabel: animationAriaLabel,
+      icon: animationPaused ? <ControlIconPlay /> : <ControlIconPause />,
+      disabled: animationDisabled,
+      ariaPressed: !animationPaused,
+      muted: animationPaused,
+    },
+    {
+      key: 'reset',
+      tooltip: 'Voltar para posição inicial',
+      ariaLabel: 'Voltar para posição inicial',
+      icon: <ControlIconReset />,
+    },
+    {
+      key: 'current',
+      tooltip: 'Focar carga no percurso',
+      ariaLabel: 'Focar carga no percurso',
+      icon: <ControlIconCurrent />,
+      disabled: mapChapterDisabled,
+    },
+    {
+      key: 'fit-route',
+      tooltip: 'Visualizar rota completa',
+      ariaLabel: 'Visualizar rota completa',
+      icon: <ControlIconRouteOverview />,
+    },
+  ];
+
   return (
     <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.8">
       <div className={styles.hud}>
@@ -250,17 +490,33 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       </div>
 
       <div className={styles.cargoChips} role="group" aria-label="Selecionar carga demo">
-        {HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => (
-          <button
-            key={cargoId}
-            type="button"
-            className={`${styles.cargoChip} ${model.cargoId === cargoId ? styles.cargoChipActive : ''}`}
-            onClick={() => selectCargo(cargoId)}
-            aria-pressed={model.cargoId === cargoId}
-          >
-            {cargoId}
-          </button>
-        ))}
+        <p className={styles.cargoPanelHeader}>Cargas monitoradas</p>
+        <ul className={styles.cargoPanelList}>
+          {HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => {
+            const isActive = model.cargoId === cargoId;
+            return (
+              <li key={cargoId} className={styles.cargoPanelItem}>
+                <button
+                  type="button"
+                  className={`${styles.cargoRow} ${isActive ? styles.cargoRowActive : ''}`}
+                  onClick={() => selectCargo(cargoId)}
+                  aria-pressed={isActive}
+                >
+                  <span
+                    className={`${styles.cargoStatusDot} ${isActive ? styles.cargoStatusDotActive : ''}`}
+                    aria-hidden="true"
+                  />
+                  <span className={styles.cargoRowBody}>
+                    <span className={styles.cargoRowId}>{cargoId}</span>
+                    {isActive ? (
+                      <span className={styles.cargoRowMeta}>{progressPercent}% percorrido</span>
+                    ) : null}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       <aside className={styles.legend} aria-label="Legenda do mapa">
@@ -281,110 +537,33 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       <nav className={styles.controlDock} aria-label="Controles do mapa">
         <div className={styles.controlStack}>
           <div
-            className={styles.controlZoomReadout}
+            className={styles.controlZoomBadge}
             aria-live="polite"
-            aria-label="Nível de zoom"
-            title="Nível de zoom"
+            aria-label={`Zoom ${zoomPercent} por cento`}
           >
             <span className={styles.controlZoomValue}>{zoomPercent}%</span>
           </div>
-          <span className={styles.controlDivider} aria-hidden="true" />
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={handleZoomIn}
-            aria-label="Aumentar zoom"
-            data-tooltip="Aumentar zoom"
-          >
-            <span className={styles.controlIcon} aria-hidden="true">
-              +
-            </span>
-          </button>
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={handleZoomOut}
-            aria-label="Diminuir zoom"
-            data-tooltip="Diminuir zoom"
-          >
-            <span className={styles.controlIcon} aria-hidden="true">
-              −
-            </span>
-          </button>
-          <span className={styles.controlDivider} aria-hidden="true" />
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={handleFitRoute}
-            aria-label="Rota completa"
-            data-tooltip="Rota completa"
-          >
-            <span className={styles.controlIcon} aria-hidden="true">
-              ⛶
-            </span>
-          </button>
-          <button
-            type="button"
-            className={styles.controlBtn}
-            onClick={handleReset}
-            aria-label="Redefinir câmera"
-            data-tooltip="Redefinir câmera"
-          >
-            <span className={styles.controlIcon} aria-hidden="true">
-              ↺
-            </span>
-          </button>
-          {showMapLibre && maplibreReady ? (
-            <>
-              <span className={styles.controlDivider} aria-hidden="true" />
-              <button
-                type="button"
-                className={styles.controlBtn}
-                onClick={() => handleFlyToChapter('origin')}
-                aria-label="Enquadrar origem"
-                data-tooltip="Origem"
-              >
-                <span className={styles.controlIcon} aria-hidden="true">
-                  ◎
-                </span>
-              </button>
-              <button
-                type="button"
-                className={styles.controlBtn}
-                onClick={() => handleFlyToChapter('current')}
-                aria-label="Enquadrar posição atual"
-                data-tooltip="Posição atual"
-              >
-                <span className={styles.controlIcon} aria-hidden="true">
-                  ◉
-                </span>
-              </button>
-              <button
-                type="button"
-                className={styles.controlBtn}
-                onClick={() => handleFlyToChapter('destination')}
-                aria-label="Enquadrar destino"
-                data-tooltip="Destino"
-              >
-                <span className={styles.controlIcon} aria-hidden="true">
-                  ⚑
-                </span>
-              </button>
-              <span className={styles.controlDivider} aria-hidden="true" />
-              <button
-                type="button"
-                className={`${styles.controlBtn} ${animationPaused ? styles.controlBtnMuted : ''}`}
-                onClick={handleToggleAnimation}
-                aria-label={animationPaused ? 'Retomar animação da rota' : 'Pausar animação da rota'}
-                aria-pressed={!animationPaused}
-                data-tooltip={animationPaused ? 'Retomar animação' : 'Pausar animação'}
-              >
-                <span className={styles.controlIcon} aria-hidden="true">
-                  {animationPaused ? '▶' : '❚❚'}
-                </span>
-              </button>
-            </>
-          ) : null}
+          {dockControls.map((control) => (
+            <button
+              key={control.key}
+              type="button"
+              className={[
+                styles.controlIconButton,
+                control.disabled ? styles.controlIconButtonDisabled : '',
+                control.active ? styles.controlIconButtonActive : '',
+                control.muted ? styles.controlIconButtonMuted : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              onClick={() => handleDockControlClick(control.key)}
+              disabled={Boolean(control.disabled)}
+              aria-label={control.ariaLabel}
+              {...(control.ariaPressed !== undefined ? { 'aria-pressed': control.ariaPressed } : {})}
+              data-tooltip={control.tooltip}
+            >
+              {control.icon}
+            </button>
+          ))}
         </div>
       </nav>
 

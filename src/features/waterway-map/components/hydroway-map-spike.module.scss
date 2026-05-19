@@ -322,8 +322,8 @@
 
 .controlDock {
   position: absolute;
-  right: 0.5rem;
-  bottom: 0.55rem;
+  right: 0.55rem;
+  bottom: 2.75rem;
   z-index: 3;
   pointer-events: none;
 }
@@ -331,111 +331,133 @@
 .controlStack {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
-  gap: 0.1rem;
-  width: 2rem;
-  padding: 0.28rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.64);
-  backdrop-filter: blur(20px);
+  align-items: center;
+  gap: 0.18rem;
+  width: 2.35rem;
+  padding: 0.32rem 0.28rem;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 224, 208, 0.28);
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(22px);
   box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    0 10px 28px rgba(0, 0, 0, 0.5),
+    0 0 18px rgba(47, 224, 208, 0.08),
+    inset 0 1px 0 rgba(47, 224, 208, 0.1);
   pointer-events: auto;
 }
 
-.controlZoomReadout {
+.controlZoomBadge {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 1.85rem;
-  padding: 0.12rem 0;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.04);
+  width: 100%;
+  min-height: 1.35rem;
+  margin-bottom: 0.06rem;
+  padding: 0.1rem 0.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(47, 224, 208, 0.2);
+  background: rgba(47, 224, 208, 0.06);
 }
 
 .controlZoomValue {
   color: rgba(142, 245, 232, 0.95);
-  font-size: 0.64rem;
+  font-size: 0.58rem;
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.02em;
   line-height: 1;
 }
 
-.controlBtn {
+.controlIconButton {
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.85rem;
-  height: 1.85rem;
-  margin: 0 auto;
+  width: 2rem;
+  height: 2rem;
   padding: 0;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: rgba(248, 252, 255, 0.94);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(232, 244, 252, 0.9);
   cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
-.controlBtn:hover {
+.controlIconButton:hover:not(:disabled) {
+  border-color: rgba(47, 224, 208, 0.42);
   background: rgba(47, 224, 208, 0.12);
-  color: #2fe0d0;
+  color: #8ef5e8;
+  box-shadow: 0 0 14px rgba(47, 224, 208, 0.22);
 }
 
-.controlBtnMuted {
-  opacity: 0.72;
+.controlIconButtonActive:not(:disabled) {
+  border-color: rgba(47, 224, 208, 0.5);
+  background: rgba(47, 224, 208, 0.16);
+  color: #8ef5e8;
+  box-shadow: 0 0 10px rgba(47, 224, 208, 0.18);
 }
 
-.controlBtn:focus-visible {
-  outline: 2px solid rgba(47, 224, 208, 0.65);
-  outline-offset: 1px;
+.controlIconButtonMuted {
+  opacity: 0.78;
 }
 
-.controlBtn[data-tooltip]::after {
+.controlIconButtonDisabled,
+.controlIconButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.38;
+  border-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.02);
+  box-shadow: none;
+}
+
+.controlIconButton:focus-visible {
+  outline: 2px solid rgba(47, 224, 208, 0.72);
+  outline-offset: 2px;
+}
+
+.controlIconButton[data-tooltip]::after {
   content: attr(data-tooltip);
   position: absolute;
-  right: calc(100% + 0.4rem);
+  right: calc(100% + 0.45rem);
   top: 50%;
   transform: translateY(-50%);
-  padding: 0.26rem 0.42rem;
-  border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(0, 0, 0, 0.88);
+  padding: 0.28rem 0.48rem;
+  border-radius: 7px;
+  border: 1px solid rgba(47, 224, 208, 0.24);
+  background: rgba(0, 0, 0, 0.92);
   backdrop-filter: blur(12px);
   color: rgba(248, 252, 255, 0.96);
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   font-weight: 600;
-  letter-spacing: 0.02em;
+  letter-spacing: 0.01em;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease;
   z-index: 4;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    0 0 10px rgba(47, 224, 208, 0.12);
 }
 
-.controlBtn[data-tooltip]:hover::after,
-.controlBtn[data-tooltip]:focus-visible::after {
+.controlIconButton[data-tooltip]:hover::after,
+.controlIconButton[data-tooltip]:focus-visible::after {
   opacity: 1;
 }
 
-.controlIcon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.82rem;
-  font-weight: 700;
-  line-height: 1;
+.controlIconButton:disabled[data-tooltip]:hover::after,
+.controlIconButton:disabled[data-tooltip]:focus-visible::after {
+  opacity: 1;
 }
 
-.controlDivider {
+.controlIconSvg {
+  display: block;
   flex-shrink: 0;
-  height: 1px;
-  margin: 0.08rem 0.15rem;
-  background: rgba(255, 255, 255, 0.1);
 }
 
 .statusBar {
@@ -508,7 +530,7 @@
     transition: none;
   }
 
-  .controlBtn[data-tooltip]::after {
+  .controlIconButton[data-tooltip]::after {
     transition: none;
   }
 
