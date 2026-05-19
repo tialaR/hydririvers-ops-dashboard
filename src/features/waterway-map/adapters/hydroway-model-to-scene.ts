@@ -1,3 +1,4 @@
+import type { HydrowayGeoFeature } from '../domain/hydroway-geo.types';
 import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import type { HydrowayMapScene, HydrowayMapViewBox } from '../providers/map-provider.types';
 import { HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
@@ -14,7 +15,10 @@ export function hydrowayModelToScene(
   viewBox: HydrowayMapViewBox = HYDRO_MAP_VIEWBOX,
 ): HydrowayMapScene {
   const corridors = model.geo.mainRivers.features
-    .filter((feature): feature is GeoJSON.Feature<GeoJSON.LineString> => feature.geometry.type === 'LineString')
+    .filter(
+      (feature): feature is HydrowayGeoFeature & { geometry: GeoJSON.LineString } =>
+        feature.geometry.type === 'LineString',
+    )
     .map((feature) => {
       const coordinates = feature.geometry.coordinates;
       const mid = coordinates[Math.floor(coordinates.length / 2)] ?? coordinates[0] ?? [0, 0];
@@ -28,7 +32,10 @@ export function hydrowayModelToScene(
     });
 
   const cities = model.geo.portsTerminals.features
-    .filter((feature): feature is GeoJSON.Feature<GeoJSON.Point> => feature.geometry.type === 'Point')
+    .filter(
+      (feature): feature is HydrowayGeoFeature & { geometry: GeoJSON.Point } =>
+        feature.geometry.type === 'Point',
+    )
     .map((feature) => {
       const properties = feature.properties;
       return {

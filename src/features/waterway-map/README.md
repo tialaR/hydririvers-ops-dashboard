@@ -16,7 +16,7 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.3z** | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
 | **V2.3zz** | Densidade hidrográfica, markers operacionais, leitura rota, labels, câmera por carga |
 | **V2.3zzz** | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
-| **V2.6** | GOV-enriched mock: rede hidroviária Arco Norte, nós logísticos, metadados e rotas demo plausíveis |
+| **V2.6** | GOV-enriched mock: rede hidroviária Arco Norte densa, nós logísticos, zonas, metadados de confiança e rotas demo plausíveis |
 | **V2.7** (atual) | Visual lift MapLibre-native: câmera em duas fases, stack hidroviária, labels por importance, HUD cockpit |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
@@ -81,32 +81,56 @@ src/features/waterway-map/
 
 ### Mock geográfico V2.6 (GOV-enriched)
 
-Artefatos em `data/` (determinísticos, bbox WGS84 fictício `HYDROWAY_MOCK_GEO_BBOX`):
+**Não é dado oficial.** Os artefatos em `data/` são *source-inspired*: inspirados estruturalmente em fontes públicas (BIT/ANTAQ hidroviário e portuário, ANA/SNIRH para evolução futura), porém **geometria fictícia**, determinística e própria para demo/produto.
 
-| Arquivo | Features (aprox.) | Cobertura |
-|---------|-------------------|-----------|
-| `amazon-main-rivers.mock.geojson` | 14 | Amazonas/Solimões, Madeira, Tapajós, Tocantins, Araguaia, estuário Pará, ramos e canais |
-| `amazon-navigable-corridors.mock.geojson` | 5 | HN-100, Madeira, Tapajós, Tocantins-Araguaia, Barra Norte |
-| `amazon-ports-terminals.mock.geojson` | 16 | Belém, Barcarena, Santarém, Itaituba, Manaus, Itacoatiara, Porto Velho, Macapá, Abaetetuba, Óbidos, Parintins, Tefé, Marabá + terminais Vila do Conde e Miritituba |
-| `cargo-routes.mock.geojson` | 3 | Rotas demo CARGO-001/002/004 com geometria curvilínea |
+Inspiração (estrutural, não reprodução):
 
-Propriedades enriquecidas (quando aplicável): `waterwayCode`, `state`, `city`, `operationalStatus`, `strategicRole`, `referenceContext`, `navigabilityRisk`, `importance`. Cobertura mínima validada em `data/hydroway-mock-coverage.ts` + `mock-geojson-schema.test.ts`.
+- Ministério dos Transportes / BIT Mapas (aquaviário, portuário, hidroviário)
+- ANTAQ Informações Geográficas (instalações, travessias, vias interiores, portos organizados)
+- ANA/SNIRH — referência futura para hidrografia e bacias
 
-Rotas demo:
+Metadados por feature (quando aplicável): `sourceInspiration`, `sourceType` (`official-inspired` | `domain-inspired` | `synthetic`), `sourceNotes`, `confidence`, `mockLevel`, `lastReviewed` (string estável), `visualPurpose`.
 
-- **CARGO-001** — Belém → Santarém (`amazonas`)
-- **CARGO-002** — Manaus → Belém (`amazonas`, eixo interior)
-- **CARGO-004** — Marabá → Vila do Conde (`tocantins-araguaia`)
+Artefatos (bbox WGS84 fictício `HYDROWAY_MOCK_GEO_BBOX`; carregados e fundidos em `load-mock-geojson.ts`):
+
+| Arquivo | Features (aprox.) | Camada lógica |
+|---------|-------------------|---------------|
+| `amazon-main-rivers.mock.geojson` | 6 | Rios principais: Amazonas/Solimões, Madeira, Tapajós, Tocantins, estuário Pará |
+| `amazon-secondary-rivers.mock.geojson` | 12 | Afluentes e ramais secundários |
+| `amazon-operational-channels.mock.geojson` | 6 | Canais operacionais / calhas |
+| `amazon-navigable-corridors.mock.geojson` | 5 | HN-100, Madeira, Tapajós, Tocantins-Araguaia, Belém–Barcarena |
+| `amazon-logistics-nodes.mock.geojson` | 24 | Portos, terminais, transbordo |
+| `amazon-risk-zones.mock.geojson` | 5 | Zonas de atenção + várzea (polígonos sutis) |
+| `cargo-routes.mock.geojson` | 3 | Rotas demo CARGO-001/002/004 |
+
+No MapLibre, `mainRivers` = principais + secundários + canais; `portsTerminals` = nós logísticos; `riskZones` = polígonos de contexto.
+
+Regenerar artefatos (determinístico):
+
+```bash
+node src/features/waterway-map/data/scripts/build-mock-geojson.mjs
+```
+
+Rotas demo (≥ 24 vértices, seguem corredores):
+
+- **CARGO-001** — Belém → Santarém (`amazonas`), contexto estuário/Óbidos/Prainha
+- **CARGO-002** — Manaus → Belém (`amazonas`), via Itacoatiara, Parintins, Óbidos, Santarém
+- **CARGO-004** — Marabá → Vila do Conde (`tocantins-araguaia`), via estuário/Barcarena
 
 Orçamento ADR 0031: ≤ 200 KB/arquivo, ≤ 500 KB combinado (`mock-geojson-budget.test.ts`).
+
+**Limitações:** coordenadas esquemáticas dentro do bbox demo; sem shapefiles oficiais; sem API em runtime; rótulos e densidade ainda evoluem com pipeline ADR 0031.
+
+**Evolução para pipeline oficial:** substituir artefatos por ingestão versionada (shapefile/GeoPackage → normalização → validação espacial → publicação estática), mantendo contrato `HydrowayMapModel` e `HydrowayGeoJsonSources`.
 
 ### Camadas GeoJSON (V2.2b+, sources `hydroway-*`)
 
 | Camada | Source | Conteúdo |
 |--------|--------|----------|
-| Rios | `hydroway-main-rivers` | Amazonas/Solimões (river) + afluentes (tributary) + canais (secondary) |
+| Rios / canais | `hydroway-main-rivers` | Principais (river) + afluentes (tributary) + secundários (secondary) + canais (channel) |
 | Corredores | `hydroway-navigable-corridors` | Hidrovias classificadas Arco Norte (mock) |
-| Portos | `hydroway-ports-terminals` | Portos e terminais com metadados GOV |
+| Portos / transbordo | `hydroway-ports-terminals` | Portos, terminais e nós de transbordo |
+| Zonas | `hydroway-risk-zones` | Várzea e zonas de atenção (fill sutil) |
 | Rota total | `hydroway-route-track` | LineString da carga ativa |
 | Rota percorrida | `hydroway-route-traveled` | Trecho até `progress01` |
 | Origem / destino / vessel | `hydroway-origin`, `hydroway-destination`, `hydroway-vessel` | Pontos operacionais |

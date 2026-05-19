@@ -1,4 +1,4 @@
-import type { HydrowayGeoRichMetadata } from '../domain/hydroway-geo.types';
+import type { HydrowayGeoFeatureCollection, HydrowayGeoRichMetadata } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
 import {
   hydrowayImportanceSortKey,
@@ -31,9 +31,9 @@ function enrichFeatureCollection(
 }
 
 function enrichLineFeatures(
-  collection: GeoJSON.FeatureCollection,
+  collection: HydrowayGeoFeatureCollection,
   resolveLabel: (id: string, name: string, props: GeoProperties) => string,
-): GeoJSON.FeatureCollection {
+): HydrowayGeoFeatureCollection {
   return {
     type: 'FeatureCollection',
     features: collection.features.map((feature) => {
@@ -45,16 +45,17 @@ function enrichLineFeatures(
       return {
         ...feature,
         properties: {
+          ...feature.properties,
           ...props,
           displayLabel: resolveLabel(id, name, props),
           labelSortKey: hydrowayImportanceSortKey(importance, priority),
         },
       };
     }),
-  };
+  } as HydrowayGeoFeatureCollection;
 }
 
-function enrichPortsTerminals(collection: GeoJSON.FeatureCollection): GeoJSON.FeatureCollection {
+function enrichPortsTerminals(collection: HydrowayGeoFeatureCollection): HydrowayGeoFeatureCollection {
   return {
     type: 'FeatureCollection',
     features: collection.features.map((feature) => {
@@ -67,13 +68,14 @@ function enrichPortsTerminals(collection: GeoJSON.FeatureCollection): GeoJSON.Fe
       return {
         ...feature,
         properties: {
+          ...feature.properties,
           ...props,
           displayLabel: resolveHydrowayPortDisplayLabel(id, name, kind),
           labelSortKey: hydrowayPortLabelSortKey(id, kind, importance, priority),
         },
       };
     }),
-  };
+  } as HydrowayGeoFeatureCollection;
 }
 
 /** Enriquece fontes GeoJSON com rótulos limpos (sem “mock” no mapa). */

@@ -427,6 +427,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers, geo.mainRivers);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors, geo.navigableCorridors);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals, geo.portsTerminals);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.riskZones, geo.riskZones);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack, geo.routeTrack);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled, geo.routeTraveled);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.origin, geo.origin);

@@ -17,7 +17,14 @@ export const HYDRO_MAPLIBRE_SOURCE_IDS = {
 
 /** Ordem de empilhamento (V2.3zzz — Style Spec válido, sem sky como layer). */
 export const HYDRO_MAPLIBRE_LAYER_GROUPS = {
-  basemap: ['hydro-background', 'hydro-depth-basin', 'hydro-depth-focus', 'hydro-grid'],
+  basemap: [
+    'hydro-background',
+    'hydro-depth-basin',
+    'hydro-depth-focus',
+    'hydro-grid',
+    'risk-floodplain-fill',
+    'risk-zone-fill',
+  ],
   waterwaySecondary: [
     'waterway-secondary-bed',
     'waterway-secondary-casing',
@@ -146,6 +153,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
     [HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers),
     [HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors),
     [HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals),
+    [HYDROWAY_GEOJSON_SOURCE_IDS.riskZones]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.riskZones),
     [HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack, true),
     [HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled, true),
     [HYDROWAY_GEOJSON_SOURCE_IDS.origin]: geoSource(HYDROWAY_GEOJSON_SOURCE_IDS.origin),
@@ -190,10 +198,31 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       },
     },
     {
+      id: 'risk-floodplain-fill',
+      type: 'fill',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.riskZones,
+      filter: ['==', ['get', 'kind'], 'floodplain'],
+      paint: {
+        'fill-color': 'rgba(30, 90, 120, 0.12)',
+        'fill-opacity': zoomOpacity(0.35, 0.28, 0.22),
+      },
+    },
+    {
+      id: 'risk-zone-fill',
+      type: 'fill',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.riskZones,
+      filter: ['==', ['get', 'kind'], 'risk-zone'],
+      paint: {
+        'fill-color': 'rgba(255, 140, 60, 0.14)',
+        'fill-opacity': zoomOpacity(0.4, 0.32, 0.26),
+        'fill-outline-color': 'rgba(255, 140, 60, 0.25)',
+      },
+    },
+    {
       id: 'waterway-secondary-bed',
       type: 'line',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'secondary'],
+      filter: ['in', ['get', 'kind'], ['literal', ['secondary', 'channel']]],
       paint: {
         'line-color': hydroMapStyleTokens.secondaryCasing,
         'line-width': zoomWidth(8, 12, 16),
@@ -205,7 +234,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       id: 'waterway-secondary-casing',
       type: 'line',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'secondary'],
+      filter: ['in', ['get', 'kind'], ['literal', ['secondary', 'channel']]],
       paint: {
         'line-color': hydroMapStyleTokens.secondaryCasing,
         'line-width': zoomWidth(5, 8, 11),
@@ -217,7 +246,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       id: 'waterway-secondary-core',
       type: 'line',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'secondary'],
+      filter: ['in', ['get', 'kind'], ['literal', ['secondary', 'channel']]],
       paint: {
         'line-color': hydroMapStyleTokens.secondaryStroke,
         'line-width': zoomWidth(2, 3.5, 5),
@@ -435,6 +464,8 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
           ['get', 'kind'],
           'terminal',
           'rgba(120, 210, 255, 0.35)',
+          'transshipment',
+          'rgba(255, 200, 80, 0.32)',
           'rgba(47, 224, 208, 0.28)',
         ],
         'circle-radius': zoomMatchByKind('terminal', 9, 12, 14, 7, 10, 12),
@@ -453,6 +484,8 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
           ['get', 'kind'],
           'terminal',
           'rgba(120, 210, 255, 0.92)',
+          'transshipment',
+          'rgba(255, 200, 80, 0.9)',
           'rgba(226, 240, 248, 0.88)',
         ],
         'circle-radius': zoomMatchByKind('terminal', 4, 5.5, 7, 3, 4.5, 6),
@@ -472,6 +505,8 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
           ['get', 'kind'],
           'terminal',
           'hydro-terminal',
+          'transshipment',
+          'hydro-port',
           'hydro-port',
         ],
         'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.72, 10, 1.05],

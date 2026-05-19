@@ -32,26 +32,61 @@ export type HydrowayGeoKind =
   | 'river'
   | 'tributary'
   | 'secondary'
+  | 'channel'
   | 'corridor'
   | 'port'
   | 'terminal'
+  | 'transshipment'
+  | 'risk-zone'
+  | 'floodplain'
   | 'route'
   | 'origin'
   | 'destination'
   | 'vessel';
 
+export type HydrowayGeoSourceType = 'official-inspired' | 'domain-inspired' | 'synthetic';
+
+export type HydrowayGeoConfidence = 'high' | 'medium' | 'low';
+
+export type HydrowayGeoMockLevel = 'enriched' | 'schematic' | 'placeholder';
+
 /** Metadados GOV-enriched (V2.6) — todos opcionais nos mocks, prontos para camadas futuras. */
 export type HydrowayGeoRichMetadata = {
   waterwayCode?: string;
+  waterway?: string;
+  waterwayFamily?: string;
+  region?: string;
   state?: string;
   city?: string;
-  operationalStatus?: 'active' | 'attention' | 'restricted' | 'planned';
+  operationalStatus?: 'active' | 'attention' | 'restricted' | 'planned' | 'in-transit';
+  operationalRole?: string;
+  cargoProfile?: string;
+  cargoProfiles?: string;
   strategicRole?: string;
   referenceContext?: string;
   sourceNote?: string;
+  sourceNotes?: string;
+  sourceInspiration?: string;
+  sourceType?: HydrowayGeoSourceType;
+  confidence?: HydrowayGeoConfidence;
+  mockLevel?: HydrowayGeoMockLevel;
+  lastReviewed?: string;
+  visualPurpose?: string;
+  visualPriority?: string;
+  navigability?: string;
+  dredgingPriority?: string;
+  drySeasonRisk?: string;
   navigabilityRisk?: 'low' | 'medium' | 'high' | 'critical';
   importance?: 'low' | 'medium' | 'high' | 'critical';
   priority?: number;
+  routeId?: string;
+  originNodeId?: string;
+  destinationNodeId?: string;
+  progress?: number;
+  currentLocation?: GeoJSON.Position;
+  distanceKmApprox?: number;
+  etaWindowMock?: string;
+  bbox?: HydrowayGeoBbox;
 };
 
 export type HydrowayGeoFeatureProperties = HydrowayGeoRichMetadata & {
@@ -77,9 +112,13 @@ export function isHydrowayGeoKind(value: string): value is HydrowayGeoKind {
     value === 'river' ||
     value === 'tributary' ||
     value === 'secondary' ||
+    value === 'channel' ||
     value === 'corridor' ||
     value === 'port' ||
     value === 'terminal' ||
+    value === 'transshipment' ||
+    value === 'risk-zone' ||
+    value === 'floodplain' ||
     value === 'route' ||
     value === 'origin' ||
     value === 'destination' ||

@@ -21,16 +21,24 @@ export function abbreviateHydrowayPortLabel(name: string, maxLength = 22): strin
 
 const PORT_LABEL_SHORT: Record<string, string> = {
   'port-belem': 'Belém',
+  'port-barcarena': 'Barcarena',
   'port-santarem': 'Santarém',
   'port-manaus': 'Manaus',
   'port-maraba': 'Marabá',
   'port-itacoatiara': 'Itacoatiara',
   'port-porto-velho': 'Porto Velho',
   'port-itaituba': 'Itaituba',
+  'port-obidos': 'Óbidos',
+  'port-breves': 'Breves',
+  'port-juruti': 'Juruti',
+  'port-altamira': 'Altamira',
+  'port-prainha': 'Prainha',
   'terminal-belem-norte': 'Belém N.',
   'terminal-santarem-oeste': 'Santarém O.',
   'terminal-vila-conde': 'Vila Conde',
   'terminal-miritituba': 'Miritituba',
+  'transshipment-belem-mosqueiro': 'Mosqueiro',
+  'transshipment-santarem-tapajos': 'Sant. Tapajós',
 };
 
 const WATERWAY_LABEL_SHORT: Record<string, string> = {

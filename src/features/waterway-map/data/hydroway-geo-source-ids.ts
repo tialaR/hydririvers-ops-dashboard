@@ -6,6 +6,7 @@ export const HYDROWAY_GEOJSON_SOURCE_IDS = {
   mainRivers: 'hydroway-main-rivers',
   navigableCorridors: 'hydroway-navigable-corridors',
   portsTerminals: 'hydroway-ports-terminals',
+  riskZones: 'hydroway-risk-zones',
   routeTrack: 'hydroway-route-track',
   routeTraveled: 'hydroway-route-traveled',
   origin: 'hydroway-origin',

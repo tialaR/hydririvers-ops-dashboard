@@ -1,6 +1,6 @@
 import type { WaterwayCorridorId } from '@/features/waterway-tracking/domain/waterway-corridor.types';
 
-import type { HydrowayGeoBbox } from './hydroway-geo.types';
+import type { HydrowayGeoBbox, HydrowayGeoFeatureCollection } from './hydroway-geo.types';
 import type { HydrowayDemoCargoId } from './hydroway-entities.types';
 import type { HydrowayMapScene } from '../providers/map-provider.types';
 
@@ -9,9 +9,10 @@ import type { HydrowayMapScene } from '../providers/map-provider.types';
  * Camadas dinâmicas (rota, origem, destino, vessel) começam vazias no bundle estático.
  */
 export type HydrowayGeoJsonSources = {
-  mainRivers: GeoJSON.FeatureCollection;
-  navigableCorridors: GeoJSON.FeatureCollection;
-  portsTerminals: GeoJSON.FeatureCollection;
+  mainRivers: HydrowayGeoFeatureCollection;
+  navigableCorridors: HydrowayGeoFeatureCollection;
+  portsTerminals: HydrowayGeoFeatureCollection;
+  riskZones: HydrowayGeoFeatureCollection;
   routeTrack: GeoJSON.FeatureCollection;
   routeTraveled: GeoJSON.FeatureCollection;
   origin: GeoJSON.FeatureCollection;
@@ -23,7 +24,7 @@ export type HydrowayGeoJsonSources = {
 /** Artefatos estáticos versionados (sem geometria de carga ativa). */
 export type HydrowayStaticGeoBundle = Pick<
   HydrowayGeoJsonSources,
-  'mainRivers' | 'navigableCorridors' | 'portsTerminals'
+  'mainRivers' | 'navigableCorridors' | 'portsTerminals' | 'riskZones'
 >;
 
 /** Metadados operacionais derivados do adapter (V2.2b). */

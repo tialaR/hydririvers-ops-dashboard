@@ -5,7 +5,7 @@ import type { HydrowayDemoCargoId } from '../domain/hydroway-entities.types';
 import type { HydrowayGeoFeatureCollection } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources, HydrowayStaticGeoBundle } from '../domain/hydroway-map-model.types';
 
-import { assertValidHydrowayGeoFeatureCollection } from './validate-mock-geojson';
+import { assertValidHydrowayGeoFeatureCollection, validateHydrowayMockCorpus } from './validate-mock-geojson';
 
 const MOCK_GEOJSON_DIR = join(process.cwd(), 'src/features/waterway-map/data');
 
@@ -14,35 +14,86 @@ function readMockGeoJsonFile(filename: string): unknown {
   return JSON.parse(raw) as unknown;
 }
 
-const amazonMainRivers = freezeValidatedCollection(
+function freezeValidatedCollection(data: unknown, label: string): HydrowayGeoFeatureCollection {
+  assertValidHydrowayGeoFeatureCollection(data, label, { requireGov: true });
+  return Object.freeze(data) as HydrowayGeoFeatureCollection;
+}
+
+function mergeFeatureCollections(
+  ...collections: HydrowayGeoFeatureCollection[]
+): HydrowayGeoFeatureCollection {
+  const features = collections.flatMap((collection) => collection.features);
+  return Object.freeze({
+    type: 'FeatureCollection',
+    features: Object.freeze(features),
+  }) as HydrowayGeoFeatureCollection;
+}
+
+const amazonMainRiversRaw = freezeValidatedCollection(
   readMockGeoJsonFile('amazon-main-rivers.mock.geojson'),
   'amazon-main-rivers.mock.geojson',
+);
+const amazonSecondaryRiversRaw = freezeValidatedCollection(
+  readMockGeoJsonFile('amazon-secondary-rivers.mock.geojson'),
+  'amazon-secondary-rivers.mock.geojson',
+);
+const amazonOperationalChannelsRaw = freezeValidatedCollection(
+  readMockGeoJsonFile('amazon-operational-channels.mock.geojson'),
+  'amazon-operational-channels.mock.geojson',
 );
 const amazonNavigableCorridors = freezeValidatedCollection(
   readMockGeoJsonFile('amazon-navigable-corridors.mock.geojson'),
   'amazon-navigable-corridors.mock.geojson',
 );
-const amazonPortsTerminals = freezeValidatedCollection(
-  readMockGeoJsonFile('amazon-ports-terminals.mock.geojson'),
-  'amazon-ports-terminals.mock.geojson',
+const amazonLogisticsNodes = freezeValidatedCollection(
+  readMockGeoJsonFile('amazon-logistics-nodes.mock.geojson'),
+  'amazon-logistics-nodes.mock.geojson',
+);
+const amazonRiskZones = freezeValidatedCollection(
+  readMockGeoJsonFile('amazon-risk-zones.mock.geojson'),
+  'amazon-risk-zones.mock.geojson',
 );
 const cargoRoutes = freezeValidatedCollection(
   readMockGeoJsonFile('cargo-routes.mock.geojson'),
   'cargo-routes.mock.geojson',
 );
 
-function freezeValidatedCollection(data: unknown, label: string): HydrowayGeoFeatureCollection {
-  assertValidHydrowayGeoFeatureCollection(data, label);
-  return Object.freeze(data) as HydrowayGeoFeatureCollection;
-}
+const amazonMainRivers = mergeFeatureCollections(
+  amazonMainRiversRaw,
+  amazonSecondaryRiversRaw,
+  amazonOperationalChannelsRaw,
+);
+
+validateHydrowayMockCorpus({
+  mainRivers: amazonMainRivers,
+  navigableCorridors: amazonNavigableCorridors,
+  portsTerminals: amazonLogisticsNodes,
+  riskZones: amazonRiskZones,
+  cargoRoutes,
+});
 
 function emptyFeatureCollection(): GeoJSON.FeatureCollection {
   return Object.freeze({ type: 'FeatureCollection', features: [] }) as GeoJSON.FeatureCollection;
 }
 
-/** Carrega rios principais e afluentes (mock versionado). */
+/** Carrega rios principais, afluentes, secundários e canais operacionais (mock V2.6). */
 export function loadHydrowayMainRiversMock(): HydrowayGeoFeatureCollection {
   return amazonMainRivers;
+}
+
+/** Carrega apenas rios principais (artefato versionado). */
+export function loadHydrowayMainRiversOnlyMock(): HydrowayGeoFeatureCollection {
+  return amazonMainRiversRaw;
+}
+
+/** Carrega afluentes e rios secundários (artefato versionado). */
+export function loadHydrowaySecondaryRiversMock(): HydrowayGeoFeatureCollection {
+  return amazonSecondaryRiversRaw;
+}
+
+/** Carrega canais operacionais (artefato versionado). */
+export function loadHydrowayOperationalChannelsMock(): HydrowayGeoFeatureCollection {
+  return amazonOperationalChannelsRaw;
 }
 
 /** Carrega hidrovias classificadas navegáveis (mock versionado). */
@@ -50,9 +101,14 @@ export function loadHydrowayNavigableCorridorsMock(): HydrowayGeoFeatureCollecti
   return amazonNavigableCorridors;
 }
 
-/** Carrega portos interiores e terminais (mock versionado). */
+/** Carrega portos, terminais e nós de transbordo (mock versionado). */
 export function loadHydrowayPortsTerminalsMock(): HydrowayGeoFeatureCollection {
-  return amazonPortsTerminals;
+  return amazonLogisticsNodes;
+}
+
+/** Carrega zonas de atenção e várzeas sutis (mock versionado). */
+export function loadHydrowayRiskZonesMock(): HydrowayGeoFeatureCollection {
+  return amazonRiskZones;
 }
 
 /** Carrega rotas demo por cargoId (mock versionado). */
@@ -73,12 +129,13 @@ export function findHydrowayCargoRouteFeature(
   return feature as GeoJSON.Feature<GeoJSON.LineString>;
 }
 
-/** Bundle estático: rios, corredores, portos/terminais. */
+/** Bundle estático: rede hidroviária + nós + zonas. */
 export function loadHydrowayStaticGeoBundle(): HydrowayStaticGeoBundle {
   return {
     mainRivers: loadHydrowayMainRiversMock(),
     navigableCorridors: loadHydrowayNavigableCorridorsMock(),
     portsTerminals: loadHydrowayPortsTerminalsMock(),
+    riskZones: loadHydrowayRiskZonesMock(),
   };
 }
 
@@ -111,13 +168,15 @@ export function loadHydrowayGeoJsonSources(): HydrowayGeoJsonSources {
   };
 }
 
-/** Bytes UTF-8 dos quatro artefatos mock (para testes de budget). */
+/** Bytes UTF-8 dos artefatos mock (para testes de budget). */
 export function getHydrowayMockGeoJsonByteSizes(): Record<string, number> {
-  const files = {
-    'amazon-main-rivers.mock.geojson': JSON.stringify(amazonMainRivers).length,
+  return {
+    'amazon-main-rivers.mock.geojson': JSON.stringify(amazonMainRiversRaw).length,
+    'amazon-secondary-rivers.mock.geojson': JSON.stringify(amazonSecondaryRiversRaw).length,
+    'amazon-operational-channels.mock.geojson': JSON.stringify(amazonOperationalChannelsRaw).length,
     'amazon-navigable-corridors.mock.geojson': JSON.stringify(amazonNavigableCorridors).length,
-    'amazon-ports-terminals.mock.geojson': JSON.stringify(amazonPortsTerminals).length,
+    'amazon-logistics-nodes.mock.geojson': JSON.stringify(amazonLogisticsNodes).length,
+    'amazon-risk-zones.mock.geojson': JSON.stringify(amazonRiskZones).length,
     'cargo-routes.mock.geojson': JSON.stringify(cargoRoutes).length,
   };
-  return files;
 }
