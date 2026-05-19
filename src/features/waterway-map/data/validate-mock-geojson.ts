@@ -78,6 +78,29 @@ function validateProperties(
     pushIssue(issues, `${base}.cargoId`, 'cargoId must be a string when present');
   }
 
+  const optionalStrings = [
+    'waterwayCode',
+    'state',
+    'city',
+    'operationalStatus',
+    'strategicRole',
+    'referenceContext',
+    'sourceNote',
+    'navigabilityRisk',
+    'importance',
+    'classification',
+  ] as const;
+
+  for (const key of optionalStrings) {
+    if (properties[key] !== undefined && typeof properties[key] !== 'string') {
+      pushIssue(issues, `${base}.${key}`, `${key} must be a string when present`);
+    }
+  }
+
+  if (properties.priority !== undefined && typeof properties.priority !== 'number') {
+    pushIssue(issues, `${base}.priority`, 'priority must be a number when present');
+  }
+
   return issues.length === 0;
 }
 

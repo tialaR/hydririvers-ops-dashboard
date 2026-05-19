@@ -1,10 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  HYDROWAY_DEMO_CARGO_IDS,
-  isHydrowayDemoCargoId,
-} from '@/features/waterway-map/domain/hydroway-entities.types';
-import { HYDROWAY_MOCK_GEO_BBOX } from '@/features/waterway-map/domain/hydroway-geo.types';
+  HYDROWAY_V26_REQUIRED_CORRIDOR_IDS,
+  HYDROWAY_V26_REQUIRED_CORRIDOR_KINDS,
+  HYDROWAY_V26_REQUIRED_NODE_IDS,
+  HYDROWAY_V26_REQUIRED_RIVER_IDS,
+} from '@/features/waterway-map/data/hydroway-mock-coverage';
 import {
   findHydrowayCargoRouteFeature,
   loadHydrowayCargoRoutesMock,
@@ -15,6 +16,11 @@ import {
   loadHydrowayStaticGeoBundle,
 } from '@/features/waterway-map/data/load-mock-geojson';
 import { validateHydrowayGeoFeatureCollection } from '@/features/waterway-map/data/validate-mock-geojson';
+import {
+  HYDROWAY_DEMO_CARGO_IDS,
+  isHydrowayDemoCargoId,
+} from '@/features/waterway-map/domain/hydroway-entities.types';
+import { HYDROWAY_MOCK_GEO_BBOX } from '@/features/waterway-map/domain/hydroway-geo.types';
 
 describe('hydroway mock geojson schema', () => {
   it('valida os quatro artefatos mock versionados', () => {
@@ -31,22 +37,62 @@ describe('hydroway mock geojson schema', () => {
     }
   });
 
-  it('expõe rios, corredores e portos/terminais com kinds esperados', () => {
+  it('expõe rios, corredores e portos/terminais com kinds esperados (V2.6)', () => {
     const rivers = loadHydrowayMainRiversMock();
     const riverKinds = [...new Set(rivers.features.map((f) => f.properties?.kind))].sort();
     expect(riverKinds).toEqual(['river', 'secondary', 'tributary']);
-    expect(rivers.features.filter((f) => f.properties?.kind === 'river').length).toBeGreaterThanOrEqual(1);
-    expect(rivers.features.filter((f) => f.properties?.kind === 'tributary').length).toBeGreaterThanOrEqual(3);
-    expect(rivers.features.filter((f) => f.properties?.kind === 'secondary').length).toBeGreaterThanOrEqual(2);
+    expect(rivers.features.length).toBeGreaterThanOrEqual(12);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'river').length).toBeGreaterThanOrEqual(2);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'tributary').length).toBeGreaterThanOrEqual(5);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'secondary').length).toBeGreaterThanOrEqual(4);
 
     const corridors = loadHydrowayNavigableCorridorsMock();
     expect(corridors.features.every((f) => f.properties?.kind === 'corridor')).toBe(true);
-    expect(corridors.features.length).toBeGreaterThanOrEqual(3);
+    expect(corridors.features.length).toBeGreaterThanOrEqual(5);
 
     const ports = loadHydrowayPortsTerminalsMock();
+    expect(ports.features.length).toBeGreaterThanOrEqual(14);
     const kinds = ports.features.map((f) => f.properties?.kind).sort();
     expect(kinds).toContain('port');
     expect(kinds).toContain('terminal');
+  });
+
+  it('cobre hidrovias prioritárias Arco Norte e nós logísticos V2.6', () => {
+    const rivers = loadHydrowayMainRiversMock();
+    const riverIds = rivers.features.map((f) => f.properties?.id);
+    for (const id of HYDROWAY_V26_REQUIRED_RIVER_IDS) {
+      expect(riverIds, `missing river ${id}`).toContain(id);
+    }
+
+    const corridors = loadHydrowayNavigableCorridorsMock();
+    const corridorIds = corridors.features.map((f) => f.properties?.id);
+    for (const id of HYDROWAY_V26_REQUIRED_CORRIDOR_IDS) {
+      expect(corridorIds, `missing corridor ${id}`).toContain(id);
+    }
+    const corridorKinds = corridors.features.map((f) => f.properties?.corridorId);
+    for (const kind of HYDROWAY_V26_REQUIRED_CORRIDOR_KINDS) {
+      expect(corridorKinds, `missing corridor kind ${kind}`).toContain(kind);
+    }
+
+    const nodes = loadHydrowayPortsTerminalsMock();
+    const nodeIds = nodes.features.map((f) => f.properties?.id);
+    for (const id of HYDROWAY_V26_REQUIRED_NODE_IDS) {
+      expect(nodeIds, `missing node ${id}`).toContain(id);
+    }
+  });
+
+  it('features estáticas carregam metadados GOV-enriched mínimos', () => {
+    const rivers = loadHydrowayMainRiversMock();
+    const amazonas = rivers.features.find((f) => f.properties?.id === 'amazonas-solimoes');
+    expect(amazonas?.properties?.waterwayCode).toBe('HN-100');
+    expect(amazonas?.properties?.strategicRole).toBeTruthy();
+    expect(amazonas?.properties?.referenceContext).toBeTruthy();
+
+    const corridors = loadHydrowayNavigableCorridorsMock();
+    expect(corridors.features.every((f) => f.properties?.classification)).toBe(true);
+
+    const nodes = loadHydrowayPortsTerminalsMock();
+    expect(nodes.features.every((f) => f.properties?.city && f.properties?.state)).toBe(true);
   });
 
   it('define rotas distintas para CARGO-001, CARGO-002 e CARGO-004', () => {
@@ -63,6 +109,15 @@ describe('hydroway mock geojson schema', () => {
     expect(coords001).not.toEqual(coords002);
     expect(coords001).not.toEqual(coords004);
     expect(coords002).not.toEqual(coords004);
+
+    expect(byCargo[0]?.properties?.corridorId).toBe('amazonas');
+    expect(byCargo[1]?.properties?.corridorId).toBe('amazonas');
+    expect(byCargo[2]?.properties?.corridorId).toBe('tocantins-araguaia');
+
+    for (const route of byCargo) {
+      if (!route || route.geometry.type !== 'LineString') continue;
+      expect(route.geometry.coordinates.length).toBeGreaterThanOrEqual(10);
+    }
   });
 
   it('mantém coordenadas dentro do bbox fictício amazônico', () => {

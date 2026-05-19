@@ -15,7 +15,8 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.3x** | Visual immersive: basemap escuro, glow rios/rota |
 | **V2.3z** | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
 | **V2.3zz** | Densidade hidrográfica, markers operacionais, leitura rota, labels, câmera por carga |
-| **V2.3zzz** (atual) | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
+| **V2.3zzz** | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
+| **V2.6** (atual) | GOV-enriched mock: rede hidroviária Arco Norte, nós logísticos, metadados e rotas demo plausíveis |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -50,7 +51,7 @@ src/features/waterway-map/
   adapters/            # Cargo → HydrowayMapModel + model → scene SVG
   components/          # shell + client + viewport MapLibre (dynamic ssr:false)
   providers/           # SvgSchematic + MapLibreHydrowayProvider (consomem model)
-  data/                # GeoJSON mock V2.2a + resolve spike por cargoId
+  data/                # GeoJSON mock V2.6 + resolve spike por cargoId
   utils/               # estilo, câmera, geo↔schematic, detectWebGL
 ```
 
@@ -76,13 +77,34 @@ src/features/waterway-map/
 - Animação operacional (`hydro-maplibre-animation.ts` + `requestAnimationFrame`, respeita `prefers-reduced-motion`; pausa via controle no mapa).
 - Dados oficiais (shapefile BIT/DNIT/ANTAQ) ficam para pipeline futura (ADR 0031).
 
+### Mock geográfico V2.6 (GOV-enriched)
+
+Artefatos em `data/` (determinísticos, bbox WGS84 fictício `HYDROWAY_MOCK_GEO_BBOX`):
+
+| Arquivo | Features (aprox.) | Cobertura |
+|---------|-------------------|-----------|
+| `amazon-main-rivers.mock.geojson` | 14 | Amazonas/Solimões, Madeira, Tapajós, Tocantins, Araguaia, estuário Pará, ramos e canais |
+| `amazon-navigable-corridors.mock.geojson` | 5 | HN-100, Madeira, Tapajós, Tocantins-Araguaia, Barra Norte |
+| `amazon-ports-terminals.mock.geojson` | 16 | Belém, Barcarena, Santarém, Itaituba, Manaus, Itacoatiara, Porto Velho, Macapá, Abaetetuba, Óbidos, Parintins, Tefé, Marabá + terminais Vila do Conde e Miritituba |
+| `cargo-routes.mock.geojson` | 3 | Rotas demo CARGO-001/002/004 com geometria curvilínea |
+
+Propriedades enriquecidas (quando aplicável): `waterwayCode`, `state`, `city`, `operationalStatus`, `strategicRole`, `referenceContext`, `navigabilityRisk`, `importance`. Cobertura mínima validada em `data/hydroway-mock-coverage.ts` + `mock-geojson-schema.test.ts`.
+
+Rotas demo:
+
+- **CARGO-001** — Belém → Santarém (`amazonas`)
+- **CARGO-002** — Manaus → Belém (`amazonas`, eixo interior)
+- **CARGO-004** — Marabá → Vila do Conde (`tocantins-araguaia`)
+
+Orçamento ADR 0031: ≤ 200 KB/arquivo, ≤ 500 KB combinado (`mock-geojson-budget.test.ts`).
+
 ### Camadas GeoJSON (V2.2b+, sources `hydroway-*`)
 
 | Camada | Source | Conteúdo |
 |--------|--------|----------|
-| Rios | `hydroway-main-rivers` | Amazonas (river) + afluentes (tributary) + canais (secondary) |
-| Corredores | `hydroway-navigable-corridors` | Hidrovias classificadas (mock) |
-| Portos | `hydroway-ports-terminals` | Portos e terminais |
+| Rios | `hydroway-main-rivers` | Amazonas/Solimões (river) + afluentes (tributary) + canais (secondary) |
+| Corredores | `hydroway-navigable-corridors` | Hidrovias classificadas Arco Norte (mock) |
+| Portos | `hydroway-ports-terminals` | Portos e terminais com metadados GOV |
 | Rota total | `hydroway-route-track` | LineString da carga ativa |
 | Rota percorrida | `hydroway-route-traveled` | Trecho até `progress01` |
 | Origem / destino / vessel | `hydroway-origin`, `hydroway-destination`, `hydroway-vessel` | Pontos operacionais |
@@ -148,7 +170,7 @@ npm test
 npm run test:mock-mode
 ```
 
-Testes: `cargo-to-hydroway-geo.adapter.test.ts`, `resolve-spike-hydroway-model.test.ts`, `geo-to-schematic.test.ts`, `schematic-to-geo.test.ts`.
+Testes: `mock-geojson-schema.test.ts`, `mock-geojson-budget.test.ts`, `cargo-to-hydroway-geo.adapter.test.ts`, `resolve-spike-hydroway-model.test.ts`, `geo-to-schematic.test.ts`, `schematic-to-geo.test.ts`, `hydro-maplibre-native.test.ts`.
 
 ## Smoke tests de rotas (Playwright)
 

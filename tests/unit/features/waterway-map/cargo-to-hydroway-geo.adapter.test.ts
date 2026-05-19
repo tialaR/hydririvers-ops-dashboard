@@ -75,14 +75,14 @@ describe('adaptCargoToHydrowayMapModel', () => {
     expect(model.geo.destination.features).toHaveLength(1);
   });
 
-  it('monta cena CARGO-002 distinta com corredor madeira e progresso 0.25', () => {
+  it('monta cena CARGO-002 distinta com corredor amazonas e progresso 0.25', () => {
     const model = adaptCargoToHydrowayMapModel({
       cargo: cargoById('CARGO-002'),
     });
 
     const model001 = adaptCargoToHydrowayMapModel({ cargo: cargoById('CARGO-001') });
 
-    expect(model.corridorId).toBe('madeira');
+    expect(model.corridorId).toBe('amazonas');
     expect(model.progress01).toBe(0.25);
     expect(lineCoords(model.geo.routeTrack)[0]).not.toEqual(lineCoords(model001.geo.routeTrack)[0]);
   });
@@ -180,12 +180,12 @@ describe('adaptCargoToHydrowayMapModel', () => {
     expect(model.metadata.locationFallbacks.destination).toBe(true);
   });
 
-  it('preenche fontes estáticas do bundle V2.2a', () => {
+  it('preenche fontes estáticas do bundle V2.6', () => {
     const model = adaptCargoToHydrowayMapModel({ cargo: cargoById('CARGO-001') });
 
-    expect(model.geo.mainRivers.features.length).toBeGreaterThan(0);
-    expect(model.geo.navigableCorridors.features.length).toBeGreaterThan(0);
-    expect(model.geo.portsTerminals.features.length).toBeGreaterThan(0);
+    expect(model.geo.mainRivers.features.length).toBeGreaterThanOrEqual(12);
+    expect(model.geo.navigableCorridors.features.length).toBeGreaterThanOrEqual(5);
+    expect(model.geo.portsTerminals.features.length).toBeGreaterThanOrEqual(14);
     expect(loadHydrowayCargoRoutesMock().features).toHaveLength(3);
   });
 });

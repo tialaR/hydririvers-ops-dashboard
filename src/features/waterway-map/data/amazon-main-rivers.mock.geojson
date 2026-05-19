@@ -4,70 +4,426 @@
     {
       "type": "Feature",
       "properties": {
-        "id": "amazonas",
-        "name": "Rio Amazonas (mock)",
+        "id": "amazonas-solimoes",
+        "name": "Rio Amazonas / Solimões (mock)",
         "kind": "river",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "waterwayCode": "HN-100",
+        "state": "AM",
+        "strategicRole": "eixo-logistico-principal",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "critical",
+        "referenceContext": "Hidrovia Amazonas-Solimões — eixo dominante AM/PA/AP"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-59.825, -2.1],
-          [-59.21394, -2.0604],
-          [-58.63848, -2.01758],
-          [-58.08674, -1.973],
-          [-57.54687, -1.92812],
-          [-57.00701, -1.88442],
-          [-56.45527, -1.84336],
-          [-55.87981, -1.8064],
-          [-55.26875, -1.775],
-          [-54.63561, -1.75234],
-          [-54.00049, -1.73906],
-          [-53.36141, -1.73281],
-          [-52.71641, -1.73125],
-          [-52.06349, -1.73203],
-          [-51.40068, -1.73281],
-          [-50.72601, -1.73125],
-          [-50.0375, -1.725],
-          [-49.66572, -1.71913],
-          [-49.30977, -1.71273],
-          [-48.96963, -1.70575],
-          [-48.64531, -1.69812],
-          [-48.33682, -1.68979],
-          [-48.04414, -1.6807],
-          [-47.76729, -1.67079],
-          [-47.50625, -1.66]
+          [
+            -59.8,
+            -2.15
+          ],
+          [
+            -59.6419,
+            -2.08027
+          ],
+          [
+            -59.48313,
+            -2.01925
+          ],
+          [
+            -59.32313,
+            -1.97433
+          ],
+          [
+            -59.1615,
+            -1.95044
+          ],
+          [
+            -58.99813,
+            -1.94933
+          ],
+          [
+            -58.83313,
+            -1.96925
+          ],
+          [
+            -58.6669,
+            -2.00527
+          ],
+          [
+            -58.5,
+            -2.05
+          ],
+          [
+            -58.30868,
+            -2.09478
+          ],
+          [
+            -58.11794,
+            -2.13083
+          ],
+          [
+            -57.92828,
+            -2.15077
+          ],
+          [
+            -57.74002,
+            -2.14967
+          ],
+          [
+            -57.55328,
+            -2.12577
+          ],
+          [
+            -57.36794,
+            -2.08083
+          ],
+          [
+            -57.18368,
+            -2.01978
+          ],
+          [
+            -57,
+            -1.95
+          ],
+          [
+            -56.81518,
+            -1.88391
+          ],
+          [
+            -56.62994,
+            -1.82655
+          ],
+          [
+            -56.44396,
+            -1.78532
+          ],
+          [
+            -56.25699,
+            -1.76516
+          ],
+          [
+            -56.06896,
+            -1.76782
+          ],
+          [
+            -55.87994,
+            -1.79155
+          ],
+          [
+            -55.69018,
+            -1.83141
+          ],
+          [
+            -55.5,
+            -1.88
+          ],
+          [
+            -55.31021,
+            -1.92986
+          ],
+          [
+            -55.12076,
+            -1.97098
+          ],
+          [
+            -54.93196,
+            -1.99597
+          ],
+          [
+            -54.744,
+            -1.99988
+          ],
+          [
+            -54.55696,
+            -1.98097
+          ],
+          [
+            -54.37076,
+            -1.94098
+          ],
+          [
+            -54.18521,
+            -1.88486
+          ],
+          [
+            -54,
+            -1.82
+          ],
+          [
+            -53.81403,
+            -1.75762
+          ],
+          [
+            -53.62783,
+            -1.70397
+          ],
+          [
+            -53.44119,
+            -1.66647
+          ],
+          [
+            -53.254,
+            -1.65005
+          ],
+          [
+            -53.06619,
+            -1.65647
+          ],
+          [
+            -52.87783,
+            -1.68397
+          ],
+          [
+            -52.68903,
+            -1.72762
+          ],
+          [
+            -52.5,
+            -1.78
+          ],
+          [
+            -52.31097,
+            -1.83238
+          ],
+          [
+            -52.12217,
+            -1.87603
+          ],
+          [
+            -51.93381,
+            -1.90353
+          ],
+          [
+            -51.746,
+            -1.90995
+          ],
+          [
+            -51.55881,
+            -1.89353
+          ],
+          [
+            -51.37217,
+            -1.85603
+          ],
+          [
+            -51.18597,
+            -1.80238
+          ],
+          [
+            -51,
+            -1.74
+          ],
+          [
+            -50.81365,
+            -1.67886
+          ],
+          [
+            -50.62712,
+            -1.62646
+          ],
+          [
+            -50.44027,
+            -1.5902
+          ],
+          [
+            -50.253,
+            -1.57503
+          ],
+          [
+            -50.06527,
+            -1.5827
+          ],
+          [
+            -49.87712,
+            -1.61146
+          ],
+          [
+            -49.68865,
+            -1.65636
+          ],
+          [
+            -49.5,
+            -1.71
+          ],
+          [
+            -49.33618,
+            -1.76364
+          ],
+          [
+            -49.17255,
+            -1.80854
+          ],
+          [
+            -49.0093,
+            -1.8373
+          ],
+          [
+            -48.84654,
+            -1.84496
+          ],
+          [
+            -48.6843,
+            -1.8298
+          ],
+          [
+            -48.52255,
+            -1.79354
+          ],
+          [
+            -48.36118,
+            -1.74114
+          ],
+          [
+            -48.2,
+            -1.68
+          ]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "para",
-        "name": "Rio Pará (mock)",
-        "kind": "tributary",
-        "corridorId": "barra-norte"
+        "id": "madeira",
+        "name": "Rio Madeira (mock)",
+        "kind": "river",
+        "corridorId": "madeira",
+        "waterwayCode": "HN-MADEIRA",
+        "state": "AM",
+        "strategicRole": "escoamento-graos-ro-mt",
+        "operationalStatus": "active",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "referenceContext": "Corredor Porto Velho → Itacoatiara — grãos e combustível"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-50.54375, -1.65],
-          [-50.29788, -1.575],
-          [-50.06387, -1.5],
-          [-49.83777, -1.425],
-          [-49.61562, -1.35],
-          [-49.39348, -1.275],
-          [-49.16738, -1.2],
-          [-48.93337, -1.125],
-          [-48.6875, -1.05],
-          [-48.56094, -1.01432],
-          [-48.43437, -0.98203],
-          [-48.30781, -0.95279],
-          [-48.18125, -0.92625],
-          [-48.05469, -0.90205],
-          [-47.92812, -0.87984],
-          [-47.80156, -0.85928],
-          [-47.675, -0.84]
+          [
+            -59.2,
+            -2.35
+          ],
+          [
+            -59.0393,
+            -2.27363
+          ],
+          [
+            -58.87701,
+            -2.21326
+          ],
+          [
+            -58.71194,
+            -2.1806
+          ],
+          [
+            -58.54367,
+            -2.17993
+          ],
+          [
+            -58.37264,
+            -2.20696
+          ],
+          [
+            -58.2,
+            -2.25
+          ],
+          [
+            -57.99256,
+            -2.28454
+          ],
+          [
+            -57.78711,
+            -2.30312
+          ],
+          [
+            -57.58512,
+            -2.29407
+          ],
+          [
+            -57.38711,
+            -2.25312
+          ],
+          [
+            -57.19256,
+            -2.18454
+          ],
+          [
+            -57,
+            -2.1
+          ],
+          [
+            -56.86208,
+            -2.01584
+          ],
+          [
+            -56.72149,
+            -1.94753
+          ],
+          [
+            -56.57625,
+            -1.90668
+          ],
+          [
+            -56.42565,
+            -1.89753
+          ],
+          [
+            -56.27042,
+            -1.91584
+          ],
+          [
+            -56.1125,
+            -1.95
+          ],
+          [
+            -55.96975,
+            -1.99288
+          ],
+          [
+            -55.82897,
+            -2.01981
+          ],
+          [
+            -55.69159,
+            -2.0191
+          ],
+          [
+            -55.55814,
+            -1.98648
+          ],
+          [
+            -55.42809,
+            -1.92622
+          ],
+          [
+            -55.3,
+            -1.85
+          ],
+          [
+            -55.22499,
+            -1.77891
+          ],
+          [
+            -55.14774,
+            -1.72375
+          ],
+          [
+            -55.06664,
+            -1.69616
+          ],
+          [
+            -54.98108,
+            -1.70041
+          ],
+          [
+            -54.89165,
+            -1.73225
+          ],
+          [
+            -54.8,
+            -1.78
+          ]
         ]
       }
     },
@@ -77,16 +433,505 @@
         "id": "tapajos",
         "name": "Rio Tapajós (mock)",
         "kind": "tributary",
-        "corridorId": "amazonas"
+        "corridorId": "tapajos-teles-pires",
+        "waterwayCode": "HN-TAPAJOS",
+        "state": "PA",
+        "strategicRole": "integracao-br163-soja",
+        "operationalStatus": "active",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "referenceContext": "Itaituba/Miritituba → Santarém — granéis"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-55.12, -1.78],
-          [-55.05, -1.92],
-          [-54.98, -2.06],
-          [-54.92, -2.2],
-          [-54.88, -2.34]
+          [
+            -55.8,
+            -2.45
+          ],
+          [
+            -55.70629,
+            -2.33743
+          ],
+          [
+            -55.60253,
+            -2.24493
+          ],
+          [
+            -55.48253,
+            -2.18493
+          ],
+          [
+            -55.34629,
+            -2.15743
+          ],
+          [
+            -55.2,
+            -2.15
+          ],
+          [
+            -55.09371,
+            -2.16257
+          ],
+          [
+            -54.99747,
+            -2.15507
+          ],
+          [
+            -54.91747,
+            -2.11507
+          ],
+          [
+            -54.85371,
+            -2.04257
+          ],
+          [
+            -54.8,
+            -1.95
+          ],
+          [
+            -54.73817,
+            -1.8681
+          ],
+          [
+            -54.6694,
+            -1.80755
+          ],
+          [
+            -54.5894,
+            -1.78155
+          ],
+          [
+            -54.49817,
+            -1.7901
+          ],
+          [
+            -54.4,
+            -1.82
+          ],
+          [
+            -54.31415,
+            -1.87049
+          ],
+          [
+            -54.23054,
+            -1.89863
+          ],
+          [
+            -54.15054,
+            -1.89063
+          ],
+          [
+            -54.07415,
+            -1.84649
+          ],
+          [
+            -54,
+            -1.78
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "tocantins",
+        "name": "Rio Tocantins (mock)",
+        "kind": "tributary",
+        "corridorId": "tocantins-araguaia",
+        "waterwayCode": "HN-TOCANTINS",
+        "state": "PA",
+        "strategicRole": "eixo-belem-interior",
+        "operationalStatus": "attention",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "referenceContext": "Belém/Barcarena → interior — dragagem crítica 2026"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -52.2,
+            -2.25
+          ],
+          [
+            -52.14412,
+            -2.16409
+          ],
+          [
+            -52.082,
+            -2.09003
+          ],
+          [
+            -52.00907,
+            -2.03651
+          ],
+          [
+            -51.92367,
+            -2.0067
+          ],
+          [
+            -51.82745,
+            -1.99742
+          ],
+          [
+            -51.725,
+            -2
+          ],
+          [
+            -51.56283,
+            -2.02436
+          ],
+          [
+            -51.4028,
+            -2.03549
+          ],
+          [
+            -51.24649,
+            -2.02371
+          ],
+          [
+            -51.09447,
+            -1.98549
+          ],
+          [
+            -50.94616,
+            -1.92436
+          ],
+          [
+            -50.8,
+            -1.85
+          ],
+          [
+            -50.64075,
+            -1.77555
+          ],
+          [
+            -50.47951,
+            -1.71436
+          ],
+          [
+            -50.31483,
+            -1.67611
+          ],
+          [
+            -50.14618,
+            -1.66436
+          ],
+          [
+            -49.97408,
+            -1.67555
+          ],
+          [
+            -49.8,
+            -1.7
+          ],
+          [
+            -49.62592,
+            -1.72445
+          ],
+          [
+            -49.45382,
+            -1.73564
+          ],
+          [
+            -49.28517,
+            -1.72389
+          ],
+          [
+            -49.12049,
+            -1.68564
+          ],
+          [
+            -48.95925,
+            -1.62445
+          ],
+          [
+            -48.8,
+            -1.55
+          ],
+          [
+            -48.70579,
+            -1.48867
+          ],
+          [
+            -48.61004,
+            -1.44065
+          ],
+          [
+            -48.51159,
+            -1.41567
+          ],
+          [
+            -48.41004,
+            -1.41731
+          ],
+          [
+            -48.30579,
+            -1.442
+          ],
+          [
+            -48.2,
+            -1.48
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "araguaia-south",
+        "name": "Rio Araguaia — trecho sul (mock)",
+        "kind": "tributary",
+        "corridorId": "tocantins-araguaia",
+        "waterwayCode": "HN-ARAGUAIA",
+        "state": "PA",
+        "strategicRole": "mineração-carga-geral",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -52.5,
+            -2.35
+          ],
+          [
+            -52.39125,
+            -2.25832
+          ],
+          [
+            -52.27299,
+            -2.19837
+          ],
+          [
+            -52.14125,
+            -2.18332
+          ],
+          [
+            -52,
+            -2.2
+          ],
+          [
+            -51.89798,
+            -2.19575
+          ],
+          [
+            -51.81545,
+            -2.1647
+          ],
+          [
+            -51.76048,
+            -2.09575
+          ],
+          [
+            -51.725,
+            -2
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "para-estuario",
+        "name": "Estuário do Pará / Baía de Marajó (mock)",
+        "kind": "tributary",
+        "corridorId": "barra-norte",
+        "waterwayCode": "HN-PARA",
+        "state": "PA",
+        "strategicRole": "acesso-estuarino-belem",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "importance": "high",
+        "referenceContext": "Eixo Pará — acesso Belém, Barcarena, Abaetetuba"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.6,
+            -1.65
+          ],
+          [
+            -50.50822,
+            -1.58401
+          ],
+          [
+            -50.41424,
+            -1.53124
+          ],
+          [
+            -50.31644,
+            -1.50136
+          ],
+          [
+            -50.21424,
+            -1.49791
+          ],
+          [
+            -50.10822,
+            -1.51735
+          ],
+          [
+            -50,
+            -1.55
+          ],
+          [
+            -49.88941,
+            -1.5772
+          ],
+          [
+            -49.78166,
+            -1.59131
+          ],
+          [
+            -49.67882,
+            -1.58273
+          ],
+          [
+            -49.58166,
+            -1.54797
+          ],
+          [
+            -49.48941,
+            -1.49053
+          ],
+          [
+            -49.4,
+            -1.42
+          ],
+          [
+            -49.33015,
+            -1.34852
+          ],
+          [
+            -49.25668,
+            -1.28994
+          ],
+          [
+            -49.17696,
+            -1.2537
+          ],
+          [
+            -49.09002,
+            -1.24327
+          ],
+          [
+            -48.99681,
+            -1.25519
+          ],
+          [
+            -48.9,
+            -1.28
+          ],
+          [
+            -48.81788,
+            -1.30589
+          ],
+          [
+            -48.7399,
+            -1.31903
+          ],
+          [
+            -48.66909,
+            -1.3101
+          ],
+          [
+            -48.60657,
+            -1.2757
+          ],
+          [
+            -48.55121,
+            -1.21922
+          ],
+          [
+            -48.5,
+            -1.15
+          ],
+          [
+            -48.47236,
+            -1.08028
+          ],
+          [
+            -48.43873,
+            -1.02254
+          ],
+          [
+            -48.39472,
+            -0.98556
+          ],
+          [
+            -48.33873,
+            -0.97254
+          ],
+          [
+            -48.27236,
+            -0.98028
+          ],
+          [
+            -48.2,
+            -1
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "negro-confluence",
+        "name": "Confluência Rio Negro (mock)",
+        "kind": "tributary",
+        "corridorId": "amazonas",
+        "state": "AM",
+        "strategicRole": "hub-manaus",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -57,
+            -1.72
+          ],
+          [
+            -56.87838,
+            -1.66771
+          ],
+          [
+            -56.75478,
+            -1.64019
+          ],
+          [
+            -56.62838,
+            -1.64771
+          ],
+          [
+            -56.5,
+            -1.68
+          ],
+          [
+            -56.41471,
+            -1.74831
+          ],
+          [
+            -56.32263,
+            -1.79272
+          ],
+          [
+            -56.22096,
+            -1.80331
+          ],
+          [
+            -56.1125,
+            -1.79
+          ]
         ]
       }
     },
@@ -96,33 +941,109 @@
         "id": "xingu",
         "name": "Rio Xingu (mock)",
         "kind": "tributary",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "state": "PA",
+        "strategicRole": "afluente-estrutural",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-52.45, -1.74],
-          [-52.38, -1.88],
-          [-52.32, -2.02],
-          [-52.28, -2.16]
+          [
+            -52.6,
+            -1.74
+          ],
+          [
+            -52.50986,
+            -1.72564
+          ],
+          [
+            -52.43591,
+            -1.7402
+          ],
+          [
+            -52.38486,
+            -1.79564
+          ],
+          [
+            -52.35,
+            -1.88
+          ],
+          [
+            -52.33244,
+            -1.96134
+          ],
+          [
+            -52.29588,
+            -2.01554
+          ],
+          [
+            -52.23244,
+            -2.03134
+          ],
+          [
+            -52.15,
+            -2.02
+          ]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "madeira-affluent",
-        "name": "Afluente Madeira (mock)",
-        "kind": "tributary",
-        "corridorId": "madeira"
+        "id": "purus-branch",
+        "name": "Ramo Purus — trecho mock",
+        "kind": "secondary",
+        "corridorId": "amazonas",
+        "state": "AM",
+        "strategicRole": "profundidade-visual",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "low",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-56.35, -1.82],
-          [-56.18, -1.95],
-          [-56.02, -2.08],
-          [-55.88, -2.18]
+          [
+            -57.8,
+            -2
+          ],
+          [
+            -57.65654,
+            -1.93094
+          ],
+          [
+            -57.50925,
+            -1.89061
+          ],
+          [
+            -57.35654,
+            -1.89094
+          ],
+          [
+            -57.2,
+            -1.92
+          ],
+          [
+            -57.04507,
+            -1.95425
+          ],
+          [
+            -56.89303,
+            -1.95965
+          ],
+          [
+            -56.74507,
+            -1.92425
+          ],
+          [
+            -56.6,
+            -1.86
+          ]
         ]
       }
     },
@@ -132,50 +1053,141 @@
         "id": "channel-belem-bay",
         "name": "Canal Baía de Belém (mock)",
         "kind": "secondary",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "city": "Belém",
+        "state": "PA",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-48.62, -1.58],
-          [-48.52, -1.52],
-          [-48.42, -1.48],
-          [-48.32, -1.44]
+          [
+            -48.65,
+            -1.58
+          ],
+          [
+            -48.62481,
+            -1.52068
+          ],
+          [
+            -48.58148,
+            -1.50068
+          ],
+          [
+            -48.52,
+            -1.52
+          ],
+          [
+            -48.46144,
+            -1.5483
+          ],
+          [
+            -48.41477,
+            -1.53497
+          ],
+          [
+            -48.38,
+            -1.48
+          ]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "channel-santarem-west",
-        "name": "Canal Santarém Oeste (mock)",
+        "id": "channel-santarem-confluence",
+        "name": "Canal Confluência Santarém (mock)",
         "kind": "secondary",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "city": "Santarém",
+        "state": "PA",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-52.35, -1.78],
-          [-52.28, -1.72],
-          [-52.22, -1.66]
+          [
+            -52.4,
+            -1.78
+          ],
+          [
+            -52.37369,
+            -1.72559
+          ],
+          [
+            -52.33369,
+            -1.71225
+          ],
+          [
+            -52.28,
+            -1.74
+          ],
+          [
+            -52.25936,
+            -1.80354
+          ],
+          [
+            -52.21603,
+            -1.83021
+          ],
+          [
+            -52.15,
+            -1.82
+          ]
         ]
       }
     },
     {
       "type": "Feature",
       "properties": {
-        "id": "channel-tocantins-north",
-        "name": "Canal Tocantins Norte (mock)",
+        "id": "channel-itacoatiara",
+        "name": "Canal Itacoatiara (mock)",
         "kind": "secondary",
-        "corridorId": "tocantins-araguaia"
+        "corridorId": "madeira",
+        "city": "Itacoatiara",
+        "state": "AM",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "medium",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-51.55, -1.88],
-          [-51.2, -1.82],
-          [-50.85, -1.76],
-          [-50.5, -1.7]
+          [
+            -54.2,
+            -1.74
+          ],
+          [
+            -54.13764,
+            -1.69025
+          ],
+          [
+            -54.07098,
+            -1.68358
+          ],
+          [
+            -54,
+            -1.72
+          ],
+          [
+            -53.94428,
+            -1.75625
+          ],
+          [
+            -53.89428,
+            -1.74959
+          ],
+          [
+            -53.85,
+            -1.7
+          ]
         ]
       }
     },
@@ -185,15 +1197,93 @@
         "id": "channel-vila-conde",
         "name": "Canal Vila do Conde (mock)",
         "kind": "secondary",
-        "corridorId": "tocantins-araguaia"
+        "corridorId": "tocantins-araguaia",
+        "city": "Barcarena",
+        "state": "PA",
+        "operationalStatus": "attention",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "referenceContext": "Terminal estuarino — sensibilidade ambiental mock"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-48.35, -1.42],
-          [-48.22, -1.38],
-          [-48.08, -1.35],
-          [-48.0125, -1.33]
+          [
+            -48.35,
+            -1.42
+          ],
+          [
+            -48.30325,
+            -1.36452
+          ],
+          [
+            -48.24658,
+            -1.35118
+          ],
+          [
+            -48.18,
+            -1.38
+          ],
+          [
+            -48.11178,
+            -1.40483
+          ],
+          [
+            -48.05595,
+            -1.38816
+          ],
+          [
+            -48.0125,
+            -1.33
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-obidos",
+        "name": "Canal Óbidos (mock)",
+        "kind": "secondary",
+        "corridorId": "amazonas",
+        "city": "Óbidos",
+        "state": "PA",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "importance": "low",
+        "referenceContext": "V2.6 GOV-enriched mock — Arco Norte 2026 (fictício)"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.6,
+            -1.78
+          ],
+          [
+            -50.55458,
+            -1.739
+          ],
+          [
+            -50.50458,
+            -1.73233
+          ],
+          [
+            -50.45,
+            -1.76
+          ],
+          [
+            -50.39542,
+            -1.78767
+          ],
+          [
+            -50.34542,
+            -1.781
+          ],
+          [
+            -50.3,
+            -1.74
+          ]
         ]
       }
     }

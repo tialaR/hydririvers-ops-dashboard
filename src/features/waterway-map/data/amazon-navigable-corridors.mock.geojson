@@ -6,20 +6,142 @@
       "properties": {
         "id": "corridor-amazonas-hn100",
         "name": "HN-100 Amazonas-Solimões (mock)",
-        "kind": "corridor",
         "corridorId": "amazonas",
-        "classification": "HN-100"
+        "classification": "HN-100",
+        "waterwayCode": "HN-100",
+        "strategicRole": "eixo-dominante",
+        "navigabilityRisk": "medium",
+        "importance": "critical",
+        "kind": "corridor",
+        "referenceContext": "V2.6 GOV-enriched — corredor navegável classificado"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-59.5, -2.05],
-          [-57.5, -1.95],
-          [-55.5, -1.85],
-          [-53.5, -1.8],
-          [-51.5, -1.75],
-          [-49.5, -1.7],
-          [-48.0, -1.68]
+          [
+            -59.5,
+            -2.05
+          ],
+          [
+            -59.10305,
+            -1.97708
+          ],
+          [
+            -58.70494,
+            -1.92208
+          ],
+          [
+            -58.30494,
+            -1.89608
+          ],
+          [
+            -57.90305,
+            -1.89908
+          ],
+          [
+            -57.5,
+            -1.92
+          ],
+          [
+            -57.09836,
+            -1.95299
+          ],
+          [
+            -56.69734,
+            -1.96804
+          ],
+          [
+            -56.29734,
+            -1.95404
+          ],
+          [
+            -55.89836,
+            -1.91099
+          ],
+          [
+            -55.5,
+            -1.85
+          ],
+          [
+            -55.10118,
+            -1.79299
+          ],
+          [
+            -54.7019,
+            -1.75394
+          ],
+          [
+            -54.3019,
+            -1.74394
+          ],
+          [
+            -53.90118,
+            -1.76299
+          ],
+          [
+            -53.5,
+            -1.8
+          ],
+          [
+            -53.09882,
+            -1.83701
+          ],
+          [
+            -52.6981,
+            -1.85606
+          ],
+          [
+            -52.2981,
+            -1.84606
+          ],
+          [
+            -51.89882,
+            -1.80701
+          ],
+          [
+            -51.5,
+            -1.75
+          ],
+          [
+            -51.10118,
+            -1.69299
+          ],
+          [
+            -50.7019,
+            -1.65394
+          ],
+          [
+            -50.3019,
+            -1.64394
+          ],
+          [
+            -49.90118,
+            -1.66299
+          ],
+          [
+            -49.5,
+            -1.7
+          ],
+          [
+            -49.19937,
+            -1.74302
+          ],
+          [
+            -48.89899,
+            -1.76808
+          ],
+          [
+            -48.59899,
+            -1.76408
+          ],
+          [
+            -48.29937,
+            -1.73102
+          ],
+          [
+            -48,
+            -1.68
+          ]
         ]
       }
     },
@@ -27,18 +149,175 @@
       "type": "Feature",
       "properties": {
         "id": "corridor-madeira",
-        "name": "Corredor Madeira (mock)",
-        "kind": "corridor",
+        "name": "Hidrovia Rio Madeira (mock)",
         "corridorId": "madeira",
-        "classification": "HN-100"
+        "classification": "EVTEA-MOCK",
+        "waterwayCode": "HN-MADEIRA",
+        "strategicRole": "escoamento-graos",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "kind": "corridor",
+        "referenceContext": "V2.6 GOV-enriched — corredor navegável classificado"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-58.98125, -2.3],
-          [-57.4625, -2.1],
-          [-56.1125, -1.9],
-          [-55.1, -1.8]
+          [
+            -59,
+            -2.32
+          ],
+          [
+            -58.70662,
+            -2.2276
+          ],
+          [
+            -58.41071,
+            -2.1575
+          ],
+          [
+            -58.11071,
+            -2.1235
+          ],
+          [
+            -57.80662,
+            -2.1256
+          ],
+          [
+            -57.5,
+            -2.15
+          ],
+          [
+            -57.21289,
+            -2.16199
+          ],
+          [
+            -56.92945,
+            -2.15183
+          ],
+          [
+            -56.65195,
+            -2.10583
+          ],
+          [
+            -56.38039,
+            -2.02399
+          ],
+          [
+            -56.1125,
+            -1.92
+          ],
+          [
+            -55.89526,
+            -1.84146
+          ],
+          [
+            -55.67601,
+            -1.78528
+          ],
+          [
+            -55.45351,
+            -1.76528
+          ],
+          [
+            -55.22776,
+            -1.78146
+          ],
+          [
+            -55,
+            -1.82
+          ],
+          [
+            -54.89531,
+            -1.87059
+          ],
+          [
+            -54.79242,
+            -1.8988
+          ],
+          [
+            -54.69242,
+            -1.8908
+          ],
+          [
+            -54.59531,
+            -1.84659
+          ],
+          [
+            -54.5,
+            -1.78
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "corridor-tapajos-teles-pires",
+        "name": "Hidrovia Tapajós (mock)",
+        "corridorId": "tapajos-teles-pires",
+        "classification": "EVTEA-MOCK",
+        "waterwayCode": "HN-TAPAJOS",
+        "strategicRole": "integracao-br163",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "kind": "corridor",
+        "referenceContext": "V2.6 GOV-enriched — corredor navegável classificado"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -55.6,
+            -2.35
+          ],
+          [
+            -55.4753,
+            -2.2244
+          ],
+          [
+            -55.33578,
+            -2.12845
+          ],
+          [
+            -55.1753,
+            -2.0744
+          ],
+          [
+            -55,
+            -2.05
+          ],
+          [
+            -54.85679,
+            -2.06106
+          ],
+          [
+            -54.72425,
+            -2.04074
+          ],
+          [
+            -54.60679,
+            -1.97606
+          ],
+          [
+            -54.5,
+            -1.88
+          ],
+          [
+            -54.38609,
+            -1.79953
+          ],
+          [
+            -54.26569,
+            -1.75155
+          ],
+          [
+            -54.13609,
+            -1.74953
+          ],
+          [
+            -54,
+            -1.78
+          ]
         ]
       }
     },
@@ -46,20 +325,175 @@
       "type": "Feature",
       "properties": {
         "id": "corridor-tocantins-araguaia",
-        "name": "Corredor Tocantins-Araguaia (mock)",
-        "kind": "corridor",
+        "name": "Hidrovia Tocantins-Araguaia (mock)",
         "corridorId": "tocantins-araguaia",
-        "classification": "HN-100"
+        "classification": "EVTEA-MOCK",
+        "waterwayCode": "HN-TOCANTINS",
+        "strategicRole": "eixo-belem-interior",
+        "navigabilityRisk": "high",
+        "importance": "high",
+        "kind": "corridor",
+        "referenceContext": "V2.6 GOV-enriched — corredor navegável classificado"
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
-          [-51.725, -2.0],
-          [-50.8, -1.92],
-          [-49.9, -1.82],
-          [-49.0, -1.7],
-          [-48.2, -1.58],
-          [-48.0125, -1.46]
+          [
+            -51.725,
+            -2
+          ],
+          [
+            -51.48458,
+            -1.9292
+          ],
+          [
+            -51.24242,
+            -1.87628
+          ],
+          [
+            -50.99742,
+            -1.85228
+          ],
+          [
+            -50.74958,
+            -1.8572
+          ],
+          [
+            -50.5,
+            -1.88
+          ],
+          [
+            -50.29394,
+            -1.90063
+          ],
+          [
+            -50.09019,
+            -1.90345
+          ],
+          [
+            -49.89019,
+            -1.87745
+          ],
+          [
+            -49.69394,
+            -1.82263
+          ],
+          [
+            -49.5,
+            -1.75
+          ],
+          [
+            -49.30788,
+            -1.66964
+          ],
+          [
+            -49.11275,
+            -1.60699
+          ],
+          [
+            -48.91275,
+            -1.57299
+          ],
+          [
+            -48.70788,
+            -1.56764
+          ],
+          [
+            -48.5,
+            -1.58
+          ],
+          [
+            -48.39126,
+            -1.60166
+          ],
+          [
+            -48.28681,
+            -1.60588
+          ],
+          [
+            -48.18931,
+            -1.58188
+          ],
+          [
+            -48.09876,
+            -1.52966
+          ],
+          [
+            -48.0125,
+            -1.46
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "corridor-barra-norte",
+        "name": "Barra Norte / Hidrovia Verde (mock)",
+        "corridorId": "barra-norte",
+        "classification": "HN-BARRA-NORTE",
+        "waterwayCode": "HN-BARRA-NORTE",
+        "strategicRole": "apoio-navegacao",
+        "navigabilityRisk": "low",
+        "importance": "medium",
+        "kind": "corridor",
+        "referenceContext": "V2.6 GOV-enriched — corredor navegável classificado"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.2,
+            -1.62
+          ],
+          [
+            -50.03332,
+            -1.5434
+          ],
+          [
+            -49.86177,
+            -1.49117
+          ],
+          [
+            -49.68332,
+            -1.4734
+          ],
+          [
+            -49.5,
+            -1.48
+          ],
+          [
+            -49.31555,
+            -1.48136
+          ],
+          [
+            -49.13663,
+            -1.45849
+          ],
+          [
+            -48.96555,
+            -1.40136
+          ],
+          [
+            -48.8,
+            -1.32
+          ],
+          [
+            -48.66741,
+            -1.21381
+          ],
+          [
+            -48.52462,
+            -1.13028
+          ],
+          [
+            -48.36741,
+            -1.07881
+          ],
+          [
+            -48.2,
+            -1.05
+          ]
         ]
       }
     }

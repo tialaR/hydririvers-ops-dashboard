@@ -5,71 +5,354 @@
       "type": "Feature",
       "properties": {
         "id": "port-belem",
-        "name": "Porto Interior Belém (mock)",
+        "name": "Porto Interior Belém",
         "kind": "port",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "city": "Belém",
+        "state": "PA",
+        "strategicRole": "hub-estuarino",
+        "importance": "critical",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
       },
-      "geometry": { "type": "Point", "coordinates": [-48.51875, -1.65] }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.51875,
+          -1.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-barcarena",
+        "name": "Porto Barcarena (mock)",
+        "kind": "port",
+        "corridorId": "tocantins-araguaia",
+        "city": "Barcarena",
+        "state": "PA",
+        "strategicRole": "terminal-industrial",
+        "importance": "high",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.28,
+          -1.38
+        ]
+      }
     },
     {
       "type": "Feature",
       "properties": {
         "id": "port-santarem",
-        "name": "Porto Interior Santarém (mock)",
+        "name": "Porto Interior Santarém",
         "kind": "port",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "city": "Santarém",
+        "state": "PA",
+        "strategicRole": "confluencia-tapajos",
+        "importance": "high",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
       },
-      "geometry": { "type": "Point", "coordinates": [-52.23125, -1.84] }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.23125,
+          -1.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-itaituba",
+        "name": "Porto Itaituba (mock)",
+        "kind": "port",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Itaituba",
+        "state": "PA",
+        "strategicRole": "origem-graos",
+        "importance": "high",
+        "navigabilityRisk": "high",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.35,
+          -2.28
+        ]
+      }
     },
     {
       "type": "Feature",
       "properties": {
         "id": "port-manaus",
-        "name": "Porto Interior Manaus (mock)",
+        "name": "Porto Interior Manaus",
         "kind": "port",
-        "corridorId": "amazonas"
+        "corridorId": "amazonas",
+        "city": "Manaus",
+        "state": "AM",
+        "strategicRole": "hub-zfm",
+        "importance": "critical",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
       },
-      "geometry": { "type": "Point", "coordinates": [-56.1125, -1.79] }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56.1125,
+          -1.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-itacoatiara",
+        "name": "Porto Itacoatiara (mock)",
+        "kind": "port",
+        "corridorId": "madeira",
+        "city": "Itacoatiara",
+        "state": "AM",
+        "strategicRole": "transbordo-madeira",
+        "importance": "high",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -54.05,
+          -1.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-porto-velho",
+        "name": "Porto Porto Velho (mock)",
+        "kind": "port",
+        "corridorId": "madeira",
+        "city": "Porto Velho",
+        "state": "RO",
+        "strategicRole": "origem-madeira",
+        "importance": "high",
+        "navigabilityRisk": "high",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.95,
+          -2.28
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-macapa",
+        "name": "Porto Macapá (mock)",
+        "kind": "port",
+        "corridorId": "amazonas",
+        "city": "Macapá",
+        "state": "AP",
+        "strategicRole": "acesso-ap",
+        "importance": "medium",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -51.05,
+          -0.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-abaetetuba",
+        "name": "Porto Abaetetuba (mock)",
+        "kind": "port",
+        "corridorId": "barra-norte",
+        "city": "Abaetetuba",
+        "state": "PA",
+        "strategicRole": "apoio-estuario",
+        "importance": "medium",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -49.85,
+          -1.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-obidos",
+        "name": "Porto Óbidos (mock)",
+        "kind": "port",
+        "corridorId": "amazonas",
+        "city": "Óbidos",
+        "state": "PA",
+        "strategicRole": "calha-estreita",
+        "importance": "medium",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -50.35,
+          -1.76
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-parintins",
+        "name": "Porto Parintins (mock)",
+        "kind": "port",
+        "corridorId": "amazonas",
+        "city": "Parintins",
+        "state": "AM",
+        "strategicRole": "apoio-interior",
+        "importance": "medium",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.38,
+          -1.82
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-tefe",
+        "name": "Porto Tefé (mock)",
+        "kind": "port",
+        "corridorId": "amazonas",
+        "city": "Tefé",
+        "state": "AM",
+        "strategicRole": "interior-solimoes",
+        "importance": "medium",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.25,
+          -1.52
+        ]
+      }
     },
     {
       "type": "Feature",
       "properties": {
         "id": "port-maraba",
-        "name": "Porto Interior Marabá (mock)",
+        "name": "Porto Interior Marabá",
         "kind": "port",
-        "corridorId": "tocantins-araguaia"
+        "corridorId": "tocantins-araguaia",
+        "city": "Marabá",
+        "state": "PA",
+        "strategicRole": "origem-tocantins",
+        "importance": "high",
+        "navigabilityRisk": "high",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
       },
-      "geometry": { "type": "Point", "coordinates": [-51.725, -2.0] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "terminal-belem-norte",
-        "name": "Terminal Belém Norte (mock)",
-        "kind": "terminal",
-        "corridorId": "amazonas"
-      },
-      "geometry": { "type": "Point", "coordinates": [-48.45, -1.62] }
-    },
-    {
-      "type": "Feature",
-      "properties": {
-        "id": "terminal-santarem-oeste",
-        "name": "Terminal Santarém Oeste (mock)",
-        "kind": "terminal",
-        "corridorId": "amazonas"
-      },
-      "geometry": { "type": "Point", "coordinates": [-52.15, -1.82] }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -51.725,
+          -2
+        ]
+      }
     },
     {
       "type": "Feature",
       "properties": {
         "id": "terminal-vila-conde",
-        "name": "Terminal Vila do Conde (mock)",
+        "name": "Terminal Vila do Conde",
         "kind": "terminal",
-        "corridorId": "tocantins-araguaia"
+        "corridorId": "tocantins-araguaia",
+        "city": "Barcarena",
+        "state": "PA",
+        "strategicRole": "exportacao-estuarina",
+        "importance": "critical",
+        "navigabilityRisk": "high",
+        "operationalStatus": "attention",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
       },
-      "geometry": { "type": "Point", "coordinates": [-48.0125, -1.46] }
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.0125,
+          -1.46
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-miritituba",
+        "name": "Terminal Miritituba (mock)",
+        "kind": "terminal",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Miritituba",
+        "state": "PA",
+        "strategicRole": "transbordo-soja",
+        "importance": "high",
+        "navigabilityRisk": "high",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.05,
+          -2.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-santarem-oeste",
+        "name": "Terminal Santarém Oeste",
+        "kind": "terminal",
+        "corridorId": "amazonas",
+        "city": "Santarém",
+        "state": "PA",
+        "strategicRole": "transbordo-graos",
+        "importance": "high",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 — nó logístico Arco Norte"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.15,
+          -1.82
+        ]
+      }
     }
   ]
 }

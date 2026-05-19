@@ -40,7 +40,21 @@ export type HydrowayGeoKind =
   | 'destination'
   | 'vessel';
 
-export type HydrowayGeoFeatureProperties = {
+/** Metadados GOV-enriched (V2.6) — todos opcionais nos mocks, prontos para camadas futuras. */
+export type HydrowayGeoRichMetadata = {
+  waterwayCode?: string;
+  state?: string;
+  city?: string;
+  operationalStatus?: 'active' | 'attention' | 'restricted' | 'planned';
+  strategicRole?: string;
+  referenceContext?: string;
+  sourceNote?: string;
+  navigabilityRisk?: 'low' | 'medium' | 'high' | 'critical';
+  importance?: 'low' | 'medium' | 'high' | 'critical';
+  priority?: number;
+};
+
+export type HydrowayGeoFeatureProperties = HydrowayGeoRichMetadata & {
   id: string;
   name: string;
   kind: HydrowayGeoKind;

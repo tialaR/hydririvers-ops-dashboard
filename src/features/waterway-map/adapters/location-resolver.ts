@@ -16,7 +16,7 @@ const TRACKING_CORRIDOR_TO_GEO: Record<string, WaterwayCorridorId> = {
   'corridor-barra-norte': 'barra-norte',
 };
 
-/** Pontos WGS84 fictícios alinhados aos mocks V2.2a (ports-terminals + cargo-routes). */
+/** Pontos WGS84 fictícios alinhados aos mocks V2.6 (ports-terminals + cargo-routes). */
 const KNOWN_LOCATION_COORDINATES: Record<string, GeoJSON.Position> = {
   'belem pa': [-48.51875, -1.65],
   'belem para': [-48.51875, -1.65],
@@ -24,18 +24,24 @@ const KNOWN_LOCATION_COORDINATES: Record<string, GeoJSON.Position> = {
   'manaus am': [-56.1125, -1.79],
   'maraba pa': [-51.725, -2.0],
   'vila do conde pa': [-48.0125, -1.46],
-  'macapa ap': [-51.0, -0.5],
-  'itacoatiara am': [-54.0, -1.72],
-  'porto velho ro': [-58.5, -2.2],
-  'tefe am': [-58.0, -1.5],
-  'obidos pa': [-50.5, -1.75],
+  'barcarena pa': [-48.28, -1.38],
+  'macapa ap': [-51.05, -0.42],
+  'itacoatiara am': [-54.05, -1.72],
+  'porto velho ro': [-58.95, -2.28],
+  'tefe am': [-58.25, -1.52],
+  'obidos pa': [-50.35, -1.76],
+  'parintins am': [-53.38, -1.82],
+  'abaetetuba pa': [-49.85, -1.52],
+  'itaituba pa': [-55.35, -2.28],
+  'miritituba pa': [-55.05, -2.18],
   'breves pa': [-49.5, -1.7],
   'terminal manaus norte': [-56.1125, -1.79],
   'terminal santarem oeste': [-52.15, -1.82],
-  'terminal porto velho graneleiro': [-58.5, -2.2],
-  'terminal itacoatiara sul': [-54.0, -1.72],
+  'terminal porto velho graneleiro': [-58.95, -2.28],
+  'terminal itacoatiara sul': [-54.05, -1.72],
   'terminal maraba': [-51.725, -2.0],
   'terminal vila do conde': [-48.0125, -1.46],
+  'terminal miritituba': [-55.05, -2.18],
 };
 
 export function normalizeHydrowayLocationKey(value: string): string {

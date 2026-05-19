@@ -22,7 +22,7 @@ describe('resolveSpikeHydrowayMapModel', () => {
     const model004 = resolveSpikeHydrowayMapModel('cargo-004');
 
     expect(model002.cargoId).toBe('CARGO-002');
-    expect(model002.corridorId).toBe('madeira');
+    expect(model002.corridorId).toBe('amazonas');
     expect(model002.progress01).toBe(0.25);
 
     expect(model004.cargoId).toBe('CARGO-004');
