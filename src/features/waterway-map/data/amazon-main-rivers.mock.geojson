@@ -70,6 +70,132 @@
           [-47.675, -0.84]
         ]
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "tapajos",
+        "name": "Rio Tapajós (mock)",
+        "kind": "tributary",
+        "corridorId": "amazonas"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-55.12, -1.78],
+          [-55.05, -1.92],
+          [-54.98, -2.06],
+          [-54.92, -2.2],
+          [-54.88, -2.34]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "xingu",
+        "name": "Rio Xingu (mock)",
+        "kind": "tributary",
+        "corridorId": "amazonas"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-52.45, -1.74],
+          [-52.38, -1.88],
+          [-52.32, -2.02],
+          [-52.28, -2.16]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "madeira-affluent",
+        "name": "Afluente Madeira (mock)",
+        "kind": "tributary",
+        "corridorId": "madeira"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-56.35, -1.82],
+          [-56.18, -1.95],
+          [-56.02, -2.08],
+          [-55.88, -2.18]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-belem-bay",
+        "name": "Canal Baía de Belém (mock)",
+        "kind": "secondary",
+        "corridorId": "amazonas"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-48.62, -1.58],
+          [-48.52, -1.52],
+          [-48.42, -1.48],
+          [-48.32, -1.44]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-santarem-west",
+        "name": "Canal Santarém Oeste (mock)",
+        "kind": "secondary",
+        "corridorId": "amazonas"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-52.35, -1.78],
+          [-52.28, -1.72],
+          [-52.22, -1.66]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-tocantins-north",
+        "name": "Canal Tocantins Norte (mock)",
+        "kind": "secondary",
+        "corridorId": "tocantins-araguaia"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-51.55, -1.88],
+          [-51.2, -1.82],
+          [-50.85, -1.76],
+          [-50.5, -1.7]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-vila-conde",
+        "name": "Canal Vila do Conde (mock)",
+        "kind": "secondary",
+        "corridorId": "tocantins-araguaia"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-48.35, -1.42],
+          [-48.22, -1.38],
+          [-48.08, -1.35],
+          [-48.0125, -1.33]
+        ]
+      }
     }
   ]
 }

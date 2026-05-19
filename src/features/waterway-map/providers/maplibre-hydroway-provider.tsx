@@ -4,6 +4,12 @@ import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
 import { HYDROWAY_MOCK_GEO_BBOX } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoBbox } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
+import {
+  buildRouteTraveledGeoJson,
+  buildVesselGeoJson,
+  resolveAnimatedRouteProgress,
+} from '../utils/hydro-maplibre-animation';
+import { resolveHydroMapLibreFitOptions } from '../utils/hydro-maplibre-camera';
 import { registerHydroMapLibreImages } from '../utils/hydro-maplibre-icons';
 import {
   enrichHydrowayGeoForMapLibre,
@@ -37,12 +43,13 @@ const ALL_LAYERS: HydrowayMapLayerId[] = [
 
 const STYLE_LAYER_BY_DOMAIN: Record<HydrowayMapLayerId, readonly string[]> = {
   'waterway-main': HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayMain,
-  'waterway-tributary': HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayTributary,
+  'waterway-tributary': [
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.waterwaySecondary,
+    ...HYDRO_MAPLIBRE_LAYER_GROUPS.waterwayTributary,
+  ],
   'cargo-route': HYDRO_MAPLIBRE_LAYER_GROUPS.route,
   ports: [...HYDRO_MAPLIBRE_LAYER_GROUPS.ports, ...HYDRO_MAPLIBRE_LAYER_GROUPS.corridors],
-  vessel: [
-    ...HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter((id) => id.includes('vessel')),
-  ],
+  vessel: HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter((id) => id.includes('vessel')),
 };
 
 const OPS_ROUTE_LAYERS = HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter(
@@ -50,13 +57,10 @@ const OPS_ROUTE_LAYERS = HYDRO_MAPLIBRE_LAYER_GROUPS.operations.filter(
 );
 
 const INITIAL_MAP_ZOOM = 5.2;
-const FIT_PADDING: PaddingOptions = { top: 150, bottom: 90, left: 340, right: 100 };
 const MAX_BOUNDS: LngLatBoundsLike = [
   [HYDROWAY_MOCK_GEO_BBOX.west - 0.35, HYDROWAY_MOCK_GEO_BBOX.south - 0.35],
   [HYDROWAY_MOCK_GEO_BBOX.east + 0.35, HYDROWAY_MOCK_GEO_BBOX.north + 0.35],
 ];
-const IMMERSIVE_PITCH = 32;
-const IMMERSIVE_BEARING = -14;
 
 export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   readonly kind = 'maplibre' as const;
@@ -66,20 +70,32 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private camera: HydrowayMapCamera = { ...HYDRO_MAP_INITIAL_CAMERA };
   private visibleLayers = new Set<HydrowayMapLayerId>(ALL_LAYERS);
   private geo: HydrowayGeoJsonSources | null = null;
+  private routeTrackCoords: GeoJSON.Position[] = [];
+  private vesselLabel = 'Embarcação';
   private progress01 = 0;
   private initFailed = false;
   private routeBbox: HydrowayGeoBbox | null = null;
+  private fitOptions = resolveHydroMapLibreFitOptions('');
   private animationFrameId: number | null = null;
-  private animationPhase = 0;
+  private animationStartMs = 0;
+  private animationPaused = false;
+  private reducedMotion = false;
 
   mount(init: HydrowayMapProviderInit, hooks?: { onReady?: () => void }): void {
     this.destroy();
     this.container = init.container;
     this.camera = init.camera ? { ...init.camera } : { ...HYDRO_MAP_INITIAL_CAMERA };
     this.progress01 = init.model.progress01;
+    this.fitOptions = resolveHydroMapLibreFitOptions(init.model.cargoId);
     this.geo = enrichHydrowayGeoForMapLibre(init.model.geo, init.model.progress01);
+    this.routeTrackCoords = extractRouteTrackCoordinates(this.geo);
+    this.vesselLabel =
+      String(this.geo.vessel.features[0]?.properties?.displayLabel ?? '') || 'Embarcação';
     this.routeBbox = init.model.bbox;
     this.initFailed = false;
+    this.reducedMotion = prefersReducedMotion();
+    this.animationPaused = this.reducedMotion;
+    this.animationStartMs = 0;
 
     const viewBox = init.viewBox ?? HYDRO_MAP_VIEWBOX;
     const style = createHydroMapLibreBaseStyle(init.model.progress01) as StyleSpecification;
@@ -102,18 +118,23 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
         fadeDuration: 0,
         pitch: 0,
         bearing: 0,
+        scrollZoom: true,
+        dragPan: true,
+        dragRotate: true,
+        touchPitch: true,
       });
 
       map.on('load', () => {
         registerHydroMapLibreImages(map);
         this.applyGeoJson(map);
         this.syncLayerVisibility(map);
-        this.startVesselPulse(map);
+        this.applyAtmosphere(map);
+        this.startNativeAnimation(map);
 
         if (init.camera) {
           this.setCamera(init.camera);
         } else {
-          this.fitRouteTrack(true);
+          this.fitRouteTrack(false);
         }
         hooks?.onReady?.();
       });
@@ -196,94 +217,137 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.fitRouteTrack(true);
   }
 
+  pauseAnimation(): void {
+    this.animationPaused = true;
+    this.syncAnimatedGeo(this.progress01);
+  }
+
+  resumeAnimation(): void {
+    if (this.reducedMotion) return;
+    this.animationPaused = false;
+    this.animationStartMs = 0;
+  }
+
+  toggleAnimationPause(): boolean {
+    if (this.animationPaused) {
+      this.resumeAnimation();
+    } else {
+      this.pauseAnimation();
+    }
+    return this.animationPaused;
+  }
+
+  isAnimationPaused(): boolean {
+    return this.animationPaused;
+  }
+
   didInitFail(): boolean {
     return this.initFailed;
   }
 
   destroy(): void {
-    this.stopVesselPulse();
+    this.stopNativeAnimation();
     this.map?.remove();
     this.map = null;
     this.container?.replaceChildren();
     this.container = null;
     this.geo = null;
+    this.routeTrackCoords = [];
     this.routeBbox = null;
     this.camera = { ...HYDRO_MAP_INITIAL_CAMERA };
     this.visibleLayers = new Set(ALL_LAYERS);
     this.initFailed = false;
     this.progress01 = 0;
-    this.animationPhase = 0;
+    this.fitOptions = resolveHydroMapLibreFitOptions('');
+    this.animationStartMs = 0;
+    this.animationPaused = false;
   }
 
   private fitRouteTrack(cinematic: boolean): void {
-    const geo = this.geo;
-    if (!geo) {
-      if (this.routeBbox) {
-        this.flyToBounds(
-          [
-            [this.routeBbox[0], this.routeBbox[1]],
-            [this.routeBbox[2], this.routeBbox[3]],
-          ],
-          cinematic,
-          FIT_PADDING,
-        );
-      }
+    const coords = this.routeTrackCoords;
+    if (coords.length >= 2) {
+      const lngs = coords.map(([lng]) => lng);
+      const lats = coords.map(([, lat]) => lat);
+      this.flyToBounds(
+        [
+          [Math.min(...lngs), Math.min(...lats)],
+          [Math.max(...lngs), Math.max(...lats)],
+        ],
+        cinematic,
+        this.fitOptions.padding,
+      );
       return;
     }
 
-    const coords = extractRouteTrackCoordinates(geo);
-    if (coords.length < 2) {
-      if (this.routeBbox) {
-        this.flyToBounds(
-          [
-            [this.routeBbox[0], this.routeBbox[1]],
-            [this.routeBbox[2], this.routeBbox[3]],
-          ],
-          cinematic,
-          FIT_PADDING,
-        );
-      }
-      return;
+    if (this.routeBbox) {
+      this.flyToBounds(
+        [
+          [this.routeBbox[0], this.routeBbox[1]],
+          [this.routeBbox[2], this.routeBbox[3]],
+        ],
+        cinematic,
+        this.fitOptions.padding,
+      );
     }
-
-    const lngs = coords.map(([lng]) => lng);
-    const lats = coords.map(([, lat]) => lat);
-    this.flyToBounds(
-      [
-        [Math.min(...lngs), Math.min(...lats)],
-        [Math.max(...lngs), Math.max(...lats)],
-      ],
-      cinematic,
-      FIT_PADDING,
-    );
   }
 
-  private flyToBounds(bounds: LngLatBoundsLike, cinematic: boolean, padding: PaddingOptions = FIT_PADDING): void {
+  private flyToBounds(
+    bounds: LngLatBoundsLike,
+    cinematic: boolean,
+    padding: PaddingOptions = this.fitOptions.padding,
+  ): void {
     const map = this.map;
     if (!map) return;
 
     const duration = cinematic ? hydroMapTransitionMs() : 0;
-    const camera = map.cameraForBounds(bounds, { padding });
+    const { maxZoom, pitch, bearing } = this.fitOptions;
 
+    if (!cinematic) {
+      map.fitBounds(bounds, {
+        padding,
+        maxZoom,
+        duration: 0,
+        pitch,
+        bearing,
+        essential: true,
+      });
+      this.camera = boundsToSchematicCamera(map.getBounds());
+      return;
+    }
+
+    const camera = map.cameraForBounds(bounds, { padding, maxZoom });
     if (!camera) {
-      map.fitBounds(bounds, { padding, duration, maxZoom: 10.5 });
+      map.fitBounds(bounds, { padding, duration, maxZoom, pitch, bearing });
       this.camera = boundsToSchematicCamera(map.getBounds());
       return;
     }
 
     map.flyTo({
       center: camera.center,
-      zoom: Math.min(camera.zoom ?? INITIAL_MAP_ZOOM, 10.5),
-      bearing: cinematic ? IMMERSIVE_BEARING : (camera.bearing ?? 0),
-      pitch: cinematic ? IMMERSIVE_PITCH : 0,
+      zoom: Math.min(camera.zoom ?? INITIAL_MAP_ZOOM, maxZoom),
+      bearing,
+      pitch,
       padding,
       duration,
       essential: true,
     });
+  }
 
-    if (!cinematic) {
-      this.camera = boundsToSchematicCamera(map.getBounds());
-    }
+  private applyAtmosphere(map: Map): void {
+    const mapWithFog = map as Map & {
+      setFog?: (options: {
+        color: string;
+        'high-color': string;
+        'horizon-blend': number;
+        range: [number, number];
+      }) => void;
+    };
+    mapWithFog.setFog?.({
+      color: '#04080d',
+      'high-color': '#0d1a28',
+      'horizon-blend': 0.12,
+      range: [0.8, 12],
+    });
   }
 
   private applyGeoJson(map: Map): void {
@@ -307,7 +371,41 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.vessel, geo.vessel);
 
     if (map.getLayer('route-planned-gradient')) {
-      map.setPaintProperty('route-planned-gradient', 'line-gradient', buildRouteGradientPaint(this.progress01)['line-gradient']);
+      map.setPaintProperty(
+        'route-planned-gradient',
+        'line-gradient',
+        buildRouteGradientPaint(this.progress01)['line-gradient'],
+      );
+    }
+  }
+
+  private syncAnimatedGeo(progress01: number): void {
+    const map = this.map;
+    const coords = this.routeTrackCoords;
+    if (!map?.loaded() || coords.length < 2) return;
+
+    const routeProps = this.geo?.routeTraveled.features[0]?.properties ?? {};
+    const vesselProps = this.geo?.vessel.features[0]?.properties ?? {};
+
+    const routeTraveled = buildRouteTraveledGeoJson(coords, progress01, routeProps);
+    const vessel = buildVesselGeoJson(coords, progress01, this.vesselLabel, vesselProps);
+
+    const routeSource = map.getSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled);
+    if (routeSource && 'setData' in routeSource) {
+      (routeSource as maplibregl.GeoJSONSource).setData(routeTraveled);
+    }
+
+    const vesselSource = map.getSource(HYDROWAY_GEOJSON_SOURCE_IDS.vessel);
+    if (vesselSource && 'setData' in vesselSource) {
+      (vesselSource as maplibregl.GeoJSONSource).setData(vessel);
+    }
+
+    if (map.getLayer('route-planned-gradient')) {
+      map.setPaintProperty(
+        'route-planned-gradient',
+        'line-gradient',
+        buildRouteGradientPaint(progress01)['line-gradient'],
+      );
     }
   }
 
@@ -325,22 +423,47 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
   }
 
-  private startVesselPulse(map: Map): void {
-    this.stopVesselPulse();
-    if (prefersReducedMotion()) return;
+  private startNativeAnimation(map: Map): void {
+    this.stopNativeAnimation();
+    if (this.reducedMotion) return;
 
-    const tick = () => {
-      if (!this.map || !map.getLayer('ops-vessel-halo-symbol')) {
+    const tick = (now: number) => {
+      if (!this.map) {
         this.animationFrameId = null;
         return;
       }
 
-      this.animationPhase += 1;
-      const pulse = 0.82 + Math.sin(this.animationPhase * 0.045) * 0.14;
-      const zoom = map.getZoom();
-      const base = zoom < 6 ? 0.75 : zoom < 9 ? 0.95 : 1.15;
+      if (!this.animationPaused) {
+        if (!this.animationStartMs) {
+          this.animationStartMs = now;
+        }
+        const elapsed = now - this.animationStartMs;
+        const animProgress = resolveAnimatedRouteProgress(this.progress01, elapsed);
+        this.syncAnimatedGeo(animProgress);
 
-      map.setLayoutProperty('ops-vessel-halo-symbol', 'icon-size', pulse * base);
+        const phase = elapsed * 0.0018;
+        const pulse = 0.82 + Math.sin(phase) * 0.14;
+        const traveledPulse = 0.55 + Math.sin(phase * 1.4) * 0.2;
+        const zoom = map.getZoom();
+        const base = zoom < 6 ? 0.75 : zoom < 9 ? 0.95 : 1.15;
+
+        if (map.getLayer('ops-vessel-halo-symbol')) {
+          map.setLayoutProperty('ops-vessel-halo-symbol', 'icon-size', pulse * base);
+        }
+
+        if (map.getLayer('route-traveled-pulse')) {
+          map.setPaintProperty('route-traveled-pulse', 'line-opacity', traveledPulse);
+          map.setPaintProperty(
+            'route-traveled-pulse',
+            'line-width',
+            (4 + Math.sin(phase * 1.2) * 0.8) * (zoom < 7 ? 0.85 : 1),
+          );
+        }
+
+        if (map.getLayer('route-traveled-glow')) {
+          map.setPaintProperty('route-traveled-glow', 'line-opacity', 0.5 + Math.sin(phase) * 0.12);
+        }
+      }
 
       this.animationFrameId = requestAnimationFrame(tick);
     };
@@ -348,7 +471,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.animationFrameId = requestAnimationFrame(tick);
   }
 
-  private stopVesselPulse(): void {
+  private stopNativeAnimation(): void {
     if (this.animationFrameId !== null) {
       cancelAnimationFrame(this.animationFrameId);
       this.animationFrameId = null;

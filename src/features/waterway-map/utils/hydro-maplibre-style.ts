@@ -15,8 +15,20 @@ export const HYDRO_MAPLIBRE_SOURCE_IDS = {
   depthMask: 'hydro-spike-depth-mask',
 } as const;
 
+/** Ordem de empilhamento (V2.3zzz — Style Spec válido, sem sky como layer). */
 export const HYDRO_MAPLIBRE_LAYER_GROUPS = {
   basemap: ['hydro-background', 'hydro-depth-basin', 'hydro-depth-focus', 'hydro-grid'],
+  waterwaySecondary: [
+    'waterway-secondary-bed',
+    'waterway-secondary-casing',
+    'waterway-secondary-core',
+  ],
+  waterwayTributary: [
+    'waterway-tributary-bed',
+    'waterway-tributary-casing',
+    'waterway-tributary-glow',
+    'waterway-tributary-core',
+  ],
   waterwayMain: [
     'waterway-river-bed',
     'waterway-river-casing',
@@ -24,23 +36,16 @@ export const HYDRO_MAPLIBRE_LAYER_GROUPS = {
     'waterway-river-core',
     'waterway-river-highlight',
   ],
-  waterwayTributary: [
-    'waterway-tributary-bed',
-    'waterway-tributary-casing',
-    'waterway-tributary-core',
-  ],
-  corridors: [
-    'navigable-corridor-casing',
-    'navigable-corridor-glow',
-    'navigable-corridor-core',
-  ],
+  corridors: ['navigable-corridor-casing', 'navigable-corridor-core'],
   route: [
     'route-planned-casing',
+    'route-remaining',
     'route-planned-gradient',
     'route-traveled-glow',
     'route-traveled-core',
+    'route-traveled-pulse',
   ],
-  ports: ['ports-halo', 'ports-symbol'],
+  ports: ['ports-halo', 'ports-circle', 'ports-symbol', 'ports-label'],
   operations: [
     'ops-origin-halo',
     'ops-origin-symbol',
@@ -83,6 +88,27 @@ const zoomOpacity = (z4: number, z8: number, z12: number): ExpressionSpecificati
   z12,
 ];
 
+/** Um único interpolate/zoom; match de kind nos outputs (Style Spec — sem zoom aninhado em match). */
+const zoomMatchByKind = (
+  kindValue: string,
+  z4Kind: number,
+  z8Kind: number,
+  z12Kind: number,
+  z4Default: number,
+  z8Default: number,
+  z12Default: number,
+): ExpressionSpecification => [
+  'interpolate',
+  ['linear'],
+  ['zoom'],
+  4,
+  ['match', ['get', 'kind'], kindValue, z4Kind, z4Default],
+  8,
+  ['match', ['get', 'kind'], kindValue, z8Kind, z8Default],
+  12,
+  ['match', ['get', 'kind'], kindValue, z12Kind, z12Default],
+];
+
 function geoSource(id: string, lineMetrics = false): SourceSpecification {
   return {
     type: 'geojson',
@@ -92,8 +118,7 @@ function geoSource(id: string, lineMetrics = false): SourceSpecification {
 }
 
 /**
- * Style MapLibre V2.3z — cartografia hidroviária nativa (sem tiles/APIs pagas).
- * Ícones registrados em runtime via `registerHydroMapLibreImages`.
+ * Style MapLibre V2.3zzz — stack operacional, sky/fog na raiz, animação via GeoJSON dinâmico.
  */
 export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpecification {
   const routeGradient = buildRouteLineGradientExpression(initialProgress01) as ExpressionSpecification;
@@ -151,6 +176,89 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'line-color': hydroMapStyleTokens.gridLine,
         'line-width': 0.5,
         'line-opacity': zoomOpacity(0.35, 0.42, 0.5),
+      },
+    },
+    {
+      id: 'waterway-secondary-bed',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'secondary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.secondaryCasing,
+        'line-width': zoomWidth(8, 12, 16),
+        'line-opacity': 0.45,
+        'line-blur': 2,
+      },
+    },
+    {
+      id: 'waterway-secondary-casing',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'secondary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.secondaryCasing,
+        'line-width': zoomWidth(5, 8, 11),
+        'line-opacity': 0.7,
+        'line-blur': 1,
+      },
+    },
+    {
+      id: 'waterway-secondary-core',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'secondary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.secondaryStroke,
+        'line-width': zoomWidth(2, 3.5, 5),
+        'line-opacity': 0.72,
+        'line-dasharray': [3, 2],
+      },
+    },
+    {
+      id: 'waterway-tributary-bed',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'tributary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.tributaryCasing,
+        'line-width': zoomWidth(14, 22, 28),
+        'line-opacity': 0.5,
+        'line-blur': 3,
+      },
+    },
+    {
+      id: 'waterway-tributary-casing',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'tributary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.tributaryCasing,
+        'line-width': zoomWidth(10, 16, 20),
+        'line-opacity': 0.82,
+        'line-blur': 1.5,
+      },
+    },
+    {
+      id: 'waterway-tributary-glow',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'tributary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.tributaryGlow,
+        'line-width': zoomWidth(6, 10, 14),
+        'line-opacity': 0.55,
+        'line-blur': 2.5,
+      },
+    },
+    {
+      id: 'waterway-tributary-core',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+      filter: ['==', ['get', 'kind'], 'tributary'],
+      paint: {
+        'line-color': hydroMapStyleTokens.tributaryStroke,
+        'line-width': zoomWidth(4, 7, 10),
+        'line-opacity': 0.85,
       },
     },
     {
@@ -212,59 +320,14 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       },
     },
     {
-      id: 'waterway-tributary-bed',
-      type: 'line',
-      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'tributary'],
-      paint: {
-        'line-color': hydroMapStyleTokens.tributaryCasing,
-        'line-width': zoomWidth(14, 22, 28),
-        'line-opacity': 0.5,
-        'line-blur': 3,
-      },
-    },
-    {
-      id: 'waterway-tributary-casing',
-      type: 'line',
-      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'tributary'],
-      paint: {
-        'line-color': hydroMapStyleTokens.tributaryCasing,
-        'line-width': zoomWidth(10, 16, 20),
-        'line-opacity': 0.82,
-        'line-blur': 1.5,
-      },
-    },
-    {
-      id: 'waterway-tributary-core',
-      type: 'line',
-      source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
-      filter: ['==', ['get', 'kind'], 'tributary'],
-      paint: {
-        'line-color': hydroMapStyleTokens.tributaryStroke,
-        'line-width': zoomWidth(4, 7, 10),
-        'line-opacity': 0.8,
-      },
-    },
-    {
       id: 'navigable-corridor-casing',
       type: 'line',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors,
       paint: {
         'line-color': hydroMapStyleTokens.corridorGlow,
         'line-width': zoomWidth(5, 8, 11),
-        'line-opacity': 0.35,
+        'line-opacity': 0.4,
         'line-blur': 2,
-      },
-    },
-    {
-      id: 'navigable-corridor-glow',
-      type: 'line',
-      source: HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors,
-      paint: {
-        'line-color': hydroMapStyleTokens.corridorGlow,
-        'line-width': zoomWidth(3, 5, 7),
-        'line-opacity': 0.5,
       },
     },
     {
@@ -293,9 +356,20 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack,
       paint: {
         'line-color': hydroMapStyleTokens.routeTrackCasing,
-        'line-width': zoomWidth(6, 10, 14),
-        'line-opacity': 0.75,
+        'line-width': zoomWidth(7, 11, 15),
+        'line-opacity': 0.7,
         'line-blur': 2,
+      },
+    },
+    {
+      id: 'route-remaining',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack,
+      paint: {
+        'line-color': hydroMapStyleTokens.routeRemaining,
+        'line-width': zoomWidth(3, 5, 7),
+        'line-opacity': 0.4,
+        'line-dasharray': [2, 3],
       },
     },
     {
@@ -305,7 +379,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       paint: {
         'line-gradient': routeGradient,
         'line-width': zoomWidth(4, 7, 10),
-        'line-opacity': 0.92,
+        'line-opacity': 0.95,
       },
     },
     {
@@ -314,9 +388,9 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled,
       paint: {
         'line-color': hydroMapStyleTokens.routeActiveGlow,
-        'line-width': zoomWidth(8, 12, 16),
-        'line-opacity': 0.6,
-        'line-blur': 4,
+        'line-width': zoomWidth(10, 14, 18),
+        'line-opacity': 0.65,
+        'line-blur': 5,
       },
     },
     {
@@ -325,27 +399,62 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled,
       paint: {
         'line-color': hydroMapStyleTokens.routeProgress,
-        'line-width': zoomWidth(4.5, 7, 9),
+        'line-width': zoomWidth(5, 8, 10),
         'line-opacity': 1,
+      },
+    },
+    {
+      id: 'route-traveled-pulse',
+      type: 'line',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled,
+      paint: {
+        'line-color': hydroMapStyleTokens.routeActive,
+        'line-width': zoomWidth(2.5, 4, 5),
+        'line-opacity': 0.55,
       },
     },
     {
       id: 'ports-halo',
       type: 'circle',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
+      minzoom: 5,
+      paint: {
+        'circle-color': [
+          'match',
+          ['get', 'kind'],
+          'terminal',
+          'rgba(120, 210, 255, 0.35)',
+          'rgba(47, 224, 208, 0.28)',
+        ],
+        'circle-radius': zoomMatchByKind('terminal', 9, 12, 14, 7, 10, 12),
+        'circle-opacity': 0.38,
+        'circle-blur': 0.85,
+      },
+    },
+    {
+      id: 'ports-circle',
+      type: 'circle',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
       minzoom: 5.5,
       paint: {
-        'circle-color': hydroMapStyleTokens.corridorGlow,
-        'circle-radius': zoomWidth(5, 7, 9),
-        'circle-opacity': 0.28,
-        'circle-blur': 0.9,
+        'circle-color': [
+          'match',
+          ['get', 'kind'],
+          'terminal',
+          'rgba(120, 210, 255, 0.92)',
+          'rgba(226, 240, 248, 0.88)',
+        ],
+        'circle-radius': zoomMatchByKind('terminal', 4, 5.5, 7, 3, 4.5, 6),
+        'circle-stroke-color': '#041018',
+        'circle-stroke-width': 1.2,
+        'circle-opacity': 0.95,
       },
     },
     {
       id: 'ports-symbol',
       type: 'symbol',
       source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
-      minzoom: 6,
+      minzoom: 6.5,
       layout: {
         'icon-image': [
           'match',
@@ -354,11 +463,35 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
           'hydro-terminal',
           'hydro-port',
         ],
-        'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.65, 10, 0.95],
+        'icon-size': ['interpolate', ['linear'], ['zoom'], 6, 0.72, 10, 1.05],
         'icon-allow-overlap': false,
+        'icon-ignore-placement': false,
       },
       paint: {
-        'icon-opacity': 0.88,
+        'icon-opacity': 0.95,
+      },
+    },
+    {
+      id: 'ports-label',
+      type: 'symbol',
+      source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
+      minzoom: 7,
+      layout: {
+        'text-field': ['get', 'displayLabel'],
+        'text-size': ['interpolate', ['linear'], ['zoom'], 7, 9, 10, 11],
+        'text-offset': [0, 1.1],
+        'text-anchor': 'top',
+        'text-max-width': 7,
+        'text-allow-overlap': false,
+        'text-ignore-placement': false,
+        'text-optional': true,
+        'symbol-sort-key': ['coalesce', ['get', 'labelSortKey'], 50],
+      },
+      paint: {
+        'text-color': hydroMapStyleTokens.cityLabel,
+        'text-halo-color': hydroMapStyleTokens.background,
+        'text-halo-width': 1.4,
+        'text-opacity': 0.88,
       },
     },
     {
@@ -395,6 +528,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'text-anchor': 'top',
         'text-max-width': 9,
         'text-allow-overlap': false,
+        'text-optional': true,
       },
       paint: {
         'text-color': hydroMapStyleTokens.cityLabel,
@@ -436,6 +570,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'text-anchor': 'top',
         'text-max-width': 9,
         'text-allow-overlap': false,
+        'text-optional': true,
       },
       paint: {
         'text-color': hydroMapStyleTokens.cityLabel,
@@ -453,6 +588,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
         'icon-rotate': ['coalesce', ['get', 'heading'], 0],
+        'icon-rotation-alignment': 'map',
       },
       paint: {
         'icon-opacity': 0.75,
@@ -468,6 +604,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'icon-allow-overlap': true,
         'icon-ignore-placement': true,
         'icon-rotate': ['coalesce', ['get', 'heading'], 0],
+        'icon-rotation-alignment': 'map',
       },
     },
     {
@@ -482,6 +619,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
         'text-anchor': 'top',
         'text-max-width': 8,
         'text-allow-overlap': false,
+        'text-optional': true,
       },
       paint: {
         'text-color': '#aaf8f0',
@@ -493,10 +631,17 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
 
   return {
     version: 8,
-    name: 'hydroway-spike-cartography-v23z',
+    name: 'hydroway-spike-cartography-v23zzz',
     sources,
     layers,
-  };
+    sky: {
+      'sky-color': '#0a1420',
+      'sky-horizon-blend': 0.4,
+      'horizon-color': '#061018',
+      'fog-color': '#04080d',
+      'fog-ground-blend': 0.55,
+    },
+  } as StyleSpecification;
 }
 
 /** Atualiza line-gradient da rota planejada conforme progresso da carga. */

@@ -65,26 +65,33 @@ function drawVesselIcon(ctx: CanvasRenderingContext2D, size: number, halo: boole
 function drawPortIcon(ctx: CanvasRenderingContext2D, size: number, terminal: boolean): void {
   const center = size / 2;
   ctx.clearRect(0, 0, size, size);
-  ctx.fillStyle = terminal ? 'rgba(120, 210, 255, 0.9)' : 'rgba(226, 240, 248, 0.75)';
   ctx.strokeStyle = '#041018';
   ctx.lineWidth = size * 0.06;
 
   if (terminal) {
+    ctx.fillStyle = 'rgba(120, 210, 255, 0.95)';
     ctx.beginPath();
-    ctx.moveTo(center, size * 0.28);
-    ctx.lineTo(size * 0.72, center);
-    ctx.lineTo(center, size * 0.72);
-    ctx.lineTo(size * 0.28, center);
+    ctx.moveTo(center, size * 0.22);
+    ctx.lineTo(size * 0.78, center);
+    ctx.lineTo(center, size * 0.78);
+    ctx.lineTo(size * 0.22, center);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
+    ctx.fillStyle = 'rgba(4, 16, 24, 0.85)';
+    ctx.fillRect(center - size * 0.06, center - size * 0.06, size * 0.12, size * 0.12);
     return;
   }
 
+  ctx.fillStyle = 'rgba(226, 240, 248, 0.9)';
   ctx.beginPath();
-  ctx.arc(center, center, size * 0.12, 0, Math.PI * 2);
+  ctx.arc(center, center, size * 0.14, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
+  ctx.beginPath();
+  ctx.arc(center, center, size * 0.05, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(47, 224, 208, 0.85)';
+  ctx.fill();
 }
 
 function iconToImageData(size: number, draw: (ctx: CanvasRenderingContext2D) => void): ImageData {
@@ -104,8 +111,8 @@ const ICON_BUILDERS: Record<HydroMapLibreIconId, () => ImageData> = {
   'hydro-destination': () => iconToImageData(64, (ctx) => drawRingIcon(ctx, 64, '#78d4ff', 'rgba(120, 210, 255, 0.65)')),
   'hydro-vessel': () => iconToImageData(64, (ctx) => drawVesselIcon(ctx, 64, false)),
   'hydro-vessel-halo': () => iconToImageData(96, (ctx) => drawVesselIcon(ctx, 96, true)),
-  'hydro-port': () => iconToImageData(32, (ctx) => drawPortIcon(ctx, 32, false)),
-  'hydro-terminal': () => iconToImageData(32, (ctx) => drawPortIcon(ctx, 32, true)),
+  'hydro-port': () => iconToImageData(40, (ctx) => drawPortIcon(ctx, 40, false)),
+  'hydro-terminal': () => iconToImageData(40, (ctx) => drawPortIcon(ctx, 40, true)),
 };
 
 /** Registra ícones gerados por canvas (sem sprite externo). */

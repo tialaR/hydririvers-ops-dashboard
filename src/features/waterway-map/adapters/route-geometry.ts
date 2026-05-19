@@ -31,7 +31,7 @@ function polylineLength(coordinates: GeoJSON.Position[]): number {
   return Math.max(length, 1e-9);
 }
 
-function pointAtPolylineProgress(
+export function pointAtPolylineProgress(
   coordinates: GeoJSON.Position[],
   progress: number,
 ): GeoJSON.Position {
@@ -64,14 +64,14 @@ function pointAtPolylineProgress(
   return [roundCoord(last[0]), roundCoord(last[1])];
 }
 
-function headingAlongPolyline(coordinates: GeoJSON.Position[], progress: number): number {
+export function headingAlongPolyline(coordinates: GeoJSON.Position[], progress: number): number {
   const current = pointAtPolylineProgress(coordinates, progress);
   const previous = pointAtPolylineProgress(coordinates, clamp(progress - 0.03, 0, 1));
   const degrees = (Math.atan2(current[1] - previous[1], current[0] - previous[0]) * 180) / Math.PI;
   return Math.round(degrees * 10) / 10;
 }
 
-function slicePolylineAtProgress(
+export function slicePolylineAtProgress(
   coordinates: GeoJSON.Position[],
   progress: number,
 ): GeoJSON.Position[] {

@@ -271,41 +271,119 @@
   transition: width 0.35s ease;
 }
 
-.controls {
+.controlDock {
   position: absolute;
   right: 0.75rem;
   bottom: 0.75rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  align-items: flex-end;
+  gap: 0.45rem;
   z-index: 3;
 }
 
-.controlButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 10px;
-  border: 1px solid rgba(47, 224, 208, 0.22);
-  background: rgba(6, 12, 20, 0.9);
-  color: #e8f6ff;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+.controlGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  padding: 0.35rem;
+  border-radius: 12px;
+  border: 1px solid rgba(47, 224, 208, 0.2);
+  background: rgba(6, 12, 20, 0.92);
+  backdrop-filter: blur(10px);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(47, 224, 208, 0.08);
 }
 
-.controlButton:hover {
-  border-color: rgba(47, 224, 208, 0.45);
+.controlBtn {
+  display: grid;
+  grid-template-columns: 1.35rem 1fr;
+  align-items: center;
+  gap: 0.35rem;
+  min-width: 5.5rem;
+  min-height: 2rem;
+  padding: 0.2rem 0.45rem 0.2rem 0.35rem;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #e8f6ff;
+  cursor: pointer;
+  text-align: left;
+}
+
+.controlBtn:hover {
+  background: rgba(47, 224, 208, 0.1);
   color: #2fe0d0;
 }
 
-.controlButton:focus-visible {
+.controlBtnMuted {
+  opacity: 0.72;
+}
+
+.controlBtn:focus-visible {
   outline: 2px solid rgba(47, 224, 208, 0.65);
-  outline-offset: 2px;
+  outline-offset: 1px;
+}
+
+.controlIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.controlCaption {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(226, 240, 248, 0.72);
+}
+
+.controlBtn:hover .controlCaption {
+  color: #8ef5e8;
+}
+
+.controlDivider {
+  display: block;
+  height: 1px;
+  margin: 0.15rem 0.25rem;
+  background: rgba(47, 224, 208, 0.14);
+}
+
+.controlProvider {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 224, 208, 0.18);
+  background: rgba(6, 12, 20, 0.88);
+  backdrop-filter: blur(6px);
+}
+
+.controlProviderDot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #2fe0d0;
+  box-shadow: 0 0 8px rgba(47, 224, 208, 0.55);
+}
+
+.controlProviderDotFallback {
+  background: rgba(226, 240, 248, 0.55);
+  box-shadow: none;
+}
+
+.controlProviderLabel {
+  color: rgba(226, 240, 248, 0.78);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
 }
 
 .statusBar {

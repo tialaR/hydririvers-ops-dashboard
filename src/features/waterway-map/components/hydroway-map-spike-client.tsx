@@ -51,6 +51,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const [maplibreMountFailed, setMaplibreMountFailed] = useState(false);
   const [maplibreReady, setMaplibreReady] = useState(false);
   const [zoomPercent, setZoomPercent] = useState(100);
+  const [animationPaused, setAnimationPaused] = useState(false);
 
   const webglReady = useSyncExternalStore(
     () => () => {},
@@ -110,6 +111,10 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const handleMaplibreReady = useCallback(() => {
     setMaplibreMountFailed(false);
     setMaplibreReady(true);
+    const mapProvider = maplibreViewportRef.current?.getProvider();
+    if (mapProvider?.kind === 'maplibre') {
+      setAnimationPaused((mapProvider as MapLibreHydrowayProvider).isAnimationPaused());
+    }
     syncZoomLabel();
   }, [syncZoomLabel]);
 
@@ -157,6 +162,13 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     syncZoomLabel();
   }, [getMapLibreProvider, showMapLibre, syncZoomLabel]);
 
+  const handleToggleAnimation = useCallback(() => {
+    const mapProvider = getMapLibreProvider();
+    if (!mapProvider) return;
+    const paused = mapProvider.toggleAnimationPause();
+    setAnimationPaused(paused);
+  }, [getMapLibreProvider]);
+
   const handleFitRoute = useCallback(() => {
     if (showMapLibre) {
       getMapLibreProvider()?.resetView();
@@ -196,7 +208,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         : null;
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.3z">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.3zzz">
       <div className={styles.hud}>
         <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
           <span className={styles.hudLabel}>Carga</span>
@@ -252,20 +264,50 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         </div>
       </aside>
 
-      <div className={styles.controls}>
-        <button type="button" className={styles.controlButton} onClick={handleFitRoute} aria-label="Ajustar à rota">
-          ⊡
-        </button>
-        <button type="button" className={styles.controlButton} onClick={handleZoomIn} aria-label="Aumentar zoom">
-          +
-        </button>
-        <button type="button" className={styles.controlButton} onClick={handleZoomOut} aria-label="Diminuir zoom">
-          −
-        </button>
-        <button type="button" className={styles.controlButton} onClick={handleReset} aria-label="Redefinir visão">
-          ⟲
-        </button>
-      </div>
+      <nav className={styles.controlDock} aria-label="Controles do mapa">
+        <div className={styles.controlGroup} aria-label="Zoom e enquadramento">
+          <button type="button" className={styles.controlBtn} onClick={handleZoomIn} aria-label="Aumentar zoom">
+            <span className={styles.controlIcon} aria-hidden="true">+</span>
+            <span className={styles.controlCaption}>Zoom</span>
+          </button>
+          <button type="button" className={styles.controlBtn} onClick={handleZoomOut} aria-label="Diminuir zoom">
+            <span className={styles.controlIcon} aria-hidden="true">−</span>
+            <span className={styles.controlCaption}>Zoom</span>
+          </button>
+          <span className={styles.controlDivider} aria-hidden="true" />
+          <button type="button" className={styles.controlBtn} onClick={handleFitRoute} aria-label="Ajustar à rota completa">
+            <span className={styles.controlIcon} aria-hidden="true">⊡</span>
+            <span className={styles.controlCaption}>Rota</span>
+          </button>
+          <button type="button" className={styles.controlBtn} onClick={handleReset} aria-label="Redefinir câmera">
+            <span className={styles.controlIcon} aria-hidden="true">⟲</span>
+            <span className={styles.controlCaption}>Reset</span>
+          </button>
+        </div>
+        {showMapLibre && maplibreReady ? (
+          <div className={styles.controlGroup} aria-label="Animação operacional">
+            <button
+              type="button"
+              className={`${styles.controlBtn} ${animationPaused ? styles.controlBtnMuted : ''}`}
+              onClick={handleToggleAnimation}
+              aria-label={animationPaused ? 'Retomar animação da rota' : 'Pausar animação da rota'}
+              aria-pressed={!animationPaused}
+            >
+              <span className={styles.controlIcon} aria-hidden="true">
+                {animationPaused ? '▶' : '❚❚'}
+              </span>
+              <span className={styles.controlCaption}>{animationPaused ? 'Play' : 'Pausa'}</span>
+            </button>
+          </div>
+        ) : null}
+        <div className={styles.controlProvider} title={isMapLibreActive ? 'MapLibre GL' : 'Fallback SVG'}>
+          <span
+            className={`${styles.controlProviderDot} ${!isMapLibreActive ? styles.controlProviderDotFallback : ''}`}
+            aria-hidden="true"
+          />
+          <span className={styles.controlProviderLabel}>{isMapLibreActive ? 'MapLibre' : 'SVG'}</span>
+        </div>
+      </nav>
 
       {showMapLibre ? (
         <HydrowayMapSpikeMaplibreViewport

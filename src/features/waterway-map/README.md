@@ -1,4 +1,4 @@
-# waterway-map — spike MapLibre (V2.1b–V2.2c)
+# waterway-map — spike MapLibre (V2.1b–V2.3zzz)
 
 Feature isolada para o mapa hidroviário profissional do desktop expanded. Complementa [ADR 0030](../../docs/adr/0030-professional-hydroway-map-provider.md) e [ADR 0031](../../docs/adr/0031-hydroway-geodata-pipeline.md).
 
@@ -13,7 +13,9 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.2b** | GeoJSON mock + `adaptCargoToHydrowayMapModel` |
 | **V2.2c** | Spike dev consome `HydrowayMapModel` (MapLibre + SVG) |
 | **V2.3x** | Visual immersive: basemap escuro, glow rios/rota |
-| **V2.3z** (atual) | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
+| **V2.3z** | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
+| **V2.3zz** | Densidade hidrográfica, markers operacionais, leitura rota, labels, câmera por carga |
+| **V2.3zzz** (atual) | MapLibre-native: animação rota/embarcação via `setData`, sky/fog, stack de layers, controles dock |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -64,17 +66,21 @@ src/features/waterway-map/
 - CSS `maplibre-gl/dist/maplibre-gl.css` importado apenas em `maplibre-hydroway-provider.tsx` (chunk client).
 - Viewport carregado via `next/dynamic(..., { ssr: false })` em `hydroway-map-spike-client.tsx`.
 - `page.tsx` da rota dev permanece RSC fino — **sem** import de `maplibre-gl`.
-- Style local escuro (`hydro-maplibre-style.ts`): fundo + camadas GeoJSON; **sem** tiles raster comerciais pagos.
+- Style local escuro (`hydro-maplibre-style.ts`): fundo + camadas GeoJSON + **sky/fog** na raiz do Style Spec; **sem** tiles raster comerciais pagos.
+- Animação nativa: `routeTraveled` + `vessel` atualizados com `GeoJSONSource.setData()` (padrão “Animate a line” / “Animate point along route”).
 - **Sem** tiles/APIs pagas: estilo local + GeoJSON mock + ícones gerados em canvas (`hydro-maplibre-icons.ts`).
-- **line-gradient** na rota planejada (`lineMetrics: true`) para leitura de progresso.
-- **Symbol layers** para origem, destino, embarcação e portos; rótulos via `displayLabel` (sem texto “mock” no mapa).
+- **line-gradient** na rota planejada (`lineMetrics: true`) + camada percorrida energética vs restante discreta.
+- **Symbol/circle layers** para origem, destino, embarcação, portos e terminais (ícones canvas distintos).
+- Rótulos curtos de porto via `displayLabel` / `labelSortKey` (sem “mock” no mapa; abreviação em clusters).
+- Câmera por carga demo (`hydro-maplibre-camera.ts`) — CARGO-001/002/004 com padding e maxZoom ajustados.
+- Animação operacional (`hydro-maplibre-animation.ts` + `requestAnimationFrame`, respeita `prefers-reduced-motion`; pausa via controle no mapa).
 - Dados oficiais (shapefile BIT/DNIT/ANTAQ) ficam para pipeline futura (ADR 0031).
 
 ### Camadas GeoJSON (V2.2b+, sources `hydroway-*`)
 
 | Camada | Source | Conteúdo |
 |--------|--------|----------|
-| Rios | `hydroway-main-rivers` | Amazonas + Pará (kind river/tributary) |
+| Rios | `hydroway-main-rivers` | Amazonas (river) + afluentes (tributary) + canais (secondary) |
 | Corredores | `hydroway-navigable-corridors` | Hidrovias classificadas (mock) |
 | Portos | `hydroway-ports-terminals` | Portos e terminais |
 | Rota total | `hydroway-route-track` | LineString da carga ativa |
@@ -85,9 +91,7 @@ Adapter: `adaptCargoToHydrowayMapModel`. Spike: `resolveSpikeHydrowayMapModel(ca
 
 ### Controles
 
-- Zoom + / −
-- Ajustar à rota (`fitGeoBbox` no `model.bbox` — MapLibre; schematic no SVG)
-- Redefinir visão (câmera inicial)
+- Dock flutuante: zoom +/−, ajustar rota (`fitBounds` na track), reset, pausa/play animação (MapLibre), indicador de provider
 
 ### Fallback SVG
 

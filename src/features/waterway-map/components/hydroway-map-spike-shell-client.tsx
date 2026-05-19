@@ -20,7 +20,7 @@ export function HydrowayMapSpikeShellClient({ model }: HydrowayMapSpikeShellClie
     <div className={styles.shell}>
       <header className={styles.banner}>
         <div>
-          <h1 className={styles.bannerTitle}>Hydroway Map Spike — V2.3z Cartography</h1>
+          <h1 className={styles.bannerTitle}>Hydroway Map Spike — V2.3zzz MapLibre Native</h1>
           <p className={styles.bannerCopy}>
             Spike dev conectado ao <code>HydrowayMapModel</code> (adapter V2.2b): rotas demo CARGO-001/002/004 via{' '}
             <code>?cargoId=</code>, MapLibre + fallback SVG. Não altera produção{' '}

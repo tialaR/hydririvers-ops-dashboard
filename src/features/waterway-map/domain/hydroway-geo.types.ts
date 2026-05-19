@@ -31,6 +31,7 @@ export const HYDROWAY_MOCK_GEO_BUDGET = {
 export type HydrowayGeoKind =
   | 'river'
   | 'tributary'
+  | 'secondary'
   | 'corridor'
   | 'port'
   | 'terminal'
@@ -61,6 +62,7 @@ export function isHydrowayGeoKind(value: string): value is HydrowayGeoKind {
   return (
     value === 'river' ||
     value === 'tributary' ||
+    value === 'secondary' ||
     value === 'corridor' ||
     value === 'port' ||
     value === 'terminal' ||

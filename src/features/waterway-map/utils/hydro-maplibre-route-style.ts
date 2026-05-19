@@ -3,7 +3,7 @@ import { hydroMapStyleTokens } from './hydro-map-style';
 /** Expressão line-gradient MapLibre (requer lineMetrics na source). */
 export function buildRouteLineGradientExpression(progress01: number): unknown[] {
   const progress = Math.max(0.02, Math.min(0.98, progress01));
-  const seam = Math.min(progress + 0.008, 0.99);
+  const seam = Math.min(progress + 0.012, 0.99);
 
   return [
     'interpolate',
@@ -14,8 +14,8 @@ export function buildRouteLineGradientExpression(progress01: number): unknown[] 
     progress,
     hydroMapStyleTokens.routeProgress,
     seam,
-    hydroMapStyleTokens.routeTrack,
+    hydroMapStyleTokens.routeRemaining,
     1,
-    hydroMapStyleTokens.routeTrack,
+    hydroMapStyleTokens.routeRemaining,
   ];
 }
