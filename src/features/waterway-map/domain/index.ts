@@ -29,6 +29,7 @@ export type {
 
 export type {
   HydrowayGeoJsonSources,
+  HydrowayMapMetadata,
   HydrowayMapModel,
   HydrowayStaticGeoBundle,
 } from './hydroway-map-model.types';

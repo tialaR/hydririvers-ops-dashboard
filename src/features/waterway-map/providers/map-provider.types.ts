@@ -1,5 +1,6 @@
 export type {
   HydrowayGeoJsonSources,
+  HydrowayMapMetadata,
   HydrowayMapModel,
   HydrowayStaticGeoBundle,
 } from '../domain/hydroway-map-model.types';

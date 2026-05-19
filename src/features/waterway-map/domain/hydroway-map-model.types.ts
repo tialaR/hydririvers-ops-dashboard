@@ -26,6 +26,23 @@ export type HydrowayStaticGeoBundle = Pick<
   'mainRivers' | 'navigableCorridors' | 'portsTerminals'
 >;
 
+/** Metadados operacionais derivados do adapter (V2.2b). */
+export type HydrowayMapMetadata = {
+  originLabel: string;
+  destinationLabel: string;
+  progress01: number;
+  routeName: string;
+  routeSource: 'demo-geojson' | 'fallback-line';
+  vesselName?: string;
+  segmentId?: string;
+  eta?: string;
+  operationalStatus?: string;
+  locationFallbacks: {
+    origin: boolean;
+    destination: boolean;
+  };
+};
+
 /**
  * Modelo unificado do mapa hidroviário: metadados operacionais + scene schematic + fontes GeoJSON.
  * O adapter Cargo → model é entregue em V2.2b; a scene permanece opcional nesta microfase.
@@ -34,6 +51,7 @@ export type HydrowayMapModel = {
   cargoId: HydrowayDemoCargoId | string;
   corridorId: WaterwayCorridorId;
   progress01: number;
+  metadata: HydrowayMapMetadata;
   scene?: HydrowayMapScene;
   geo: HydrowayGeoJsonSources;
   bbox: HydrowayGeoBbox;

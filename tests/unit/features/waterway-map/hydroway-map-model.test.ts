@@ -10,6 +10,14 @@ describe('HydrowayMapModel', () => {
       cargoId: 'CARGO-001',
       corridorId: 'amazonas',
       progress01: 0.15,
+      metadata: {
+        originLabel: 'Belém',
+        destinationLabel: 'Santarém',
+        progress01: 0.15,
+        routeName: 'Belém → Santarém',
+        routeSource: 'demo-geojson',
+        locationFallbacks: { origin: false, destination: false },
+      },
       geo: loadHydrowayGeoJsonSources(),
       bbox: HYDROWAY_MOCK_GEO_BBOX_TUPLE,
     };
