@@ -217,7 +217,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         : null;
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.7c">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.8">
       <div className={styles.hud}>
         <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
           <span className={styles.hudLabel}>Carga</span>
@@ -230,11 +230,13 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         </div>
         <div className={styles.hudCard}>
           <span className={styles.hudLabel}>Progresso</span>
-          <span className={styles.hudValue}>{progressPercent}%</span>
+          <span className={`${styles.hudValue} ${styles.hudValueAccent}`}>{progressPercent}%</span>
         </div>
-        <div className={styles.hudCard}>
+        <div className={`${styles.hudCard} ${styles.hudCardRoute}`}>
           <span className={styles.hudLabel}>Rota</span>
-          <span className={styles.hudValue}>{routeLabel}</span>
+          <p className={styles.hudRouteValue} title={routeLabel}>
+            {routeLabel}
+          </p>
         </div>
         <div className={styles.hudCard}>
           <span className={styles.hudLabel}>Motor</span>
@@ -277,79 +279,112 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       </aside>
 
       <nav className={styles.controlDock} aria-label="Controles do mapa">
-        <div className={styles.controlZoomReadout} aria-live="polite">
-          <span className={styles.controlZoomLabel}>Zoom</span>
-          <span className={styles.controlZoomValue}>{zoomPercent}%</span>
-        </div>
-        <div className={styles.controlGroup} aria-label="Zoom e enquadramento">
-          <button type="button" className={styles.controlBtn} onClick={handleZoomIn} aria-label="Aumentar zoom">
-            <span className={styles.controlIcon} aria-hidden="true">+</span>
-            <span className={styles.controlCaption}>Zoom</span>
+        <div className={styles.controlStack}>
+          <div
+            className={styles.controlZoomReadout}
+            aria-live="polite"
+            aria-label="Nível de zoom"
+            title="Nível de zoom"
+          >
+            <span className={styles.controlZoomValue}>{zoomPercent}%</span>
+          </div>
+          <span className={styles.controlDivider} aria-hidden="true" />
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={handleZoomIn}
+            aria-label="Aumentar zoom"
+            data-tooltip="Aumentar zoom"
+          >
+            <span className={styles.controlIcon} aria-hidden="true">
+              +
+            </span>
           </button>
-          <button type="button" className={styles.controlBtn} onClick={handleZoomOut} aria-label="Diminuir zoom">
-            <span className={styles.controlIcon} aria-hidden="true">−</span>
-            <span className={styles.controlCaption}>Zoom</span>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={handleZoomOut}
+            aria-label="Diminuir zoom"
+            data-tooltip="Diminuir zoom"
+          >
+            <span className={styles.controlIcon} aria-hidden="true">
+              −
+            </span>
           </button>
           <span className={styles.controlDivider} aria-hidden="true" />
-          <button type="button" className={styles.controlBtn} onClick={handleFitRoute} aria-label="Rota completa">
-            <span className={styles.controlIcon} aria-hidden="true">⊡</span>
-            <span className={styles.controlCaption}>Rota</span>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={handleFitRoute}
+            aria-label="Rota completa"
+            data-tooltip="Rota completa"
+          >
+            <span className={styles.controlIcon} aria-hidden="true">
+              ⛶
+            </span>
           </button>
-          <button type="button" className={styles.controlBtn} onClick={handleReset} aria-label="Redefinir câmera">
-            <span className={styles.controlIcon} aria-hidden="true">⟲</span>
-            <span className={styles.controlCaption}>Reset</span>
+          <button
+            type="button"
+            className={styles.controlBtn}
+            onClick={handleReset}
+            aria-label="Redefinir câmera"
+            data-tooltip="Redefinir câmera"
+          >
+            <span className={styles.controlIcon} aria-hidden="true">
+              ↺
+            </span>
           </button>
-        </div>
-        {showMapLibre && maplibreReady ? (
-          <div className={styles.controlGroup} aria-label="Capítulos de câmera">
-            <button
-              type="button"
-              className={styles.controlBtn}
-              onClick={() => handleFlyToChapter('origin')}
-              aria-label="Enquadrar origem"
-            >
-              <span className={styles.controlCaption}>Origem</span>
-            </button>
-            <button
-              type="button"
-              className={styles.controlBtn}
-              onClick={() => handleFlyToChapter('current')}
-              aria-label="Enquadrar posição atual"
-            >
-              <span className={styles.controlCaption}>Atual</span>
-            </button>
-            <button
-              type="button"
-              className={styles.controlBtn}
-              onClick={() => handleFlyToChapter('destination')}
-              aria-label="Enquadrar destino"
-            >
-              <span className={styles.controlCaption}>Destino</span>
-            </button>
-          </div>
-        ) : null}
-        {showMapLibre && maplibreReady ? (
-          <div className={styles.controlGroup} aria-label="Animação operacional">
-            <button
-              type="button"
-              className={`${styles.controlBtn} ${animationPaused ? styles.controlBtnMuted : ''}`}
-              onClick={handleToggleAnimation}
-              aria-label={animationPaused ? 'Retomar animação da rota' : 'Pausar animação da rota'}
-              aria-pressed={!animationPaused}
-            >
-              <span className={styles.controlIcon} aria-hidden="true">
-                {animationPaused ? '▶' : '❚❚'}
-              </span>
-              <span className={styles.controlCaption}>{animationPaused ? 'Play' : 'Pausa'}</span>
-            </button>
-          </div>
-        ) : null}
-        <div className={styles.controlProvider} title={isMapLibreActive ? 'MapLibre GL' : 'Fallback SVG'}>
-          <span
-            className={`${styles.controlProviderDot} ${!isMapLibreActive ? styles.controlProviderDotFallback : ''}`}
-            aria-hidden="true"
-          />
-          <span className={styles.controlProviderLabel}>{isMapLibreActive ? 'MapLibre' : 'SVG'}</span>
+          {showMapLibre && maplibreReady ? (
+            <>
+              <span className={styles.controlDivider} aria-hidden="true" />
+              <button
+                type="button"
+                className={styles.controlBtn}
+                onClick={() => handleFlyToChapter('origin')}
+                aria-label="Enquadrar origem"
+                data-tooltip="Origem"
+              >
+                <span className={styles.controlIcon} aria-hidden="true">
+                  ◎
+                </span>
+              </button>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                onClick={() => handleFlyToChapter('current')}
+                aria-label="Enquadrar posição atual"
+                data-tooltip="Posição atual"
+              >
+                <span className={styles.controlIcon} aria-hidden="true">
+                  ◉
+                </span>
+              </button>
+              <button
+                type="button"
+                className={styles.controlBtn}
+                onClick={() => handleFlyToChapter('destination')}
+                aria-label="Enquadrar destino"
+                data-tooltip="Destino"
+              >
+                <span className={styles.controlIcon} aria-hidden="true">
+                  ⚑
+                </span>
+              </button>
+              <span className={styles.controlDivider} aria-hidden="true" />
+              <button
+                type="button"
+                className={`${styles.controlBtn} ${animationPaused ? styles.controlBtnMuted : ''}`}
+                onClick={handleToggleAnimation}
+                aria-label={animationPaused ? 'Retomar animação da rota' : 'Pausar animação da rota'}
+                aria-pressed={!animationPaused}
+                data-tooltip={animationPaused ? 'Retomar animação' : 'Pausar animação'}
+              >
+                <span className={styles.controlIcon} aria-hidden="true">
+                  {animationPaused ? '▶' : '❚❚'}
+                </span>
+              </button>
+            </>
+          ) : null}
         </div>
       </nav>
 
