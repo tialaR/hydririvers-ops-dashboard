@@ -214,14 +214,15 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     const corridor = scene.corridors[index];
     if (!corridor) return group;
 
+    const isMain = index === 0;
     group.appendChild(
       createSvgElement('path', {
         d: corridor.pathD,
         fill: 'none',
-        stroke: `url(#${this.uid}-corridor)`,
-        'stroke-width': 28,
+        stroke: isMain ? hydroMapStyleTokens.riverCasing : hydroMapStyleTokens.tributaryCasing,
+        'stroke-width': isMain ? 52 : 38,
         'stroke-linecap': 'round',
-        opacity: 0.9,
+        opacity: 0.45,
       }),
     );
     group.appendChild(
@@ -229,9 +230,19 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
         d: corridor.pathD,
         fill: 'none',
         stroke: hydroMapStyleTokens.corridorGlow,
-        'stroke-width': 42,
+        'stroke-width': isMain ? 44 : 32,
         'stroke-linecap': 'round',
-        opacity: 0.35,
+        opacity: 0.38,
+      }),
+    );
+    group.appendChild(
+      createSvgElement('path', {
+        d: corridor.pathD,
+        fill: 'none',
+        stroke: `url(#${this.uid}-corridor)`,
+        'stroke-width': isMain ? 30 : 22,
+        'stroke-linecap': 'round',
+        opacity: 0.92,
       }),
     );
     const corridorLabel = createSvgElement('text', {
@@ -282,9 +293,31 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
       createSvgElement('path', {
         d: route.routePathD,
         fill: 'none',
-        stroke: hydroMapStyleTokens.routeTrack,
-        'stroke-width': 10,
+        stroke: hydroMapStyleTokens.routeTrackCasing,
+        'stroke-width': 14,
         'stroke-linecap': 'round',
+        opacity: 0.65,
+      }),
+    );
+    group.appendChild(
+      createSvgElement('path', {
+        d: route.routePathD,
+        fill: 'none',
+        stroke: hydroMapStyleTokens.routeTrack,
+        'stroke-width': 9,
+        'stroke-linecap': 'round',
+        'stroke-dasharray': '10 8',
+        opacity: 0.55,
+      }),
+    );
+    group.appendChild(
+      createSvgElement('path', {
+        d: route.traveledPathD,
+        fill: 'none',
+        stroke: hydroMapStyleTokens.routeActiveGlow,
+        'stroke-width': 16,
+        'stroke-linecap': 'round',
+        opacity: 0.45,
       }),
     );
     group.appendChild(
@@ -332,14 +365,15 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     });
     group.appendChild(
       createSvgElement('circle', {
-        r: 22,
+        r: 28,
         fill: hydroMapStyleTokens.vesselHalo,
-        opacity: 0.35,
+        opacity: 0.32,
+        class: 'hydroway-vessel-halo',
       }),
     );
     group.appendChild(
       createSvgElement('circle', {
-        r: 8,
+        r: 10,
         fill: hydroMapStyleTokens.accent,
         stroke: '#041018',
         'stroke-width': 2,

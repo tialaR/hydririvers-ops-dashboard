@@ -159,7 +159,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const handleFitRoute = useCallback(() => {
     if (showMapLibre) {
-      getMapLibreProvider()?.fitGeoBbox(model.bbox);
+      getMapLibreProvider()?.resetView();
       syncZoomLabel();
       return;
     }
@@ -169,7 +169,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     const { origin, destination, vessel } = schematicScene.route;
     provider.fitBounds([origin, destination, vessel]);
     syncZoomLabel();
-  }, [getMapLibreProvider, model.bbox, schematicScene.route, showMapLibre, syncZoomLabel]);
+  }, [getMapLibreProvider, schematicScene.route, showMapLibre, syncZoomLabel]);
 
   const selectCargo = useCallback(
     (cargoId: string) => {
@@ -185,20 +185,26 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const progressPercent = Math.round(model.progress01 * 100);
   const routeLabel = model.metadata.routeName;
-
-  const providerLabel = activeProviderKind === 'maplibre' ? 'MapLibre GL' : 'SVG schematic';
+  const isMapLibreActive = activeProviderKind === 'maplibre';
 
   const fallbackNote = forceSvgFallback
-    ? ' • fallback forçado (?forceSvgFallback=1)'
+    ? 'fallback ?forceSvgFallback=1'
     : maplibreMountFailed
-      ? ' • fallback por falha MapLibre'
+      ? 'fallback falha MapLibre'
       : !webglReady
-        ? ' • fallback sem WebGL'
-        : '';
+        ? 'fallback sem WebGL'
+        : null;
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.2c">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.3z">
       <div className={styles.hud}>
+        <div className={`${styles.hudCard} ${styles.hudCardWide}`}>
+          <span className={styles.hudLabel}>Carga</span>
+          <span className={`${styles.hudValue} ${styles.hudValueMono}`}>{model.cargoId}</span>
+          <div className={styles.progressTrack} role="progressbar" aria-valuenow={progressPercent} aria-valuemin={0} aria-valuemax={100}>
+            <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
+          </div>
+        </div>
         <div className={styles.hudCard}>
           <span className={styles.hudLabel}>Progresso</span>
           <span className={styles.hudValue}>{progressPercent}%</span>
@@ -208,12 +214,12 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           <span className={styles.hudValue}>{routeLabel}</span>
         </div>
         <div className={styles.hudCard}>
-          <span className={styles.hudLabel}>Provider</span>
-          <span className={styles.hudValue}>{providerLabel}</span>
-        </div>
-        <div className={styles.hudCard}>
-          <span className={styles.hudLabel}>Corredor</span>
-          <span className={styles.hudValue}>{model.corridorId}</span>
+          <span className={styles.hudLabel}>Motor</span>
+          <span
+            className={`${styles.providerBadge} ${!isMapLibreActive ? styles.providerBadgeFallback : ''}`}
+          >
+            {isMapLibreActive ? 'MapLibre GL' : 'SVG schematic'}
+          </span>
         </div>
       </div>
 
@@ -230,6 +236,21 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           </button>
         ))}
       </div>
+
+      <aside className={styles.legend} aria-label="Legenda do mapa">
+        <div className={styles.legendItem}>
+          <span className={`${styles.legendSwatch} ${styles.legendSwatchTraveled}`} aria-hidden="true" />
+          Percorrido
+        </div>
+        <div className={styles.legendItem}>
+          <span className={`${styles.legendSwatch} ${styles.legendSwatchPending}`} aria-hidden="true" />
+          Restante
+        </div>
+        <div className={styles.legendItem}>
+          <span className={`${styles.legendSwatch} ${styles.legendSwatchRiver}`} aria-hidden="true" />
+          Hidrovia
+        </div>
+      </aside>
 
       <div className={styles.controls}>
         <button type="button" className={styles.controlButton} onClick={handleFitRoute} aria-label="Ajustar à rota">
@@ -258,10 +279,8 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       )}
 
       <p className={styles.statusBar}>
-        {model.corridorId} • {model.cargoId} • {model.metadata.routeSource} • provider {activeProviderKind} • zoom{' '}
-        {zoomPercent}%
-        {webglReady ? ' • WebGL ok' : ' • WebGL indisponível'}
-        {fallbackNote}
+        {model.corridorId} • zoom {zoomPercent}%
+        {fallbackNote ? ` • ${fallbackNote}` : ''}
       </p>
     </section>
   );

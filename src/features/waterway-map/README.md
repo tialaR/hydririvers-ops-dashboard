@@ -11,7 +11,9 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.1b** | Rota dev + `SvgSchematicHydrowayProvider` + mocks TS |
 | **V2.1c** | `maplibre-gl` + `MapLibreHydrowayProvider` + fallback SVG |
 | **V2.2b** | GeoJSON mock + `adaptCargoToHydrowayMapModel` |
-| **V2.2c** (atual) | Spike dev consome `HydrowayMapModel` (MapLibre + SVG) |
+| **V2.2c** | Spike dev consome `HydrowayMapModel` (MapLibre + SVG) |
+| **V2.3x** | Visual immersive: basemap escuro, glow rios/rota |
+| **V2.3z** (atual) | Cartografia MapLibre-native: line-gradient, symbol layers, ícones canvas, pitch |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -63,7 +65,10 @@ src/features/waterway-map/
 - Viewport carregado via `next/dynamic(..., { ssr: false })` em `hydroway-map-spike-client.tsx`.
 - `page.tsx` da rota dev permanece RSC fino — **sem** import de `maplibre-gl`.
 - Style local escuro (`hydro-maplibre-style.ts`): fundo + camadas GeoJSON; **sem** tiles raster comerciais pagos.
-- Glyphs de demonstração OSS (`demotiles.maplibre.org`) apenas para rótulos de cidades; hidrovia/rota/embarcação são vetores próprios.
+- **Sem** tiles/APIs pagas: estilo local + GeoJSON mock + ícones gerados em canvas (`hydro-maplibre-icons.ts`).
+- **line-gradient** na rota planejada (`lineMetrics: true`) para leitura de progresso.
+- **Symbol layers** para origem, destino, embarcação e portos; rótulos via `displayLabel` (sem texto “mock” no mapa).
+- Dados oficiais (shapefile BIT/DNIT/ANTAQ) ficam para pipeline futura (ADR 0031).
 
 ### Camadas GeoJSON (V2.2b+, sources `hydroway-*`)
 

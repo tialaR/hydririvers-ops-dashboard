@@ -56,5 +56,10 @@ export const HydrowayMapSpikeMaplibreViewport = forwardRef<
     };
   }, [model, onInitError, onReady]);
 
-  return <div ref={viewportRef} className={styles.maplibreViewport} />;
+  return (
+    <div className={styles.maplibreWrap}>
+      <div ref={viewportRef} className={styles.maplibreViewport} />
+      <div className={styles.mapAtmosphere} aria-hidden="true" />
+    </div>
+  );
 });
