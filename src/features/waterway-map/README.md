@@ -1,4 +1,4 @@
-# waterway-map — spike MapLibre (V2.1b–c)
+# waterway-map — spike MapLibre (V2.1b–V2.2c)
 
 Feature isolada para o mapa hidroviário profissional do desktop expanded. Complementa [ADR 0030](../../docs/adr/0030-professional-hydroway-map-provider.md) e [ADR 0031](../../docs/adr/0031-hydroway-geodata-pipeline.md).
 
@@ -9,7 +9,9 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | Microfase | Entrega |
 |-----------|---------|
 | **V2.1b** | Rota dev + `SvgSchematicHydrowayProvider` + mocks TS |
-| **V2.1c** (atual) | `maplibre-gl` + `MapLibreHydrowayProvider` + fallback SVG |
+| **V2.1c** | `maplibre-gl` + `MapLibreHydrowayProvider` + fallback SVG |
+| **V2.2b** | GeoJSON mock + `adaptCargoToHydrowayMapModel` |
+| **V2.2c** (atual) | Spike dev consome `HydrowayMapModel` (MapLibre + SVG) |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
 ## Rota dev
@@ -18,12 +20,15 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 /<locale>/dev/hydroway-map-spike
 ```
 
-Exemplos locais:
+Exemplos locais (cargo demo via `?cargoId=`, default **CARGO-001**):
 
+- CARGO-001: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-001`
+- CARGO-002: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-002`
+- CARGO-004: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-004`
 - MapLibre (default com WebGL): `http://localhost:3000/pt-BR/dev/hydroway-map-spike`
-- Forçar fallback SVG: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?forceSvgFallback=1`
+- Forçar fallback SVG: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-001&forceSvgFallback=1`
 
-Use os chips **SVG schematic** / **MapLibre GL** no banner para alternar o provider preferido.
+Use os chips **CARGO-*** no mapa ou a query `cargoId`. No banner, alterne **SVG schematic** / **MapLibre GL**.
 
 ## Variáveis de ambiente
 
@@ -38,10 +43,11 @@ Helper: `isHydrowayMapLibreSpikeRouteEnabled()` em `src/shared/config/env.ts`.
 
 ```text
 src/features/waterway-map/
+  adapters/            # Cargo → HydrowayMapModel + model → scene SVG
   components/          # shell + client + viewport MapLibre (dynamic ssr:false)
-  providers/           # SvgSchematic + MapLibreHydrowayProvider
-  data/                # mocks schematic + GeoJSON derivado
-  utils/               # estilo, câmera, schematic→WGS84, detectWebGL
+  providers/           # SvgSchematic + MapLibreHydrowayProvider (consomem model)
+  data/                # GeoJSON mock V2.2a + resolve spike por cargoId
+  utils/               # estilo, câmera, geo↔schematic, detectWebGL
 ```
 
 **Não importar** desta feature em:
@@ -59,21 +65,23 @@ src/features/waterway-map/
 - Style local escuro (`hydro-maplibre-style.ts`): fundo + camadas GeoJSON; **sem** tiles raster comerciais pagos.
 - Glyphs de demonstração OSS (`demotiles.maplibre.org`) apenas para rótulos de cidades; hidrovia/rota/embarcação são vetores próprios.
 
-### Camadas GeoJSON mock (CARGO-001)
+### Camadas GeoJSON (V2.2b+, sources `hydroway-*`)
 
 | Camada | Source | Conteúdo |
 |--------|--------|----------|
-| Rios | `spike-rivers` | Amazonas + Pará (LineString) |
-| Rota | `spike-route-track` / `spike-route-traveled` | Belém → Santarém, trecho percorrido 15% |
-| Cidades | `spike-cities` | Pontos de contexto |
-| Origem / destino / vessel | `spike-origin`, `spike-destination`, `spike-vessel` | Extremidades + posição mock |
+| Rios | `hydroway-main-rivers` | Amazonas + Pará (kind river/tributary) |
+| Corredores | `hydroway-navigable-corridors` | Hidrovias classificadas (mock) |
+| Portos | `hydroway-ports-terminals` | Portos e terminais |
+| Rota total | `hydroway-route-track` | LineString da carga ativa |
+| Rota percorrida | `hydroway-route-traveled` | Trecho até `progress01` |
+| Origem / destino / vessel | `hydroway-origin`, `hydroway-destination`, `hydroway-vessel` | Pontos operacionais |
 
-Conversão schematic → WGS84 fictício: `utils/schematic-to-geo.ts` + `data/spike-scene-geojson.ts`.
+Adapter: `adaptCargoToHydrowayMapModel`. Spike: `resolveSpikeHydrowayMapModel(cargoId)`. SVG fallback projeta geo → schematic via `utils/geo-to-schematic.ts`.
 
 ### Controles
 
 - Zoom + / −
-- Ajustar à rota (`fitBounds` nos pontos origem, destino, vessel)
+- Ajustar à rota (`fitGeoBbox` no `model.bbox` — MapLibre; schematic no SVG)
 - Redefinir visão (câmera inicial)
 
 ### Fallback SVG
@@ -131,7 +139,7 @@ npm test
 npm run test:mock-mode
 ```
 
-Testes unitários do adapter geográfico: `tests/unit/features/waterway-map/schematic-to-geo.test.ts`.
+Testes: `cargo-to-hydroway-geo.adapter.test.ts`, `resolve-spike-hydroway-model.test.ts`, `geo-to-schematic.test.ts`, `schematic-to-geo.test.ts`.
 
 ## Rollback
 

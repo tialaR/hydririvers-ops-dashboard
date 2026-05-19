@@ -1,9 +1,11 @@
+import { hydrowayModelToScene } from '../adapters/hydroway-model-to-scene';
 import type {
   HydrowayMapCamera,
   HydrowayMapLayerId,
   HydrowayMapPoint,
   HydrowayMapProvider,
   HydrowayMapProviderInit,
+  HydrowayMapScene,
 } from './map-provider.types';
 import {
   cameraToSvgViewBox,
@@ -44,20 +46,21 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
   private camera: HydrowayMapCamera = { ...HYDRO_MAP_INITIAL_CAMERA };
   private visibleLayers = new Set<HydrowayMapLayerId>(ALL_LAYERS);
   private layerGroups = new Map<HydrowayMapLayerId, SVGGElement>();
-  private scene: HydrowayMapProviderInit['scene'] | null = null;
+  private scene: HydrowayMapScene | null = null;
   private uid = 'hydroway-spike';
 
   mount(init: HydrowayMapProviderInit): void {
     this.destroy();
     this.container = init.container;
-    this.scene = init.scene;
+    const scene = hydrowayModelToScene(init.model, init.viewBox);
+    this.scene = scene;
     this.camera = init.camera ? { ...init.camera } : { ...HYDRO_MAP_INITIAL_CAMERA };
-    this.uid = `hydroway-${Math.abs(hashString(init.scene.route.cargoId))}`;
+    this.uid = `hydroway-${Math.abs(hashString(scene.route.cargoId))}`;
 
     const svg = createSvgElement('svg', {
       class: 'hydroway-map-spike-svg',
       role: 'img',
-      'aria-label': `${init.scene.route.originLabel} → ${init.scene.route.destinationLabel}`,
+      'aria-label': `${scene.route.originLabel} → ${scene.route.destinationLabel}`,
     });
     svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
     this.svg = svg;
@@ -66,11 +69,11 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     this.appendBackdrop(svg);
     this.appendGrid(svg);
 
-    this.layerGroups.set('waterway-main', this.buildCorridorLayer(init, 0));
-    this.layerGroups.set('waterway-tributary', this.buildCorridorLayer(init, 1));
-    this.layerGroups.set('ports', this.buildCitiesLayer(init));
-    this.layerGroups.set('cargo-route', this.buildRouteLayer(init));
-    this.layerGroups.set('vessel', this.buildVesselLayer(init));
+    this.layerGroups.set('waterway-main', this.buildCorridorLayer(scene, 0));
+    this.layerGroups.set('waterway-tributary', this.buildCorridorLayer(scene, 1));
+    this.layerGroups.set('ports', this.buildCitiesLayer(scene));
+    this.layerGroups.set('cargo-route', this.buildRouteLayer(scene));
+    this.layerGroups.set('vessel', this.buildVesselLayer(scene));
 
     for (const group of this.layerGroups.values()) {
       svg.appendChild(group);
@@ -206,9 +209,9 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     svg.appendChild(grid);
   }
 
-  private buildCorridorLayer(init: HydrowayMapProviderInit, index: number): SVGGElement {
+  private buildCorridorLayer(scene: HydrowayMapScene, index: number): SVGGElement {
     const group = createSvgElement('g');
-    const corridor = init.scene.corridors[index];
+    const corridor = scene.corridors[index];
     if (!corridor) return group;
 
     group.appendChild(
@@ -245,9 +248,9 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     return group;
   }
 
-  private buildCitiesLayer(init: HydrowayMapProviderInit): SVGGElement {
+  private buildCitiesLayer(scene: HydrowayMapScene): SVGGElement {
     const group = createSvgElement('g');
-    for (const city of init.scene.cities) {
+    for (const city of scene.cities) {
       const marker = createSvgElement('g');
       marker.appendChild(
         createSvgElement('circle', {
@@ -271,8 +274,8 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     return group;
   }
 
-  private buildRouteLayer(init: HydrowayMapProviderInit): SVGGElement {
-    const { route } = init.scene;
+  private buildRouteLayer(scene: HydrowayMapScene): SVGGElement {
+    const { route } = scene;
     const group = createSvgElement('g');
 
     group.appendChild(
@@ -322,8 +325,8 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
     return group;
   }
 
-  private buildVesselLayer(init: HydrowayMapProviderInit): SVGGElement {
-    const { vessel } = init.scene.route;
+  private buildVesselLayer(scene: HydrowayMapScene): SVGGElement {
+    const { vessel } = scene.route;
     const group = createSvgElement('g', {
       transform: `translate(${vessel.x} ${vessel.y})`,
     });

@@ -107,6 +107,47 @@
   height: 100%;
 }
 
+.cargoChips {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  z-index: 2;
+  max-width: 14rem;
+}
+
+.cargoChip {
+  min-height: 1.55rem;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  border: 1px solid rgba(226, 240, 248, 0.16);
+  background: rgba(8, 14, 22, 0.82);
+  color: rgba(226, 240, 248, 0.78);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+}
+
+.cargoChip:hover {
+  border-color: rgba(47, 224, 208, 0.35);
+  color: #8ef5e8;
+}
+
+.cargoChipActive {
+  border-color: rgba(47, 224, 208, 0.45);
+  background: rgba(47, 224, 208, 0.12);
+  color: #8ef5e8;
+}
+
+.cargoChip:focus-visible {
+  outline: 2px solid rgba(47, 224, 208, 0.65);
+  outline-offset: 2px;
+}
+
 .hud {
   position: absolute;
   top: 0.75rem;
@@ -116,6 +157,7 @@
   gap: 0.45rem;
   z-index: 2;
   pointer-events: none;
+  max-width: calc(100% - 16rem);
 }
 
 .hudCard {

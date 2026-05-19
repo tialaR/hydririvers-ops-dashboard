@@ -2,7 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 
-import { SPIKE_DEFAULT_MAP_SCENE } from '../data/spike-cargo-route.mock';
+import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import { MapLibreHydrowayProvider } from '../providers/maplibre-hydroway-provider';
 import type { HydrowayMapProvider } from '../providers/map-provider.types';
 import { HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
@@ -13,6 +13,7 @@ export type HydrowayMapSpikeMaplibreViewportHandle = {
 };
 
 type HydrowayMapSpikeMaplibreViewportProps = {
+  model: HydrowayMapModel;
   onReady: () => void;
   onInitError: () => void;
 };
@@ -20,7 +21,7 @@ type HydrowayMapSpikeMaplibreViewportProps = {
 export const HydrowayMapSpikeMaplibreViewport = forwardRef<
   HydrowayMapSpikeMaplibreViewportHandle,
   HydrowayMapSpikeMaplibreViewportProps
->(function HydrowayMapSpikeMaplibreViewport({ onReady, onInitError }, ref) {
+>(function HydrowayMapSpikeMaplibreViewport({ model, onReady, onInitError }, ref) {
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const providerRef = useRef<MapLibreHydrowayProvider | null>(null);
 
@@ -38,7 +39,7 @@ export const HydrowayMapSpikeMaplibreViewport = forwardRef<
         {
           container,
           viewBox: HYDRO_MAP_VIEWBOX,
-          scene: SPIKE_DEFAULT_MAP_SCENE,
+          model,
         },
         { onReady },
       );
@@ -53,7 +54,7 @@ export const HydrowayMapSpikeMaplibreViewport = forwardRef<
       provider.destroy();
       providerRef.current = null;
     };
-  }, [onInitError, onReady]);
+  }, [model, onInitError, onReady]);
 
   return <div ref={viewportRef} className={styles.maplibreViewport} />;
 });

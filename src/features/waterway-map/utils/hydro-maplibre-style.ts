@@ -1,25 +1,46 @@
 import type { StyleSpecification } from 'maplibre-gl';
 
+import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
 import { hydroMapStyleTokens } from './hydro-map-style';
-import { SPIKE_GEOJSON_SOURCE_IDS } from '../data/spike-scene-geojson';
 
 /**
  * Style MapLibre local: fundo escuro HydroRivers, sem tiles comerciais.
- * Camadas GeoJSON são registradas pelo provider em runtime.
+ * Fontes GeoJSON V2.2b (`hydroway-*`) são preenchidas pelo provider em runtime.
  */
 export function createHydroMapLibreBaseStyle(): StyleSpecification {
+  const emptyCollection = (): GeoJSON.FeatureCollection => ({
+    type: 'FeatureCollection',
+    features: [],
+  });
+
   return {
     version: 8,
     name: 'hydroway-spike-dark',
     glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
     sources: {
-      [SPIKE_GEOJSON_SOURCE_IDS.rivers]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.routeTrack]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.routeTraveled]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.cities]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.origin]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.destination]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
-      [SPIKE_GEOJSON_SOURCE_IDS.vessel]: { type: 'geojson', data: { type: 'FeatureCollection', features: [] } },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers]: {
+        type: 'geojson',
+        data: emptyCollection(),
+      },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors]: {
+        type: 'geojson',
+        data: emptyCollection(),
+      },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals]: {
+        type: 'geojson',
+        data: emptyCollection(),
+      },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack]: {
+        type: 'geojson',
+        data: emptyCollection(),
+      },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled]: {
+        type: 'geojson',
+        data: emptyCollection(),
+      },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.origin]: { type: 'geojson', data: emptyCollection() },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.destination]: { type: 'geojson', data: emptyCollection() },
+      [HYDROWAY_GEOJSON_SOURCE_IDS.vessel]: { type: 'geojson', data: emptyCollection() },
     },
     layers: [
       {
@@ -30,8 +51,8 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'waterway-main',
         type: 'line',
-        source: SPIKE_GEOJSON_SOURCE_IDS.rivers,
-        filter: ['==', ['get', 'id'], 'amazonas'],
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+        filter: ['==', ['get', 'kind'], 'river'],
         paint: {
           'line-color': hydroMapStyleTokens.corridorStroke,
           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 4, 8, 10, 12, 16],
@@ -42,8 +63,8 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'waterway-tributary',
         type: 'line',
-        source: SPIKE_GEOJSON_SOURCE_IDS.rivers,
-        filter: ['==', ['get', 'id'], 'para'],
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers,
+        filter: ['==', ['get', 'kind'], 'tributary'],
         paint: {
           'line-color': hydroMapStyleTokens.corridorGlow,
           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3, 8, 8, 12, 12],
@@ -51,9 +72,20 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
         },
       },
       {
+        id: 'navigable-corridors',
+        type: 'line',
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors,
+        paint: {
+          'line-color': 'rgba(80, 160, 200, 0.35)',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 4, 1.5, 10, 3],
+          'line-dasharray': [2, 2],
+          'line-opacity': 0.6,
+        },
+      },
+      {
         id: 'cargo-route-track',
         type: 'line',
-        source: SPIKE_GEOJSON_SOURCE_IDS.routeTrack,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack,
         paint: {
           'line-color': hydroMapStyleTokens.routeTrack,
           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 2, 10, 5],
@@ -63,7 +95,7 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'cargo-route-traveled',
         type: 'line',
-        source: SPIKE_GEOJSON_SOURCE_IDS.routeTraveled,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled,
         paint: {
           'line-color': hydroMapStyleTokens.routeActive,
           'line-width': ['interpolate', ['linear'], ['zoom'], 4, 3, 10, 6],
@@ -73,7 +105,7 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'ports',
         type: 'circle',
-        source: SPIKE_GEOJSON_SOURCE_IDS.cities,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
         paint: {
           'circle-color': hydroMapStyleTokens.cityDot,
           'circle-radius': ['interpolate', ['linear'], ['zoom'], 4, 2, 10, 4],
@@ -81,9 +113,9 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
         },
       },
       {
-        id: 'city-labels',
+        id: 'port-labels',
         type: 'symbol',
-        source: SPIKE_GEOJSON_SOURCE_IDS.cities,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals,
         layout: {
           'text-field': ['get', 'name'],
           'text-size': 11,
@@ -100,7 +132,7 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'route-origin',
         type: 'circle',
-        source: SPIKE_GEOJSON_SOURCE_IDS.origin,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.origin,
         paint: {
           'circle-color': hydroMapStyleTokens.endpointOrigin,
           'circle-radius': 8,
@@ -112,7 +144,7 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'route-destination',
         type: 'circle',
-        source: SPIKE_GEOJSON_SOURCE_IDS.destination,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.destination,
         paint: {
           'circle-color': hydroMapStyleTokens.endpointDestination,
           'circle-radius': 8,
@@ -124,7 +156,7 @@ export function createHydroMapLibreBaseStyle(): StyleSpecification {
       {
         id: 'vessel',
         type: 'circle',
-        source: SPIKE_GEOJSON_SOURCE_IDS.vessel,
+        source: HYDROWAY_GEOJSON_SOURCE_IDS.vessel,
         paint: {
           'circle-color': hydroMapStyleTokens.accent,
           'circle-radius': 9,

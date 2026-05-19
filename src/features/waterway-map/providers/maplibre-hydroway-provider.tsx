@@ -1,14 +1,12 @@
 import maplibregl, { type LngLatBoundsLike, type Map, type StyleSpecification } from 'maplibre-gl';
 
-import { buildSpikeSceneGeoJson, SPIKE_GEOJSON_SOURCE_IDS, type SpikeGeoJsonBundle } from '../data/spike-scene-geojson';
-import { SPIKE_MAP_VIEWBOX } from '../data/spike-amazon-river.mock';
+import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
+import { HYDROWAY_MOCK_GEO_BBOX } from '../domain/hydroway-geo.types';
+import type { HydrowayGeoBbox } from '../domain/hydroway-geo.types';
+import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
 import { createHydroMapLibreBaseStyle } from '../utils/hydro-maplibre-style';
-import {
-  HYDRO_MAP_INITIAL_CAMERA,
-  HYDRO_MAP_VIEWBOX,
-  hydroMapStyleTokens,
-} from '../utils/hydro-map-style';
-import { schematicPointToLngLat, SPIKE_GEO_BBOX, type LngLat } from '../utils/schematic-to-geo';
+import { HYDRO_MAP_INITIAL_CAMERA, HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
+import { schematicPointToLngLat } from '../utils/schematic-to-geo';
 import type {
   HydrowayMapCamera,
   HydrowayMapLayerId,
@@ -31,7 +29,7 @@ const STYLE_LAYER_BY_DOMAIN: Record<HydrowayMapLayerId, string[]> = {
   'waterway-main': ['waterway-main'],
   'waterway-tributary': ['waterway-tributary'],
   'cargo-route': ['cargo-route-track', 'cargo-route-traveled', 'route-origin', 'route-destination'],
-  ports: ['ports', 'city-labels'],
+  ports: ['ports', 'port-labels', 'navigable-corridors'],
   vessel: ['vessel'],
 };
 
@@ -44,23 +42,24 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private container: HTMLElement | null = null;
   private camera: HydrowayMapCamera = { ...HYDRO_MAP_INITIAL_CAMERA };
   private visibleLayers = new Set<HydrowayMapLayerId>(ALL_LAYERS);
-  private geojson: SpikeGeoJsonBundle | null = null;
+  private geo: HydrowayGeoJsonSources | null = null;
   private initFailed = false;
 
   mount(init: HydrowayMapProviderInit, hooks?: { onReady?: () => void }): void {
     this.destroy();
     this.container = init.container;
     this.camera = init.camera ? { ...init.camera } : { ...HYDRO_MAP_INITIAL_CAMERA };
-    this.geojson = buildSpikeSceneGeoJson(init.scene);
+    this.geo = init.model.geo;
     this.initFailed = false;
 
+    const viewBox = init.viewBox ?? HYDRO_MAP_VIEWBOX;
     const style = createHydroMapLibreBaseStyle() as StyleSpecification;
     const center = schematicPointToLngLat(
       {
-        x: HYDRO_MAP_VIEWBOX.width / 2,
-        y: HYDRO_MAP_VIEWBOX.height / 2,
+        x: viewBox.width / 2,
+        y: viewBox.height / 2,
       },
-      init.viewBox,
+      viewBox,
     );
 
     try {
@@ -82,10 +81,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
         if (init.camera) {
           this.setCamera(init.camera);
         } else {
-          this.fitBounds(
-            [init.scene.route.origin, init.scene.route.destination, init.scene.route.vessel],
-            80,
-          );
+          this.fitGeoBbox(init.model.bbox, 80);
         }
         hooks?.onReady?.();
       });
@@ -125,6 +121,21 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     ];
 
     map.fitBounds(bounds, { padding, duration: 0, maxZoom: 10.5 });
+    this.camera = boundsToSchematicCamera(map.getBounds());
+  }
+
+  fitGeoBbox(bbox: HydrowayGeoBbox, padding = 72): void {
+    const map = this.map;
+    if (!map) return;
+
+    const [west, south, east, north] = bbox;
+    map.fitBounds(
+      [
+        [west, south],
+        [east, north],
+      ],
+      { padding, duration: 0, maxZoom: 10.5 },
+    );
     this.camera = boundsToSchematicCamera(map.getBounds());
   }
 
@@ -168,15 +179,15 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.map = null;
     this.container?.replaceChildren();
     this.container = null;
-    this.geojson = null;
+    this.geo = null;
     this.camera = { ...HYDRO_MAP_INITIAL_CAMERA };
     this.visibleLayers = new Set(ALL_LAYERS);
     this.initFailed = false;
   }
 
   private applyGeoJson(map: Map): void {
-    const geojson = this.geojson;
-    if (!geojson) return;
+    const geo = this.geo;
+    if (!geo) return;
 
     const setSource = (sourceId: string, data: GeoJSON.FeatureCollection) => {
       const source = map.getSource(sourceId);
@@ -185,13 +196,14 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       }
     };
 
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.rivers, geojson.rivers);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.routeTrack, geojson.routeTrack);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.routeTraveled, geojson.routeTraveled);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.cities, geojson.cities);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.origin, geojson.origin);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.destination, geojson.destination);
-    setSource(SPIKE_GEOJSON_SOURCE_IDS.vessel, geojson.vessel);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers, geo.mainRivers);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors, geo.navigableCorridors);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.portsTerminals, geo.portsTerminals);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack, geo.routeTrack);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled, geo.routeTraveled);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.origin, geo.origin);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.destination, geo.destination);
+    setSource(HYDROWAY_GEOJSON_SOURCE_IDS.vessel, geo.vessel);
   }
 
   private syncLayerVisibility(map: Map): void {
@@ -206,7 +218,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
 }
 
 function boundsToSchematicCamera(bounds: maplibregl.LngLatBounds): HydrowayMapCamera {
-  const { west, east, south, north } = SPIKE_GEO_BBOX;
+  const { west, east, south, north } = HYDROWAY_MOCK_GEO_BBOX;
   const sw = bounds.getSouthWest();
   const ne = bounds.getNorthEast();
 

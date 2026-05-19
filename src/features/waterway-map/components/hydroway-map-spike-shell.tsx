@@ -1,5 +1,10 @@
+import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import { HydrowayMapSpikeShellClient } from './hydroway-map-spike-shell-client';
 
-export function HydrowayMapSpikeShell() {
-  return <HydrowayMapSpikeShellClient />;
+type HydrowayMapSpikeShellProps = {
+  model: HydrowayMapModel;
+};
+
+export function HydrowayMapSpikeShell({ model }: HydrowayMapSpikeShellProps) {
+  return <HydrowayMapSpikeShellClient model={model} />;
 }

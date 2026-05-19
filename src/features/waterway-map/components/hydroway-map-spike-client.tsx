@@ -1,10 +1,12 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useSearchParams } from 'next/navigation';
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 
-import { SPIKE_DEFAULT_MAP_SCENE } from '../data/spike-cargo-route.mock';
+import { hydrowayModelToScene } from '../adapters/hydroway-model-to-scene';
+import { HYDROWAY_DEMO_CARGO_IDS } from '../domain/hydroway-entities.types';
+import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import {
   getMapLibreZoomPercent,
   MapLibreHydrowayProvider,
@@ -30,12 +32,17 @@ const HydrowayMapSpikeMaplibreViewport = dynamic(
 export type HydrowaySpikeProviderMode = 'maplibre' | 'svg-schematic';
 
 type HydrowayMapSpikeClientProps = {
+  model: HydrowayMapModel;
   preferredProvider: HydrowaySpikeProviderMode;
 };
 
-export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeClientProps) {
+export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMapSpikeClientProps) {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
   const forceSvgFallback = searchParams.get('forceSvgFallback') === '1';
+
+  const schematicScene = useMemo(() => hydrowayModelToScene(model), [model]);
 
   const svgViewportRef = useRef<HTMLDivElement | null>(null);
   const svgProviderRef = useRef<SvgSchematicHydrowayProvider | null>(null);
@@ -88,7 +95,7 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
     provider.mount({
       container,
       viewBox: HYDRO_MAP_VIEWBOX,
-      scene: SPIKE_DEFAULT_MAP_SCENE,
+      model,
     });
     svgProviderRef.current = provider;
     setMaplibreReady(false);
@@ -98,7 +105,7 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
       provider.destroy();
       svgProviderRef.current = null;
     };
-  }, [showMapLibre, syncZoomLabel]);
+  }, [model, showMapLibre, syncZoomLabel]);
 
   const handleMaplibreReady = useCallback(() => {
     setMaplibreMountFailed(false);
@@ -151,23 +158,33 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
   }, [getMapLibreProvider, showMapLibre, syncZoomLabel]);
 
   const handleFitRoute = useCallback(() => {
-    const { route } = SPIKE_DEFAULT_MAP_SCENE;
-    const points = [route.origin, route.destination, route.vessel];
-
     if (showMapLibre) {
-      getMapLibreProvider()?.fitBounds(points);
+      getMapLibreProvider()?.fitGeoBbox(model.bbox);
       syncZoomLabel();
       return;
     }
 
     const provider = svgProviderRef.current;
     if (!provider) return;
-    provider.fitBounds(points);
+    const { origin, destination, vessel } = schematicScene.route;
+    provider.fitBounds([origin, destination, vessel]);
     syncZoomLabel();
-  }, [getMapLibreProvider, showMapLibre, syncZoomLabel]);
+  }, [getMapLibreProvider, model.bbox, schematicScene.route, showMapLibre, syncZoomLabel]);
 
-  const progressPercent = Math.round(SPIKE_DEFAULT_MAP_SCENE.route.progress01 * 100);
-  const routeLabel = `${SPIKE_DEFAULT_MAP_SCENE.route.originLabel} → ${SPIKE_DEFAULT_MAP_SCENE.route.destinationLabel}`;
+  const selectCargo = useCallback(
+    (cargoId: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('cargoId', cargoId);
+      if (forceSvgFallback) {
+        params.set('forceSvgFallback', '1');
+      }
+      router.replace(`${pathname}?${params.toString()}`);
+    },
+    [forceSvgFallback, pathname, router, searchParams],
+  );
+
+  const progressPercent = Math.round(model.progress01 * 100);
+  const routeLabel = model.metadata.routeName;
 
   const providerLabel = activeProviderKind === 'maplibre' ? 'MapLibre GL' : 'SVG schematic';
 
@@ -180,7 +197,7 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
         : '';
 
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.1c">
+    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.2c">
       <div className={styles.hud}>
         <div className={styles.hudCard}>
           <span className={styles.hudLabel}>Progresso</span>
@@ -194,6 +211,24 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
           <span className={styles.hudLabel}>Provider</span>
           <span className={styles.hudValue}>{providerLabel}</span>
         </div>
+        <div className={styles.hudCard}>
+          <span className={styles.hudLabel}>Corredor</span>
+          <span className={styles.hudValue}>{model.corridorId}</span>
+        </div>
+      </div>
+
+      <div className={styles.cargoChips} role="group" aria-label="Selecionar carga demo">
+        {HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => (
+          <button
+            key={cargoId}
+            type="button"
+            className={`${styles.cargoChip} ${model.cargoId === cargoId ? styles.cargoChipActive : ''}`}
+            onClick={() => selectCargo(cargoId)}
+            aria-pressed={model.cargoId === cargoId}
+          >
+            {cargoId}
+          </button>
+        ))}
       </div>
 
       <div className={styles.controls}>
@@ -214,6 +249,7 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
       {showMapLibre ? (
         <HydrowayMapSpikeMaplibreViewport
           ref={maplibreViewportRef}
+          model={model}
           onReady={handleMaplibreReady}
           onInitError={handleMaplibreInitError}
         />
@@ -222,7 +258,8 @@ export function HydrowayMapSpikeClient({ preferredProvider }: HydrowayMapSpikeCl
       )}
 
       <p className={styles.statusBar}>
-        Amazonas • {SPIKE_DEFAULT_MAP_SCENE.route.cargoId} • provider {activeProviderKind} • zoom {zoomPercent}%
+        {model.corridorId} • {model.cargoId} • {model.metadata.routeSource} • provider {activeProviderKind} • zoom{' '}
+        {zoomPercent}%
         {webglReady ? ' • WebGL ok' : ' • WebGL indisponível'}
         {fallbackNote}
       </p>
