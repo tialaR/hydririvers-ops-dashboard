@@ -63,6 +63,28 @@
   color: rgba(226, 240, 248, 0.72);
 }
 
+.badgeButton {
+  cursor: pointer;
+  font: inherit;
+}
+
+.badgeActive {
+  border-color: rgba(47, 224, 208, 0.45);
+  background: rgba(47, 224, 208, 0.14);
+  color: #8ef5e8;
+}
+
+.maplibreViewport {
+  position: absolute;
+  inset: 0;
+}
+
+.maplibreViewport :global(.maplibregl-map),
+.maplibreViewport :global(.maplibregl-canvas) {
+  width: 100%;
+  height: 100%;
+}
+
 .stage {
   position: relative;
   flex: 1;
