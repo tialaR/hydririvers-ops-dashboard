@@ -33,7 +33,11 @@ describe('hydroway mock geojson schema', () => {
 
   it('expõe rios, corredores e portos/terminais com kinds esperados', () => {
     const rivers = loadHydrowayMainRiversMock();
-    expect(rivers.features.map((f) => f.properties?.kind).sort()).toEqual(['river', 'tributary']);
+    const riverKinds = [...new Set(rivers.features.map((f) => f.properties?.kind))].sort();
+    expect(riverKinds).toEqual(['river', 'secondary', 'tributary']);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'river').length).toBeGreaterThanOrEqual(1);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'tributary').length).toBeGreaterThanOrEqual(3);
+    expect(rivers.features.filter((f) => f.properties?.kind === 'secondary').length).toBeGreaterThanOrEqual(2);
 
     const corridors = loadHydrowayNavigableCorridorsMock();
     expect(corridors.features.every((f) => f.properties?.kind === 'corridor')).toBe(true);
