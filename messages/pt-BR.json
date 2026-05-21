@@ -1544,7 +1544,16 @@
         "logisticsCorridor": "Corredor logístico",
         "regionalInfluence": "Influência regional",
         "region": "Região"
-      }
+      },
+      "routeMarkerOrigin": "Origem da carga",
+      "routeMarkerDestination": "Destino da carga",
+      "currentCargoLocation": "Local atual da carga",
+      "focusOrigin": "Focar origem",
+      "focusOriginAria": "Focar no ponto de origem da carga",
+      "focusDestination": "Focar destino",
+      "focusDestinationAria": "Focar no ponto de destino da carga",
+      "focusCurrentCargo": "Focar carga atual",
+      "focusCurrentCargoAria": "Focar no local atual da carga"
     },
     "mapTracking": {
       "title": "Rota hidroviária",
