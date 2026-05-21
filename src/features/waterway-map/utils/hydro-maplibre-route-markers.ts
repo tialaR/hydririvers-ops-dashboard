@@ -1,9 +1,9 @@
 import maplibregl, { type Map } from 'maplibre-gl';
 
 import {
-  HYDRI_ROUTE_DESTINATION_MARKER_SVG_URL,
-  HYDRI_ROUTE_ORIGIN_MARKER_SVG_URL,
-  HYDRI_ROUTE_VESSEL_MARKER_SVG_URL,
+  HYDRIRIVERS_CURRENT_CARGO_SVG_URL,
+  HYDRIRIVERS_DESTINATION_RADAR_SVG_URL,
+  HYDRIRIVERS_ORIGIN_RADAR_SVG_URL,
 } from '../constants/hydro-route-marker-assets';
 
 export type RouteMarkerKind = 'origin' | 'destination' | 'vessel';
@@ -11,28 +11,16 @@ export type RouteMarkerKind = 'origin' | 'destination' | 'vessel';
 export type RouteMarkerAriaLabels = Partial<Record<RouteMarkerKind, string>>;
 
 const ROUTE_MARKER_SVG_URL: Record<RouteMarkerKind, string> = {
-  origin: HYDRI_ROUTE_ORIGIN_MARKER_SVG_URL,
-  destination: HYDRI_ROUTE_DESTINATION_MARKER_SVG_URL,
-  vessel: HYDRI_ROUTE_VESSEL_MARKER_SVG_URL,
+  origin: HYDRIRIVERS_ORIGIN_RADAR_SVG_URL,
+  destination: HYDRIRIVERS_DESTINATION_RADAR_SVG_URL,
+  vessel: HYDRIRIVERS_CURRENT_CARGO_SVG_URL,
 };
 
 const ROUTE_MARKER_ROOT_CLASS: Record<RouteMarkerKind, string> = {
-  origin:
-    'hydriRouteMarker hydriRouteMarkerOrigin routeMarker originMarker originRouteMarker',
+  origin: 'hydriRouteIdentificationMarker hydriRouteIdentificationMarkerOrigin',
   destination:
-    'hydriRouteMarker hydriRouteMarkerDestination routeMarker destinationMarker destinationRouteMarker',
-  vessel:
-    'hydriRouteMarker hydriRouteMarkerVessel routeMarker vesselMarker hydriCurrentCargoMarker vesselRouteMarker',
-};
-
-/**
- * Radar SVGs use viewBox 0 0 64 64 but the pulse core sits at cy=40 (not 32).
- * Wrapper class shifts artwork so MapLibre anchor:center hits the visible dot.
- */
-const ROUTE_MARKER_SVG_ANCHOR_CLASS: Record<RouteMarkerKind, string> = {
-  origin: 'hydriRouteMarkerSvgAnchor hydriRouteMarkerSvgAnchorOrigin',
-  destination: 'hydriRouteMarkerSvgAnchor hydriRouteMarkerSvgAnchorDestination',
-  vessel: 'hydriRouteMarkerSvgAnchor hydriRouteMarkerSvgAnchorVessel',
+    'hydriRouteIdentificationMarker hydriRouteIdentificationMarkerDestination',
+  vessel: 'hydriRouteIdentificationMarker hydriRouteIdentificationMarkerCurrentCargo',
 };
 
 /** Classes CSS dos marcadores HTML (spike MapLibre viewport). */
@@ -63,7 +51,7 @@ export async function prefetchHydrowayRouteMarkerSvgs(): Promise<HydrowayRouteMa
         if (kind === 'vessel') svgs.vesselSvg = markup;
         if (kind === 'destination') svgs.destinationSvg = markup;
       } catch {
-        // Fallback text in syncRouteMarkers remains.
+        // img fallback remains in syncRouteMarkers.
       }
     }),
   );
@@ -82,125 +70,76 @@ function isValidLngLat(coordinates: GeoJSON.Position | null | undefined): coordi
   return Number.isFinite(lng) && Number.isFinite(lat);
 }
 
-function decorateMarkerSvg(element: HTMLDivElement, ariaLabel: string | undefined): void {
+function decorateMarkerSvg(element: HTMLDivElement): void {
   const svg = element.querySelector('svg');
   if (!svg) return;
-  if (ariaLabel) {
-    svg.setAttribute('aria-hidden', 'true');
-    svg.removeAttribute('role');
-    svg.removeAttribute('aria-labelledby');
-  }
+  svg.setAttribute('aria-hidden', 'true');
+  svg.removeAttribute('role');
+  svg.removeAttribute('aria-labelledby');
 }
 
 function appendMarkerGraphic(
-  iconWrap: HTMLElement,
+  element: HTMLDivElement,
   kind: RouteMarkerKind,
   options: { svgHtml?: string | null },
 ): void {
-  const anchor = document.createElement('span');
-  anchor.className = ROUTE_MARKER_SVG_ANCHOR_CLASS[kind];
-  anchor.setAttribute('aria-hidden', 'true');
-
   const markup = options.svgHtml?.trim();
   if (markup) {
-    anchor.insertAdjacentHTML('beforeend', markup);
-    iconWrap.appendChild(anchor);
+    element.insertAdjacentHTML('beforeend', markup);
     return;
   }
 
   const img = document.createElement('img');
-  img.className = 'hydriRouteMarkerImg';
   img.src = ROUTE_MARKER_SVG_URL[kind];
   img.alt = '';
   img.setAttribute('aria-hidden', 'true');
   img.decoding = 'async';
-  anchor.appendChild(img);
-  iconWrap.appendChild(anchor);
+  element.appendChild(img);
 }
 
-export function createRoutePointerMarkerElement(
+export function createRouteIdentificationMarkerElement(
   kind: RouteMarkerKind,
   options: {
     svgHtml?: string | null;
-    ariaLabel?: string;
-  },
+  } = {},
 ): HTMLDivElement {
   const element = document.createElement('div');
   element.className = ROUTE_MARKER_ROOT_CLASS[kind];
+  element.setAttribute('aria-hidden', 'true');
   element.style.pointerEvents = 'none';
-  element.style.position = 'relative';
-  element.style.transformOrigin = 'center center';
 
-  const ariaLabel = options.ariaLabel?.trim();
-  if (ariaLabel) {
-    element.setAttribute('role', 'img');
-    element.setAttribute('aria-label', ariaLabel);
-  } else {
-    element.setAttribute('aria-hidden', 'true');
-  }
+  appendMarkerGraphic(element, kind, { svgHtml: options.svgHtml });
+  decorateMarkerSvg(element);
 
-  const iconWrap = document.createElement('span');
-  iconWrap.className = 'markerIcon hydriRouteMarkerIcon';
-  iconWrap.setAttribute('aria-hidden', 'true');
-
-  const fallback = document.createElement('span');
-  fallback.className = 'hydriRouteMarkerFallback';
-  fallback.setAttribute('aria-hidden', 'true');
-  iconWrap.appendChild(fallback);
-
-  appendMarkerGraphic(iconWrap, kind, { svgHtml: options.svgHtml });
-  decorateMarkerSvg(element, ariaLabel);
-
-  element.appendChild(iconWrap);
   return element;
 }
+
+/** @deprecated Prefer `createRouteIdentificationMarkerElement`. */
+export const createRoutePointerMarkerElement = createRouteIdentificationMarkerElement;
 
 export type SyncRouteMarkersInput = {
   map: Map;
   origin: GeoJSON.Position | null;
   destination: GeoJSON.Position | null;
   vessel: GeoJSON.Position | null;
-  ariaLabels?: RouteMarkerAriaLabels;
   visibleKinds?: ReadonlySet<RouteMarkerKind>;
 };
 
 /**
- * Keeps origin / destination / vessel HTML markers in sync (create once, update lngLat).
+ * Keeps origin / destination / current-cargo HTML markers in sync (create once, update lngLat).
  * Uses `maplibregl.Marker({ element })` so inline SVG/CSS animations stay alive.
  */
 export class HydroMapLibreRouteMarkers {
   private readonly slots: Partial<Record<RouteMarkerKind, MarkerSlot>> = {};
   private readonly svgHtml: Partial<Record<RouteMarkerKind, string>> = {};
-  private ariaLabels: RouteMarkerAriaLabels = {};
   private visibleKinds = new Set<RouteMarkerKind>(['origin', 'destination', 'vessel']);
 
-  setAriaLabels(labels: RouteMarkerAriaLabels): void {
-    this.ariaLabels = { ...labels };
-    for (const kind of ['origin', 'destination', 'vessel'] as const) {
-      const slot = this.slots[kind];
-      const label = this.ariaLabels[kind]?.trim();
-      if (!slot) continue;
-      if (label) {
-        slot.element.setAttribute('role', 'img');
-        slot.element.setAttribute('aria-label', label);
-        slot.element.removeAttribute('aria-hidden');
-      } else {
-        slot.element.removeAttribute('role');
-        slot.element.removeAttribute('aria-label');
-        slot.element.setAttribute('aria-hidden', 'true');
-      }
-      decorateMarkerSvg(slot.element, label);
-    }
-  }
-
-  setVisibleKinds(kinds: ReadonlySet<RouteMarkerKind>): void {
-    this.visibleKinds = new Set(kinds);
-    this.applyVisibility();
+  getMarker(kind: RouteMarkerKind): maplibregl.Marker | null {
+    return this.slots[kind]?.marker ?? null;
   }
 
   destroy(): void {
     this.removeAll();
-    this.ariaLabels = {};
   }
 
   setPrefetchedSvgs(svgs: HydrowayRouteMarkerSvgs): void {
@@ -220,9 +159,6 @@ export class HydroMapLibreRouteMarkers {
 
   sync(input: SyncRouteMarkersInput): void {
     const { map } = input;
-    if (input.ariaLabels) {
-      this.setAriaLabels(input.ariaLabels);
-    }
     if (input.visibleKinds) {
       this.visibleKinds = new Set(input.visibleKinds);
     }
@@ -237,13 +173,11 @@ export class HydroMapLibreRouteMarkers {
     const slot = this.slots[kind];
     const markup = this.svgHtml[kind];
     if (!slot || !markup) return;
+    if (slot.element.querySelector('svg')) return;
 
-    const iconWrap = slot.element.querySelector('.hydriRouteMarkerIcon, .markerIcon');
-    if (!iconWrap || iconWrap.querySelector('.hydriRouteMarkerSvgAnchor svg')) return;
-
-    iconWrap.querySelector('.hydriRouteMarkerSvgAnchor')?.remove();
-    appendMarkerGraphic(iconWrap as HTMLElement, kind, { svgHtml: markup });
-    decorateMarkerSvg(slot.element, this.ariaLabels[kind]);
+    slot.element.replaceChildren();
+    appendMarkerGraphic(slot.element, kind, { svgHtml: markup });
+    decorateMarkerSvg(slot.element);
   }
 
   private syncKind(
@@ -260,9 +194,8 @@ export class HydroMapLibreRouteMarkers {
     const existing = this.slots[kind];
 
     if (!existing) {
-      const element = createRoutePointerMarkerElement(kind, {
+      const element = createRouteIdentificationMarkerElement(kind, {
         svgHtml: this.svgHtml[kind],
-        ariaLabel: this.ariaLabels[kind],
       });
       const marker = new maplibregl.Marker({ element, anchor: 'center', offset: [0, 0] })
         .setLngLat([lng, lat])

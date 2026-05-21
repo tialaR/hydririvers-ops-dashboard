@@ -802,15 +802,15 @@ const ROUTE_MARKER_LAYER_IDS_BY_KIND: Record<
 
 export function syncRouteMarkerLayerVisibility(
   map: Map | null | undefined,
-  visibleKinds: ReadonlySet<RouteMarkerKind>,
+  _visibleKinds?: ReadonlySet<RouteMarkerKind>,
 ): void {
   if (!isMapLibreOverlayMapUsable(map) || !map.loaded()) return;
 
+  // HTML identification markers replace canvas dots; keep geometry sources intact.
   for (const kind of ['origin', 'destination', 'vessel'] as const) {
-    const visible = visibleKinds.has(kind);
     const layerIds = ROUTE_MARKER_LAYER_IDS_BY_KIND[kind];
-    setLayoutIfLayerExists(map, layerIds.pulse, 'visibility', visible ? 'visible' : 'none');
-    setLayoutIfLayerExists(map, layerIds.core, 'visibility', visible ? 'visible' : 'none');
+    setLayoutIfLayerExists(map, layerIds.pulse, 'visibility', 'none');
+    setLayoutIfLayerExists(map, layerIds.core, 'visibility', 'none');
   }
 }
 
