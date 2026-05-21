@@ -1,6 +1,9 @@
 import type { LngLatBoundsLike, Map, PaddingOptions } from 'maplibre-gl';
 
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
+import { resolveEffectiveRouteTrack } from './hydro-maplibre-geo';
+import { resolveRouteMarkerCoordinates } from './route-marker-geometry';
+import { prefersReducedMotion } from './hydro-motion';
 
 export type HydrowayCameraChapterId = 'overview' | 'origin' | 'current' | 'destination';
 
@@ -33,13 +36,13 @@ const DEFAULT_FIT_PADDING: PaddingOptions = {
 
 const DEFAULT_OVERVIEW_PITCH = 30;
 const DEFAULT_OVERVIEW_BEARING = 0;
-const DEFAULT_FLY_DURATION_MS = 1800;
+const DEFAULT_FLY_DURATION_MS = 2400;
+const DEFAULT_CURRENT_FLY_DURATION_MS = 2600;
 const DEFAULT_FIT_DURATION_MS = 1400;
 
-function extractPointCoord(collection: GeoJSON.FeatureCollection): [number, number] | null {
-  const feature = collection.features[0];
-  if (!feature || feature.geometry.type !== 'Point') return null;
-  const [lng, lat] = feature.geometry.coordinates;
+function asLngLat(coordinates: GeoJSON.Position | null | undefined): [number, number] | null {
+  if (!coordinates || coordinates.length < 2) return null;
+  const [lng, lat] = coordinates;
   if (typeof lng !== 'number' || typeof lat !== 'number') return null;
   return [lng, lat];
 }
@@ -72,12 +75,25 @@ function resolveRouteBounds(
 export function buildHydrowayCameraChapters(
   geo: HydrowayGeoJsonSources,
   routeBbox?: readonly [number, number, number, number] | null,
-  options?: { maxZoom?: number; padding?: PaddingOptions },
+  options?: {
+    maxZoom?: number;
+    padding?: PaddingOptions;
+    /** Progress along route — aligns "current" chapter with the HTML boat marker. */
+    progress01?: number;
+    routeTrackCoords?: GeoJSON.Position[];
+  },
 ): Partial<Record<HydrowayCameraChapterId, HydrowayCameraChapter>> {
   const bounds = resolveRouteBounds(geo.routeTrack, routeBbox);
-  const origin = extractPointCoord(geo.origin);
-  const destination = extractPointCoord(geo.destination);
-  const vessel = extractPointCoord(geo.vessel);
+  const routeTrackCoords = options?.routeTrackCoords ?? [];
+  const track = resolveEffectiveRouteTrack(geo, routeTrackCoords);
+  const progress01 =
+    typeof options?.progress01 === 'number' && Number.isFinite(options.progress01)
+      ? options.progress01
+      : 0;
+  const markers = resolveRouteMarkerCoordinates(track, progress01);
+  const origin = asLngLat(markers.origin);
+  const destination = asLngLat(markers.destination);
+  const vessel = asLngLat(markers.vessel);
 
   const chapters: Partial<Record<HydrowayCameraChapterId, HydrowayCameraChapter>> = {};
 
@@ -97,9 +113,9 @@ export function buildHydrowayCameraChapters(
     chapters.origin = {
       kind: 'point',
       center: origin,
-      zoom: 9.8,
-      pitch: 42,
-      bearing: -12,
+      zoom: 10,
+      pitch: 35,
+      bearing: 30,
       duration: DEFAULT_FLY_DURATION_MS,
     };
   }
@@ -108,10 +124,10 @@ export function buildHydrowayCameraChapters(
     chapters.current = {
       kind: 'point',
       center: vessel,
-      zoom: 10.4,
-      pitch: 44,
-      bearing: -8,
-      duration: DEFAULT_FLY_DURATION_MS,
+      zoom: 12,
+      pitch: 45,
+      bearing: 60,
+      duration: DEFAULT_CURRENT_FLY_DURATION_MS,
     };
   }
 
@@ -119,9 +135,9 @@ export function buildHydrowayCameraChapters(
     chapters.destination = {
       kind: 'point',
       center: destination,
-      zoom: 9.8,
-      pitch: 42,
-      bearing: 8,
+      zoom: 10,
+      pitch: 35,
+      bearing: 120,
       duration: DEFAULT_FLY_DURATION_MS,
     };
   }
@@ -129,8 +145,39 @@ export function buildHydrowayCameraChapters(
   return chapters;
 }
 
-export function flyToHydrowayCameraChapter(map: Map, chapter: HydrowayCameraChapter): void {
+function jumpToHydrowayCameraChapter(map: Map, chapter: HydrowayCameraChapter): void {
+  if (chapter.kind === 'bounds') {
+    map.fitBounds(chapter.bounds, {
+      padding: chapter.padding ?? DEFAULT_FIT_PADDING,
+      maxZoom: chapter.maxZoom ?? 10.5,
+      pitch: chapter.pitch ?? DEFAULT_OVERVIEW_PITCH,
+      bearing: chapter.bearing ?? DEFAULT_OVERVIEW_BEARING,
+      duration: 0,
+      essential: true,
+    });
+    return;
+  }
+
+  map.jumpTo({
+    center: chapter.center,
+    zoom: chapter.zoom,
+    bearing: chapter.bearing ?? map.getBearing(),
+    pitch: chapter.pitch ?? map.getPitch(),
+  });
+}
+
+/** Flies the map to a cargo chapter; uses jump when reduced motion is preferred. */
+export function flyToHydrowayCameraChapter(
+  map: Map,
+  chapter: HydrowayCameraChapter,
+  reducedMotion = prefersReducedMotion(),
+): void {
   map.stop();
+
+  if (reducedMotion) {
+    jumpToHydrowayCameraChapter(map, chapter);
+    return;
+  }
 
   if (chapter.kind === 'bounds') {
     map.fitBounds(chapter.bounds, {

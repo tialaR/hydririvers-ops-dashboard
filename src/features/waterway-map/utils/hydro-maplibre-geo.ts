@@ -7,6 +7,7 @@ import {
   resolveHydrowayWaterwayDisplayLabel,
   sanitizeHydrowayDisplayLabel,
 } from './hydro-maplibre-labels';
+import { sanitizeRouteLineStringCoordinates } from './route-marker-geometry';
 
 type GeoProperties = Record<string, unknown>;
 
@@ -107,8 +108,26 @@ export function enrichHydrowayGeoForMapLibre(
   };
 }
 
+/** LineString sanitizada (apenas pares lng/lat finitos). */
+export const sanitizeRouteTrackCoordinates = sanitizeRouteLineStringCoordinates;
+
 export function extractRouteTrackCoordinates(geo: HydrowayGeoJsonSources): GeoJSON.Position[] {
   const feature = geo.routeTrack.features[0];
   if (!feature || feature.geometry.type !== 'LineString') return [];
-  return feature.geometry.coordinates;
+  return sanitizeRouteTrackCoordinates(feature.geometry.coordinates);
+}
+
+/**
+ * Fonte de verdade da rota desenhada: parâmetro explícito ou LineString do GeoJSON.
+ * Retorna [] quando não há trecho válido (menos de 2 vértices).
+ */
+export function resolveEffectiveRouteTrack(
+  geo: HydrowayGeoJsonSources,
+  routeTrackCoords: GeoJSON.Position[] = [],
+): GeoJSON.Position[] {
+  const fromParam = sanitizeRouteTrackCoordinates(routeTrackCoords);
+  if (fromParam.length >= 2) return fromParam;
+
+  const fromGeo = extractRouteTrackCoordinates(geo);
+  return fromGeo.length >= 2 ? fromGeo : [];
 }

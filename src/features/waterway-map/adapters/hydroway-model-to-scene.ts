@@ -4,10 +4,10 @@ import type { HydrowayMapScene, HydrowayMapViewBox } from '../providers/map-prov
 import { HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
 import {
   extractLineStringCoordinates,
-  extractPointCoordinate,
   lineStringToSvgPathD,
   lngLatToSchematicPoint,
 } from '../utils/geo-to-schematic';
+import { resolveRouteMarkerCoordinates } from '../utils/route-marker-geometry';
 
 /** Converte HydrowayMapModel (V2.2b) em cena schematic para o provider SVG. */
 export function hydrowayModelToScene(
@@ -47,10 +47,10 @@ export function hydrowayModelToScene(
 
   const routeTrack = extractLineStringCoordinates(model.geo.routeTrack);
   const routeTraveled = extractLineStringCoordinates(model.geo.routeTraveled);
-  const originCoord = extractPointCoordinate(model.geo.origin) ?? routeTrack[0] ?? [0, 0];
-  const destinationCoord =
-    extractPointCoordinate(model.geo.destination) ?? routeTrack[routeTrack.length - 1] ?? [0, 0];
-  const vesselCoord = extractPointCoordinate(model.geo.vessel) ?? originCoord;
+  const markers = resolveRouteMarkerCoordinates(routeTrack, model.progress01);
+  const originCoord = markers.origin ?? routeTrack[0] ?? [0, 0];
+  const destinationCoord = markers.destination ?? routeTrack[routeTrack.length - 1] ?? originCoord;
+  const vesselCoord = markers.vessel ?? originCoord;
 
   return {
     corridors,

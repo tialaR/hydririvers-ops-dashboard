@@ -2,6 +2,12 @@ import {
   HYDROWAY_MOCK_GEO_BBOX,
   type HydrowayGeoBbox,
 } from '../domain/hydroway-geo.types';
+import {
+  getCoordinateAtRouteProgress,
+  normalizeRouteProgress,
+  resolveRouteMarkerCoordinates,
+  sanitizeRouteLineStringCoordinates,
+} from '../utils/route-marker-geometry';
 
 export type HydrowayRouteGeometry = {
   routeTrack: GeoJSON.Position[];
@@ -169,13 +175,17 @@ export function buildHydrowayRouteGeometry(
   routeTrack: GeoJSON.Position[],
   progress01: number,
 ): HydrowayRouteGeometry {
-  const normalizedTrack = routeTrack.map(
+  const normalizedTrack = sanitizeRouteLineStringCoordinates(routeTrack).map(
     (coord) => [roundCoord(coord[0]), roundCoord(coord[1])] as GeoJSON.Position,
   );
-  const safeProgress = clamp(progress01, 0, 1);
-  const origin = normalizedTrack[0] ?? [0, 0];
-  const destination = normalizedTrack[normalizedTrack.length - 1] ?? origin;
-  const vessel = pointAtPolylineProgress(normalizedTrack, safeProgress);
+  const safeProgress = normalizeRouteProgress(progress01);
+  const markers = resolveRouteMarkerCoordinates(normalizedTrack, safeProgress);
+  const origin = markers.origin ?? normalizedTrack[0] ?? [0, 0];
+  const destination = markers.destination ?? origin;
+  const vessel =
+    markers.vessel ??
+    getCoordinateAtRouteProgress(normalizedTrack, safeProgress) ??
+    pointAtPolylineProgress(normalizedTrack, safeProgress);
   const routeTraveled = slicePolylineAtProgress(normalizedTrack, safeProgress);
   const bboxPositions = [...normalizedTrack, vessel];
 

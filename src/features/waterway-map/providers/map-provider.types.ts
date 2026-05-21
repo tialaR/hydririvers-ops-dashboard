@@ -28,6 +28,11 @@ export type HydrowayMapLayerId =
   | 'ports'
   | 'vessel';
 
+export type HydrowayLayerToggleResult = {
+  appliedLayerCount: number;
+  hydrographyAvailable: boolean;
+};
+
 export type HydrowayRiverCorridorScene = {
   id: string;
   label: string;
@@ -65,6 +70,12 @@ export type HydrowayMapProviderInit = {
   model: HydrowayMapModel;
   viewBox?: HydrowayMapViewBox;
   camera?: HydrowayMapCamera;
+  /** Accessible name for the HTML marker at current cargo / vessel position (MapLibre). */
+  currentCargoMarkerAriaLabel?: string;
+  /** Accessible name for the animated origin marker (MapLibre). */
+  originMarkerAriaLabel?: string;
+  /** Accessible name for the animated destination marker (MapLibre). */
+  destinationMarkerAriaLabel?: string;
 };
 
 export interface HydrowayMapProvider {
@@ -72,7 +83,7 @@ export interface HydrowayMapProvider {
   mount(init: HydrowayMapProviderInit): void;
   setCamera(camera: Partial<HydrowayMapCamera>): void;
   fitBounds(points: HydrowayMapPoint[], padding?: number): void;
-  setLayers(layers: HydrowayMapLayerId[]): void;
+  setLayers(layers: HydrowayMapLayerId[]): void | HydrowayLayerToggleResult;
   getCamera(): HydrowayMapCamera;
   destroy(): void;
 }

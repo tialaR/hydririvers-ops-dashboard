@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import { useTranslations } from 'next-intl';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   useCallback,
@@ -97,22 +98,6 @@ function ControlIconLayers() {
       <path d="M12 4 4 8l8 4 8-4-8-4z" />
       <path d="M4 12l8 4 8-4" />
       <path d="M4 16l8 4 8-4" />
-    </svg>
-  );
-}
-
-function ControlIconPause() {
-  return (
-    <svg {...CONTROL_ICON_PROPS}>
-      <path d="M9 7v10M15 7v10" />
-    </svg>
-  );
-}
-
-function ControlIconPlay() {
-  return (
-    <svg {...CONTROL_ICON_PROPS}>
-      <path d="M9 7.5v9l8-4.5-8-4.5z" fill="currentColor" stroke="none" />
     </svg>
   );
 }
@@ -236,7 +221,10 @@ type HydrowayMapSpikeClientProps = {
   preferredProvider: HydrowaySpikeProviderMode;
 };
 
+const MAP_CHAPTER_CONTROL_KEYS = new Set(['origin', 'current', 'destination']);
+
 export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMapSpikeClientProps) {
+  const tMap = useTranslations('operationsBoard.map');
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -247,12 +235,17 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const svgViewportRef = useRef<HTMLDivElement | null>(null);
   const svgProviderRef = useRef<SvgSchematicHydrowayProvider | null>(null);
   const maplibreViewportRef = useRef<HydrowayMapSpikeMaplibreViewportHandle | null>(null);
-
   const [maplibreMountFailed, setMaplibreMountFailed] = useState(false);
-  const [maplibreReady, setMaplibreReady] = useState(false);
+  const [maplibreReadyCargoId, setMaplibreReadyCargoId] = useState<string | null>(null);
   const [zoomPercent, setZoomPercent] = useState(100);
-  const [animationPaused, setAnimationPaused] = useState(false);
   const [mapLayersExpanded, setMapLayersExpanded] = useState(true);
+  const [activeChapterByCargo, setActiveChapterByCargo] = useState<{
+    cargoId: string;
+    chapter: HydrowayCameraChapterId;
+  } | null>(null);
+  const cameraFlyRequestRef = useRef(0);
+  const activeMapChapter =
+    activeChapterByCargo?.cargoId === model.cargoId ? activeChapterByCargo.chapter : null;
 
   const webglReady = useSyncExternalStore(
     () => () => {},
@@ -262,8 +255,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const wantsMapLibre = preferredProvider === 'maplibre' && webglReady && !forceSvgFallback && !maplibreMountFailed;
   const showMapLibre = wantsMapLibre;
+  const maplibreReady = showMapLibre && maplibreReadyCargoId === model.cargoId;
   const activeProviderKind: HydrowaySpikeProviderMode =
-    showMapLibre && maplibreReady ? 'maplibre' : 'svg-schematic';
+    maplibreReady ? 'maplibre' : 'svg-schematic';
 
   const getMapLibreProvider = useCallback((): MapLibreHydrowayProvider | null => {
     const provider = maplibreViewportRef.current?.getProvider();
@@ -300,7 +294,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       model,
     });
     svgProviderRef.current = provider;
-    setMaplibreReady(false);
+    setMaplibreReadyCargoId(null);
     syncZoomLabel();
 
     return () => {
@@ -311,22 +305,20 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const handleMaplibreReady = useCallback(() => {
     setMaplibreMountFailed(false);
-    setMaplibreReady(true);
-    const mapProvider = maplibreViewportRef.current?.getProvider();
-    if (mapProvider?.kind === 'maplibre') {
-      setAnimationPaused((mapProvider as MapLibreHydrowayProvider).isAnimationPaused());
-    }
+    setMaplibreReadyCargoId(model.cargoId);
     syncZoomLabel();
-  }, [syncZoomLabel]);
+  }, [model.cargoId, syncZoomLabel]);
 
   const handleMaplibreInitError = useCallback(() => {
     setMaplibreMountFailed(true);
-    setMaplibreReady(false);
+    setMaplibreReadyCargoId(null);
   }, []);
 
   const handleZoomIn = useCallback(() => {
     if (showMapLibre) {
-      getMapLibreProvider()?.zoomIn();
+      const mapProvider = getMapLibreProvider();
+      if (!mapProvider?.isReady()) return;
+      mapProvider.zoomInImmediate();
       syncZoomLabel();
       return;
     }
@@ -339,7 +331,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const handleZoomOut = useCallback(() => {
     if (showMapLibre) {
-      getMapLibreProvider()?.zoomOut();
+      const mapProvider = getMapLibreProvider();
+      if (!mapProvider?.isReady()) return;
+      mapProvider.zoomOutImmediate();
       syncZoomLabel();
       return;
     }
@@ -351,8 +345,13 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   }, [getMapLibreProvider, showMapLibre, syncZoomLabel]);
 
   const handleReset = useCallback(() => {
+    setActiveChapterByCargo(null);
+    cameraFlyRequestRef.current += 1;
+
     if (showMapLibre) {
-      getMapLibreProvider()?.resetView();
+      const mapProvider = getMapLibreProvider();
+      if (!mapProvider?.isReady()) return;
+      mapProvider.resetView();
       syncZoomLabel();
       return;
     }
@@ -363,20 +362,44 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     syncZoomLabel();
   }, [getMapLibreProvider, showMapLibre, syncZoomLabel]);
 
-  const handleToggleAnimation = useCallback(() => {
-    const mapProvider = getMapLibreProvider();
-    if (!mapProvider) return;
-    const paused = mapProvider.toggleAnimationPause();
-    setAnimationPaused(paused);
-  }, [getMapLibreProvider]);
-
   const handleFlyToChapter = useCallback(
     (chapterId: HydrowayCameraChapterId) => {
-      if (!showMapLibre) return;
-      getMapLibreProvider()?.flyToChapter(chapterId);
-      syncZoomLabel();
+      const requestId = cameraFlyRequestRef.current + 1;
+      cameraFlyRequestRef.current = requestId;
+
+      if (MAP_CHAPTER_CONTROL_KEYS.has(chapterId)) {
+        setActiveChapterByCargo({ cargoId: model.cargoId, chapter: chapterId });
+      } else {
+        setActiveChapterByCargo(null);
+      }
+
+      if (!showMapLibre) {
+        const provider = svgProviderRef.current;
+        if (!provider) return;
+        const { origin, destination, vessel } = schematicScene.route;
+        const point =
+          chapterId === 'origin'
+            ? origin
+            : chapterId === 'destination'
+              ? destination
+              : chapterId === 'current'
+                ? vessel
+                : null;
+        if (point) {
+          provider.fitBounds([point], 120);
+          syncZoomLabel();
+        }
+        return;
+      }
+
+      const mapProvider = getMapLibreProvider();
+      if (!mapProvider?.isReady()) return;
+      mapProvider.flyToChapter(chapterId);
+      if (cameraFlyRequestRef.current === requestId) {
+        syncZoomLabel();
+      }
     },
-    [getMapLibreProvider, showMapLibre, syncZoomLabel],
+    [getMapLibreProvider, model.cargoId, schematicScene.route, showMapLibre, syncZoomLabel],
   );
 
   const handleToggleLayers = useCallback(() => {
@@ -384,7 +407,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     const layers = nextExpanded ? ALL_MAP_LAYERS : MINIMAL_MAP_LAYERS;
 
     if (showMapLibre) {
-      getMapLibreProvider()?.setLayers(layers);
+      const mapProvider = getMapLibreProvider();
+      if (!mapProvider?.isReady()) return;
+      mapProvider.setLayers(layers);
     } else {
       svgProviderRef.current?.setLayers(layers);
     }
@@ -429,22 +454,11 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         ? 'fallback sem WebGL'
         : null;
 
-  const mapChapterDisabled = !showMapLibre || !maplibreReady;
-  const animationDisabled = mapChapterDisabled;
-  const animationTooltip = animationPaused ? 'Retomar animação' : 'Pausar animação';
-  const animationAriaLabel = animationPaused ? 'Retomar animação' : 'Pausar animação';
+  const mapLibreControlsDisabled = showMapLibre && !maplibreReady;
 
   const stopFloatingControlEvent = useCallback(
     (event: PointerEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
       event.stopPropagation();
-    },
-    [],
-  );
-
-  const runFloatingControlAction = useCallback(
-    (action: () => void) => (event: MouseEvent<HTMLButtonElement>) => {
-      event.stopPropagation();
-      action();
     },
     [],
   );
@@ -467,9 +481,6 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         case 'layers':
           handleToggleLayers();
           break;
-        case 'animation':
-          handleToggleAnimation();
-          break;
         case 'reset':
           handleReset();
           break;
@@ -487,7 +498,6 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       handleFitRoute,
       handleFlyToChapter,
       handleReset,
-      handleToggleAnimation,
       handleToggleLayers,
       handleZoomIn,
       handleZoomOut,
@@ -496,39 +506,47 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const handleDockControlButtonClick = useCallback(
     (event: MouseEvent<HTMLButtonElement>) => {
+      event.stopPropagation();
+      if (event.currentTarget.disabled) return;
       const controlKey = event.currentTarget.dataset.controlKey;
       if (!controlKey) return;
-      runFloatingControlAction(() => handleDockControlClick(controlKey))(event);
+      handleDockControlClick(controlKey);
     },
-    [handleDockControlClick, runFloatingControlAction],
+    [handleDockControlClick],
   );
 
   const dockControls = [
     {
       key: 'origin',
-      tooltip: 'Origem da viagem',
-      ariaLabel: 'Focar origem da viagem',
+      tooltip: tMap('focusOrigin'),
+      ariaLabel: tMap('focusOriginAria'),
       icon: <ControlIconOrigin />,
-      disabled: mapChapterDisabled,
+      disabled: mapLibreControlsDisabled,
+      ariaPressed: activeMapChapter === 'origin',
+      active: activeMapChapter === 'origin',
     },
     {
       key: 'destination',
-      tooltip: 'Destino da viagem',
-      ariaLabel: 'Focar destino da viagem',
+      tooltip: tMap('focusDestination'),
+      ariaLabel: tMap('focusDestinationAria'),
       icon: <ControlIconDestination />,
-      disabled: mapChapterDisabled,
+      disabled: mapLibreControlsDisabled,
+      ariaPressed: activeMapChapter === 'destination',
+      active: activeMapChapter === 'destination',
     },
     {
       key: 'zoom-in',
       tooltip: 'Ampliar mapa',
       ariaLabel: 'Ampliar mapa',
       icon: <ControlIconZoomIn />,
+      disabled: mapLibreControlsDisabled,
     },
     {
       key: 'zoom-out',
       tooltip: 'Diminuir mapa',
       ariaLabel: 'Diminuir mapa',
       icon: <ControlIconZoomOut />,
+      disabled: mapLibreControlsDisabled,
     },
     {
       key: 'layers',
@@ -537,34 +555,30 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       icon: <ControlIconLayers />,
       ariaPressed: mapLayersExpanded,
       active: !mapLayersExpanded,
-    },
-    {
-      key: 'animation',
-      tooltip: animationTooltip,
-      ariaLabel: animationAriaLabel,
-      icon: animationPaused ? <ControlIconPlay /> : <ControlIconPause />,
-      disabled: animationDisabled,
-      ariaPressed: animationPaused,
-      active: animationPaused,
+      disabled: mapLibreControlsDisabled,
     },
     {
       key: 'reset',
       tooltip: 'Voltar para posição inicial',
       ariaLabel: 'Voltar para posição inicial',
       icon: <ControlIconReset />,
+      disabled: mapLibreControlsDisabled,
     },
     {
       key: 'current',
-      tooltip: 'Focar carga no percurso',
-      ariaLabel: 'Focar carga no percurso',
+      tooltip: tMap('focusCurrentCargo'),
+      ariaLabel: tMap('focusCurrentCargoAria'),
       icon: <ControlIconCurrent />,
-      disabled: mapChapterDisabled,
+      disabled: mapLibreControlsDisabled,
+      ariaPressed: activeMapChapter === 'current',
+      active: activeMapChapter === 'current',
     },
     {
       key: 'fit-route',
       tooltip: 'Visualizar rota completa',
       ariaLabel: 'Visualizar rota completa',
       icon: <ControlIconRouteOverview />,
+      disabled: mapLibreControlsDisabled,
     },
   ];
 
@@ -695,6 +709,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
       {showMapLibre ? (
         <HydrowayMapSpikeMaplibreViewport
+          key={model.cargoId}
           ref={maplibreViewportRef}
           model={model}
           onReady={handleMaplibreReady}

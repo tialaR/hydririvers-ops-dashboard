@@ -1,8 +1,11 @@
 import {
   headingAlongPolyline,
-  pointAtPolylineProgress,
   slicePolylineAtProgress,
 } from '../adapters/route-geometry';
+import {
+  getCoordinateAtRouteProgress,
+  normalizeRouteProgress,
+} from './route-marker-geometry';
 
 /** Duração de um ciclo completo de animação da rota/embarcação (ms). */
 export const HYDRO_MAPLIBRE_ANIMATION_CYCLE_MS = 9000;
@@ -57,8 +60,10 @@ export function buildVesselGeoJson(
   displayLabel: string,
   properties: Record<string, unknown> = {},
 ): GeoJSON.FeatureCollection {
-  const position = pointAtPolylineProgress(routeTrack, progress01);
-  const heading = headingAlongPolyline(routeTrack, progress01);
+  const safeProgress = normalizeRouteProgress(progress01);
+  const position =
+    getCoordinateAtRouteProgress(routeTrack, safeProgress) ?? ([0, 0] as GeoJSON.Position);
+  const heading = headingAlongPolyline(routeTrack, safeProgress);
 
   return {
     type: 'FeatureCollection',
@@ -70,7 +75,7 @@ export function buildVesselGeoJson(
           kind: 'vessel',
           displayLabel,
           heading,
-          progress01,
+          progress01: safeProgress,
         },
         geometry: {
           type: 'Point',

@@ -7,6 +7,7 @@ import type {
   HydrowayMapProviderInit,
   HydrowayMapScene,
 } from './map-provider.types';
+import { HYDRI_CARGO_BOAT_MARKER_SVG_URL } from '../constants/hydro-cargo-boat-marker';
 import {
   cameraToSvgViewBox,
   HYDRO_MAP_INITIAL_CAMERA,
@@ -360,23 +361,19 @@ export class SvgSchematicHydrowayProvider implements HydrowayMapProvider {
 
   private buildVesselLayer(scene: HydrowayMapScene): SVGGElement {
     const { vessel } = scene.route;
+    const size = 52;
+    const half = size / 2;
     const group = createSvgElement('g', {
       transform: `translate(${vessel.x} ${vessel.y})`,
+      class: 'hydroway-vessel-marker',
     });
     group.appendChild(
-      createSvgElement('circle', {
-        r: 28,
-        fill: hydroMapStyleTokens.vesselHalo,
-        opacity: 0.32,
-        class: 'hydroway-vessel-halo',
-      }),
-    );
-    group.appendChild(
-      createSvgElement('circle', {
-        r: 10,
-        fill: hydroMapStyleTokens.accent,
-        stroke: '#041018',
-        'stroke-width': 2,
+      createSvgElement('image', {
+        href: HYDRI_CARGO_BOAT_MARKER_SVG_URL,
+        x: -half,
+        y: -half,
+        width: size,
+        height: size,
       }),
     );
     return group;
