@@ -1517,6 +1517,9 @@
       "zoomIn": "Acercar",
       "zoomOut": "Alejar",
       "resetView": "Reiniciar encuadre",
+      "fitRoute": "Encuadrar ruta",
+      "recenterVessel": "Centrar embarcación",
+      "cameraSummary": "Zoom {zoom}%",
       "waterwayMap": "Mapa hidroviario",
       "legend": "Leyenda",
       "planned": "Planificado",
@@ -1541,7 +1544,16 @@
         "logisticsCorridor": "Corredor logístico",
         "regionalInfluence": "Influencia regional",
         "region": "Región"
-      }
+      },
+      "routeMarkerOrigin": "Origen de la carga",
+      "routeMarkerDestination": "Destino de la carga",
+      "currentCargoLocation": "Ubicación actual de la carga",
+      "focusOrigin": "Enfocar origen",
+      "focusOriginAria": "Enfocar el punto de origen de la carga",
+      "focusDestination": "Enfocar destino",
+      "focusDestinationAria": "Enfocar el punto de destino de la carga",
+      "focusCurrentCargo": "Enfocar carga actual",
+      "focusCurrentCargoAria": "Enfocar la ubicación actual de la carga"
     },
     "mapTracking": {
       "title": "Ruta hidroviaria",

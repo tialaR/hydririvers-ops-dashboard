@@ -750,7 +750,6 @@ function HydroMapPanel({
 }) {
   const svgUid = useId().replace(/:/g, '');
   const [zoomLevel, setZoomLevel] = useState(1);
-  const [expanded, setExpanded] = useState(false);
   const [layerMode, setLayerMode] = useState<'all' | 'route' | 'network'>('all');
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
@@ -758,20 +757,10 @@ function HydroMapPanel({
   const [viewportSize, setViewportSize] = useState({ width: 1000, height: 470 });
   const dragState = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
   const viewportRef = useRef<HTMLDivElement | null>(null);
-  const modalViewportRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!expanded) return undefined;
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [expanded]);
 
   useEffect(() => {
     const updateSize = () => {
-      const el = expanded ? modalViewportRef.current : viewportRef.current;
+      const el = viewportRef.current;
       if (!el) return;
       const rect = el.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -785,7 +774,7 @@ function HydroMapPanel({
       window.removeEventListener('resize', updateSize);
       window.clearTimeout(timer);
     };
-  }, [expanded]);
+  }, []);
 
   const trackingRoute = useMemo(() => buildTrackingRoute(cargo), [cargo]);
   const progress01 = trackingRoute.progress / 100;
@@ -826,22 +815,6 @@ function HydroMapPanel({
   const resetView = () => {
     setZoomLevel(1);
     setPan({ x: 0, y: 0 });
-  };
-
-  const closeExpandedMap = () => {
-    setExpanded(false);
-    resetView();
-    setHoveredPlace(null);
-  };
-
-  const toggleExpandedMap = () => {
-    if (expanded) {
-      closeExpandedMap();
-      return;
-    }
-    resetView();
-    setHoveredPlace(null);
-    setExpanded(true);
   };
 
   const changeZoom = (delta: number) => {
@@ -909,18 +882,13 @@ function HydroMapPanel({
   const isCompactViewport = viewportSize.width <= 900;
   const routeSummaryStatus = getCargoStatusLabel(cargo.status, tCommon);
 
-  const renderViewport = (mode: 'card' | 'modal') => {
-    const isModal = mode === 'modal';
-    const idSuffix = `${svgUid}-${mode}`;
+  const renderViewport = () => {
+    const idSuffix = `${svgUid}-card`;
 
     return (
       <div
-        ref={isModal ? modalViewportRef : viewportRef}
-        className={cx(
-          styles.hydroRadarViewport,
-          isModal && styles.hydroRadarViewportModal,
-          isCompactViewport && styles.hydroRadarViewportCompact
-        )}
+        ref={viewportRef}
+        className={cx(styles.hydroRadarViewport, isCompactViewport && styles.hydroRadarViewportCompact)}
       >
         <div className={styles.hydroRadarTopBar}>
           <div className={styles.hydroRadarSummary}>
@@ -946,14 +914,13 @@ function HydroMapPanel({
               <Layers size={18} strokeWidth={2} aria-hidden />
               <span>{tCommon('filter')}</span>
             </button>
-            <button
-              type="button"
+            <Link
+              href={intlAppPaths.cargos.cargoMap(cargo.id)}
               className={styles.hydroRadarIconBtn}
-              aria-label={isModal ? tBoard('map.closeExpanded') : tBoard('map.expand')}
-              onClick={toggleExpandedMap}
+              aria-label={tBoard('map.expand')}
             >
-              {isModal ? <X size={18} strokeWidth={2} /> : <Navigation size={18} strokeWidth={2} />}
-            </button>
+              <Navigation size={18} strokeWidth={2} />
+            </Link>
           </div>
         </div>
 
@@ -1055,29 +1022,14 @@ function HydroMapPanel({
           <span>{tBoard('map.statusSummary', { river: mainRiver, status: routeSummaryStatus, layer: layerLabel, zoom: Math.round(zoomLevel * 100) })}</span>
         </div>
 
-        {isModal ? (
-          <div className={styles.hydroRadarFullscreenHint} aria-live="polite">
-            <span>{tBoard('map.rotateHint')}</span>
-          </div>
-        ) : null}
       </div>
     );
   };
 
   return (
-    <>
-      <section className={cx(styles.hydroRadarSection, expanded && styles.hydroRadarSectionExpanded)} aria-label={tBoard('map.radarSectionAria')}>
-        {renderViewport('card')}
-      </section>
-
-      {expanded ? (
-        <div className={styles.hydroRadarBackdrop} role="dialog" aria-modal="true" aria-label={tBoard('map.expanded')} onClick={closeExpandedMap}>
-          <div className={styles.hydroRadarModal} onClick={(event) => event.stopPropagation()}>
-            {renderViewport('modal')}
-          </div>
-        </div>
-      ) : null}
-    </>
+    <section className={styles.hydroRadarSection} aria-label={tBoard('map.radarSectionAria')}>
+      {renderViewport()}
+    </section>
   );
 }
 

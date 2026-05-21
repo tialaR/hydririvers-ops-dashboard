@@ -1517,6 +1517,9 @@
       "zoomIn": "Zoom in",
       "zoomOut": "Zoom out",
       "resetView": "Reset framing",
+      "fitRoute": "Fit route",
+      "recenterVessel": "Recenter vessel",
+      "cameraSummary": "Zoom {zoom}%",
       "waterwayMap": "Waterway map",
       "legend": "Legend",
       "planned": "Planned",
@@ -1541,7 +1544,16 @@
         "logisticsCorridor": "Logistics corridor",
         "regionalInfluence": "Regional influence",
         "region": "Region"
-      }
+      },
+      "routeMarkerOrigin": "Cargo origin",
+      "routeMarkerDestination": "Cargo destination",
+      "currentCargoLocation": "Current cargo location",
+      "focusOrigin": "Focus origin",
+      "focusOriginAria": "Focus the cargo origin point",
+      "focusDestination": "Focus destination",
+      "focusDestinationAria": "Focus the cargo destination point",
+      "focusCurrentCargo": "Focus current cargo",
+      "focusCurrentCargoAria": "Focus the current cargo location"
     },
     "mapTracking": {
       "title": "Hydro route",

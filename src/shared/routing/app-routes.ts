@@ -76,7 +76,9 @@ export const intlAppPaths = {
     myCargoDetail: (cargoId: string) =>
       `${intlSegments.minhasCargas}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
     cargoView: (cargoId: string, view: string) =>
-      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}?view=${encodeURIComponent(view)}`
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}?view=${encodeURIComponent(view)}`,
+    cargoMap: (cargoId: string) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}/mapa`
   },
   admin: {
     home: intlSegments.admin
@@ -156,7 +158,9 @@ export const appRoutes = {
     cargoView: (locale: AppLocale, cargoId: string, view: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.cargoView(cargoId, view)),
     myCargoDetail: (locale: AppLocale, cargoId: string) =>
-      localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId))
+      localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId)),
+    cargoMap: (locale: AppLocale, cargoId: string) =>
+      localizedAppPath(locale, intlAppPaths.cargos.cargoMap(cargoId))
   },
   admin: {
     home: (locale: AppLocale) => localizedAppPath(locale, intlAppPaths.admin.home)

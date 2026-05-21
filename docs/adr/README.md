@@ -34,6 +34,7 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0026 - Negociações como central de decisões comerciais](./0026-negotiations-as-commercial-decision-center.md)
 - [0027 - Detalhe de negociação como guia de decisão](./0027-negotiation-detail-as-decision-guide.md)
 - [0028 - Impacto com storytelling baseado em evidências](./0028-impact-page-evidence-based-storytelling.md)
+- [0001-desktop-expanded-map-route - Rota própria do mapa desktop expanded](./0001-desktop-expanded-map-route.md) _(Proposto; ver também [0001 feature-based](./0001-feature-based-architecture.md))_
 - [0010 - Mapa visual com alternativa textual acessível](./0010-map-accessibility-and-alternative-route-summary.md)
 - [0012 - Priority Tab Operational Design](./0012-priority-tab-operational-design.md)
 - [0013 - Feature Mocks and Business Scope](./0013-feature-mocks-and-business-scope.md)
@@ -44,6 +45,12 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0014 - Form Validation with Zod and React Hook Form](./0014-form-validation-zod-react-hook-form.md)
 - [0015 - Estratégia de validação e testes para mudanças críticas](./0015-validation-and-test-strategy.md)
 - [0029 - Dados mock fictícios e determinísticos](./0029-mock-data-fictional-deterministic.md)
+
+## Mapa hidroviário (desktop expanded V2)
+
+- [0030 - Provider profissional do mapa hidroviário (MapLibre + fallback SVG)](./0030-professional-hydroway-map-provider.md) _(Accepted — V2.1a; spike isolado; `/mapa` e instalação MapLibre em microfases posteriores)_
+- [0031 - Pipeline geográfico do mapa hidroviário (GeoJSON mock → dados oficiais)](./0031-hydroway-geodata-pipeline.md) _(Accepted for spike — V2.1a; mock/local apenas; shapefile e BIT/DNIT em fase futura)_
+- [Plano operacional V2](../workflows/professional-hydroway-map-v2-plan.md)
 
 ## Overlays e mobile
 
