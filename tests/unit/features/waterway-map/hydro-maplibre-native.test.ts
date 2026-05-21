@@ -319,10 +319,10 @@ describe('hydro-maplibre-native', () => {
     expect(HYDRI_CURRENT_CARGO_BOAT_MARKER_SVG_URL).toBe('/assets/map/hydririvers-boat-icon-pulsing.svg');
     expect(HYDRI_ROUTE_VESSEL_MARKER_SVG_URL).toBe(HYDRI_CURRENT_CARGO_BOAT_MARKER_SVG_URL);
     expect(HYDRI_ROUTE_ORIGIN_MARKER_SVG_URL).toBe(
-      '/assets/map/hydririvers-radar-dot-cyan-vibrant-pulsing.svg',
+      '/assets/map/hydririvers-radar-dot-cyan-transparent-pulsing.svg',
     );
     expect(HYDRI_ROUTE_DESTINATION_MARKER_SVG_URL).toBe(
-      '/assets/map/hydririvers-radar-dot-amber-pulsing.svg',
+      '/assets/map/hydririvers-radar-dot-amber-transparent-pulsing.svg',
     );
   });
 

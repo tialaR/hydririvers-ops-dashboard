@@ -9,8 +9,8 @@ import { resolveRouteMarkerVisibleKinds } from '@/features/waterway-map/utils/hy
 
 describe('hydro-maplibre-route-markers', () => {
   it('expõe URLs dos SVGs animados por tipo de marcador', () => {
-    expect(HYDRI_ROUTE_ORIGIN_MARKER_SVG_URL).toContain('cyan');
-    expect(HYDRI_ROUTE_DESTINATION_MARKER_SVG_URL).toContain('amber');
+    expect(HYDRI_ROUTE_ORIGIN_MARKER_SVG_URL).toContain('cyan-transparent');
+    expect(HYDRI_ROUTE_DESTINATION_MARKER_SVG_URL).toContain('amber-transparent');
     expect(HYDRI_ROUTE_VESSEL_MARKER_SVG_URL).toContain('boat');
   });
 

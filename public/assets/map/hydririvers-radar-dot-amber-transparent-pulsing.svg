@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ponto âmbar pulsante">
+  <defs>
+    <radialGradient id="amberCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFF8D6" stop-opacity="1"/>
+      <stop offset="45%" stop-color="#FFE08A" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#D69A36" stop-opacity="0.95"/>
+    </radialGradient>
+    <filter id="amberGlow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2.1" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .hr-amber-ring-a { transform-origin: 32px 32px; animation: hr-amber-pulse-a 2.55s ease-out infinite; }
+      .hr-amber-ring-b { transform-origin: 32px 32px; animation: hr-amber-pulse-b 2.55s ease-out infinite; animation-delay: .86s; }
+      .hr-amber-core { transform-origin: 32px 32px; animation: hr-amber-core 1.95s ease-in-out infinite; }
+      .hr-amber-spark { transform-origin: 32px 32px; animation: hr-amber-spark 1.95s ease-in-out infinite; }
+      @keyframes hr-amber-pulse-a {
+        0% { transform: scale(.52); opacity: .70; stroke-width: 2.8; }
+        62% { opacity: .24; stroke-width: 1.8; }
+        100% { transform: scale(1.18); opacity: 0; stroke-width: 1; }
+      }
+      @keyframes hr-amber-pulse-b {
+        0% { transform: scale(.42); opacity: .56; stroke-width: 2.4; }
+        66% { opacity: .18; stroke-width: 1.6; }
+        100% { transform: scale(1.04); opacity: 0; stroke-width: .8; }
+      }
+      @keyframes hr-amber-core {
+        0%, 100% { transform: scale(.96); opacity: .94; }
+        50% { transform: scale(1.08); opacity: 1; }
+      }
+      @keyframes hr-amber-spark {
+        0%, 100% { opacity: .50; }
+        50% { opacity: .92; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hr-amber-ring-a, .hr-amber-ring-b, .hr-amber-core, .hr-amber-spark { animation: none; }
+      }
+    </style>
+  </defs>
+  <g filter="url(#amberGlow)">
+    <circle class="hr-amber-ring-a" cx="32" cy="32" r="20" stroke="#F2C86A" stroke-opacity=".9"/>
+    <circle class="hr-amber-ring-b" cx="32" cy="32" r="17" stroke="#FFE59A" stroke-opacity=".7"/>
+    <circle cx="32" cy="32" r="10.8" fill="#E2A943" fill-opacity=".24"/>
+    <circle class="hr-amber-core" cx="32" cy="32" r="7.2" fill="url(#amberCore)" stroke="#FFF0B9" stroke-width="1.4"/>
+    <circle class="hr-amber-spark" cx="29.8" cy="29.6" r="2.2" fill="#FFFFFF" fill-opacity=".68"/>
+  </g>
+</svg>

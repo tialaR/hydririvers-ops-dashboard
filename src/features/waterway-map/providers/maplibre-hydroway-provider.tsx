@@ -24,7 +24,11 @@ import {
   syncRouteMarkerLayerVisibility,
   syncRoutePointPulsePaint,
 } from '../utils/hydro-maplibre-overlay';
-import { resolveRouteMarkerVisibleKinds } from '../utils/hydro-maplibre-route-markers';
+import { resolveRouteMarkerCoordinates } from '../utils/route-marker-geometry';
+import {
+  HydroMapLibreRouteMarkers,
+  resolveRouteMarkerVisibleKinds,
+} from '../utils/hydro-maplibre-route-markers';
 import { HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
 import { hydroMapTransitionMs, prefersReducedMotion } from '../utils/hydro-motion';
 import { schematicPointToLngLat } from '../utils/schematic-to-geo';
@@ -94,6 +98,12 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private visualFrameId: number | null = null;
   private visualPhaseStartMs = 0;
   private renderedRouteCoordinates: GeoJSON.Position[] = [];
+  private originMarker: maplibregl.Marker | null = null;
+  private destinationMarker: maplibregl.Marker | null = null;
+  private currentCargoMarker: maplibregl.Marker | null = null;
+  private readonly routeIdentificationMarkers = new HydroMapLibreRouteMarkers();
+  private routeIdentificationMarkerSyncScheduled = false;
+  private routeMarkersDebugLoggedKey = '';
 
   private mountOnReadyHook: (() => void) | undefined;
   private pendingInitCamera: HydrowayMapCamera | undefined;
@@ -120,6 +130,11 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.renderedRouteCoordinates = renderedRouteCoordinates;
     this.syncRouteMarkerLayers(map);
     this.syncLayerVisibility(map);
+    this.syncRouteIdentificationMarkersWhenReady(map);
+    void this.routeIdentificationMarkers.prefetchSvgAssets().then(() => {
+      if (this.destroyed || this.map !== map) return;
+      this.syncRouteIdentificationMarkersWhenReady(map);
+    });
 
     if (this.pendingInitCamera) {
       this.setCamera(this.pendingInitCamera);
@@ -201,7 +216,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.routeBbox = model.bbox;
     this.overviewBounds = this.resolveRouteBounds();
 
-    const map = this.getOperationalMap();
+    const map = this.getMountedMap();
     if (!map || !this.geo) return;
 
     const { renderedRouteCoordinates } = syncHydrowayMapLibreOverlayData(
@@ -211,6 +226,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       this.routeTrackCoords,
     );
     this.renderedRouteCoordinates = renderedRouteCoordinates;
+    this.syncRouteIdentificationMarkersWhenReady(map);
+
+    if (!this.overlayReady || !map.loaded()) return;
+
     this.syncRouteMarkerLayers(map);
 
     try {
@@ -358,6 +377,9 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.mapLoadedOnce = false;
     this.pendingInitCamera = undefined;
     this.renderedRouteCoordinates = [];
+    this.routeIdentificationMarkerSyncScheduled = false;
+    this.routeMarkersDebugLoggedKey = '';
+    this.removeRouteIdentificationMarkers();
 
     if (this.resizeObserver) {
       this.resizeObserver.disconnect();
@@ -400,6 +422,111 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private syncRouteMarkerLayers(map: Map): void {
     if (this.destroyed || !isMapLibreMapUsable(map)) return;
     syncRouteMarkerLayerVisibility(map, resolveRouteMarkerVisibleKinds(this.visibleLayers));
+  }
+
+  private hasRouteIdentificationMarkerInputs(): boolean {
+    return this.renderedRouteCoordinates.length >= 2 && Number.isFinite(this.progress01);
+  }
+
+  private isRouteMarkersMapReady(map: Map): boolean {
+    return (
+      isMapLibreMapUsable(map) &&
+      this.hasRouteIdentificationMarkerInputs() &&
+      (map.loaded() || this.mapLoadedOnce) &&
+      this.overlayReady
+    );
+  }
+
+  private syncRouteIdentificationMarkersWhenReady(map: Map): void {
+    if (this.destroyed || !isMapLibreMapUsable(map)) return;
+    if (!this.hasRouteIdentificationMarkerInputs()) return;
+
+    if (!this.isRouteMarkersMapReady(map)) {
+      this.scheduleRouteIdentificationMarkerSync(map);
+      return;
+    }
+
+    this.routeIdentificationMarkerSyncScheduled = false;
+    this.syncRouteIdentificationMarkers(map);
+    this.logRouteIdentificationMarkerDebugOnce(map);
+  }
+
+  private scheduleRouteIdentificationMarkerSync(map: Map): void {
+    if (this.routeIdentificationMarkerSyncScheduled) return;
+    this.routeIdentificationMarkerSyncScheduled = true;
+
+    const retry = (): void => {
+      this.routeIdentificationMarkerSyncScheduled = false;
+      if (this.destroyed || this.map !== map) return;
+      this.syncRouteIdentificationMarkersWhenReady(map);
+    };
+
+    if (!map.loaded()) {
+      map.once('load', retry);
+      return;
+    }
+
+    map.once('idle', retry);
+  }
+
+  private syncRouteIdentificationMarkers(map: Map): void {
+    if (this.destroyed || !isMapLibreMapUsable(map)) return;
+    if (!this.hasRouteIdentificationMarkerInputs()) return;
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+
+    this.routeIdentificationMarkers.sync({
+      map,
+      origin: markers.origin,
+      destination: markers.destination,
+      vessel: markers.vessel,
+      visibleKinds: resolveRouteMarkerVisibleKinds(this.visibleLayers),
+    });
+
+    this.originMarker = this.routeIdentificationMarkers.getMarker('origin');
+    this.destinationMarker = this.routeIdentificationMarkers.getMarker('destination');
+    this.currentCargoMarker = this.routeIdentificationMarkers.getMarker('vessel');
+  }
+
+  private logRouteIdentificationMarkerDebugOnce(map: Map): void {
+    if (process.env.NODE_ENV === 'production') return;
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+    const stateKey = [
+      map.loaded(),
+      this.overlayReady,
+      this.renderedRouteCoordinates.length,
+      markers.origin?.join(','),
+      markers.destination?.join(','),
+      markers.vessel?.join(','),
+    ].join('|');
+
+    if (stateKey === this.routeMarkersDebugLoggedKey) return;
+    this.routeMarkersDebugLoggedKey = stateKey;
+
+    const markerCountAfterSync = document.querySelectorAll('.hydriRouteIdentificationMarker').length;
+
+    console.debug('[hydroway-map] route identification markers sync', {
+      routeCoordinatesLength: this.renderedRouteCoordinates.length,
+      progress01: this.progress01,
+      originValid: markers.origin !== null,
+      destinationValid: markers.destination !== null,
+      vesselValid: markers.vessel !== null,
+      markerCountAfterSync,
+    });
+  }
+
+  private removeRouteIdentificationMarkers(): void {
+    this.routeIdentificationMarkers.destroy();
+    this.originMarker = null;
+    this.destinationMarker = null;
+    this.currentCargoMarker = null;
   }
 
   private getMountedMap(): Map | null {
@@ -554,6 +681,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.cameraSettled = true;
     this.camera = boundsToSchematicCamera(map.getBounds());
     this.syncRouteMarkerLayers(map);
+    this.syncRouteIdentificationMarkersWhenReady(map);
     this.startVisualLoop(map);
   }
 
@@ -574,6 +702,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
         reducedMotion: false,
       });
       syncRoutePointPulsePaint(map, elapsed);
+      this.syncRouteIdentificationMarkers(map);
     } catch {
       // Best-effort during teardown or missing layers at extreme zoom.
     }
@@ -635,6 +764,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
 
     this.syncRouteMarkerLayers(map);
+    this.syncRouteIdentificationMarkersWhenReady(map);
 
     return {
       appliedLayerCount,
