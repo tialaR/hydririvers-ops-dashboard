@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-labelledby="title desc">
+<title id="title">Radar pulsante ciano</title>
+<desc id="desc">Dot de radar ciano com feixe diagonal e anéis pulsantes, pronto para uso em HTML.</desc>
+<style>
+  .radar-dot { transform-box: fill-box; transform-origin: center; }
+  .pulse-a, .pulse-b { transform-box: fill-box; transform-origin: center; opacity: 0; }
+  .pulse-a { animation: radarPulse 1.85s ease-out infinite; }
+  .pulse-b { animation: radarPulse 1.85s ease-out infinite; animation-delay: .62s; }
+  .core-glow { animation: coreBreath 1.35s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .beam { animation: beamBreath 1.8s ease-in-out infinite; transform-origin: 32px 40px; }
+  @keyframes radarPulse {
+    0% { transform: scale(.62); opacity: .72; stroke-width: 2.8; }
+    58% { opacity: .3; }
+    100% { transform: scale(1.46); opacity: 0; stroke-width: .9; }
+  }
+  @keyframes coreBreath {
+    0%, 100% { transform: scale(.94); opacity: .86; }
+    50% { transform: scale(1.08); opacity: 1; }
+  }
+  @keyframes beamBreath {
+    0%, 100% { opacity: .55; }
+    50% { opacity: .95; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .pulse-a, .pulse-b, .core-glow, .beam { animation: none; }
+    .pulse-a { opacity: .45; transform: scale(1.05); }
+    .pulse-b { opacity: .18; transform: scale(1.32); }
+  }
+</style>
+<defs>
+  <radialGradient id="cyanCore" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#dffdf4"/>
+    <stop offset="48%" stop-color="#84f0df"/>
+    <stop offset="100%" stop-color="#38b8aa"/>
+  </radialGradient>
+  <radialGradient id="cyanHalo" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="#76f5e3" stop-opacity=".5"/>
+    <stop offset="68%" stop-color="#5bd7ca" stop-opacity=".16"/>
+    <stop offset="100%" stop-color="#5bd7ca" stop-opacity="0"/>
+  </radialGradient>
+  <linearGradient id="beamGradient" x1="22" y1="42" x2="68" y2="-4" gradientUnits="userSpaceOnUse">
+    <stop offset="0%" stop-color="#8dfff0" stop-opacity=".95"/>
+    <stop offset="55%" stop-color="#8dfff0" stop-opacity=".55"/>
+    <stop offset="100%" stop-color="#8dfff0" stop-opacity="0"/>
+  </linearGradient>
+  <filter id="cyanGlow" x="-80%" y="-80%" width="260%" height="260%">
+    <feGaussianBlur stdDeviation="2.7" result="blur"/>
+    <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+</defs>
+<g filter="url(#cyanGlow)">
+  <path class="beam" d="M31 34 L66 -1" stroke="url(#beamGradient)" stroke-width="7.5" stroke-linecap="round" opacity=".78"/>
+  <circle class="pulse-b" cx="32" cy="40" r="12" fill="none" stroke="#4dd4c9"/>
+  <circle class="pulse-a" cx="32" cy="40" r="12" fill="none" stroke="#83fff0"/>
+  <circle cx="32" cy="40" r="19.5" fill="url(#cyanHalo)" opacity=".44"/>
+  <circle cx="32" cy="40" r="13.5" fill="none" stroke="#5ee7d8" stroke-width="2" opacity=".64"/>
+  <g class="radar-dot core-glow">
+    <circle cx="32" cy="40" r="8.8" fill="#153c3a" opacity=".82"/>
+    <circle cx="32" cy="40" r="6.7" fill="url(#cyanCore)"/>
+    <circle cx="32" cy="40" r="4.5" fill="#c7fff7" opacity=".72"/>
+  </g>
+</g>
+</svg>

@@ -1,0 +1,109 @@
+<svg class="hydririvers-boat-pulse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="hydriBoatPulseTitle hydriBoatPulseDesc">
+  <title id="hydriBoatPulseTitle">Ícone de embarcação pulsante</title>
+  <desc id="hydriBoatPulseDesc">Ícone central de uma embarcação em traço ciano com pulso suave, sem linhas externas ou elementos auxiliares.</desc>
+
+  <defs>
+    <radialGradient id="hydri-pulse-bg" cx="50%" cy="50%" r="56%">
+      <stop offset="0%" stop-color="#0d3e3d" stop-opacity="1"/>
+      <stop offset="72%" stop-color="#06282b" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#041d20" stop-opacity="1"/>
+    </radialGradient>
+
+    <linearGradient id="hydri-pulse-ring" x1="24" y1="20" x2="104" y2="108" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#a8fff8"/>
+      <stop offset=".52" stop-color="#74fff2"/>
+      <stop offset="1" stop-color="#38d7ca"/>
+    </linearGradient>
+
+    <filter id="hydri-pulse-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" result="glow" type="matrix"
+        values="0 0 0 0 0.38
+                0 0 0 0 1
+                0 0 0 0 0.94
+                0 0 0 0.95 0"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="hydri-pulse-soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="7" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <style>
+      .hydririvers-boat-pulse {
+        --hydri-cyan: #7ffff2;
+        --hydri-cyan-soft: rgba(127, 255, 242, .72);
+        overflow: visible;
+      }
+
+      .hydririvers-boat-pulse .pulse-ring {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: hydri-ring-pulse 2.15s cubic-bezier(.16, .84, .44, 1) infinite;
+      }
+
+      .hydririvers-boat-pulse .pulse-ring.second {
+        animation-delay: .78s;
+      }
+
+      .hydririvers-boat-pulse .core {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: hydri-core-breathe 1.85s ease-in-out infinite;
+      }
+
+      .hydririvers-boat-pulse .boat {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: hydri-boat-float 1.85s ease-in-out infinite;
+      }
+
+      @keyframes hydri-ring-pulse {
+        0% { opacity: .72; transform: scale(.78); stroke-width: 3.5; }
+        68% { opacity: .1; transform: scale(1.18); stroke-width: 1.3; }
+        100% { opacity: 0; transform: scale(1.28); stroke-width: .8; }
+      }
+
+      @keyframes hydri-core-breathe {
+        0%, 100% { transform: scale(.985); filter: drop-shadow(0 0 8px var(--hydri-cyan-soft)); }
+        50% { transform: scale(1.035); filter: drop-shadow(0 0 18px var(--hydri-cyan)); }
+      }
+
+      @keyframes hydri-boat-float {
+        0%, 100% { transform: translateY(.7px) scale(.995); opacity: .94; }
+        50% { transform: translateY(-1.1px) scale(1.018); opacity: 1; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .hydririvers-boat-pulse .pulse-ring,
+        .hydririvers-boat-pulse .core,
+        .hydririvers-boat-pulse .boat {
+          animation: none;
+        }
+      }
+    </style>
+  </defs>
+
+  <circle class="pulse-ring" cx="64" cy="64" r="49" fill="none" stroke="#7ffff2" stroke-opacity="0.52"/>
+  <circle class="pulse-ring second" cx="64" cy="64" r="49" fill="none" stroke="#7ffff2" stroke-opacity="0.22"/>
+
+  <g class="core" filter="url(#hydri-pulse-soft)">
+    <circle cx="64" cy="64" r="51" fill="url(#hydri-pulse-bg)"/>
+    <circle cx="64" cy="64" r="51" fill="none" stroke="url(#hydri-pulse-ring)" stroke-width="4"/>
+    <circle cx="64" cy="64" r="41" fill="none" stroke="#7ffff2" stroke-opacity="0.28" stroke-width="2"/>
+  </g>
+
+  <g class="boat" fill="none" stroke="#7ffff2" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#hydri-pulse-glow)">
+    <path d="M48 58V40h32l5 18"/>
+    <path d="M56 40V27h21v13"/>
+    <path d="M39 66h50L80 88H48L39 66Z"/>
+    <path d="M29 88c5 0 7.5 3.5 12.5 3.5S49 88 54 88s7.5 3.5 12.5 3.5S74 88 79 88s7.5 3.5 12.5 3.5S99 88 104 88"/>
+  </g>
+</svg>
