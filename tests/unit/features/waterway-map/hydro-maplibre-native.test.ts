@@ -33,15 +33,15 @@ import {
   HYDROWAY_ROUTE_MARKERS_SOURCE_ID,
 } from '@/features/waterway-map/utils/hydro-maplibre-overlay';
 import {
-  buildRouteAnimatedDasharray,
+  buildHydrowayRouteActiveGradientExpression,
+  buildHydrowayRouteRemainingGradientExpression,
   buildRouteLineGradientExpression,
-  buildRouteRemainingFlowGradientExpression,
-  buildRouteTraveledFlowGradientExpression,
-  resolveRouteDestinationFlowPaint,
+  HYDRAWAY_ROUTE_ACTIVE_COLORS,
+  HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS,
+  HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS,
+  HYDRAWAY_ROUTE_REMAINING_COLORS,
+  resolveHydrowayRouteBreathingPaint,
   resolveRoutePointPulsePaint,
-  resolveRouteRiverMistPaint,
-  ROUTE_DESTINATION_FLOW_DURATION_MS,
-  ROUTE_RIVER_MIST_DURATION_MS,
 } from '@/features/waterway-map/utils/hydro-maplibre-route-style';
 import { resolveSpikeHydrowayMapModel } from '@/features/waterway-map/data/resolve-spike-hydroway-model';
 import type { ExpressionSpecification } from 'maplibre-gl';
@@ -98,29 +98,28 @@ describe('hydro-maplibre-native', () => {
     expect(JSON.stringify(gradient)).toContain('0.08');
   });
 
-  it('gera gradientes de fluxo percorrido e restante para route-flow', () => {
-    const traveled = buildRouteTraveledFlowGradientExpression(0.42);
-    const remaining = buildRouteRemainingFlowGradientExpression(0.42);
-    const traveledAnimated = buildRouteTraveledFlowGradientExpression(0.42, 0.25);
-    expect(traveled[0]).toBe('interpolate');
+  it('gera line-gradient estático para trechos ativo e restante', () => {
+    const active = buildHydrowayRouteActiveGradientExpression();
+    const remaining = buildHydrowayRouteRemainingGradientExpression();
+    expect(active[0]).toBe('interpolate');
     expect(remaining[0]).toBe('interpolate');
-    expect(JSON.stringify(traveled)).toContain('0.42');
-    expect(JSON.stringify(remaining)).toContain('0.42');
-    expect(JSON.stringify(remaining)).toContain('101, 255, 232');
-    expect(JSON.stringify(remaining)).not.toContain('58, 132, 168');
-    expect(JSON.stringify(traveledAnimated)).not.toEqual(JSON.stringify(traveled));
+    expect(JSON.stringify(active)).toContain(HYDRAWAY_ROUTE_ACTIVE_COLORS.deep);
+    expect(JSON.stringify(active)).toContain(HYDRAWAY_ROUTE_ACTIVE_COLORS.head);
+    expect(JSON.stringify(remaining)).toContain(HYDRAWAY_ROUTE_REMAINING_COLORS.near);
+    expect(JSON.stringify(remaining)).toContain(HYDRAWAY_ROUTE_REMAINING_COLORS.far);
   });
 
-  it('mantém trecho restante com opacidade menor que o percorrido no gradiente', () => {
-    const traveled = JSON.stringify(buildRouteTraveledFlowGradientExpression(0.35));
-    const remaining = JSON.stringify(buildRouteRemainingFlowGradientExpression(0.35));
-    const traveledPeak = Math.max(
-      ...[...traveled.matchAll(/rgba\([^)]+,\s*([\d.]+)\)/g)].map((m) => Number(m[1])),
+  it('respira opacidade/blur sem animar dasharray ou geometria', () => {
+    const atStart = resolveHydrowayRouteBreathingPaint(0);
+    const midActive = resolveHydrowayRouteBreathingPaint(HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS / 4);
+    const midRemaining = resolveHydrowayRouteBreathingPaint(
+      HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS / 3,
     );
-    const remainingPeak = Math.max(
-      ...[...remaining.matchAll(/rgba\([^)]+,\s*([\d.]+)\)/g)].map((m) => Number(m[1])),
-    );
-    expect(remainingPeak).toBeLessThan(traveledPeak);
+    expect(atStart.active.coreOpacity).toBeGreaterThanOrEqual(0.74);
+    expect(atStart.active.coreOpacity).toBeLessThanOrEqual(0.79);
+    expect(midActive.active.glowOpacity).not.toEqual(atStart.active.glowOpacity);
+    expect(midRemaining.remaining.glowBlur).not.toEqual(atStart.remaining.glowBlur);
+    expect(atStart.remaining.coreOpacity).toBeLessThan(atStart.active.coreOpacity);
   });
 
   it('abrevia rótulos de porto para clusters operacionais', () => {
@@ -179,17 +178,21 @@ describe('hydro-maplibre-native', () => {
     expect(DEV_BASEMAP_STYLE_URL).toBe('https://tiles.openfreemap.org/styles/bright');
   });
 
-  it('anima fluxo aquático com dasharray dedicado (sem line-gradient na mesma layer)', () => {
-    const destination = resolveRouteDestinationFlowPaint(2400);
-    const mist = resolveRouteRiverMistPaint(6000);
-    expect(destination['line-opacity']).toBeGreaterThan(0.08);
-    expect(destination['line-opacity']).toBeLessThanOrEqual(0.82);
-    expect(mist['line-opacity']).toBeGreaterThanOrEqual(0.1);
-    expect(mist['line-opacity']).toBeLessThanOrEqual(0.28);
-    expect(destination['line-dasharray']).toHaveLength(3);
-    expect(buildRouteAnimatedDasharray(0, 72, 420)).toEqual([0, 72, 420]);
-    expect(ROUTE_DESTINATION_FLOW_DURATION_MS).toBe(9800);
-    expect(ROUTE_RIVER_MIST_DURATION_MS).toBe(15000);
+  it('não usa dasharray animado nas layers de fluxo da rota', () => {
+    const layers = getHydrowayMvpOverlayLayerDefinitions();
+    const flowLayerIds: string[] = [
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowActiveShadow,
+    ];
+    for (const layer of layers) {
+      if (!flowLayerIds.includes(layer.id)) continue;
+      if (layer.type !== 'line') continue;
+      expect(layer.paint?.['line-dasharray']).toBeUndefined();
+    }
   });
 
   it('expõe overlay MVP com layers GeoJSON e pontos operacionais', () => {
@@ -201,7 +204,12 @@ describe('hydro-maplibre-native', () => {
     );
     expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist)).toBe(true);
     expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled)).toBe(true);
-    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining)).toBe(true);
+    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining)).toBe(
+      true,
+    );
+    expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowActiveShadow)).toBe(
+      true,
+    );
     expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePointPulseOrigin)).toBe(
       true,
     );
@@ -212,20 +220,22 @@ describe('hydro-maplibre-native', () => {
       true,
     );
     expect(layers.some((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePoints)).toBe(true);
-    const remaining = layers.find((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining);
-    expect(remaining?.type === 'line' && remaining.paint?.['line-opacity']).toBe(0.3);
-    const destination = layers.find(
+    const remainingShadow = layers.find(
+      (layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
+    );
+    expect(remainingShadow?.type === 'line' && remainingShadow.paint?.['line-opacity']).toBe(0.16);
+    const remainingCore = layers.find(
       (layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
     );
-    expect(destination?.type).toBe('line');
-    if (destination?.type === 'line') {
-      expect(destination.paint?.['line-gradient']).toBeUndefined();
-      expect(destination.paint?.['line-dasharray']).toBeDefined();
+    expect(remainingCore?.type).toBe('line');
+    if (remainingCore?.type === 'line') {
+      expect(remainingCore.paint?.['line-gradient']).toBeDefined();
+      expect(remainingCore.paint?.['line-dasharray']).toBeUndefined();
     }
-    const mist = layers.find((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist);
-    expect(mist?.type).toBe('line');
-    if (mist?.type === 'line') {
-      expect(mist.paint?.['line-gradient']).toBeUndefined();
+    const activeCore = layers.find((layer) => layer.id === HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled);
+    expect(activeCore?.type).toBe('line');
+    if (activeCore?.type === 'line') {
+      expect(activeCore.paint?.['line-gradient']).toBeDefined();
     }
     for (const layer of layers) {
       expect('source' in layer && layer.source).toBeTruthy();
