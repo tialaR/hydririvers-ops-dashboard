@@ -1,9 +1,25 @@
-import maplibregl, { type LngLatBoundsLike, type Map, type PaddingOptions } from 'maplibre-gl';
+import maplibregl, {
+  type LngLatBoundsLike,
+  type Map,
+  type MapGeoJSONFeature,
+  type MapLayerMouseEvent,
+  type PaddingOptions,
+} from 'maplibre-gl';
 
 import { HYDROWAY_MOCK_GEO_BBOX } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoBbox } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources, HydrowayMapModel } from '../domain/hydroway-map-model.types';
+import {
+  DEFAULT_HYDROWAY_MAP_LAYER_PRESET_ID,
+  type HydrowayMapLayerPresetId,
+  isHydrowayMapLayerPresetId,
+} from '../constants/hydroway-map-layer-presets';
 import { DEV_BASEMAP_STYLE_URL } from '../utils/hydro-maplibre-dev-basemap';
+import {
+  isNonFatalOpenFreeMapTileError,
+  syncHydrowayContextLayers as applyHydrowayContextLayerPreset,
+  syncHydrowayMapLayerPresetPaint,
+} from '../utils/hydro-maplibre-layer-preset-sync';
 import {
   buildHydrowayCameraChapters,
   fitHydrowayRoute,
@@ -15,11 +31,20 @@ import { resolveHydroMapLibreFitOptions } from '../utils/hydro-maplibre-camera';
 import { enrichHydrowayGeoForMapLibre } from '../utils/hydro-maplibre-geo';
 import {
   applyHydroLayerPaintMode,
+  buildHydrowayLayerTooltipHtml,
+  canShowHydrowayLayerTooltip,
   extractOverlayRouteTrackCoordinates,
+  getHydrowayLayerTooltipFeatureKey,
+  HYDRAWAY_LAYER_TOOLTIP_LAYER_IDS,
   HYDROWAY_MVP_LAYER_GROUPS,
   installHydrowayMapLibreOverlay,
+  isHydrowayLayerTooltipLayerVisible,
   layerExistsOnMap,
+  resolveHydrowayLayerTooltipLngLat,
+  startHydrowayRouteBreathingAnimation,
+  stopHydrowayRouteBreathingAnimation,
   syncHydrowayMapLibreOverlayData,
+  syncHydrowayRouteBreathingPaint,
   syncRouteFlowPaint,
   syncRouteMarkerLayerVisibility,
   syncRoutePointPulsePaint,
@@ -30,6 +55,7 @@ import {
   resolveRouteMarkerVisibleKinds,
 } from '../utils/hydro-maplibre-route-markers';
 import { HYDRO_MAP_VIEWBOX } from '../utils/hydro-map-style';
+import { HYDRAWAY_ROUTE_BREATHING_TICK_MS } from '../utils/hydro-maplibre-route-style';
 import { hydroMapTransitionMs, prefersReducedMotion } from '../utils/hydro-motion';
 import { schematicPointToLngLat } from '../utils/schematic-to-geo';
 import type {
@@ -97,6 +123,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private resizeObserver: ResizeObserver | null = null;
   private visualFrameId: number | null = null;
   private visualPhaseStartMs = 0;
+  private routeBreathingStarted = false;
+  private routeBreathingLastTickMs = 0;
   private renderedRouteCoordinates: GeoJSON.Position[] = [];
   private originMarker: maplibregl.Marker | null = null;
   private destinationMarker: maplibregl.Marker | null = null;
@@ -104,6 +132,12 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private readonly routeIdentificationMarkers = new HydroMapLibreRouteMarkers();
   private routeIdentificationMarkerSyncScheduled = false;
   private routeMarkersDebugLoggedKey = '';
+  private layerPresetId: HydrowayMapLayerPresetId = DEFAULT_HYDROWAY_MAP_LAYER_PRESET_ID;
+  private openFreeMapTileWarned = false;
+  private layerTooltipPopup: maplibregl.Popup | null = null;
+  private layerTooltipCurrentFeatureKey: string | null = null;
+  private layerTooltipRegisteredLayerIds = new Set<string>();
+  private layerTooltipUiBlocked = false;
 
   private mountOnReadyHook: (() => void) | undefined;
   private pendingInitCamera: HydrowayMapCamera | undefined;
@@ -112,6 +146,24 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     const map = this.map;
     if (!this.canSyncMapState(map)) return;
     this.camera = boundsToSchematicCamera(map.getBounds());
+  };
+
+  private readonly handleMapError = (event: { error?: unknown }): void => {
+    if (!isNonFatalOpenFreeMapTileError(event.error)) return;
+
+    if (process.env.NODE_ENV === 'development' && !this.openFreeMapTileWarned) {
+      console.warn('[hydroway-map] Ignoring transient OpenFreeMap tile fetch error');
+      this.openFreeMapTileWarned = true;
+    }
+  };
+
+  private readonly handleMapResize = (): void => {
+    this.syncLayerPresetPaint();
+  };
+
+  private readonly handleStyleLoad = (): void => {
+    if (!this.overlayReady) return;
+    this.syncLayerPresetPaint();
   };
 
   private readonly handleMapLoad = (): void => {
@@ -130,6 +182,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.renderedRouteCoordinates = renderedRouteCoordinates;
     this.syncRouteMarkerLayers(map);
     this.syncLayerVisibility(map);
+    this.syncLayerPresetPaint(map);
+    this.installLayerTooltips(map);
     this.syncRouteIdentificationMarkersWhenReady(map);
     void this.routeIdentificationMarkers.prefetchSvgAssets().then(() => {
       if (this.destroyed || this.map !== map) return;
@@ -191,7 +245,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       this.mountOnReadyHook = hooks?.onReady;
       this.pendingInitCamera = init.camera;
       map.on('load', this.handleMapLoad);
+      map.on('style.load', this.handleStyleLoad);
       map.on('moveend', this.handleMapMoveEnd);
+      map.on('resize', this.handleMapResize);
+      map.on('error', this.handleMapError);
 
       this.map = map;
     } catch {
@@ -236,6 +293,74 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       syncRouteFlowPaint(map, this.progress01, this.resolveRouteFlowPaintOptions());
     } catch {
       // Best-effort during teardown or missing layers.
+    }
+
+    this.syncLayerPresetPaint(map);
+    this.syncLayerTooltipHandlers(map);
+  }
+
+  setLayerPreset(presetId: HydrowayMapLayerPresetId): void {
+    if (!isHydrowayMapLayerPresetId(presetId) || !this.canSetLayerPreset(presetId)) return;
+    this.layerPresetId = presetId;
+    this.syncLayerPresetPaint();
+    const map = this.getOperationalMap();
+    if (map) {
+      this.clearLayerTooltipState(map);
+      this.syncLayerTooltipHandlers(map);
+    }
+  }
+
+  getLayerPreset(): HydrowayMapLayerPresetId {
+    return this.layerPresetId;
+  }
+
+  /** Bloqueia tooltip quando o painel Camadas captura o ponteiro (floating controls). */
+  setLayerTooltipUiBlocked(blocked: boolean): void {
+    this.layerTooltipUiBlocked = blocked;
+    if (!blocked) return;
+    const map = this.map;
+    if (map && isMapLibreMapUsable(map)) {
+      this.clearLayerTooltipState(map);
+    }
+  }
+
+  canSetLayerPreset(presetId: HydrowayMapLayerPresetId): boolean {
+    if (!isHydrowayMapLayerPresetId(presetId)) return false;
+    if (this.destroyed || this.initFailed) return false;
+    return Boolean(this.getOperationalMap());
+  }
+
+  syncLayerPresetPaint(map?: Map | null): void {
+    const targetMap = map ?? this.getOperationalMap();
+    if (!targetMap) return;
+
+    const emphasis = this.resolveHydrographyEmphasis();
+    const elapsedMs = this.visualPhaseStartMs
+      ? performance.now() - this.visualPhaseStartMs
+      : 0;
+    const flowPhase = (elapsedMs % 9800) / 9800;
+
+    try {
+      syncHydrowayMapLayerPresetPaint(targetMap, this.layerPresetId, {
+        progress01: this.progress01,
+        hydrographyEmphasis: emphasis,
+        flowPhase01: flowPhase,
+        elapsedMs,
+        reducedMotion: this.reducedMotion,
+      });
+    } catch {
+      // Best-effort when basemap or overlay layers are unavailable.
+    }
+  }
+
+  syncHydrowayContextLayers(map?: Map | null): void {
+    const targetMap = map ?? this.getOperationalMap();
+    if (!targetMap) return;
+
+    try {
+      applyHydrowayContextLayerPreset(targetMap, this.layerPresetId);
+    } catch {
+      // Best-effort when context layers are unavailable.
     }
   }
 
@@ -366,7 +491,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   }
 
   destroy(): void {
-    this.stopVisualLoop();
+    this.stopRouteVisualEffects();
 
     if (this.destroyed && !this.map && this.visualFrameId === null && !this.resizeObserver) {
       return;
@@ -392,9 +517,13 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.mountOnReadyHook = undefined;
 
     if (isMapLibreMapUsable(map)) {
+      this.removeLayerTooltips(map);
       try {
         map.off('load', this.handleMapLoad);
+        map.off('style.load', this.handleStyleLoad);
         map.off('moveend', this.handleMapMoveEnd);
+        map.off('resize', this.handleMapResize);
+        map.off('error', this.handleMapError);
       } catch {
         // Map may already be tearing down.
       }
@@ -403,6 +532,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       } catch {
         // Ignore double-remove during Fast Refresh.
       }
+    } else {
+      this.removeLayerTooltips();
     }
 
     this.container?.replaceChildren();
@@ -417,7 +548,128 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.fitOptions = resolveHydroMapLibreFitOptions('');
     this.cameraSettled = false;
     this.visualPhaseStartMs = 0;
+    this.layerPresetId = DEFAULT_HYDROWAY_MAP_LAYER_PRESET_ID;
+    this.openFreeMapTileWarned = false;
+    this.layerTooltipUiBlocked = false;
   }
+
+  private installLayerTooltips(map: Map): void {
+    if (this.destroyed || !isMapLibreMapUsable(map)) return;
+    this.syncLayerTooltipHandlers(map);
+  }
+
+  private removeLayerTooltips(map?: Map): void {
+    const targetMap = map ?? this.map;
+    if (targetMap && isMapLibreMapUsable(targetMap)) {
+      for (const layerId of this.layerTooltipRegisteredLayerIds) {
+        try {
+          targetMap.off('mousemove', layerId, this.handleLayerTooltipMouseMove);
+          targetMap.off('mouseleave', layerId, this.handleLayerTooltipMouseLeave);
+        } catch {
+          // Map may already be tearing down.
+        }
+      }
+    }
+
+    this.layerTooltipRegisteredLayerIds.clear();
+    this.clearLayerTooltipState(targetMap ?? undefined);
+  }
+
+  private syncLayerTooltipHandlers(map: Map): void {
+    if (this.destroyed || !isMapLibreMapUsable(map) || !this.overlayReady) return;
+
+    for (const layerId of HYDRAWAY_LAYER_TOOLTIP_LAYER_IDS) {
+      if (!layerExistsOnMap(map, layerId)) continue;
+      if (this.layerTooltipRegisteredLayerIds.has(layerId)) continue;
+
+      map.on('mousemove', layerId, this.handleLayerTooltipMouseMove);
+      map.on('mouseleave', layerId, this.handleLayerTooltipMouseLeave);
+      this.layerTooltipRegisteredLayerIds.add(layerId);
+    }
+  }
+
+  private canShowTooltipForLayer(map: Map, layerId: string): boolean {
+    if (this.destroyed || !canShowHydrowayLayerTooltip(layerId)) return false;
+    return isHydrowayLayerTooltipLayerVisible(map, layerId);
+  }
+
+  private buildLayerTooltipHtml(feature: MapGeoJSONFeature, layerId: string): string | null {
+    return buildHydrowayLayerTooltipHtml(layerId, feature as GeoJSON.Feature);
+  }
+
+  private getLayerTooltipFeatureKey(feature: MapGeoJSONFeature, layerId: string): string | null {
+    return getHydrowayLayerTooltipFeatureKey(layerId, feature as GeoJSON.Feature);
+  }
+
+  private clearLayerTooltipState(map?: Map): void {
+    this.layerTooltipCurrentFeatureKey = null;
+    this.layerTooltipPopup?.remove();
+    this.layerTooltipPopup = null;
+
+    if (map && isMapLibreMapUsable(map)) {
+      try {
+        map.getCanvas().style.cursor = '';
+      } catch {
+        // Canvas may be gone during teardown.
+      }
+    }
+  }
+
+  private readonly handleLayerTooltipMouseMove = (event: MapLayerMouseEvent): void => {
+    const map = this.map;
+    if (!map || this.destroyed || !isMapLibreMapUsable(map)) return;
+
+    if (this.layerTooltipUiBlocked) {
+      this.clearLayerTooltipState(map);
+      return;
+    }
+
+    const layerId = event.features?.[0]?.layer?.id;
+    const feature = event.features?.[0];
+    if (!layerId || !feature || !this.canShowTooltipForLayer(map, layerId)) {
+      this.clearLayerTooltipState(map);
+      return;
+    }
+
+    const featureKey = this.getLayerTooltipFeatureKey(feature, layerId);
+    if (!featureKey) {
+      this.clearLayerTooltipState(map);
+      return;
+    }
+
+    map.getCanvas().style.cursor = 'pointer';
+
+    const lngLat = resolveHydrowayLayerTooltipLngLat(feature as GeoJSON.Feature, event.lngLat);
+
+    if (featureKey === this.layerTooltipCurrentFeatureKey && this.layerTooltipPopup) {
+      this.layerTooltipPopup.setLngLat(lngLat);
+      return;
+    }
+
+    const html = this.buildLayerTooltipHtml(feature, layerId);
+    if (!html) {
+      this.clearLayerTooltipState(map);
+      return;
+    }
+
+    if (!this.layerTooltipPopup) {
+      this.layerTooltipPopup = new maplibregl.Popup({
+        closeButton: false,
+        closeOnClick: false,
+        className: 'hydriMapTooltip',
+        maxWidth: '170px',
+      });
+    }
+
+    this.layerTooltipCurrentFeatureKey = featureKey;
+    this.layerTooltipPopup.setLngLat(lngLat).setHTML(html).addTo(map);
+  };
+
+  private readonly handleLayerTooltipMouseLeave = (): void => {
+    const map = this.map;
+    if (!map || !isMapLibreMapUsable(map)) return;
+    this.clearLayerTooltipState(map);
+  };
 
   private syncRouteMarkerLayers(map: Map): void {
     if (this.destroyed || !isMapLibreMapUsable(map)) return;
@@ -548,16 +800,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   }
 
   private resolveRouteFlowPaintOptions(hydrographyEmphasis?: boolean) {
-    const elapsedMs = this.visualPhaseStartMs
-      ? performance.now() - this.visualPhaseStartMs
-      : 0;
-    const flowPhase = (elapsedMs % 9800) / 9800;
-
     return {
       hydrographyEmphasis: hydrographyEmphasis ?? this.resolveHydrographyEmphasis(),
-      flowPhase01: flowPhase,
-      elapsedMs,
-      reducedMotion: this.reducedMotion,
     };
   }
 
@@ -682,7 +926,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.camera = boundsToSchematicCamera(map.getBounds());
     this.syncRouteMarkerLayers(map);
     this.syncRouteIdentificationMarkersWhenReady(map);
-    this.startVisualLoop(map);
+    this.startRouteVisualEffects(map);
   }
 
   private readonly visualTick = (now: number): void => {
@@ -696,11 +940,13 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
     const elapsed = now - this.visualPhaseStartMs;
     try {
-      syncRouteFlowPaint(map, this.progress01, {
-        ...this.resolveRouteFlowPaintOptions(),
-        elapsedMs: elapsed,
-        reducedMotion: false,
-      });
+      if (
+        this.routeBreathingStarted &&
+        now - this.routeBreathingLastTickMs >= HYDRAWAY_ROUTE_BREATHING_TICK_MS
+      ) {
+        syncHydrowayRouteBreathingPaint(map, now);
+        this.routeBreathingLastTickMs = now;
+      }
       syncRoutePointPulsePaint(map, elapsed);
       this.syncRouteIdentificationMarkers(map);
     } catch {
@@ -712,20 +958,36 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
   };
 
-  private startVisualLoop(map: Map): void {
-    if (this.visualFrameId !== null) return;
+  private startRouteVisualEffects(map: Map): void {
     if (!this.cameraSettled || !this.overlayReady) return;
     if (this.map !== map || !this.canSyncMapState(map)) return;
 
     syncRouteFlowPaint(map, this.progress01, this.resolveRouteFlowPaintOptions());
     syncRoutePointPulsePaint(map, 0);
-    if (this.reducedMotion) return;
 
-    this.visualPhaseStartMs = 0;
-    this.visualFrameId = requestAnimationFrame(this.visualTick);
+    if (!this.reducedMotion) {
+      if (!this.routeBreathingStarted) {
+        startHydrowayRouteBreathingAnimation(map, { reducedMotion: this.reducedMotion });
+        this.routeBreathingStarted = true;
+      }
+      if (this.visualFrameId === null) {
+        this.visualPhaseStartMs = 0;
+        this.visualFrameId = requestAnimationFrame(this.visualTick);
+      }
+      return;
+    }
+
+    try {
+      syncHydrowayRouteBreathingPaint(map, performance.now());
+    } catch {
+      // Static paint when reduced motion is preferred.
+    }
   }
 
-  private stopVisualLoop(): void {
+  private stopRouteVisualEffects(): void {
+    stopHydrowayRouteBreathingAnimation();
+    this.routeBreathingStarted = false;
+    this.routeBreathingLastTickMs = 0;
     if (this.visualFrameId !== null) {
       cancelAnimationFrame(this.visualFrameId);
       this.visualFrameId = null;
@@ -757,12 +1019,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     const hydroPaint = applyHydroLayerPaintMode(map, hydrographyEmphasis);
     appliedLayerCount += hydroPaint.appliedLayerCount;
 
-    try {
-      syncRouteFlowPaint(map, this.progress01, this.resolveRouteFlowPaintOptions(hydrographyEmphasis));
-    } catch {
-      // Paint sync is best-effort during teardown.
-    }
-
+    this.syncLayerPresetPaint(map);
+    this.syncLayerTooltipHandlers(map);
     this.syncRouteMarkerLayers(map);
     this.syncRouteIdentificationMarkersWhenReady(map);
 
@@ -800,4 +1058,4 @@ export function getMapLibreZoomPercent(zoom: number, baseZoom = INITIAL_MAP_ZOOM
   return Math.round((2 ** (safeZoom - baseZoom)) * 100);
 }
 
-export type { HydrowayCameraChapterId };
+export type { HydrowayCameraChapterId, HydrowayMapLayerPresetId };
