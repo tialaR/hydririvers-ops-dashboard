@@ -8,6 +8,11 @@ import type {
 
 import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
+import { HYDRAWAY_MAP_CONTEXT_MOCK } from '../mocks/hydroway-map-context.mock';
+import {
+  pointAtPolylineProgress,
+  slicePolylineAtProgress,
+} from '../adapters/route-geometry';
 import { buildRouteTraveledGeoJson } from './hydro-maplibre-animation';
 import type { RouteMarkerKind } from './hydro-maplibre-route-markers';
 
@@ -21,11 +26,16 @@ import {
   type RouteMarkerCoordinates,
 } from './route-marker-geometry';
 import {
-  buildRouteRemainingFlowGradientExpression,
-  buildRouteTraveledFlowGradientExpression,
-  resolveRouteDestinationFlowPaint,
+  buildHydrowayRouteActiveGradientExpression,
+  buildHydrowayRouteRemainingGradientExpression,
+  HYDRAWAY_ROUTE_ACTIVE_COLORS,
+  HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS,
+  HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS,
+  HYDRAWAY_ROUTE_BREATHING_TICK_MS,
+  HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED,
+  HYDRAWAY_ROUTE_REMAINING_COLORS,
+  resolveHydrowayRouteBreathingPaint,
   resolveRoutePointPulsePaint,
-  resolveRouteRiverMistPaint,
   ROUTE_RIVER_COLORS,
   type RoutePointPulseKind,
 } from './hydro-maplibre-route-style';
@@ -37,21 +47,60 @@ export const HYDROWAY_ROUTE_MARKERS_SOURCE_ID = 'hydroway-route-markers';
 
 export const HYDROWAY_MVP_OVERLAY_SOURCE_IDS = {
   routePoints: 'hydroway-route-points',
-  routeFlow: 'hydroway-route-flow',
+  routeFlowActive: 'hydroway-route-flow-active',
+  routeFlowRemainingSegment: 'hydroway-route-flow-remaining',
   routeMarkers: HYDROWAY_ROUTE_MARKERS_SOURCE_ID,
 } as const;
 
 /** Layers MVP V2.7c — overlay limpo sobre basemap OpenFreeMap (dev only). */
+/** Sources mock de contexto hidroviário (dev spike). */
+export const HYDROWAY_CONTEXT_SOURCE_IDS = {
+  corridors: 'hydri-waterway-corridors-source',
+  corridorInfoPoints: 'hydri-waterway-corridor-info-points-source',
+  terminals: 'hydri-waterway-terminals-source',
+  infrastructure: 'hydri-waterway-infrastructure-source',
+  signals: 'hydri-waterway-signals-source',
+  basins: 'hydri-waterway-basins-source',
+  basinInfoPoints: 'hydri-waterway-basin-info-points-source',
+  alertZones: 'hydri-waterway-alert-zones-source',
+  alertPoints: 'hydri-waterway-alert-points-source',
+} as const;
+
+export const HYDROWAY_CONTEXT_LAYER_IDS = {
+  corridorsShadow: 'hydri-waterway-corridors-shadow',
+  corridorsCore: 'hydri-waterway-corridors-core',
+  corridorsHighlight: 'hydri-waterway-corridors-highlight',
+  corridorInfoPoint: 'hydri-waterway-corridor-info-points',
+  terminalsHalo: 'hydri-waterway-terminals-halo',
+  terminalsPoint: 'hydri-waterway-terminals-point',
+  infrastructurePoint: 'hydri-waterway-infrastructure-point',
+  infrastructureLabel: 'hydri-waterway-infrastructure-label',
+  signalsPoint: 'hydri-waterway-signals-point',
+  basinsFill: 'hydri-waterway-basins-fill',
+  basinsOutline: 'hydri-waterway-basins-outline',
+  basinInfoPoint: 'hydri-waterway-basin-info-points',
+  alertZonesFill: 'hydri-waterway-alert-zones-fill',
+  alertZonesOutline: 'hydri-waterway-alert-zones-outline',
+  alertPointsPoint: 'hydri-waterway-alert-points',
+} as const;
+
 export const HYDROWAY_MVP_OVERLAY_LAYER_IDS = {
   waterwayMain: 'hydri-waterway-main',
   waterwayCorridor: 'hydri-waterway-corridor',
   routeTrackCasing: 'hydri-route-track-casing',
   routeTrackGlow: 'hydri-route-track-glow',
   routeTrackCore: 'hydri-route-track-core',
+  /** Remaining segment shadow (vessel → destination). */
   routeFlowRemaining: 'hydri-route-flow-remaining',
+  /** Remaining segment glow. */
   routeFlowRiverMist: 'hydri-route-flow-river-mist',
+  /** Remaining segment core. */
   routeFlowDestination: 'hydri-route-flow-destination',
+  /** Active segment shadow (origin → vessel). */
+  routeFlowActiveShadow: 'hydri-route-flow-active-shadow',
+  /** Active segment glow. */
   routeFlowTraveledGlow: 'hydri-route-flow-traveled-glow',
+  /** Active segment core. */
   routeFlowTraveled: 'hydri-route-flow-traveled',
   routePointPulseOrigin: 'hydri-route-point-pulse-origin',
   routePointPulseDestination: 'hydri-route-point-pulse-destination',
@@ -73,6 +122,7 @@ export const HYDROWAY_MVP_LAYER_GROUPS = {
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
+    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowActiveShadow,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePointPulseOrigin,
@@ -88,9 +138,8 @@ export const HYDROWAY_MVP_LAYER_GROUPS = {
   ],
 } as const;
 
-const ROUTE_FLOW_REMAINING_OPACITY = { default: 0.3, emphasis: 0.34 } as const;
-const ROUTE_FLOW_TRAVELED_OPACITY = { default: 0.72, emphasis: 0.78 } as const;
-const ROUTE_FLOW_TRAVELED_GLOW_OPACITY = { default: 0.28, emphasis: 0.34 } as const;
+const ROUTE_FLOW_ACTIVE_CORE_OPACITY = { default: 0.78, emphasis: 0.82 } as const;
+const ROUTE_FLOW_REMAINING_CORE_OPACITY = { default: 0.24, emphasis: 0.28 } as const;
 
 const ROUTE_POINT_PULSE_LAYER_BY_KIND: Record<RoutePointPulseKind, string> = {
   origin: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routePointPulseOrigin,
@@ -144,13 +193,15 @@ const zoomWidth = (z4: number, z8: number, z12: number): ExpressionSpecification
   z12,
 ];
 
-/** hr-route-base / glow / flow — larguras de referência no zoom 8. */
+/** hr-route-base / glow — larguras de referência no zoom 8. */
 const ROUTE_BASE_WIDTH = zoomWidth(3.2, 4.8, 6.2);
 const ROUTE_GLOW_WIDTH = zoomWidth(5.5, 8.5, 11);
-const ROUTE_DEST_FLOW_WIDTH = zoomWidth(3.6, 5.2, 6.8);
-const ROUTE_MIST_WIDTH = zoomWidth(4.8, 7.2, 9);
-const ROUTE_TRAVELED_WIDTH = zoomWidth(3.4, 5.2, 6.6);
-const ROUTE_TRAVELED_GLOW_WIDTH = zoomWidth(4.8, 7.2, 9);
+const ROUTE_ACTIVE_CORE_WIDTH = 6;
+const ROUTE_ACTIVE_GLOW_WIDTH = 10;
+const ROUTE_ACTIVE_SHADOW_WIDTH = 11;
+const ROUTE_REMAINING_CORE_WIDTH = 5;
+const ROUTE_REMAINING_GLOW_WIDTH = 7;
+const ROUTE_REMAINING_SHADOW_WIDTH = 9;
 
 function emptyCollection(): GeoJSON.FeatureCollection {
   return { type: 'FeatureCollection', features: [] };
@@ -191,9 +242,88 @@ function clampProgress01(progress01: number): number {
   return Math.max(0, Math.min(1, progress01));
 }
 
-function clampFlowPhase01(flowPhase01: number | undefined): number {
-  if (flowPhase01 === undefined || !Number.isFinite(flowPhase01)) return 0;
-  return flowPhase01 % 1;
+function lineStringFeatureCollection(coordinates: GeoJSON.Position[]): GeoJSON.FeatureCollection {
+  if (coordinates.length < 2) {
+    return emptyCollection();
+  }
+
+  return {
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: { kind: 'route-segment' },
+        geometry: {
+          type: 'LineString',
+          coordinates,
+        },
+      },
+    ],
+  };
+}
+
+function slicePolylineFromProgress(
+  coordinates: GeoJSON.Position[],
+  progress01: number,
+): GeoJSON.Position[] {
+  if (coordinates.length < 2) {
+    return coordinates;
+  }
+
+  const safeProgress = clampProgress01(progress01);
+  if (safeProgress <= 0) {
+    return coordinates;
+  }
+  if (safeProgress >= 1) {
+    const end = coordinates[coordinates.length - 1];
+    return [end, end];
+  }
+
+  const start = pointAtPolylineProgress(coordinates, safeProgress);
+  const traveled = slicePolylineAtProgress(coordinates, safeProgress);
+  const seam = traveled[traveled.length - 1];
+  const remaining: GeoJSON.Position[] = [start];
+
+  let seamIndex = -1;
+  for (let index = 0; index < coordinates.length; index += 1) {
+    const [lng, lat] = coordinates[index];
+    if (Math.abs(lng - seam[0]) < 1e-5 && Math.abs(lat - seam[1]) < 1e-5) {
+      seamIndex = index;
+      break;
+    }
+  }
+
+  if (seamIndex >= 0) {
+    for (let index = seamIndex + 1; index < coordinates.length; index += 1) {
+      remaining.push(coordinates[index]);
+    }
+  } else {
+    remaining.push(seam);
+    const end = coordinates[coordinates.length - 1];
+    if (remaining[remaining.length - 1] !== end) {
+      remaining.push(end);
+    }
+  }
+
+  if (remaining.length < 2) {
+    remaining.push(coordinates[coordinates.length - 1]);
+  }
+
+  return remaining;
+}
+
+export function buildRouteActiveSegmentGeoJson(
+  routeTrack: GeoJSON.Position[],
+  progress01: number,
+): GeoJSON.FeatureCollection {
+  return lineStringFeatureCollection(slicePolylineAtProgress(routeTrack, clampProgress01(progress01)));
+}
+
+export function buildRouteRemainingSegmentGeoJson(
+  routeTrack: GeoJSON.Position[],
+  progress01: number,
+): GeoJSON.FeatureCollection {
+  return lineStringFeatureCollection(slicePolylineFromProgress(routeTrack, clampProgress01(progress01)));
 }
 
 export function layerExistsOnMap(map: Map | null | undefined, layerId: string): boolean {
@@ -429,6 +559,349 @@ function buildRouteMarkerCoreLayer(kind: RoutePointPulseKind): LayerSpecificatio
   };
 }
 
+export function getHydrowayContextLayerDefinitions(): LayerSpecification[] {
+  const corridorWidth = zoomWidth(1.8, 3.2, 4.8);
+  const corridorHighlightWidth = zoomWidth(2.4, 4, 5.5);
+
+  return [
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.basinsFill,
+      type: 'fill',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.basins,
+      paint: {
+        'fill-color': 'rgba(32, 72, 96, 0.12)',
+        'fill-opacity': 0.12,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.alertZonesFill,
+      type: 'fill',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.alertZones,
+      paint: {
+        'fill-color': [
+          'match',
+          ['get', 'severity'],
+          'high',
+          'rgba(196, 92, 72, 0.22)',
+          'medium',
+          'rgba(196, 148, 72, 0.18)',
+          'rgba(120, 148, 168, 0.14)',
+        ],
+        'fill-opacity': 0.28,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.alertZonesOutline,
+      type: 'line',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.alertZones,
+      paint: {
+        'line-color': 'rgba(196, 120, 88, 0.55)',
+        'line-width': 1.2,
+        'line-opacity': 0.45,
+        'line-dasharray': [4, 3],
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.corridorsShadow,
+      type: 'line',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.corridors,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': 'rgba(8, 24, 36, 0.65)',
+        'line-width': zoomWidth(3, 5, 7),
+        'line-opacity': 0.35,
+        'line-blur': 0.8,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.corridorsCore,
+      type: 'line',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.corridors,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': [
+          'match',
+          ['get', 'category'],
+          'main',
+          'rgba(48, 168, 188, 0.88)',
+          'strategic',
+          'rgba(58, 148, 198, 0.82)',
+          'rgba(72, 158, 178, 0.72)',
+        ],
+        'line-width': corridorWidth,
+        'line-opacity': 0.82,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.corridorsHighlight,
+      type: 'line',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.corridors,
+      filter: ['==', ['get', 'category'], 'strategic'],
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': 'rgba(95, 220, 235, 0.75)',
+        'line-width': corridorHighlightWidth,
+        'line-opacity': 0.55,
+        'line-blur': 0.4,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.corridorInfoPoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.corridorInfoPoints,
+      paint: {
+        'circle-color': 'rgba(13, 172, 160, 0.82)',
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          2.2,
+          10,
+          3.2,
+          14,
+          4,
+        ],
+        'circle-stroke-color': 'rgba(127, 255, 242, 0.35)',
+        'circle-stroke-width': 0.8,
+        'circle-opacity': 0.72,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.terminalsHalo,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.terminals,
+      paint: {
+        'circle-color': 'rgba(72, 210, 228, 0.18)',
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          6,
+          10,
+          10,
+          14,
+          14,
+        ],
+        'circle-opacity': 0.5,
+        'circle-blur': 0.65,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.terminalsPoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.terminals,
+      paint: {
+        'circle-color': [
+          'match',
+          ['get', 'importance'],
+          'national',
+          '#5fd4e8',
+          'regional',
+          '#4ab8cc',
+          '#3a9aad',
+        ],
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          3.5,
+          10,
+          5.5,
+          14,
+          7,
+        ],
+        'circle-stroke-color': 'rgba(6, 18, 28, 0.85)',
+        'circle-stroke-width': 1.5,
+        'circle-opacity': 0.88,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.infrastructurePoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.infrastructure,
+      paint: {
+        'circle-color': [
+          'match',
+          ['get', 'assetType'],
+          'dam',
+          '#c48a5a',
+          'lock',
+          '#b89a4a',
+          'draft-restriction',
+          '#c47258',
+          'navigation-risk',
+          '#a87888',
+          '#8a9aaf',
+        ],
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          4,
+          10,
+          6,
+          14,
+          8,
+        ],
+        'circle-stroke-color': 'rgba(6, 18, 28, 0.9)',
+        'circle-stroke-width': 1.2,
+        'circle-opacity': 0.9,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.infrastructureLabel,
+      type: 'symbol',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.infrastructure,
+      layout: {
+        'text-field': ['get', 'name'],
+        'text-size': 10,
+        'text-offset': [0, 1.2],
+        'text-anchor': 'top',
+        visibility: 'none',
+      },
+      paint: {
+        'text-color': 'rgba(58, 88, 108, 0.85)',
+        'text-halo-color': 'rgba(230, 234, 238, 0.75)',
+        'text-halo-width': 1,
+        'text-opacity': 0.85,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.signalsPoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.signals,
+      paint: {
+        'circle-color': [
+          'match',
+          ['get', 'condition'],
+          'maintenance',
+          '#c4a85a',
+          'attention',
+          '#d4a858',
+          '#6ad4c8',
+        ],
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          2.5,
+          10,
+          4,
+          14,
+          5,
+        ],
+        'circle-stroke-color': 'rgba(6, 18, 28, 0.8)',
+        'circle-stroke-width': 1,
+        'circle-opacity': 0.85,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.basinsOutline,
+      type: 'line',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.basins,
+      paint: {
+        'line-color': 'rgba(58, 108, 138, 0.45)',
+        'line-width': 1,
+        'line-opacity': 0.35,
+        'line-dasharray': [6, 4],
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.basinInfoPoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.basinInfoPoints,
+      paint: {
+        'circle-color': 'rgba(13, 172, 160, 0.55)',
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          2,
+          10,
+          2.8,
+          14,
+          3.5,
+        ],
+        'circle-stroke-color': 'rgba(127, 255, 242, 0.28)',
+        'circle-stroke-width': 0.6,
+        'circle-opacity': 0.62,
+      },
+    },
+    {
+      id: HYDROWAY_CONTEXT_LAYER_IDS.alertPointsPoint,
+      type: 'circle',
+      source: HYDROWAY_CONTEXT_SOURCE_IDS.alertPoints,
+      paint: {
+        'circle-color': [
+          'match',
+          ['get', 'severity'],
+          'high',
+          'rgba(196, 92, 72, 0.82)',
+          'medium',
+          'rgba(196, 148, 72, 0.78)',
+          'rgba(120, 148, 168, 0.7)',
+        ],
+        'circle-radius': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          4,
+          2.2,
+          10,
+          3,
+          14,
+          3.8,
+        ],
+        'circle-stroke-color': 'rgba(8, 18, 28, 0.75)',
+        'circle-stroke-width': 0.8,
+        'circle-opacity': 0.8,
+      },
+    },
+  ];
+}
+
+export function installHydrowayContextOverlay(map: Map): void {
+  const contextSources: Record<string, SourceSpecification> = {
+    [HYDROWAY_CONTEXT_SOURCE_IDS.corridors]: geoJsonSource(HYDRAWAY_MAP_CONTEXT_MOCK.corridors),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.corridorInfoPoints]: geoJsonSource(
+      HYDRAWAY_MAP_CONTEXT_MOCK.corridorInfoPoints,
+    ),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.terminals]: geoJsonSource(HYDRAWAY_MAP_CONTEXT_MOCK.terminals),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.infrastructure]: geoJsonSource(
+      HYDRAWAY_MAP_CONTEXT_MOCK.infrastructure,
+    ),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.signals]: geoJsonSource(HYDRAWAY_MAP_CONTEXT_MOCK.signals),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.basins]: geoJsonSource(HYDRAWAY_MAP_CONTEXT_MOCK.basins),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.basinInfoPoints]: geoJsonSource(
+      HYDRAWAY_MAP_CONTEXT_MOCK.basinInfoPoints,
+    ),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.alertZones]: geoJsonSource(
+      HYDRAWAY_MAP_CONTEXT_MOCK.alertZones,
+    ),
+    [HYDROWAY_CONTEXT_SOURCE_IDS.alertPoints]: geoJsonSource(
+      HYDRAWAY_MAP_CONTEXT_MOCK.alertPoints,
+    ),
+  };
+
+  for (const [id, spec] of Object.entries(contextSources)) {
+    if (!map.getSource(id)) {
+      map.addSource(id, spec);
+    }
+  }
+
+  for (const layer of getHydrowayContextLayerDefinitions()) {
+    if (!layerExistsOnMap(map, layer.id)) {
+      map.addLayer(layer);
+    }
+  }
+}
+
 export function getHydrowayMvpOverlayLayerDefinitions(): LayerSpecification[] {
   return [
     {
@@ -492,59 +965,76 @@ export function getHydrowayMvpOverlayLayerDefinitions(): LayerSpecification[] {
     {
       id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
       type: 'line',
-      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow,
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
-        'line-gradient': buildRouteRemainingFlowGradientExpression(0.15),
-        'line-width': ROUTE_BASE_WIDTH,
-        'line-opacity': ROUTE_FLOW_REMAINING_OPACITY.default,
+        'line-color': HYDRAWAY_ROUTE_REMAINING_COLORS.shadow,
+        'line-width': ROUTE_REMAINING_SHADOW_WIDTH,
+        'line-opacity': 0.16,
+        'line-blur': 0.7,
       },
     },
     {
       id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
       type: 'line',
-      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow,
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
-        'line-color': ROUTE_RIVER_COLORS.glow,
-        'line-width': ROUTE_MIST_WIDTH,
-        'line-dasharray': [0, 120, 520],
-        'line-opacity': 0.22,
+        'line-color': HYDRAWAY_ROUTE_REMAINING_COLORS.glow,
+        'line-width': ROUTE_REMAINING_GLOW_WIDTH,
+        'line-opacity': 0.055,
+        'line-blur': 2.8,
       },
     },
     {
       id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
       type: 'line',
-      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow,
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
-        'line-color': ROUTE_RIVER_COLORS.flow,
-        'line-width': ROUTE_DEST_FLOW_WIDTH,
-        'line-dasharray': [0, 72, 420],
-        'line-opacity': 0.34,
+        ...(HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED
+          ? { 'line-gradient': buildHydrowayRouteRemainingGradientExpression() }
+          : { 'line-color': HYDRAWAY_ROUTE_REMAINING_COLORS.fallback }),
+        'line-width': ROUTE_REMAINING_CORE_WIDTH,
+        'line-opacity': ROUTE_FLOW_REMAINING_CORE_OPACITY.default,
+        'line-blur': 0.45,
+      },
+    },
+    {
+      id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowActiveShadow,
+      type: 'line',
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive,
+      layout: { 'line-cap': 'round', 'line-join': 'round' },
+      paint: {
+        'line-color': HYDRAWAY_ROUTE_ACTIVE_COLORS.shadow,
+        'line-width': ROUTE_ACTIVE_SHADOW_WIDTH,
+        'line-opacity': 0.37,
+        'line-blur': 0.7,
       },
     },
     {
       id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
       type: 'line',
-      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow,
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
-        'line-gradient': buildRouteTraveledFlowGradientExpression(0.15),
-        'line-width': ROUTE_TRAVELED_GLOW_WIDTH,
-        'line-opacity': ROUTE_FLOW_TRAVELED_GLOW_OPACITY.default,
-        'line-blur': 1.15,
+        'line-color': HYDRAWAY_ROUTE_ACTIVE_COLORS.glow,
+        'line-width': ROUTE_ACTIVE_GLOW_WIDTH,
+        'line-opacity': 0.1,
+        'line-blur': 2.2,
       },
     },
     {
       id: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
       type: 'line',
-      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow,
+      source: HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive,
       layout: { 'line-cap': 'round', 'line-join': 'round' },
       paint: {
-        'line-gradient': buildRouteTraveledFlowGradientExpression(0.15),
-        'line-width': ROUTE_TRAVELED_WIDTH,
-        'line-opacity': ROUTE_FLOW_TRAVELED_OPACITY.default,
+        ...(HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED
+          ? { 'line-gradient': buildHydrowayRouteActiveGradientExpression() }
+          : { 'line-color': HYDRAWAY_ROUTE_ACTIVE_COLORS.bright }),
+        'line-width': ROUTE_ACTIVE_CORE_WIDTH,
+        'line-opacity': ROUTE_FLOW_ACTIVE_CORE_OPACITY.default,
       },
     },
     buildRoutePointPulseLayer('origin'),
@@ -603,12 +1093,17 @@ function geoJsonSourceWithLineMetrics(
 }
 
 export function installHydrowayMapLibreOverlay(map: Map, geo: HydrowayGeoJsonSources): void {
+  installHydrowayContextOverlay(map);
+
   const sources: Record<string, SourceSpecification> = {
     [HYDROWAY_GEOJSON_SOURCE_IDS.mainRivers]: geoJsonSource(geo.mainRivers),
     [HYDROWAY_GEOJSON_SOURCE_IDS.navigableCorridors]: geoJsonSource(geo.navigableCorridors),
     [HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack]: geoJsonSource(geo.routeTrack),
     [HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled]: geoJsonSource(geo.routeTraveled),
-    [HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow]: geoJsonSourceWithLineMetrics(geo.routeTrack),
+    [HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive]: geoJsonSourceWithLineMetrics(emptyCollection()),
+    [HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment]: geoJsonSourceWithLineMetrics(
+      emptyCollection(),
+    ),
     [HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routePoints]: geoJsonSource(emptyCollection()),
     [HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeMarkers]: geoJsonSource(emptyCollection()),
   };
@@ -627,7 +1122,7 @@ export function installHydrowayMapLibreOverlay(map: Map, geo: HydrowayGeoJsonSou
 }
 
 export type SyncHydrowayMapLibreOverlayResult = {
-  /** Mesma LineString usada no GeoJSON da rota ciano (routeTrack + routeFlow). */
+  /** LineStrings ativa/restante derivadas da mesma rota ciano (routeTrack). */
   renderedRouteCoordinates: GeoJSON.Position[];
 };
 
@@ -664,7 +1159,14 @@ export function syncHydrowayMapLibreOverlayData(
   if (renderedRouteCoordinates.length >= 2) {
     const routeTrackData = buildRouteTrackGeoJson(geo.routeTrack, renderedRouteCoordinates);
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack, routeTrackData);
-    setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow, routeTrackData);
+    setSource(
+      HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive,
+      buildRouteActiveSegmentGeoJson(renderedRouteCoordinates, safeProgress),
+    );
+    setSource(
+      HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment,
+      buildRouteRemainingSegmentGeoJson(renderedRouteCoordinates, safeProgress),
+    );
     setSource(
       HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled,
       buildRouteTraveledGeoJson(renderedRouteCoordinates, safeProgress, routeProps),
@@ -676,7 +1178,8 @@ export function syncHydrowayMapLibreOverlayData(
     setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routePoints, emptyCollection());
   } else {
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTrack, geo.routeTrack);
-    setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlow, geo.routeTrack);
+    setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowActive, emptyCollection());
+    setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeFlowRemainingSegment, emptyCollection());
     setSource(HYDROWAY_GEOJSON_SOURCE_IDS.routeTraveled, geo.routeTraveled);
     setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routeMarkers, emptyCollection());
     setSource(HYDROWAY_MVP_OVERLAY_SOURCE_IDS.routePoints, emptyCollection());
@@ -689,97 +1192,140 @@ export function syncHydrowayMapLibreOverlayData(
 
 export function syncRouteFlowPaint(
   map: Map | null | undefined,
-  progress01: number,
+  _progress01: number,
   options?: {
     hydrographyEmphasis?: boolean;
-    flowPhase01?: number;
-    elapsedMs?: number;
-    reducedMotion?: boolean;
   },
 ): void {
   if (!isMapLibreOverlayMapUsable(map) || !map.loaded()) return;
 
   const emphasis = options?.hydrographyEmphasis ?? false;
-  const safeProgress = clampProgress01(progress01);
-  const flowPhase = clampFlowPhase01(options?.flowPhase01);
-  const elapsedMs = Number.isFinite(options?.elapsedMs) ? Math.max(0, options!.elapsedMs!) : 0;
-  const reducedMotion = options?.reducedMotion ?? false;
-  const traveledGradient = buildRouteTraveledFlowGradientExpression(safeProgress, flowPhase);
-  const remainingGradient = buildRouteRemainingFlowGradientExpression(safeProgress, flowPhase);
+  const activeCoreOpacity = emphasis
+    ? ROUTE_FLOW_ACTIVE_CORE_OPACITY.emphasis
+    : ROUTE_FLOW_ACTIVE_CORE_OPACITY.default;
+  const remainingCoreOpacity = emphasis
+    ? ROUTE_FLOW_REMAINING_CORE_OPACITY.emphasis
+    : ROUTE_FLOW_REMAINING_CORE_OPACITY.default;
 
-  const traveledOpacity = emphasis
-    ? ROUTE_FLOW_TRAVELED_OPACITY.emphasis
-    : ROUTE_FLOW_TRAVELED_OPACITY.default;
-  const traveledGlowOpacity = emphasis
-    ? ROUTE_FLOW_TRAVELED_GLOW_OPACITY.emphasis
-    : ROUTE_FLOW_TRAVELED_GLOW_OPACITY.default;
-  const remainingOpacity = emphasis
-    ? ROUTE_FLOW_REMAINING_OPACITY.emphasis
-    : ROUTE_FLOW_REMAINING_OPACITY.default;
+  if (HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED) {
+    setPaintIfLayerExists(
+      map,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
+      'line-gradient',
+      buildHydrowayRouteActiveGradientExpression(),
+    );
+    setPaintIfLayerExists(
+      map,
+      HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
+      'line-gradient',
+      buildHydrowayRouteRemainingGradientExpression(),
+    );
+  }
 
-  const destinationFlow = resolveRouteDestinationFlowPaint(elapsedMs, reducedMotion);
-  const riverMist = resolveRouteRiverMistPaint(elapsedMs, reducedMotion);
-
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
-    'line-gradient',
-    traveledGradient,
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
-    'line-opacity',
-    traveledGlowOpacity,
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
-    'line-gradient',
-    traveledGradient,
-  );
   setPaintIfLayerExists(
     map,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
     'line-opacity',
-    traveledOpacity,
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
-    'line-gradient',
-    remainingGradient,
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRemaining,
-    'line-opacity',
-    remainingOpacity,
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
-    'line-dasharray',
-    destinationFlow['line-dasharray'],
+    activeCoreOpacity,
   );
   setPaintIfLayerExists(
     map,
     HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
     'line-opacity',
-    destinationFlow['line-opacity'],
+    remainingCoreOpacity,
   );
+}
+
+const HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS = {
+  activeGlow: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveledGlow,
+  activeCore: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowTraveled,
+  remainingGlow: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
+  remainingCore: HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowDestination,
+} as const;
+
+let hydrowayRouteBreathingStartMs = 0;
+let hydrowayRouteBreathingEnabled = false;
+let hydrowayRouteBreathingDebugLogged = false;
+
+export function syncHydrowayRouteBreathingPaint(map: Map, timestamp: number): void {
+  if (!isMapLibreOverlayMapUsable(map) || !map.loaded()) return;
+
+  const elapsed = Math.max(0, timestamp - hydrowayRouteBreathingStartMs);
+  const paint = resolveHydrowayRouteBreathingPaint(elapsed);
+
   setPaintIfLayerExists(
     map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
-    'line-dasharray',
-    riverMist['line-dasharray'],
-  );
-  setPaintIfLayerExists(
-    map,
-    HYDROWAY_MVP_OVERLAY_LAYER_IDS.routeFlowRiverMist,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.activeGlow,
     'line-opacity',
-    riverMist['line-opacity'],
+    paint.active.glowOpacity,
   );
+  setPaintIfLayerExists(
+    map,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.activeGlow,
+    'line-blur',
+    paint.active.glowBlur,
+  );
+  setPaintIfLayerExists(
+    map,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.activeCore,
+    'line-opacity',
+    paint.active.coreOpacity,
+  );
+  setPaintIfLayerExists(
+    map,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.remainingGlow,
+    'line-opacity',
+    paint.remaining.glowOpacity,
+  );
+  setPaintIfLayerExists(
+    map,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.remainingGlow,
+    'line-blur',
+    paint.remaining.glowBlur,
+  );
+  setPaintIfLayerExists(
+    map,
+    HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.remainingCore,
+    'line-opacity',
+    paint.remaining.coreOpacity,
+  );
+}
+
+export function isHydrowayRouteBreathingAnimationEnabled(): boolean {
+  return hydrowayRouteBreathingEnabled;
+}
+
+export function startHydrowayRouteBreathingAnimation(
+  map: Map,
+  options?: { reducedMotion?: boolean },
+): void {
+  if (!isMapLibreOverlayMapUsable(map)) return;
+  if (options?.reducedMotion) return;
+
+  hydrowayRouteBreathingEnabled = true;
+  if (hydrowayRouteBreathingStartMs === 0) {
+    hydrowayRouteBreathingStartMs = performance.now();
+  }
+
+  if (process.env.NODE_ENV === 'development' && !hydrowayRouteBreathingDebugLogged) {
+    hydrowayRouteBreathingDebugLogged = true;
+    console.debug('[hydroway-map] hydroway route breathing animation active', {
+      activeBreathingStarted: layerExistsOnMap(map, HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.activeCore),
+      remainingBreathingStarted: layerExistsOnMap(
+        map,
+        HYDRAWAY_ROUTE_BREATHING_LAYER_TARGETS.remainingCore,
+      ),
+      activeCycleMs: HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS,
+      remainingCycleMs: HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS,
+      lineGradientEnabled: HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED,
+      reducedMotion: Boolean(options?.reducedMotion),
+    });
+  }
+}
+
+export function stopHydrowayRouteBreathingAnimation(): void {
+  hydrowayRouteBreathingEnabled = false;
+  hydrowayRouteBreathingStartMs = 0;
 }
 
 const ROUTE_MARKER_LAYER_IDS_BY_KIND: Record<
@@ -874,6 +1420,327 @@ export function extractDestinationCoordinate(
 ): GeoJSON.Position | null {
   const track = resolveEffectiveRouteTrack(geo, routeTrackCoords);
   return getRouteDestinationCoordinate(track);
+}
+
+/** Apenas pontos informativos — sem fill/linha ampla (dev spike). */
+export const HYDRAWAY_LAYER_TOOLTIP_LAYER_IDS = [
+  HYDROWAY_CONTEXT_LAYER_IDS.terminalsPoint,
+  HYDROWAY_CONTEXT_LAYER_IDS.infrastructurePoint,
+  HYDROWAY_CONTEXT_LAYER_IDS.signalsPoint,
+  HYDROWAY_CONTEXT_LAYER_IDS.corridorInfoPoint,
+  HYDROWAY_CONTEXT_LAYER_IDS.basinInfoPoint,
+  HYDROWAY_CONTEXT_LAYER_IDS.alertPointsPoint,
+] as const;
+
+export type HydrowayLayerTooltipCategory =
+  | 'corridor'
+  | 'terminal'
+  | 'infrastructure'
+  | 'signal'
+  | 'basin'
+  | 'alert';
+
+const TOOLTIP_CATEGORY_BY_LAYER: Record<string, HydrowayLayerTooltipCategory> = {
+  [HYDROWAY_CONTEXT_LAYER_IDS.terminalsPoint]: 'terminal',
+  [HYDROWAY_CONTEXT_LAYER_IDS.infrastructurePoint]: 'infrastructure',
+  [HYDROWAY_CONTEXT_LAYER_IDS.signalsPoint]: 'signal',
+  [HYDROWAY_CONTEXT_LAYER_IDS.corridorInfoPoint]: 'corridor',
+  [HYDROWAY_CONTEXT_LAYER_IDS.basinInfoPoint]: 'basin',
+  [HYDROWAY_CONTEXT_LAYER_IDS.alertPointsPoint]: 'alert',
+};
+
+const TOOLTIP_EYEBROW_BY_CATEGORY: Record<HydrowayLayerTooltipCategory, string> = {
+  corridor: 'Corredor',
+  terminal: 'Terminal',
+  infrastructure: 'Infra',
+  signal: 'Sinal',
+  basin: 'Bacia',
+  alert: 'Alerta',
+};
+
+const TOOLTIP_TITLE_MAX_LEN = 28;
+const TOOLTIP_META_MAX_LEN = 36;
+
+export function truncateHydrowayMapTooltipText(value: string, maxLen: number): string {
+  const trimmed = value.trim();
+  if (trimmed.length <= maxLen) return trimmed;
+  return `${trimmed.slice(0, Math.max(0, maxLen - 1))}…`;
+}
+
+export function escapeHydrowayMapTooltipText(value: unknown): string {
+  const text = value === null || value === undefined ? '' : String(value);
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function resolveHydrowayLayerTooltipCategory(
+  layerId: string,
+): HydrowayLayerTooltipCategory | null {
+  return TOOLTIP_CATEGORY_BY_LAYER[layerId] ?? null;
+}
+
+export function canShowHydrowayLayerTooltip(layerId: string): boolean {
+  return resolveHydrowayLayerTooltipCategory(layerId) !== null;
+}
+
+function readFeatureProperty(feature: GeoJSON.Feature, key: string): unknown {
+  const props = feature.properties;
+  if (!props || typeof props !== 'object') return undefined;
+  return (props as Record<string, unknown>)[key];
+}
+
+function readFeatureString(feature: GeoJSON.Feature, key: string, fallback = ''): string {
+  const value = readFeatureProperty(feature, key);
+  if (value === null || value === undefined) return fallback;
+  return String(value).trim();
+}
+
+function resolveTooltipCategoryFromFeature(
+  layerId: string,
+  feature: GeoJSON.Feature,
+): HydrowayLayerTooltipCategory | null {
+  const kind = readFeatureString(feature, 'tooltipKind');
+  if (
+    kind === 'corridor' ||
+    kind === 'terminal' ||
+    kind === 'infrastructure' ||
+    kind === 'signal' ||
+    kind === 'basin' ||
+    kind === 'alert'
+  ) {
+    return kind;
+  }
+  return resolveHydrowayLayerTooltipCategory(layerId);
+}
+
+function formatCargoProfileShort(value: string): string {
+  switch (value) {
+    case 'grains':
+      return 'grãos';
+    case 'fuel':
+      return 'combustível';
+    case 'ores':
+      return 'minério';
+    case 'containers':
+      return 'contêineres';
+    case 'bulk':
+      return 'granel';
+    default:
+      return 'geral';
+  }
+}
+
+function formatImportanceShort(value: string): string {
+  switch (value) {
+    case 'national':
+      return 'nacional';
+    case 'regional':
+      return 'regional';
+    case 'local':
+      return 'local';
+    default:
+      return 'ativo';
+  }
+}
+
+function formatCorridorMeta(feature: GeoJSON.Feature): string {
+  const category = readFeatureString(feature, 'category');
+  const navigability = readFeatureString(feature, 'navigability');
+  const left =
+    category === 'strategic'
+      ? 'Estratégico'
+      : category === 'main'
+        ? 'Principal'
+        : category === 'secondary'
+          ? 'Secundário'
+          : 'Corredor';
+  const right =
+    navigability === 'high'
+      ? 'nav. alta'
+      : navigability === 'medium'
+        ? 'nav. média'
+        : navigability === 'low'
+          ? 'nav. baixa'
+          : 'monitorado';
+  return `${left} · ${right}`;
+}
+
+function formatTerminalMeta(feature: GeoJSON.Feature): string {
+  const cargoProfile = readFeatureString(feature, 'cargoProfile');
+  const importance = readFeatureString(feature, 'importance');
+  return `Carga ${formatCargoProfileShort(cargoProfile)} · ${formatImportanceShort(importance)}`;
+}
+
+function formatInfrastructureMeta(feature: GeoJSON.Feature): string {
+  const assetType = readFeatureString(feature, 'assetType');
+  const severity = readFeatureString(feature, 'severity');
+  const left =
+    assetType === 'dam'
+      ? 'Barragem'
+      : assetType === 'draft-restriction'
+        ? 'Calado'
+        : assetType === 'navigation-risk'
+          ? 'Risco nav.'
+          : 'Infra';
+  const right =
+    severity === 'high' ? 'alta' : severity === 'medium' ? 'média' : 'monitorado';
+  return `${left} · sev. ${right}`;
+}
+
+function formatSignalMeta(feature: GeoJSON.Feature): string {
+  const condition = readFeatureString(feature, 'condition');
+  const priority = readFeatureString(feature, 'visibilityPriority');
+  const left =
+    condition === 'maintenance'
+      ? 'Manutenção'
+      : condition === 'attention'
+        ? 'Atenção'
+        : 'Ativo';
+  const right =
+    priority === 'high' ? 'prio. alta' : priority === 'medium' ? 'prio. média' : 'referência';
+  return `${left} · ${right}`;
+}
+
+function formatBasinMeta(feature: GeoJSON.Feature): string {
+  const region = readFeatureString(feature, 'region');
+  const sensitivity = readFeatureString(feature, 'environmentalSensitivity');
+  const left = region ? region : 'Planejamento';
+  const right =
+    sensitivity === 'high' ? 'sens. alta' : sensitivity === 'medium' ? 'sens. média' : 'contexto';
+  return `${left} · ${right}`;
+}
+
+function formatAlertMeta(feature: GeoJSON.Feature): string {
+  const alertType = readFeatureString(feature, 'alertType');
+  const severity = readFeatureString(feature, 'severity');
+  const left =
+    alertType === 'draft-restricted'
+      ? 'Calado'
+      : alertType === 'low-visibility'
+        ? 'Visibilidade'
+        : alertType === 'traffic-intense'
+          ? 'Tráfego'
+          : alertType === 'environmental-monitoring'
+            ? 'Ambiental'
+            : 'Operação';
+  const right =
+    severity === 'high' ? 'alta' : severity === 'medium' ? 'média' : 'baixa';
+  return `${left} · sev. ${right}`;
+}
+
+export function resolveHydrowayLayerTooltipContent(
+  layerId: string,
+  feature: GeoJSON.Feature,
+): { eyebrow: string; title: string; meta: string } | null {
+  const category = resolveTooltipCategoryFromFeature(layerId, feature);
+  if (!category) return null;
+
+  const title = truncateHydrowayMapTooltipText(
+    readFeatureString(feature, 'name') ||
+      readFeatureString(feature, 'basinName') ||
+      'Ponto hidroviário',
+    TOOLTIP_TITLE_MAX_LEN,
+  );
+
+  const metaByCategory: Record<HydrowayLayerTooltipCategory, string> = {
+    corridor: formatCorridorMeta(feature),
+    terminal: formatTerminalMeta(feature),
+    infrastructure: formatInfrastructureMeta(feature),
+    signal: formatSignalMeta(feature),
+    basin: formatBasinMeta(feature),
+    alert: formatAlertMeta(feature),
+  };
+
+  return {
+    eyebrow: TOOLTIP_EYEBROW_BY_CATEGORY[category],
+    title,
+    meta: truncateHydrowayMapTooltipText(metaByCategory[category], TOOLTIP_META_MAX_LEN),
+  };
+}
+
+export function getHydrowayLayerTooltipFeatureKey(
+  layerId: string,
+  feature: GeoJSON.Feature,
+): string | null {
+  if (!resolveTooltipCategoryFromFeature(layerId, feature)) return null;
+
+  const geometry = feature.geometry;
+  if (geometry?.type !== 'Point') return null;
+
+  const featureId = readFeatureString(feature, 'id');
+  if (featureId) return `${layerId}:${featureId}`;
+
+  if (geometry.coordinates.length >= 2) {
+    const [lng, lat] = geometry.coordinates;
+    return `${layerId}:point:${lng.toFixed(5)}:${lat.toFixed(5)}`;
+  }
+
+  return null;
+}
+
+export function buildHydrowayLayerTooltipHtml(
+  layerId: string,
+  feature: GeoJSON.Feature,
+): string | null {
+  const content = resolveHydrowayLayerTooltipContent(layerId, feature);
+  if (!content) return null;
+
+  const eyebrow = escapeHydrowayMapTooltipText(content.eyebrow);
+  const title = escapeHydrowayMapTooltipText(content.title);
+  const meta = escapeHydrowayMapTooltipText(content.meta);
+
+  return [
+    '<div class="hydriMapTooltipCard">',
+    `<span class="hydriMapTooltipEyebrow">${eyebrow}</span>`,
+    `<strong class="hydriMapTooltipTitle">${title}</strong>`,
+    `<span class="hydriMapTooltipMeta">${meta}</span>`,
+    '</div>',
+  ].join('');
+}
+
+export function isHydrowayLayerTooltipLayerVisible(map: Map, layerId: string): boolean {
+  if (!layerExistsOnMap(map, layerId)) return false;
+
+  try {
+    const visibility = map.getLayoutProperty(layerId, 'visibility');
+    if (visibility === 'none') return false;
+  } catch {
+    return false;
+  }
+
+  const opacityKeys = ['fill-opacity', 'line-opacity', 'circle-opacity'] as const;
+  for (const property of opacityKeys) {
+    try {
+      const value = map.getPaintProperty(layerId, property);
+      if (typeof value === 'number' && value <= 0.02) return false;
+    } catch {
+      // Layer may not expose this paint property.
+    }
+  }
+
+  return true;
+}
+
+export function resolveHydrowayLayerTooltipLngLat(
+  feature: GeoJSON.Feature,
+  cursorLngLat: { lng: number; lat: number },
+): [number, number] {
+  const geometry = feature.geometry;
+  if (geometry?.type === 'Point' && geometry.coordinates.length >= 2) {
+    const [lng, lat] = geometry.coordinates;
+    if (Number.isFinite(lng) && Number.isFinite(lat)) {
+      const wrap = (value: number) => {
+        const world = 360;
+        return ((((value - cursorLngLat.lng) % world) + world) % world) + cursorLngLat.lng;
+      };
+      return [wrap(lng), lat];
+    }
+  }
+
+  return [cursorLngLat.lng, cursorLngLat.lat];
 }
 
 export {

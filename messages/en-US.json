@@ -1553,7 +1553,19 @@
       "focusDestination": "Focus destination",
       "focusDestinationAria": "Focus the cargo destination point",
       "focusCurrentCargo": "Focus current cargo",
-      "focusCurrentCargoAria": "Focus the current cargo location"
+      "focusCurrentCargoAria": "Focus the current cargo location",
+      "layersTitle": "Layers",
+      "layersPanelAria": "Map visual presets",
+      "layerPresetDark": "Dark mode",
+      "layerPresetSemiLight": "Semi-light",
+      "layerPresetRealistic": "Realistic",
+      "layerPresetWaterways": "Waterways",
+      "layerPresetGovernment": "Government",
+      "layerPresetDarkDescription": "High contrast for night operations and route readability.",
+      "layerPresetSemiLightDescription": "Controlled light base with clear waterway reading.",
+      "layerPresetRealisticDescription": "Territorial look with more natural colors.",
+      "layerPresetWaterwaysDescription": "Emphasis on navigable reaches and river corridors.",
+      "layerPresetGovernmentDescription": "Analytical view for infrastructure and planning."
     },
     "mapTracking": {
       "title": "Hydro route",

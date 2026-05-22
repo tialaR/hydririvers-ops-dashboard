@@ -18,6 +18,11 @@ import { hydrowayModelToScene } from '../adapters/hydroway-model-to-scene';
 import { HYDROWAY_DEMO_CARGO_IDS } from '../domain/hydroway-entities.types';
 import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import {
+  HYDROWAY_MAP_LAYER_PRESET_ORDER,
+  HYDROWAY_MAP_LAYER_PRESETS,
+  type HydrowayMapLayerPresetId,
+} from '../constants/hydroway-map-layer-presets';
+import {
   getMapLibreZoomPercent,
   MapLibreHydrowayProvider,
   type HydrowayCameraChapterId,
@@ -42,8 +47,6 @@ const ALL_MAP_LAYERS: HydrowayMapLayerId[] = [
   'ports',
   'vessel',
 ];
-
-const MINIMAL_MAP_LAYERS: HydrowayMapLayerId[] = ['cargo-route', 'vessel'];
 
 const CONTROL_ICON_PROPS = {
   className: styles.controlIconSvg,
@@ -238,7 +241,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const [maplibreMountFailed, setMaplibreMountFailed] = useState(false);
   const [maplibreReadyCargoId, setMaplibreReadyCargoId] = useState<string | null>(null);
   const [zoomPercent, setZoomPercent] = useState(100);
-  const [mapLayersExpanded, setMapLayersExpanded] = useState(true);
+  const [layerPresetPanelOpen, setLayerPresetPanelOpen] = useState(false);
+  const [activeLayerPreset, setActiveLayerPreset] = useState<HydrowayMapLayerPresetId>('dark');
+  const layerPresetPanelRef = useRef<HTMLDivElement | null>(null);
   const [activeChapterByCargo, setActiveChapterByCargo] = useState<{
     cargoId: string;
     chapter: HydrowayCameraChapterId;
@@ -294,6 +299,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       model,
     });
     svgProviderRef.current = provider;
+    provider.setLayers(ALL_MAP_LAYERS);
     setMaplibreReadyCargoId(null);
     syncZoomLabel();
 
@@ -306,6 +312,12 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
   const handleMaplibreReady = useCallback(() => {
     setMaplibreMountFailed(false);
     setMaplibreReadyCargoId(model.cargoId);
+    const mapProvider = maplibreViewportRef.current?.getProvider();
+    if (mapProvider?.kind === 'maplibre') {
+      const maplibreProvider = mapProvider as MapLibreHydrowayProvider;
+      maplibreProvider.setLayers(ALL_MAP_LAYERS);
+      setActiveLayerPreset(maplibreProvider.getLayerPreset());
+    }
     syncZoomLabel();
   }, [model.cargoId, syncZoomLabel]);
 
@@ -402,20 +414,47 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     [getMapLibreProvider, model.cargoId, schematicScene.route, showMapLibre, syncZoomLabel],
   );
 
-  const handleToggleLayers = useCallback(() => {
-    const nextExpanded = !mapLayersExpanded;
-    const layers = nextExpanded ? ALL_MAP_LAYERS : MINIMAL_MAP_LAYERS;
+  const handleToggleLayerPresetPanel = useCallback(() => {
+    setLayerPresetPanelOpen((open) => !open);
+  }, []);
 
-    if (showMapLibre) {
+  const handleSelectLayerPreset = useCallback(
+    (presetId: HydrowayMapLayerPresetId) => {
+      if (!showMapLibre) return;
       const mapProvider = getMapLibreProvider();
-      if (!mapProvider?.isReady()) return;
-      mapProvider.setLayers(layers);
-    } else {
-      svgProviderRef.current?.setLayers(layers);
+      if (!mapProvider?.isReady() || !mapProvider.canSetLayerPreset(presetId)) return;
+      mapProvider.setLayerPreset(presetId);
+      setActiveLayerPreset(presetId);
+    },
+    [getMapLibreProvider, showMapLibre],
+  );
+
+  useEffect(() => {
+    if (!layerPresetPanelOpen) {
+      getMapLibreProvider()?.setLayerTooltipUiBlocked(false);
+      return undefined;
     }
 
-    setMapLayersExpanded(nextExpanded);
-  }, [getMapLibreProvider, mapLayersExpanded, showMapLibre]);
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setLayerPresetPanelOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      getMapLibreProvider()?.setLayerTooltipUiBlocked(false);
+    };
+  }, [getMapLibreProvider, layerPresetPanelOpen]);
+
+  const handleLayerPresetPanelPointerEnter = useCallback(() => {
+    getMapLibreProvider()?.setLayerTooltipUiBlocked(true);
+  }, [getMapLibreProvider]);
+
+  const handleLayerPresetPanelPointerLeave = useCallback(() => {
+    getMapLibreProvider()?.setLayerTooltipUiBlocked(false);
+  }, [getMapLibreProvider]);
 
   const handleFitRoute = useCallback(() => {
     if (showMapLibre) {
@@ -455,6 +494,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
         : null;
 
   const mapLibreControlsDisabled = showMapLibre && !maplibreReady;
+  const layerPresetControlsEnabled = maplibreReady;
 
   const stopFloatingControlEvent = useCallback(
     (event: PointerEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => {
@@ -479,7 +519,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           handleZoomOut();
           break;
         case 'layers':
-          handleToggleLayers();
+          handleToggleLayerPresetPanel();
           break;
         case 'reset':
           handleReset();
@@ -498,7 +538,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       handleFitRoute,
       handleFlyToChapter,
       handleReset,
-      handleToggleLayers,
+      handleToggleLayerPresetPanel,
       handleZoomIn,
       handleZoomOut,
     ],
@@ -550,11 +590,11 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     },
     {
       key: 'layers',
-      tooltip: 'Camadas',
-      ariaLabel: 'Alternar camadas do mapa',
+      tooltip: tMap('layersTitle'),
+      ariaLabel: tMap('layersPanelAria'),
       icon: <ControlIconLayers />,
-      ariaPressed: mapLayersExpanded,
-      active: !mapLayersExpanded,
+      ariaPressed: layerPresetPanelOpen,
+      active: layerPresetPanelOpen,
       disabled: mapLibreControlsDisabled,
     },
     {
@@ -730,6 +770,59 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
       <nav className={styles.controlDock} aria-label="Controles do mapa">
         <div className={styles.controlDockInner}>
+          {layerPresetPanelOpen && showMapLibre ? (
+            <div
+              ref={layerPresetPanelRef}
+              className={[
+                styles.layerPresetPanel,
+                activeLayerPreset === 'dark' ? styles.layerPresetPanelDark : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              role="group"
+              aria-label={tMap('layersPanelAria')}
+              onPointerEnter={handleLayerPresetPanelPointerEnter}
+              onPointerLeave={handleLayerPresetPanelPointerLeave}
+            >
+              <header className={styles.layerPresetPanelHeader}>
+                <span className={styles.layerPresetPanelTitle}>{tMap('layersTitle')}</span>
+              </header>
+              <ul className={styles.layerPresetList}>
+                {HYDROWAY_MAP_LAYER_PRESET_ORDER.map((presetId) => {
+                  const preset = HYDROWAY_MAP_LAYER_PRESETS[presetId];
+                  const isActive = activeLayerPreset === presetId;
+
+                  return (
+                    <li key={presetId} className={styles.layerPresetItem}>
+                      <button
+                        type="button"
+                        className={[
+                          styles.layerPresetButton,
+                          isActive ? styles.layerPresetButtonActive : '',
+                        ]
+                          .filter(Boolean)
+                          .join(' ')}
+                        onPointerDownCapture={stopFloatingControlEvent}
+                        onMouseDownCapture={stopFloatingControlEvent}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          handleSelectLayerPreset(presetId);
+                        }}
+                        disabled={!layerPresetControlsEnabled}
+                        aria-pressed={isActive}
+                        aria-label={tMap(preset.labelKey)}
+                      >
+                        <span className={styles.layerPresetButtonLabel}>{tMap(preset.labelKey)}</span>
+                        <span className={styles.layerPresetButtonDescription}>
+                          {tMap(preset.descriptionKey)}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ) : null}
           <div className={styles.controlStack}>
             {dockControls.map((control) => (
               <button

@@ -1553,7 +1553,19 @@
       "focusDestination": "Enfocar destino",
       "focusDestinationAria": "Enfocar el punto de destino de la carga",
       "focusCurrentCargo": "Enfocar carga actual",
-      "focusCurrentCargoAria": "Enfocar la ubicación actual de la carga"
+      "focusCurrentCargoAria": "Enfocar la ubicación actual de la carga",
+      "layersTitle": "Capas",
+      "layersPanelAria": "Presets visuales del mapa",
+      "layerPresetDark": "Modo oscuro",
+      "layerPresetSemiLight": "Semi-light",
+      "layerPresetRealistic": "Realista",
+      "layerPresetWaterways": "Hidrovías",
+      "layerPresetGovernment": "Gubernamental",
+      "layerPresetDarkDescription": "Alto contraste para operación nocturna y lectura de la ruta.",
+      "layerPresetSemiLightDescription": "Base clara controlada con buena lectura hidroviaria.",
+      "layerPresetRealisticDescription": "Aspecto territorial con colores más naturales.",
+      "layerPresetWaterwaysDescription": "Énfasis en tramos navegables y corredores fluviales.",
+      "layerPresetGovernmentDescription": "Lectura analítica para infraestructura y planificación."
     },
     "mapTracking": {
       "title": "Ruta hidroviaria",

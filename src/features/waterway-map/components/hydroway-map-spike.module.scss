@@ -140,6 +140,58 @@
   z-index: 5;
 }
 
+.maplibreViewport :global(.maplibregl-popup.hydriMapTooltip) {
+  z-index: 8;
+  max-width: 170px;
+  pointer-events: none;
+}
+
+.maplibreViewport :global(.hydriMapTooltip .maplibregl-popup-content) {
+  padding: 0;
+  border-radius: 10px;
+  background: rgba(5, 16, 18, 0.5);
+  border: 1px solid rgba(127, 255, 242, 0.07);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
+  color: #dffefa;
+  backdrop-filter: blur(2px);
+}
+
+.maplibreViewport :global(.hydriMapTooltip .maplibregl-popup-tip) {
+  opacity: 0.38;
+}
+
+.maplibreViewport :global(.hydriMapTooltipCard) {
+  display: grid;
+  gap: 0.12rem;
+  padding: 0.4rem 0.48rem;
+}
+
+.maplibreViewport :global(.hydriMapTooltipEyebrow) {
+  color: rgba(127, 255, 242, 0.52);
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.maplibreViewport :global(.hydriMapTooltipTitle) {
+  color: rgba(239, 255, 251, 0.82);
+  font-size: 0.66rem;
+  line-height: 1.08;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.maplibreViewport :global(.hydriMapTooltipMeta) {
+  color: rgba(223, 254, 250, 0.48);
+  font-size: 0.56rem;
+  line-height: 1.15;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .maplibreViewport :global(.hydriRouteIdentificationMarker img),
 .maplibreViewport :global(.hydriRouteIdentificationMarker svg) {
   display: block;
@@ -588,14 +640,150 @@
 .controlDockInner {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  gap: 0.45rem;
   padding: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
   pointer-events: none;
+}
+
+.layerPresetPanel {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  width: min(14.5rem, calc(100vw - 5.5rem));
+  max-height: min(22rem, 52dvh);
+  padding: 0.45rem;
+  border-radius: 12px;
+  border: 1px solid var(--overlay-border-strong);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, var(--overlay-teal-glow), transparent 55%),
+    linear-gradient(
+      152deg,
+      var(--overlay-surface-top) 0%,
+      var(--overlay-surface-mid) 52%,
+      var(--overlay-surface-bottom) 100%
+    );
+  backdrop-filter: blur(18px);
+  box-shadow: var(--overlay-shadow), var(--overlay-inset-highlight);
+  pointer-events: auto;
+  overflow: hidden auto;
+}
+
+.layerPresetPanelDark {
+  border-color: rgba(127, 255, 242, 0.22);
+  background:
+    radial-gradient(ellipse 120% 80% at 50% -10%, rgba(13, 172, 160, 0.14), transparent 55%),
+    linear-gradient(152deg, rgba(5, 14, 18, 0.96) 0%, rgba(7, 18, 22, 0.94) 52%, rgba(4, 10, 14, 0.98) 100%);
+}
+
+.layerPresetPanelHeader {
+  display: flex;
+  align-items: center;
+  padding: 0.2rem 0.35rem 0.35rem;
+}
+
+.layerPresetPanelTitle {
+  color: rgba(226, 240, 248, 0.88);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.layerPresetList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layerPresetItem {
+  margin: 0;
+}
+
+.layerPresetButton {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.12rem;
+  width: 100%;
+  padding: 0.42rem 0.5rem;
+  border: 1px solid rgba(47, 224, 208, 0.12);
+  border-radius: 9px;
+  background: rgba(8, 14, 22, 0.45);
+  color: rgba(226, 240, 248, 0.9);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 120ms ease,
+    background 120ms ease;
+}
+
+.layerPresetButton:hover:not(:disabled) {
+  border-color: rgba(47, 224, 208, 0.28);
+  background: rgba(47, 224, 208, 0.08);
+}
+
+.layerPresetButton:focus-visible {
+  outline: 2px solid rgba(127, 255, 242, 0.55);
+  outline-offset: 2px;
+}
+
+.layerPresetButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.layerPresetButtonActive {
+  border-color: rgba(47, 224, 208, 0.42);
+  background: rgba(47, 224, 208, 0.12);
+}
+
+.layerPresetPanelDark .layerPresetButton {
+  border-color: rgba(127, 255, 242, 0.14);
+  background: rgba(5, 12, 16, 0.72);
+  color: rgba(223, 254, 250, 0.9);
+}
+
+.layerPresetPanelDark .layerPresetButton:hover:not(:disabled) {
+  border-color: rgba(127, 255, 242, 0.32);
+  background: rgba(13, 172, 160, 0.1);
+}
+
+.layerPresetPanelDark .layerPresetButtonActive {
+  border-color: rgba(127, 255, 242, 0.48);
+  background: rgba(13, 172, 160, 0.16);
+}
+
+.layerPresetPanelDark .layerPresetButtonActive .layerPresetButtonLabel {
+  color: #b8fff4;
+}
+
+.layerPresetPanelDark .layerPresetButtonDescription {
+  color: rgba(183, 220, 214, 0.78);
+}
+
+.layerPresetButtonLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.layerPresetButtonDescription {
+  color: rgba(168, 198, 214, 0.78);
+  font-size: 0.6rem;
+  line-height: 1.35;
+}
+
+.layerPresetButtonActive .layerPresetButtonLabel {
+  color: #8ef5e8;
 }
 
 .controlStack {

@@ -2,201 +2,60 @@ import type { ExpressionSpecification } from 'maplibre-gl';
 
 import { hydroMapStyleTokens } from './hydro-map-style';
 
-/** Família ciano/aqua do SVG hydririvers-route-cyan-progressive-slow. */
+/** Breathing animation cycle lengths (ms). */
+export const HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS = 24000;
+export const HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS = 38000;
+export const HYDRAWAY_ROUTE_BREATHING_TICK_MS = 350;
+
+export const HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED = true;
+
+/** Active segment (origin → vessel) — hydrovia teal/cyan. */
+export const HYDRAWAY_ROUTE_ACTIVE_COLORS = {
+  deep: '#064e55',
+  mid: '#087c75',
+  bright: '#0daca0',
+  head: '#7ffff2',
+  glow: '#7ffff2',
+  shadow: '#050808',
+  dash: '#d9fffb',
+} as const;
+
+/** Remaining segment (vessel → destination) — distant future route. */
+export const HYDRAWAY_ROUTE_REMAINING_COLORS = {
+  near: '#0daca0',
+  far: '#064e55',
+  glow: '#7ffff2',
+  shadow: '#050808',
+  fallback: '#087c75',
+} as const;
+
+/** Base track tint (routeTrackGlow / routeTrackCore). */
 export const ROUTE_RIVER_COLORS = {
-  base: '#65ffe8',
-  glow: '#5fffe0',
-  flow: '#72ffe8',
+  base: HYDRAWAY_ROUTE_ACTIVE_COLORS.bright,
+  glow: HYDRAWAY_ROUTE_ACTIVE_COLORS.glow,
+  flow: HYDRAWAY_ROUTE_REMAINING_COLORS.fallback,
   highlight: '#f5d77a',
 } as const;
 
-const ROUTE_FLOW_TRANSPARENT = 'rgba(95, 255, 224, 0)';
-const ROUTE_FLOW_TRAVELED_BODY = 'rgba(101, 255, 232, 0.72)';
-const ROUTE_FLOW_TRAVELED_HIGHLIGHT = 'rgba(245, 215, 122, 0.68)';
-const ROUTE_FLOW_TRAVELED_HEAD = 'rgba(114, 255, 232, 0.92)';
-/** Mesma família aqua do percorrido; opacidade alvo 0.3 no trecho restante. */
-const ROUTE_FLOW_REMAINING_BODY = 'rgba(101, 255, 232, 0.30)';
-const ROUTE_FLOW_REMAINING_TAIL = 'rgba(95, 255, 224, 0.18)';
-
-const ROUTE_FLOW_PHASE_SHIFT = 0.06;
-
-/** hrRiverFlowToBoat — 9.8s */
-export const ROUTE_DESTINATION_FLOW_DURATION_MS = 9800;
-const ROUTE_DEST_FLOW_DASH = 72;
-const ROUTE_DEST_FLOW_GAP = 420;
-const ROUTE_DEST_FLOW_CYCLE = ROUTE_DEST_FLOW_DASH + ROUTE_DEST_FLOW_GAP;
-
-/** hrRiverMistToBoat — 15s */
-export const ROUTE_RIVER_MIST_DURATION_MS = 15000;
-const ROUTE_RIVER_MIST_DASH = 120;
-const ROUTE_RIVER_MIST_GAP = 520;
-const ROUTE_RIVER_MIST_CYCLE = ROUTE_RIVER_MIST_DASH + ROUTE_RIVER_MIST_GAP;
-
-type ScalarKeyframe = { at: number; value: number };
+export type HydrowayRouteBreathingPaint = {
+  active: {
+    glowOpacity: number;
+    glowBlur: number;
+    coreOpacity: number;
+  };
+  remaining: {
+    glowOpacity: number;
+    glowBlur: number;
+    coreOpacity: number;
+  };
+};
 
 function clampRouteProgress(progress01: number): number {
   if (!Number.isFinite(progress01)) return 0.15;
   return Math.max(0.02, Math.min(0.98, progress01));
 }
 
-function clampFlowPhase(flowPhase01: number): number {
-  if (!Number.isFinite(flowPhase01)) return 0;
-  return flowPhase01 % 1;
-}
-
-function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
-
-function cubicBezierEase(t: number, x1: number, y1: number, x2: number, y2: number): number {
-  const clamped = Math.max(0, Math.min(1, t));
-  let start = 0;
-  let end = 1;
-  for (let i = 0; i < 12; i += 1) {
-    const mid = (start + end) / 2;
-    const x =
-      3 * (1 - mid) * (1 - mid) * mid * x1 +
-      3 * (1 - mid) * mid * mid * x2 +
-      mid * mid * mid;
-    if (x < clamped) {
-      start = mid;
-    } else {
-      end = mid;
-    }
-  }
-  const mid = (start + end) / 2;
-  return (
-    3 * (1 - mid) * (1 - mid) * mid * y1 +
-    3 * (1 - mid) * mid * mid * y2 +
-    mid * mid * mid
-  );
-}
-
-function sampleScalarKeyframes(t01: number, frames: ScalarKeyframe[], ease = false): number {
-  const t = clampFlowPhase(t01);
-  if (t <= frames[0].at) return frames[0].value;
-  for (let i = 1; i < frames.length; i += 1) {
-    const next = frames[i];
-    const prev = frames[i - 1];
-    if (t <= next.at) {
-      const span = next.at - prev.at;
-      if (span <= 0) return next.value;
-      const local = (t - prev.at) / span;
-      const eased = ease ? cubicBezierEase(local, 0.45, 0, 0.25, 1) : local;
-      return lerp(prev.value, next.value, eased);
-    }
-  }
-  return frames[frames.length - 1].value;
-}
-
-/** Desloca o padrão de dash ao longo da linha (equivalente a stroke-dashoffset no SVG). */
-export function buildRouteAnimatedDasharray(
-  offsetPx: number,
-  dash: number,
-  gap: number,
-): [number, number, number] {
-  const total = dash + gap;
-  const normalized = ((offsetPx % total) + total) % total;
-  if (normalized < 0.001) {
-    return [0, dash, gap];
-  }
-  const gapLead = Math.max(0.001, gap - normalized);
-  return [normalized, dash, gapLead];
-}
-
-export type RouteRiverDashPaint = {
-  'line-dasharray': [number, number, number];
-  'line-opacity': number;
-};
-
-/** Fluxo principal até a embarcação (hr-route-destination-flow). */
-export function resolveRouteDestinationFlowPaint(
-  elapsedMs: number,
-  reducedMotion = false,
-): RouteRiverDashPaint {
-  if (reducedMotion) {
-    return {
-      'line-dasharray': buildRouteAnimatedDasharray(
-        ROUTE_DEST_FLOW_CYCLE * 0.42,
-        ROUTE_DEST_FLOW_DASH,
-        ROUTE_DEST_FLOW_GAP,
-      ),
-      'line-opacity': 0.34,
-    };
-  }
-
-  const t = (elapsedMs % ROUTE_DESTINATION_FLOW_DURATION_MS) / ROUTE_DESTINATION_FLOW_DURATION_MS;
-  const opacity = sampleScalarKeyframes(
-    t,
-    [
-      { at: 0, value: 0.08 },
-      { at: 0.18, value: 0.34 },
-      { at: 0.58, value: 0.82 },
-      { at: 0.82, value: 0.46 },
-      { at: 1, value: 0.08 },
-    ],
-    true,
-  );
-  const offset = sampleScalarKeyframes(
-    t,
-    [
-      { at: 0, value: ROUTE_DEST_FLOW_CYCLE },
-      { at: 0.82, value: 0 },
-      { at: 1, value: -ROUTE_DEST_FLOW_DASH },
-    ],
-    true,
-  );
-
-  return {
-    'line-dasharray': buildRouteAnimatedDasharray(
-      offset,
-      ROUTE_DEST_FLOW_DASH,
-      ROUTE_DEST_FLOW_GAP,
-    ),
-    'line-opacity': opacity,
-  };
-}
-
-/** Véu de correnteza mais largo e lento (hr-route-river-mist). */
-export function resolveRouteRiverMistPaint(
-  elapsedMs: number,
-  reducedMotion = false,
-): RouteRiverDashPaint {
-  if (reducedMotion) {
-    return {
-      'line-dasharray': buildRouteAnimatedDasharray(
-        ROUTE_RIVER_MIST_CYCLE * 0.38,
-        ROUTE_RIVER_MIST_DASH,
-        ROUTE_RIVER_MIST_GAP,
-      ),
-      'line-opacity': 0.22,
-    };
-  }
-
-  const t = (elapsedMs % ROUTE_RIVER_MIST_DURATION_MS) / ROUTE_RIVER_MIST_DURATION_MS;
-  const opacity = sampleScalarKeyframes(t, [
-    { at: 0, value: 0.1 },
-    { at: 0.45, value: 0.28 },
-    { at: 0.75, value: 0.22 },
-    { at: 1, value: 0.1 },
-  ]);
-  const offset = sampleScalarKeyframes(t, [
-    { at: 0, value: ROUTE_RIVER_MIST_CYCLE },
-    { at: 0.75, value: 0 },
-    { at: 1, value: -160 },
-  ]);
-
-  return {
-    'line-dasharray': buildRouteAnimatedDasharray(
-      offset,
-      ROUTE_RIVER_MIST_DASH,
-      ROUTE_RIVER_MIST_GAP,
-    ),
-    'line-opacity': opacity,
-  };
-}
-
-/** Expressão line-gradient MapLibre (requer lineMetrics na source). */
+/** Legacy planned-route gradient (hydro-maplibre-style). */
 export function buildRouteLineGradientExpression(progress01: number): ExpressionSpecification {
   const progress = clampRouteProgress(progress01);
   const seam = Math.min(progress + 0.012, 0.99);
@@ -216,62 +75,100 @@ export function buildRouteLineGradientExpression(progress01: number): Expression
   ];
 }
 
-/** Percorrido: corpo aqua até o head no progresso; highlight sutil perto da embarcação. */
-export function buildRouteTraveledFlowGradientExpression(
-  progress01: number,
-  flowPhase01 = 0,
-): ExpressionSpecification {
-  const progress = clampRouteProgress(progress01);
-  const phase = clampFlowPhase(flowPhase01);
-  const flowShift = phase * ROUTE_FLOW_PHASE_SHIFT;
-  const head = Math.min(progress + flowShift, 0.992);
-  const headLead = Math.max(0, head - 0.08);
-  const highlight = Math.max(0, head - 0.025);
-  const fade = Math.min(head + 0.018, 0.995);
+/** Static line-gradient for the active segment (requires lineMetrics on source). */
+export function buildHydrowayRouteActiveGradientExpression(): ExpressionSpecification {
+  if (!HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED) {
+    return HYDRAWAY_ROUTE_ACTIVE_COLORS.bright as unknown as ExpressionSpecification;
+  }
 
   return [
     'interpolate',
     ['linear'],
     ['line-progress'],
     0,
-    ROUTE_FLOW_TRAVELED_BODY,
-    headLead,
-    ROUTE_FLOW_TRAVELED_BODY,
-    highlight,
-    ROUTE_FLOW_TRAVELED_HIGHLIGHT,
-    head,
-    ROUTE_FLOW_TRAVELED_HEAD,
-    fade,
-    ROUTE_FLOW_TRANSPARENT,
+    HYDRAWAY_ROUTE_ACTIVE_COLORS.deep,
+    0.35,
+    HYDRAWAY_ROUTE_ACTIVE_COLORS.mid,
+    0.7,
+    HYDRAWAY_ROUTE_ACTIVE_COLORS.bright,
     1,
-    ROUTE_FLOW_TRANSPARENT,
+    HYDRAWAY_ROUTE_ACTIVE_COLORS.head,
   ];
 }
 
-/** Restante: transparente até o progresso; gradiente suave depois (família aqua/cyan). */
-export function buildRouteRemainingFlowGradientExpression(
-  progress01: number,
-  flowPhase01 = 0,
-): ExpressionSpecification {
-  const progress = clampRouteProgress(progress01);
-  const phase = clampFlowPhase(flowPhase01);
-  const breathe = 0.004 + phase * 0.005;
-  const seam = Math.min(progress + 0.02 + breathe, 0.99);
+/** Static line-gradient for the remaining segment (requires lineMetrics on source). */
+export function buildHydrowayRouteRemainingGradientExpression(): ExpressionSpecification {
+  if (!HYDRAWAY_ROUTE_LINE_GRADIENT_ENABLED) {
+    return HYDRAWAY_ROUTE_REMAINING_COLORS.fallback as unknown as ExpressionSpecification;
+  }
 
   return [
     'interpolate',
     ['linear'],
     ['line-progress'],
     0,
-    ROUTE_FLOW_TRANSPARENT,
-    progress,
-    ROUTE_FLOW_TRANSPARENT,
-    seam,
-    ROUTE_FLOW_REMAINING_BODY,
+    HYDRAWAY_ROUTE_REMAINING_COLORS.near,
     1,
-    ROUTE_FLOW_REMAINING_TAIL,
+    HYDRAWAY_ROUTE_REMAINING_COLORS.far,
   ];
 }
+
+/** Opacity/blur breathing — no geometry or dash motion. */
+export function resolveHydrowayRouteBreathingPaint(elapsedMs: number): HydrowayRouteBreathingPaint {
+  const elapsed = Math.max(0, elapsedMs);
+  const activeWave =
+    (Math.sin((elapsed / HYDRAWAY_ROUTE_BREATHING_ACTIVE_CYCLE_MS) * Math.PI * 2) + 1) / 2;
+  const remainingWave =
+    (Math.sin((elapsed / HYDRAWAY_ROUTE_BREATHING_REMAINING_CYCLE_MS) * Math.PI * 2 + Math.PI / 3) +
+      1) /
+    2;
+
+  return {
+    active: {
+      glowOpacity: 0.07 + activeWave * 0.055,
+      glowBlur: 1.8 + activeWave * 0.8,
+      coreOpacity: 0.74 + activeWave * 0.05,
+    },
+    remaining: {
+      glowOpacity: 0.03 + remainingWave * 0.045,
+      glowBlur: 2.2 + remainingWave * 1.1,
+      coreOpacity: 0.18 + remainingWave * 0.055,
+    },
+  };
+}
+
+/** Preset-driven track tinting (cargo-route base layers). */
+export type RouteFlowPalette = {
+  base: string;
+  glow: string;
+  flow: string;
+  highlight: string;
+  trackCasing: string;
+  traveledBody: string;
+  traveledHighlight: string;
+  traveledHead: string;
+  remainingBody: string;
+  remainingTail: string;
+  traveledGlowOpacity: number;
+  traveledOpacity: number;
+  remainingOpacity: number;
+};
+
+export const DEFAULT_ROUTE_FLOW_PALETTE: RouteFlowPalette = {
+  base: HYDRAWAY_ROUTE_ACTIVE_COLORS.bright,
+  glow: HYDRAWAY_ROUTE_ACTIVE_COLORS.glow,
+  flow: HYDRAWAY_ROUTE_REMAINING_COLORS.fallback,
+  highlight: '#f5d77a',
+  trackCasing: 'rgba(8, 28, 42, 0.42)',
+  traveledBody: HYDRAWAY_ROUTE_ACTIVE_COLORS.bright,
+  traveledHighlight: '#f5d77a',
+  traveledHead: HYDRAWAY_ROUTE_ACTIVE_COLORS.head,
+  remainingBody: HYDRAWAY_ROUTE_REMAINING_COLORS.near,
+  remainingTail: HYDRAWAY_ROUTE_REMAINING_COLORS.far,
+  traveledGlowOpacity: 0.1,
+  traveledOpacity: 0.78,
+  remainingOpacity: 0.24,
+};
 
 export type RoutePointPulseKind = 'origin' | 'destination' | 'vessel';
 
@@ -286,6 +183,10 @@ const ROUTE_POINT_PULSE_PHASE_MS: Record<RoutePointPulseKind, number> = {
   destination: 280,
   vessel: 0,
 };
+
+function lerp(a: number, b: number, t: number): number {
+  return a + (b - a) * t;
+}
 
 function pulseWave(elapsedMs: number, durationMs: number, phaseMs: number): number {
   const t = ((elapsedMs + phaseMs) % durationMs) / durationMs;
