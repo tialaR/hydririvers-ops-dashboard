@@ -50,7 +50,7 @@ import {
 } from '@/features/notifications/services/notifications.client';
 import { filterMainNavigationForUser, mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
 import { persistStoredLocale, type StoredLocale } from '@/shared/preferences/client-preferences';
-import { intlAppPaths, isAuthPublicShellPathname } from '@/shared/routing/app-routes';
+import { intlAppPaths, isAuthPublicShellPathname, isCargoHydrowayMapPathname } from '@/shared/routing/app-routes';
 import styles from './admin-chrome.module.scss';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
@@ -225,6 +225,8 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const hasUnreadNotifications = unreadNotificationsCount > 0;
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
   const isCargoDetailPath = normalizedPathname.startsWith(`${intlAppPaths.cargos.marketplace}/`);
+  const isCargoHydrowayMapRoute = isCargoHydrowayMapPathname(pathname);
+  const suppressMobileShellChrome = isMobileViewport && isCargoHydrowayMapRoute;
   const showMockTools = isMockQaUiEnabled();
 
   const mobileSearchShortcutList = useMemo(
@@ -649,7 +651,16 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
       <div className="hx-main hr-main">
         <main className="hx-content hr-dashboard-page">
-          <div ref={dashboardScrollRef} className="hr-dashboard-scroll">
+          <div
+            ref={dashboardScrollRef}
+            className={[
+              'hr-dashboard-scroll',
+              suppressMobileShellChrome ? styles.mobileHydrowayMapScrollLock : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+          {!suppressMobileShellChrome ? (
           <header className="hx-mobile-topbar" aria-label={tChrome('mobile.headerAria')}>
             <div className="hx-mobile-topbar__row">
               <Link href={intlAppPaths.dashboard.home} className="hx-mobile-brand" aria-label={tChrome('brandAria')}>
@@ -700,6 +711,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
               </h1>
             </div>
           </header>
+          ) : null}
 
           <div className={styles.desktopChromeShell}>
           <header
@@ -821,7 +833,15 @@ export function AdminChrome({ children }: AdminChromeProps) {
           </header>
           </div>
 
-          <div className={`hr-dashboard-content-root ${styles.mobileContentStage}`}>
+          <div
+            className={[
+              'hr-dashboard-content-root',
+              styles.mobileContentStage,
+              suppressMobileShellChrome ? styles.mobileHydrowayMapContentStage : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
             <ScreenTransition>
               {children}
             </ScreenTransition>
@@ -830,7 +850,8 @@ export function AdminChrome({ children }: AdminChromeProps) {
         </main>
       </div>
 
-      <nav className={styles.mobileBottomNav} aria-label={t('mobileMenu')}>
+      {!suppressMobileShellChrome ? (
+      <nav className={`${styles.mobileBottomNav} hx-mobile-bottom-nav`} aria-label={t('mobileMenu')}>
         {MOBILE_BOTTOM_NAV.map((slot) => {
           const Icon = iconByKey[slot.iconKey];
           const active = activeHref === slot.href;
@@ -870,6 +891,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
           );
         })}
       </nav>
+      ) : null}
 
       <BottomSheet
         open={isMobileViewport && notificationsOpen}

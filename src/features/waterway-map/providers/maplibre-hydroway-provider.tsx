@@ -101,6 +101,20 @@ function finiteOrUndefined(value: number | null | undefined): number | undefined
   return typeof value === 'number' && Number.isFinite(value) ? value : undefined;
 }
 
+function asRouteMarkerLngLat(
+  coordinates: GeoJSON.Position | null | undefined,
+): [number, number] | null {
+  if (!coordinates || coordinates.length < 2) return null;
+  const [lng, lat] = coordinates;
+  if (typeof lng !== 'number' || typeof lat !== 'number') return null;
+  if (!Number.isFinite(lng) || !Number.isFinite(lat)) return null;
+  return [lng, lat];
+}
+
+function clampOperationalZoom(zoom: number): number {
+  return Math.min(11, Math.max(9, zoom));
+}
+
 export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   readonly kind = 'maplibre' as const;
 
@@ -138,6 +152,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private layerTooltipCurrentFeatureKey: string | null = null;
   private layerTooltipRegisteredLayerIds = new Set<string>();
   private layerTooltipUiBlocked = false;
+  private skipInitialRouteCamera = false;
 
   private mountOnReadyHook: (() => void) | undefined;
   private pendingInitCamera: HydrowayMapCamera | undefined;
@@ -161,6 +176,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.syncLayerPresetPaint();
   };
 
+  private readonly handleContainerResize = (): void => {
+    this.syncMapViewportSize();
+  };
+
   private readonly handleStyleLoad = (): void => {
     if (!this.overlayReady) return;
     this.syncLayerPresetPaint();
@@ -170,6 +189,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     const map = this.map;
     if (this.destroyed || !isMapLibreMapUsable(map)) return;
 
+    this.syncMapViewportSize();
     this.mapLoadedOnce = true;
     installHydrowayMapLibreOverlay(map, this.geo!);
     this.overlayReady = true;
@@ -194,8 +214,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       this.setCamera(this.pendingInitCamera);
       this.pendingInitCamera = undefined;
       this.onCameraSettled(map);
-    } else {
+    } else if (!this.skipInitialRouteCamera) {
       this.applyInitialRouteCamera(map);
+    } else {
+      this.onCameraSettled(map);
     }
     this.mountOnReadyHook?.();
   };
@@ -205,6 +227,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.destroyed = false;
     this.overlayReady = false;
     this.mapLoadedOnce = false;
+    this.skipInitialRouteCamera = init.skipInitialRouteCamera === true;
     this.container = init.container;
     this.progress01 = init.model.progress01;
     this.fitOptions = resolveHydroMapLibreFitOptions(init.model.cargoId);
@@ -251,6 +274,8 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
       map.on('error', this.handleMapError);
 
       this.map = map;
+      this.installContainerResizeObserver();
+      requestAnimationFrame(() => this.syncMapViewportSize());
     } catch {
       this.initFailed = true;
       throw new Error('maplibre-init-failed');
@@ -260,6 +285,11 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   isReady(): boolean {
     const map = this.map;
     return Boolean(this.overlayReady && this.geo && this.canRunMapOperations(map));
+  }
+
+  /** Garante que o canvas MapLibre acompanha o container após layout/portals. */
+  ensureViewportSize(): void {
+    this.syncMapViewportSize();
   }
 
   /** Sync route overlay + HTML boat marker when cargo/progress changes without remounting the map. */
@@ -411,6 +441,133 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     if (!chapter) return;
 
     flyToHydrowayCameraChapter(map, chapter, this.reducedMotion);
+  }
+
+  /** Enquadra origem, carga atual e destino (fallback: bounds da rota). */
+  fitRouteOverview(options?: {
+    padding?: PaddingOptions;
+    maxZoom?: number;
+    duration?: number;
+    includeRouteCoordinates?: boolean;
+  }): boolean {
+    const map = this.map;
+    if (!map?.loaded()) return false;
+
+    const markerBounds = this.resolveRouteMarkerBounds({
+      includeRouteCoordinates: options?.includeRouteCoordinates ?? true,
+    });
+    const bounds = markerBounds ?? this.overviewBounds;
+    if (!bounds) {
+      this.flyToChapter('overview');
+      return false;
+    }
+
+    map.stop();
+    fitHydrowayRoute(map, bounds, {
+      padding: options?.padding ?? this.fitOptions.padding,
+      maxZoom: options?.maxZoom ?? this.fitOptions.maxZoom,
+      duration:
+        options?.duration ??
+        (this.reducedMotion ? 0 : hydroMapTransitionMs(this.reducedMotion)),
+    });
+    return true;
+  }
+
+  /** Centraliza na origem; retorna false quando coordenada inválida. */
+  focusOrigin(options?: { zoom?: number }): boolean {
+    return this.focusRouteMarker('origin', options);
+  }
+
+  /** Centraliza no destino; retorna false quando coordenada inválida. */
+  focusDestination(options?: { zoom?: number }): boolean {
+    return this.focusRouteMarker('destination', options);
+  }
+
+  /** Centraliza no barco/carga atual; retorna false quando coordenada inválida. */
+  centerCurrentCargo(options?: { zoom?: number }): boolean {
+    const map = this.map;
+    if (!map?.loaded() || !this.hasRouteIdentificationMarkerInputs()) return false;
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+    const vessel = asRouteMarkerLngLat(markers.vessel);
+    if (!vessel) return false;
+
+    const zoom = clampOperationalZoom(options?.zoom ?? 10);
+    map.stop();
+
+    if (this.reducedMotion) {
+      map.jumpTo({
+        center: vessel,
+        zoom,
+        bearing: map.getBearing(),
+        pitch: map.getPitch(),
+      });
+      return true;
+    }
+
+    map.easeTo({
+      center: vessel,
+      zoom,
+      bearing: map.getBearing(),
+      pitch: map.getPitch(),
+      duration: hydroMapTransitionMs(this.reducedMotion),
+      essential: true,
+    });
+    return true;
+  }
+
+  bindUserCameraInteractionListener(listener: () => void): () => void {
+    const map = this.map;
+    if (!isMapLibreMapUsable(map)) return () => {};
+
+    const handleInteraction = (event: { originalEvent?: Event }) => {
+      if (!event.originalEvent) return;
+      listener();
+    };
+
+    map.on('dragstart', handleInteraction);
+    map.on('zoomstart', handleInteraction);
+    map.on('rotatestart', handleInteraction);
+    map.on('pitchstart', handleInteraction);
+
+    return () => {
+      if (!isMapLibreMapUsable(map)) return;
+      map.off('dragstart', handleInteraction);
+      map.off('zoomstart', handleInteraction);
+      map.off('rotatestart', handleInteraction);
+      map.off('pitchstart', handleInteraction);
+    };
+  }
+
+  getRouteMarkerDiagnostics(): {
+    hasOrigin: boolean;
+    hasCurrentCargo: boolean;
+    hasDestination: boolean;
+    routeCoordinatesLength: number;
+  } {
+    if (!this.hasRouteIdentificationMarkerInputs()) {
+      return {
+        hasOrigin: false,
+        hasCurrentCargo: false,
+        hasDestination: false,
+        routeCoordinatesLength: this.renderedRouteCoordinates.length,
+      };
+    }
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+
+    return {
+      hasOrigin: asRouteMarkerLngLat(markers.origin) !== null,
+      hasCurrentCargo: asRouteMarkerLngLat(markers.vessel) !== null,
+      hasDestination: asRouteMarkerLngLat(markers.destination) !== null,
+      routeCoordinatesLength: this.renderedRouteCoordinates.length,
+    };
   }
 
   setCamera(camera: Partial<HydrowayMapCamera>): void {
@@ -883,6 +1040,74 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     });
   }
 
+  private focusRouteMarker(
+    kind: 'origin' | 'destination',
+    options?: { zoom?: number },
+  ): boolean {
+    const map = this.map;
+    if (!map?.loaded() || !this.hasRouteIdentificationMarkerInputs()) return false;
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+    const center = asRouteMarkerLngLat(kind === 'origin' ? markers.origin : markers.destination);
+    if (!center) return false;
+
+    const zoom = clampOperationalZoom(options?.zoom ?? 10);
+    map.stop();
+
+    if (this.reducedMotion) {
+      map.jumpTo({
+        center,
+        zoom,
+        bearing: map.getBearing(),
+        pitch: map.getPitch(),
+      });
+      return true;
+    }
+
+    map.easeTo({
+      center,
+      zoom,
+      bearing: map.getBearing(),
+      pitch: map.getPitch(),
+      duration: hydroMapTransitionMs(this.reducedMotion),
+      essential: true,
+    });
+    return true;
+  }
+
+  private resolveRouteMarkerBounds(options?: {
+    includeRouteCoordinates?: boolean;
+  }): LngLatBoundsLike | null {
+    if (!this.hasRouteIdentificationMarkerInputs()) return null;
+
+    const markers = resolveRouteMarkerCoordinates(
+      this.renderedRouteCoordinates,
+      this.progress01,
+    );
+    const points = [markers.origin, markers.destination, markers.vessel]
+      .map((coord) => asRouteMarkerLngLat(coord))
+      .filter((coord): coord is [number, number] => coord !== null);
+
+    if (options?.includeRouteCoordinates !== false) {
+      for (const coord of this.renderedRouteCoordinates) {
+        const lngLat = asRouteMarkerLngLat(coord);
+        if (lngLat) points.push(lngLat);
+      }
+    }
+
+    if (points.length < 2) return null;
+
+    const lngs = points.map(([lng]) => lng);
+    const lats = points.map(([, lat]) => lat);
+    return [
+      [Math.min(...lngs), Math.min(...lats)],
+      [Math.max(...lngs), Math.max(...lats)],
+    ];
+  }
+
   private resolveRouteBounds(): LngLatBoundsLike | null {
     const coords = this.routeTrackCoords;
     if (coords.length >= 2) {
@@ -902,6 +1127,30 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
 
     return null;
+  }
+
+  private installContainerResizeObserver(): void {
+    if (typeof ResizeObserver === 'undefined' || !this.container) return;
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.handleContainerResize();
+    });
+    this.resizeObserver.observe(this.container);
+  }
+
+  private syncMapViewportSize(): void {
+    const map = this.map;
+    if (!isMapLibreMapUsable(map)) return;
+
+    try {
+      map.resize();
+    } catch {
+      return;
+    }
+
+    if (this.overlayReady && map.loaded()) {
+      this.syncLayerPresetPaint(map);
+    }
   }
 
   private applyInitialRouteCamera(map: Map): void {

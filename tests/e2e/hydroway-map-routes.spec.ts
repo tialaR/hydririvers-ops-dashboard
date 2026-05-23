@@ -81,9 +81,21 @@ test.describe('Cargas — rotas protegidas do marketplace', () => {
 
     await expect(page).toHaveURL(/\/pt-BR\/cargas\/CARGO-001\/mapa/);
     await expect(page.getByText(/cargo-001/i).first()).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-product')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-product-stage')).toBeVisible();
 
     await expectNoHydrowaySpikeDevUi(page);
     await expect(page.getByRole('heading', { name: /Hydroway Map Spike/i })).toHaveCount(0);
+  });
+
+  test('smoke /pt-BR/cargas/CARGO-004/mapa rota oficial', async ({ page }, testInfo) => {
+    await smokeHydrowayRoute(page, '/pt-BR/cargas/CARGO-004/mapa', testInfo, {
+      screenshotName: 'cargas-pt-br-cargo-004-mapa',
+    });
+
+    await expect(page).toHaveURL(/\/pt-BR\/cargas\/CARGO-004\/mapa/);
+    await expect(page.getByTestId('hydroway-map-product')).toBeVisible();
+    await expectNoHydrowaySpikeDevUi(page);
   });
 });
 
@@ -97,6 +109,46 @@ test.describe('Cargas — mobile smoke @mobile-hydroway', () => {
     await expect(page.getByRole('button', { name: /CARGO-001/i }).first()).toBeVisible();
     await expect(page.getByText('CARGO-001').first()).toBeVisible();
 
+    await expectNoHydrowaySpikeDevUi(page);
+  });
+
+  test('smoke /pt-BR/cargas/CARGO-001/mapa experiência mobile', async ({ page }, testInfo) => {
+    await smokeHydrowayRoute(page, '/pt-BR/cargas/CARGO-001/mapa', testInfo, {
+      screenshotName: 'cargas-pt-br-mobile-mapa',
+    });
+
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-back')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-stage')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-focus-origin-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-center-cargo-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-focus-destination-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-route-overview-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-product')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-product-stage')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-top-bar')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-bottom-summary')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-layer-panel')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
+    await expect(page.getByRole('group', { name: /Selecionar carga demo/i })).toHaveCount(0);
+    await expect(page.getByRole('group', { name: /Resumo operacional da carga/i })).toHaveCount(0);
+    await expectNoHydrowaySpikeDevUi(page);
+  });
+
+  test('smoke /pt-BR/cargas/CARGO-004/mapa experiência mobile', async ({ page }, testInfo) => {
+    await smokeHydrowayRoute(page, '/pt-BR/cargas/CARGO-004/mapa', testInfo, {
+      screenshotName: 'cargas-pt-br-mobile-mapa-cargo-004',
+    });
+
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-back')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-stage')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-focus-origin-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-center-cargo-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-focus-destination-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-route-overview-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-product')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
     await expectNoHydrowaySpikeDevUi(page);
   });
 });
