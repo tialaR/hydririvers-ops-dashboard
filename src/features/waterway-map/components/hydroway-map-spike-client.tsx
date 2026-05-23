@@ -219,14 +219,23 @@ const HydrowayMapSpikeMaplibreViewport = dynamic(
 
 export type HydrowaySpikeProviderMode = 'maplibre' | 'svg-schematic';
 
+export type HydrowayMapExperience = 'spike' | 'product';
+
 type HydrowayMapSpikeClientProps = {
   model: HydrowayMapModel;
   preferredProvider: HydrowaySpikeProviderMode;
+  /** `product` omite chrome dev (seletor de cargas demo, legenda lateral do spike). */
+  experience?: HydrowayMapExperience;
 };
 
 const MAP_CHAPTER_CONTROL_KEYS = new Set(['origin', 'current', 'destination']);
 
-export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMapSpikeClientProps) {
+export function HydrowayMapSpikeClient({
+  model,
+  preferredProvider,
+  experience = 'spike',
+}: HydrowayMapSpikeClientProps) {
+  const isProductExperience = experience === 'product';
   const tMap = useTranslations('operationsBoard.map');
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -315,6 +324,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     const mapProvider = maplibreViewportRef.current?.getProvider();
     if (mapProvider?.kind === 'maplibre') {
       const maplibreProvider = mapProvider as MapLibreHydrowayProvider;
+      maplibreProvider.ensureViewportSize();
       maplibreProvider.setLayers(ALL_MAP_LAYERS);
       setActiveLayerPreset(maplibreProvider.getLayerPreset());
     }
@@ -471,6 +481,8 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
 
   const selectCargo = useCallback(
     (cargoId: string) => {
+      if (isProductExperience) return;
+
       const params = new URLSearchParams(searchParams.toString());
       params.set('cargoId', cargoId);
       if (forceSvgFallback) {
@@ -478,7 +490,7 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
       }
       router.replace(`${pathname}?${params.toString()}`);
     },
-    [forceSvgFallback, pathname, router, searchParams],
+    [forceSvgFallback, isProductExperience, pathname, router, searchParams],
   );
 
   const progressPercent = Math.round(model.progress01 * 100);
@@ -622,8 +634,17 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
     },
   ];
 
+  const stageAriaLabel = isProductExperience
+    ? tMap('waterwayMap')
+    : 'Mapa hidroviário — spike V2.8';
+  const stageTestId = isProductExperience ? 'hydroway-map-product-stage' : undefined;
+
   return (
-    <section className={styles.stage} aria-label="Mapa hidroviário — spike V2.8">
+    <section
+      className={styles.stage}
+      aria-label={stageAriaLabel}
+      {...(stageTestId ? { 'data-testid': stageTestId } : {})}
+    >
       <div className={styles.topOverlay}>
       <div className={styles.hud} role="group" aria-label="Resumo operacional da carga">
         <article className={`${styles.hudCard} ${styles.hudCardCompact}`}>
@@ -672,73 +693,77 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
             {routeLabel}
           </p>
         </article>
-        <article className={`${styles.hudCard} ${styles.hudCardCompact} ${styles.hudCardMotor}`}>
-          <header className={styles.hudCardHeader}>
-            <span className={styles.hudIcon} aria-hidden="true">
-              <HudIconMotor />
+        {isProductExperience ? null : (
+          <article className={`${styles.hudCard} ${styles.hudCardCompact} ${styles.hudCardMotor}`}>
+            <header className={styles.hudCardHeader}>
+              <span className={styles.hudIcon} aria-hidden="true">
+                <HudIconMotor />
+              </span>
+              <span className={styles.hudLabel}>Motor</span>
+            </header>
+            <span
+              className={`${styles.hudProviderBadge} ${!isMapLibreActive ? styles.hudProviderBadgeFallback : ''}`}
+              data-testid="hydroway-map-provider"
+            >
+              {isMapLibreActive ? 'MapLibre GL' : 'SVG schematic'}
             </span>
-            <span className={styles.hudLabel}>Motor</span>
-          </header>
-          <span
-            className={`${styles.hudProviderBadge} ${!isMapLibreActive ? styles.hudProviderBadgeFallback : ''}`}
-            data-testid="hydroway-map-provider"
-          >
-            {isMapLibreActive ? 'MapLibre GL' : 'SVG schematic'}
-          </span>
-        </article>
+          </article>
+        )}
       </div>
 
-      <div className={styles.topOverlayAside}>
-        <aside className={styles.cargoPanel} role="group" aria-label="Selecionar carga demo">
-          <header className={styles.cargoPanelHeader}>
-            <span className={styles.hudIcon} aria-hidden="true">
-              <HudIconMonitor />
-            </span>
-            <span className={styles.cargoPanelTitle}>Cargas monitoradas</span>
-          </header>
-          <ul className={styles.cargoPanelList}>
-            {HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => {
-              const isActive = model.cargoId === cargoId;
-              return (
-                <li key={cargoId} className={styles.cargoPanelItem}>
-                  <button
-                    type="button"
-                    className={`${styles.cargoRow} ${isActive ? styles.cargoRowActive : ''}`}
-                    onClick={() => selectCargo(cargoId)}
-                    aria-pressed={isActive}
-                  >
-                    <span
-                      className={`${styles.cargoStatusDot} ${isActive ? styles.cargoStatusDotActive : ''}`}
-                      aria-hidden="true"
-                    />
-                    <span className={styles.cargoRowBody}>
-                      <span className={styles.cargoRowId}>{cargoId}</span>
-                      {isActive ? (
-                        <span className={styles.cargoRowMeta}>{progressPercent}% percorrido</span>
-                      ) : null}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </aside>
+      {isProductExperience ? null : (
+        <div className={styles.topOverlayAside}>
+          <aside className={styles.cargoPanel} role="group" aria-label="Selecionar carga demo">
+            <header className={styles.cargoPanelHeader}>
+              <span className={styles.hudIcon} aria-hidden="true">
+                <HudIconMonitor />
+              </span>
+              <span className={styles.cargoPanelTitle}>Cargas monitoradas</span>
+            </header>
+            <ul className={styles.cargoPanelList}>
+              {HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => {
+                const isActive = model.cargoId === cargoId;
+                return (
+                  <li key={cargoId} className={styles.cargoPanelItem}>
+                    <button
+                      type="button"
+                      className={`${styles.cargoRow} ${isActive ? styles.cargoRowActive : ''}`}
+                      onClick={() => selectCargo(cargoId)}
+                      aria-pressed={isActive}
+                    >
+                      <span
+                        className={`${styles.cargoStatusDot} ${isActive ? styles.cargoStatusDotActive : ''}`}
+                        aria-hidden="true"
+                      />
+                      <span className={styles.cargoRowBody}>
+                        <span className={styles.cargoRowId}>{cargoId}</span>
+                        {isActive ? (
+                          <span className={styles.cargoRowMeta}>{progressPercent}% percorrido</span>
+                        ) : null}
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </aside>
 
-        <aside className={styles.legend} aria-label="Legenda do mapa">
-          <div className={styles.legendItem}>
-            <span className={`${styles.legendSwatch} ${styles.legendSwatchTraveled}`} aria-hidden="true" />
-            Percorrido
-          </div>
-          <div className={styles.legendItem}>
-            <span className={`${styles.legendSwatch} ${styles.legendSwatchPending}`} aria-hidden="true" />
-            Restante
-          </div>
-          <div className={styles.legendItem}>
-            <span className={`${styles.legendSwatch} ${styles.legendSwatchRiver}`} aria-hidden="true" />
-            Hidrovia
-          </div>
-        </aside>
-      </div>
+          <aside className={styles.legend} aria-label="Legenda do mapa">
+            <div className={styles.legendItem}>
+              <span className={`${styles.legendSwatch} ${styles.legendSwatchTraveled}`} aria-hidden="true" />
+              Percorrido
+            </div>
+            <div className={styles.legendItem}>
+              <span className={`${styles.legendSwatch} ${styles.legendSwatchPending}`} aria-hidden="true" />
+              Restante
+            </div>
+            <div className={styles.legendItem}>
+              <span className={`${styles.legendSwatch} ${styles.legendSwatchRiver}`} aria-hidden="true" />
+              Hidrovia
+            </div>
+          </aside>
+        </div>
+      )}
       </div>
 
       {fallbackNote ? (
@@ -862,7 +887,9 @@ export function HydrowayMapSpikeClient({ model, preferredProvider }: HydrowayMap
           <HudIconCorridor />
         </span>
         <span className={styles.corridorBadgeLabel}>{formatCorridorLabel(model.corridorId)}</span>
-        {fallbackNote ? <span className={styles.corridorBadgeMeta}>{fallbackNote}</span> : null}
+        {!isProductExperience && fallbackNote ? (
+          <span className={styles.corridorBadgeMeta}>{fallbackNote}</span>
+        ) : null}
       </div>
     </section>
   );

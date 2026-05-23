@@ -120,6 +120,11 @@ export function isAuthPublicShellPathname(pathname: string): boolean {
   return stripped === intlAppPaths.auth.login || stripped === intlAppPaths.auth.register;
 }
 
+/** Mapa hidroviário de carga (`/[locale]/cargas/[id]/mapa`) — experiência imersiva no mobile. */
+export function isCargoHydrowayMapPathname(pathname: string): boolean {
+  return /^\/cargas\/[^/]+\/mapa$/.test(stripLocaleSegmentPath(pathname));
+}
+
 /** Rotas que exigem cookie `hydrorivers_session` (mesma ordem semântica que `proxy.ts`). */
 export const middlewarePrivateIntlPaths: readonly string[] = [
   intlAppPaths.dashboard.home,

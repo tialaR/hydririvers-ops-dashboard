@@ -76,6 +76,8 @@ export type HydrowayMapProviderInit = {
   originMarkerAriaLabel?: string;
   /** Accessible name for the animated destination marker (MapLibre). */
   destinationMarkerAriaLabel?: string;
+  /** When true, MapLibre skips the default route-track camera (mobile defers to runtime fit). */
+  skipInitialRouteCamera?: boolean;
 };
 
 export interface HydrowayMapProvider {

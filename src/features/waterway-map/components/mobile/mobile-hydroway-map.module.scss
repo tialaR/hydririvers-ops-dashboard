@@ -1,0 +1,438 @@
+:global(html.hx-hydroway-map-mobile-immersive),
+:global(body.hx-hydroway-map-mobile-immersive) {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hx-mobile-topbar),
+:global(body.hx-hydroway-map-mobile-immersive .hx-sidebar),
+:global(body.hx-hydroway-map-mobile-immersive .hx-mobile-bottom-nav),
+:global(body.hx-hydroway-map-mobile-immersive .hx-shell > nav) {
+  display: none;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hr-dashboard-scroll),
+:global(body.hx-hydroway-map-mobile-immersive .hx-main),
+:global(body.hx-hydroway-map-mobile-immersive .hx-content) {
+  overflow: hidden;
+  height: 100dvh;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hr-dashboard-content-root) {
+  padding-bottom: 0;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 2147482000;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  isolation: isolate;
+  background: #04080d;
+  color: #e2f0f8;
+}
+
+.mapHost {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.shell .mapHost .mapStage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.shell .mapHost .mapStage :global(.maplibregl-map),
+.shell .mapHost .mapStage :global(.maplibregl-canvas) {
+  width: 100%;
+  height: 100%;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+.shell .mapHost .mapStage :global(.maplibregl-marker.hydriRouteIdentificationMarker),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerOrigin),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerDestination) {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerCurrentCargo) {
+  width: 2.4rem;
+  height: 2.4rem;
+  z-index: 5;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker img),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.floatingBackButton {
+  position: absolute;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: calc(0.75rem + env(safe-area-inset-left, 0px));
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 224, 208, 0.22);
+  background: rgba(8, 14, 22, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #8ef5e8;
+  text-decoration: none;
+  touch-action: manipulation;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+.floatingBackButton:active {
+  transform: scale(0.96);
+  background: rgba(8, 14, 22, 0.88);
+}
+
+.floatingBackButton:focus-visible {
+  outline: 2px solid rgba(142, 245, 232, 0.85);
+  outline-offset: 2px;
+}
+
+.floatingControls {
+  position: absolute;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  right: calc(0.75rem + env(safe-area-inset-right, 0px));
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.floatingControlsGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 224, 208, 0.14);
+  background: rgba(8, 14, 22, 0.42);
+}
+
+.floatingButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(47, 224, 208, 0.22);
+  background: rgba(8, 14, 22, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  color: #8ef5e8;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.floatingButton:active:not(:disabled) {
+  transform: scale(0.96);
+  background: rgba(8, 14, 22, 0.88);
+}
+
+.floatingButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.floatingButtonActive {
+  border-color: rgba(142, 245, 232, 0.55);
+  background: rgba(12, 28, 34, 0.9);
+  color: #c8fff5;
+}
+
+.floatingButton:focus-visible {
+  outline: 2px solid rgba(142, 245, 232, 0.85);
+  outline-offset: 2px;
+}
+
+.layerPanel {
+  position: absolute;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  right: calc(3.65rem + env(safe-area-inset-right, 0px));
+  z-index: 5;
+  width: min(12.5rem, calc(100vw - 5.5rem));
+  max-height: min(18rem, calc(100dvh - 6rem));
+  overflow: auto;
+  overscroll-behavior: contain;
+  border-radius: 0.85rem;
+  border: 1px solid rgba(47, 224, 208, 0.2);
+  background: rgba(8, 14, 22, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+  touch-action: manipulation;
+}
+
+.layerPanelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem 0.45rem;
+  border-bottom: 1px solid rgba(47, 224, 208, 0.1);
+}
+
+.layerPanelTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.88);
+}
+
+.layerPanelClose {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #b8ebe4;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.layerPresetList {
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+}
+
+.layerPresetItem {
+  margin: 0;
+}
+
+.layerPresetButton {
+  width: 100%;
+  min-height: 2.35rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #d8ece8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+
+.layerPresetButtonActive {
+  border-color: rgba(47, 224, 208, 0.28);
+  background: rgba(20, 216, 196, 0.12);
+  color: #e8fffb;
+}
+
+.layerPresetButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.layerPresetLabel {
+  display: block;
+}
+
+.bottomSummary {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.25rem 0  calc(0.35rem + env(safe-area-inset-bottom, 0px));
+}
+
+.bottomSummaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.bottomSummaryCargoId {
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.bottomSummaryStatus {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(142, 245, 232, 0.9);
+}
+
+.bottomSummaryRoute {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  font-size: 0.88rem;
+  color: rgba(214, 232, 236, 0.92);
+}
+
+.bottomSummaryOrigin,
+.bottomSummaryDestination {
+  font-weight: 600;
+}
+
+.bottomSummaryArrow {
+  color: rgba(142, 245, 232, 0.75);
+}
+
+.bottomSummaryProgressRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.bottomSummaryProgressLabel {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.78);
+}
+
+.bottomSummaryProgressValue {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #8ef5e8;
+}
+
+.bottomSummaryProgressTrack {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.bottomSummaryProgressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(20, 216, 196, 0.85), rgba(35, 156, 214, 0.9));
+}
+
+.bottomSummaryEvent {
+  margin: 0;
+  font-size: 0.82rem;
+  color: rgba(200, 220, 226, 0.85);
+}
+
+.bottomSummaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(47, 224, 208, 0.28);
+  background: rgba(20, 216, 196, 0.14);
+  color: #d8fff9;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-align: center;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #04080d;
+}
+
+.loadingPulse {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  border: 2px solid rgba(47, 224, 208, 0.18);
+  border-top-color: rgba(142, 245, 232, 0.85);
+  animation: mobileMapSpin 0.9s linear infinite;
+}
+
+@keyframes mobileMapSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingPulse {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .floatingBackButton,
+  .floatingButton {
+    transition: none;
+  }
+}

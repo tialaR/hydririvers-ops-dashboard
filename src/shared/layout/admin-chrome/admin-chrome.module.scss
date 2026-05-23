@@ -597,6 +597,22 @@
   min-height: 100%;
 }
 
+.mobileHydrowayMapContentStage {
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  max-height: 100dvh;
+  padding-bottom: 0;
+}
+
+.mobileHydrowayMapScrollLock {
+  overflow: hidden;
+  height: 100dvh;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
 .mobileBottomNav {
   position: fixed;
   left: max(0.75rem, env(safe-area-inset-left));
