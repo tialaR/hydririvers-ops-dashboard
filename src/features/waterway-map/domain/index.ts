@@ -33,3 +33,21 @@ export type {
   HydrowayMapModel,
   HydrowayStaticGeoBundle,
 } from './hydroway-map-model.types';
+
+export type {
+  CargoProfile,
+  CargoWaterwayOperationalContext,
+  HydrowayAlert,
+  HydrowayCheckpoint,
+  HydrowayCorridor,
+  HydrowayLngLat,
+  HydrowayOperationalDataset,
+  HydrowayOperationalDatasetSlice,
+  HydrowayOperationalFeatureKind,
+  HydrowayOperationalLayerMode,
+  HydrowayOperationalLayerModeConfig,
+  HydrowayPlanningArea,
+  HydrowaySegment,
+  HydrowaySignal,
+  HydrowayTerminal,
+} from './hydroway-operational-domain.types';
