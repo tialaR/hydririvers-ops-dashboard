@@ -30,6 +30,8 @@ export type BottomSheetProps = {
   /** Accessible label for the close control (defaults to `title` when omitted). */
   closeAriaLabel?: string;
   variant?: BottomSheetVariant;
+  /** Sobrescreve z-index do overlay/sheet (ex.: mapa mobile imersivo acima do shell). */
+  stackingZIndex?: number;
 };
 
 function resolveSnapPoint(snapPoints: BottomSheetSnapPoint[] | undefined) {
@@ -77,7 +79,8 @@ export function BottomSheet({
   className,
   bodyClassName,
   closeAriaLabel,
-  variant = 'default'
+  variant = 'default',
+  stackingZIndex,
 }: BottomSheetProps) {
   const titleId = useId();
   const descriptionId = useId();
@@ -144,17 +147,20 @@ export function BottomSheet({
     };
   }, [open, requestClose]);
 
+  const resolvedOverlayZIndex = stackingZIndex ?? zIndex.overlay;
+  const resolvedSheetZIndex = stackingZIndex ? stackingZIndex + 1 : zIndex.bottomSheet;
+
   const sheetStyle = useMemo<CSSProperties>(() => ({
     ['--sheet-offset' as string]: `${dragOffset}px`,
     ['--sheet-snap' as string]: snap
       ? `${snap}vh`
       : resolveSnapPoint(snapPoints[snapIndex] ? [snapPoints[snapIndex]] : snapPoints),
-    zIndex: zIndex.bottomSheet
-  }), [dragOffset, snap, snapIndex, snapPoints]);
+    zIndex: resolvedSheetZIndex,
+  }), [dragOffset, resolvedSheetZIndex, snap, snapIndex, snapPoints]);
 
   const overlayStyle = useMemo<CSSProperties>(() => ({
-    zIndex: zIndex.overlay
-  }), []);
+    zIndex: resolvedOverlayZIndex,
+  }), [resolvedOverlayZIndex]);
 
   function handleOverlayClick() {
     if (closeOnOverlayClick) requestClose();

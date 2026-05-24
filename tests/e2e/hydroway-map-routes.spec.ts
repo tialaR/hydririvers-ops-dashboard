@@ -83,6 +83,8 @@ test.describe('Cargas — rotas protegidas do marketplace', () => {
     await expect(page.getByText(/cargo-001/i).first()).toBeVisible();
     await expect(page.getByTestId('hydroway-map-product')).toBeVisible();
     await expect(page.getByTestId('hydroway-map-product-stage')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-route-dock')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toHaveCount(0);
 
     await expectNoHydrowaySpikeDevUi(page);
     await expect(page.getByRole('heading', { name: /Hydroway Map Spike/i })).toHaveCount(0);
@@ -127,6 +129,40 @@ test.describe('Cargas — mobile smoke @mobile-hydroway', () => {
     await expect(page.getByTestId('hydroway-map-product')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-product-stage')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-mobile-top-bar')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-route-dock')).toBeVisible();
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toHaveAttribute('data-sheet-open', 'false');
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toHaveAttribute('data-suppressed', 'false');
+
+    await page.getByTestId('hydroway-map-mobile-route-dock').click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toHaveAttribute('data-sheet-open', 'true');
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toHaveAttribute('data-suppressed', 'true');
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toHaveAttribute('aria-hidden', 'true');
+    await expect(page.getByTestId('hydroway-map-mobile-route-sheet-content')).toBeVisible();
+    await expect(page.getByText('Resumo da viagem')).toBeVisible();
+    await expect(page.getByText('Linha do tempo operacional')).toBeVisible();
+
+    await expect(page.getByTestId('hydroway-map-mobile-focus-origin-button')).toBeHidden();
+    await expect(page.getByTestId('hydroway-map-mobile-info-button')).toBeHidden();
+
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-experience')).toHaveAttribute('data-sheet-open', 'false');
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toHaveAttribute('data-suppressed', 'false');
+    await expect(page.getByTestId('hydroway-map-mobile-focus-origin-button')).toBeVisible();
+
+    await page.getByTestId('hydroway-map-mobile-info-button').click();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toHaveAttribute('data-suppressed', 'true');
+    await expect(page.getByTestId('hydroway-map-mobile-info-button')).toBeHidden();
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-map-mobile-info-button')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.getByTestId('hydroway-map-mobile-info-button')).toBeVisible();
+
+    await expect(page.getByTestId('hydroway-map-mobile-control-stack')).toBeVisible();
     await expect(page.getByTestId('hydroway-map-mobile-bottom-summary')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-layer-panel')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
@@ -147,6 +183,7 @@ test.describe('Cargas — mobile smoke @mobile-hydroway', () => {
     await expect(page.getByTestId('hydroway-map-mobile-center-cargo-button')).toBeVisible();
     await expect(page.getByTestId('hydroway-map-mobile-focus-destination-button')).toBeVisible();
     await expect(page.getByTestId('hydroway-map-mobile-route-overview-button')).toBeVisible();
+    await expect(page.getByTestId('hydroway-map-mobile-route-dock')).toBeVisible();
     await expect(page.getByTestId('hydroway-map-product')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
     await expectNoHydrowaySpikeDevUi(page);

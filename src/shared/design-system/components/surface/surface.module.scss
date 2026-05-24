@@ -1,0 +1,65 @@
+.surface {
+  border-radius: var(--ds-radius-lg, 16px);
+  border: 1px solid color-mix(in srgb, var(--line, rgba(255, 255, 255, 0.12)) 80%, transparent);
+  background: var(--surface, rgba(8, 14, 22, 0.88));
+  color: var(--text, #e8f0f4);
+}
+
+.tone_default {
+  background: var(--surface, rgba(8, 14, 22, 0.88));
+}
+
+.tone_glass {
+  background: color-mix(in srgb, var(--surface-strong, rgba(8, 14, 22, 0.72)) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.tone_elevated {
+  background: color-mix(in srgb, var(--surface-strong, rgba(8, 14, 22, 0.92)) 88%, transparent);
+  box-shadow: var(--ds-elevation-medium, 0 12px 32px rgba(0, 0, 0, 0.18));
+}
+
+.padding_none {
+  padding: 0;
+}
+
+.padding_sm {
+  padding: 0.5rem;
+}
+
+.padding_md {
+  padding: 0.75rem;
+}
+
+.padding_lg {
+  padding: 1rem;
+}
+
+.interactive {
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 120ms cubic-bezier(0.2, 0, 0, 1),
+    background 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.interactive:active {
+  transform: scale(0.985);
+}
+
+.interactive:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand, #2fe0d0) 70%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .interactive {
+    transition: none;
+  }
+
+  .interactive:active {
+    transform: none;
+  }
+}

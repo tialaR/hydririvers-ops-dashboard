@@ -1,0 +1,87 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill, 999px);
+  border: 1px solid color-mix(in srgb, var(--line, rgba(255, 255, 255, 0.14)) 80%, transparent);
+  color: var(--text, #e8f0f4);
+  touch-action: manipulation;
+  cursor: pointer;
+  transition:
+    transform 120ms cubic-bezier(0.2, 0, 0, 1),
+    background 120ms cubic-bezier(0.2, 0, 0, 1),
+    border-color 120ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--brand, #2fe0d0) 70%, transparent);
+  outline-offset: 2px;
+}
+
+.size_sm {
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  min-height: 2rem;
+}
+
+.size_md {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  min-height: 2.5rem;
+}
+
+.size_lg {
+  width: 2.75rem;
+  min-width: 2.75rem;
+  height: 2.75rem;
+  min-height: 2.75rem;
+}
+
+.variant_ghost {
+  background: transparent;
+}
+
+.variant_glass {
+  background: color-mix(in srgb, var(--surface-strong, rgba(5, 16, 18, 0.42)) 100%, transparent);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: var(--ds-elevation-soft, 0 8px 24px rgba(0, 0, 0, 0.12));
+}
+
+.variant_solid {
+  background: color-mix(in srgb, var(--brand, #14d8c4) 18%, transparent);
+  border-color: color-mix(in srgb, var(--brand, #2fe0d0) 35%, transparent);
+}
+
+.active {
+  border-color: color-mix(in srgb, var(--brand, #2fe0d0) 55%, transparent);
+  background: color-mix(in srgb, var(--brand, #14d8c4) 22%, transparent);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:active:not(:disabled) {
+    transform: none;
+  }
+}
