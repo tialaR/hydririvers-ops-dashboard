@@ -4,7 +4,10 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 
 import { hydrowayModelToScene } from '../adapters/hydroway-model-to-scene';
-import type { HydrowayMapLayerPresetId } from '../constants/hydroway-map-layer-presets';
+import { HYDROWAY_OPERATIONAL_LAYER_MODE_ORDER } from '../constants/hydroway-operational-layer-order';
+import { HYDROWAY_OPERATIONAL_LAYER_MODES } from '../constants/hydroway-operational-layer-modes';
+import { resolveCargoOperationalWaterwayContext } from '../data/resolve-cargo-operational-waterway-context';
+import type { HydrowayOperationalLayerMode } from '../domain/hydroway-operational-domain.types';
 import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
 import type { HydrowayMapSpikeMaplibreViewportHandle } from '../components/hydroway-map-spike-maplibre-viewport';
 import {
@@ -76,7 +79,8 @@ export function useHydrowayMapRuntime({
   const [maplibreReadyCargoId, setMaplibreReadyCargoId] = useState<string | null>(null);
   const [zoomPercent, setZoomPercent] = useState(100);
   const [layerPresetPanelOpen, setLayerPresetPanelOpen] = useState(false);
-  const [activeLayerPreset, setActiveLayerPreset] = useState<HydrowayMapLayerPresetId>('dark');
+  const [activeOperationalLayerMode, setActiveOperationalLayerMode] =
+    useState<HydrowayOperationalLayerMode>('operation');
   const [activeChapterByCargo, setActiveChapterByCargo] = useState<{
     cargoId: string;
     chapter: HydrowayCameraChapterId;
@@ -108,6 +112,14 @@ export function useHydrowayMapRuntime({
     const provider = maplibreViewportRef.current?.getProvider();
     return provider?.kind === 'maplibre' ? (provider as MapLibreHydrowayProvider) : null;
   }, []);
+
+  useEffect(() => {
+    const context = resolveCargoOperationalWaterwayContext(model.cargoId);
+    const recommendedMode = context?.recommendedLayerMode ?? 'operation';
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- alinhar modo operacional ao trocar carga mock
+    setActiveOperationalLayerMode(recommendedMode);
+    getMapLibreProvider()?.setOperationalLayerMode(recommendedMode);
+  }, [getMapLibreProvider, model.cargoId]);
 
   const syncZoomLabel = useCallback(() => {
     if (showMapLibre) {
@@ -376,7 +388,8 @@ export function useHydrowayMapRuntime({
       const maplibreProvider = mapProvider as MapLibreHydrowayProvider;
       maplibreProvider.ensureViewportSize();
       maplibreProvider.setLayers(ALL_MAP_LAYERS);
-      setActiveLayerPreset(maplibreProvider.getLayerPreset());
+      maplibreProvider.setOperationalLayerMode(activeOperationalLayerMode);
+      setActiveOperationalLayerMode(maplibreProvider.getOperationalLayerMode());
       if (disableLayerTooltips) {
         maplibreProvider.setLayerTooltipUiBlocked(true);
       }
@@ -390,6 +403,7 @@ export function useHydrowayMapRuntime({
     }
     syncZoomLabel();
   }, [
+    activeOperationalLayerMode,
     disableLayerTooltips,
     mobileCamera,
     model.cargoId,
@@ -538,13 +552,13 @@ export function useHydrowayMapRuntime({
     });
   }, [disableLayerTooltips, getMapLibreProvider]);
 
-  const handleSelectLayerPreset = useCallback(
-    (presetId: HydrowayMapLayerPresetId) => {
+  const handleSelectOperationalLayerMode = useCallback(
+    (mode: HydrowayOperationalLayerMode) => {
       if (!showMapLibre) return;
       const mapProvider = getMapLibreProvider();
-      if (!mapProvider?.isReady() || !mapProvider.canSetLayerPreset(presetId)) return;
-      mapProvider.setLayerPreset(presetId);
-      setActiveLayerPreset(presetId);
+      if (!mapProvider?.isReady() || !mapProvider.canSetOperationalLayerMode(mode)) return;
+      mapProvider.setOperationalLayerMode(mode);
+      setActiveOperationalLayerMode(mapProvider.getOperationalLayerMode());
       if (closeLayerPanelOnSelect) {
         setLayerPresetPanelOpen(false);
         if (disableLayerTooltips) {
@@ -631,13 +645,13 @@ export function useHydrowayMapRuntime({
     const mapProvider = getMapLibreProvider();
     if (!mapProvider?.isReady()) return;
 
-    const nextPreset: HydrowayMapLayerPresetId =
-      activeLayerPreset === 'waterways' ? 'dark' : 'waterways';
-    if (!mapProvider.canSetLayerPreset(nextPreset)) return;
+    const nextMode: HydrowayOperationalLayerMode =
+      activeOperationalLayerMode === 'navigation' ? 'operation' : 'navigation';
+    if (!mapProvider.canSetOperationalLayerMode(nextMode)) return;
 
-    mapProvider.setLayerPreset(nextPreset);
-    setActiveLayerPreset(nextPreset);
-  }, [activeLayerPreset, getMapLibreProvider, showMapLibre]);
+    mapProvider.setOperationalLayerMode(nextMode);
+    setActiveOperationalLayerMode(mapProvider.getOperationalLayerMode());
+  }, [activeOperationalLayerMode, getMapLibreProvider, showMapLibre]);
 
   const progressPercent = Math.round(model.progress01 * 100);
   const routeLabel = model.metadata.routeName;
@@ -665,7 +679,9 @@ export function useHydrowayMapRuntime({
     zoomPercent,
     layerPresetPanelOpen,
     setLayerPresetPanelOpen,
-    activeLayerPreset,
+    activeOperationalLayerMode,
+    operationalLayerModes: HYDROWAY_OPERATIONAL_LAYER_MODES,
+    operationalLayerModeOrder: HYDROWAY_OPERATIONAL_LAYER_MODE_ORDER,
     activeMapChapter,
     progressPercent,
     routeLabel,
@@ -679,7 +695,7 @@ export function useHydrowayMapRuntime({
     handleReset,
     handleFlyToChapter,
     handleToggleLayerPresetPanel,
-    handleSelectLayerPreset,
+    handleSelectOperationalLayerMode,
     handleCloseLayerPresetPanel,
     handleFitRoute,
     handleFocusOrigin,

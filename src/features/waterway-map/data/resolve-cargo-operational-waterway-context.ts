@@ -132,9 +132,13 @@ function collectRelevantPlanningAreas(
   const corridor = dataset.corridors.find((c) => c.id === corridorId);
   if (!corridor) return [];
 
-  const nameTokens = corridor.name.toLowerCase().split(/[\s-]+/);
+  const corridorName = corridor.name.toLowerCase();
+  const nameTokens = corridorName.split(/[\s-]+/);
   return dataset.planningAreas.filter((area) => {
     const areaName = area.name.toLowerCase();
+    if (area.type === 'basin' && corridorName.includes('amazonas')) {
+      return areaName.includes('amaz');
+    }
     return nameTokens.some((token) => token.length > 3 && areaName.includes(token));
   });
 }

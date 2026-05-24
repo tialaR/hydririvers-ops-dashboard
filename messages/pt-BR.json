@@ -1580,7 +1580,8 @@
       "focusCurrentCargo": "Focar carga atual",
       "focusCurrentCargoAria": "Focar no local atual da carga",
       "layersTitle": "Camadas",
-      "layersPanelAria": "Presets visuais do mapa",
+      "layersCurrent": "Atual: {mode}",
+      "layersPanelAria": "Modos operacionais do mapa",
       "layerPresetDark": "Modo escuro",
       "layerPresetSemiLight": "Semi-light",
       "layerPresetRealistic": "Realista",
@@ -2470,6 +2471,57 @@
       "in-transit": "Em trânsito",
       "completed": "Concluído",
       "error-scenarios": "Erros e pendências"
+    }
+  },
+  "waterwayMap": {
+    "operationalModes": {
+      "legendTitle": "Legenda",
+      "operation": {
+        "label": "Operação",
+        "description": "Rota, carga atual e pontos operacionais.",
+        "legend": {
+          "corridor": "Corredor ativo",
+          "checkpoint": "Checkpoint",
+          "alert": "Alerta próximo"
+        }
+      },
+      "navigation": {
+        "label": "Navegação",
+        "description": "Calado, restrições, dragagem e sinalização.",
+        "legend": {
+          "normal": "Navegável",
+          "attention": "Atenção",
+          "restricted": "Restrito",
+          "dredging": "Dragagem"
+        }
+      },
+      "logistics": {
+        "label": "Logística",
+        "description": "Terminais, checkpoints e gargalos.",
+        "legend": {
+          "terminal": "Terminais",
+          "checkpoint": "Checkpoints",
+          "bottleneck": "Gargalo/fila"
+        }
+      },
+      "risk": {
+        "label": "Risco",
+        "description": "Alertas que impactam prazo, custo ou segurança.",
+        "legend": {
+          "critical": "Crítico",
+          "warning": "Atenção",
+          "restricted": "Trecho restrito"
+        }
+      },
+      "government": {
+        "label": "Governo",
+        "description": "Corredores, bacias e planejamento hidroviário.",
+        "legend": {
+          "corridor": "Corredor hidroviário",
+          "planning": "Planejamento/estudo",
+          "outline": "Área institucional"
+        }
+      }
     }
   }
 }

@@ -10,6 +10,98 @@ import type {
 } from '../domain/hydroway-operational-domain.types';
 import { isValidLineStringCoordinates, isValidLngLat } from './hydroway-operational-validation';
 
+export const OP_ICON_COLORS = {
+  critical: '#FF3B30',
+  riskDominant: '#FF2D55',
+  warning: '#FFB020',
+  restricted: '#EF4444',
+  dredging: '#2563EB',
+  signalAttention: '#F59E0B',
+  terminal: '#8B5CF6',
+  checkpoint: '#38BDF8',
+  bottleneck: '#F97316',
+  government: '#2563EB',
+  governmentAlt: '#A855F7',
+} as const;
+
+export type OperationalIconProperties = {
+  iconSymbol: string;
+  iconColor: string;
+  iconKind?: string;
+};
+
+function resolveAlertIcon(alert: HydrowayAlert): OperationalIconProperties {
+  if (alert.type === 'port-window' || alert.type === 'traffic') {
+    return { iconSymbol: 'Q', iconColor: OP_ICON_COLORS.bottleneck, iconKind: 'bottleneck' };
+  }
+  if (alert.type === 'draft') {
+    return { iconSymbol: 'D', iconColor: OP_ICON_COLORS.restricted, iconKind: 'draft-restriction' };
+  }
+  if (alert.type === 'dredging') {
+    return { iconSymbol: 'M', iconColor: OP_ICON_COLORS.dredging, iconKind: 'dredging' };
+  }
+  if (alert.severity === 'critical') {
+    return { iconSymbol: '!', iconColor: OP_ICON_COLORS.riskDominant, iconKind: 'alert-critical' };
+  }
+  if (alert.severity === 'warning') {
+    return { iconSymbol: '!', iconColor: OP_ICON_COLORS.warning, iconKind: 'alert-warning' };
+  }
+  return { iconSymbol: '!', iconColor: OP_ICON_COLORS.warning, iconKind: 'alert-info' };
+}
+
+function resolveTerminalIcon(terminal: HydrowayTerminal): OperationalIconProperties {
+  if (terminal.queueRisk === 'high') {
+    return { iconSymbol: 'Q', iconColor: OP_ICON_COLORS.bottleneck, iconKind: 'bottleneck' };
+  }
+  return { iconSymbol: 'T', iconColor: OP_ICON_COLORS.terminal, iconKind: 'terminal' };
+}
+
+function resolveSignalIcon(signal: HydrowaySignal): OperationalIconProperties {
+  if (signal.condition === 'attention' || signal.condition === 'maintenance') {
+    return { iconSymbol: 'B', iconColor: OP_ICON_COLORS.signalAttention, iconKind: 'signal-attention' };
+  }
+  return { iconSymbol: 'B', iconColor: OP_ICON_COLORS.signalAttention, iconKind: 'signal-ok' };
+}
+
+function resolveCheckpointIcon(checkpoint: HydrowayCheckpoint): OperationalIconProperties {
+  if (checkpoint.type === 'risk-point') {
+    return { iconSymbol: 'D', iconColor: OP_ICON_COLORS.restricted, iconKind: 'draft-restriction' };
+  }
+  return { iconSymbol: 'C', iconColor: OP_ICON_COLORS.checkpoint, iconKind: 'checkpoint' };
+}
+
+function resolvePlanningIcon(area: HydrowayPlanningArea): OperationalIconProperties {
+  if (area.type === 'dredging-plan') {
+    return { iconSymbol: 'M', iconColor: OP_ICON_COLORS.dredging, iconKind: 'dredging' };
+  }
+  const isStudy = area.type === 'concession-study' || area.type === 'priority-corridor';
+  return {
+    iconSymbol: 'G',
+    iconColor: isStudy ? OP_ICON_COLORS.governmentAlt : OP_ICON_COLORS.government,
+    iconKind: 'government',
+  };
+}
+
+function resolveSegmentIcon(segment: HydrowaySegment): OperationalIconProperties | null {
+  if (
+    segment.dredgingStatus === 'active' ||
+    segment.dredgingStatus === 'scheduled' ||
+    segment.dredgingStatus === 'restricted'
+  ) {
+    return { iconSymbol: 'M', iconColor: OP_ICON_COLORS.dredging, iconKind: 'dredging' };
+  }
+  if (segment.navigabilityStatus === 'restricted' || segment.navigabilityStatus === 'attention') {
+    return { iconSymbol: 'D', iconColor: OP_ICON_COLORS.restricted, iconKind: 'draft-restriction' };
+  }
+  return null;
+}
+
+function midpointOfLine(coordinates: HydrowayLngLat[]): HydrowayLngLat | null {
+  if (!coordinates.length) return null;
+  const index = Math.floor(coordinates.length / 2);
+  return coordinates[index] ?? null;
+}
+
 type GeoJsonFeatureCollection<G extends GeoJSON.Geometry> = GeoJSON.FeatureCollection<G>;
 
 function emptyFeatureCollection<G extends GeoJSON.Geometry>(): GeoJsonFeatureCollection<G> {
@@ -33,7 +125,9 @@ function pickSegmentProperties(segment: HydrowaySegment): Record<string, unknown
 }
 
 function pickTerminalProperties(terminal: HydrowayTerminal): Record<string, unknown> {
+  const icon = resolveTerminalIcon(terminal);
   return {
+    tooltipKind: 'terminal',
     id: terminal.id,
     name: terminal.name,
     type: terminal.type,
@@ -42,11 +136,16 @@ function pickTerminalProperties(terminal: HydrowayTerminal): Record<string, unkn
     etaRelevance: terminal.etaRelevance,
     importance: terminal.importance,
     businessImpactSummary: terminal.businessImpactSummary,
+    iconSymbol: icon.iconSymbol,
+    iconColor: icon.iconColor,
+    iconKind: icon.iconKind,
   };
 }
 
 function pickAlertProperties(alert: HydrowayAlert): Record<string, unknown> {
+  const icon = resolveAlertIcon(alert);
   return {
+    tooltipKind: 'alert',
     id: alert.id,
     type: alert.type,
     severity: alert.severity,
@@ -58,22 +157,32 @@ function pickAlertProperties(alert: HydrowayAlert): Record<string, unknown> {
     segmentId: alert.segmentId,
     corridorId: alert.corridorId,
     etaImpactMinutes: alert.etaImpactMinutes ?? undefined,
+    iconSymbol: icon.iconSymbol,
+    iconColor: icon.iconColor,
+    iconKind: icon.iconKind,
   };
 }
 
 function pickSignalProperties(signal: HydrowaySignal): Record<string, unknown> {
+  const icon = resolveSignalIcon(signal);
   return {
+    tooltipKind: 'signal',
     id: signal.id,
     segmentId: signal.segmentId,
     signalType: signal.signalType,
     condition: signal.condition,
     visibilityPriority: signal.visibilityPriority,
     captainHint: signal.captainHint,
+    iconSymbol: icon.iconSymbol,
+    iconColor: icon.iconColor,
+    iconKind: icon.iconKind,
   };
 }
 
 function pickCheckpointProperties(checkpoint: HydrowayCheckpoint): Record<string, unknown> {
+  const icon = resolveCheckpointIcon(checkpoint);
   return {
+    tooltipKind: 'checkpoint',
     id: checkpoint.id,
     name: checkpoint.name,
     type: checkpoint.type,
@@ -83,6 +192,9 @@ function pickCheckpointProperties(checkpoint: HydrowayCheckpoint): Record<string
     cargoId: checkpoint.cargoId,
     terminalId: checkpoint.terminalId,
     alertId: checkpoint.alertId,
+    iconSymbol: icon.iconSymbol,
+    iconColor: icon.iconColor,
+    iconKind: icon.iconKind,
   };
 }
 
@@ -90,16 +202,19 @@ function pickCorridorProperties(corridor: HydrowayCorridor): Record<string, unkn
   return {
     id: corridor.id,
     name: corridor.name,
+    officialCode: corridor.officialCode,
     region: corridor.region,
     priority: corridor.priority,
     concessionStatus: corridor.concessionStatus,
     strategicRole: corridor.strategicRole,
     businessValue: corridor.businessValue,
+    cargoProfiles: corridor.cargoProfiles,
     sourceContext: corridor.sourceContext,
   };
 }
 
 function pickPlanningAreaProperties(area: HydrowayPlanningArea): Record<string, unknown> {
+  const icon = resolvePlanningIcon(area);
   return {
     id: area.id,
     name: area.name,
@@ -109,6 +224,9 @@ function pickPlanningAreaProperties(area: HydrowayPlanningArea): Record<string, 
     institutionalSummary: area.institutionalSummary,
     authority: area.authority,
     sourceName: area.sourceName,
+    iconSymbol: icon.iconSymbol,
+    iconColor: icon.iconColor,
+    iconKind: icon.iconKind,
   };
 }
 
@@ -241,5 +359,125 @@ export function toCheckpointsFeatureCollection(
       properties: pickCheckpointProperties(checkpoint),
     });
   }
+  return { type: 'FeatureCollection', features };
+}
+
+export function toSegmentIconsFeatureCollection(
+  segments: HydrowaySegment[],
+): GeoJsonFeatureCollection<GeoJSON.Point> {
+  if (!segments.length) return emptyFeatureCollection();
+
+  const features: GeoJSON.Feature<GeoJSON.Point>[] = [];
+  for (const segment of segments) {
+    const icon = resolveSegmentIcon(segment);
+    const midpoint = midpointOfLine(segment.coordinates);
+    if (!icon || !midpoint || !isValidLngLat(midpoint)) continue;
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: midpoint },
+      properties: {
+        id: `${segment.id}-icon`,
+        segmentId: segment.id,
+        name: segment.name,
+        navigabilityStatus: segment.navigabilityStatus,
+        dredgingStatus: segment.dredgingStatus,
+        iconSymbol: icon.iconSymbol,
+        iconColor: icon.iconColor,
+        iconKind: icon.iconKind,
+      },
+    });
+  }
+  return { type: 'FeatureCollection', features };
+}
+
+export function toPlanningDredgingIconsFeatureCollection(
+  areas: HydrowayPlanningArea[],
+): GeoJsonFeatureCollection<GeoJSON.Point> {
+  const features: GeoJSON.Feature<GeoJSON.Point>[] = [];
+  for (const area of areas) {
+    if (area.type !== 'dredging-plan') continue;
+    const ring = area.coordinates[0];
+    if (!ring?.length) continue;
+    let lngSum = 0;
+    let latSum = 0;
+    let count = 0;
+    for (const coord of ring) {
+      if (coord.length < 2) continue;
+      lngSum += coord[0];
+      latSum += coord[1];
+      count += 1;
+    }
+    if (!count) continue;
+    const icon = resolvePlanningIcon(area);
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: [lngSum / count, latSum / count] },
+      properties: {
+        id: `${area.id}-dredging-icon`,
+        name: area.name,
+        type: area.type,
+        iconSymbol: icon.iconSymbol,
+        iconColor: icon.iconColor,
+        iconKind: icon.iconKind,
+      },
+    });
+  }
+  return { type: 'FeatureCollection', features };
+}
+
+export function mergeSegmentAndPlanningIconPoints(
+  segments: HydrowaySegment[],
+  planningAreas: HydrowayPlanningArea[],
+): GeoJsonFeatureCollection<GeoJSON.Point> {
+  return mergeAttentionIconPoints(segments, planningAreas, [], []);
+}
+
+export function mergeAttentionIconPoints(
+  segments: HydrowaySegment[],
+  planningAreas: HydrowayPlanningArea[],
+  alerts: HydrowayAlert[],
+  checkpoints: HydrowayCheckpoint[],
+): GeoJsonFeatureCollection<GeoJSON.Point> {
+  const segmentIcons = toSegmentIconsFeatureCollection(segments);
+  const planningDredging = toPlanningDredgingIconsFeatureCollection(planningAreas);
+  const features: GeoJSON.Feature<GeoJSON.Point>[] = [
+    ...segmentIcons.features,
+    ...planningDredging.features,
+  ];
+
+  for (const alert of alerts) {
+    const icon = resolveAlertIcon(alert);
+    if (icon.iconKind !== 'draft-restriction' && icon.iconKind !== 'dredging') continue;
+    if (!isValidLngLat(alert.coordinates)) continue;
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: alert.coordinates },
+      properties: {
+        id: `${alert.id}-attention-icon`,
+        alertId: alert.id,
+        iconSymbol: icon.iconSymbol,
+        iconColor: icon.iconColor,
+        iconKind: icon.iconKind,
+      },
+    });
+  }
+
+  for (const checkpoint of checkpoints) {
+    if (checkpoint.type !== 'risk-point') continue;
+    if (!isValidLngLat(checkpoint.coordinates)) continue;
+    const icon = resolveCheckpointIcon(checkpoint);
+    features.push({
+      type: 'Feature',
+      geometry: { type: 'Point', coordinates: checkpoint.coordinates },
+      properties: {
+        id: `${checkpoint.id}-attention-icon`,
+        checkpointId: checkpoint.id,
+        iconSymbol: icon.iconSymbol,
+        iconColor: icon.iconColor,
+        iconKind: icon.iconKind,
+      },
+    });
+  }
+
   return { type: 'FeatureCollection', features };
 }

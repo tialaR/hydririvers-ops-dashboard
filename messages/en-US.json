@@ -1580,7 +1580,8 @@
       "focusCurrentCargo": "Focus current cargo",
       "focusCurrentCargoAria": "Focus the current cargo location",
       "layersTitle": "Layers",
-      "layersPanelAria": "Map visual presets",
+      "layersCurrent": "Current: {mode}",
+      "layersPanelAria": "Map operational modes",
       "layerPresetDark": "Dark mode",
       "layerPresetSemiLight": "Semi-light",
       "layerPresetRealistic": "Realistic",
@@ -2470,6 +2471,57 @@
       "in-transit": "In transit",
       "completed": "Completed",
       "error-scenarios": "Errors and pending items"
+    }
+  },
+  "waterwayMap": {
+    "operationalModes": {
+      "legendTitle": "Legend",
+      "operation": {
+        "label": "Operation",
+        "description": "Route, current cargo, and operational points.",
+        "legend": {
+          "corridor": "Active corridor",
+          "checkpoint": "Checkpoint",
+          "alert": "Nearby alert"
+        }
+      },
+      "navigation": {
+        "label": "Navigation",
+        "description": "Draft, restrictions, dredging, and signaling.",
+        "legend": {
+          "normal": "Navigable",
+          "attention": "Attention",
+          "restricted": "Restricted",
+          "dredging": "Dredging"
+        }
+      },
+      "logistics": {
+        "label": "Logistics",
+        "description": "Terminals, checkpoints, and bottlenecks.",
+        "legend": {
+          "terminal": "Terminals",
+          "checkpoint": "Checkpoints",
+          "bottleneck": "Queue/bottleneck"
+        }
+      },
+      "risk": {
+        "label": "Risk",
+        "description": "Alerts affecting schedule, cost, or safety.",
+        "legend": {
+          "critical": "Critical",
+          "warning": "Warning",
+          "restricted": "Restricted segment"
+        }
+      },
+      "government": {
+        "label": "Government",
+        "description": "Corridors, basins, and waterway planning.",
+        "legend": {
+          "corridor": "Waterway corridor",
+          "planning": "Planning/study",
+          "outline": "Institutional area"
+        }
+      }
     }
   }
 }

@@ -3,11 +3,8 @@
 import { useTranslations } from 'next-intl';
 import type { MouseEvent } from 'react';
 
-import {
-  HYDROWAY_MAP_LAYER_PRESET_ORDER,
-  HYDROWAY_MAP_LAYER_PRESETS,
-} from '../../constants/hydroway-map-layer-presets';
 import type { HydrowayMapRuntime } from '../../hooks/use-hydroway-map-runtime';
+import { OperationalLayerModeLegend } from '../operational-layer-mode-legend';
 import styles from './mobile-hydroway-map.module.scss';
 
 type MobileMapLayerPanelProps = {
@@ -15,12 +12,14 @@ type MobileMapLayerPanelProps = {
 };
 
 export function MobileMapLayerPanel({ runtime }: MobileMapLayerPanelProps) {
+  const tModes = useTranslations('waterwayMap.operationalModes');
   const tMap = useTranslations('operationsBoard.map');
   const {
     layerPresetPanelOpen,
-    activeLayerPreset,
+    activeOperationalLayerMode,
+    operationalLayerModeOrder,
     layerPresetControlsEnabled,
-    handleSelectLayerPreset,
+    handleSelectOperationalLayerMode,
     handleCloseLayerPresetPanel,
     handleLayerPresetPanelPointerEnter,
     handleLayerPresetPanelPointerLeave,
@@ -32,17 +31,36 @@ export function MobileMapLayerPanel({ runtime }: MobileMapLayerPanelProps) {
     event.stopPropagation();
   };
 
+  const activeModeLabel = tModes(`${activeOperationalLayerMode}.label`);
+  const activeModeDescription = tModes(`${activeOperationalLayerMode}.description`);
+
   return (
     <aside
       className={styles.layerPanel}
       role="dialog"
       aria-label={tMap('layersPanelAria')}
-      data-testid="hydroway-map-mobile-layer-panel"
+      data-testid="hydroway-layer-panel"
       onPointerEnter={handleLayerPresetPanelPointerEnter}
       onPointerLeave={handleLayerPresetPanelPointerLeave}
     >
       <header className={styles.layerPanelHeader}>
-        <span className={styles.layerPanelTitle}>{tMap('mapLayers')}</span>
+        <div className={styles.layerPanelHeading}>
+          <span className={styles.layerPanelTitle}>{tMap('mapLayers')}</span>
+          <p className={styles.layerPanelCurrent} data-testid="hydroway-layer-current-mode">
+            {tMap('layersCurrent', { mode: activeModeLabel })}
+          </p>
+          <p className={styles.layerPanelActiveDescription}>{activeModeDescription}</p>
+          <OperationalLayerModeLegend
+            mode={activeOperationalLayerMode}
+            className={styles.layerPanelLegend}
+            titleClassName={styles.layerPanelLegendTitle}
+            listClassName={styles.layerPanelLegendList}
+            itemClassName={styles.layerPanelLegendItem}
+            swatchClassName={styles.layerPanelLegendSwatch}
+            labelClassName={styles.layerPanelLegendLabel}
+            maxItems={4}
+          />
+        </div>
         <button
           type="button"
           className={styles.layerPanelClose}
@@ -54,12 +72,11 @@ export function MobileMapLayerPanel({ runtime }: MobileMapLayerPanelProps) {
       </header>
 
       <ul className={styles.layerPresetList}>
-        {HYDROWAY_MAP_LAYER_PRESET_ORDER.map((presetId) => {
-          const preset = HYDROWAY_MAP_LAYER_PRESETS[presetId];
-          const isActive = activeLayerPreset === presetId;
+        {operationalLayerModeOrder.map((modeId) => {
+          const isActive = activeOperationalLayerMode === modeId;
 
           return (
-            <li key={presetId} className={styles.layerPresetItem}>
+            <li key={modeId} className={styles.layerPresetItem}>
               <button
                 type="button"
                 className={[
@@ -71,13 +88,25 @@ export function MobileMapLayerPanel({ runtime }: MobileMapLayerPanelProps) {
                 onMouseDown={stopEvent}
                 onClick={(event) => {
                   stopEvent(event);
-                  handleSelectLayerPreset(presetId);
+                  handleSelectOperationalLayerMode(modeId);
                 }}
                 disabled={!layerPresetControlsEnabled}
                 aria-pressed={isActive}
-                aria-label={tMap(preset.labelKey)}
+                aria-current={isActive ? 'true' : undefined}
+                aria-label={tModes(`${modeId}.label`)}
+                data-testid={`hydroway-layer-mode-${modeId}`}
               >
-                <span className={styles.layerPresetLabel}>{tMap(preset.labelKey)}</span>
+                <span className={styles.layerPresetButtonRow}>
+                  <span className={styles.layerPresetLabel}>{tModes(`${modeId}.label`)}</span>
+                  {isActive ? (
+                    <span className={styles.layerPresetCheck} aria-hidden>
+                      ✓
+                    </span>
+                  ) : null}
+                </span>
+                <span className={styles.layerPresetDescription}>
+                  {tModes(`${modeId}.description`)}
+                </span>
               </button>
             </li>
           );

@@ -14,6 +14,28 @@ import {
   type HydrowayMapLayerPresetId,
   isHydrowayMapLayerPresetId,
 } from '../constants/hydroway-map-layer-presets';
+import { isHydrowayOperationalLayerMode } from '../constants/hydroway-operational-layer-order';
+import {
+  resolveCargoOperationalWaterwayContext,
+  resolveOperationalDatasetForCargo,
+} from '../data/resolve-cargo-operational-waterway-context';
+import type { HydrowayOperationalLayerMode } from '../domain/hydroway-operational-domain.types';
+import type { HydrowayOperationalDatasetSlice } from '../domain/hydroway-operational-domain.types';
+import {
+  buildOperationalGeoJsonFromSlice,
+  buildOperationalLayersDebugSnapshot,
+  buildOperationalModePaintSnapshot,
+  countOperationalSourceFeatures,
+  ensureOperationalLayerLayers,
+  ensureOperationalLayerSources,
+  formatOperationalSourceCountsForLog,
+  listHiddenOperationalLayerIds,
+  listOperationalLayerIdsOnMap,
+  listVisibleOperationalLayerIds,
+  syncOperationalLayerModePaint as applyOperationalLayerModePaint,
+  syncOperationalLayers as applyOperationalLayers,
+  updateOperationalLayerData as pushOperationalLayerData,
+} from '../utils/hydro-maplibre-operational-overlay';
 import { DEV_BASEMAP_STYLE_URL } from '../utils/hydro-maplibre-dev-basemap';
 import {
   isNonFatalOpenFreeMapTileError,
@@ -147,12 +169,16 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private routeIdentificationMarkerSyncScheduled = false;
   private routeMarkersDebugLoggedKey = '';
   private layerPresetId: HydrowayMapLayerPresetId = DEFAULT_HYDROWAY_MAP_LAYER_PRESET_ID;
+  private cargoId = '';
+  private operationalLayerMode: HydrowayOperationalLayerMode = 'operation';
+  private operationalSlice: HydrowayOperationalDatasetSlice | null = null;
   private openFreeMapTileWarned = false;
   private layerTooltipPopup: maplibregl.Popup | null = null;
   private layerTooltipCurrentFeatureKey: string | null = null;
   private layerTooltipRegisteredLayerIds = new Set<string>();
   private layerTooltipUiBlocked = false;
   private skipInitialRouteCamera = false;
+  private operationalSyncDebugKey = '';
 
   private mountOnReadyHook: (() => void) | undefined;
   private pendingInitCamera: HydrowayMapCamera | undefined;
@@ -183,6 +209,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   private readonly handleStyleLoad = (): void => {
     if (!this.overlayReady) return;
     this.syncLayerPresetPaint();
+    const map = this.getOperationalMap();
+    if (map) {
+      this.syncOperationalLayers(map);
+    }
   };
 
   private readonly handleMapLoad = (): void => {
@@ -203,6 +233,7 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.syncRouteMarkerLayers(map);
     this.syncLayerVisibility(map);
     this.syncLayerPresetPaint(map);
+    this.syncOperationalLayers(map);
     this.installLayerTooltips(map);
     this.syncRouteIdentificationMarkersWhenReady(map);
     void this.routeIdentificationMarkers.prefetchSvgAssets().then(() => {
@@ -229,7 +260,9 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.mapLoadedOnce = false;
     this.skipInitialRouteCamera = init.skipInitialRouteCamera === true;
     this.container = init.container;
+    this.cargoId = init.model.cargoId;
     this.progress01 = init.model.progress01;
+    this.refreshOperationalDataset(false);
     this.fitOptions = resolveHydroMapLibreFitOptions(init.model.cargoId);
     this.geo = enrichHydrowayGeoForMapLibre(init.model.geo, init.model.progress01);
     this.routeTrackCoords = extractOverlayRouteTrackCoordinates(this.geo);
@@ -296,7 +329,10 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
   updateModel(model: HydrowayMapModel): void {
     if (this.destroyed) return;
 
+    const cargoChanged = this.cargoId !== model.cargoId;
+    this.cargoId = model.cargoId;
     this.progress01 = model.progress01;
+    this.refreshOperationalDataset(cargoChanged);
     this.fitOptions = resolveHydroMapLibreFitOptions(model.cargoId);
     this.geo = enrichHydrowayGeoForMapLibre(model.geo, model.progress01);
     this.routeTrackCoords = extractOverlayRouteTrackCoordinates(this.geo);
@@ -326,12 +362,87 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     }
 
     this.syncLayerPresetPaint(map);
+    this.syncOperationalLayers(map);
     this.syncLayerTooltipHandlers(map);
+  }
+
+  setOperationalLayerMode(mode: HydrowayOperationalLayerMode): void {
+    if (!isHydrowayOperationalLayerMode(mode) || !this.canSetOperationalLayerMode(mode)) return;
+    const previousMode = this.operationalLayerMode;
+    const modeChanged = previousMode !== mode;
+    this.operationalLayerMode = mode;
+    const map = this.getOperationalMap();
+    if (map) {
+      this.syncOperationalLayers(map);
+      if (modeChanged) {
+        this.logOperationalLayerModeChange(map, previousMode, mode);
+      }
+      this.clearLayerTooltipState(map);
+      this.syncLayerTooltipHandlers(map);
+      this.installOperationalLayersDebugHook(map);
+    }
+  }
+
+  getOperationalLayerMode(): HydrowayOperationalLayerMode {
+    return this.operationalLayerMode;
+  }
+
+  canSetOperationalLayerMode(mode: HydrowayOperationalLayerMode): boolean {
+    if (!isHydrowayOperationalLayerMode(mode)) return false;
+    if (this.destroyed || this.initFailed) return false;
+    return Boolean(this.getOperationalMap());
+  }
+
+  syncOperationalLayers(map?: Map | null): void {
+    const targetMap = map ?? this.getOperationalMap();
+    if (!targetMap || !this.overlayReady) return;
+
+    try {
+      const sourceCounts = applyOperationalLayers(
+        targetMap,
+        this.operationalSlice,
+        this.operationalLayerMode,
+      );
+      this.logOperationalLayersSync(targetMap, sourceCounts);
+      this.installOperationalLayersDebugHook(targetMap);
+    } catch {
+      // Best-effort when overlay is unavailable.
+    }
+  }
+
+  syncOperationalLayerModePaint(map?: Map | null, mode?: HydrowayOperationalLayerMode): void {
+    const targetMap = map ?? this.getOperationalMap();
+    if (!targetMap) return;
+    const resolvedMode = mode ?? this.operationalLayerMode;
+    try {
+      applyOperationalLayerModePaint(targetMap, resolvedMode);
+    } catch {
+      // Best-effort during style reload.
+    }
+  }
+
+  ensureOperationalLayerSources(
+    map: Map,
+    slice: HydrowayOperationalDatasetSlice | null = this.operationalSlice,
+  ): void {
+    try {
+      ensureOperationalLayerSources(map, buildOperationalGeoJsonFromSlice(slice));
+    } catch {
+      // Best-effort when sources are unavailable.
+    }
+  }
+
+  updateOperationalLayerData(
+    map: Map,
+    slice: HydrowayOperationalDatasetSlice | null = this.operationalSlice,
+  ): void {
+    pushOperationalLayerData(map, slice);
   }
 
   setLayerPreset(presetId: HydrowayMapLayerPresetId): void {
     if (!isHydrowayMapLayerPresetId(presetId) || !this.canSetLayerPreset(presetId)) return;
     this.layerPresetId = presetId;
+    this.applyLegacyOperationalModeFromPreset(presetId);
     this.syncLayerPresetPaint();
     const map = this.getOperationalMap();
     if (map) {
@@ -706,8 +817,14 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     this.cameraSettled = false;
     this.visualPhaseStartMs = 0;
     this.layerPresetId = DEFAULT_HYDROWAY_MAP_LAYER_PRESET_ID;
+    this.cargoId = '';
+    this.operationalLayerMode = 'operation';
+    this.operationalSlice = null;
     this.openFreeMapTileWarned = false;
     this.layerTooltipUiBlocked = false;
+    if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+      delete window.__hydriOperationalLayersDebug;
+    }
   }
 
   private installLayerTooltips(map: Map): void {
@@ -942,6 +1059,85 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     if (this.destroyed) return null;
     const map = this.map;
     return isMapLibreMapUsable(map) ? map : null;
+  }
+
+  private refreshOperationalDataset(resetMode: boolean): void {
+    this.operationalSlice = resolveOperationalDatasetForCargo(this.cargoId);
+    if (resetMode) {
+      this.operationalSyncDebugKey = '';
+      const context = resolveCargoOperationalWaterwayContext(this.cargoId);
+      if (context?.recommendedLayerMode) {
+        this.operationalLayerMode = context.recommendedLayerMode;
+      } else {
+        this.operationalLayerMode = 'operation';
+      }
+    }
+  }
+
+  private applyLegacyOperationalModeFromPreset(presetId: HydrowayMapLayerPresetId): void {
+    const mappedMode: HydrowayOperationalLayerMode | null =
+      presetId === 'government'
+        ? 'government'
+        : presetId === 'waterways'
+          ? 'navigation'
+          : null;
+    if (!mappedMode) return;
+    this.operationalLayerMode = mappedMode;
+    const map = this.getOperationalMap();
+    if (map) {
+      this.syncOperationalLayers(map);
+    }
+  }
+
+  private logOperationalLayersSync(map: Map, sourceCounts: Record<string, number>): void {
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const debugKey = `${this.cargoId}|${this.operationalLayerMode}|${JSON.stringify(sourceCounts)}`;
+    if (debugKey === this.operationalSyncDebugKey) return;
+    this.operationalSyncDebugKey = debugKey;
+
+    const { layerIdsFound, missingLayerIds } = listOperationalLayerIdsOnMap(map);
+    const sourceLog = formatOperationalSourceCountsForLog(this.cargoId, sourceCounts);
+
+    console.info('[hydroway-map] operational sources ready', sourceLog);
+    console.info('[hydroway-map] operational layers ready', {
+      layerIdsFound,
+      missingLayerIds,
+    });
+  }
+
+  private logOperationalLayerModeChange(
+    map: Map,
+    previousMode: HydrowayOperationalLayerMode,
+    nextMode: HydrowayOperationalLayerMode,
+  ): void {
+    if (process.env.NODE_ENV !== 'development') return;
+
+    const visibleLayerIds = listVisibleOperationalLayerIds(map, nextMode);
+    const hiddenLayerIds = listHiddenOperationalLayerIds(map);
+
+    console.info('[hydroway-map] operational layer mode changed', {
+      previousMode,
+      nextMode,
+      visibleLayerIds,
+      hiddenLayerIds,
+      sourceCounts: countOperationalSourceFeatures(this.operationalSlice),
+      modePaintSnapshot: buildOperationalModePaintSnapshot(nextMode, map),
+    });
+  }
+
+  private installOperationalLayersDebugHook(map: Map): void {
+    if (process.env.NODE_ENV !== 'development') return;
+    if (typeof window === 'undefined') return;
+
+    const provider = this;
+    window.__hydriOperationalLayersDebug = () =>
+      buildOperationalLayersDebugSnapshot(
+        map,
+        provider.operationalLayerMode,
+        provider.cargoId,
+        provider.operationalSlice,
+      );
   }
 
   private getOperationalMap(): Map | null {
