@@ -1,3 +1,5 @@
+@use '../shared/hydroway-map-floating-action.tokens' as fab;
+
 :global(html.hx-hydroway-map-mobile-immersive),
 :global(body.hx-hydroway-map-mobile-immersive) {
   overflow: hidden;
@@ -120,27 +122,31 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: fab.$fab-size-mobile;
+  height: fab.$fab-size-mobile;
+  min-width: fab.$fab-size-mobile;
+  min-height: fab.$fab-size-mobile;
   border-radius: 999px;
-  border: 1px solid rgba(47, 224, 208, 0.22);
-  background: rgba(8, 14, 22, 0.72);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  color: #8ef5e8;
+  border: 1px solid fab.$fab-button-border;
+  background: fab.$fab-button-background;
+  backdrop-filter: fab.$fab-button-backdrop-filter;
+  -webkit-backdrop-filter: fab.$fab-button-backdrop-filter;
+  color: fab.$fab-button-color;
   text-decoration: none;
   touch-action: manipulation;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-  transition: transform 120ms ease, background 120ms ease;
+  box-shadow: fab.$fab-button-shadow;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
 }
 
 .floatingBackButton:active {
   transform: scale(0.96);
-  background: rgba(8, 14, 22, 0.88);
+  border-color: fab.$fab-button-border-active;
+  background: fab.$fab-button-background-active;
+  color: fab.$fab-button-color-active;
 }
 
 .floatingBackButton:focus-visible {
-  outline: 2px solid rgba(142, 245, 232, 0.85);
+  outline: 2px solid fab.$fab-button-focus-outline;
   outline-offset: 2px;
 }
 
@@ -165,49 +171,10 @@
   gap: 0.25rem;
   padding: 0.2rem;
   border-radius: 999px;
-  border: 1px solid rgba(47, 224, 208, 0.14);
-  background: rgba(8, 14, 22, 0.42);
-}
-
-.floatingButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  border-radius: 999px;
-  border: 1px solid rgba(47, 224, 208, 0.22);
-  background: rgba(8, 14, 22, 0.72);
+  border: 1px solid rgba(127, 255, 242, 0.16);
+  background: rgba(5, 16, 18, 0.42);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  color: #8ef5e8;
-  cursor: pointer;
-  touch-action: manipulation;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
-  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
-}
-
-.floatingButton:active:not(:disabled) {
-  transform: scale(0.96);
-  background: rgba(8, 14, 22, 0.88);
-}
-
-.floatingButton:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-}
-
-.floatingButtonActive {
-  border-color: rgba(142, 245, 232, 0.55);
-  background: rgba(12, 28, 34, 0.9);
-  color: #c8fff5;
-}
-
-.floatingButton:focus-visible {
-  outline: 2px solid rgba(142, 245, 232, 0.85);
-  outline-offset: 2px;
 }
 
 .layerPanel {
@@ -237,12 +204,74 @@
   border-bottom: 1px solid rgba(47, 224, 208, 0.1);
 }
 
+.layerPanelHeading {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
 .layerPanelTitle {
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: rgba(176, 228, 222, 0.88);
+}
+
+.layerPanelCurrent {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e8fffb;
+}
+
+.layerPanelActiveDescription {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: rgba(176, 228, 222, 0.72);
+}
+
+.layerPanelLegend {
+  display: grid;
+  gap: 0.28rem;
+  margin-top: 0.15rem;
+}
+
+.layerPanelLegendTitle {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.68);
+}
+
+.layerPanelLegendList {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layerPanelLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.layerPanelLegendSwatch {
+  flex-shrink: 0;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-width: 1.5px;
+  border-radius: 999px;
+}
+
+.layerPanelLegendLabel {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  color: rgba(210, 248, 242, 0.82);
 }
 
 .layerPanelClose {
@@ -271,8 +300,10 @@
 }
 
 .layerPresetButton {
+  display: grid;
+  gap: 0.18rem;
   width: 100%;
-  min-height: 2.35rem;
+  min-height: 2.55rem;
   padding: 0.45rem 0.65rem;
   border: 1px solid transparent;
   border-radius: 0.55rem;
@@ -285,9 +316,38 @@
 }
 
 .layerPresetButtonActive {
-  border-color: rgba(47, 224, 208, 0.28);
-  background: rgba(20, 216, 196, 0.12);
+  border-color: rgba(47, 224, 208, 0.42);
+  background: rgba(20, 216, 196, 0.16);
+  box-shadow: 0 0 0 1px rgba(127, 255, 242, 0.12);
   color: #e8fffb;
+}
+
+.layerPresetButtonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.layerPresetCheck {
+  flex-shrink: 0;
+  color: #7ffff2;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.layerPresetDescription {
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(176, 228, 222, 0.72);
+}
+
+.layerPresetButtonActive .layerPresetDescription {
+  color: rgba(210, 248, 242, 0.82);
 }
 
 .layerPresetButton:disabled {
@@ -431,8 +491,7 @@
     opacity: 0.7;
   }
 
-  .floatingBackButton,
-  .floatingButton {
+  .floatingBackButton {
     transition: none;
   }
 }

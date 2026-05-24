@@ -8,6 +8,7 @@ import type {
 import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
 import { createHydroMapDepthMaskGeoJson, createHydroMapGridGeoJson } from './hydro-map-grid';
 import { hydroMapStyleTokens } from './hydro-map-style';
+import { HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT } from './hydro-maplibre-glyphs';
 import { buildRouteLineGradientExpression } from './hydro-maplibre-route-style';
 
 export const HYDRO_MAPLIBRE_SOURCE_IDS = {
@@ -597,6 +598,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       minzoom: 5.5,
       filter: ['all', ['==', ['get', 'kind'], 'river'], ['>=', ['coalesce', ['get', 'labelSortKey'], 0], 78]],
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'symbol-placement': 'line',
         'text-field': ['get', 'displayLabel'],
         'text-size': ['interpolate', ['linear'], ['zoom'], 5.5, 9, 9, 11.5],
@@ -620,6 +622,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       minzoom: 6.5,
       filter: ['>=', ['coalesce', ['get', 'labelSortKey'], 0], 70],
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'symbol-placement': 'line',
         'text-field': ['get', 'displayLabel'],
         'text-size': ['interpolate', ['linear'], ['zoom'], 6.5, 8.5, 10, 10.5],
@@ -641,6 +644,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       minzoom: 6.5,
       filter: ['>=', ['coalesce', ['get', 'labelSortKey'], 0], 62],
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'text-field': ['get', 'displayLabel'],
         'text-size': ['interpolate', ['linear'], ['zoom'], 6.5, 9, 10, 11],
         'text-offset': [0, 1.1],
@@ -662,6 +666,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.origin,
       minzoom: 5,
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'text-field': ['get', 'displayLabel'],
         'text-size': 11,
         'text-offset': [0, 1.35],
@@ -683,6 +688,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.destination,
       minzoom: 5,
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'text-field': ['get', 'displayLabel'],
         'text-size': 11,
         'text-offset': [0, 1.35],
@@ -704,6 +710,7 @@ export function createHydroMapLibreBaseStyle(initialProgress01 = 0.15): StyleSpe
       source: HYDROWAY_GEOJSON_SOURCE_IDS.vessel,
       minzoom: 6,
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'text-field': ['get', 'displayLabel'],
         'text-size': 10,
         'text-offset': [0, 1.55],

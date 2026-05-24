@@ -1,0 +1,256 @@
+@use './hydroway-map-floating-action.tokens' as fab;
+
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  user-select: none;
+  pointer-events: auto;
+  transition: transform 120ms ease;
+}
+
+.action:disabled {
+  cursor: not-allowed;
+}
+
+.action:focus-visible {
+  outline: 2px solid fab.$fab-button-focus-outline;
+  outline-offset: 2px;
+}
+
+.surface {
+  position: relative;
+  display: grid;
+  place-items: center;
+  border: 1px solid fab.$fab-button-border;
+  background: fab.$fab-button-background;
+  backdrop-filter: fab.$fab-button-backdrop-filter;
+  -webkit-backdrop-filter: fab.$fab-button-backdrop-filter;
+  color: fab.$fab-button-color;
+  box-shadow: fab.$fab-button-shadow;
+  overflow: hidden;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.surface::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 42%);
+  pointer-events: none;
+}
+
+.icon {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+}
+
+.sizeMobile {
+  width: fab.$fab-size-mobile;
+  height: fab.$fab-size-mobile;
+  min-width: fab.$fab-size-mobile;
+  min-height: fab.$fab-size-mobile;
+}
+
+.sizeMobile .surface {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.sizeMobile:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.sizeDesktop {
+  width: fab.$fab-size-desktop;
+  height: fab.$fab-size-desktop;
+  min-width: fab.$fab-size-desktop;
+  min-height: fab.$fab-size-desktop;
+}
+
+.sizeDesktop .surface {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+}
+
+.sizeDesktop:hover:not(:disabled):not(.active):not([aria-pressed='true']) .surface,
+.sizeDesktop:focus-visible:not(.active):not([aria-pressed='true']) .surface {
+  transform: translateY(-1px);
+  border-color: fab.$fab-button-border-hover;
+  background: fab.$fab-button-background-hover;
+  color: fab.$fab-button-color-hover;
+}
+
+.sizeDesktop:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+.sizeMobile:hover:not(:disabled):not(.active):not([aria-pressed='true']) .surface,
+.sizeMobile:focus-visible:not(.active):not([aria-pressed='true']) .surface {
+  border-color: fab.$fab-button-border-hover;
+  background: fab.$fab-button-background-hover;
+  color: fab.$fab-button-color-hover;
+}
+
+.action:not(.active):not([aria-pressed='true']):active:not(:disabled) .surface {
+  border-color: fab.$fab-button-border-hover;
+  background: fab.$fab-button-background-hover;
+  color: fab.$fab-button-color-hover;
+}
+
+.active:not(:disabled) .surface,
+.action[aria-pressed='true']:not(:disabled) .surface {
+  border-color: fab.$fab-button-border-active;
+  background: fab.$fab-button-background-active;
+  color: fab.$fab-button-color-active;
+  box-shadow: fab.$fab-button-shadow-active;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.active:not(:disabled):active .surface,
+.action[aria-pressed='true']:not(:disabled):active .surface {
+  border-color: fab.$fab-button-border-active;
+  background: fab.$fab-button-background-active;
+  color: fab.$fab-button-color-active;
+  box-shadow: fab.$fab-button-shadow-active;
+}
+
+.active:not(:disabled) .surface::before,
+.action[aria-pressed='true']:not(:disabled) .surface::before {
+  background: linear-gradient(180deg, rgba(127, 255, 242, 0.08) 0%, transparent 48%);
+  box-shadow: inset 0 0 0 1px rgba(127, 255, 242, 0.14);
+}
+
+.active:not(:disabled) .surface::after,
+.action[aria-pressed='true']:not(:disabled) .surface::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  z-index: 2;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: fab.$fab-active-indicator-color;
+  box-shadow: fab.$fab-active-indicator-glow;
+  pointer-events: none;
+}
+
+.active:not(:disabled) .icon,
+.action[aria-pressed='true']:not(:disabled) .icon {
+  color: fab.$fab-button-color-active;
+}
+
+.active:not(:disabled) .icon svg,
+.action[aria-pressed='true']:not(:disabled) .icon svg {
+  color: fab.$fab-button-color-active;
+  opacity: 1;
+  stroke: currentColor;
+  filter: fab.$fab-button-icon-glow-active;
+}
+
+.sizeDesktop.active:not(:disabled):hover .surface,
+.sizeDesktop.action[aria-pressed='true']:not(:disabled):hover .surface {
+  transform: translateY(-1px);
+  border-color: fab.$fab-button-border-active;
+  box-shadow: fab.$fab-button-shadow-active;
+}
+
+.disabled:not(:disabled) {
+  /* noop — use :disabled */
+}
+
+.action:disabled .surface {
+  opacity: 0.45;
+  border-color: rgba(127, 255, 242, 0.12);
+  background: fab.$fab-button-background;
+  color: fab.$fab-button-color;
+  box-shadow: none;
+  transform: none;
+}
+
+.action:disabled .surface::before {
+  box-shadow: none;
+}
+
+.action:disabled .surface::after {
+  content: none;
+}
+
+.action:disabled .icon svg {
+  opacity: 0.72;
+  filter: none;
+}
+
+/* Tooltip desktop — data-tooltip no botão */
+.sizeDesktop[data-tooltip] {
+  position: relative;
+}
+
+.sizeDesktop[data-tooltip]::before,
+.sizeDesktop[data-tooltip]::after {
+  pointer-events: none;
+}
+
+.sizeDesktop[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: calc(100% + 0.45rem);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.28rem 0.48rem;
+  border-radius: 7px;
+  border: 1px solid rgba(0, 230, 208, 0.24);
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(12px);
+  color: rgba(248, 252, 255, 0.96);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 4;
+  box-shadow:
+    0 6px 16px rgba(0, 0, 0, 0.45),
+    0 0 10px rgba(0, 230, 208, 0.12);
+}
+
+.sizeDesktop[data-tooltip]:hover::after,
+.sizeDesktop[data-tooltip]:focus-visible::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .action,
+  .surface {
+    transition: none;
+  }
+
+  .sizeMobile:active:not(:disabled) {
+    transform: none;
+  }
+
+  .sizeDesktop:hover:not(:disabled) .surface,
+  .sizeDesktop:focus-visible .surface {
+    transform: none;
+  }
+}

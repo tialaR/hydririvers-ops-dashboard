@@ -14,6 +14,7 @@ import { useTranslations } from 'next-intl';
 import type { MouseEvent, PointerEvent } from 'react';
 
 import type { HydrowayMapRuntime } from '../../hooks/use-hydroway-map-runtime';
+import { HydrowayMapFloatingAction } from '../shared/hydroway-map-floating-action';
 import styles from './mobile-hydroway-map.module.scss';
 
 type MobileMapFloatingControlsProps = {
@@ -47,135 +48,114 @@ export function MobileMapFloatingControls({
 
   return (
     <nav className={styles.floatingControls} aria-label={tMap('layersPanelAria')}>
-      <button
-        type="button"
-        className={[
-          styles.floatingButton,
-          layerPresetPanelOpen ? styles.floatingButtonActive : '',
-        ]
-          .filter(Boolean)
-          .join(' ')}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<Layers size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapLayers')}
+        active={layerPresetPanelOpen}
+        ariaPressed={layerPresetPanelOpen}
+        disabled={mapLibreControlsDisabled}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           onToggleLayers();
         }}
-        disabled={mapLibreControlsDisabled}
-        aria-label={tMap('mapLayers')}
-        aria-pressed={layerPresetPanelOpen}
         data-testid="hydroway-map-mobile-layers-button"
-      >
-        <Layers size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
 
-      <button
-        type="button"
-        className={styles.floatingButton}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<MapPin size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapFocusOrigin')}
+        disabled={mapLibreControlsDisabled}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           handleFocusOrigin();
         }}
-        disabled={mapLibreControlsDisabled}
-        aria-label={tMap('mapFocusOrigin')}
         data-testid="hydroway-map-mobile-focus-origin-button"
-      >
-        <MapPin size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
 
-      <button
-        type="button"
-        className={styles.floatingButton}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<Crosshair size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapCurrentCargoLocation')}
+        disabled={mapLibreControlsDisabled}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           handleCenterCurrentCargo();
         }}
-        disabled={mapLibreControlsDisabled}
-        aria-label={tMap('mapCurrentCargoLocation')}
         data-testid="hydroway-map-mobile-center-cargo-button"
-      >
-        <Crosshair size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
 
-      <button
-        type="button"
-        className={styles.floatingButton}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<Flag size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapFocusDestination')}
+        disabled={mapLibreControlsDisabled}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           handleFocusDestination();
         }}
-        disabled={mapLibreControlsDisabled}
-        aria-label={tMap('mapFocusDestination')}
         data-testid="hydroway-map-mobile-focus-destination-button"
-      >
-        <Flag size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
 
-      <button
-        type="button"
-        className={styles.floatingButton}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<Route size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapRouteOverview')}
+        disabled={mapLibreControlsDisabled}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           handleFitRoute();
         }}
-        disabled={mapLibreControlsDisabled}
-        aria-label={tMap('mapRouteOverview')}
         data-testid="hydroway-map-mobile-route-overview-button"
-      >
-        <Route size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
 
       <div className={styles.floatingControlsGroup} role="group" aria-label={tMap('mapZoomControls')}>
-        <button
-          type="button"
-          className={styles.floatingButton}
+        <HydrowayMapFloatingAction
+          size="mobile"
+          icon={<Plus size={18} strokeWidth={2} />}
+          ariaLabel={tMap('mapZoomIn')}
+          disabled={mapLibreControlsDisabled}
           onPointerDown={stopEvent}
           onClick={(event) => {
             stopEvent(event);
             handleZoomIn();
           }}
-          disabled={mapLibreControlsDisabled}
-          aria-label={tMap('mapZoomIn')}
           data-testid="hydroway-map-mobile-zoom-in-button"
-        >
-          <Plus size={18} strokeWidth={2} aria-hidden />
-        </button>
+        />
 
-        <button
-          type="button"
-          className={styles.floatingButton}
+        <HydrowayMapFloatingAction
+          size="mobile"
+          icon={<Minus size={18} strokeWidth={2} />}
+          ariaLabel={tMap('mapZoomOut')}
+          disabled={mapLibreControlsDisabled}
           onPointerDown={stopEvent}
           onClick={(event) => {
             stopEvent(event);
             handleZoomOut();
           }}
-          disabled={mapLibreControlsDisabled}
-          aria-label={tMap('mapZoomOut')}
           data-testid="hydroway-map-mobile-zoom-out-button"
-        >
-          <Minus size={18} strokeWidth={2} aria-hidden />
-        </button>
+        />
       </div>
 
-      <button
-        type="button"
-        className={[styles.floatingButton, infoOpen ? styles.floatingButtonActive : '']
-          .filter(Boolean)
-          .join(' ')}
+      <HydrowayMapFloatingAction
+        size="mobile"
+        icon={<List size={18} strokeWidth={2} />}
+        ariaLabel={tMap('mapOpenInfo')}
+        active={infoOpen}
+        ariaPressed={infoOpen}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
           onToggleInfo();
         }}
-        aria-label={tMap('mapOpenInfo')}
-        aria-pressed={infoOpen}
         data-testid="hydroway-map-mobile-info-button"
-      >
-        <List size={18} strokeWidth={2} aria-hidden />
-      </button>
+      />
     </nav>
   );
 }

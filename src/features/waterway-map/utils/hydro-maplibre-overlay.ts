@@ -17,6 +17,7 @@ import { buildRouteTraveledGeoJson } from './hydro-maplibre-animation';
 import type { RouteMarkerKind } from './hydro-maplibre-route-markers';
 
 import { HYDRI_CARGO_BOAT_MARKER_SVG_URL } from '../constants/hydro-cargo-boat-marker';
+import { HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT } from './hydro-maplibre-glyphs';
 import { resolveEffectiveRouteTrack, sanitizeRouteTrackCoordinates } from './hydro-maplibre-geo';
 import {
   getCoordinateAtRouteProgress,
@@ -757,6 +758,7 @@ export function getHydrowayContextLayerDefinitions(): LayerSpecification[] {
       type: 'symbol',
       source: HYDROWAY_CONTEXT_SOURCE_IDS.infrastructure,
       layout: {
+        ...HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT,
         'text-field': ['get', 'name'],
         'text-size': 10,
         'text-offset': [0, 1.2],
@@ -1430,6 +1432,12 @@ export const HYDRAWAY_LAYER_TOOLTIP_LAYER_IDS = [
   HYDROWAY_CONTEXT_LAYER_IDS.corridorInfoPoint,
   HYDROWAY_CONTEXT_LAYER_IDS.basinInfoPoint,
   HYDROWAY_CONTEXT_LAYER_IDS.alertPointsPoint,
+  'hydri-op-terminals-point',
+  'hydri-op-alerts-point',
+  'hydri-op-signals-point',
+  'hydri-op-signals-attention',
+  'hydri-op-checkpoints-point',
+  'hydri-op-planning-areas-label',
 ] as const;
 
 export type HydrowayLayerTooltipCategory =
@@ -1438,7 +1446,9 @@ export type HydrowayLayerTooltipCategory =
   | 'infrastructure'
   | 'signal'
   | 'basin'
-  | 'alert';
+  | 'alert'
+  | 'checkpoint'
+  | 'planning';
 
 const TOOLTIP_CATEGORY_BY_LAYER: Record<string, HydrowayLayerTooltipCategory> = {
   [HYDROWAY_CONTEXT_LAYER_IDS.terminalsPoint]: 'terminal',
@@ -1447,6 +1457,12 @@ const TOOLTIP_CATEGORY_BY_LAYER: Record<string, HydrowayLayerTooltipCategory> = 
   [HYDROWAY_CONTEXT_LAYER_IDS.corridorInfoPoint]: 'corridor',
   [HYDROWAY_CONTEXT_LAYER_IDS.basinInfoPoint]: 'basin',
   [HYDROWAY_CONTEXT_LAYER_IDS.alertPointsPoint]: 'alert',
+  'hydri-op-terminals-point': 'terminal',
+  'hydri-op-alerts-point': 'alert',
+  'hydri-op-signals-point': 'signal',
+  'hydri-op-signals-attention': 'signal',
+  'hydri-op-checkpoints-point': 'checkpoint',
+  'hydri-op-planning-areas-label': 'planning',
 };
 
 const TOOLTIP_EYEBROW_BY_CATEGORY: Record<HydrowayLayerTooltipCategory, string> = {
@@ -1456,6 +1472,8 @@ const TOOLTIP_EYEBROW_BY_CATEGORY: Record<HydrowayLayerTooltipCategory, string> 
   signal: 'Sinal',
   basin: 'Bacia',
   alert: 'Alerta',
+  checkpoint: 'Checkpoint',
+  planning: 'Planejamento',
 };
 
 const TOOLTIP_TITLE_MAX_LEN = 28;
@@ -1509,7 +1527,9 @@ function resolveTooltipCategoryFromFeature(
     kind === 'infrastructure' ||
     kind === 'signal' ||
     kind === 'basin' ||
-    kind === 'alert'
+    kind === 'alert' ||
+    kind === 'checkpoint' ||
+    kind === 'planning'
   ) {
     return kind;
   }
@@ -1614,21 +1634,102 @@ function formatBasinMeta(feature: GeoJSON.Feature): string {
 }
 
 function formatAlertMeta(feature: GeoJSON.Feature): string {
-  const alertType = readFeatureString(feature, 'alertType');
+  const impact = readFeatureString(feature, 'impact');
+  const etaMinutes = readFeatureProperty(feature, 'etaImpactMinutes');
+  if (impact) {
+    const etaSuffix =
+      typeof etaMinutes === 'number' && Number.isFinite(etaMinutes) && etaMinutes > 0
+        ? ` · ETA +${Math.round(etaMinutes / 60)}h`
+        : '';
+    return truncateHydrowayMapTooltipText(`${impact}${etaSuffix}`, TOOLTIP_META_MAX_LEN);
+  }
+
+  const alertType = readFeatureString(feature, 'alertType') || readFeatureString(feature, 'type');
   const severity = readFeatureString(feature, 'severity');
   const left =
-    alertType === 'draft-restricted'
+    alertType === 'draft' || alertType === 'draft-restricted'
       ? 'Calado'
-      : alertType === 'low-visibility'
-        ? 'Visibilidade'
-        : alertType === 'traffic-intense'
-          ? 'Tráfego'
-          : alertType === 'environmental-monitoring'
-            ? 'Ambiental'
-            : 'Operação';
+      : alertType === 'drought'
+        ? 'Seca'
+        : alertType === 'dredging'
+          ? 'Dragagem'
+          : alertType === 'signaling'
+            ? 'Sinalização'
+            : alertType === 'traffic'
+              ? 'Tráfego'
+              : alertType === 'port-window'
+                ? 'Janela portuária'
+                : alertType === 'low-visibility' || alertType === 'visibility'
+                  ? 'Visibilidade'
+                  : 'Alerta';
   const right =
-    severity === 'high' ? 'alta' : severity === 'medium' ? 'média' : 'baixa';
-  return `${left} · sev. ${right}`;
+    severity === 'critical'
+      ? 'crítico'
+      : severity === 'warning'
+        ? 'atenção'
+        : severity === 'high'
+          ? 'alta'
+          : severity === 'medium'
+            ? 'média'
+            : 'monitorado';
+  return `${left} · ${right}`;
+}
+
+function formatOperationalAlertMeta(feature: GeoJSON.Feature): string {
+  const title = readFeatureString(feature, 'title');
+  const shortMessage = readFeatureString(feature, 'shortMessage');
+  const etaMinutes = readFeatureProperty(feature, 'etaImpactMinutes');
+  const etaSuffix =
+    typeof etaMinutes === 'number' && Number.isFinite(etaMinutes) && etaMinutes > 0
+      ? ` · ETA +${Math.max(1, Math.round(etaMinutes / 60))}h`
+      : '';
+
+  if (title && etaSuffix) {
+    return truncateHydrowayMapTooltipText(`${title}${etaSuffix}`, TOOLTIP_META_MAX_LEN);
+  }
+  if (shortMessage) {
+    return truncateHydrowayMapTooltipText(shortMessage, TOOLTIP_META_MAX_LEN);
+  }
+  return formatAlertMeta(feature);
+}
+
+function formatOperationalTerminalMeta(feature: GeoJSON.Feature): string {
+  const status = readFeatureString(feature, 'operationalStatus');
+  const queue = readFeatureString(feature, 'queueRisk');
+  const statusLabel =
+    status === 'open'
+      ? 'aberto'
+      : status === 'congested'
+        ? 'congestionado'
+        : status === 'closed'
+          ? 'fechado'
+          : 'monitorado';
+  const queueLabel = queue === 'high' ? 'fila alta' : queue === 'medium' ? 'fila média' : 'fila baixa';
+  return `${statusLabel} · ${queueLabel}`;
+}
+
+function formatOperationalSignalMeta(feature: GeoJSON.Feature): string {
+  const condition = readFeatureString(feature, 'condition');
+  const hint = readFeatureString(feature, 'captainHint');
+  if (hint) return truncateHydrowayMapTooltipText(hint, TOOLTIP_META_MAX_LEN);
+  return condition === 'maintenance'
+    ? 'Manutenção · atenção'
+    : condition === 'attention'
+      ? 'Atenção náutica'
+      : 'Sinal ok';
+}
+
+function formatCheckpointMeta(feature: GeoJSON.Feature): string {
+  const status = readFeatureString(feature, 'status');
+  const message = readFeatureString(feature, 'shortMessage');
+  if (message) return truncateHydrowayMapTooltipText(message, TOOLTIP_META_MAX_LEN);
+  return status === 'pending' ? 'Próximo checkpoint' : status === 'passed' ? 'Checkpoint concluído' : 'Checkpoint';
+}
+
+function formatPlanningMeta(feature: GeoJSON.Feature): string {
+  const summary = readFeatureString(feature, 'institutionalSummary');
+  if (summary) return truncateHydrowayMapTooltipText(summary, TOOLTIP_META_MAX_LEN);
+  return 'Área de planejamento · mock';
 }
 
 export function resolveHydrowayLayerTooltipContent(
@@ -1639,19 +1740,24 @@ export function resolveHydrowayLayerTooltipContent(
   if (!category) return null;
 
   const title = truncateHydrowayMapTooltipText(
-    readFeatureString(feature, 'name') ||
+    readFeatureString(feature, 'title') ||
+      readFeatureString(feature, 'name') ||
       readFeatureString(feature, 'basinName') ||
+      readFeatureString(feature, 'label') ||
       'Ponto hidroviário',
     TOOLTIP_TITLE_MAX_LEN,
   );
 
+  const isOperationalLayer = layerId.startsWith('hydri-op-');
   const metaByCategory: Record<HydrowayLayerTooltipCategory, string> = {
     corridor: formatCorridorMeta(feature),
-    terminal: formatTerminalMeta(feature),
+    terminal: isOperationalLayer ? formatOperationalTerminalMeta(feature) : formatTerminalMeta(feature),
     infrastructure: formatInfrastructureMeta(feature),
-    signal: formatSignalMeta(feature),
+    signal: isOperationalLayer ? formatOperationalSignalMeta(feature) : formatSignalMeta(feature),
     basin: formatBasinMeta(feature),
-    alert: formatAlertMeta(feature),
+    alert: isOperationalLayer ? formatOperationalAlertMeta(feature) : formatAlertMeta(feature),
+    checkpoint: formatCheckpointMeta(feature),
+    planning: formatPlanningMeta(feature),
   };
 
   return {

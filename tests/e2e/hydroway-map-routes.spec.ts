@@ -128,7 +128,7 @@ test.describe('Cargas — mobile smoke @mobile-hydroway', () => {
     await expect(page.getByTestId('hydroway-map-product-stage')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-mobile-top-bar')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-mobile-bottom-summary')).toHaveCount(0);
-    await expect(page.getByTestId('hydroway-map-mobile-layer-panel')).toHaveCount(0);
+    await expect(page.getByTestId('hydroway-layer-panel')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
     await expect(page.getByRole('group', { name: /Selecionar carga demo/i })).toHaveCount(0);
     await expect(page.getByRole('group', { name: /Resumo operacional da carga/i })).toHaveCount(0);
@@ -150,5 +150,67 @@ test.describe('Cargas — mobile smoke @mobile-hydroway', () => {
     await expect(page.getByTestId('hydroway-map-product')).toHaveCount(0);
     await expect(page.getByTestId('hydroway-map-cargo-id')).toHaveCount(0);
     await expectNoHydrowaySpikeDevUi(page);
+  });
+});
+
+test.describe('Cargas — modos operacionais Camadas', () => {
+  test('desktop /pt-BR/cargas/CARGO-001/mapa abre painel e modos operacionais', async ({
+    page,
+  }, testInfo) => {
+    await smokeHydrowayRoute(page, '/pt-BR/cargas/CARGO-001/mapa', testInfo, {
+      screenshotName: 'cargas-pt-br-cargo-001-mapa-layers',
+    });
+
+    await page.getByRole('button', { name: /Modos operacionais do mapa/i }).click();
+    await expect(page.getByTestId('hydroway-layer-panel')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Atual:/i);
+    await expect(page.getByTestId('hydroway-layer-legend')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-operation')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-navigation')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-logistics')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-risk')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-government')).toBeVisible();
+    await expect(page.getByText('Modo escuro')).toHaveCount(0);
+    await expect(page.getByText('Semi-light')).toHaveCount(0);
+
+    await page.getByTestId('hydroway-layer-mode-navigation').scrollIntoViewIfNeeded();
+    await page.getByTestId('hydroway-layer-mode-navigation').click();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Navegação/i);
+    await expect(page.getByTestId('hydroway-layer-legend')).toContainText(/Navegável/i);
+    await page.getByTestId('hydroway-layer-mode-logistics').scrollIntoViewIfNeeded();
+    await page.getByTestId('hydroway-layer-mode-logistics').click();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Logística/i);
+    await page.getByTestId('hydroway-layer-mode-risk').scrollIntoViewIfNeeded();
+    await page.getByTestId('hydroway-layer-mode-risk').click();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Risco/i);
+    await page.getByTestId('hydroway-layer-mode-government').scrollIntoViewIfNeeded();
+    await page.getByTestId('hydroway-layer-mode-government').click();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Governo/i);
+  });
+
+  test('mobile /pt-BR/cargas/CARGO-001/mapa seleciona modos operacionais @mobile-hydroway', async ({
+    page,
+  }, testInfo) => {
+    await smokeHydrowayRoute(page, '/pt-BR/cargas/CARGO-001/mapa', testInfo, {
+      screenshotName: 'cargas-pt-br-mobile-mapa-layers',
+    });
+
+    await page.getByTestId('hydroway-map-mobile-layers-button').click();
+    await expect(page.getByTestId('hydroway-layer-panel')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Atual:/i);
+    await expect(page.getByTestId('hydroway-layer-legend')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-operation')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-navigation')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-logistics')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-risk')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-mode-government')).toBeVisible();
+    await expect(page.getByText('Modo escuro')).toHaveCount(0);
+
+    await page.getByTestId('hydroway-layer-mode-navigation').click();
+    await expect(page.getByTestId('hydroway-layer-panel')).toBeVisible();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Navegação/i);
+
+    await page.getByTestId('hydroway-layer-mode-risk').click();
+    await expect(page.getByTestId('hydroway-layer-current-mode')).toContainText(/Risco/i);
   });
 });

@@ -1580,7 +1580,8 @@
       "focusCurrentCargo": "Enfocar carga actual",
       "focusCurrentCargoAria": "Enfocar la ubicación actual de la carga",
       "layersTitle": "Capas",
-      "layersPanelAria": "Presets visuales del mapa",
+      "layersCurrent": "Actual: {mode}",
+      "layersPanelAria": "Modos operativos del mapa",
       "layerPresetDark": "Modo oscuro",
       "layerPresetSemiLight": "Semi-light",
       "layerPresetRealistic": "Realista",
@@ -2470,6 +2471,57 @@
       "in-transit": "En tránsito",
       "completed": "Completado",
       "error-scenarios": "Errores y pendencias"
+    }
+  },
+  "waterwayMap": {
+    "operationalModes": {
+      "legendTitle": "Leyenda",
+      "operation": {
+        "label": "Operación",
+        "description": "Ruta, carga actual y puntos operativos.",
+        "legend": {
+          "corridor": "Corredor activo",
+          "checkpoint": "Checkpoint",
+          "alert": "Alerta cercana"
+        }
+      },
+      "navigation": {
+        "label": "Navegación",
+        "description": "Calado, restricciones, dragado y señalización.",
+        "legend": {
+          "normal": "Navegable",
+          "attention": "Atención",
+          "restricted": "Restringido",
+          "dredging": "Dragado"
+        }
+      },
+      "logistics": {
+        "label": "Logística",
+        "description": "Terminales, checkpoints y cuellos de botella.",
+        "legend": {
+          "terminal": "Terminales",
+          "checkpoint": "Checkpoints",
+          "bottleneck": "Cuello de botella/cola"
+        }
+      },
+      "risk": {
+        "label": "Riesgo",
+        "description": "Alertas que impactan plazo, costo o seguridad.",
+        "legend": {
+          "critical": "Crítico",
+          "warning": "Atención",
+          "restricted": "Tramo restringido"
+        }
+      },
+      "government": {
+        "label": "Gobierno",
+        "description": "Corredores, cuencas y planificación hidroviaria.",
+        "legend": {
+          "corridor": "Corredor hidroviario",
+          "planning": "Planificación/estudio",
+          "outline": "Área institucional"
+        }
+      }
     }
   }
 }

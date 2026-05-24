@@ -27,7 +27,7 @@ function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExp
     model,
     preferredProvider: 'maplibre',
     disableLayerTooltips: true,
-    closeLayerPanelOnSelect: true,
+    closeLayerPanelOnSelect: false,
     mobileCamera: true,
   });
 

@@ -648,7 +648,7 @@
 .controlDockInner {
   position: relative;
   display: flex;
-  flex-direction: row-reverse;
+  flex-direction: row;
   align-items: flex-end;
   gap: 0.45rem;
   padding: 0;
@@ -676,10 +676,24 @@
       var(--overlay-surface-mid) 52%,
       var(--overlay-surface-bottom) 100%
     );
-  backdrop-filter: blur(18px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: var(--overlay-shadow), var(--overlay-inset-highlight);
   pointer-events: auto;
   overflow: hidden auto;
+  animation: layerPresetPanelIn 180ms ease-out;
+}
+
+@keyframes layerPresetPanelIn {
+  from {
+    opacity: 0;
+    transform: translateX(0.4rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .layerPresetPanelDark {
@@ -691,8 +705,44 @@
 
 .layerPresetPanelHeader {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
   padding: 0.2rem 0.35rem 0.35rem;
+}
+
+.layerPresetPanelClose {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #b8ebe4;
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.layerPresetPanelClose:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #e8fffb;
+}
+
+.layerPresetPanelClose:focus-visible {
+  outline: 2px solid rgba(127, 255, 242, 0.55);
+  outline-offset: 2px;
+}
+
+.layerPresetPanelHeading {
+  display: grid;
+  gap: 0.18rem;
+  min-width: 0;
 }
 
 .layerPresetPanelTitle {
@@ -701,6 +751,63 @@
   font-weight: 800;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.layerPresetPanelCurrent {
+  margin: 0;
+  color: #dff8ff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.layerPresetPanelActiveDescription {
+  margin: 0;
+  color: rgba(168, 198, 214, 0.82);
+  font-size: 0.6rem;
+  line-height: 1.35;
+}
+
+.layerPresetPanelLegend {
+  display: grid;
+  gap: 0.28rem;
+  margin-top: 0.2rem;
+}
+
+.layerPresetPanelLegendTitle {
+  color: rgba(168, 198, 214, 0.72);
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.layerPresetPanelLegendList {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layerPresetPanelLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.layerPresetPanelLegendSwatch {
+  flex-shrink: 0;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-width: 1.5px;
+  border-radius: 999px;
+}
+
+.layerPresetPanelLegendLabel {
+  color: rgba(210, 228, 248, 0.82);
+  font-size: 0.58rem;
+  line-height: 1.25;
 }
 
 .layerPresetList {
@@ -750,8 +857,38 @@
 }
 
 .layerPresetButtonActive {
-  border-color: rgba(47, 224, 208, 0.42);
-  background: rgba(47, 224, 208, 0.12);
+  border-color: rgba(47, 224, 208, 0.48);
+  background: rgba(47, 224, 208, 0.14);
+  box-shadow: 0 0 0 1px rgba(127, 255, 242, 0.14);
+}
+
+.layerPresetButtonLabelRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  width: 100%;
+}
+
+.layerPresetButtonIcon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  color: rgba(176, 228, 222, 0.92);
+  line-height: 0;
+}
+
+.layerPresetButtonActive .layerPresetButtonIcon {
+  color: #b8fff4;
+}
+
+.layerPresetButtonCheck {
+  flex-shrink: 0;
+  color: #7ffff2;
+  font-size: 0.82rem;
+  font-weight: 800;
+  line-height: 1;
 }
 
 .layerPresetPanelDark .layerPresetButton {
@@ -798,12 +935,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 0.35rem;
   padding: 0;
   border: 0;
   background: transparent;
   box-shadow: none;
   pointer-events: none;
+}
+
+.controlStack > * {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
 }
 
 .mapZoomBadge {
@@ -852,138 +995,6 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
   line-height: 1;
-}
-
-.controlIconButton {
-  position: relative;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  min-height: 38px;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  transform: none;
-  cursor: pointer;
-  touch-action: manipulation;
-  user-select: none;
-  pointer-events: auto;
-}
-
-.controlButtonSurface {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 11px;
-  border: 1px solid var(--overlay-border);
-  background:
-    radial-gradient(ellipse 120% 90% at 50% -20%, var(--overlay-teal-glow), transparent 58%),
-    linear-gradient(
-      152deg,
-      var(--overlay-surface-top) 0%,
-      var(--overlay-surface-mid) 52%,
-      var(--overlay-surface-bottom) 100%
-    );
-  backdrop-filter: blur(18px);
-  color: rgba(239, 247, 252, 0.68);
-  box-shadow:
-    var(--overlay-shadow),
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    var(--overlay-inset-highlight);
-  pointer-events: none;
-  overflow: hidden;
-  transition:
-    transform 160ms ease,
-    border-color 160ms ease,
-    color 160ms ease,
-    box-shadow 160ms ease;
-}
-
-.controlButtonSurface::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--overlay-shine);
-  pointer-events: none;
-}
-
-.controlIconButton:hover:not(:disabled) .controlButtonSurface,
-.controlIconButton:focus-visible .controlButtonSurface {
-  transform: translateY(-1px);
-  border-color: rgba(47, 224, 208, 0.42);
-  color: rgba(127, 246, 236, 0.92);
-}
-
-.controlIconButtonActive:not(:disabled) .controlButtonSurface {
-  border-color: var(--overlay-border-strong);
-  color: rgba(127, 246, 236, 0.92);
-  box-shadow:
-    var(--overlay-shadow),
-    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
-    var(--overlay-inset-highlight),
-    0 0 8px rgba(47, 224, 208, 0.1);
-}
-
-.controlIconButtonDisabled,
-.controlIconButton:disabled {
-  cursor: not-allowed;
-}
-
-.controlIconButtonDisabled .controlButtonSurface,
-.controlIconButton:disabled .controlButtonSurface {
-  opacity: 0.38;
-  border-color: rgba(190, 213, 224, 0.1);
-  box-shadow: none;
-  transform: none;
-}
-
-.controlIconButton:focus-visible {
-  outline: 2px solid rgba(47, 224, 208, 0.72);
-  outline-offset: 3px;
-}
-
-.controlIconButton[data-tooltip]::before,
-.controlIconButton[data-tooltip]::after {
-  pointer-events: none;
-}
-
-.controlIconButton[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  right: calc(100% + 0.45rem);
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0.28rem 0.48rem;
-  border-radius: 7px;
-  border: 1px solid rgba(47, 224, 208, 0.24);
-  background: rgba(0, 0, 0, 0.92);
-  backdrop-filter: blur(12px);
-  color: rgba(248, 252, 255, 0.96);
-  font-size: 0.62rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  opacity: 0;
-  transition: opacity 0.15s ease;
-  z-index: 4;
-  box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.45),
-    0 0 10px rgba(47, 224, 208, 0.12);
-}
-
-.controlIconButton[data-tooltip]:hover::after,
-.controlIconButton[data-tooltip]:focus-visible::after {
-  opacity: 1;
-}
-
-.controlIconButton:disabled[data-tooltip]:hover::after,
-.controlIconButton:disabled[data-tooltip]:focus-visible::after {
-  opacity: 1;
 }
 
 .controlIconSvg {
@@ -1208,25 +1219,15 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .layerPresetPanel {
+    animation: none;
+  }
+
   .hudAccentBarFill,
   .hudProgressFill {
     transition: none;
   }
 
-  .controlButtonSurface {
-    transition:
-      border-color 160ms ease,
-      color 160ms ease,
-      box-shadow 160ms ease,
-      background 160ms ease;
-  }
-
-  .controlIconButton:hover:not(:disabled) .controlButtonSurface,
-  .controlIconButton:focus-visible .controlButtonSurface {
-    transform: none;
-  }
-
-  .controlIconButton[data-tooltip]::after,
   .corridorBadge[data-tooltip]::after {
     transition: none;
   }
