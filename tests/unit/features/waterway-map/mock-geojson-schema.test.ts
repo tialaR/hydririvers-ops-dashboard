@@ -21,7 +21,7 @@ import {
   loadHydrowayRiskZonesMock,
   loadHydrowaySecondaryRiversMock,
   loadHydrowayStaticGeoBundle,
-} from '@/features/waterway-map/data/load-mock-geojson';
+} from '@/features/waterway-map/data/load-mock-geojson.server';
 import {
   validateHydrowayGeoFeatureCollection,
   validateHydrowayMockCorpus,

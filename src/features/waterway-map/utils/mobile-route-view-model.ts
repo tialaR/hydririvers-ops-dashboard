@@ -1,9 +1,15 @@
 import type { Cargo, CargoStatus } from '@/features/marketplace/domain/marketplace.types';
 import type { CargoWaterwayTrackingCompat } from '@/features/waterway-tracking/waterway-compat';
 
-import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
-import { resolveCargoOperationalWaterwayContext } from '../data/resolve-cargo-operational-waterway-context';
-import { hydrowayOperationalDatasetMock } from '../mocks/hydroway-operational-layers.mock';
+import type {
+  HydrowayMapMetadata,
+  HydrowayMapMobileRouteSegmentStatus,
+  HydrowayMapModel,
+} from '../domain/hydroway-map-model.types';
+import {
+  parseNextSegmentOperationalBrief,
+  type NextSegmentOperationalBrief,
+} from './parse-next-segment-operational-brief';
 
 export type MobileSyncStatus = 'online' | 'offline' | 'syncing' | 'pending';
 
@@ -32,14 +38,31 @@ export type MobileRouteDockViewModel = {
   syncStatus: MobileSyncStatus;
 };
 
+export type MobileRouteNextSegmentStatusKey =
+  | 'mobileRouteNextStatusOnTime'
+  | 'mobileRouteNextStatusAttention'
+  | 'mobileRouteNextStatusDelayed';
+
 export type MobileRouteSheetViewModel = MobileRouteDockViewModel & {
   routeName: string;
+  routeTechnicalRef: string;
   vesselName?: string;
   syncDetailKey: MobileSyncDetailKey;
   nextSegmentLabel: string;
   nextSegmentDetail?: string;
+  nextSegmentBrief?: NextSegmentOperationalBrief;
+  nextSegmentStatusKey: MobileRouteNextSegmentStatusKey;
   alertSummary?: string;
   timelineSteps: MobileRouteTimelineStep[];
+};
+
+const NEXT_SEGMENT_STATUS_KEYS: Record<
+  HydrowayMapMobileRouteSegmentStatus,
+  MobileRouteNextSegmentStatusKey
+> = {
+  onTime: 'mobileRouteNextStatusOnTime',
+  attention: 'mobileRouteNextStatusAttention',
+  delayed: 'mobileRouteNextStatusDelayed',
 };
 
 export function resolveMobileSyncStatus(
@@ -117,29 +140,43 @@ function buildTimelineSteps(progressPercent: number): MobileRouteTimelineStep[] 
   ];
 }
 
-function resolveNextSegment(
-  cargoId: string,
-  model: HydrowayMapModel,
-): { label: string; detail?: string } {
-  const operationalContext = resolveCargoOperationalWaterwayContext(cargoId);
-  if (operationalContext?.nextTerminalId) {
-    const terminal = hydrowayOperationalDatasetMock.terminals.find(
-      (entry) => entry.id === operationalContext.nextTerminalId,
-    );
+function mapTrackingOperationalStatus(
+  status: CargoWaterwayTrackingCompat['operationalStatus'] | undefined,
+): HydrowayMapMobileRouteSegmentStatus | undefined {
+  if (status === 'attention') return 'attention';
+  if (status === 'delayed') return 'delayed';
+  if (status === 'on-time') return 'onTime';
+  return undefined;
+}
+
+export function resolveNextSegmentStatusKey(
+  metadata: HydrowayMapMetadata,
+  tracking?: CargoWaterwayTrackingCompat | null,
+): MobileRouteNextSegmentStatusKey {
+  const segmentStatus =
+    metadata.nextSegmentStatus ?? mapTrackingOperationalStatus(tracking?.operationalStatus);
+
+  if (segmentStatus) {
+    return NEXT_SEGMENT_STATUS_KEYS[segmentStatus];
+  }
+
+  return 'mobileRouteNextStatusOnTime';
+}
+
+function resolveNextSegment(metadata: HydrowayMapMetadata): { label: string; detail?: string } {
+  if (metadata.nextSegmentLabel) {
     return {
-      label: terminal?.name ?? operationalContext.nextTerminalId,
-      detail: operationalContext.businessSummary,
+      label: metadata.nextSegmentLabel,
+      detail: metadata.nextSegmentDetail,
     };
   }
 
   const label =
-    model.metadata.segmentId ||
-    model.metadata.operationalStatus ||
-    model.metadata.routeName;
+    metadata.segmentId || metadata.operationalStatus || metadata.routeName;
 
   return {
     label,
-    detail: model.metadata.operationalStatus,
+    detail: metadata.operationalStatus,
   };
 }
 
@@ -175,15 +212,18 @@ export function buildMobileRouteSheetViewModel(
   tracking?: CargoWaterwayTrackingCompat | null,
 ): MobileRouteSheetViewModel {
   const dock = buildMobileRouteDockViewModel(cargo, model, progressPercent, tracking);
-  const nextSegment = resolveNextSegment(cargo.id, model);
+  const nextSegment = resolveNextSegment(model.metadata);
 
   return {
     ...dock,
     routeName: model.metadata.routeName,
+    routeTechnicalRef: model.metadata.routeTechnicalRef,
     vesselName: model.metadata.vesselName ?? tracking?.vesselName,
     syncDetailKey: resolveMobileSyncDetailKey(dock.syncStatus),
     nextSegmentLabel: nextSegment.label,
     nextSegmentDetail: nextSegment.detail,
+    nextSegmentBrief: parseNextSegmentOperationalBrief(nextSegment.detail),
+    nextSegmentStatusKey: resolveNextSegmentStatusKey(model.metadata, tracking),
     alertSummary: tracking?.constraints[0]?.title,
     timelineSteps: buildTimelineSteps(progressPercent),
   };

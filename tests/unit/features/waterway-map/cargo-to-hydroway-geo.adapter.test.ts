@@ -6,7 +6,7 @@ import { HYDROWAY_MOCK_GEO_BBOX } from '@/features/waterway-map/domain/hydroway-
 import {
   findHydrowayCargoRouteFeature,
   loadHydrowayCargoRoutesMock,
-} from '@/features/waterway-map/data/load-mock-geojson';
+} from '@/features/waterway-map/data/load-mock-geojson.server';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import { publicCargosMock } from '@/features/cargo/mocks/publicCargos.mock';
 import { cargoWaterwayTrackingByCargoId } from '@/features/waterway-tracking/waterway-compat';

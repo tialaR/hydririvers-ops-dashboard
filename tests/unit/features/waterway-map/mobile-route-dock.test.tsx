@@ -7,6 +7,7 @@ import { resolveCargoHydrowayMapModel } from '@/features/waterway-map/data/resol
 import { cargoWaterwayTrackingByCargoId } from '@/features/waterway-tracking/waterway-compat';
 import {
   buildMobileRouteDockViewModel,
+  buildMobileRouteSheetViewModel,
   resolveMobileSyncStatus,
 } from '@/features/waterway-map/utils/mobile-route-view-model';
 
@@ -36,28 +37,39 @@ describe('mobile route dock foundation', () => {
     expect(viewModel.syncStatus).toBe('online');
   });
 
-  it('renderiza dock compacto com test id e dados da rota', () => {
+  it('sheet view model separa rota humana e referência técnica para CARGO-001', () => {
+    const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-001');
+    const model = resolveCargoHydrowayMapModel(cargo!);
+    const tracking = cargoWaterwayTrackingByCargoId.get('CARGO-001');
+    const viewModel = buildMobileRouteSheetViewModel(cargo!, model!, 15, tracking);
+
+    expect(viewModel.originLabel).toBe('Belém');
+    expect(viewModel.destinationLabel).toBe('Santarém');
+    expect(viewModel.routeTechnicalRef).toBe('port-belem → port-santarem');
+    expect(viewModel.nextSegmentLabel).toBe('Abaetetuba');
+    expect(viewModel.nextSegmentStatusKey).toBe('mobileRouteNextStatusAttention');
+  });
+
+  it('renderiza dock passivo compacto sem CTA nem gatilho de sheet', () => {
     const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-001');
     const model = resolveCargoHydrowayMapModel(cargo!);
     const tracking = cargoWaterwayTrackingByCargoId.get('CARGO-001');
     const viewModel = buildMobileRouteDockViewModel(cargo!, model!, 15, tracking);
 
-    const htmlClosed = renderToStaticMarkup(
-      <MobileRouteDock viewModel={viewModel} onOpenDetails={() => undefined} />,
-    );
+    const htmlClosed = renderToStaticMarkup(<MobileRouteDock viewModel={viewModel} />);
 
     expect(htmlClosed).toContain('data-testid="hydroway-map-mobile-route-dock"');
-    expect(htmlClosed).toContain('data-sheet-open="false"');
+    expect(htmlClosed).not.toContain('data-sheet-open');
+    expect(htmlClosed).not.toContain('role="button"');
+    expect(htmlClosed).not.toContain('mobileRouteOpenDetails');
+    expect(htmlClosed).not.toContain('aria-expanded');
+    expect(htmlClosed).toContain('role="region"');
+    expect(htmlClosed).toContain('CARGO-001');
+    expect(htmlClosed).toContain('data-testid="hydroway-map-mobile-sync-pill"');
 
-    const htmlOpen = renderToStaticMarkup(
-      <MobileRouteDock viewModel={viewModel} sheetOpen onOpenDetails={() => undefined} />,
-    );
+    const htmlOpen = renderToStaticMarkup(<MobileRouteDock viewModel={viewModel} sheetOpen />);
 
-    expect(htmlOpen).toContain('data-sheet-open="true"');
-
-    const html = htmlClosed;
-    expect(html).toContain('CARGO-001');
-    expect(html).toContain('mobileRouteOpenDetails');
-    expect(html).toContain('data-testid="hydroway-map-mobile-sync-pill"');
+    expect(htmlOpen).toContain('dockSheetOpen');
+    expect(htmlOpen).not.toContain('role="button"');
   });
 });

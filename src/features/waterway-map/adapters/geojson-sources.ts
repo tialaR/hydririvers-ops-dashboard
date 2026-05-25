@@ -2,7 +2,6 @@ import type { WaterwayCorridorId } from '@/features/waterway-tracking/domain/wat
 
 import type { HydrowayGeoFeatureProperties } from '../domain/hydroway-geo.types';
 import type { HydrowayGeoJsonSources } from '../domain/hydroway-map-model.types';
-import { loadHydrowayStaticGeoBundle } from '../data/load-mock-geojson';
 import { HYDROWAY_GEOJSON_SOURCE_IDS } from '../data/hydroway-geo-source-ids';
 import type { HydrowayRouteGeometry } from './route-geometry';
 
@@ -159,19 +158,5 @@ export function buildHydrowayDynamicGeoSources(
     destination,
     vessel,
     routeBounds,
-  };
-}
-
-/** Une bundle estático V2.2a com fontes dinâmicas da carga ativa. */
-export function assembleHydrowayGeoJsonSources(
-  dynamic: Pick<
-    HydrowayGeoJsonSources,
-    'routeTrack' | 'routeTraveled' | 'origin' | 'destination' | 'vessel' | 'routeBounds'
-  >,
-): HydrowayGeoJsonSources {
-  const staticBundle = loadHydrowayStaticGeoBundle();
-  return {
-    ...staticBundle,
-    ...dynamic,
   };
 }

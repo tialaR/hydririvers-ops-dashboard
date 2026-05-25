@@ -27,17 +27,25 @@ export type HydrowayStaticGeoBundle = Pick<
   'mainRivers' | 'navigableCorridors' | 'portsTerminals' | 'riskZones'
 >;
 
+/** Status serializável do próximo trecho para UI mobile (resolvido no servidor). */
+export type HydrowayMapMobileRouteSegmentStatus = 'onTime' | 'attention' | 'delayed';
+
 /** Metadados operacionais derivados do adapter (V2.2b). */
 export type HydrowayMapMetadata = {
   originLabel: string;
   destinationLabel: string;
   progress01: number;
   routeName: string;
+  routeTechnicalRef: string;
   routeSource: 'demo-geojson' | 'fallback-line';
   vesselName?: string;
   segmentId?: string;
   eta?: string;
   operationalStatus?: string;
+  /** Próximo trecho/terminal — preenchido no adapter para consumo client-safe. */
+  nextSegmentLabel?: string;
+  nextSegmentDetail?: string;
+  nextSegmentStatus?: HydrowayMapMobileRouteSegmentStatus;
   locationFallbacks: {
     origin: boolean;
     destination: boolean;

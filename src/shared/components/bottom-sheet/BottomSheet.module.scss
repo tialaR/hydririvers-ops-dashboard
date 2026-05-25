@@ -9,6 +9,30 @@
   -webkit-backdrop-filter: blur(8px);
   touch-action: none;
   overscroll-behavior: contain;
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.overlay[data-visible='true'] {
+  opacity: 1;
+}
+
+.overlay[data-variant="light"] {
+  background: rgba(1, 7, 11, 0.24);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.overlay[data-variant="map"] {
+  background: rgba(1, 7, 11, 0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .overlay[data-variant="map"] {
+    background: rgba(1, 7, 11, 0.68);
+  }
 }
 
 .overlay[data-variant="strong"] {
@@ -25,6 +49,30 @@
   -webkit-backdrop-filter: blur(16px);
 }
 
+.overlay[data-viewport-anchor='flush'] {
+  padding: 0;
+  align-items: end;
+  justify-items: stretch;
+}
+
+.overlay[data-viewport-anchor='flush'][data-variant="light"] {
+  background: rgba(1, 7, 11, 0.18);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.overlay[data-viewport-anchor='flush'][data-variant="map"] {
+  background: rgba(1, 7, 11, 0.48);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .overlay[data-viewport-anchor='flush'][data-variant="map"] {
+    background: rgba(1, 7, 11, 0.62);
+  }
+}
+
 .sheet {
   width: min(100%, 42rem);
   margin: 0 auto;
@@ -38,17 +86,53 @@
     linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, #10191c) 84%, transparent), color-mix(in srgb, var(--hx-card, #071015) 96%, transparent));
   box-shadow: 0 28px 70px rgba(0,0,0,.42);
   max-height: min(var(--sheet-snap, 90dvh), 100dvh);
-  transform: translateY(var(--sheet-offset, 0));
-  transition: transform .22s ease;
+  transform: translate3d(0, calc(100% + var(--sheet-offset, 0px)), 0);
+  opacity: 0;
+  transition:
+    transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 220ms cubic-bezier(0.2, 0, 0, 1);
   will-change: transform;
   pointer-events: auto;
 }
 
+.overlay[data-visible='true'] .sheet {
+  transform: translate3d(0, var(--sheet-offset, 0), 0);
+  opacity: 1;
+}
+
+.sheet[data-dragging='true'] {
+  transition: none;
+}
+
+.overlay[data-viewport-anchor='flush'] .sheet {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  height: var(--sheet-max-height, 95dvh);
+  max-height: var(--sheet-max-height, 95dvh);
+  min-height: 0;
+  border-radius: 1.35rem 1.35rem 0 0;
+  border-bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  transform: translate3d(0, var(--sheet-translate-y, 100%), 0);
+  opacity: 1;
+  box-shadow:
+    0 -4px 24px rgba(0, 0, 0, 0.2),
+    0 28px 70px rgba(0, 0, 0, 0.38);
+}
+
+.overlay[data-viewport-anchor='flush'][data-visible='true'] .sheet {
+  transform: translate3d(0, var(--sheet-translate-y, 0), 0);
+}
+
 .sheet[data-variant="strong"] {
-  border-color: rgba(70, 108, 118, 0.18);
+  border-color: rgba(70, 108, 118, 0.28);
   background:
-    radial-gradient(circle at 100% 0%, rgba(20, 216, 196, 0.06), transparent 10rem),
-    linear-gradient(180deg, rgba(8, 17, 24, 0.985), rgba(5, 11, 17, 0.992));
+    radial-gradient(circle at 100% 0%, rgba(20, 216, 196, 0.05), transparent 10rem),
+    linear-gradient(180deg, rgba(8, 17, 24, 0.99), rgba(4, 10, 16, 1));
+  box-shadow:
+    0 -4px 24px rgba(0, 0, 0, 0.18),
+    0 28px 70px rgba(0, 0, 0, 0.42);
 }
 
 .sheet[data-variant="strong"] .closeButton {
@@ -150,12 +234,16 @@
   box-shadow: 0 -0.5rem 1.25rem rgba(0, 0, 0, 0.28);
 }
 
+.overlay[data-viewport-anchor='flush'] .footer {
+  padding-bottom: .9rem;
+}
+
 @media (orientation: landscape) and (max-height: 600px) {
-  .overlay {
+  .overlay:not([data-viewport-anchor='flush']) {
     padding: .5rem;
   }
 
-  .sheet {
+  .overlay:not([data-viewport-anchor='flush']) .sheet {
     width: 100%;
     max-height: 100dvh;
     border-radius: 18px;
@@ -163,7 +251,20 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+  }
+
   .sheet {
     transition: none;
+  }
+
+  .overlay[data-visible='true'] .sheet {
+    transform: translate3d(0, var(--sheet-offset, 0), 0);
+    opacity: 1;
+  }
+
+  .overlay[data-viewport-anchor='flush'][data-visible='true'] .sheet {
+    transform: translate3d(0, var(--sheet-translate-y, 0), 0);
   }
 }

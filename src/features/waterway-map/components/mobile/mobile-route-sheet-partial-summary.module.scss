@@ -1,0 +1,321 @@
+.partialCard {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.42rem;
+  padding: 0.5rem 0.52rem 0.48rem;
+  border-color: rgba(47, 224, 208, 0.2);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.partialRouteRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.38rem;
+  align-items: start;
+  flex-shrink: 0;
+}
+
+.iconBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(47, 224, 208, 0.24);
+  background: rgba(20, 216, 196, 0.12);
+  color: rgba(142, 245, 232, 0.96);
+  flex-shrink: 0;
+}
+
+.partialRouteCopy {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.partialRouteTitle {
+  margin: 0;
+  min-width: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #e8fffb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partialRouteSecondary {
+  margin: 0;
+  min-width: 0;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  color: rgba(176, 228, 222, 0.68);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.partialRouteTrailing {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.24rem;
+  flex-shrink: 0;
+}
+
+.partialStatusBadge {
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.healthChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+}
+
+.healthChip[data-state='ok'] {
+  color: #8ef5e8;
+  border-color: rgba(142, 245, 232, 0.35);
+  background: rgba(20, 216, 196, 0.12);
+}
+
+.healthChip[data-state='alert'] {
+  color: #ffd98a;
+  border-color: rgba(255, 217, 138, 0.35);
+  background: rgba(255, 217, 138, 0.1);
+}
+
+.partialStack {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  gap: 0.38rem;
+}
+
+.partialMetricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.partialMetricsGrid[data-columns='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.partialMetricsGrid[data-columns='4'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.statCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.34rem;
+  padding: 0.38rem 0.42rem;
+  border-radius: 0.62rem;
+  border: 1px solid rgba(47, 224, 208, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  min-width: 0;
+}
+
+.statIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 0.5rem;
+  background: rgba(20, 216, 196, 0.1);
+  color: rgba(142, 245, 232, 0.94);
+  flex-shrink: 0;
+}
+
+.statCopy {
+  display: grid;
+  gap: 0.06rem;
+  min-width: 0;
+}
+
+.statLabel {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.68);
+}
+
+.statValue {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: rgba(232, 255, 251, 0.96);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partialSyncValue {
+  display: flex;
+  align-items: center;
+  min-height: 1.1rem;
+}
+
+.partialNextStatusChip {
+  display: inline-flex;
+  align-self: flex-start;
+  margin-top: 0.04rem;
+  padding: 0.08rem 0.36rem;
+  border-radius: 999px;
+  border: 1px solid rgba(142, 245, 232, 0.24);
+  background: rgba(20, 216, 196, 0.08);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.88);
+  white-space: nowrap;
+}
+
+.partialProgressSection {
+  display: grid;
+  gap: 0.28rem;
+  flex-shrink: 0;
+}
+
+.partialProgressHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.72);
+}
+
+.partialProgressHeader strong {
+  margin-left: auto;
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: #e8fffb;
+}
+
+.progressTrack {
+  height: 0.38rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.progressTrackMarked {
+  position: relative;
+  overflow: visible;
+  height: 0.44rem;
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(20, 216, 196, 0.8), rgba(142, 245, 232, 0.95));
+}
+
+.progressVessel {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.1rem;
+  height: 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(142, 245, 232, 0.55);
+  background: rgba(6, 18, 24, 0.96);
+  color: #8ef5e8;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 0 3px rgba(142, 245, 232, 0.14);
+}
+
+.partialFillBand {
+  display: grid;
+  gap: 0.34rem;
+  margin-top: auto;
+  padding: 0.42rem 0.44rem;
+  border-radius: 0.68rem;
+  border: 1px solid rgba(47, 224, 208, 0.12);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.partialFillRow,
+.partialAlertRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.38rem;
+  align-items: start;
+  color: rgba(176, 228, 222, 0.82);
+}
+
+.partialAlertRow {
+  color: rgba(255, 217, 138, 0.92);
+}
+
+.partialFillCopy {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: rgba(200, 220, 226, 0.86);
+}
+
+.partialFillLabel {
+  display: block;
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.62);
+}
+
+.partialFillValue {
+  display: block;
+  margin-top: 0.06rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #e8fffb;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partialExpandHint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  margin: 0.08rem 0 0;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.58);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressFill,
+  .progressVessel {
+    transition: none;
+  }
+}

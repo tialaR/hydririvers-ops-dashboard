@@ -9,17 +9,13 @@ import { HydrowayMapStage } from '../hydroway-map-stage';
 import { useHydrowayMapRuntime } from '../../hooks/use-hydroway-map-runtime';
 import { cargoWaterwayTrackingByCargoId } from '@/features/waterway-tracking/waterway-compat';
 
-import {
-  buildMobileRouteDockViewModel,
-  buildMobileRouteSheetViewModel,
-} from '../../utils/mobile-route-view-model';
+import { buildMobileRouteSheetViewModel } from '../../utils/mobile-route-view-model';
 
 import { MobileHydrowayMapShell } from './mobile-hydroway-map-shell';
 import { MobileMapControlStack } from './mobile-map-control-stack';
 import { MobileMapLayerPanel } from './mobile-map-layer-panel';
 import { MobileMapFloatingBackButton } from './mobile-map-floating-back-button';
-import { MobileRouteDock } from './mobile-route-dock';
-import { MobileRouteSheet } from './mobile-route-sheet';
+import { MobileRouteSheet, type MobileRouteSheetSnap } from './mobile-route-sheet';
 import styles from './mobile-hydroway-map.module.scss';
 
 type MobileHydrowayMapExperienceProps = {
@@ -30,6 +26,7 @@ type MobileHydrowayMapExperienceProps = {
 function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExperienceProps) {
   const tMap = useTranslations('operationsBoard.map');
   const [infoOpen, setInfoOpen] = useState(false);
+  const [routeSheetSnap, setRouteSheetSnap] = useState<MobileRouteSheetSnap>('partial');
   const runtime = useHydrowayMapRuntime({
     model,
     preferredProvider: 'maplibre',
@@ -45,33 +42,25 @@ function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExp
     [cargo.id],
   );
 
-  const dockViewModel = useMemo(
-    () => buildMobileRouteDockViewModel(cargo, model, runtime.progressPercent, tracking),
-    [cargo, model, runtime.progressPercent, tracking],
-  );
-
   const sheetViewModel = useMemo(
     () => buildMobileRouteSheetViewModel(cargo, model, runtime.progressPercent, tracking),
     [cargo, model, runtime.progressPercent, tracking],
   );
 
-  const handleOpenDetails = useCallback(() => {
+  const handleOpenRouteDetails = useCallback(() => {
+    if (infoOpen) return;
     if (layerPresetPanelOpen) {
       handleCloseLayerPresetPanel();
     }
     setInfoOpen(true);
-  }, [handleCloseLayerPresetPanel, layerPresetPanelOpen]);
-
-  const handleToggleInfo = useCallback(() => {
-    if (!infoOpen && layerPresetPanelOpen) {
-      handleCloseLayerPresetPanel();
-    }
-    setInfoOpen((open) => !open);
   }, [handleCloseLayerPresetPanel, infoOpen, layerPresetPanelOpen]);
 
   const handleInfoOpenChange = useCallback((open: boolean) => {
     if (open && layerPresetPanelOpen) {
       handleCloseLayerPresetPanel();
+    }
+    if (!open) {
+      setRouteSheetSnap('partial');
     }
     setInfoOpen(open);
   }, [handleCloseLayerPresetPanel, layerPresetPanelOpen]);
@@ -96,23 +85,18 @@ function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExp
         <MobileMapFloatingBackButton cargoId={cargo.id} />
         <MobileMapControlStack
           runtime={runtime}
-          isSuppressed={infoOpen}
-          infoOpen={infoOpen}
-          onToggleInfo={handleToggleInfo}
+          routeDetailsOpen={infoOpen}
+          routeSheetSnap={routeSheetSnap}
+          onOpenRouteDetails={handleOpenRouteDetails}
           onToggleLayers={handleToggleLayers}
         />
         <MobileMapLayerPanel runtime={runtime} />
       </div>
 
-      <MobileRouteDock
-        viewModel={dockViewModel}
-        sheetOpen={infoOpen}
-        onOpenDetails={handleOpenDetails}
-      />
-
       <MobileRouteSheet
         open={infoOpen}
         onOpenChange={handleInfoOpenChange}
+        onSnapChange={setRouteSheetSnap}
         viewModel={sheetViewModel}
       />
     </MobileHydrowayMapShell>

@@ -12,10 +12,22 @@ vi.mock('@/features/waterway-map/components/shared/hydroway-map-floating-action'
   HydrowayMapFloatingAction: ({
     'data-testid': testId,
     'aria-pressed': ariaPressed,
+    'aria-label': ariaLabel,
+    onClick,
   }: {
     'data-testid'?: string;
     'aria-pressed'?: boolean;
-  }) => <button type="button" data-testid={testId} aria-pressed={ariaPressed} />,
+    'aria-label'?: string;
+    onClick?: () => void;
+  }) => (
+    <button
+      type="button"
+      data-testid={testId}
+      aria-pressed={ariaPressed}
+      aria-label={ariaLabel}
+      onClick={onClick}
+    />
+  ),
 }));
 
 function createRuntimeStub(): HydrowayMapRuntime {
@@ -34,37 +46,41 @@ function createRuntimeStub(): HydrowayMapRuntime {
 describe('mobile map control stack', () => {
   const runtime = createRuntimeStub();
 
-  it('mantém stack interativa quando o sheet está fechado', () => {
+  it('mantém stack visível e interativa quando o sheet está fechado', () => {
     const html = renderToStaticMarkup(
       <MobileMapControlStack
         runtime={runtime}
-        isSuppressed={false}
-        infoOpen={false}
-        onToggleInfo={() => undefined}
+        routeDetailsOpen={false}
+        onOpenRouteDetails={() => undefined}
         onToggleLayers={() => undefined}
       />,
     );
 
     expect(html).toContain('data-testid="hydroway-map-mobile-control-stack"');
-    expect(html).toContain('data-suppressed="false"');
+    expect(html).toContain('data-sheet-open="false"');
+    expect(html).toContain('data-testid="hydroway-map-mobile-route-details-button"');
+    expect(html).toContain('aria-label="mobileRouteOpenDetailsAria"');
     expect(html).not.toContain('aria-hidden="true"');
     expect(html).not.toContain('inert');
+    expect(html).not.toContain('stackSuppressed');
   });
 
-  it('suprime stack quando o sheet está aberto', () => {
+  it('mantém stack visível quando o sheet está aberto', () => {
     const html = renderToStaticMarkup(
       <MobileMapControlStack
         runtime={runtime}
-        isSuppressed
-        infoOpen
-        onToggleInfo={() => undefined}
+        routeDetailsOpen
+        routeSheetSnap="partial"
+        onOpenRouteDetails={() => undefined}
         onToggleLayers={() => undefined}
       />,
     );
 
-    expect(html).toContain('data-suppressed="true"');
-    expect(html).toContain('aria-hidden="true"');
-    expect(html).toContain('inert');
+    expect(html).toContain('data-sheet-open="true"');
+    expect(html).toContain('data-sheet-snap="partial"');
     expect(html).toContain('aria-pressed="true"');
+    expect(html).not.toContain('aria-hidden="true"');
+    expect(html).not.toContain('inert');
+    expect(html).toContain('data-testid="hydroway-map-mobile-focus-origin-button"');
   });
 });

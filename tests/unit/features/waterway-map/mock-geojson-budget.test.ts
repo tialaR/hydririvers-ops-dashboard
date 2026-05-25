@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { HYDROWAY_MOCK_GEO_BUDGET } from '@/features/waterway-map/domain/hydroway-geo.types';
-import { getHydrowayMockGeoJsonByteSizes } from '@/features/waterway-map/data/load-mock-geojson';
+import { getHydrowayMockGeoJsonByteSizes } from '@/features/waterway-map/data/load-mock-geojson.server';
 
 describe('hydroway mock geojson budget', () => {
   it('respeita orçamento ADR 0031 por arquivo e combinado', () => {

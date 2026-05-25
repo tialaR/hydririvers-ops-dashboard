@@ -93,7 +93,7 @@ Inspiração (estrutural, não reprodução):
 
 Metadados por feature (quando aplicável): `sourceInspiration`, `sourceType` (`official-inspired` | `domain-inspired` | `synthetic`), `sourceNotes`, `confidence`, `mockLevel`, `lastReviewed` (string estável), `visualPurpose`.
 
-Artefatos (bbox WGS84 fictício `HYDROWAY_MOCK_GEO_BBOX`; carregados e fundidos em `load-mock-geojson.ts`):
+Artefatos (bbox WGS84 fictício `HYDROWAY_MOCK_GEO_BBOX`; carregados e fundidos em `load-mock-geojson.server.ts`):
 
 | Arquivo | Features (aprox.) | Camada lógica |
 |---------|-------------------|---------------|

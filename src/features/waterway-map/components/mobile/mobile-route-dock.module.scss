@@ -2,12 +2,12 @@
   position: relative;
   z-index: 5;
   flex-shrink: 0;
-  margin: 0 0.55rem calc(0.55rem + env(safe-area-inset-bottom, 0px));
-  min-height: 3.25rem;
-  border-radius: 1.25rem;
+  margin: 0 0.55rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  min-height: 0;
+  border-radius: 1rem;
   border-color: rgba(47, 224, 208, 0.2);
   box-shadow:
-    0 10px 28px rgba(0, 0, 0, 0.28),
+    0 8px 22px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
   overflow: hidden;
   opacity: 1;
@@ -20,24 +20,15 @@
 }
 
 .dockSheetOpen {
-  opacity: 0.42;
-  transform: translate3d(0, 0.35rem, 0);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-  pointer-events: none;
+  opacity: 0.5;
+  transform: translate3d(0, 0.2rem, 0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
 }
 
 .inner {
   display: grid;
-  gap: 0.5rem;
-  padding: 0.55rem 0.8rem 0.6rem;
-}
-
-.handle {
-  justify-self: center;
-  width: 2.1rem;
-  height: 0.22rem;
-  border-radius: 999px;
-  background: rgba(176, 228, 222, 0.35);
+  gap: 0.35rem;
+  padding: 0.45rem 0.7rem 0.5rem;
 }
 
 .headerRow {
@@ -48,104 +39,54 @@
 }
 
 .cargoId {
-  font-size: 0.84rem;
+  font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   color: #e8fffb;
 }
 
-.routeRow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
-  align-items: start;
+.routeLine {
+  display: flex;
+  align-items: center;
   gap: 0.35rem;
-}
-
-.endpoint {
-  display: grid;
-  gap: 0.1rem;
+  margin: 0;
   min-width: 0;
 }
 
-.endpointLabel {
-  font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: rgba(176, 228, 222, 0.68);
-}
-
-.endpointValue {
-  font-size: 0.78rem;
+.routeEndpoint {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 0.74rem;
   font-weight: 600;
-  color: rgba(232, 255, 251, 0.94);
+  color: rgba(232, 255, 251, 0.92);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.corridor {
-  display: grid;
-  gap: 0.2rem;
-  align-content: center;
-  min-width: 0;
-  padding-top: 0.15rem;
-}
-
-.corridorTrack {
-  position: relative;
-  height: 0.28rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.1);
-  overflow: visible;
-}
-
-.corridorProgress {
-  position: absolute;
-  inset: 0 auto 0 0;
-  border-radius: inherit;
-  background: linear-gradient(90deg, rgba(20, 216, 196, 0.75), rgba(35, 156, 214, 0.85));
-}
-
-.corridorMarker {
-  position: absolute;
-  top: 50%;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 999px;
-  border: 2px solid rgba(8, 14, 22, 0.9);
-  background: #8ef5e8;
-  transform: translate(-50%, -50%);
-  box-shadow: 0 0 0 2px rgba(142, 245, 232, 0.25);
-}
-
-.corridorCurrent {
-  font-size: 0.64rem;
+.routeArrow {
+  flex-shrink: 0;
+  font-size: 0.72rem;
   font-weight: 700;
-  line-height: 1.2;
-  text-align: center;
-  color: rgba(142, 245, 232, 0.92);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  color: rgba(142, 245, 232, 0.88);
 }
 
 .metricsRow {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.65rem 1rem;
+  gap: 0.5rem 0.85rem;
 }
 
 .metric {
   display: inline-flex;
   align-items: baseline;
-  gap: 0.3rem;
+  gap: 0.28rem;
   min-width: 0;
 }
 
 .metricLabel {
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -153,13 +94,13 @@
 }
 
 .metricValue {
-  font-size: 0.8rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: rgba(232, 255, 251, 0.95);
 }
 
 .progressTrack {
-  height: 0.28rem;
+  height: 0.22rem;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.07);
   overflow: hidden;
@@ -172,23 +113,10 @@
   transition: width 220ms cubic-bezier(0.2, 0, 0, 1);
 }
 
-.expandHint {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  min-height: 1.75rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: rgba(176, 228, 222, 0.82);
-}
-
 @keyframes dockEnter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
 
   to {
@@ -204,7 +132,7 @@
   }
 
   .dockSheetOpen {
-    opacity: 0.5;
+    opacity: 0.55;
     transform: none;
   }
 

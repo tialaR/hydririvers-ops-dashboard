@@ -15,22 +15,22 @@ import type { MouseEvent, PointerEvent } from 'react';
 
 import type { HydrowayMapRuntime } from '../../hooks/use-hydroway-map-runtime';
 import { HydrowayMapFloatingAction } from '../shared/hydroway-map-floating-action';
+import type { MobileRouteSheetSnap } from './mobile-route-sheet';
 import styles from './mobile-map-control-stack.module.scss';
 
 export type MobileMapControlStackProps = {
   runtime: HydrowayMapRuntime;
-  /** Route/info sheet aberto — suprime presença visual e interação da stack. */
-  isSuppressed: boolean;
-  infoOpen: boolean;
-  onToggleInfo: () => void;
+  routeDetailsOpen: boolean;
+  routeSheetSnap?: MobileRouteSheetSnap;
+  onOpenRouteDetails: () => void;
   onToggleLayers: () => void;
 };
 
 export function MobileMapControlStack({
   runtime,
-  isSuppressed,
-  infoOpen,
-  onToggleInfo,
+  routeDetailsOpen,
+  routeSheetSnap = 'partial',
+  onOpenRouteDetails,
   onToggleLayers,
 }: MobileMapControlStackProps) {
   const tMap = useTranslations('operationsBoard.map');
@@ -49,13 +49,20 @@ export function MobileMapControlStack({
     event.stopPropagation();
   };
 
+  const stackClassName = [
+    styles.stack,
+    routeDetailsOpen && routeSheetSnap === 'expanded' ? styles.stackAboveExpandedSheet : '',
+    routeDetailsOpen && routeSheetSnap === 'partial' ? styles.stackAbovePartialSheet : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
     <nav
-      className={[styles.stack, isSuppressed ? styles.stackSuppressed : ''].filter(Boolean).join(' ')}
+      className={stackClassName}
       aria-label={tMap('layersPanelAria')}
-      aria-hidden={isSuppressed ? true : undefined}
-      {...(isSuppressed ? { inert: true } : {})}
-      data-suppressed={isSuppressed ? 'true' : 'false'}
+      data-sheet-open={routeDetailsOpen ? 'true' : 'false'}
+      data-sheet-snap={routeDetailsOpen ? routeSheetSnap : undefined}
       data-testid="hydroway-map-mobile-control-stack"
     >
       <HydrowayMapFloatingAction
@@ -156,15 +163,15 @@ export function MobileMapControlStack({
       <HydrowayMapFloatingAction
         size="mobile"
         icon={<List size={18} strokeWidth={2} />}
-        ariaLabel={tMap('mapOpenInfo')}
-        active={infoOpen}
-        ariaPressed={infoOpen}
+        ariaLabel={tMap('mobileRouteOpenDetailsAria')}
+        active={routeDetailsOpen}
+        ariaPressed={routeDetailsOpen}
         onPointerDown={stopEvent}
         onClick={(event) => {
           stopEvent(event);
-          onToggleInfo();
+          onOpenRouteDetails();
         }}
-        data-testid="hydroway-map-mobile-info-button"
+        data-testid="hydroway-map-mobile-route-details-button"
       />
     </nav>
   );
