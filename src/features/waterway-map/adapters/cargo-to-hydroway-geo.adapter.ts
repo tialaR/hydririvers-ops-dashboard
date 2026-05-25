@@ -8,11 +8,10 @@ import {
   type HydrowayDemoCargoId,
 } from '../domain/hydroway-entities.types';
 import type { HydrowayMapMetadata, HydrowayMapModel } from '../domain/hydroway-map-model.types';
-import { findHydrowayCargoRouteFeature } from '../data/load-mock-geojson';
-import {
-  assembleHydrowayGeoJsonSources,
-  buildHydrowayDynamicGeoSources,
-} from './geojson-sources';
+import { findHydrowayCargoRouteFeature } from '../data/load-mock-geojson.server';
+import { resolveMobileRouteMetadataPatch } from '../data/resolve-mobile-route-metadata.server';
+import { assembleHydrowayGeoJsonSources } from './geojson-sources.server';
+import { buildHydrowayDynamicGeoSources } from './geojson-sources';
 import {
   formatHydrowayShortLocation,
   mapTrackingCorridorToGeoCorridor,
@@ -121,6 +120,17 @@ export function adaptCargoToHydrowayMapModel(input: CargoHydrowayAdapterInput): 
   const routeName =
     demoRoute?.properties?.name ?? buildRouteName(originLabel, destinationLabel);
 
+  const demoRouteProps = demoRoute?.properties as
+    | { originNodeId?: string; destinationNodeId?: string }
+    | undefined;
+  const routeTechnicalRef =
+    demoRouteProps?.originNodeId && demoRouteProps?.destinationNodeId
+      ? `${demoRouteProps.originNodeId} → ${demoRouteProps.destinationNodeId}`
+      : buildRouteName(
+          input.cargo.origin.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+          input.cargo.destination.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''),
+        );
+
   const geometry = buildHydrowayRouteGeometry(routeCoordinates, progress01);
 
   const dynamic = buildHydrowayDynamicGeoSources({
@@ -137,16 +147,20 @@ export function adaptCargoToHydrowayMapModel(input: CargoHydrowayAdapterInput): 
     vesselName: input.tracking?.vesselName,
   });
 
+  const mobileRouteMetadata = resolveMobileRouteMetadataPatch(cargoId);
+
   const metadata: HydrowayMapMetadata = {
     originLabel,
     destinationLabel,
     progress01,
     routeName,
+    routeTechnicalRef,
     routeSource,
     vesselName: input.tracking?.vesselName,
     segmentId: input.tracking?.segmentId,
     eta: input.tracking?.eta,
     operationalStatus: input.tracking?.operationalStatus,
+    ...mobileRouteMetadata,
     locationFallbacks: {
       origin: resolvedOrigin.usedFallback,
       destination: resolvedDestination.usedFallback,

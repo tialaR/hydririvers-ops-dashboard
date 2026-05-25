@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 
-import { HydrowayMapSpikeShell } from '@/features/waterway-map';
+import { HydrowayMapSpikeShell } from '@/features/waterway-map/components/hydroway-map-spike-shell';
 import { resolveSpikeHydrowayMapModel } from '@/features/waterway-map/data/resolve-spike-hydroway-model';
 import { isHydrowayMapLibreSpikeRouteEnabled } from '@/shared/config/env';
 

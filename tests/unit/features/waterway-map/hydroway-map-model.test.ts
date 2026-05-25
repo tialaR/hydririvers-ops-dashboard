@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { HydrowayMapModel } from '@/features/waterway-map/providers/map-provider.types';
 import { HYDROWAY_MOCK_GEO_BBOX_TUPLE } from '@/features/waterway-map/domain/hydroway-geo.types';
-import { loadHydrowayGeoJsonSources } from '@/features/waterway-map/data/load-mock-geojson';
+import { loadHydrowayGeoJsonSources } from '@/features/waterway-map/data/load-mock-geojson.server';
 
 describe('HydrowayMapModel', () => {
   it('aceita estrutura mínima com geo e metadados (sem scene)', () => {
@@ -15,6 +15,7 @@ describe('HydrowayMapModel', () => {
         destinationLabel: 'Santarém',
         progress01: 0.15,
         routeName: 'Belém → Santarém',
+        routeTechnicalRef: 'port-belem → port-santarem',
         routeSource: 'demo-geojson',
         locationFallbacks: { origin: false, destination: false },
       },

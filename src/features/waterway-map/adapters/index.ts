@@ -1,7 +1,8 @@
 export { adaptCargoToHydrowayMapModel } from './cargo-to-hydroway-geo.adapter';
 export { hydrowayModelToScene } from './hydroway-model-to-scene';
 export type { CargoHydrowayAdapterInput } from './cargo-to-hydroway-geo.adapter';
-export { HYDROWAY_GEOJSON_SOURCE_IDS, assembleHydrowayGeoJsonSources, buildHydrowayDynamicGeoSources } from './geojson-sources';
+export { HYDROWAY_GEOJSON_SOURCE_IDS, buildHydrowayDynamicGeoSources } from './geojson-sources';
+export { assembleHydrowayGeoJsonSources } from './geojson-sources.server';
 export type { BuildHydrowayDynamicGeoSourcesInput } from './geojson-sources';
 export {
   formatHydrowayShortLocation,
