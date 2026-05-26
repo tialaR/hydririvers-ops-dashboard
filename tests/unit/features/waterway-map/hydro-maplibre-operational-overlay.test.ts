@@ -16,7 +16,9 @@ import {
   HYDRI_OP_ICON_SYMBOL_LAYER_IDS,
   HYDRI_OP_LAYER_IDS,
   ICON_SYMBOLS_BY_MODE,
+  OPERATIONAL_LINE_DASHARRAY_SOLID,
   OPERATIONAL_MODE_DOMINANT_COLORS,
+  resolveOperationalLineDasharrayPaint,
 } from '@/features/waterway-map/utils/hydro-maplibre-operational-overlay';
 import {
   toAlertsFeatureCollection,
@@ -59,8 +61,8 @@ describe('hydro-maplibre operational overlay', () => {
     expect(slice!.planningAreas.length).toBeGreaterThan(0);
   });
 
-  it('CARGO-001 and CARGO-004 resolve datasets with features for all sources', () => {
-    for (const cargoId of ['CARGO-001', 'CARGO-004'] as const) {
+  it('all public list cargos resolve datasets with features for core sources', () => {
+    for (const cargoId of ['CARGO-001', 'CARGO-002', 'CARGO-003', 'CARGO-004'] as const) {
       const slice = resolveOperationalDatasetForCargo(cargoId);
       expect(slice).not.toBeNull();
       const geo = buildOperationalGeoJsonFromSlice(slice);
@@ -149,6 +151,52 @@ describe('hydro-maplibre operational overlay', () => {
     expect(ICON_SYMBOLS_BY_MODE.navigation).toContain('D');
     expect(ICON_SYMBOLS_BY_MODE.logistics).toContain('Q');
     expect(ICON_SYMBOLS_BY_MODE.government).toContain('G');
+  });
+
+  it('resolveOperationalLineDasharrayPaint never returns undefined for visible dredging without dash', () => {
+    const solid = resolveOperationalLineDasharrayPaint(HYDRI_OP_LAYER_IDS.segmentsDredging, {
+      visibility: 'visible',
+      opacity: 0.5,
+    });
+    expect(solid).toEqual(OPERATIONAL_LINE_DASHARRAY_SOLID);
+    expect(solid).not.toBeUndefined();
+  });
+
+  it('resolveOperationalLineDasharrayPaint preserves explicit dash arrays', () => {
+    const dashed = resolveOperationalLineDasharrayPaint(HYDRI_OP_LAYER_IDS.segmentsDredging, {
+      visibility: 'visible',
+      opacity: 0.9,
+      lineDasharray: [2.5, 1.4],
+    });
+    expect(dashed).toEqual([2.5, 1.4]);
+  });
+
+  it('resolveOperationalLineDasharrayPaint skips dash for non-dredging line layers', () => {
+    const dash = resolveOperationalLineDasharrayPaint(HYDRI_OP_LAYER_IDS.segmentsNormal, {
+      visibility: 'visible',
+      opacity: 0.9,
+    });
+    expect(dash).toBeUndefined();
+  });
+
+  it('all operational mode visuals avoid nullish numeric paint when syncing dredging dash', () => {
+    for (const mode of HYDROWAY_OPERATIONAL_LAYER_MODE_ORDER) {
+      const dredgingDash = resolveOperationalLineDasharrayPaint(
+        HYDRI_OP_LAYER_IDS.segmentsDredging,
+        {
+          visibility: 'visible',
+          opacity: getOperationalModePaintConfig(mode).segmentsDredging,
+          lineDasharray: mode === 'navigation' || mode === 'risk' ? [2.5, 1.4] : undefined,
+        },
+      );
+      if (mode === 'navigation' || mode === 'risk') {
+        expect(dredgingDash).toEqual([2.5, 1.4]);
+      } else if (
+        getOperationalModePaintConfig(mode).segmentsDredging > 0.02
+      ) {
+        expect(dredgingDash).toEqual(OPERATIONAL_LINE_DASHARRAY_SOLID);
+      }
+    }
   });
 
   it('symbol layers with text-field use OpenFreeMap-compatible text-font', () => {

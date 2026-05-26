@@ -1,27 +1,22 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent as ReactPointerEvent, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import { readCargoes } from '@/features/marketplace/services/marketplace.client';
 import { cargoConstants } from '@/features/cargos/domain/cargo-constants';
-import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
+import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import { CargoCard } from '../cargo-card/cargo-card';
 import styles from './cargo-list.module.scss';
 
 const PAGE_SIZE = cargoConstants.defaultPageSize;
-const SHEET_CLOSE_MS = 220;
-const SHEET_CLOSE_THRESHOLD = 120;
-const SHEET_FULL_THRESHOLD = 72;
-const SHEET_HALF_THRESHOLD = 72;
+const FILTER_SHEET_SNAP_ORDER = ['half', 'full'] as const;
 
 type FilterKey = 'query' | 'corridor' | 'origin' | 'destination' | 'type' | 'family' | 'document';
 type FilterState = Record<FilterKey, string>;
 
-type SheetState = 'closed' | 'open' | 'closing';
-type SheetSnap = 'half' | 'full';
+type FilterSheetSnap = (typeof FILTER_SHEET_SNAP_ORDER)[number];
 
 const emptyFilters: FilterState = { query: '', corridor: '', origin: '', destination: '', type: '', family: '', document: '' };
 
@@ -52,23 +47,9 @@ export function CargoList({ cargoes }: { cargoes: Cargo[] }) {
   const [items, setItems] = useState(cargoes);
   const [filters, setFilters] = useState<FilterState>(emptyFilters);
   const [page, setPage] = useState<number>(cargoConstants.defaultPage);
-  const [sheetState, setSheetState] = useState<SheetState>('closed');
-  const [sheetSnap, setSheetSnap] = useState<SheetSnap>('half');
-  const [dragOffset, setDragOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
+  const [filterSheetOpen, setFilterSheetOpen] = useState(false);
+  const [filterSheetSnap, setFilterSheetSnap] = useState<FilterSheetSnap>('full');
   const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => ({ ...allAccordionSectionsClosed }));
-
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const dragStartYRef = useRef<number | null>(null);
-  const dragDeltaRef = useRef(0);
-  const dragPointerRef = useRef<number | null>(null);
-
-  const sheetVisible = sheetState !== 'closed';
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
 
   useEffect(() => {
     const refresh = () => { readCargoes().then(setItems).catch(() => setItems(cargoes)); };
@@ -76,27 +57,6 @@ export function CargoList({ cargoes }: { cargoes: Cargo[] }) {
     window.addEventListener('hydrorivers:mock-changed', refresh);
     return () => window.removeEventListener('hydrorivers:mock-changed', refresh);
   }, [cargoes]);
-
-  useLockBodyScroll(sheetVisible);
-
-  useEffect(() => () => {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sheetVisible) return undefined;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        requestCloseSheet();
-      }
-    };
-
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [sheetVisible]);
 
   const options = useMemo(() => ({
     corridors: uniqueOptions(items.map((cargo) => cargo.corridor ?? '')),
@@ -143,92 +103,27 @@ export function CargoList({ cargoes }: { cargoes: Cargo[] }) {
     event?.preventDefault();
     event?.stopPropagation();
 
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-
-    setDragOffset(0);
-    setDragging(false);
-    setSheetSnap('full');
+    setFilterSheetSnap('full');
     setOpenSections({ ...allAccordionSectionsClosed });
-    setSheetState('open');
+    setFilterSheetOpen(true);
   }
 
-  function requestCloseSheet() {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-    }
-
-    setDragOffset(0);
-    setDragging(false);
-    setSheetState('closing');
-    closeTimerRef.current = setTimeout(() => {
-      setSheetSnap('full');
-      setSheetState('closed');
-      closeTimerRef.current = null;
-    }, SHEET_CLOSE_MS);
+  function closeFilterSheet() {
+    setFilterSheetOpen(false);
+    setFilterSheetSnap('full');
   }
 
-  function handleSheetDragStart(event: ReactPointerEvent<HTMLElement>) {
-    dragStartYRef.current = event.clientY;
-    dragDeltaRef.current = 0;
-    dragPointerRef.current = event.pointerId;
-    setDragging(true);
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-  }
-
-  function handleSheetDragMove(event: ReactPointerEvent<HTMLElement>) {
-    if (dragStartYRef.current === null) return;
-
-    const delta = event.clientY - dragStartYRef.current;
-    dragDeltaRef.current = delta;
-
-    if (delta > 0) {
-      setDragOffset(delta);
-    } else {
-      setDragOffset(0);
+  function handleFilterSheetOpenChange(open: boolean) {
+    setFilterSheetOpen(open);
+    if (!open) {
+      setFilterSheetSnap('full');
     }
   }
 
-  function handleSheetDragEnd(event: ReactPointerEvent<HTMLElement>) {
-    if (dragStartYRef.current === null) return;
-
-    const delta = dragDeltaRef.current;
-    dragStartYRef.current = null;
-    dragDeltaRef.current = 0;
-    setDragging(false);
-
-    if (dragPointerRef.current !== null) {
-      event.currentTarget.releasePointerCapture?.(dragPointerRef.current);
-      dragPointerRef.current = null;
+  function handleFilterSheetSnapChange(snapId: string) {
+    if (snapId === 'half' || snapId === 'full') {
+      setFilterSheetSnap(snapId);
     }
-
-    if (sheetSnap === 'full') {
-      if (delta > SHEET_CLOSE_THRESHOLD) {
-        setSheetSnap('half');
-      } else if (delta < -SHEET_FULL_THRESHOLD) {
-        setSheetSnap('full');
-      }
-      setDragOffset(0);
-      return;
-    }
-
-    if (delta > SHEET_CLOSE_THRESHOLD) {
-      requestCloseSheet();
-      return;
-    }
-
-    if (delta < -SHEET_FULL_THRESHOLD) {
-      setSheetSnap('full');
-    } else if (delta > SHEET_HALF_THRESHOLD) {
-      requestCloseSheet();
-      return;
-    } else {
-      setSheetSnap('half');
-    }
-
-    setDragOffset(0);
   }
 
   function displayValue(key: FilterKey, value: string) {
@@ -349,60 +244,6 @@ export function CargoList({ cargoes }: { cargoes: Cargo[] }) {
     </>
   );
 
-  const sheetInlineStyle = {
-    '--sheet-drag-offset': `${dragOffset}px`
-  } as CSSProperties;
-
-  const filterSheet = sheetVisible ? (
-    <div
-      className={styles.sheetOverlay}
-      role="presentation"
-      data-state={sheetState}
-    >
-      <aside
-        className={styles.sheet}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('filter')}
-        data-state={sheetState}
-        data-snap={sheetSnap}
-        data-dragging={dragging}
-        style={sheetInlineStyle}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div
-          className={styles.sheetDragZone}
-          onPointerDown={handleSheetDragStart}
-          onPointerMove={handleSheetDragMove}
-          onPointerUp={handleSheetDragEnd}
-          onPointerCancel={handleSheetDragEnd}
-        >
-          <div className={styles.sheetHandle} aria-hidden="true" />
-          <header className={styles.sheetHeader}>
-            <div>
-              <small>{t('mobileFiltersEyebrow')}</small>
-              <h2>{t('filter')}</h2>
-            </div>
-            <button type="button" onClick={() => requestCloseSheet()} aria-label={t('closeFilters')}>
-              <HydroIcon name="close" size={20} />
-            </button>
-          </header>
-        </div>
-        <div className={styles.sheetSummary}>
-          <strong>{t('resultCount', { count: filtered.length })}</strong>
-          <span>{count ? t('activeFilterCount', { count }) : t('noActiveFilters')}</span>
-        </div>
-        <div className={styles.sheetScroll}>{renderFilterControls()}</div>
-        <footer className={styles.sheetFooter}>
-          <button type="button" className={styles.clearButton} onClick={clearAll} disabled={!count}>{t('clear')}</button>
-          <button type="button" className={styles.applyButton} onClick={() => requestCloseSheet()}>
-            {t('showResults', { count: filtered.length })}
-          </button>
-        </footer>
-      </aside>
-    </div>
-  ) : null;
-
   return (
     <section className={styles.layout} aria-label={p('listSectionAriaLabel')}>
       <aside className={styles.filters} aria-label={t('filter')}>
@@ -477,7 +318,39 @@ export function CargoList({ cargoes }: { cargoes: Cargo[] }) {
         ) : null}
       </div>
 
-      {mounted && filterSheet ? createPortal(filterSheet, document.body) : null}
+      <BottomSheet
+        open={filterSheetOpen}
+        onOpenChange={handleFilterSheetOpenChange}
+        title={t('filter')}
+        description={t('mobileFiltersEyebrow')}
+        closeAriaLabel={t('closeFilters')}
+        snapHeights={{
+          half: '52dvh',
+          full: '92dvh',
+        }}
+        snapOrder={[...FILTER_SHEET_SNAP_ORDER]}
+        initialSnap={filterSheetSnap}
+        enableDrag
+        closeOnOverlayClick
+        variant="strong"
+        className={styles.filterSheet}
+        bodyClassName={styles.filterSheetBody}
+        onSnapChange={handleFilterSheetSnapChange}
+        footer={
+          <div className={styles.sheetFooter}>
+            <button type="button" className={styles.clearButton} onClick={clearAll} disabled={!count}>{t('clear')}</button>
+            <button type="button" className={styles.applyButton} onClick={closeFilterSheet}>
+              {t('showResults', { count: filtered.length })}
+            </button>
+          </div>
+        }
+      >
+        <div className={styles.sheetSummary}>
+          <strong>{t('resultCount', { count: filtered.length })}</strong>
+          <span>{count ? t('activeFilterCount', { count }) : t('noActiveFilters')}</span>
+        </div>
+        <div className={styles.sheetScroll}>{renderFilterControls()}</div>
+      </BottomSheet>
     </section>
   );
 }

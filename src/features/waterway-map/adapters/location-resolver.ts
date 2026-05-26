@@ -31,6 +31,9 @@ const KNOWN_LOCATION_COORDINATES: Record<string, GeoJSON.Position> = {
   'tefe am': [-58.25, -1.52],
   'obidos pa': [-50.35, -1.76],
   'parintins am': [-53.38, -1.82],
+  'tabatinga am': [-69.94, -4.25],
+  /** Handoff cabotagem fictício dentro do bbox amazônico (rótulo de produto permanece Suape, PE). */
+  'suape pe': [-47.08, -2.72],
   'abaetetuba pa': [-49.85, -1.52],
   'itaituba pa': [-55.35, -2.28],
   'miritituba pa': [-55.05, -2.18],

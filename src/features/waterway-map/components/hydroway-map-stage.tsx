@@ -33,6 +33,7 @@ export function HydrowayMapStage({
     handleMaplibreReady,
     handleMaplibreInitError,
     mobileCamera,
+    mobileRouteOverviewAppliedCargoId,
   } = runtime;
 
   return (
@@ -40,6 +41,9 @@ export function HydrowayMapStage({
       className={[spikeStyles.stage, stageClassName].filter(Boolean).join(' ')}
       aria-label={stageAriaLabel}
       {...(stageTestId ? { 'data-testid': stageTestId } : {})}
+      {...(mobileCamera && mobileRouteOverviewAppliedCargoId === model.cargoId
+        ? { 'data-mobile-route-overview-applied-cargo': mobileRouteOverviewAppliedCargoId }
+        : {})}
     >
       {fallbackNote ? (
         <span hidden data-testid="hydroway-map-fallback">

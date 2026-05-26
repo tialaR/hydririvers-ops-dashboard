@@ -29,6 +29,8 @@ export type BottomSheetProps = {
   onClose?: () => void;
   title: string;
   description?: string;
+  /** Rótulo acessível do diálogo; quando definido, substitui `aria-labelledby` do título. */
+  ariaLabel?: string;
   children: ReactNode;
   footer?: ReactNode;
   snapPoints?: BottomSheetSnapPoint[];
@@ -122,6 +124,7 @@ export function BottomSheet({
   onClose,
   title,
   description,
+  ariaLabel,
   children,
   footer,
   snapPoints = ['90vh'],
@@ -590,7 +593,8 @@ export function BottomSheet({
         style={sheetStyle}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={labelledById ?? titleId}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabel ? undefined : (labelledById ?? titleId)}
         aria-describedby={description ? (describedById ?? descriptionId) : undefined}
         onClick={(event) => event.stopPropagation()}
       >

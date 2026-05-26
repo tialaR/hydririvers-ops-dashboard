@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { MouseEvent as ReactMouseEvent, ReactNode } from 'react';
-import { createPortal } from 'react-dom';
 import {
   ArrowRight,
   ClipboardList,
@@ -10,11 +9,11 @@ import {
   Flag,
   Map as MapIcon,
   ReceiptText,
-  X,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/core/i18n/navigation';
-import { intlAppPaths } from '@/shared/routing/app-routes';
+import { intlAppPaths, type CargoDetailTabView } from '@/shared/routing/app-routes';
+import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { useScreenTransitionNavigation } from '@/shared/ui/screen-transition';
 
 import styles from './cargo-action-sheet-bridge.module.scss';
@@ -29,18 +28,19 @@ type SelectedCargo = {
   label: string;
 };
 
-type CargoView = 'visao-geral' | 'jornada' | 'documentos' | 'custos' | 'prioridade';
-
 type CargoAction = {
   description: string;
   title: string;
-  view: CargoView;
   icon: ReactNode;
-};
+} & (
+  | { destination: 'map' }
+  | { destination: 'view'; view: CargoDetailTabView }
+);
 
 type CargoOptionButtonProps = {
   action: CargoAction;
-  onClick: (view: CargoView) => void;
+  onClick: (action: CargoAction) => void;
+  disabled?: boolean;
 };
 
 const MOBILE_VIEWPORT_MAX_WIDTH = 860;
@@ -48,8 +48,6 @@ const MOBILE_QUERY = `(max-width: ${MOBILE_VIEWPORT_MAX_WIDTH}px)`;
 const MAX_LABEL_LENGTH = 96;
 const CARGO_CARD_SELECTOR = 'button[data-cargo-id], button.hr-cargo-card';
 const CARGO_CODE_SELECTOR = '.hr-cargo-card__code';
-const SHEET_ENTER_ANIMATION_MS = 320;
-const SHEET_EXIT_ANIMATION_MS = 220;
 
 function isModifiedNavigation(event: ReactMouseEvent<HTMLDivElement>): boolean {
   return event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0;
@@ -65,17 +63,20 @@ function normalizeCargoSegment(value: string): string {
 
 function isIgnoredCargoSegment(cargoId: string): boolean {
   const normalized = normalizeCargoSegment(cargoId);
-  return (
-    normalized === 'nova' ||
-    normalized === 'minhas-cargas' ||
-    normalized === 'rastreio' ||
-    normalized === 'visao-geral'
-  );
+  return normalized === 'nova' || normalized === 'minhas-cargas' || normalized === 'rastreio';
 }
 
-function buildCargoViewHref(locale: string, cargoId: string, view: CargoView): string {
+function buildCargoViewHref(locale: string, cargoId: string, view: CargoDetailTabView): string {
   void locale;
   return intlAppPaths.cargos.cargoView(cargoId, view);
+}
+
+function buildCargoActionHref(locale: string, cargoId: string, action: CargoAction): string {
+  if (action.destination === 'map') {
+    return intlAppPaths.cargos.cargoMap(cargoId);
+  }
+
+  return buildCargoViewHref(locale, cargoId, action.view);
 }
 
 function getCargoIdFromAnchor(anchor: HTMLAnchorElement, locale: string): string | null {
@@ -149,12 +150,13 @@ function getCargoLabelFromCard(card: HTMLButtonElement, cargoId: string): string
   );
 }
 
-function CargoOptionButton({ action, onClick }: CargoOptionButtonProps) {
+function CargoOptionButton({ action, onClick, disabled }: CargoOptionButtonProps) {
   return (
     <button
       type="button"
       className={styles.actionItem}
-      onClick={() => onClick(action.view)}
+      onClick={() => onClick(action)}
+      disabled={disabled}
       aria-label={`${action.title}: ${action.description}`}
     >
       <span className={styles.actionIcon}>{action.icon}</span>
@@ -177,37 +179,39 @@ export function CargoActionSheetBridge({
   const router = useRouter();
   const { navigateWithTransition, prefetchScreen } = useScreenTransitionNavigation();
   const [selectedCargo, setSelectedCargo] = useState<SelectedCargo | null>(null);
-  const [isClosing, setIsClosing] = useState(false);
   const [isNavigating, setIsNavigating] = useState(false);
-  const closeTimeoutRef = useRef<number | null>(null);
 
   const actions = useMemo<CargoAction[]>(
     () => [
       {
-        view: 'visao-geral',
+        destination: 'map',
         title: tBoard('tabs.overview'),
         description: tBoard('actionSheet.overviewDescription'),
         icon: <MapIcon aria-hidden />,
       },
       {
+        destination: 'view',
         view: 'jornada',
         title: tBoard('tabs.timeline'),
         description: tBoard('actionSheet.timelineDescription'),
         icon: <ClipboardList aria-hidden />,
       },
       {
+        destination: 'view',
         view: 'documentos',
         title: tBoard('tabs.documents'),
         description: tBoard('actionSheet.documentsDescription'),
         icon: <FileText aria-hidden />,
       },
       {
+        destination: 'view',
         view: 'custos',
         title: tBoard('tabs.cost'),
         description: tBoard('actionSheet.costDescription'),
         icon: <ReceiptText aria-hidden />,
       },
       {
+        destination: 'view',
         view: 'prioridade',
         title: tBoard('tabs.priority'),
         description: tBoard('actionSheet.priorityDescription'),
@@ -217,52 +221,18 @@ export function CargoActionSheetBridge({
     [tBoard],
   );
 
-  const clearCloseTimeout = useCallback(() => {
-    if (closeTimeoutRef.current !== null) {
-      window.clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
+  const handleOpenChange = useCallback((open: boolean) => {
+    if (open) return;
+    setSelectedCargo(null);
+    setIsNavigating(false);
   }, []);
 
-  const finishClose = useCallback(() => {
-    clearCloseTimeout();
-    setSelectedCargo(null);
-    setIsClosing(false);
-    setIsNavigating(false);
-  }, [clearCloseTimeout]);
-
-  const scheduleClose = useCallback((onClosed?: () => void) => {
-    clearCloseTimeout();
-    setIsClosing(true);
-    closeTimeoutRef.current = window.setTimeout(() => {
-      finishClose();
-      onClosed?.();
-    }, SHEET_EXIT_ANIMATION_MS);
-  }, [clearCloseTimeout, finishClose]);
-
   useEffect(() => {
     if (!selectedCargo) {
       return undefined;
     }
 
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        scheduleClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [scheduleClose, selectedCargo]);
-
-  useEffect(() => {
-    if (!selectedCargo) {
-      return undefined;
-    }
-
-    const hrefs = actions.map((action) =>
-      buildCargoViewHref(locale, selectedCargo.id, action.view)
-    );
+    const hrefs = actions.map((action) => buildCargoActionHref(locale, selectedCargo.id, action));
 
     hrefs.forEach((href) => {
       void router.prefetch(href);
@@ -271,50 +241,18 @@ export function CargoActionSheetBridge({
     return undefined;
   }, [actions, locale, prefetchScreen, router, selectedCargo]);
 
-  useEffect(() => {
-    if (!selectedCargo || typeof document === 'undefined') {
-      return undefined;
-    }
-
-    const { body } = document;
-    const previousOverflow = body.style.overflow;
-    const previousTouchAction = body.style.touchAction;
-
-    body.style.overflow = 'hidden';
-    body.style.touchAction = 'none';
-
-    return () => {
-      body.style.overflow = previousOverflow;
-      body.style.touchAction = previousTouchAction;
-    };
-  }, [selectedCargo]);
-
-  useEffect(() => () => clearCloseTimeout(), [clearCloseTimeout]);
-
-  const closeSheet = useCallback(() => {
-    if (!selectedCargo || isClosing) {
+  const navigateToCargoAction = (action: CargoAction) => {
+    if (!selectedCargo || isNavigating) {
       return;
     }
 
-    scheduleClose();
-  }, [isClosing, scheduleClose, selectedCargo]);
-
-  const navigateToCargoView = (view: CargoView) => {
-    if (!selectedCargo || isClosing || isNavigating) {
-      return;
-    }
-
-    const href = buildCargoViewHref(locale, selectedCargo.id, view);
+    const href = buildCargoActionHref(locale, selectedCargo.id, action);
     setIsNavigating(true);
-    scheduleClose(() => {
-      navigateWithTransition(href);
-    });
+    navigateWithTransition(href);
   };
 
   const openSheetForCargo = (cargo: SelectedCargo) => {
-    clearCloseTimeout();
     setSelectedCargo(cargo);
-    setIsClosing(false);
     setIsNavigating(false);
   };
 
@@ -371,54 +309,33 @@ export function CargoActionSheetBridge({
     <div className={styles.scope} onClickCapture={handleClickCapture}>
       {children}
 
-      {selectedCargo && typeof document !== 'undefined'
-        ? createPortal(
-            <div
-              className={isClosing ? `${styles.overlay} ${styles.overlayClosing}` : styles.overlay}
-              role="presentation"
-              onClick={closeSheet}
-              style={{ ['--cargo-action-sheet-enter-ms' as string]: `${SHEET_ENTER_ANIMATION_MS}ms`, ['--cargo-action-sheet-exit-ms' as string]: `${SHEET_EXIT_ANIMATION_MS}ms` }}
-            >
-              <section
-                className={isClosing ? `${styles.sheet} ${styles.sheetClosing}` : styles.sheet}
-                role="dialog"
-                aria-modal="true"
-                aria-label={tBoard('actionSheet.ariaLabel')}
-                onClick={(event) => event.stopPropagation()}
-              >
-                <div className={styles.handle} aria-hidden />
-
-                <header className={styles.header}>
-                  <div>
-                    <span className={styles.eyebrow}>{tBoard('map.hud.selectedCargo')}</span>
-                    <h2>{selectedCargo.label}</h2>
-                  </div>
-
-                  <button
-                    type="button"
-                    className={styles.closeButton}
-                    onClick={closeSheet}
-                    aria-label={tBoard('actionSheet.close')}
-                    disabled={isNavigating}
-                  >
-                    <X aria-hidden />
-                  </button>
-                </header>
-
-                <nav className={styles.actionList} aria-label={tBoard('actionSheet.navigationAria')}>
-                  {actions.map((action) => (
-                    <CargoOptionButton
-                      key={action.view}
-                      action={action}
-                      onClick={navigateToCargoView}
-                    />
-                  ))}
-                </nav>
-              </section>
-            </div>,
-            document.body,
-          )
-        : null}
+      {selectedCargo ? (
+        <BottomSheet
+          open
+          onOpenChange={handleOpenChange}
+          ariaLabel={tBoard('actionSheet.ariaLabel')}
+          title={selectedCargo.label}
+          description={tBoard('map.hud.selectedCargo')}
+          closeAriaLabel={tBoard('actionSheet.close')}
+          snapPoints={['75vh']}
+          variant="strong"
+          enableDrag
+          closeOnOverlayClick
+          className={styles.sheet}
+          bodyClassName={styles.body}
+        >
+          <nav className={styles.actionList} aria-label={tBoard('actionSheet.navigationAria')}>
+            {actions.map((action) => (
+              <CargoOptionButton
+                key={action.destination === 'map' ? 'map' : action.view}
+                action={action}
+                onClick={navigateToCargoAction}
+                disabled={isNavigating}
+              />
+            ))}
+          </nav>
+        </BottomSheet>
+      ) : null}
     </div>
   );
 }

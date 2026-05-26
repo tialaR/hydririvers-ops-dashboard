@@ -2,9 +2,15 @@ import { readMock } from '@/shared/server/mock-db';
 import { normalizeCargoIdForLookup } from '@/shared/routing/normalize-cargo-id';
 import type { UserRole } from '@/features/auth/domain/auth.types';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
+import { mergeCanonicalPublicCargo } from '@/features/cargo/constants/merge-canonical-public-cargo';
+import { PUBLIC_MARKETPLACE_CARGO_IDS } from '@/features/cargo/constants/public-marketplace-cargos';
+import { findVisualCargoById } from '@/features/cargo/data/build-visual-cargo-pool';
+import {
+  findPublicMarketplaceCargo,
+  resolvePublicMarketplaceCargoList,
+} from '@/features/cargo/data/resolve-public-marketplace-cargo-list';
 import { publicCargosMock } from '@/features/cargo/mocks/publicCargos.mock';
 import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/my-cargos/mocks/myCargos.mock';
-import { isPublicCargo } from '@/features/marketplace/services/cargo-visibility';
 
 function cloneAsShipper(cargoes: Cargo[], userId: string) {
   return cargoes.map((cargo) => ({ ...cargo, ownerId: userId, shipperId: userId, visibility: 'private' as const }));
@@ -26,9 +32,11 @@ function fallbackMyCargoesDeck(userId: string, role?: UserRole): Cargo[] {
 
 export async function getPublicCargos(): Promise<Cargo[]> {
   const cargoes = readMock('cargoes') as Cargo[];
-  const publicCargoes = cargoes.filter((cargo) => isPublicCargo(cargo));
-  return publicCargoes.length ? publicCargoes : publicCargosMock;
+  return resolvePublicMarketplaceCargoList(cargoes);
 }
+
+/** IDs exibidos na lista pública — espelha `getPublicCargos()`. */
+export { PUBLIC_MARKETPLACE_CARGO_IDS };
 
 /** Alias alinhado ao vocabulário de domínio (pt). */
 export const getPublicCargoes = getPublicCargos;
@@ -72,6 +80,41 @@ export const getMyCargos = getCurrentUserCargos;
 export async function getCargoById(id: string): Promise<Cargo | undefined> {
   const cargoes = readMock('cargoes') as Cargo[];
   const normalizedId = normalizeCargoIdForLookup(id);
+  const canonicalPublic = publicCargosMock.find(
+    (cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId,
+  );
+
+  const publicList = resolvePublicMarketplaceCargoList(cargoes);
+  const visualCargo = findVisualCargoById(id, publicList);
+  const marketplaceCargo = findPublicMarketplaceCargo(id, cargoes);
+
+  if (canonicalPublic) {
+    const stored = cargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
+    const merged = stored
+      ? mergeCanonicalPublicCargo(stored, canonicalPublic)
+      : { ...canonicalPublic };
+
+    if (visualCargo && normalizeCargoIdForLookup(visualCargo.id) === normalizedId) {
+      return mergeCanonicalPublicCargo(visualCargo, merged);
+    }
+
+    return merged;
+  }
+
+  if (visualCargo) {
+    const canonical = publicCargosMock.find(
+      (cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId,
+    );
+    if (canonical) {
+      return mergeCanonicalPublicCargo(visualCargo, canonical);
+    }
+    return visualCargo;
+  }
+
+  if (marketplaceCargo) {
+    return marketplaceCargo;
+  }
+
   const allCargoes = [
     ...cargoes,
     ...publicCargosMock,

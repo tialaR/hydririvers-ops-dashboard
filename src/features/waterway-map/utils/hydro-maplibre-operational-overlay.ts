@@ -22,7 +22,7 @@ import {
   toTerminalsFeatureCollection,
 } from './hydroway-operational-geojson';
 import { HYDRI_MAPLIBRE_TEXT_FONT_LAYOUT } from './hydro-maplibre-glyphs';
-import { layerExistsOnMap } from './hydro-maplibre-overlay';
+import { layerExistsOnMap, setPaintIfLayerExists } from './hydro-maplibre-overlay';
 import { HYDROWAY_MVP_OVERLAY_LAYER_IDS } from './hydro-maplibre-overlay';
 
 export const HYDRI_OP_SOURCE_IDS = {
@@ -271,6 +271,9 @@ const FILTER_CHECKPOINT_OPERATION: FilterSpecification = [
 const FILTER_SEGMENT_DRAFT_ICON: FilterSpecification = ['==', ['get', 'iconKind'], 'draft-restriction'];
 
 const FILTER_SEGMENT_DREDGING_ICON: FilterSpecification = ['==', ['get', 'iconKind'], 'dredging'];
+
+/** Linha contínua — evita `null`/`undefined` ao limpar `line-dasharray` no MapLibre. */
+export const OPERATIONAL_LINE_DASHARRAY_SOLID: [number, number] = [1, 0];
 
 const FILTER_CHECKPOINT_RISK_ICON: FilterSpecification = ['==', ['get', 'iconKind'], 'draft-restriction'];
 
@@ -1163,6 +1166,22 @@ function applyLayerFilter(
   }
 }
 
+export function resolveOperationalLineDasharrayPaint(
+  layerId: string,
+  visual: OpLayerVisual,
+): number[] | undefined {
+  if (visual.lineDasharray !== undefined) {
+    return visual.lineDasharray;
+  }
+  if (
+    visual.visibility === 'visible' &&
+    layerId === HYDRI_OP_LAYER_IDS.segmentsDredging
+  ) {
+    return [...OPERATIONAL_LINE_DASHARRAY_SOLID];
+  }
+  return undefined;
+}
+
 function applyLineLayerVisual(map: Map, layerId: string, visual: OpLayerVisual): void {
   if (!layerExistsOnMap(map, layerId)) return;
   try {
@@ -1171,17 +1190,16 @@ function applyLineLayerVisual(map: Map, layerId: string, visual: OpLayerVisual):
       applyLayerFilter(map, layerId, visual.filter);
     }
     if (visual.visibility === 'none') return;
-    map.setPaintProperty(layerId, 'line-opacity', visual.opacity);
+    setPaintIfLayerExists(map, layerId, 'line-opacity', visual.opacity);
     if (visual.lineWidth !== undefined) {
-      map.setPaintProperty(layerId, 'line-width', visual.lineWidth);
+      setPaintIfLayerExists(map, layerId, 'line-width', visual.lineWidth);
     }
     if (visual.lineColor !== undefined) {
-      map.setPaintProperty(layerId, 'line-color', visual.lineColor);
+      setPaintIfLayerExists(map, layerId, 'line-color', visual.lineColor);
     }
-    if (visual.lineDasharray !== undefined) {
-      map.setPaintProperty(layerId, 'line-dasharray', visual.lineDasharray);
-    } else {
-      map.setPaintProperty(layerId, 'line-dasharray', undefined);
+    const lineDasharray = resolveOperationalLineDasharrayPaint(layerId, visual);
+    if (lineDasharray !== undefined) {
+      setPaintIfLayerExists(map, layerId, 'line-dasharray', lineDasharray);
     }
   } catch {
     // Layer may be unavailable during style reload.
@@ -1196,18 +1214,18 @@ function applyCircleLayerVisual(map: Map, layerId: string, visual: OpLayerVisual
       applyLayerFilter(map, layerId, visual.filter);
     }
     if (visual.visibility === 'none') return;
-    map.setPaintProperty(layerId, 'circle-opacity', visual.opacity);
+    setPaintIfLayerExists(map, layerId, 'circle-opacity', visual.opacity);
     if (visual.circleRadius !== undefined) {
-      map.setPaintProperty(layerId, 'circle-radius', visual.circleRadius);
+      setPaintIfLayerExists(map, layerId, 'circle-radius', visual.circleRadius);
     }
     if (visual.circleColor !== undefined) {
-      map.setPaintProperty(layerId, 'circle-color', visual.circleColor);
+      setPaintIfLayerExists(map, layerId, 'circle-color', visual.circleColor);
     }
     if (visual.circleStrokeColor !== undefined) {
-      map.setPaintProperty(layerId, 'circle-stroke-color', visual.circleStrokeColor);
+      setPaintIfLayerExists(map, layerId, 'circle-stroke-color', visual.circleStrokeColor);
     }
     if (visual.circleStrokeWidth !== undefined) {
-      map.setPaintProperty(layerId, 'circle-stroke-width', visual.circleStrokeWidth);
+      setPaintIfLayerExists(map, layerId, 'circle-stroke-width', visual.circleStrokeWidth);
     }
   } catch {
     // Layer may be unavailable during style reload.
@@ -1222,9 +1240,9 @@ function applyFillLayerVisual(map: Map, layerId: string, visual: OpLayerVisual):
       applyLayerFilter(map, layerId, visual.filter);
     }
     if (visual.visibility === 'none') return;
-    map.setPaintProperty(layerId, 'fill-opacity', visual.opacity);
+    setPaintIfLayerExists(map, layerId, 'fill-opacity', visual.opacity);
     if (visual.fillColor !== undefined) {
-      map.setPaintProperty(layerId, 'fill-color', visual.fillColor);
+      setPaintIfLayerExists(map, layerId, 'fill-color', visual.fillColor);
     }
   } catch {
     // Layer may be unavailable during style reload.
@@ -1243,7 +1261,7 @@ function applyIconBadgeVisual(map: Map, layerId: string, visual: OpIconVisual): 
       applyLayerFilter(map, layerId, visual.filter);
     }
     if (visual.visibility === 'none') return;
-    map.setPaintProperty(layerId, 'circle-opacity', Math.min(visual.opacity, 0.96));
+    setPaintIfLayerExists(map, layerId, 'circle-opacity', Math.min(visual.opacity, 0.96));
   } catch {
     // Layer may be unavailable during style reload.
   }
@@ -1257,7 +1275,7 @@ function applySymbolLayerVisual(map: Map, layerId: string, visual: OpIconVisual)
       applyLayerFilter(map, layerId, visual.filter);
     }
     if (visual.visibility === 'none') return;
-    map.setPaintProperty(layerId, 'text-opacity', visual.opacity);
+    setPaintIfLayerExists(map, layerId, 'text-opacity', visual.opacity);
     if (visual.textSize !== undefined) {
       map.setLayoutProperty(layerId, 'text-size', visual.textSize);
     }

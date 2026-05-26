@@ -255,12 +255,12 @@ export function HydrowayMapSpikeClient({
     };
   }, [model, showMapLibre, syncZoomLabel]);
 
-  const handleMaplibreReady = useCallback(() => {
+  const handleMaplibreReady = useCallback((mapProviderFromViewport: MapLibreHydrowayProvider) => {
     setMaplibreMountFailed(false);
     setMaplibreReadyCargoId(model.cargoId);
-    const mapProvider = maplibreViewportRef.current?.getProvider();
-    if (mapProvider?.kind === 'maplibre') {
-      const maplibreProvider = mapProvider as MapLibreHydrowayProvider;
+    const mapProvider = mapProviderFromViewport;
+    if (mapProvider.kind === 'maplibre') {
+      const maplibreProvider = mapProvider;
       maplibreProvider.ensureViewportSize();
       maplibreProvider.setLayers(ALL_MAP_LAYERS);
       if (isProductExperience) {

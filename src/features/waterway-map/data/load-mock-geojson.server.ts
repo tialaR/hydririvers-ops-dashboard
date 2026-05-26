@@ -120,10 +120,13 @@ export function loadHydrowayCargoRoutesMock(): HydrowayGeoFeatureCollection {
 
 /** Retorna a rota LineString de um cargo demo, se existir no artefato. */
 export function findHydrowayCargoRouteFeature(
-  cargoId: HydrowayDemoCargoId,
+  cargoId: string,
 ): GeoJSON.Feature<GeoJSON.LineString> | undefined {
+  const normalized = cargoId.toUpperCase();
   const feature = cargoRoutes.features.find(
-    (entry) => entry.properties?.cargoId === cargoId && entry.geometry.type === 'LineString',
+    (entry) =>
+      String(entry.properties?.cargoId).toUpperCase() === normalized &&
+      entry.geometry.type === 'LineString',
   );
   if (!feature || feature.geometry.type !== 'LineString') {
     return undefined;

@@ -30,17 +30,21 @@ vi.mock('@/features/waterway-map/components/shared/hydroway-map-floating-action'
   ),
 }));
 
-function createRuntimeStub(): HydrowayMapRuntime {
+function createRuntimeStub(overrides: Partial<HydrowayMapRuntime> = {}): HydrowayMapRuntime {
   return {
     mapLibreControlsDisabled: false,
     layerPresetPanelOpen: false,
+    activeMapChapter: null,
+    mobileRouteOverviewAppliedCargoId: null,
+    model: { cargoId: 'CARGO-001' },
     handleCenterCurrentCargo: () => undefined,
     handleFitRoute: () => undefined,
     handleFocusDestination: () => undefined,
     handleFocusOrigin: () => undefined,
     handleZoomIn: () => undefined,
     handleZoomOut: () => undefined,
-  } as HydrowayMapRuntime;
+    ...overrides,
+  } as unknown as HydrowayMapRuntime;
 }
 
 describe('mobile map control stack', () => {
@@ -63,6 +67,21 @@ describe('mobile map control stack', () => {
     expect(html).not.toContain('aria-hidden="true"');
     expect(html).not.toContain('inert');
     expect(html).not.toContain('stackSuppressed');
+  });
+
+  it('marca capítulo ativo com aria-pressed no botão correspondente', () => {
+    const html = renderToStaticMarkup(
+      <MobileMapControlStack
+        runtime={createRuntimeStub({ activeMapChapter: 'origin' })}
+        routeDetailsOpen={false}
+        onOpenRouteDetails={() => undefined}
+        onToggleLayers={() => undefined}
+      />,
+    );
+
+    expect(html).toContain('data-testid="hydroway-map-mobile-focus-origin-button"');
+    expect(html).toMatch(/data-testid="hydroway-map-mobile-focus-origin-button"[^>]*aria-pressed="true"/);
+    expect(html).toMatch(/data-testid="hydroway-map-mobile-center-cargo-button"[^>]*aria-pressed="false"/);
   });
 
   it('mantém stack visível quando o sheet está aberto', () => {

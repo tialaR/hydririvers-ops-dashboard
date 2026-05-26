@@ -1,3 +1,6 @@
+import { isMapEligibleCargoId } from '@/features/cargo/constants/public-marketplace-cargos';
+import { normalizeCargoId } from '@/shared/routing/normalize-cargo-id';
+
 import { getHydrowayOperationalLayerModeConfig } from '../constants/hydroway-operational-layer-modes';
 import type {
   CargoWaterwayOperationalContext,
@@ -9,23 +12,24 @@ import type {
   HydrowayTerminal,
 } from '../domain/hydroway-operational-domain.types';
 import { hydrowayOperationalDatasetMock } from '../mocks/hydroway-operational-layers.mock';
+import {
+  buildSyntheticOperationalCheckpoints,
+  synthesizePublicCargoOperationalContext,
+} from './public-cargo-operational-synthesis';
 import { clampProgress01 } from '../utils/hydroway-operational-validation';
 
-const SUPPORTED_CARGO_IDS = ['CARGO-001', 'CARGO-004'] as const;
+export type SupportedOperationalCargoId = string;
 
-export type SupportedOperationalCargoId = (typeof SUPPORTED_CARGO_IDS)[number];
-
-export function isSupportedOperationalCargoId(
-  cargoId: string,
-): cargoId is SupportedOperationalCargoId {
-  return (SUPPORTED_CARGO_IDS as readonly string[]).includes(cargoId);
+export function isSupportedOperationalCargoId(cargoId: string): cargoId is SupportedOperationalCargoId {
+  return isMapEligibleCargoId(normalizeCargoId(cargoId));
 }
 
 function findCargoContext(
   dataset: HydrowayOperationalDataset,
   cargoId: string,
 ): CargoWaterwayOperationalContext | undefined {
-  return dataset.cargoContexts.find((ctx) => ctx.cargoId === cargoId);
+  const normalized = normalizeCargoId(cargoId);
+  return dataset.cargoContexts.find((ctx) => normalizeCargoId(ctx.cargoId) === normalized);
 }
 
 function enrichContext(
@@ -48,9 +52,10 @@ export function resolveCargoOperationalWaterwayContext(
   cargoId: string,
   dataset: HydrowayOperationalDataset = hydrowayOperationalDatasetMock,
 ): CargoWaterwayOperationalContext | null {
-  const raw = findCargoContext(dataset, cargoId);
+  const normalized = normalizeCargoId(cargoId);
+  const raw = findCargoContext(dataset, normalized) ?? synthesizePublicCargoOperationalContext(normalized);
   if (!raw) return null;
-  return enrichContext(raw, dataset);
+  return enrichContext({ ...raw, cargoId: normalized }, dataset);
 }
 
 function segmentIdsForCorridor(dataset: HydrowayOperationalDataset, corridorId: string): Set<string> {
@@ -122,7 +127,12 @@ function collectRelevantCheckpoints(
   dataset: HydrowayOperationalDataset,
   cargoId: string,
 ): HydrowayOperationalDataset['checkpoints'] {
-  return dataset.checkpoints.filter((checkpoint) => checkpoint.cargoId === cargoId);
+  const normalized = normalizeCargoId(cargoId);
+  return dataset.checkpoints.filter(
+    (checkpoint) =>
+      checkpoint.cargoId !== undefined &&
+      normalizeCargoId(checkpoint.cargoId) === normalized,
+  );
 }
 
 function collectRelevantPlanningAreas(
@@ -162,7 +172,10 @@ export function resolveOperationalDatasetForCargo(
   const terminals = collectRelevantTerminals(dataset, context);
   const alerts = collectRelevantAlerts(dataset, context);
   const signals = collectRelevantSignals(dataset, segmentIdSet);
-  const checkpoints = collectRelevantCheckpoints(dataset, cargoId);
+  let checkpoints = collectRelevantCheckpoints(dataset, cargoId);
+  if (checkpoints.length === 0) {
+    checkpoints = buildSyntheticOperationalCheckpoints(context);
+  }
   const planningAreas = collectRelevantPlanningAreas(dataset, context.corridorId);
 
   return {

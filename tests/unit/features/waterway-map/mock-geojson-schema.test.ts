@@ -138,18 +138,20 @@ describe('hydroway mock geojson schema', () => {
     expect(nodes.features.every((f) => f.properties?.operationalRole)).toBe(true);
   });
 
-  it('define rotas distintas e curvilíneas para CARGO-001, CARGO-002 e CARGO-004', () => {
+  it('define rotas distintas e curvilíneas para cargas demo CARGO-001…004, CARGO-009 e HYD-2026-00020', () => {
     const routes = loadHydrowayCargoRoutesMock();
-    expect(routes.features).toHaveLength(3);
+    expect(routes.features).toHaveLength(6);
 
     const byCargo = HYDROWAY_DEMO_CARGO_IDS.map((cargoId) => findHydrowayCargoRouteFeature(cargoId));
     expect(byCargo.every(Boolean)).toBe(true);
 
     const coords001 = byCargo[0]?.geometry.coordinates[0];
     const coords002 = byCargo[1]?.geometry.coordinates[0];
-    const coords004 = byCargo[2]?.geometry.coordinates[0];
+    const coords003 = byCargo[2]?.geometry.coordinates[0];
+    const coords004 = byCargo[3]?.geometry.coordinates[0];
 
     expect(coords001).not.toEqual(coords002);
+    expect(coords001).not.toEqual(coords003);
     expect(coords001).not.toEqual(coords004);
     expect(coords002).not.toEqual(coords004);
 
@@ -159,9 +161,16 @@ describe('hydroway mock geojson schema', () => {
     expect(byCargo[1]?.properties?.corridorId).toBe('amazonas');
     expect(byCargo[1]?.properties?.originNodeId).toBe('port-manaus');
     expect(byCargo[1]?.properties?.destinationNodeId).toBe('port-belem');
-    expect(byCargo[2]?.properties?.corridorId).toBe('tocantins-araguaia');
-    expect(byCargo[2]?.properties?.originNodeId).toBe('port-maraba');
-    expect(byCargo[2]?.properties?.destinationNodeId).toBe('terminal-vila-conde');
+    expect(byCargo[2]?.properties?.corridorId).toBe('barra-norte');
+    expect(byCargo[2]?.properties?.originNodeId).toBe('port-santarem');
+    expect(byCargo[2]?.properties?.destinationNodeId).toBe('port-macapa');
+    expect(byCargo[3]?.properties?.corridorId).toBe('tocantins-araguaia');
+    expect(byCargo[3]?.properties?.originNodeId).toBe('port-maraba');
+    expect(byCargo[3]?.properties?.destinationNodeId).toBe('terminal-vila-conde');
+    expect(byCargo[4]?.properties?.corridorId).toBe('barra-norte');
+    expect(byCargo[4]?.properties?.originNodeId).toBe('terminal-vila-conde');
+    expect(byCargo[4]?.properties?.destinationNodeId).toBe('port-suape-cabotagem');
+    expect(byCargo[4]?.properties?.cargoId).toBe('CARGO-009');
 
     for (const route of byCargo) {
       if (!route || route.geometry.type !== 'LineString') continue;

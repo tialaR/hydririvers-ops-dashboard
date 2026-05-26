@@ -12,6 +12,8 @@ const MOBILE_MAP_IMMERSIVE_CLASS = 'hx-hydroway-map-mobile-immersive';
 type MobileHydrowayMapShellProps = {
   children: ReactNode;
   sheetOpen?: boolean;
+  routeOverviewAppliedCargoId?: string | null;
+  cargoId?: string;
 };
 
 function applyImmersiveDocumentClass(active: boolean) {
@@ -28,7 +30,12 @@ function applyImmersiveDocumentClass(active: boolean) {
   body.classList.remove(MOBILE_MAP_IMMERSIVE_CLASS);
 }
 
-export function MobileHydrowayMapShell({ children, sheetOpen = false }: MobileHydrowayMapShellProps) {
+export function MobileHydrowayMapShell({
+  children,
+  sheetOpen = false,
+  routeOverviewAppliedCargoId = null,
+  cargoId,
+}: MobileHydrowayMapShellProps) {
   useLockBodyScroll(true);
 
   useLayoutEffect(() => {
@@ -44,6 +51,9 @@ export function MobileHydrowayMapShell({ children, sheetOpen = false }: MobileHy
       className={styles.shell}
       data-testid="hydroway-map-mobile-experience"
       data-sheet-open={sheetOpen ? 'true' : 'false'}
+      {...(routeOverviewAppliedCargoId && routeOverviewAppliedCargoId === cargoId
+        ? { 'data-mobile-route-overview-applied-cargo': routeOverviewAppliedCargoId }
+        : {})}
     >
       {children}
     </div>

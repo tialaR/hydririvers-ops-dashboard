@@ -36,6 +36,12 @@ const CARGO_FIT_OVERRIDES: Partial<Record<HydrowayDemoCargoId, Partial<HydroMapL
     pitch: 24,
     bearing: -6,
   },
+  'CARGO-009': {
+    padding: { top: 104, bottom: 60, left: 258, right: 72 },
+    maxZoom: 9.6,
+    pitch: 22,
+    bearing: -4,
+  },
 };
 
 export function resolveHydroMapLibreFitOptions(cargoId: string): HydroMapLibreFitOptions {

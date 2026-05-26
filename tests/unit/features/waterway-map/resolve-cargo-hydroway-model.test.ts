@@ -23,23 +23,56 @@ describe('resolveCargoHydrowayMapModel', () => {
     expect(validateHydrowayMapModel(model!)).toBe(true);
   });
 
+  it('resolve CARGO-002 com rota demo e tracking compat', () => {
+    const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-002');
+    expect(cargo).toBeDefined();
+
+    const model = resolveCargoHydrowayMapModel(cargo!);
+
+    expect(model).not.toBeNull();
+    expect(model!.cargoId).toBe('CARGO-002');
+    expect(model!.progress01).toBe(0.25);
+    expect(validateHydrowayMapModel(model!)).toBe(true);
+  });
+
+  it('resolve CARGO-003 com rota demo Santarém→Macapá e tracking', () => {
+    const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-003');
+    expect(cargo).toBeDefined();
+
+    const model = resolveCargoHydrowayMapModel(cargo!);
+
+    expect(model).not.toBeNull();
+    expect(model!.cargoId).toBe('CARGO-003');
+    expect(model!.metadata.routeSource).toBe('demo-geojson');
+    expect(model!.corridorId).toBe('barra-norte');
+    expect(model!.progress01).toBe(0.18);
+    expect(validateHydrowayMapModel(model!)).toBe(true);
+  });
+
+  it('resolve CARGO-009 com rota demo cabotagem e corredor barra-norte', () => {
+    const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-009');
+    expect(cargo).toBeDefined();
+
+    const model = resolveCargoHydrowayMapModel(cargo!);
+
+    expect(model).not.toBeNull();
+    expect(model!.cargoId).toBe('CARGO-009');
+    expect(model!.metadata.routeSource).toBe('demo-geojson');
+    expect(model!.corridorId).toBe('barra-norte');
+    expect(model!.progress01).toBe(0.12);
+    expect(validateHydrowayMapModel(model!)).toBe(true);
+  });
+
   it('resolve CARGO-004 com corredor tocantins-araguaia', () => {
-    const model = resolveCargoHydrowayMapModel({
-      id: 'CARGO-004',
-      title: 'Grãos — corredor Tocantins (mock)',
-      origin: 'Marabá, PA',
-      destination: 'Vila do Conde, PA',
-      volume: '40 t',
-      window: '10-14 maio',
-      cargoType: 'Seca',
-      status: 'contracting',
-      co2Saving: '-40% CO₂',
-      targetPrice: 'R$ 12.000',
-    });
+    const cargo = publicCargosMock.find((entry) => entry.id === 'CARGO-004');
+    expect(cargo).toBeDefined();
+
+    const model = resolveCargoHydrowayMapModel(cargo!);
 
     expect(model).not.toBeNull();
     expect(model!.cargoId).toBe('CARGO-004');
     expect(model!.corridorId).toBe('tocantins-araguaia');
+    expect(model!.progress01).toBe(0.4);
     expect(validateHydrowayMapModel(model!)).toBe(true);
   });
 
