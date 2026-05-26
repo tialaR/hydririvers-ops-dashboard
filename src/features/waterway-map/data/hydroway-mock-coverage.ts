@@ -55,7 +55,10 @@ export const HYDROWAY_V26_REQUIRED_NODE_IDS = [
 export const HYDROWAY_V26_DEMO_CARGO_IDS: readonly HydrowayDemoCargoId[] = [
   'CARGO-001',
   'CARGO-002',
+  'CARGO-003',
   'CARGO-004',
+  'CARGO-009',
+  'HYD-2026-00020',
 ];
 
 /** Mínimo de vértices por rota demo (geometria curvilínea). */

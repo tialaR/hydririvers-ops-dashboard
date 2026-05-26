@@ -17,25 +17,29 @@
 - safe-area mobile
 - `z-index` acima de mapa, sidebar e bottom nav
 
-## Arquivos migrados
+## Arquivos migrados (casca global)
 
-- `src/features/cargo-market/components/cargo-list/cargo-list.tsx`
-  - lock manual de body/html substituído por `useLockBodyScroll(sheetVisible)`
-- `src/shared/layout/app-header/app-header.tsx`
-  - lock manual de body/html substituído por `useLockBodyScroll(sheetVisible)`
+- `src/features/waterway-map/components/mobile/mobile-route-sheet.tsx` — composição sobre `BottomSheet` (`flush`, `map`)
+- `src/features/cargo/components/cargo-action-sheet/cargo-action-sheet-bridge.tsx` — motor próprio removido
+- `src/features/cargo-market/components/cargo-list/cargo-list.tsx` — filtros mobile
+- `src/shared/layout/app-header/app-header.tsx` — menu mobile
+- `src/shared/layout/admin-chrome/admin-chrome.tsx` — notificações, conta, busca (já usava `BottomSheet`)
+- `src/features/dashboard/components/operations-board/operations-board.tsx` — filtros/picker mobile (via `@/shared/ui`)
 
-## Arquivos legados mantidos
+## Arquivos legados mantidos (shim apenas)
 
-- `src/shared/ui/bottom-sheet/bottom-sheet.tsx`
-  - mantido como shim seguro para compatibilidade
+- `src/shared/ui/bottom-sheet/bottom-sheet.tsx` — re-export para `@/shared/ui`
 - `src/shared/ui/bottom-sheet/index.ts`
-  - mantido para exportes legados
-- `src/shared/hooks/useLockBodyScroll.ts`
-  - mantido como re-export do hook canônico
+- `src/shared/hooks/useLockBodyScroll.ts` — re-export do hook canônico
 
 ## Arquivos removidos
 
-- Nenhum arquivo legado foi removido nesta etapa.
+- Nenhum arquivo shim removido (sem imports quebrados).
+- CSS/portal legado removido dos bridges migrados (`cargo-action-sheet-bridge`, `cargo-list`, `app-header`).
+
+## Documentação
+
+- `src/shared/components/bottom-sheet/README.md`
 
 ## Riscos
 

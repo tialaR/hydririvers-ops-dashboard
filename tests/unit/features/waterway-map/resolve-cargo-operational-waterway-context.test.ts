@@ -32,6 +32,29 @@ describe('resolveCargoOperationalWaterwayContext', () => {
     expect(context!.recommendedLayerMode).toBe('navigation');
   });
 
+  it('resolve CARGO-002 com contexto operacional e checkpoints', () => {
+    const context = resolveCargoOperationalWaterwayContext('CARGO-002');
+    expect(context).not.toBeNull();
+    expect(context!.corridorId).toBe('corridor-amazonas-solimoes');
+    expect(context!.originTerminalId).toBe('terminal-manaus');
+    expect(context!.destinationTerminalId).toBe('terminal-belem');
+    expect(context!.activeAlertIds).toEqual(['alert-traffic-estuario']);
+
+    const slice = resolveOperationalDatasetForCargo('CARGO-002');
+    expect(slice!.checkpoints.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('resolve CARGO-003 com alerta de sinalização e terminal Macapá', () => {
+    const context = resolveCargoOperationalWaterwayContext('CARGO-003');
+    expect(context).not.toBeNull();
+    expect(context!.corridorId).toBe('corridor-barra-norte');
+    expect(context!.destinationTerminalId).toBe('terminal-macapa-santana');
+    expect(context!.activeAlertIds).toEqual(['alert-signaling-barra-norte']);
+
+    const slice = resolveOperationalDatasetForCargo('CARGO-003');
+    expect(slice!.alerts.length).toBeGreaterThanOrEqual(1);
+  });
+
   it('resolve CARGO-004 com alerta crítico e terminal relevante', () => {
     const context = resolveCargoOperationalWaterwayContext('CARGO-004');
     expect(context).not.toBeNull();
@@ -54,6 +77,23 @@ describe('resolveCargoOperationalWaterwayContext', () => {
     expect(slice!.segments.every((s) => s.corridorId === slice!.corridor.id || s.id === slice!.context.activeSegmentId)).toBe(
       true,
     );
+  });
+
+  it('resolve CARGO-006, CARGO-007 e CARGO-009 com contexto e checkpoints sintéticos', () => {
+    for (const cargoId of ['CARGO-006', 'CARGO-007', 'CARGO-009'] as const) {
+      const context = resolveCargoOperationalWaterwayContext(cargoId);
+      expect(context, cargoId).not.toBeNull();
+      expect(context!.corridorId).toBeTruthy();
+      expect(context!.activeSegmentId).toBeTruthy();
+      expect(Array.isArray(context!.activeAlertIds)).toBe(true);
+      expect(context!.currentPosition.coordinates).toHaveLength(2);
+
+      const slice = resolveOperationalDatasetForCargo(cargoId);
+      expect(slice, cargoId).not.toBeNull();
+      expect(slice!.checkpoints.length).toBeGreaterThan(0);
+      expect(slice!.segments.length).toBeGreaterThan(0);
+      expect(slice!.terminals.length).toBeGreaterThan(0);
+    }
   });
 
   it('retorna null para cargo desconhecido sem lançar erro', () => {

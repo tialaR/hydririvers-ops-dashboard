@@ -5,6 +5,7 @@ const MAPLIBRE_FATAL_CONSOLE_PATTERNS: RegExp[] = [
   /missing required property/i,
   /expected one of/i,
   /Only one zoom-based/i,
+  /Expected value of type number, but found null instead/i,
   /\bsource\b/i,
   /\bstyle\b/i,
   /WebGL/i,

@@ -109,7 +109,7 @@ function emptyFeatureCollection<G extends GeoJSON.Geometry>(): GeoJsonFeatureCol
 }
 
 function pickSegmentProperties(segment: HydrowaySegment): Record<string, unknown> {
-  return {
+  const properties: Record<string, unknown> = {
     id: segment.id,
     corridorId: segment.corridorId,
     name: segment.name,
@@ -119,9 +119,19 @@ function pickSegmentProperties(segment: HydrowaySegment): Record<string, unknown
     dredgingStatus: segment.dredgingStatus,
     speedRecommendation: segment.speedRecommendation,
     businessImpactSummary: segment.businessImpactSummary,
-    draftMeters: segment.draftMeters ?? undefined,
-    requiredDraftMeters: segment.requiredDraftMeters ?? undefined,
   };
+
+  if (typeof segment.draftMeters === 'number' && Number.isFinite(segment.draftMeters)) {
+    properties.draftMeters = segment.draftMeters;
+  }
+  if (
+    typeof segment.requiredDraftMeters === 'number' &&
+    Number.isFinite(segment.requiredDraftMeters)
+  ) {
+    properties.requiredDraftMeters = segment.requiredDraftMeters;
+  }
+
+  return properties;
 }
 
 function pickTerminalProperties(terminal: HydrowayTerminal): Record<string, unknown> {
@@ -154,9 +164,11 @@ function pickAlertProperties(alert: HydrowayAlert): Record<string, unknown> {
     impact: alert.impact,
     recommendedAction: alert.recommendedAction,
     audience: alert.audience,
-    segmentId: alert.segmentId,
-    corridorId: alert.corridorId,
-    etaImpactMinutes: alert.etaImpactMinutes ?? undefined,
+    ...(alert.segmentId ? { segmentId: alert.segmentId } : {}),
+    ...(alert.corridorId ? { corridorId: alert.corridorId } : {}),
+    ...(typeof alert.etaImpactMinutes === 'number' && Number.isFinite(alert.etaImpactMinutes)
+      ? { etaImpactMinutes: alert.etaImpactMinutes }
+      : {}),
     iconSymbol: icon.iconSymbol,
     iconColor: icon.iconColor,
     iconKind: icon.iconKind,
@@ -189,9 +201,9 @@ function pickCheckpointProperties(checkpoint: HydrowayCheckpoint): Record<string
     status: checkpoint.status,
     label: checkpoint.label,
     shortMessage: checkpoint.shortMessage,
-    cargoId: checkpoint.cargoId,
-    terminalId: checkpoint.terminalId,
-    alertId: checkpoint.alertId,
+    ...(checkpoint.cargoId ? { cargoId: checkpoint.cargoId } : {}),
+    ...(checkpoint.terminalId ? { terminalId: checkpoint.terminalId } : {}),
+    ...(checkpoint.alertId ? { alertId: checkpoint.alertId } : {}),
     iconSymbol: icon.iconSymbol,
     iconColor: icon.iconColor,
     iconKind: icon.iconKind,
@@ -202,7 +214,7 @@ function pickCorridorProperties(corridor: HydrowayCorridor): Record<string, unkn
   return {
     id: corridor.id,
     name: corridor.name,
-    officialCode: corridor.officialCode,
+    ...(corridor.officialCode ? { officialCode: corridor.officialCode } : {}),
     region: corridor.region,
     priority: corridor.priority,
     concessionStatus: corridor.concessionStatus,
@@ -222,8 +234,9 @@ function pickPlanningAreaProperties(area: HydrowayPlanningArea): Record<string, 
     status: area.status,
     confidence: area.confidence,
     institutionalSummary: area.institutionalSummary,
-    authority: area.authority,
-    sourceName: area.sourceName,
+    ...(area.authority ? { authority: area.authority } : {}),
+    ...(area.sourceName ? { sourceName: area.sourceName } : {}),
+    ...(area.sourceDate ? { sourceDate: area.sourceDate } : {}),
     iconSymbol: icon.iconSymbol,
     iconColor: icon.iconColor,
     iconKind: icon.iconKind,

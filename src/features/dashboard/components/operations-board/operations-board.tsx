@@ -67,9 +67,10 @@ import {
   HydroRouteTrackingMapLegend,
   HydroRouteTrackingMapSvg
 } from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking-map';
+import { buildVisualCargoPool } from '@/features/cargo/data/build-visual-cargo-pool';
 import { getVesselVisual } from '@/features/cargo-market/components/cargo-detail/cargo-vessel-visual';
 import {
-  cargoWaterwayTrackingByCargoId,
+  getCargoWaterwayTracking,
   getPrimaryWaterwayConstraint,
   getWaterwayOperationalLabel,
   waterwayCorridorsMock,
@@ -460,39 +461,6 @@ function parseEtaMeta(
     etaLabel: formatEtaLabel(etaPart || value, tBoard),
     confidenceLabel: confidencePart ? translateEtaConfidence(confidencePart, tCommon) : ''
   };
-}
-
-function buildVisualCargoPool(cargoes: Cargo[]) {
-  if (cargoes.length >= 20) {
-    return cargoes.slice(0, 20);
-  }
-
-  const targetSize = Math.max(20, cargoes.length);
-  const statusRotation: CargoStatus[] = ['open', 'bidding', 'contracting', 'reserved', 'boarded', 'delivered'];
-
-  return Array.from({ length: targetSize }, (_, index) => {
-    const base = cargoes[index % cargoes.length];
-    const duplicate = index >= cargoes.length;
-    const sequence = String(index + 1).padStart(5, '0');
-    const status = statusRotation[index % statusRotation.length];
-
-    if (!duplicate) {
-      return base;
-    }
-
-    return {
-      ...base,
-      id: `hyd-2026-${sequence}`,
-      status,
-      title: `${base.title} ${Math.floor(index / cargoes.length) + 1}`,
-      etaConfidence: [
-        'ETA 36–44h • confiança média',
-        'ETA 4–6 dias • confiança média',
-        'ETA 52–72h • sazonal',
-        'ETA 30–42h • alta confiança'
-      ][index % 4]
-    };
-  });
 }
 
 function formatMoney(locale: string, value: string) {
@@ -1909,7 +1877,7 @@ export function OperationsBoard({
         showMenu={!isMobileViewport}
         statusLabel={getCargoStatusLabel(cargo.status, tCommon)}
         vesselLabel={vesselName(cargo, negotiations, vessels)}
-        waterwayTracking={cargoWaterwayTrackingByCargoId.get(cargo.id)}
+        waterwayTracking={getCargoWaterwayTracking(cargo.id)}
       />
     );
   };

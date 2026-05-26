@@ -295,6 +295,18 @@
   cursor: not-allowed;
 }
 
+.filterSheet {
+  width: min(100%, 42rem);
+}
+
+.filterSheetBody {
+  padding: 0;
+  gap: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .sheetOverlay {
   position: fixed;
   inset: 0;

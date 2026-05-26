@@ -15,7 +15,7 @@ Esta aceitação **autoriza apenas** o próximo spike técnico **isolado** com M
 | `src/features/waterway-map/` | **Não** | V2.1b–V2.1c (spike) |
 | Rota `/<locale>/cargas/[id]/mapa` | **Mantém SVG foundation** | Substituição/integração MapLibre apenas em **V2.3** |
 | Cockpit `/<locale>/cargas` | **Intocado** | Fase futura própria |
-| Mobile immersive | **Intocado** | Fora do escopo V2 |
+| Mobile mapa (`/mapa`) | **MapLibre** | Integrado em V2.3+ |
 
 **Rollback:** o fallback **SVG foundation** (`desktop-cargo-map/`) permanece plano de rollback obrigatório — feature flag `hydrowayMapLibreEnabled`, falha de WebGL ou timeout revertem para SVG sem redeploy de geometria.
 
@@ -25,7 +25,7 @@ O HydroRivers possui três superfícies de mapa esquemático em SVG custom, sem 
 
 - **Cockpit desktop** (`/<locale>/cargas`) — mapa compacto integrado à lista (`HydroRouteTrackingMapSvg`);
 - **Desktop expanded** (`/<locale>/cargas/[id]/mapa`) — foundation com câmera SVG `viewBox`, pan/zoom e rota por curva Bézier entre coordenadas artificiais ([ADR 0001-desktop-expanded-map-route](./0001-desktop-expanded-map-route.md));
-- **Mobile immersive** (`/<locale>/cargas/[id]?view=visao-geral`) — experiência própria com layouts por corredor.
+- **Mobile mapa oficial** (`/<locale>/cargas/[id]/mapa`) — MapLibre via `MobileHydrowayMapExperience` (legado `?view=visao-geral` removido).
 
 A foundation do desktop expanded validou rota, i18n, interação básica e URL compartilhável, mas **não atende** ao objetivo de produto de mapa hidroviário profissional: zoom revela lacunas, pan perde contexto, basemap é grid + tubos estilizados, e não há pipeline GeoJSON nem continuidade geográfica.
 

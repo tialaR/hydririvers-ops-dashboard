@@ -26,7 +26,10 @@ import {
 const DEMO_CARGO_PROGRESS_OVERRIDES: Record<HydrowayDemoCargoId, number> = {
   'CARGO-001': 0.15,
   'CARGO-002': 0.25,
+  'CARGO-003': 0.18,
   'CARGO-004': 0.4,
+  'CARGO-009': 0.12,
+  'HYD-2026-00020': 0.25,
 };
 
 function progress01FromCargoStatus(status: CargoStatus): number {

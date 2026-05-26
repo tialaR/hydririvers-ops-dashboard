@@ -36,7 +36,8 @@
   box-shadow: fab.$fab-button-shadow;
   overflow: hidden;
   transition:
-    transform 160ms ease,
+    transform 120ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 120ms ease,
     border-color 160ms ease,
     background 160ms ease,
     color 160ms ease,
@@ -74,7 +75,11 @@
 }
 
 .sizeMobile:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: scale(0.94);
+}
+
+.sizeMobile:active:not(:disabled) .surface {
+  opacity: 0.92;
 }
 
 .sizeDesktop {
@@ -113,6 +118,7 @@
   border-color: fab.$fab-button-border-hover;
   background: fab.$fab-button-background-hover;
   color: fab.$fab-button-color-hover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .active:not(:disabled) .surface,
@@ -131,6 +137,7 @@
   background: fab.$fab-button-background-active;
   color: fab.$fab-button-color-active;
   box-shadow: fab.$fab-button-shadow-active;
+  opacity: 0.96;
 }
 
 .active:not(:disabled) .surface::before,
@@ -247,6 +254,13 @@
 
   .sizeMobile:active:not(:disabled) {
     transform: none;
+  }
+
+  .sizeMobile:active:not(:disabled) .surface,
+  .action:not(.active):not([aria-pressed='true']):active:not(:disabled) .surface,
+  .active:not(:disabled):active .surface,
+  .action[aria-pressed='true']:not(:disabled):active .surface {
+    opacity: 1;
   }
 
   .sizeDesktop:hover:not(:disabled) .surface,

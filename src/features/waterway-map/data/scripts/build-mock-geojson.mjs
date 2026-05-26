@@ -38,6 +38,8 @@ const NODES = {
   'transshipment-santarem-tapajos': [-52.05, -1.78],
   'transshipment-itaituba-flex': [-55.22, -2.22],
   'terminal-santarem-oeste': [-52.15, -1.82],
+  /** Handoff cabotagem Nordeste — coordenada esquemática dentro do bbox (rótulo Suape no produto). */
+  'port-suape-cabotagem': [-47.08, -2.72],
 };
 
 function round5(n) {
@@ -790,6 +792,23 @@ const route002 = cargoRoute(
   'in-transit',
 );
 
+const route003 = cargoRoute(
+  'CARGO-003',
+  'route-cargo-003',
+  'barra-norte',
+  'port-santarem',
+  'port-macapa',
+  [
+    NODES['port-santarem'],
+    NODES['port-obidos'],
+    NODES['port-breves'],
+    NODES['port-macapa'],
+  ],
+  0.18,
+  '2026-06-10/2026-06-14',
+  'in-transit',
+);
+
 const route004 = cargoRoute(
   'CARGO-004',
   'route-cargo-004',
@@ -809,9 +828,46 @@ const route004 = cargoRoute(
   'in-transit',
 );
 
+const route009 = cargoRoute(
+  'CARGO-009',
+  'route-cargo-009',
+  'barra-norte',
+  'terminal-vila-conde',
+  'port-suape-cabotagem',
+  [
+    NODES['terminal-vila-conde'],
+    NODES['port-barcarena'],
+    NODES['transshipment-belem-mosqueiro'],
+    NODES['port-belem'],
+    NODES['port-breves'],
+    NODES['port-prainha'],
+    NODES['port-suape-cabotagem'],
+  ],
+  0.12,
+  '2026-06-18/2026-06-24',
+  'in-transit',
+);
+
+const routeHyd202600020 = cargoRoute(
+  'HYD-2026-00020',
+  'route-hyd-2026-00020',
+  'barra-norte',
+  'port-abaetetuba',
+  'terminal-vila-conde',
+  [
+    NODES['port-abaetetuba'],
+    NODES['port-breves'],
+    NODES['port-barcarena'],
+    NODES['terminal-vila-conde'],
+  ],
+  0.25,
+  '2026-05-17/2026-05-20',
+  'in-transit',
+);
+
 const cargoRoutes = {
   type: 'FeatureCollection',
-  features: [route001, route002, route004],
+  features: [route001, route002, route003, route004, route009, routeHyd202600020],
 };
 
 const FILES = {

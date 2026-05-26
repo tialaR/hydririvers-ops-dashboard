@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { LogOut } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -9,7 +8,7 @@ import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
 import { Link, usePathname, useRouter } from '@/core/i18n/navigation';
 import { mainNavigation, resolveActiveNavigationHref } from '@/shared/config/navigation';
 import { intlAppPaths } from '@/shared/routing/app-routes';
-import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
+import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
 import { LocaleSwitcher } from '@/shared/ui/locale-switcher/locale-switcher';
 import { AuthActions } from '@/features/auth/components/auth-actions/auth-actions';
@@ -18,13 +17,9 @@ import { logout } from '@/features/auth/services/auth.client';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import styles from './app-header.module.scss';
 
-const MENU_SHEET_CLOSE_MS = 260;
-const MENU_SHEET_CLOSE_THRESHOLD = 170;
-const MENU_SHEET_HALF_THRESHOLD = 76;
-const MENU_SHEET_FULL_THRESHOLD = 72;
+const MENU_SHEET_SNAP_ORDER = ['half', 'full'] as const;
 
-type MenuSheetState = 'closed' | 'open' | 'closing';
-type MenuSheetSnap = 'half' | 'full';
+type MenuSheetSnap = (typeof MENU_SHEET_SNAP_ORDER)[number];
 
 function resolveActiveHref(pathname: string) {
   return resolveActiveNavigationHref(pathname, mainNavigation);
@@ -35,16 +30,10 @@ export function AppHeader() {
   const ta = useTranslations('auth');
   const router = useRouter();
   const pathname = usePathname();
-  const [sheetState, setSheetState] = useState<MenuSheetState>('closed');
-  const [sheetSnap, setSheetSnap] = useState<MenuSheetSnap>('full');
-  const [dragOffset, setDragOffset] = useState(0);
-  const [dragging, setDragging] = useState(false);
+  const [menuSheetOpen, setMenuSheetOpen] = useState(false);
+  const [menuSheetSnap, setMenuSheetSnap] = useState<MenuSheetSnap>('full');
   const [moreOpen, setMoreOpen] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
-  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const dragStartYRef = useRef<number | null>(null);
-  const dragDeltaRef = useRef(0);
-  const dragPointerRef = useRef<number | null>(null);
   const { user, ready } = useAuthSession();
   const navigationUser = ready ? user : null;
   const desktopNavigation = useMemo(
@@ -63,32 +52,6 @@ export function AppHeader() {
   const activeHref = useMemo(() => resolveActiveHref(pathname), [pathname]);
   const activeItem = useMemo(() => mainNavigation.find((item) => item.href === activeHref), [activeHref]);
   const overflowActive = useMemo(() => overflow.some((item) => item.href === activeHref), [overflow, activeHref]);
-  const sheetVisible = sheetState !== 'closed';
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-
-  useLockBodyScroll(sheetVisible);
-
-  useEffect(() => () => {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!sheetVisible) return undefined;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') requestCloseSheet();
-    };
-
-    window.addEventListener('keydown', onKeyDown);
-    return () => window.removeEventListener('keydown', onKeyDown);
-  }, [sheetVisible]);
-
   useEffect(() => {
     if (!moreOpen) return;
     const onPointerDown = (event: PointerEvent) => {
@@ -109,89 +72,32 @@ export function AppHeader() {
     event?.preventDefault();
     event?.stopPropagation();
 
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
-
     setMoreOpen(false);
-    setDragOffset(0);
-    setDragging(false);
-    setSheetSnap('full');
-    setSheetState('open');
+    setMenuSheetSnap('full');
+    setMenuSheetOpen(true);
   }
 
-  function requestCloseSheet() {
-    if (closeTimerRef.current) {
-      clearTimeout(closeTimerRef.current);
-    }
-
-    setDragOffset(0);
-    setDragging(false);
-    setSheetState('closing');
-
-    closeTimerRef.current = setTimeout(() => {
-      setSheetSnap('full');
-      setSheetState('closed');
-      closeTimerRef.current = null;
-    }, MENU_SHEET_CLOSE_MS);
+  function closeMenuSheet() {
+    setMenuSheetOpen(false);
+    setMenuSheetSnap('full');
   }
 
-  function handleSheetDragStart(event: ReactPointerEvent<HTMLElement>) {
-    dragStartYRef.current = event.clientY;
-    dragDeltaRef.current = 0;
-    dragPointerRef.current = event.pointerId;
-    setDragging(true);
-    event.currentTarget.setPointerCapture?.(event.pointerId);
-  }
-
-  function handleSheetDragMove(event: ReactPointerEvent<HTMLElement>) {
-    if (dragStartYRef.current === null) return;
-
-    const delta = event.clientY - dragStartYRef.current;
-    dragDeltaRef.current = delta;
-
-    if (delta > 0) {
-      setDragOffset(delta);
-    } else {
-      setDragOffset(0);
+  function handleMenuSheetOpenChange(open: boolean) {
+    setMenuSheetOpen(open);
+    if (!open) {
+      setMenuSheetSnap('full');
     }
   }
 
-  function handleSheetDragEnd(event: ReactPointerEvent<HTMLElement>) {
-    if (dragStartYRef.current === null) return;
-
-    const delta = dragDeltaRef.current;
-    dragStartYRef.current = null;
-    dragDeltaRef.current = 0;
-    setDragging(false);
-
-    if (dragPointerRef.current !== null) {
-      event.currentTarget.releasePointerCapture?.(dragPointerRef.current);
-      dragPointerRef.current = null;
+  function handleMenuSheetSnapChange(snapId: string) {
+    if (snapId === 'half' || snapId === 'full') {
+      setMenuSheetSnap(snapId);
     }
-
-    if (delta > MENU_SHEET_CLOSE_THRESHOLD) {
-      requestCloseSheet();
-      return;
-    }
-
-    if (delta > MENU_SHEET_HALF_THRESHOLD) {
-      setSheetSnap('half');
-    } else if (delta < -MENU_SHEET_FULL_THRESHOLD) {
-      setSheetSnap('full');
-    } else if (sheetSnap === 'half') {
-      setSheetSnap('half');
-    } else {
-      setSheetSnap('full');
-    }
-
-    setDragOffset(0);
   }
 
   const closeMenus = () => {
     setMoreOpen(false);
-    if (sheetVisible) requestCloseSheet();
+    if (menuSheetOpen) closeMenuSheet();
   };
 
   const mobileNavItems = useMemo(
@@ -204,137 +110,12 @@ export function AppHeader() {
     [user]
   );
 
-  const sheetInlineStyle = {
-    '--sheet-drag-offset': `${dragOffset}px`
-  } as CSSProperties;
-
-  const mobileMenuSheet = sheetVisible ? (
-    <>
-      <div
-        className={styles.sheetOverlay}
-        data-state={sheetState}
-        role="presentation"
-        aria-hidden
-        onClick={() => requestCloseSheet()}
-      />
-      <aside
-        className={styles.sheet}
-        aria-hidden={!sheetVisible}
-        role="dialog"
-        aria-modal="true"
-        aria-label={t('mobileMenuTitle')}
-        data-state={sheetState}
-        data-snap={sheetSnap}
-        data-dragging={dragging}
-        style={sheetInlineStyle}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className={styles.sheetInner}>
-          <div
-            className={styles.sheetDragZone}
-            onPointerDown={handleSheetDragStart}
-            onPointerMove={handleSheetDragMove}
-            onPointerUp={handleSheetDragEnd}
-            onPointerCancel={handleSheetDragEnd}
-          >
-            <div className={styles.sheetHandle} aria-hidden />
-            <div className={styles.sheetHeaderRow}>
-              <div className={styles.sheetBrand}>
-                <span className={styles.sheetBrandMark} aria-hidden>
-                  <HydroIcon name="river" size={22} />
-                </span>
-                <div className={styles.mobileMenuBrandText}>
-                  <strong>HydroRivers</strong>
-                  <p className={styles.mobileMenuTitle}>{t('mobileMenuTitle')}</p>
-                </div>
-              </div>
-              <button type="button" className={styles.mobileMenuClose} onClick={() => requestCloseSheet()} aria-label={t('closeMenu')}>
-                <HydroIcon name="close" />
-              </button>
-            </div>
-          </div>
-
-          <section className={styles.mobileMenuQuick} aria-label={t('quickActions')}>
-            <h2 className={styles.visuallyHidden}>{t('quickActions')}</h2>
-
-            <div className={`${styles.quickRow} ${styles.quickAccountRow}`}>
-              <span className={styles.quickLabel} id="mobile-quick-account">
-                {t('account')}
-              </span>
-              <div className={styles.quickAccountControls} aria-labelledby="mobile-quick-account">
-                {!ready ? (
-                  <span className={styles.quickAuthSkeleton} aria-hidden />
-                ) : !user ? (
-                  <>
-                    <Link href={intlAppPaths.auth.login} onClick={() => requestCloseSheet()} className={`${styles.quickLink} ${styles.quickLinkMuted}`}>
-                      {t('login')}
-                    </Link>
-                    <Link href={intlAppPaths.auth.register} onClick={() => requestCloseSheet()} className={`${styles.quickLink} ${styles.quickLinkPrimary}`}>
-                      {t('signup')}
-                    </Link>
-                  </>
-                ) : (
-                  <>
-                    <Link href={intlAppPaths.auth.profile} onClick={() => requestCloseSheet()} className={`${styles.quickLink} ${styles.quickLinkMuted}`}>
-                      {t('profile')}
-                    </Link>
-                    <button
-                      type="button"
-                      className={styles.quickLogout}
-                      onClick={async () => {
-                        await logout();
-                        requestCloseSheet();
-                        router.push(intlAppPaths.home);
-                      }}
-                      aria-label={ta('logout')}
-                    >
-                      <LogOut size={16} aria-hidden />
-                      <span>{ta('logout')}</span>
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-          </section>
-
-          <nav className={styles.sheetScrollArea} aria-label={t('primaryNavigation')}>
-            <div className={styles.sheetNav}>
-              {mobileNavItems.map((item) => (
-                <Link
-                  onClick={() => requestCloseSheet()}
-                  key={item.href}
-                  href={item.href}
-                  className={item.href === activeHref ? styles.sheetActive : undefined}
-                >
-                  <span>{t(item.labelKey)}</span>
-                  <HydroIcon
-                    name={
-                      item.href === intlAppPaths.cargos.marketplace
-                        ? 'cargo'
-                        : item.href === intlAppPaths.vessels.marketplace
-                          ? 'ship'
-                          : item.href === intlAppPaths.tracking.home
-                            ? 'map'
-                            : 'route'
-                    }
-                    size={16}
-                  />
-                </Link>
-              ))}
-            </div>
-          </nav>
-
-          <div className={styles.sheetFooter}>
-            {pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos) ? (
-              <Link href={intlAppPaths.cargos.publishCargo} onClick={() => requestCloseSheet()} className={styles.sheetCta}>
-                {t('cta')}
-              </Link>
-            ) : null}
-          </div>
-        </div>
-      </aside>
-    </>
-  ) : null;
+  const menuSheetFooter =
+    pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos) ? (
+      <Link href={intlAppPaths.cargos.publishCargo} onClick={closeMenuSheet} className={styles.sheetCta}>
+        {t('cta')}
+      </Link>
+    ) : null;
 
   return (
     <header className={`${styles.headerShell} ${pathname !== '/' ? styles.subPage : ''}`}>
@@ -398,7 +179,7 @@ export function AppHeader() {
               onClick={openSheet}
               aria-label={t('openMenu')}
               aria-haspopup="dialog"
-              aria-expanded={sheetVisible}
+              aria-expanded={menuSheetOpen}
             >
               <HydroIcon name="menu" />
             </button>
@@ -413,7 +194,102 @@ export function AppHeader() {
         </div>
       ) : null}
 
-      {mounted && mobileMenuSheet ? createPortal(mobileMenuSheet, document.body) : null}
+      <BottomSheet
+        open={menuSheetOpen}
+        onOpenChange={handleMenuSheetOpenChange}
+        title="HydroRivers"
+        description={t('mobileMenuTitle')}
+        closeAriaLabel={t('closeMenu')}
+        snapHeights={{
+          half: '55dvh',
+          full: '92dvh',
+        }}
+        snapOrder={[...MENU_SHEET_SNAP_ORDER]}
+        initialSnap={menuSheetSnap}
+        enableDrag
+        closeOnOverlayClick
+        variant="strong"
+        className={styles.menuSheet}
+        bodyClassName={styles.menuSheetBody}
+        onSnapChange={handleMenuSheetSnapChange}
+        footer={menuSheetFooter}
+      >
+        <div className={styles.sheetBrandRow}>
+          <span className={styles.sheetBrandMark} aria-hidden>
+            <HydroIcon name="river" size={22} />
+          </span>
+        </div>
+
+        <section className={styles.mobileMenuQuick} aria-label={t('quickActions')}>
+          <h2 className={styles.visuallyHidden}>{t('quickActions')}</h2>
+
+          <div className={`${styles.quickRow} ${styles.quickAccountRow}`}>
+            <span className={styles.quickLabel} id="mobile-quick-account">
+              {t('account')}
+            </span>
+            <div className={styles.quickAccountControls} aria-labelledby="mobile-quick-account">
+              {!ready ? (
+                <span className={styles.quickAuthSkeleton} aria-hidden />
+              ) : !user ? (
+                <>
+                  <Link href={intlAppPaths.auth.login} onClick={closeMenuSheet} className={`${styles.quickLink} ${styles.quickLinkMuted}`}>
+                    {t('login')}
+                  </Link>
+                  <Link href={intlAppPaths.auth.register} onClick={closeMenuSheet} className={`${styles.quickLink} ${styles.quickLinkPrimary}`}>
+                    {t('signup')}
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link href={intlAppPaths.auth.profile} onClick={closeMenuSheet} className={`${styles.quickLink} ${styles.quickLinkMuted}`}>
+                    {t('profile')}
+                  </Link>
+                  <button
+                    type="button"
+                    className={styles.quickLogout}
+                    onClick={async () => {
+                      await logout();
+                      closeMenuSheet();
+                      router.push(intlAppPaths.home);
+                    }}
+                    aria-label={ta('logout')}
+                  >
+                    <LogOut size={16} aria-hidden />
+                    <span>{ta('logout')}</span>
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </section>
+
+        <nav className={styles.sheetScrollArea} aria-label={t('primaryNavigation')}>
+          <div className={styles.sheetNav}>
+            {mobileNavItems.map((item) => (
+              <Link
+                onClick={closeMenuSheet}
+                key={item.href}
+                href={item.href}
+                className={item.href === activeHref ? styles.sheetActive : undefined}
+              >
+                <span>{t(item.labelKey)}</span>
+                <HydroIcon
+                  name={
+                    item.href === intlAppPaths.cargos.marketplace
+                      ? 'cargo'
+                      : item.href === intlAppPaths.vessels.marketplace
+                        ? 'ship'
+                        : item.href === intlAppPaths.tracking.home
+                          ? 'map'
+                          : 'route'
+                  }
+                  size={16}
+                />
+              </Link>
+            ))}
+          </div>
+        </nav>
+      </BottomSheet>
     </header>
   );
 }

@@ -1,5 +1,5 @@
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
-import { cargoWaterwayTrackingByCargoId } from '@/features/waterway-tracking/waterway-compat';
+import { getCargoWaterwayTracking } from '@/features/waterway-tracking/waterway-compat';
 import { normalizeCargoId } from '@/shared/routing/normalize-cargo-id';
 
 import { adaptCargoToHydrowayMapModel } from '../adapters/cargo-to-hydroway-geo.adapter';
@@ -120,7 +120,7 @@ function logProductModelResolved(model: HydrowayMapModel | null, cargoId: string
 /** Resolve HydrowayMapModel para rotas de produto (`/cargas/[id]/mapa`). */
 export function resolveCargoHydrowayMapModel(cargo: Cargo): HydrowayMapModel | null {
   const cargoId = normalizeCargoId(cargo.id);
-  const tracking = cargoWaterwayTrackingByCargoId.get(cargoId);
+  const tracking = getCargoWaterwayTracking(cargoId);
   const rawModel = adaptCargoToHydrowayMapModel({ cargo, tracking });
   const model = sanitizeHydrowayMapModel(rawModel);
 

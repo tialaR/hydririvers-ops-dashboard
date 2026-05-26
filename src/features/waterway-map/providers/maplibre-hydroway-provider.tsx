@@ -630,6 +630,24 @@ export class MapLibreHydrowayProvider implements HydrowayMapProvider {
     return true;
   }
 
+  /** Executa callback uma vez após o mapa estar idle (marcadores/overlays prontos). */
+  scheduleWhenIdle(callback: () => void): void {
+    const map = this.map;
+    if (!isMapLibreMapUsable(map)) return;
+
+    const run = (): void => {
+      if (this.destroyed || this.map !== map) return;
+      callback();
+    };
+
+    if (!map.loaded()) {
+      map.once('load', () => map.once('idle', run));
+      return;
+    }
+
+    map.once('idle', run);
+  }
+
   bindUserCameraInteractionListener(listener: () => void): () => void {
     const map = this.map;
     if (!isMapLibreMapUsable(map)) return () => {};

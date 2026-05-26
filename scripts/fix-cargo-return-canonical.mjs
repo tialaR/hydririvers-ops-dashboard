@@ -3,10 +3,7 @@ import path from 'node:path';
 
 const root = process.cwd();
 
-const targets = [
-  'src/app/[locale]/cargas/[id]/cargo-map-immersive-client.tsx',
-  'src/shared/layout/admin-chrome/admin-chrome.tsx',
-];
+const targets = ['src/shared/layout/admin-chrome/admin-chrome.tsx'];
 
 function read(file) {
   const full = path.join(root, file);
@@ -46,42 +43,6 @@ function insertAfterImports(text, snippet) {
   const insertAt = lastImport.index + lastImport[0].length;
 
   return `${text.slice(0, insertAt)}\n${snippet}\n${text.slice(insertAt)}`;
-}
-
-function patchMapClient(target) {
-  let text = target.text;
-
-  // O mapa deve voltar para a lista canonica de cargas, nao marketplace.
-  text = text.replace(
-    /const\s+cargoesHref\s*=\s*appRoutes\.cargos\.marketplace\([^;\n]*\);/,
-    'const cargoesHref = `/${locale}/cargas`;',
-  );
-
-  // Se por acaso algum patch anterior deixou outro destino para cargoesHref,
-  // padroniza qualquer definicao simples.
-  text = text.replace(
-    /const\s+cargoesHref\s*=\s*[^;\n]*\/marketplace[^;\n]*;/g,
-    'const cargoesHref = `/${locale}/cargas`;',
-  );
-
-  // Remove comportamento dependente do historico.
-  text = text.replace(/router\.back\(\)/g, 'router.replace(cargoesHref)');
-  text = text.replace(/window\.history\.back\(\)/g, 'router.replace(cargoesHref)');
-  text = text.replace(/\bhistory\.back\(\)/g, 'router.replace(cargoesHref)');
-
-  // Se existe handler canonico, garante replace nele.
-  text = text.replace(
-    /const\s+handleReturnToCargoes\s*=\s*\(\)\s*=>\s*\{[\s\S]*?\n\s*\};/,
-    `const handleReturnToCargoes = () => {
-    router.replace(cargoesHref);
-  };`,
-  );
-
-  if (text !== target.text) {
-    write(target, text);
-  } else {
-    console.log(`no changes needed: ${target.file}`);
-  }
 }
 
 function patchAdminChrome(target) {
@@ -134,10 +95,6 @@ for (const file of targets) {
     continue;
   }
 
-  if (file.includes('cargo-map-immersive-client.tsx')) {
-    patchMapClient(target);
-  }
-
   if (file.includes('admin-chrome.tsx')) {
     patchAdminChrome(target);
   }
@@ -145,6 +102,4 @@ for (const file of targets) {
 
 console.log('');
 console.log('Audit after patch:');
-console.log('1) Map must not use router.back/history.back.');
-console.log('2) Map cargoesHref must be /${locale}/cargas.');
-console.log('3) AdminChrome Cargas must not point to marketplace.');
+console.log('1) AdminChrome Cargas must not point to marketplace.');

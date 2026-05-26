@@ -3,7 +3,6 @@
 import { useTranslations } from 'next-intl';
 
 import { DsBadge } from '@/shared/design-system/components/badge';
-import { Surface } from '@/shared/design-system/components/surface';
 
 import type { MobileSyncStatus } from '../../utils/mobile-route-view-model';
 import styles from './mobile-offline-status-pill.module.scss';
@@ -34,13 +33,5 @@ export function MobileOfflineStatusPill({ status }: MobileOfflineStatusPillProps
       <span className={styles.dot} data-status={status} aria-hidden />
       {tMap(resolveLabelKey(status))}
     </DsBadge>
-  );
-}
-
-export function MobileOfflineStatusSurface({ status }: MobileOfflineStatusPillProps) {
-  return (
-    <Surface tone="glass" padding="none" className={styles.wrapper}>
-      <MobileOfflineStatusPill status={status} />
-    </Surface>
   );
 }

@@ -15,7 +15,7 @@ export type HydrowayMapSpikeMaplibreViewportHandle = {
 
 type HydrowayMapSpikeMaplibreViewportProps = {
   model: HydrowayMapModel;
-  onReady: () => void;
+  onReady: (provider: MapLibreHydrowayProvider) => void;
   onInitError: () => void;
   skipInitialRouteCamera?: boolean;
 };
@@ -118,7 +118,7 @@ export const HydrowayMapSpikeMaplibreViewport = forwardRef<
           onReady: () => {
             if (cancelled) return;
             provider.ensureViewportSize();
-            onReadyRef.current();
+            onReadyRef.current(provider);
           },
         },
       );

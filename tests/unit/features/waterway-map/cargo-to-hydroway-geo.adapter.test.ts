@@ -186,6 +186,28 @@ describe('adaptCargoToHydrowayMapModel', () => {
     expect(model.geo.mainRivers.features.length).toBeGreaterThanOrEqual(12);
     expect(model.geo.navigableCorridors.features.length).toBeGreaterThanOrEqual(5);
     expect(model.geo.portsTerminals.features.length).toBeGreaterThanOrEqual(14);
-    expect(loadHydrowayCargoRoutesMock().features).toHaveLength(3);
+    expect(loadHydrowayCargoRoutesMock().features).toHaveLength(6);
+  });
+
+  it('monta cena CARGO-009 com rota demo cabotagem dentro do bbox', () => {
+    const model = adaptCargoToHydrowayMapModel({
+      cargo: cargoById('CARGO-009'),
+      tracking: cargoWaterwayTrackingByCargoId.get('CARGO-009'),
+    });
+
+    expect(model.cargoId).toBe('CARGO-009');
+    expect(model.corridorId).toBe('barra-norte');
+    expect(model.progress01).toBe(0.12);
+    expect(model.metadata.routeSource).toBe('demo-geojson');
+    expect(model.metadata.originLabel).toBe('Vila do Conde');
+    expect(model.metadata.destinationLabel).toBe('Suape');
+
+    const demoRoute = findHydrowayCargoRouteFeature('CARGO-009');
+    expect(lineCoords(model.geo.routeTrack)).toEqual(demoRoute?.geometry.coordinates);
+    expect(lineCoords(model.geo.routeTrack).length).toBeGreaterThanOrEqual(24);
+
+    const destination = pointCoord(model.geo.destination)!;
+    expect(isWithinMockBbox(destination)).toBe(true);
+    expect(resolveHydrowayLocation('Suape, PE').usedFallback).toBe(false);
   });
 });

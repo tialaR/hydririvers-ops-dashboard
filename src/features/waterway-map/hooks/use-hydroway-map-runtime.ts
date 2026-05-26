@@ -25,6 +25,12 @@ import {
   zoomHydrowayMapCameraIn,
   zoomHydrowayMapCameraOut,
 } from '../utils/hydro-map-style';
+import {
+  canApplyMobileInitialRouteOverview,
+  markMobileInitialRouteOverviewApplied,
+  resetMobileRouteOverviewInitialState,
+  type MobileRouteOverviewInitialState,
+} from '../utils/mobile-route-overview-camera';
 
 const ALL_MAP_LAYERS: HydrowayMapLayerId[] = [
   'waterway-main',
@@ -45,7 +51,6 @@ const MOBILE_ROUTE_OVERVIEW_PADDING = {
 
 const MOBILE_ROUTE_OVERVIEW_MAX_ZOOM = 10.5;
 const MOBILE_POINT_FOCUS_ZOOM = 10;
-const MOBILE_INITIAL_FIT_MAX_ATTEMPTS = 10;
 
 export type HydrowaySpikeProviderMode = 'maplibre' | 'svg-schematic';
 
@@ -54,8 +59,6 @@ export type UseHydrowayMapRuntimeOptions = {
   preferredProvider: HydrowaySpikeProviderMode;
   /** Bloqueia tooltips hover (recomendado no mobile). */
   disableLayerTooltips?: boolean;
-  /** Fecha o painel de presets após seleção (mobile). */
-  closeLayerPanelOnSelect?: boolean;
   /** Padding e enquadramento pensados para viewport mobile. */
   mobileCamera?: boolean;
 };
@@ -64,7 +67,6 @@ export function useHydrowayMapRuntime({
   model,
   preferredProvider,
   disableLayerTooltips = false,
-  closeLayerPanelOnSelect = false,
   mobileCamera = false,
 }: UseHydrowayMapRuntimeOptions) {
   const searchParams = useSearchParams();
@@ -75,6 +77,7 @@ export function useHydrowayMapRuntime({
   const svgViewportRef = useRef<HTMLDivElement | null>(null);
   const svgProviderRef = useRef<SvgSchematicHydrowayProvider | null>(null);
   const maplibreViewportRef = useRef<HydrowayMapSpikeMaplibreViewportHandle | null>(null);
+  const maplibreProviderRef = useRef<MapLibreHydrowayProvider | null>(null);
   const [maplibreMountFailed, setMaplibreMountFailed] = useState(false);
   const [maplibreReadyCargoId, setMaplibreReadyCargoId] = useState<string | null>(null);
   const [zoomPercent, setZoomPercent] = useState(100);
@@ -86,14 +89,19 @@ export function useHydrowayMapRuntime({
     chapter: HydrowayCameraChapterId;
   } | null>(null);
   const cameraFlyRequestRef = useRef(0);
-  const userCameraInteractedRef = useRef(false);
-  const mobileInitialFitCargoRef = useRef<string | null>(null);
+  const mobileRouteOverviewInitialRef = useRef<MobileRouteOverviewInitialState>({
+    appliedCargoId: null,
+    userInteracted: false,
+  });
+  const [mobileRouteOverviewAppliedCargoId, setMobileRouteOverviewAppliedCargoId] = useState<
+    string | null
+  >(null);
   const activeMapChapter =
     activeChapterByCargo?.cargoId === model.cargoId ? activeChapterByCargo.chapter : null;
 
   useEffect(() => {
-    userCameraInteractedRef.current = false;
-    mobileInitialFitCargoRef.current = null;
+    resetMobileRouteOverviewInitialState(mobileRouteOverviewInitialRef.current);
+    maplibreProviderRef.current = null;
   }, [model.cargoId]);
 
   const webglReady = useSyncExternalStore(
@@ -109,7 +117,8 @@ export function useHydrowayMapRuntime({
   const activeProviderKind: HydrowaySpikeProviderMode = maplibreReady ? 'maplibre' : 'svg-schematic';
 
   const getMapLibreProvider = useCallback((): MapLibreHydrowayProvider | null => {
-    const provider = maplibreViewportRef.current?.getProvider();
+    const provider =
+      maplibreViewportRef.current?.getProvider() ?? maplibreProviderRef.current;
     return provider?.kind === 'maplibre' ? (provider as MapLibreHydrowayProvider) : null;
   }, []);
 
@@ -141,6 +150,8 @@ export function useHydrowayMapRuntime({
       return undefined;
     }
 
+    maplibreProviderRef.current = null;
+
     const container = svgViewportRef.current;
     if (!container) return undefined;
 
@@ -162,9 +173,8 @@ export function useHydrowayMapRuntime({
   }, [model, showMapLibre, syncZoomLabel]);
 
   const fitRouteOverview = useCallback(() => {
-      if (showMapLibre) {
-        const mapProvider = getMapLibreProvider();
-        if (!mapProvider?.isReady()) return false;
+      const mapProvider = getMapLibreProvider();
+      if (mapProvider?.isReady()) {
         const fitted = mapProvider.fitRouteOverview(
           mobileCamera
             ? {
@@ -187,7 +197,7 @@ export function useHydrowayMapRuntime({
       syncZoomLabel();
       return true;
     },
-    [getMapLibreProvider, mobileCamera, schematicScene.route, showMapLibre, syncZoomLabel],
+    [getMapLibreProvider, mobileCamera, schematicScene.route, syncZoomLabel],
   );
 
   const focusOrigin = useCallback(() => {
@@ -286,106 +296,61 @@ export function useHydrowayMapRuntime({
     syncZoomLabel,
   ]);
 
-  const runMobileInitialRouteFitRef = useRef<(attempt?: number) => void>(() => {});
+  const markMobileRouteOverviewApplied = useCallback((cargoId: string) => {
+    markMobileInitialRouteOverviewApplied(mobileRouteOverviewInitialRef.current, cargoId);
+    setMobileRouteOverviewAppliedCargoId(cargoId);
+  }, []);
 
-  const runMobileInitialRouteFit = useCallback(
-    (attempt = 0): void => {
-      if (!mobileCamera) return;
-      if (userCameraInteractedRef.current) return;
-      if (mobileInitialFitCargoRef.current === model.cargoId) return;
+  const applyRouteOverviewCamera = useCallback(() => {
+    setActiveChapterByCargo(null);
+    cameraFlyRequestRef.current += 1;
+    const fitted = fitRouteOverview();
+    if (mobileCamera && fitted) {
+      markMobileRouteOverviewApplied(model.cargoId);
+    }
+    return fitted;
+  }, [fitRouteOverview, markMobileRouteOverviewApplied, mobileCamera, model.cargoId]);
 
-      const scheduleRetry = (nextAttempt: number) => {
-        if (nextAttempt >= MOBILE_INITIAL_FIT_MAX_ATTEMPTS) return;
-        requestAnimationFrame(() => runMobileInitialRouteFitRef.current(nextAttempt));
-      };
-
-      if (showMapLibre) {
-        const mapProvider = getMapLibreProvider();
-        if (!mapProvider?.isReady()) {
-          scheduleRetry(attempt + 1);
-          return;
-        }
-
+  const runMobileRouteOverviewFit = useCallback(
+    (mapProvider?: MapLibreHydrowayProvider | null): boolean => {
+      if (mapProvider?.isReady()) {
         mapProvider.ensureViewportSize();
-        const diagnostics = mapProvider.getRouteMarkerDiagnostics();
-        const hasAnyMarker =
-          diagnostics.hasOrigin || diagnostics.hasCurrentCargo || diagnostics.hasDestination;
-
-        if (!hasAnyMarker) {
-          scheduleRetry(attempt + 1);
-          return;
-        }
-
-        const fitted = fitRouteOverview();
-        if (!fitted) {
-          scheduleRetry(attempt + 1);
-          if (attempt + 1 >= MOBILE_INITIAL_FIT_MAX_ATTEMPTS) {
-            centerCurrentCargo();
-          }
-          return;
-        }
-
-        mobileInitialFitCargoRef.current = model.cargoId;
-
-        if (process.env.NODE_ENV === 'development') {
-          console.info('[hydroway-map] mobile initial route fit', {
-            cargoId: model.cargoId,
-            hasOrigin: diagnostics.hasOrigin,
-            hasCurrentCargo: diagnostics.hasCurrentCargo,
-            hasDestination: diagnostics.hasDestination,
-            routeCoordinatesLength: diagnostics.routeCoordinatesLength,
-            padding: MOBILE_ROUTE_OVERVIEW_PADDING,
-            maxZoom: MOBILE_ROUTE_OVERVIEW_MAX_ZOOM,
-            mapReady: mapProvider.isReady(),
-            fitted,
-          });
-        }
-        return;
       }
 
-      const provider = svgProviderRef.current;
-      if (!provider) {
-        scheduleRetry(attempt + 1);
-        return;
-      }
-
-      fitRouteOverview();
-      mobileInitialFitCargoRef.current = model.cargoId;
-
-      if (process.env.NODE_ENV === 'development') {
-        const routeFeature = model.geo.routeTrack.features[0];
-        const routeCoordinatesLength =
-          routeFeature?.geometry.type === 'LineString'
-            ? routeFeature.geometry.coordinates.length
-            : 0;
-
-        console.info('[hydroway-map] mobile initial route fit', {
-          cargoId: model.cargoId,
-          hasOrigin: true,
-          hasCurrentCargo: true,
-          hasDestination: true,
-          routeCoordinatesLength,
-          padding: MOBILE_ROUTE_OVERVIEW_PADDING,
-          maxZoom: MOBILE_ROUTE_OVERVIEW_MAX_ZOOM,
-          mapReady: true,
-          fitted: true,
-          provider: 'svg-schematic',
-        });
-      }
+      return Boolean(applyRouteOverviewCamera());
     },
-    [centerCurrentCargo, fitRouteOverview, getMapLibreProvider, mobileCamera, model, showMapLibre],
+    [applyRouteOverviewCamera],
   );
 
-  useEffect(() => {
-    runMobileInitialRouteFitRef.current = runMobileInitialRouteFit;
-  }, [runMobileInitialRouteFit]);
+  const tryApplyMobileInitialRouteOverview = useCallback(
+    (mapProviderOverride?: MapLibreHydrowayProvider | null): void => {
+      const mapProvider = mapProviderOverride ?? getMapLibreProvider();
+      const mapReady = mapProvider?.isReady()
+        ? true
+        : Boolean(svgProviderRef.current);
 
-  const handleMaplibreReady = useCallback(() => {
+      if (
+        !canApplyMobileInitialRouteOverview(mobileRouteOverviewInitialRef.current, {
+          mobileCamera,
+          cargoId: model.cargoId,
+          mapReady,
+        })
+      ) {
+        return;
+      }
+
+      runMobileRouteOverviewFit(mapProvider);
+    },
+    [getMapLibreProvider, mobileCamera, model.cargoId, runMobileRouteOverviewFit],
+  );
+
+  const handleMaplibreReady = useCallback((mapProviderFromViewport: MapLibreHydrowayProvider) => {
     setMaplibreMountFailed(false);
     setMaplibreReadyCargoId(model.cargoId);
-    const mapProvider = maplibreViewportRef.current?.getProvider();
-    if (mapProvider?.kind === 'maplibre') {
-      const maplibreProvider = mapProvider as MapLibreHydrowayProvider;
+    maplibreProviderRef.current = mapProviderFromViewport;
+    const mapProvider = mapProviderFromViewport;
+    if (mapProvider.kind === 'maplibre') {
+      const maplibreProvider = mapProvider;
       maplibreProvider.ensureViewportSize();
       maplibreProvider.setLayers(ALL_MAP_LAYERS);
       maplibreProvider.setOperationalLayerMode(activeOperationalLayerMode);
@@ -394,49 +359,85 @@ export function useHydrowayMapRuntime({
         maplibreProvider.setLayerTooltipUiBlocked(true);
       }
       if (mobileCamera) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            runMobileInitialRouteFit(0);
+        const runInitialRouteOverview = () => {
+          if (
+            !canApplyMobileInitialRouteOverview(mobileRouteOverviewInitialRef.current, {
+              mobileCamera: true,
+              cargoId: model.cargoId,
+              mapReady: maplibreProvider.isReady(),
+            })
+          ) {
+            return;
+          }
+
+          setActiveChapterByCargo(null);
+          cameraFlyRequestRef.current += 1;
+          const fitted = maplibreProvider.fitRouteOverview({
+            padding: MOBILE_ROUTE_OVERVIEW_PADDING,
+            maxZoom: MOBILE_ROUTE_OVERVIEW_MAX_ZOOM,
+            includeRouteCoordinates: true,
           });
-        });
+
+          if (!fitted) return;
+
+          syncZoomLabel();
+          markMobileRouteOverviewApplied(model.cargoId);
+        };
+
+        runInitialRouteOverview();
+        maplibreProvider.scheduleWhenIdle(runInitialRouteOverview);
       }
     }
     syncZoomLabel();
   }, [
     activeOperationalLayerMode,
     disableLayerTooltips,
+    markMobileRouteOverviewApplied,
     mobileCamera,
     model.cargoId,
-    runMobileInitialRouteFit,
     syncZoomLabel,
   ]);
 
   useEffect(() => {
     if (!mobileCamera || !maplibreReady) return undefined;
 
-    const mapProvider = getMapLibreProvider();
-    if (!mapProvider?.isReady()) return undefined;
-
-    return mapProvider.bindUserCameraInteractionListener(() => {
-      userCameraInteractedRef.current = true;
-    });
-  }, [getMapLibreProvider, maplibreReady, mobileCamera, model.cargoId]);
-
-  useEffect(() => {
-    if (!mobileCamera || showMapLibre) return undefined;
-
     const frameId = requestAnimationFrame(() => {
-      runMobileInitialRouteFit(0);
+      tryApplyMobileInitialRouteOverview();
     });
 
     return () => {
       cancelAnimationFrame(frameId);
     };
-  }, [mobileCamera, model.cargoId, runMobileInitialRouteFit, showMapLibre]);
+  }, [maplibreReady, mobileCamera, model.cargoId, tryApplyMobileInitialRouteOverview]);
+
+  useEffect(() => {
+    if (!mobileCamera || !maplibreReady) return undefined;
+    if (mobileRouteOverviewInitialRef.current.appliedCargoId !== model.cargoId) return undefined;
+
+    const mapProvider = getMapLibreProvider();
+    if (!mapProvider?.isReady()) return undefined;
+
+    return mapProvider.bindUserCameraInteractionListener(() => {
+      mobileRouteOverviewInitialRef.current.userInteracted = true;
+    });
+  }, [getMapLibreProvider, maplibreReady, mobileCamera, mobileRouteOverviewAppliedCargoId, model.cargoId]);
+
+  useEffect(() => {
+    if (!mobileCamera || showMapLibre) return undefined;
+
+    const frameId = requestAnimationFrame(() => {
+      tryApplyMobileInitialRouteOverview();
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [mobileCamera, model.cargoId, showMapLibre, tryApplyMobileInitialRouteOverview]);
 
   const handleMaplibreInitError = useCallback(() => {
     setMaplibreMountFailed(true);
     setMaplibreReadyCargoId(null);
+    maplibreProviderRef.current = null;
   }, []);
 
   const handleZoomIn = useCallback(() => {
@@ -559,16 +560,8 @@ export function useHydrowayMapRuntime({
       if (!mapProvider?.isReady() || !mapProvider.canSetOperationalLayerMode(mode)) return;
       mapProvider.setOperationalLayerMode(mode);
       setActiveOperationalLayerMode(mapProvider.getOperationalLayerMode());
-      if (closeLayerPanelOnSelect) {
-        setLayerPresetPanelOpen(false);
-        if (disableLayerTooltips) {
-          mapProvider.setLayerTooltipUiBlocked(true);
-        } else {
-          mapProvider.setLayerTooltipUiBlocked(false);
-        }
-      }
     },
-    [closeLayerPanelOnSelect, disableLayerTooltips, getMapLibreProvider, showMapLibre],
+    [getMapLibreProvider, showMapLibre],
   );
 
   const handleCloseLayerPresetPanel = useCallback(() => {
@@ -619,11 +612,7 @@ export function useHydrowayMapRuntime({
     getMapLibreProvider()?.setLayerTooltipUiBlocked(false);
   }, [disableLayerTooltips, getMapLibreProvider]);
 
-  const handleFitRoute = useCallback(() => {
-    setActiveChapterByCargo(null);
-    cameraFlyRequestRef.current += 1;
-    fitRouteOverview();
-  }, [fitRouteOverview]);
+  const handleFitRoute = applyRouteOverviewCamera;
 
   const handleFocusOrigin = useCallback(() => {
     cameraFlyRequestRef.current += 1;
@@ -710,6 +699,9 @@ export function useHydrowayMapRuntime({
     handleLayerPresetPanelPointerLeave,
     getMapLibreProvider,
     mobileCamera,
+    mobileRouteOverviewAppliedCargoId,
+    applyRouteOverviewCamera,
+    tryApplyMobileInitialRouteOverview,
   };
 }
 

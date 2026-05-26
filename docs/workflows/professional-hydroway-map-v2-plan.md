@@ -198,7 +198,7 @@ npm run check:i18n
 
 - `src/app/globals.scss`
 - `next-env.d.ts`
-- Componentes mobile / `cargo-map-immersive-client.tsx`
+- Componentes mobile em `src/app/[locale]/cargas/[id]/mapa/` e `src/features/waterway-map/components/mobile/`
 - Auth, mocks globais fora do escopo
 - `package.json` antes de V2.0 aceito e início de V2.1
 

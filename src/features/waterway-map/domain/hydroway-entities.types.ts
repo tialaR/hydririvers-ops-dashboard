@@ -1,7 +1,14 @@
 import type { WaterwayCorridorId } from '@/features/waterway-tracking/domain/waterway-corridor.types';
 
 /** Cargas demo com rotas mock versionadas (ADR 0031). */
-export const HYDROWAY_DEMO_CARGO_IDS = ['CARGO-001', 'CARGO-002', 'CARGO-004'] as const;
+export const HYDROWAY_DEMO_CARGO_IDS = [
+  'CARGO-001',
+  'CARGO-002',
+  'CARGO-003',
+  'CARGO-004',
+  'CARGO-009',
+  'HYD-2026-00020',
+] as const;
 
 export type HydrowayDemoCargoId = (typeof HYDROWAY_DEMO_CARGO_IDS)[number];
 

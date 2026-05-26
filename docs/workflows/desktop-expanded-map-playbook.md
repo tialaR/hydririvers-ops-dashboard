@@ -202,7 +202,7 @@ Validação obrigatória:
 - bottom sheet/action sheet
 - cards mobile
 - mapa mobile
-- `src/app/[locale]/cargas/[id]/cargo-map-immersive-client.tsx`
+- mapa mobile oficial em `src/app/[locale]/cargas/[id]/mapa/` (não editar neste playbook)
 - auth/login/cadastro
 - mocks globais fora do escopo
 

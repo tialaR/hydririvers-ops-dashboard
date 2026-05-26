@@ -893,6 +893,98 @@ const checkpointsCargo001: HydrowayCheckpoint[] = [
   },
 ];
 
+const checkpointsCargo002: HydrowayCheckpoint[] = [
+  {
+    id: 'checkpoint-cargo-002-origin',
+    name: 'Origem Manaus',
+    type: 'origin',
+    coordinates: [-56.11087, -1.83792],
+    cargoId: 'CARGO-002',
+    terminalId: 'terminal-manaus',
+    status: 'completed',
+    label: 'Embarque concluído',
+    shortMessage: 'Farinha ensacada embarcada no terminal Manaus Norte.',
+  },
+  {
+    id: 'checkpoint-cargo-002-current',
+    name: 'Posição atual',
+    type: 'current-cargo',
+    coordinates: [-53.31754, -1.81205],
+    cargoId: 'CARGO-002',
+    status: 'current',
+    label: 'Em trânsito',
+    shortMessage: '25% da rota — Manaus → Belém com tráfego no estuário.',
+  },
+  {
+    id: 'checkpoint-cargo-002-next-terminal',
+    name: 'Próximo: Itacoatiara',
+    type: 'next-terminal',
+    coordinates: [-58.4442, -3.1431],
+    cargoId: 'CARGO-002',
+    terminalId: 'terminal-itacoatiara',
+    status: 'upcoming',
+    label: 'Transbordo programado',
+    shortMessage: 'Confirmar janela de atracação antes de seguir a Belém.',
+  },
+  {
+    id: 'checkpoint-cargo-002-destination',
+    name: 'Destino Belém',
+    type: 'destination',
+    coordinates: [-48.49034, -1.69008],
+    cargoId: 'CARGO-002',
+    terminalId: 'terminal-belem',
+    status: 'upcoming',
+    label: 'Destino final',
+    shortMessage: 'Entrega seca — janela 07–11 maio.',
+  },
+];
+
+const checkpointsCargo003: HydrowayCheckpoint[] = [
+  {
+    id: 'checkpoint-cargo-003-origin',
+    name: 'Origem Santarém',
+    type: 'origin',
+    coordinates: [-54.7083, -2.4431],
+    cargoId: 'CARGO-003',
+    terminalId: 'terminal-santarem',
+    status: 'completed',
+    label: 'Embarque concluído',
+    shortMessage: 'Castanha beneficiada embarcada em Santarém.',
+  },
+  {
+    id: 'checkpoint-cargo-003-current',
+    name: 'Posição atual',
+    type: 'current-cargo',
+    coordinates: [-52.4, -1.1],
+    cargoId: 'CARGO-003',
+    status: 'current',
+    label: 'Em trânsito',
+    shortMessage: '18% da rota — Santarém → Macapá com janela portuária apertada.',
+  },
+  {
+    id: 'checkpoint-cargo-003-risk',
+    name: 'Sinalização em manutenção',
+    type: 'risk-point',
+    coordinates: [-50.0, -0.5],
+    cargoId: 'CARGO-003',
+    alertId: 'alert-signaling-barra-norte',
+    status: 'attention',
+    label: 'Atenção operacional',
+    shortMessage: 'Navegação assistida recomendada no trecho costeiro.',
+  },
+  {
+    id: 'checkpoint-cargo-003-destination',
+    name: 'Destino Macapá/Santana',
+    type: 'destination',
+    coordinates: [-51.1786, 0.0356],
+    cargoId: 'CARGO-003',
+    terminalId: 'terminal-macapa-santana',
+    status: 'upcoming',
+    label: 'Destino final',
+    shortMessage: 'ETA estimado 2d 03h — confirmar slot no terminal.',
+  },
+];
+
 const checkpointsCargo004: HydrowayCheckpoint[] = [
   {
     id: 'checkpoint-cargo-004-origin',
@@ -952,6 +1044,8 @@ const checkpointsCargo004: HydrowayCheckpoint[] = [
 
 export const hydrowayOperationalCheckpointsMock: HydrowayCheckpoint[] = [
   ...checkpointsCargo001,
+  ...checkpointsCargo002,
+  ...checkpointsCargo003,
   ...checkpointsCargo004,
 ];
 
@@ -978,6 +1072,52 @@ export const hydrowayOperationalCargoContextsMock: CargoWaterwayOperationalConte
       'Carga refrigerada Belém→Santarém: calado em atenção no trecho médio; revisar ETA com embarcador.',
     captainSummary:
       'Reduzir velocidade após Abaetetuba; calado 8,5 m vs 9,2 m exigidos — confirmar com prático.',
+  },
+  {
+    cargoId: 'CARGO-002',
+    corridorId: HYDROWAY_OPERATIONAL_CORRIDOR_IDS.amazonasSolimoes,
+    activeSegmentId: 'segment-amazonas-santarem-itacoatiara',
+    originTerminalId: 'terminal-manaus',
+    destinationTerminalId: 'terminal-belem',
+    currentPosition: {
+      coordinates: [-53.31754, -1.81205],
+      updatedAt: MOCK_POSITION_UPDATED_AT,
+      confidence: 'high',
+    },
+    eta: '1d 06h',
+    progress01: 0.25,
+    operationalStatus: 'attention',
+    activeAlertIds: ['alert-traffic-estuario'],
+    nextTerminalId: 'terminal-itacoatiara',
+    nextCheckpointId: 'checkpoint-cargo-002-next-terminal',
+    recommendedLayerMode: 'logistics',
+    businessSummary:
+      'Farinha Manaus→Belém: tráfego intenso no estuário e janela de transbordo em Itacoatiara.',
+    captainSummary:
+      'Coordenar passagem com centro de tráfego fluvial; confirmar calado antes de Itacoatiara.',
+  },
+  {
+    cargoId: 'CARGO-003',
+    corridorId: HYDROWAY_OPERATIONAL_CORRIDOR_IDS.barraNorte,
+    activeSegmentId: 'segment-barra-norte-macapa-belem',
+    originTerminalId: 'terminal-santarem',
+    destinationTerminalId: 'terminal-macapa-santana',
+    currentPosition: {
+      coordinates: [-52.4, -1.1],
+      updatedAt: MOCK_POSITION_UPDATED_AT,
+      confidence: 'medium',
+    },
+    eta: '2d 03h',
+    progress01: 0.18,
+    operationalStatus: 'attention',
+    activeAlertIds: ['alert-signaling-barra-norte'],
+    nextTerminalId: 'terminal-macapa-santana',
+    nextCheckpointId: 'checkpoint-cargo-003-destination',
+    recommendedLayerMode: 'navigation',
+    businessSummary:
+      'Castanha Santarém→Macapá: sinalização em manutenção no trecho costeiro — revisar ETA.',
+    captainSummary:
+      'Ativar redundância de comunicação e reduzir velocidade noturna até Macapá.',
   },
   {
     cargoId: 'CARGO-004',

@@ -1,13 +1,13 @@
 'use client';
 
-import { Suspense, useCallback, useMemo, useState } from 'react';
+import { Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import type { HydrowayMapModel } from '../../domain/hydroway-map-model.types';
 import { HydrowayMapStage } from '../hydroway-map-stage';
 import { useHydrowayMapRuntime } from '../../hooks/use-hydroway-map-runtime';
-import { cargoWaterwayTrackingByCargoId } from '@/features/waterway-tracking/waterway-compat';
+import { getCargoWaterwayTracking } from '@/features/waterway-tracking/waterway-compat';
 
 import { buildMobileRouteSheetViewModel } from '../../utils/mobile-route-view-model';
 
@@ -31,16 +31,24 @@ function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExp
     model,
     preferredProvider: 'maplibre',
     disableLayerTooltips: true,
-    closeLayerPanelOnSelect: false,
     mobileCamera: true,
   });
 
-  const { layerPresetPanelOpen, handleCloseLayerPresetPanel, handleToggleLayerPresetPanel } = runtime;
+  const {
+    layerPresetPanelOpen,
+    handleCloseLayerPresetPanel,
+    handleToggleLayerPresetPanel,
+    maplibreReady,
+    mobileRouteOverviewAppliedCargoId,
+    tryApplyMobileInitialRouteOverview,
+  } = runtime;
 
-  const tracking = useMemo(
-    () => cargoWaterwayTrackingByCargoId.get(cargo.id),
-    [cargo.id],
-  );
+  useEffect(() => {
+    if (!maplibreReady) return;
+    tryApplyMobileInitialRouteOverview();
+  }, [maplibreReady, cargo.id, tryApplyMobileInitialRouteOverview]);
+
+  const tracking = useMemo(() => getCargoWaterwayTracking(cargo.id), [cargo.id]);
 
   const sheetViewModel = useMemo(
     () => buildMobileRouteSheetViewModel(cargo, model, runtime.progressPercent, tracking),
@@ -73,7 +81,11 @@ function MobileHydrowayMapExperienceInner({ cargo, model }: MobileHydrowayMapExp
   }, [handleToggleLayerPresetPanel, infoOpen, layerPresetPanelOpen]);
 
   return (
-    <MobileHydrowayMapShell sheetOpen={infoOpen}>
+    <MobileHydrowayMapShell
+      sheetOpen={infoOpen}
+      routeOverviewAppliedCargoId={mobileRouteOverviewAppliedCargoId}
+      cargoId={model.cargoId}
+    >
       <div className={styles.mapHost}>
         <HydrowayMapStage
           runtime={runtime}

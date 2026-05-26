@@ -209,6 +209,22 @@
   background: color-mix(in srgb, var(--hx-card, #071015) 82%, transparent);
   color: var(--hx-text, #eef7f6);
   cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    transform 120ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 120ms ease,
+    box-shadow 120ms ease,
+    background 120ms ease,
+    border-color 120ms ease;
+}
+
+.closeButton:active {
+  transform: scale(0.94);
+  opacity: 0.9;
+}
+
+.closeButton:focus:not(:focus-visible) {
+  outline: none;
 }
 
 .closeButton:focus-visible {
@@ -266,5 +282,14 @@
 
   .overlay[data-viewport-anchor='flush'][data-visible='true'] .sheet {
     transform: translate3d(0, var(--sheet-translate-y, 0), 0);
+  }
+
+  .closeButton {
+    transition: none;
+  }
+
+  .closeButton:active {
+    transform: none;
+    opacity: 1;
   }
 }

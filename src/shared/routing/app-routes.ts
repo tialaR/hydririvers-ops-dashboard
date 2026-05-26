@@ -2,6 +2,9 @@ import type { AppLocale } from './route-types';
 import { routeSearchParams } from './route-search-params';
 import { normalizeCargoId } from './normalize-cargo-id';
 
+/** Abas do detalhe de carga via `?view=` — mapa oficial usa `cargoMap`, não query. */
+export type CargoDetailTabView = 'jornada' | 'documentos' | 'custos' | 'prioridade';
+
 /** Segmentos sem prefixo de locale (uso com next-intl Link / router + proxy). */
 const intlSegments = {
   login: '/login',
@@ -75,7 +78,7 @@ export const intlAppPaths = {
       `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
     myCargoDetail: (cargoId: string) =>
       `${intlSegments.minhasCargas}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
-    cargoView: (cargoId: string, view: string) =>
+    cargoView: (cargoId: string, view: CargoDetailTabView) =>
       `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}?view=${encodeURIComponent(view)}`,
     cargoMap: (cargoId: string) =>
       `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}/mapa`
@@ -160,7 +163,7 @@ export const appRoutes = {
     publishCargo: (locale: AppLocale) => localizedAppPath(locale, intlAppPaths.cargos.publishCargo),
     cargoDetail: (locale: AppLocale, cargoId: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.cargoDetail(cargoId)),
-    cargoView: (locale: AppLocale, cargoId: string, view: string) =>
+    cargoView: (locale: AppLocale, cargoId: string, view: CargoDetailTabView) =>
       localizedAppPath(locale, intlAppPaths.cargos.cargoView(cargoId, view)),
     myCargoDetail: (locale: AppLocale, cargoId: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId)),

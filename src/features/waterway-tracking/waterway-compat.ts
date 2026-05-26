@@ -1,3 +1,7 @@
+import { isMapEligibleCargoId } from '@/features/cargo/constants/public-marketplace-cargos';
+import { findPublicMarketplaceCargo } from '@/features/cargo/data/resolve-public-marketplace-cargo-list';
+import { normalizeCargoId } from '@/shared/routing/normalize-cargo-id';
+
 import { WATERWAY_CORRIDORS } from './data/waterway-corridors.mock';
 
 export type WaterwayCompatConstraintSeverity = 'info' | 'warning' | 'critical';
@@ -156,10 +160,10 @@ const profiles: CargoWaterwayProfile[] = [
     corridorId: 'corridor-amazonas',
     segmentId: 'segment-manaus-santarem',
     vesselName: 'Comboio Solimoes II',
-    originTerminal: 'Terminal Manaus Norte',
-    destinationTerminal: 'Terminal Santarem Oeste',
-    progressPercent: 8,
-    eta: '3d 17h',
+    originTerminal: 'Terminal Itacoatiara Sul',
+    destinationTerminal: 'Terminal Vila do Conde',
+    progressPercent: 32,
+    eta: '4d 05h',
     signalPercent: 88,
     operationalStatus: 'on-time',
     severity: 'info',
@@ -170,7 +174,133 @@ const profiles: CargoWaterwayProfile[] = [
     co2SavingsPercent: 34,
     priorityLevel: 'standard',
   },
+  {
+    cargoId: 'CARGO-007',
+    corridorId: 'corridor-amazonas',
+    segmentId: 'segment-manaus-santarem',
+    vesselName: 'Solimões Care',
+    originTerminal: 'Terminal Parintins',
+    destinationTerminal: 'Terminal Tabatinga',
+    progressPercent: 55,
+    eta: '7d 02h',
+    signalPercent: 41,
+    operationalStatus: 'attention',
+    severity: 'warning',
+    title: 'Cadeia fria essencial',
+    description: 'Abastecimento territorial com sincronizacao tardia em trechos de baixa cobertura.',
+    documentsReadyPercent: 69,
+    estimatedCost: 315000,
+    co2SavingsPercent: 66,
+    priorityLevel: 'critical',
+  },
+  {
+    cargoId: 'CARGO-009',
+    corridorId: 'corridor-barra-norte',
+    segmentId: 'segment-barra-norte-belem',
+    vesselName: 'Cabotagem Norte 01',
+    originTerminal: 'Terminal Vila do Conde',
+    destinationTerminal: 'Terminal Belém',
+    progressPercent: 12,
+    eta: '5d 18h',
+    signalPercent: 94,
+    operationalStatus: 'on-time',
+    severity: 'info',
+    title: 'Janela portuaria monitorada',
+    description: 'Conexao de cabotagem com manifesto e booking em validacao.',
+    documentsReadyPercent: 92,
+    estimatedCost: 428000,
+    co2SavingsPercent: 52,
+    priorityLevel: 'priority',
+  },
+  {
+    cargoId: 'HYD-2026-00020',
+    corridorId: 'corridor-barra-norte',
+    segmentId: 'segment-amazonas-belem-abaetetuba',
+    vesselName: 'Cabotagem Norte 01',
+    originTerminal: 'Terminal Abaetetuba',
+    destinationTerminal: 'Terminal Vila do Conde',
+    progressPercent: 25,
+    eta: '30–42h',
+    signalPercent: 88,
+    operationalStatus: 'on-time',
+    severity: 'info',
+    title: 'Consolidacao curto curso em cotacao',
+    description: 'Trecho Abaetetuba→Vila do Conde com ETA 30–42h e progresso 25% no mock operacional.',
+    documentsReadyPercent: 78,
+    estimatedCost: 242400,
+    co2SavingsPercent: 52,
+    priorityLevel: 'priority',
+  },
 ];
+
+const VESSEL_NAMES = [
+  'Comboio Rio Negro',
+  'Frio Tapajós',
+  'Tapajós Express',
+  'Marajó Link',
+  'Cabotagem Norte 01',
+  'Comboio Solimoes II',
+] as const;
+
+const SEGMENT_IDS = [
+  'segment-manaus-santarem',
+  'segment-porto-velho-itacoatiara',
+  'segment-miritituba-santarem',
+  'segment-maraba-vila-conde',
+  'segment-barra-norte-belem',
+] as const;
+
+function stableIndex(source: string, modulo: number): number {
+  let hash = 0;
+  for (let index = 0; index < source.length; index += 1) {
+    hash = ((hash << 5) - hash + source.charCodeAt(index)) | 0;
+  }
+  return Math.abs(hash) % modulo;
+}
+
+function derivePublicCargoTracking(cargoId: string): CargoWaterwayTrackingCompat | undefined {
+  if (!isMapEligibleCargoId(cargoId)) {
+    return undefined;
+  }
+
+  const cargo = findPublicMarketplaceCargo(cargoId);
+  const progressPercent =
+    cargo?.status === 'reserved'
+      ? 52
+      : cargo?.status === 'bidding'
+        ? 28
+        : cargo?.status === 'contracting'
+          ? 36
+          : 15;
+  const vesselName = VESSEL_NAMES[stableIndex(cargoId, VESSEL_NAMES.length)];
+  const segmentId = SEGMENT_IDS[stableIndex(`${cargoId}-segment`, SEGMENT_IDS.length)];
+
+  return {
+    cargoId,
+    corridorId: 'corridor-amazonas',
+    segmentId,
+    vesselName,
+    originTerminal: cargo?.origin ?? 'Terminal origem',
+    destinationTerminal: cargo?.destination ?? 'Terminal destino',
+    progressPercent,
+    remainingPercent: Math.max(0, 100 - progressPercent),
+    eta: progressPercent > 50 ? '2d 08h' : '4d 12h',
+    signalPercent: 55 + stableIndex(`${cargoId}-signal`, 40),
+    operationalStatus: progressPercent > 50 ? 'attention' : 'on-time',
+    constraints: [
+      {
+        type: 'traffic',
+        severity: 'info',
+        title: 'Rota publica mock',
+        description: 'Perfil operacional sintetizado para carga publica do marketplace.',
+      },
+    ],
+    documentsReadyPercent: 60 + stableIndex(`${cargoId}-docs`, 35),
+    estimatedCost: 150000 + stableIndex(`${cargoId}-cost`, 200000),
+    co2SavingsPercent: 30 + stableIndex(`${cargoId}-co2`, 30),
+    priorityLevel: 'standard',
+  };
+}
 
 export const cargoWaterwayTrackingMock: CargoWaterwayTrackingCompat[] = profiles.map((profile) => ({
   cargoId: profile.cargoId,
@@ -201,6 +331,16 @@ export const cargoWaterwayTrackingMock: CargoWaterwayTrackingCompat[] = profiles
 export const cargoWaterwayTrackingByCargoId: Map<string, CargoWaterwayTrackingCompat> = new Map(
   cargoWaterwayTrackingMock.map((tracking) => [tracking.cargoId, tracking]),
 );
+
+/** Lookup estável para ids `cargo-00N` e `CARGO-00N`. */
+export function getCargoWaterwayTracking(
+  cargoId: string,
+): CargoWaterwayTrackingCompat | undefined {
+  const normalized = normalizeCargoId(cargoId);
+  return (
+    cargoWaterwayTrackingByCargoId.get(normalized) ?? derivePublicCargoTracking(normalized)
+  );
+}
 
 export function getPrimaryWaterwayConstraint(
   tracking: CargoWaterwayTrackingCompat | undefined,

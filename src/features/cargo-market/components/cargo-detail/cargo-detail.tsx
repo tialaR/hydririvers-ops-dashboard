@@ -3,8 +3,10 @@
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
+import { Link } from '@/core/i18n/navigation';
 import { Card } from '@/shared/ui/card/card';
 import { Button } from '@/shared/ui/button/button';
+import buttonStyles from '@/shared/ui/button/button.module.scss';
 import { Badge } from '@/shared/ui/badge/badge';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import { Tooltip } from '@/shared/ui/tooltip/tooltip';
@@ -16,6 +18,7 @@ import { getCargoProposalVisibility } from '@/features/cargo-market/utils/cargo-
 import { CargoStatusAssistantCard } from '@/features/ai-assist/components/CargoStatusAssistantCard';
 import { cargoProposalSchema } from '@/features/cargo-market/domain/cargo-proposal.schema';
 import { translateMock } from '@/shared/i18n/mock-content';
+import { intlAppPaths } from '@/shared/routing/app-routes';
 import styles from './cargo-detail.module.scss';
 import { getCargoDetailOverviewVisuals } from './cargo-detail-overview-visuals';
 import type { BadgeProps } from '@/shared/ui/badge/badge';
@@ -70,6 +73,7 @@ function translateDocument(t: ReturnType<typeof useTranslations>, name: string) 
 export function CargoDetail({ cargo, viewer }: { cargo: Cargo; viewer?: CargoViewer | null }) {
   const page = useTranslations('pages.cargoDetail');
   const common = useTranslations('common');
+  const tMap = useTranslations('operationsBoard.map');
   const locale = useLocale();
   const { showForHttpStatus } = useHumanizedHttpToast();
   const [proposalCount, setProposalCount] = useState(2);
@@ -230,6 +234,14 @@ export function CargoDetail({ cargo, viewer }: { cargo: Cargo; viewer?: CargoVie
                 river: riverLabel
               })}
             </p>
+            <Link
+              href={intlAppPaths.cargos.cargoMap(cargo.id)}
+              className={`${buttonStyles.button} ${buttonStyles.secondary}`}
+              data-testid="cargo-detail-open-map"
+            >
+              <HydroIcon name="map" size={16} aria-hidden />
+              {tMap('mapRouteOverview')}
+            </Link>
           </div>
         </section>
 

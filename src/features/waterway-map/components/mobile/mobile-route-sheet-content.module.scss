@@ -1,3 +1,5 @@
+@use './mobile-route-sheet-icon-pulse' as pulse;
+
 .content {
   display: grid;
   gap: 0.7rem;
@@ -64,6 +66,7 @@
   color: #8ef5e8;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 0 3px rgba(142, 245, 232, 0.16);
+  @include pulse.route-sheet-vessel-pulse;
 }
 
 .statCard {
@@ -155,7 +158,7 @@
 .syncCard[data-sync='syncing'] .syncCardIcon {
   background: rgba(255, 217, 138, 0.14);
   color: rgba(255, 232, 180, 0.96);
-  animation: syncPulse 1.6s ease-in-out infinite;
+  @include pulse.route-sheet-sync-pulse;
 }
 
 .syncCardHeadline {
@@ -204,17 +207,6 @@
 
 .syncCard[data-sync='offline'] .syncSignalFill {
   background: rgba(176, 200, 210, 0.45);
-}
-
-@keyframes syncPulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 217, 138, 0);
-  }
-
-  50% {
-    box-shadow: 0 0 0 4px rgba(255, 217, 138, 0.18);
-  }
 }
 
 /* Expanded layout */
@@ -343,6 +335,7 @@
   background: linear-gradient(180deg, rgba(20, 216, 196, 0.18), rgba(20, 216, 196, 0.08));
   color: rgba(142, 245, 232, 0.98);
   box-shadow: 0 4px 14px rgba(20, 216, 196, 0.12);
+  @include pulse.route-sheet-icon-pulse;
 }
 
 .nextCardHead {
@@ -507,6 +500,7 @@
   width: 1.6rem;
   height: 1.6rem;
   box-shadow: 0 0 0 3px rgba(142, 245, 232, 0.2);
+  @include pulse.route-sheet-icon-pulse;
 }
 
 .stepperItem[data-state='done'] .stepperMarker {
@@ -629,10 +623,26 @@
 
 @media (prefers-reduced-motion: reduce) {
   .progressFill,
-  .progressVessel,
-  .syncSignalFill,
-  .syncCard[data-sync='syncing'] .syncCardIcon {
-    animation: none;
+  .syncSignalFill {
     transition: none;
+  }
+
+  .progressVessel {
+    animation: none;
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+
+  .syncCard[data-sync='syncing'] .syncCardIcon,
+  .nextWaypointIcon,
+  .stepperItem[data-state='current'] .stepperMarker {
+    animation: none;
+    transform: none;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  .timelineIconCurrent {
+    filter: drop-shadow(0 0 6px rgba(142, 245, 232, 0.28));
   }
 }
