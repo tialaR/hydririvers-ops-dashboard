@@ -25,7 +25,10 @@
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
     "test:hydroway-routes": "playwright test --config=playwright.hydroway-routes.config.ts",
-    "visual:hero-check": "node scripts/phase-visual-check.mjs"
+    "visual:hero-check": "node scripts/phase-visual-check.mjs",
+    "tokens:design": "node tools/design-token-import/generate-design-tokens.mjs",
+    "tokens:ios": "npm run tokens:design",
+    "ds:check": "node tools/design-system/validate-hydro-design-system.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",

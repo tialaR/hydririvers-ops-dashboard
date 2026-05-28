@@ -128,6 +128,17 @@ export function isCargoHydrowayMapPathname(pathname: string): boolean {
   return /^\/cargas\/[^/]+\/mapa$/.test(stripLocaleSegmentPath(pathname));
 }
 
+/** Segmento `/dev` — rotas de laboratório sem `(product-shell)` / AdminChrome. */
+export function isDevSegmentPathname(pathname: string): boolean {
+  const stripped = stripLocaleSegmentPath(pathname);
+  return stripped === '/dev' || stripped.startsWith('/dev/');
+}
+
+/** Lab mobile de lista de cargas — tela isolada sem AdminChrome. */
+export function isDevMobileCargoListLabPathname(pathname: string): boolean {
+  return stripLocaleSegmentPath(pathname) === '/dev/mobile-cargo-list-lab';
+}
+
 /** Rotas que exigem cookie `hydrorivers_session` (mesma ordem semântica que `proxy.ts`). */
 export const middlewarePrivateIntlPaths: readonly string[] = [
   intlAppPaths.dashboard.home,

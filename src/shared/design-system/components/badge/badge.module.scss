@@ -38,3 +38,15 @@
   color: var(--river-text, #9fd4ff);
   border-color: color-mix(in srgb, var(--river-text, #9fd4ff) 28%, transparent);
 }
+
+.tone_danger {
+  background: color-mix(in srgb, rgba(212, 86, 92, 0.16) 100%, transparent);
+  color: #ffb4b8;
+  border-color: color-mix(in srgb, #ffb4b8 28%, transparent);
+}
+
+.density_compact {
+  min-height: 1.25rem;
+  padding: 0.1rem 0.45rem;
+  font-size: 0.62rem;
+}

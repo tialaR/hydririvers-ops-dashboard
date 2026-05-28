@@ -7,12 +7,12 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 import { routing } from '@/core/i18n/routing';
 import '../globals.scss';
-import { AdminChrome } from '@/shared/layout/admin-chrome/admin-chrome';
 import { type Theme, ThemeProvider } from '@/shared/providers/theme-provider';
 import { cookieNames } from '@/shared/http/cookie-names';
 import { ToastProvider } from '@/shared/ui/toast/toast-provider';
 import { MockMode } from '@/shared/ui/mock-mode/mock-mode';
 import { isMockQaUiEnabled } from '@/shared/qa/mock-qa-ui-env';
+import { HydroDesignSystemRoot } from '@/shared/design-system/hydro-design-system-root';
 
 const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
 
@@ -62,11 +62,13 @@ export default async function LocaleLayout({
       <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider initialTheme={initialTheme}>
-            <ToastProvider>
-              <AdminChrome>{children}</AdminChrome>
-              {isMockQaUiEnabled() ? <MockMode /> : null}
-              {shouldRenderAnalytics ? <Analytics /> : null}
-            </ToastProvider>
+            <HydroDesignSystemRoot>
+              <ToastProvider>
+                {children}
+                {isMockQaUiEnabled() ? <MockMode /> : null}
+                {shouldRenderAnalytics ? <Analytics /> : null}
+              </ToastProvider>
+            </HydroDesignSystemRoot>
           </ThemeProvider>
         </NextIntlClientProvider>
       </body>

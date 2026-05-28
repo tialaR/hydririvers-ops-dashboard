@@ -36,6 +36,32 @@
   padding: 1rem;
 }
 
+.role_card {
+  background: var(--ds-surface-card, var(--surface, rgba(8, 14, 22, 0.88)));
+  border-radius: var(--ds-radius-card, 16px);
+}
+
+.role_cardElevated {
+  background: var(--ds-surface-card-elevated, var(--surface-strong, rgba(8, 14, 22, 0.92)));
+  box-shadow: var(--ds-elevation-card, 0 4px 16px rgba(0, 0, 0, 0.12));
+  border-radius: var(--ds-radius-card, 16px);
+}
+
+.role_panel {
+  background: var(--ds-surface-panel, var(--surface, rgba(8, 14, 22, 0.88)));
+  border-radius: var(--ds-radius-panel, 12px);
+}
+
+.role_sheet {
+  background: var(--ds-surface-sheet, var(--surface, rgba(8, 14, 22, 0.88)));
+  border-radius: var(--ds-radius-sheet, 20px);
+}
+
+.role_overlay {
+  background: var(--ds-surface-overlay, rgba(0, 0, 0, 0.45));
+  border-color: transparent;
+}
+
 .interactive {
   cursor: pointer;
   touch-action: manipulation;

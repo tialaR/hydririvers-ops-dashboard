@@ -39,7 +39,7 @@ vi.mock('@/shared/ui/page-shell/page-shell', () => ({
     )
 }));
 
-import ProfilePage from '@/app/[locale]/perfil/page';
+import ProfilePage from '@/app/[locale]/(product-shell)/perfil/page';
 
 describe('profile page', () => {
   beforeEach(() => {

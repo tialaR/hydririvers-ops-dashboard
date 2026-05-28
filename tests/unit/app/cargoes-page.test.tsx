@@ -39,7 +39,7 @@ vi.mock('@/shared/ui/page-shell/page-shell', () => ({
   )
 }));
 
-import CargoesPage from '@/app/[locale]/cargas/page';
+import CargoesPage from '@/app/[locale]/(product-shell)/cargas/page';
 
 describe('cargas page', () => {
   beforeEach(() => {

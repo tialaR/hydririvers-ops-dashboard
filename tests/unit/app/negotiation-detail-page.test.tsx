@@ -46,7 +46,7 @@ vi.mock('@/features/negotiations/components/negotiation-detail/negotiation-detai
   NegotiationDetail: () => <div data-testid="negotiation-detail" />
 }));
 
-import NegotiationDetailPage from '@/app/[locale]/negociacoes/[id]/page';
+import NegotiationDetailPage from '@/app/[locale]/(product-shell)/negociacoes/[id]/page';
 
 describe('negotiation detail page', () => {
   beforeEach(() => {

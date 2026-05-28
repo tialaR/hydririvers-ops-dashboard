@@ -503,6 +503,83 @@
       "disclaimerAria": "Note on internal use",
       "disclaimer": "This screen is an internal/documentation tool to guide new developers and evaluators. It does not run scripts or read files from disk—it only summarizes what is already in the repository."
     },
+    "devMobileCargoListLab": {
+      "eyebrow": "Operations",
+      "title": "Cargoes",
+      "subtitle": "{total, plural, one {# waterway operation} other {# waterway operations}}",
+      "counter": "{count} of {total}",
+      "filterShortcutLabel": "Filters",
+      "filterShortcutAria": "Open filters",
+      "hero": {
+        "eyebrow": "Operations",
+        "subtitle": "being tracked",
+        "active": "Operation",
+        "attention": "Attention",
+        "open": "Open"
+      },
+      "routeOrigin": "Origin",
+      "routeDestination": "Destination",
+      "searchPlaceholder": "Search cargo, origin, or destination",
+      "searchAria": "Search cargoes",
+      "searchClearAria": "Clear search",
+      "dock": {
+        "aria": "Lab bottom navigation",
+        "cargas": "Cargoes",
+        "filters": "Filters",
+        "attention": "Attention",
+        "map": "Map"
+      },
+      "filtersAria": "Filter cargoes by status",
+      "listAria": "Cargo list",
+      "emptyTitle": "No cargoes available",
+      "emptyDescription": "When new operations arrive, they will appear here.",
+      "emptyFilteredTitle": "No results",
+      "emptyFilteredDescription": "Adjust search or filters to see other cargoes.",
+      "clearFiltersAction": "Clear filters",
+      "desktopGate": "Mobile experience under validation. Use a mobile viewport.",
+      "themeToggleAria": "Toggle light or dark theme",
+      "filters": {
+        "all": "All",
+        "open": "Open",
+        "quote": "Quote",
+        "operation": "Operation",
+        "bidding": "Bidding",
+        "contracting": "Contracting",
+        "reserved": "In operation",
+        "boarded": "In transit",
+        "attention": "Attention"
+      },
+      "actionSheet": {
+        "ariaLabel": "Selected cargo options",
+        "close": "Close",
+        "comingSoon": "Coming soon",
+        "selectedSubtitle": "Selected cargo",
+        "overviewTitle": "Overview",
+        "overviewDescription": "Immersive map, progress, and waterway route.",
+        "journeyTitle": "Journey",
+        "journeyDescription": "Events, checkpoints, and timeline.",
+        "documentsTitle": "Documents",
+        "documentsDescription": "Document pack, pending items, and validations.",
+        "costsTitle": "Costs",
+        "costsDescription": "Financial summary, savings, and breakdown.",
+        "priorityTitle": "Priority"
+      },
+      "filterSheet": {
+        "title": "Filters",
+        "subtitle": "Refine the cargo list",
+        "statusSection": "Status",
+        "attentionSection": "Attention",
+        "attentionOnly": "Only cargoes that need attention",
+        "originSection": "Origin",
+        "destinationSection": "Destination",
+        "clear": "Clear filters",
+        "apply": "Apply"
+      },
+      "mapHint": {
+        "title": "Select a cargo",
+        "description": "Tap a card in the list to open the immersive map for that operation."
+      }
+    },
     "cargoes": {
       "eyebrow": "Marketplace",
       "title": "Public cargoes",

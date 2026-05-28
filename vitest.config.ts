@@ -27,6 +27,23 @@ export default defineConfig({
     include: [
       'tests/unit/**/*.test.ts',
       'tests/unit/features/negotiations/negotiation-board-render.test.tsx',
+      'tests/unit/features/cargo/mobile-cargo-card.test.tsx',
+      'tests/unit/features/cargo/mobile-cargo-empty-state.test.tsx',
+      'tests/unit/app/mobile-cargo-list-lab-page.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-button.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-popover.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-sheet.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-tab-bar.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-segmented-control.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-switch.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-search-field.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-text-field.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-toolbar.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-window.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-progress.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-scroll-edge.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-surface.test.tsx',
+      'tests/unit/shared/design-system/hydro-design-system-boundaries.test.ts',
       'tests/integration/**/*.test.ts'
     ]
   }

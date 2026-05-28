@@ -1,0 +1,10 @@
+/* Neutral full-viewport host for dev/lab routes — no dashboard padding or chrome. */
+
+.root {
+  display: block;
+  width: 100%;
+  min-height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}

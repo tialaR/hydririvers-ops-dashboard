@@ -1,0 +1,180 @@
+/* Liquid Glass Switch — Apple Toggle / Switch recipe, tokenized with local fallbacks. */
+
+.root {
+  --switch-width: 64px;
+  --switch-height: 28px;
+  --switch-padding: 2px;
+  --switch-knob-width: 39px;
+  --switch-knob-height: 24px;
+  --switch-radius: var(--hydro-radius-pill, 100px);
+  --switch-checked-light: var(--hydro-color-success, #34c759);
+  --switch-checked-dark: #30d158;
+  --switch-unchecked-light: rgba(60, 60, 67, 0.3);
+  --switch-unchecked-dark: rgba(235, 235, 245, 0.3);
+  --switch-knob-bg: #ffffff;
+  --switch-travel: calc(
+    var(--switch-width) - (2 * var(--switch-padding)) - var(--switch-knob-width)
+  );
+  --switch-motion: var(--hydro-motion-control, 180ms);
+  --switch-easing: var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+  --switch-focus-color: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #0088ff)
+  );
+  --switch-checked-bg: var(--switch-checked-light);
+  --switch-unchecked-bg: var(
+    --hydro-color-fill-secondary,
+    var(--switch-unchecked-light)
+  );
+  --switch-label-color: var(--hydro-color-label-primary, #000000);
+
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+  color: var(--switch-label-color);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.labelText {
+  font-size: 15px;
+  line-height: 20px;
+  letter-spacing: -0.23px;
+}
+
+.switchControl {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  width: var(--switch-width);
+  height: var(--switch-height);
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.track {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: var(--switch-padding);
+  border-radius: var(--switch-radius);
+  background: var(--switch-unchecked-bg);
+  transition:
+    background-color var(--switch-motion) var(--switch-easing),
+    transform var(--switch-motion) var(--switch-easing);
+}
+
+.knob {
+  width: var(--switch-knob-width);
+  height: var(--switch-knob-height);
+  border-radius: var(--switch-radius);
+  background: var(--switch-knob-bg);
+  transform: translateX(0);
+  transition: transform var(--switch-motion) var(--switch-easing);
+}
+
+.input:checked + .track {
+  background: var(--switch-checked-bg);
+}
+
+.input:checked + .track .knob {
+  transform: translateX(var(--switch-travel));
+}
+
+.root:has(.input:disabled) {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.root:has(.input:disabled) .input {
+  cursor: not-allowed;
+}
+
+.switchControl:has(.input:active:not(:disabled)) .track {
+  transform: scale(0.98);
+}
+
+.input:focus {
+  outline: none;
+}
+
+.input:focus-visible + .track {
+  outline: 2px solid color-mix(in srgb, var(--switch-focus-color) 72%, transparent);
+  outline-offset: 2px;
+}
+
+/* Theme: light */
+.root[data-tone='light'] {
+  --switch-checked-bg: var(--switch-checked-light);
+  --switch-unchecked-bg: var(--switch-unchecked-light);
+  --switch-label-color: #000000;
+}
+
+/* Theme: dark */
+.root[data-tone='dark'] {
+  --switch-checked-bg: var(--switch-checked-dark);
+  --switch-unchecked-bg: var(--switch-unchecked-dark);
+  --switch-label-color: #ffffff;
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .root[data-tone='auto'] {
+  --switch-checked-bg: var(--switch-checked-light);
+  --switch-unchecked-bg: var(--switch-unchecked-light);
+  --switch-label-color: #000000;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .root[data-tone='auto'] {
+  --switch-checked-bg: var(--switch-checked-dark);
+  --switch-unchecked-bg: var(--switch-unchecked-dark);
+  --switch-label-color: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .root[data-tone='auto'] {
+    --switch-checked-bg: var(--switch-checked-light);
+    --switch-unchecked-bg: var(--switch-unchecked-light);
+    --switch-label-color: #000000;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .root[data-tone='auto'] {
+    --switch-checked-bg: var(--switch-checked-dark);
+    --switch-unchecked-bg: var(--switch-unchecked-dark);
+    --switch-label-color: #ffffff;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track,
+  .knob {
+    transition: none;
+  }
+
+  .switchControl:has(.input:active:not(:disabled)) .track {
+    transform: none;
+  }
+}

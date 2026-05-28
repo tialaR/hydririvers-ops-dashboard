@@ -1,0 +1,16 @@
+{
+  "Mode": {
+    "$type": "string",
+    "$value": "Dark",
+    "$extensions": {
+      "com.figma.variableId": "VariableID:fc91c352cab441e0f5f9c4b4209aa51f2f07ff0e/5915:27",
+      "com.figma.scopes": [
+        "ALL_SCOPES"
+      ],
+      "com.figma.type": "string"
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Dark"
+  }
+}
