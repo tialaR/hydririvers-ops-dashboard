@@ -1,13 +1,12 @@
-/* Round 6 minimal floating dock: active black capsule + ghost icon buttons. */
+/* Round 7 stable minimal floating dock: translucent capsule + circular active lens. */
 
 .root {
-  --dock-motion: 250ms;
-  --dock-bubble-motion: 420ms;
-  --dock-easing: cubic-bezier(0.18, 0.95, 0.18, 1);
-  --dock-active-color: rgb(248 250 248 / 96%);
-  --dock-inactive-color: rgb(236 240 238 / 58%);
-  --dock-pill: rgb(12 13 13 / 84%);
-  --dock-ghost: rgb(255 255 255 / 10%);
+  --dock-motion: 210ms;
+  --dock-bubble-motion: 320ms;
+  --dock-easing: cubic-bezier(0.2, 0.85, 0.2, 1);
+  --dock-active-color: rgb(18 19 19 / 96%);
+  --dock-inactive-color: rgb(236 240 238 / 64%);
+  --dock-track: rgb(8 9 9 / 72%);
   --dock-font-family: var(
     --hydro-font-family-system,
     -apple-system,
@@ -21,8 +20,11 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   padding-inline: 18px;
-  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 14px);
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  box-sizing: border-box;
   font-family: var(--dock-font-family);
   pointer-events: none;
 }
@@ -31,21 +33,23 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  width: auto;
-  min-width: min(100%, 326px);
-  max-width: calc(100vw - 32px);
+  justify-content: space-between;
+  width: min(312px, calc(100vw - 40px));
   height: 62px;
   padding: 6px;
   border-radius: 999px;
-  background: transparent;
-  border: 0;
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  box-shadow: none;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    var(--dock-track);
+  border: 1px solid rgb(255 255 255 / 9%);
+  -webkit-backdrop-filter: blur(26px) saturate(1.12);
+  backdrop-filter: blur(26px) saturate(1.12);
+  box-shadow:
+    0 16px 30px rgb(0 0 0 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
   pointer-events: auto;
-  overflow: visible;
+  overflow: hidden;
+  isolation: isolate;
 }
 
 .activeBubble {
@@ -53,16 +57,16 @@
   top: 6px;
   bottom: 6px;
   left: 6px;
+  z-index: 0;
+  width: 50px;
   border-radius: 999px;
   background:
-    radial-gradient(circle at 34% 0%, rgb(255 255 255 / 12%), transparent 64%),
-    linear-gradient(180deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1%)),
-    var(--dock-pill);
-  border: 1px solid rgb(255 255 255 / 8%);
+    radial-gradient(circle at 34% 12%, rgb(255 255 255 / 100%), rgb(246 247 246 / 94%) 52%, rgb(212 216 212 / 90%));
+  border: 1px solid rgb(255 255 255 / 50%);
   box-shadow:
-    0 18px 28px rgb(0 0 0 / 28%),
-    inset 0 1px 0 rgb(255 255 255 / 10%),
-    inset 0 -12px 22px rgb(0 0 0 / 18%);
+    0 10px 18px rgb(0 0 0 / 34%),
+    inset 0 1px 0 rgb(255 255 255 / 85%),
+    inset 0 -10px 18px rgb(0 0 0 / 10%);
   pointer-events: none;
   transition:
     transform var(--dock-bubble-motion) var(--dock-easing),
@@ -75,48 +79,31 @@
 .item {
   position: relative;
   z-index: 1;
-  flex: 0 0 48px;
+  flex: 0 0 50px;
   display: inline-flex;
-  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 999px;
   color: var(--dock-inactive-color);
-  background:
-    radial-gradient(circle at 34% 0%, rgb(255 255 255 / 12%), transparent 64%),
-    rgb(255 255 255 / 8%);
-  -webkit-backdrop-filter: blur(24px) saturate(1.1);
-  backdrop-filter: blur(24px) saturate(1.1);
-  box-shadow:
-    0 10px 20px rgb(0 0 0 / 18%),
-    inset 0 1px 0 rgb(255 255 255 / 12%);
+  background: transparent;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    width var(--dock-bubble-motion) var(--dock-easing),
-    min-width var(--dock-bubble-motion) var(--dock-easing),
-    flex-basis var(--dock-bubble-motion) var(--dock-easing),
-    transform 140ms var(--dock-easing),
+    transform 150ms var(--dock-easing),
     color var(--dock-motion) var(--dock-easing),
-    background var(--dock-motion) var(--dock-easing),
-    box-shadow var(--dock-motion) var(--dock-easing);
+    opacity var(--dock-motion) var(--dock-easing),
+    filter var(--dock-motion) var(--dock-easing);
 }
 
 .itemActive {
-  flex-basis: 128px;
-  width: 128px;
-  min-width: 128px;
   color: var(--dock-active-color);
-  background: transparent;
-  box-shadow: none;
 }
 
 .icon {
@@ -132,7 +119,7 @@
 .icon :global(svg) {
   width: 22px;
   height: 22px;
-  stroke-width: 1.8;
+  stroke-width: 1.85;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
@@ -141,46 +128,21 @@
   transform: translateY(-1px) scale(1.04);
 }
 
-.label {
-  display: block;
-  max-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 0;
-  transform: translateX(-6px);
-  font-size: 13px;
-  line-height: 16px;
-  font-weight: 720;
-  letter-spacing: -0.02em;
-  transition:
-    max-width var(--dock-bubble-motion) var(--dock-easing),
-    opacity var(--dock-motion) var(--dock-easing),
-    transform var(--dock-motion) var(--dock-easing);
-}
-
-.itemActive .label {
-  max-width: 78px;
-  opacity: 1;
-  transform: translateX(0);
-}
-
+.label,
 .activeArrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 14px;
-  height: 14px;
-  opacity: 0.74;
-  transform: rotate(45deg);
-  font-size: 12px;
-  line-height: 1;
-  transition: transform var(--dock-motion) var(--dock-easing);
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 
 .badge {
   position: absolute;
   top: 4px;
-  right: 6px;
+  right: 4px;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -198,11 +160,11 @@
 }
 
 .item:active:not(:disabled) {
-  transform: scale(0.88);
+  transform: scale(0.86);
 }
 
 .itemActive:active:not(:disabled) {
-  transform: scale(0.96);
+  transform: scale(0.92);
 }
 
 .item:focus {
@@ -217,9 +179,7 @@
 @media (prefers-reduced-motion: reduce) {
   .activeBubble,
   .item,
-  .icon,
-  .label,
-  .activeArrow {
+  .icon {
     transition: none;
   }
 

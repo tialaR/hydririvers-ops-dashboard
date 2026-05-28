@@ -1661,3 +1661,134 @@
     transform: translateY(0) scale(1);
   }
 }
+
+/* Round 7 — stability pass: no horizontal bleed, hidden mobile scrollbars, stable sheets. */
+:global(html),
+:global(body) {
+  overflow-x: hidden;
+}
+
+.root,
+.viewport,
+.listSection,
+.listScroller {
+  max-width: 100%;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+
+.root * {
+  box-sizing: border-box;
+}
+
+.listScroller {
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-inline: clamp(16px, 4vw, var(--mobile-cargo-list-page-padding));
+}
+
+.listScroller::-webkit-scrollbar,
+.cardActionSheet::-webkit-scrollbar,
+.cardActionList::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.filterSheetOverlay :global([class*='content']),
+.sheetOverlay :global([class*='content']),
+.mapHintSheetOverlay :global([class*='content']) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filterSheetOverlay :global([class*='content'])::-webkit-scrollbar,
+.sheetOverlay :global([class*='content'])::-webkit-scrollbar,
+.mapHintSheetOverlay :global([class*='content'])::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.dockHost {
+  inset-inline: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  padding-inline: 0;
+}
+
+.root[data-sheet-open='true'] .dockHost {
+  display: none;
+}
+
+.cardActionOverlay,
+.sheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay {
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.cardActionOverlay[data-open='true'],
+.sheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'] {
+  visibility: visible;
+}
+
+.cardActionOverlay:not([data-open='true']) {
+  pointer-events: none;
+  opacity: 0;
+  backdrop-filter: none;
+}
+
+.cardActionOverlay:not([data-open='true']) .cardActionSheet {
+  opacity: 0;
+  transform: translateY(110%) scale(0.985);
+}
+
+.cardActionSheet {
+  max-height: min(82dvh, 680px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cardActionList {
+  max-height: min(44dvh, 380px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cardActionTitle {
+  max-width: calc(100vw - 118px);
+}
+
+.filterScroll,
+.filterSheetBody,
+.filterSheetChips {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filterScroll::-webkit-scrollbar,
+.filterSheetBody::-webkit-scrollbar,
+.filterSheetChips::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.searchField:focus-within,
+.filterChip:active:not(:disabled),
+.headerFilterButton:active,
+.compactFilterButton:active,
+.cardButton:active,
+.cardActionRow:active:not(:disabled) {
+  will-change: transform, filter;
+}

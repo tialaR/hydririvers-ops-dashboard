@@ -141,11 +141,6 @@ export function LiquidGlassBottomDock({
                 {item.icon}
               </span>
               <span className={styles.label}>{item.label}</span>
-              {isActive ? (
-                <span className={styles.activeArrow} aria-hidden>
-                  ↑
-                </span>
-              ) : null}
               {item.badge != null ? (
                 <span className={styles.badge} aria-label={`${item.label}: ${item.badge}`}>
                   {item.badge}

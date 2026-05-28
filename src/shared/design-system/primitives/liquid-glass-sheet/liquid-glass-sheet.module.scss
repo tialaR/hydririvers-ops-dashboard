@@ -539,3 +539,35 @@
     opacity: 1;
   }
 }
+
+/* Round 7 stability: closed sheets are fully non-interactive and hidden after fade. */
+.overlay {
+  visibility: hidden;
+  transition:
+    opacity var(--sheet-motion) var(--sheet-easing),
+    visibility 0ms linear var(--sheet-motion);
+}
+
+.overlay[data-open='true'] {
+  visibility: visible;
+  transition:
+    opacity var(--sheet-motion) var(--sheet-easing),
+    visibility 0ms linear 0ms;
+}
+
+.sheet[data-open='false'] {
+  opacity: 0;
+  transform: translateY(110%) scale(0.985);
+}
+
+.content[data-scrollable='true'],
+.content[data-scrollable='false'] {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
