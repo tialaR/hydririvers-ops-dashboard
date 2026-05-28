@@ -1,11 +1,13 @@
-/* Round 5 floating neumorphic dock. */
+/* Round 6 minimal floating dock: active black capsule + ghost icon buttons. */
 
 .root {
-  --dock-motion: 260ms;
-  --dock-easing: cubic-bezier(0.16, 1, 0.3, 1);
-  --dock-bubble-motion: 340ms;
-  --dock-active-color: #d9ffd0;
-  --dock-inactive-color: rgb(236 239 240 / 62%);
+  --dock-motion: 250ms;
+  --dock-bubble-motion: 420ms;
+  --dock-easing: cubic-bezier(0.18, 0.95, 0.18, 1);
+  --dock-active-color: rgb(248 250 248 / 96%);
+  --dock-inactive-color: rgb(236 240 238 / 58%);
+  --dock-pill: rgb(12 13 13 / 84%);
+  --dock-ghost: rgb(255 255 255 / 10%);
   --dock-font-family: var(
     --hydro-font-family-system,
     -apple-system,
@@ -19,8 +21,8 @@
   display: flex;
   justify-content: center;
   width: 100%;
-  padding-inline: 14px;
-  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  padding-inline: 18px;
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 14px);
   font-family: var(--dock-font-family);
   pointer-events: none;
 }
@@ -28,137 +30,157 @@
 .track {
   position: relative;
   display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  width: min(100%, 374px);
-  height: 78px;
-  padding: 8px;
-  border-radius: 30px;
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)),
-    rgb(35 41 45 / 78%);
-  border: 1px solid rgb(255 255 255 / 12%);
-  -webkit-backdrop-filter: blur(34px) saturate(1.18);
-  backdrop-filter: blur(34px) saturate(1.18);
-  box-shadow:
-    -12px -12px 24px rgb(255 255 255 / 7%),
-    14px 16px 28px rgb(0 0 0 / 44%),
-    inset 0 1px 0 rgb(255 255 255 / 16%),
-    inset 0 -18px 24px rgb(0 0 0 / 10%);
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: auto;
+  min-width: min(100%, 326px);
+  max-width: calc(100vw - 32px);
+  height: 62px;
+  padding: 6px;
+  border-radius: 999px;
+  background: transparent;
+  border: 0;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
   pointer-events: auto;
-  overflow: hidden;
-}
-
-.track::after {
-  content: '';
-  position: absolute;
-  inset-inline: 22px;
-  top: 1px;
-  height: 1px;
-  background: rgb(255 255 255 / 30%);
-  opacity: 0.55;
-}
-
-.track[data-tone='light'],
-.root[data-tone='light'] .track {
-  --dock-active-color: #111;
-  --dock-inactive-color: rgb(60 60 67 / 68%);
-  background: rgb(242 242 247 / 78%);
+  overflow: visible;
 }
 
 .activeBubble {
   position: absolute;
-  top: 8px;
-  bottom: 8px;
-  left: 8px;
-  border-radius: 24px;
+  top: 6px;
+  bottom: 6px;
+  left: 6px;
+  border-radius: 999px;
   background:
-    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 22%), transparent 60%),
-    linear-gradient(145deg, rgb(255 255 255 / 24%), rgb(255 255 255 / 4%)),
-    rgb(80 88 90 / 70%);
-  border: 1px solid rgb(255 255 255 / 20%);
+    radial-gradient(circle at 34% 0%, rgb(255 255 255 / 12%), transparent 64%),
+    linear-gradient(180deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1%)),
+    var(--dock-pill);
+  border: 1px solid rgb(255 255 255 / 8%);
   box-shadow:
-    -8px -8px 18px rgb(255 255 255 / 10%),
-    10px 12px 22px rgb(0 0 0 / 36%),
-    inset 0 1px 0 rgb(255 255 255 / 24%);
+    0 18px 28px rgb(0 0 0 / 28%),
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    inset 0 -12px 22px rgb(0 0 0 / 18%);
   pointer-events: none;
   transition:
     transform var(--dock-bubble-motion) var(--dock-easing),
     width var(--dock-bubble-motion) var(--dock-easing),
     opacity var(--dock-motion) var(--dock-easing);
   will-change: transform, width;
+  opacity: 1;
 }
 
 .item {
   position: relative;
   z-index: 1;
-  flex: 1 1 0;
-  display: flex;
-  flex-direction: column;
+  flex: 0 0 48px;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  min-width: 0;
+  gap: 8px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
   margin: 0;
-  padding: 7px 4px 6px;
+  padding: 0;
   border: 0;
-  border-radius: 24px;
-  background: transparent;
+  border-radius: 999px;
   color: var(--dock-inactive-color);
+  background:
+    radial-gradient(circle at 34% 0%, rgb(255 255 255 / 12%), transparent 64%),
+    rgb(255 255 255 / 8%);
+  -webkit-backdrop-filter: blur(24px) saturate(1.1);
+  backdrop-filter: blur(24px) saturate(1.1);
+  box-shadow:
+    0 10px 20px rgb(0 0 0 / 18%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform 130ms var(--dock-easing),
+    width var(--dock-bubble-motion) var(--dock-easing),
+    min-width var(--dock-bubble-motion) var(--dock-easing),
+    flex-basis var(--dock-bubble-motion) var(--dock-easing),
+    transform 140ms var(--dock-easing),
     color var(--dock-motion) var(--dock-easing),
-    opacity var(--dock-motion) var(--dock-easing);
+    background var(--dock-motion) var(--dock-easing),
+    box-shadow var(--dock-motion) var(--dock-easing);
 }
 
 .itemActive {
+  flex-basis: 128px;
+  width: 128px;
+  min-width: 128px;
   color: var(--dock-active-color);
-}
-
-.itemActive .icon {
-  transform: translateY(-1px) scale(1.04);
-}
-
-.itemActive .label {
-  color: var(--dock-active-color);
-  text-shadow: 0 0 10px rgb(185 240 138 / 18%);
+  background: transparent;
+  box-shadow: none;
 }
 
 .icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
-  height: 25px;
+  width: 24px;
+  height: 24px;
   line-height: 1;
   transition: transform var(--dock-motion) var(--dock-easing);
 }
 
 .icon :global(svg) {
-  width: 23px;
-  height: 23px;
+  width: 22px;
+  height: 22px;
+  stroke-width: 1.8;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
+.itemActive .icon {
+  transform: translateY(-1px) scale(1.04);
+}
+
 .label {
-  max-width: 100%;
+  display: block;
+  max-width: 0;
   overflow: hidden;
-  text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 11px;
-  line-height: 13px;
-  font-weight: 650;
-  letter-spacing: -0.015em;
+  opacity: 0;
+  transform: translateX(-6px);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  transition:
+    max-width var(--dock-bubble-motion) var(--dock-easing),
+    opacity var(--dock-motion) var(--dock-easing),
+    transform var(--dock-motion) var(--dock-easing);
+}
+
+.itemActive .label {
+  max-width: 78px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.activeArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  opacity: 0.74;
+  transform: rotate(45deg);
+  font-size: 12px;
+  line-height: 1;
+  transition: transform var(--dock-motion) var(--dock-easing);
 }
 
 .badge {
   position: absolute;
-  top: 5px;
-  right: 10px;
+  top: 4px;
+  right: 6px;
   min-width: 16px;
   height: 16px;
   padding: 0 4px;
@@ -176,7 +198,11 @@
 }
 
 .item:active:not(:disabled) {
-  transform: scale(0.92);
+  transform: scale(0.88);
+}
+
+.itemActive:active:not(:disabled) {
+  transform: scale(0.96);
 }
 
 .item:focus {
@@ -184,18 +210,21 @@
 }
 
 .item:focus-visible {
-  outline: 2px solid rgb(185 240 138 / 42%);
-  outline-offset: 2px;
+  outline: 2px solid rgb(255 255 255 / 28%);
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .activeBubble,
   .item,
-  .icon {
+  .icon,
+  .label,
+  .activeArrow {
     transition: none;
   }
 
-  .item:active:not(:disabled) {
+  .item:active:not(:disabled),
+  .itemActive:active:not(:disabled) {
     transform: none;
   }
 }

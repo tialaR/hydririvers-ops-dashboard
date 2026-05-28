@@ -484,3 +484,58 @@
     transform: none;
   }
 }
+
+/* Round 6: softer physical sheet motion. */
+.overlay {
+  --sheet-motion: 390ms;
+  --sheet-easing: cubic-bezier(0.18, 0.95, 0.18, 1);
+}
+
+.overlay[data-open='true'] {
+  animation: round6OverlayFade 280ms var(--sheet-easing) both;
+}
+
+.sheet {
+  transform: translateY(34px) scale(0.968);
+  transform-origin: center bottom;
+  will-change: transform, opacity, height;
+}
+
+.sheet[data-open='true'] {
+  transform: translateY(0) scale(1);
+}
+
+.sheet[data-draggable='true'][data-open='true'] .grabber {
+  animation: round6SheetGrabberPulse 640ms var(--sheet-easing) 80ms both;
+}
+
+.controlButton:active:not(:disabled),
+.primaryButton:active:not(:disabled) {
+  transform: scale(0.9);
+}
+
+@keyframes round6OverlayFade {
+  from {
+    opacity: 0;
+    backdrop-filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    backdrop-filter: blur(14px);
+  }
+}
+
+@keyframes round6SheetGrabberPulse {
+  from {
+    transform: scaleX(0.62);
+    opacity: 0.46;
+  }
+  54% {
+    transform: scaleX(1.22);
+    opacity: 0.86;
+  }
+  to {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+}

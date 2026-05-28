@@ -1,6 +1,6 @@
 'use client';
 
-import type { PointerEvent as ReactPointerEvent, RefObject } from 'react';
+import type { CSSProperties, PointerEvent as ReactPointerEvent, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -517,11 +517,13 @@ export function MobileCargoLabCard({
   onPress,
   routeOriginLabel = 'Origem',
   routeDestinationLabel = 'Destino',
+  motionIndex = 0,
 }: {
   item: MobileCargoListLabItem;
   onPress: (item: MobileCargoListLabItem) => void;
   routeOriginLabel?: string;
   routeDestinationLabel?: string;
+  motionIndex?: number;
 }) {
   const statusTone = getStatusTone(item.statusLabel);
   const reliabilityTone = getReliabilityTone(item.etaLabel);
@@ -531,6 +533,7 @@ export function MobileCargoLabCard({
       className={styles.cardSurface}
       data-attention={item.needsAttention ? 'true' : undefined}
       data-status-tone={statusTone}
+      style={{ '--motion-index': motionIndex } as CSSProperties}
     >
       <button
         type="button"
@@ -1088,7 +1091,7 @@ export function MobileCargoListLab({
                 aria-label={t('filtersAria')}
               >
                 <div className={styles.filterChips}>
-                  {filterChipItems.map((chip) => {
+                  {filterChipItems.map((chip, chipIndex) => {
                     const isActive = statusFilter === chip.id;
                     return (
                       <button
@@ -1098,6 +1101,7 @@ export function MobileCargoListLab({
                         aria-selected={isActive}
                         className={styles.filterChip}
                         data-active={isActive ? 'true' : undefined}
+                        style={{ '--motion-index': chipIndex } as CSSProperties}
                         disabled={chip.disabled}
                         onClick={() =>
                           handleStatusChipChange(chip.id as MobileCargoStatusFilter)
@@ -1122,10 +1126,11 @@ export function MobileCargoListLab({
               />
             ) : (
               <div className={styles.list} data-testid="cargo-lab-list">
-                {listItems.map((item) => (
+                {listItems.map((item, cardIndex) => (
                   <MobileCargoLabCard
                     key={item.id}
                     item={item}
+                    motionIndex={cardIndex}
                     routeOriginLabel={t('routeOrigin')}
                     routeDestinationLabel={t('routeDestination')}
                     onPress={openCargoActionsSheet}

@@ -1266,3 +1266,398 @@
 .sheetHeader {
   padding-block: 0 10px;
 }
+
+/* Round 6 — motion pass based on pill nav + card stack references. */
+.root {
+  --round6-spring: cubic-bezier(0.18, 0.95, 0.18, 1);
+  --round6-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.header {
+  animation: round6HeaderIn 520ms var(--round6-spring) both;
+}
+
+.controls {
+  animation: round6ControlsIn 560ms var(--round6-spring) 70ms both;
+}
+
+.searchField {
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+.searchField::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 16% 0%, rgb(255 255 255 / 15%), transparent 46%);
+  opacity: 0.54;
+  pointer-events: none;
+  transition:
+    opacity 240ms var(--round6-spring),
+    transform 240ms var(--round6-spring);
+}
+
+.searchField::after {
+  content: '';
+  position: absolute;
+  inset: 8px 14px auto;
+  height: 1px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 34%);
+  opacity: 0;
+  transform: scaleX(0.58);
+  transform-origin: left center;
+  transition:
+    opacity 260ms var(--round6-spring),
+    transform 260ms var(--round6-spring);
+  pointer-events: none;
+}
+
+.searchField:focus-within {
+  transform: translateY(-2px) scale(1.015);
+  border-color: rgb(255 255 255 / 22%);
+  box-shadow:
+    -14px -14px 26px rgb(255 255 255 / 8%),
+    18px 20px 34px rgb(0 0 0 / 44%),
+    inset 0 1px 0 rgb(255 255 255 / 19%),
+    inset 0 -18px 28px rgb(0 0 0 / 10%);
+}
+
+.searchField:focus-within::before {
+  opacity: 0.74;
+  transform: translateX(6px) scale(1.04);
+}
+
+.searchField:focus-within::after {
+  opacity: 0.72;
+  transform: scaleX(1);
+}
+
+.searchInput,
+.searchIcon,
+.searchClearButton {
+  position: relative;
+  z-index: 1;
+}
+
+.searchClearButton:active {
+  transform: scale(0.88);
+}
+
+.filterChip {
+  overflow: hidden;
+  transform-origin: center;
+  animation: round6ChipIn 460ms var(--round6-spring) both;
+  animation-delay: calc(120ms + (var(--motion-index, 0) * 48ms));
+}
+
+.filterChip::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 28%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+.filterChip:active:not(:disabled) {
+  transform: scale(0.9) translateY(1px);
+  filter: brightness(1.08);
+}
+
+.filterChip:active:not(:disabled)::after {
+  animation: round6TapBloom 360ms var(--round6-snappy) both;
+}
+
+.filterChip[data-active='true'] {
+  background:
+    radial-gradient(circle at 30% 0%, rgb(255 255 255 / 24%), transparent 68%),
+    linear-gradient(145deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 3%)),
+    rgb(56 62 64 / 86%);
+}
+
+.list {
+  perspective: 900px;
+}
+
+.cardSurface {
+  transform-origin: center top;
+  animation: round6CardIn 620ms var(--round6-spring) both;
+  animation-delay: calc(160ms + (var(--motion-index, 0) * 90ms));
+}
+
+.cardSurface:hover {
+  transform: translateY(-1px);
+}
+
+.cardSurface::before {
+  transition:
+    opacity 180ms var(--round6-spring),
+    transform 180ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active)::before {
+  opacity: 0.82;
+  transform: translateX(8px) scale(1.04);
+}
+
+.cardButton {
+  transform-origin: center;
+  transition:
+    transform 170ms var(--round6-spring),
+    filter 170ms var(--round6-spring),
+    opacity 170ms var(--round6-spring);
+}
+
+.cardButton:active {
+  transform: scale(0.965) translateY(2px);
+  filter: brightness(1.11) saturate(1.04);
+}
+
+.cardRouteIconBubble,
+.cardMetaIcon,
+.statusPill,
+.warningPill {
+  transition:
+    transform 170ms var(--round6-spring),
+    filter 170ms var(--round6-spring),
+    box-shadow 170ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active) .cardRouteIconBubble,
+.cardSurface:has(.cardButton:active) .cardMetaIcon {
+  transform: scale(0.92);
+  filter: brightness(1.08);
+}
+
+.cardSurface:has(.cardButton:active) .statusPill,
+.cardSurface:has(.cardButton:active) .warningPill {
+  transform: scale(0.96);
+}
+
+.cardRouteArrow {
+  transition: transform 220ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active) .cardRouteArrow {
+  transform: translateX(4px);
+}
+
+.headerFilterButton,
+.compactFilterButton,
+.clearButton,
+.filterSheetChip,
+.filterSheetToggle,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.cardActionCloseButton,
+.cardActionRow {
+  transition:
+    transform 150ms var(--round6-spring),
+    filter 150ms var(--round6-spring),
+    background 180ms var(--round6-spring),
+    box-shadow 180ms var(--round6-spring);
+}
+
+.headerFilterButton:active,
+.compactFilterButton:active,
+.clearButton:active,
+.filterSheetChip:active:not(:disabled),
+.filterSheetToggle:active,
+.filterSheetClearButton:active,
+.filterSheetApplyButton:active,
+.cardActionCloseButton:active,
+.cardActionRow:active:not(:disabled) {
+  transform: scale(0.91);
+  filter: brightness(1.08);
+}
+
+.dockHost {
+  animation: round6DockFloatIn 620ms var(--round6-spring) 260ms both;
+}
+
+.cardActionOverlay {
+  transition:
+    opacity 280ms var(--round6-spring),
+    background 280ms var(--round6-spring),
+    backdrop-filter 280ms var(--round6-spring);
+}
+
+.cardActionSheet {
+  transform: translateY(42px) scale(0.965);
+  transform-origin: center bottom;
+  transition:
+    transform 430ms var(--round6-spring),
+    opacity 300ms var(--round6-spring),
+    border-radius 430ms var(--round6-spring);
+}
+
+.cardActionSheet[data-open='true'] {
+  transform: translateY(0) scale(1);
+}
+
+.cardActionGrabber {
+  width: 74px;
+  transition:
+    width 300ms var(--round6-spring),
+    opacity 300ms var(--round6-spring);
+}
+
+.cardActionSheet[data-open='true'] .cardActionGrabber {
+  animation: round6GrabberPulse 680ms var(--round6-spring) 110ms both;
+}
+
+.cardActionHeader,
+.cardActionList {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.cardActionSheet[data-open='true'] .cardActionHeader {
+  animation: round6SheetChildIn 430ms var(--round6-spring) 120ms both;
+}
+
+.cardActionSheet[data-open='true'] .cardActionList {
+  animation: round6SheetChildIn 430ms var(--round6-spring) 190ms both;
+}
+
+.cardActionRow {
+  transform-origin: center;
+}
+
+.cardActionRow:active:not(:disabled) {
+  background: rgb(255 255 255 / 10%);
+}
+
+.filterSheetOverlay :global([class*='sheet'][data-open='true']),
+.mapHintSheetOverlay :global([class*='sheet'][data-open='true']) {
+  animation: round6PrimitiveSheetIn 430ms var(--round6-spring) both;
+}
+
+.filterSheetBody > *,
+.filterSheetFooter {
+  animation: round6SheetChildIn 430ms var(--round6-spring) both;
+}
+
+.filterSheetBody > :nth-child(1) { animation-delay: 90ms; }
+.filterSheetBody > :nth-child(2) { animation-delay: 145ms; }
+.filterSheetBody > :nth-child(3) { animation-delay: 200ms; }
+.filterSheetBody > :nth-child(4) { animation-delay: 255ms; }
+.filterSheetFooter { animation-delay: 280ms; }
+
+@keyframes round6HeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6ControlsIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6ChipIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6CardIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotateX(8deg) scale(0.965);
+    filter: blur(4px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) rotateX(0deg) scale(1.006);
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes round6DockFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.92);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes round6TapBloom {
+  from {
+    opacity: 0.52;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(9);
+  }
+}
+
+@keyframes round6GrabberPulse {
+  from {
+    width: 44px;
+    opacity: 0.42;
+  }
+  52% {
+    width: 86px;
+    opacity: 0.78;
+  }
+  to {
+    width: 74px;
+    opacity: 1;
+  }
+}
+
+@keyframes round6SheetChildIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6PrimitiveSheetIn {
+  from {
+    transform: translateY(34px) scale(0.97);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
