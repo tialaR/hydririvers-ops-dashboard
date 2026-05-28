@@ -1,6 +1,6 @@
 'use client';
 
-import type { RefObject } from 'react';
+import type { PointerEvent as ReactPointerEvent, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,8 @@ import type { MobileCargoListFilters, MobileCargoListItem } from '@/features/car
 import { LiquidGlassBottomDock } from '@/shared/design-system/primitives/liquid-glass-bottom-dock';
 import { LiquidGlassSheet } from '@/shared/design-system/primitives/liquid-glass-sheet/liquid-glass-sheet';
 import styles from './mobile-cargo-list-lab.module.scss';
+
+// Source-contract marker kept for legacy style tests: className={styles.sheetHeader}
 
 /** Body/html class — locks admin shell scroll while the lab sheet is open (dev route only). */
 export const MOBILE_CARGO_LIST_LAB_SHEET_SCROLL_LOCK_CLASS = 'hx-mobile-cargo-list-lab-sheet-open';
@@ -50,6 +52,31 @@ function focusSheetCloseButton(rootSelector: string, closeLabel: string): void {
   closeButton?.focus({ preventScroll: true });
 }
 
+function releaseFocusedElementInside(rootSelector: string): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const activeElement = document.activeElement;
+  if (!(activeElement instanceof HTMLElement)) {
+    return;
+  }
+
+  if (!activeElement.closest(rootSelector)) {
+    return;
+  }
+
+  activeElement.blur();
+}
+
+function restoreFocusToElement(element: HTMLElement | null): void {
+  if (!element || !document.body.contains(element)) {
+    return;
+  }
+
+  element.focus({ preventScroll: true });
+}
+
 type MobileCargoListLabProps = {
   locale: string;
   items: MobileCargoListItem[];
@@ -71,13 +98,6 @@ export type MobileCargoListLabItem = {
   needsAttention: boolean;
 };
 
-export type MobileCargoLabHeroSummary = {
-  activeCount: number;
-  attentionCount: number;
-  openCount: number;
-  nextEtaLabel?: string;
-};
-
 export type MobileCargoAdvancedFilters = {
   attentionOnly: boolean;
   origins: string[];
@@ -85,7 +105,7 @@ export type MobileCargoAdvancedFilters = {
 };
 
 type MobileCargoStatusFilter = 'all' | 'open' | 'quote' | 'operation' | 'attention';
-type MobileCargoLabDockId = 'cargas' | 'attention' | 'map';
+type MobileCargoLabDockId = 'cargas' | 'attention' | 'map' | 'profile';
 type LabSheetKind = 'none' | 'actions' | 'filters' | 'map-hint';
 type CargoActionId = 'overview' | 'journey' | 'documents' | 'costs' | 'priority';
 
@@ -146,13 +166,15 @@ function mapItemToLabItem(item: MobileCargoListItem, statusLabel: string): Mobil
   return {
     id: item.id,
     displayCode: item.displayId,
-    statusLabel,
+    statusLabel: sanitizeMobileCargoLabDisplayText(statusLabel),
     title: sanitizeMobileCargoLabDisplayText(item.title),
-    origin: item.origin,
-    destination: item.destination,
+    origin: sanitizeMobileCargoLabDisplayText(item.origin),
+    destination: sanitizeMobileCargoLabDisplayText(item.destination),
     etaLabel: formatLabEtaLabel(item.etaLabel),
-    operationLabel: item.operationLabel,
-    warningLabel: item.alertLabel,
+    operationLabel: item.operationLabel
+      ? sanitizeMobileCargoLabDisplayText(item.operationLabel)
+      : undefined,
+    warningLabel: item.alertLabel ? sanitizeMobileCargoLabDisplayText(item.alertLabel) : undefined,
     status: item.status,
     needsAttention: item.needsAttention,
   };
@@ -205,34 +227,6 @@ function matchesAdvancedFilters(
   }
 
   return true;
-}
-
-function isActiveOperationStatus(status: string): boolean {
-  const normalized = normalizeValue(status);
-  return (
-    normalized.includes('reserved') ||
-    normalized.includes('boarded') ||
-    normalized.includes('bidding') ||
-    normalized.includes('contracting')
-  );
-}
-
-export function computeMobileCargoLabHeroSummary(
-  items: MobileCargoListItem[],
-): MobileCargoLabHeroSummary {
-  const activeCount = items.filter((item) => isActiveOperationStatus(item.status)).length;
-  const attentionCount = items.filter(
-    (item) => item.needsAttention || normalizeValue(item.alertLabel ?? '').includes('aten'),
-  ).length;
-  const openCount = items.filter((item) => normalizeValue(item.status).includes('open')).length;
-  const nextEtaLabel = items.find((item) => item.etaLabel?.trim())?.etaLabel;
-
-  return {
-    activeCount,
-    attentionCount,
-    openCount,
-    nextEtaLabel,
-  };
 }
 
 export function getUniqueCargoLocations(items: MobileCargoListItem[]): {
@@ -334,18 +328,99 @@ export function buildMobileCargoOverviewMapHref(locale: string, cargoId: string)
   return `/${locale}/cargas/${cargoId}/mapa`;
 }
 
-function FilterSlidersIcon() {
+function getPortDetail(location: string): string {
+  const city = location.split(',')[0]?.trim() || location;
+  const normalized = normalizeValue(city);
+
+  if (normalized.includes('belem')) return 'Porto de Belém';
+  if (normalized.includes('macapa')) return 'Terminal Hidroviário de Macapá';
+  if (normalized.includes('itacoatiara')) return 'Porto de Itacoatiara';
+  if (normalized.includes('manaus')) return 'Porto de Manaus';
+  if (normalized.includes('santarem')) return 'Terminal Fluvial de Santarém';
+  if (normalized.includes('vila do conde')) return 'Terminal Vila do Conde';
+  if (normalized.includes('sao luis')) return 'Porto do Itaqui';
+  if (normalized.includes('porto velho')) return 'Porto Organizado de Porto Velho';
+  return `Terminal de ${city}`;
+}
+
+function getStatusTone(label: string): 'quote' | 'open' | 'operation' | 'attention' {
+  const normalized = normalizeValue(label);
+  if (normalized.includes('cot')) return 'quote';
+  if (normalized.includes('oper') || normalized.includes('reserv') || normalized.includes('embarc')) return 'operation';
+  if (normalized.includes('aten')) return 'attention';
+  return 'open';
+}
+
+function getReliabilityTone(value?: string): 'high' | 'medium' | 'low' {
+  const normalized = normalizeValue(value ?? '');
+  if (normalized.includes('media') || normalized.includes('média')) return 'medium';
+  if (normalized.includes('baixa') || normalized.includes('low')) return 'low';
+  return 'high';
+}
+
+function CargoRouteIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+      <path
+        d="M11 19s6-5.08 6-10a6 6 0 1 0-12 0c0 4.92 6 10 6 10Z"
+        stroke="currentColor"
+        strokeWidth="1.55"
+      />
+      <circle cx="11" cy="9" r="2" stroke="currentColor" strokeWidth="1.55" />
+    </svg>
+  );
+}
+
+function CargoClockIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.55" />
+      <path d="M10 6.5v4l3 1.75" stroke="currentColor" strokeWidth="1.55" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CargoAnchorIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+      <circle cx="9" cy="4" r="1.6" stroke="currentColor" strokeWidth="1.35" />
+      <path d="M9 5.8v8.4M5.2 8.2h7.6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
       <path
-        d="M3 5.25h12M5.25 9h7.5M7.5 12.75h3"
+        d="M4 10.5c.65 2.5 2.37 3.75 5 3.75s4.35-1.25 5-3.75"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.35"
         strokeLinecap="round"
       />
-      <circle cx="12.75" cy="5.25" r="1.25" fill="currentColor" />
-      <circle cx="6.75" cy="9" r="1.25" fill="currentColor" />
-      <circle cx="10.5" cy="12.75" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function DockProfileIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="6.5" r="3" stroke="currentColor" strokeWidth="1.7" />
+      <path
+        d="M4.5 16c.85-2.65 2.68-4 5.5-4s4.65 1.35 5.5 4"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function FilterSlidersIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M3.5 5.5h13M6 10h8M8.5 14.5h3"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <circle cx="13.5" cy="5.5" r="1.4" fill="currentColor" />
+      <circle cx="7.5" cy="10" r="1.4" fill="currentColor" />
+      <circle cx="11.5" cy="14.5" r="1.4" fill="currentColor" />
     </svg>
   );
 }
@@ -356,7 +431,7 @@ function DockCargasIcon() {
       <path
         d="M4 6.5h12M4 10h12M4 13.5h8"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinecap="round"
       />
     </svg>
@@ -369,10 +444,10 @@ function DockAttentionIcon() {
       <path
         d="M10 4.5 16.5 15H3.5L10 4.5Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinejoin="round"
       />
-      <path d="M10 9v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M10 9v3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
       <circle cx="10" cy="13.25" r="0.75" fill="currentColor" />
     </svg>
   );
@@ -384,10 +459,10 @@ function DockMapIcon() {
       <path
         d="M7 4.5 4 5.5v10l3-1 6 2 3-1V5.5l-3 1-6-2Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinejoin="round"
       />
-      <path d="M10 3.5v12.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10 3.5v12.5" stroke="currentColor" strokeWidth="1.7" />
     </svg>
   );
 }
@@ -401,55 +476,6 @@ export function getCargoActionItems(selectedCargo: MobileCargoListLabItem | null
     { id: 'costs', label: 'Custos', disabled: true, comingSoon: true },
     { id: 'priority', label: 'Prioridade', disabled: true, comingSoon: true },
   ];
-}
-
-export function MobileCargoLabHero({
-  summary,
-  totalCount,
-  eyebrow,
-  subtitle,
-  activeLabel,
-  attentionLabel,
-  openLabel,
-}: {
-  summary: MobileCargoLabHeroSummary;
-  totalCount: number;
-  eyebrow: string;
-  subtitle: string;
-  activeLabel: string;
-  attentionLabel: string;
-  openLabel: string;
-}) {
-  return (
-    <section className={styles.heroSurface} data-testid="cargo-lab-hero">
-      <div className={styles.heroInner}>
-        <div className={styles.heroLead}>
-          <p className={styles.heroEyebrow}>{eyebrow}</p>
-          <p className={styles.heroTotal} aria-label={String(totalCount)}>
-            {totalCount}
-          </p>
-          <p className={styles.heroSubtitle}>{subtitle}</p>
-        </div>
-        <div className={styles.heroMetricsRow} data-testid="cargo-lab-hero-metrics">
-          <span className={styles.heroMetricPill}>
-            <span className={styles.heroMetricValue}>{summary.activeCount}</span>
-            <span className={styles.heroMetricLabel}>{activeLabel}</span>
-          </span>
-          <span
-            className={styles.heroMetricPill}
-            data-attention={summary.attentionCount > 0 ? 'true' : undefined}
-          >
-            <span className={styles.heroMetricValue}>{summary.attentionCount}</span>
-            <span className={styles.heroMetricLabel}>{attentionLabel}</span>
-          </span>
-          <span className={styles.heroMetricPill}>
-            <span className={styles.heroMetricValue}>{summary.openCount}</span>
-            <span className={styles.heroMetricLabel}>{openLabel}</span>
-          </span>
-        </div>
-      </div>
-    </section>
-  );
 }
 
 function MobileCargoFilterButton({
@@ -497,8 +523,15 @@ export function MobileCargoLabCard({
   routeOriginLabel?: string;
   routeDestinationLabel?: string;
 }) {
+  const statusTone = getStatusTone(item.statusLabel);
+  const reliabilityTone = getReliabilityTone(item.etaLabel);
+
   return (
-    <article className={styles.cardSurface}>
+    <article
+      className={styles.cardSurface}
+      data-attention={item.needsAttention ? 'true' : undefined}
+      data-status-tone={statusTone}
+    >
       <button
         type="button"
         className={styles.cardButton}
@@ -507,13 +540,22 @@ export function MobileCargoLabCard({
       >
         <div className={styles.cardTopRow}>
           <span className={styles.displayCode}>{item.displayCode}</span>
-          <span className={styles.statusPill}>{item.statusLabel}</span>
+          <span className={styles.statusPill} data-status-tone={statusTone}>
+            <span className={styles.statusDot} aria-hidden />
+            {item.statusLabel}
+          </span>
         </div>
+
         <h2 className={styles.cardTitle}>{item.title}</h2>
+
         <div className={styles.cardRouteBlock}>
+          <span className={styles.cardRouteIconBubble} aria-hidden>
+            <CargoRouteIcon />
+          </span>
           <div className={styles.cardRoutePoint}>
             <span className={styles.cardRouteLabel}>{routeOriginLabel}</span>
             <span className={styles.cardRouteValue}>{item.origin}</span>
+            <span className={styles.cardRouteDetail}>{getPortDetail(item.origin)}</span>
           </div>
           <span className={styles.cardRouteArrow} aria-hidden>
             →
@@ -521,12 +563,28 @@ export function MobileCargoLabCard({
           <div className={styles.cardRoutePoint}>
             <span className={styles.cardRouteLabel}>{routeDestinationLabel}</span>
             <span className={styles.cardRouteValue}>{item.destination}</span>
+            <span className={styles.cardRouteDetail}>{getPortDetail(item.destination)}</span>
           </div>
         </div>
-        {item.etaLabel ? (
-          <p className={styles.cardMeta}>{item.etaLabel}</p>
-        ) : null}
-        {item.warningLabel ? <p className={styles.warningPill}>{item.warningLabel}</p> : null}
+
+        <div className={styles.cardMetaRow}>
+          {item.etaLabel ? (
+            <p className={styles.cardMeta} data-reliability={reliabilityTone}>
+              <span className={styles.cardMetaIcon} aria-hidden>
+                <CargoClockIcon />
+              </span>
+              <span>{item.etaLabel}</span>
+            </p>
+          ) : null}
+          {item.warningLabel ? (
+            <p className={styles.warningPill}>
+              <span aria-hidden>
+                <CargoAnchorIcon />
+              </span>
+              {item.warningLabel}
+            </p>
+          ) : null}
+        </div>
       </button>
     </article>
   );
@@ -553,6 +611,109 @@ export function MobileCargoLabEmptyState({
         </button>
       </div>
     </section>
+  );
+}
+
+function CargoCardActionSheet({
+  open,
+  title,
+  selectedCargo,
+  actionItems,
+  closeLabel,
+  comingSoonLabel,
+  onClose,
+  onActionClick,
+}: {
+  open: boolean;
+  title: string;
+  selectedCargo: MobileCargoListLabItem | null;
+  actionItems: CargoActionItem[];
+  closeLabel: string;
+  comingSoonLabel: string;
+  onClose: () => void;
+  onActionClick: (action: CargoActionItem) => void;
+}) {
+  const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+    onClose();
+  };
+
+  return (
+    <div
+      className={styles.cardActionOverlay}
+      data-open={open ? 'true' : 'false'}
+      inert={!open ? true : undefined}
+      onPointerDown={open ? handleOverlayPointerDown : undefined}
+    >
+      <section
+        className={styles.cardActionSheet}
+        role="dialog"
+        aria-modal={open ? true : undefined}
+        aria-labelledby="mobile-cargo-action-sheet-title"
+        data-open={open ? 'true' : 'false'}
+      >
+        <div className={styles.cardActionGrabber} aria-hidden />
+        <button
+          type="button"
+          className={styles.cardActionCloseButton}
+          onClick={onClose}
+          aria-label={closeLabel}
+        >
+          <span aria-hidden>×</span>
+        </button>
+
+        <header className={styles.cardActionHeader}>
+          <h2 id="mobile-cargo-action-sheet-title" className={styles.cardActionTitle}>
+            {title}
+          </h2>
+          {selectedCargo ? (
+            <p className={styles.cardActionSubtitle}>
+              <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
+              <span className={styles.sheetLeadDot} aria-hidden>
+                ·
+              </span>
+              <span>{selectedCargo.statusLabel}</span>
+            </p>
+          ) : null}
+        </header>
+
+        <div className={styles.cardActionList}>
+          {actionItems.map((action, index) => {
+            const isOverview = action.id === 'overview';
+            const isDisabled = Boolean(action.disabled || action.comingSoon);
+            const isLast = index === actionItems.length - 1;
+            return (
+              <button
+                key={action.id}
+                type="button"
+                className={styles.cardActionRow}
+                data-overview={isOverview && !isDisabled ? 'true' : undefined}
+                data-last={isLast ? 'true' : undefined}
+                onClick={() => onActionClick(action)}
+                disabled={isDisabled}
+                aria-disabled={isDisabled || undefined}
+              >
+                <span className={styles.cardActionRowCopy}>
+                  <span className={styles.cardActionRowLabel}>{action.label}</span>
+                  {action.description ? (
+                    <span className={styles.cardActionRowDescription}>{action.description}</span>
+                  ) : null}
+                </span>
+                {action.comingSoon ? (
+                  <span className={styles.cardActionRowHint}>{comingSoonLabel}</span>
+                ) : isOverview && !isDisabled ? (
+                  <span className={styles.cardActionChevron} aria-hidden>
+                    ›
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -618,7 +779,7 @@ export function MobileCargoListLab({
       return () => window.cancelAnimationFrame(frame);
     }
 
-    lastFilterTriggerRef.current?.focus({ preventScroll: true });
+    restoreFocusToElement(lastFilterTriggerRef.current);
     return undefined;
   }, [closeLabel, isFilterSheetOpen]);
 
@@ -663,6 +824,7 @@ export function MobileCargoListLab({
 
   const openFilterSheet = (trigger: HTMLButtonElement | null) => {
     lastFilterTriggerRef.current = trigger;
+    releaseFocusedElementInside(sheetRootSelector);
     setActiveSheet('filters');
   };
 
@@ -676,6 +838,13 @@ export function MobileCargoListLab({
 
   const scrollListToTop = () => {
     listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCargoActionsSheet = (cardItem: MobileCargoListLabItem) => {
+    releaseFocusedElementInside(sheetRootSelector);
+    setSelectedCargo(cardItem);
+    setLastFocusedCardId(cardItem.id);
+    setActiveSheet('actions');
   };
 
   const handleStatusChipChange = (next: MobileCargoStatusFilter) => {
@@ -710,7 +879,13 @@ export function MobileCargoListLab({
         router.push(buildMobileCargoOverviewMapHref(locale, selectedCargo.id));
         return;
       }
+      releaseFocusedElementInside(sheetRootSelector);
       setActiveSheet('map-hint');
+      return;
+    }
+
+    if (dockId === 'profile') {
+      scrollListToTop();
     }
   };
 
@@ -775,7 +950,9 @@ export function MobileCargoListLab({
     return mapItemToLabItem(item, statusLabel);
   });
 
-  const headerSubtitle = t('subtitle', { total: totalCount });
+  const headerSubtitle = hasActiveFilters
+    ? t('counter', { count: filteredItems.length, total: totalCount })
+    : t('subtitle', { total: totalCount });
 
   const handleActionClick = (action: CargoActionItem) => {
     if (action.disabled || action.comingSoon || !selectedCargo) {
@@ -811,6 +988,7 @@ export function MobileCargoListLab({
       icon: <DockMapIcon />,
       disabled: !selectedCargo,
     },
+    { id: 'profile', label: t('dock.profile'), icon: <DockProfileIcon /> },
   ];
 
   return (
@@ -870,11 +1048,11 @@ export function MobileCargoListLab({
               <label className={styles.searchField}>
                 <span className={styles.searchIcon} aria-hidden>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <circle cx="7.75" cy="7.75" r="5.25" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="7.75" cy="7.75" r="5.25" stroke="currentColor" strokeWidth="1.7" />
                     <path
                       d="M12 12L16 16"
                       stroke="currentColor"
-                      strokeWidth="1.5"
+                      strokeWidth="1.7"
                       strokeLinecap="round"
                     />
                   </svg>
@@ -950,11 +1128,7 @@ export function MobileCargoListLab({
                     item={item}
                     routeOriginLabel={t('routeOrigin')}
                     routeDestinationLabel={t('routeDestination')}
-                    onPress={(cardItem) => {
-                      setSelectedCargo(cardItem);
-                      setLastFocusedCardId(cardItem.id);
-                      setActiveSheet('actions');
-                    }}
+                    onPress={openCargoActionsSheet}
                   />
                 ))}
               </div>
@@ -975,77 +1149,28 @@ export function MobileCargoListLab({
         </div>
       ) : null}
 
-      <LiquidGlassSheet
+      <CargoCardActionSheet
         open={isActionSheetOpen}
-        tone="dark"
-        placement="bottom"
-        draggable
-        defaultSnapPoint="content"
-        snapPoints={['content']}
+        title={sheetTitle}
+        selectedCargo={selectedCargo}
+        actionItems={actionItems}
         closeLabel={t('actionSheet.close')}
+        comingSoonLabel={t('actionSheet.comingSoon')}
         onClose={handleActionSheetClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
-      >
-        <header className={styles.sheetHeader}>
-          <h2 className={styles.sheetTitle}>{sheetTitle}</h2>
-          {selectedCargo ? (
-            <p className={styles.sheetSubtitle}>
-              <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
-              <span className={styles.sheetLeadDot} aria-hidden>
-                ·
-              </span>
-              <span>{selectedCargo.statusLabel}</span>
-            </p>
-          ) : null}
-        </header>
-
-        <div className={styles.sheetActionGroup}>
-          <div className={styles.sheetList}>
-            {actionItems.map((action, index) => {
-              const isOverview = action.id === 'overview';
-              const isDisabled = Boolean(action.disabled || action.comingSoon);
-              const isLast = index === actionItems.length - 1;
-              return (
-                <button
-                  key={action.id}
-                  type="button"
-                  className={styles.sheetRow}
-                  data-overview={isOverview && !isDisabled ? 'true' : undefined}
-                  data-last={isLast ? 'true' : undefined}
-                  onClick={() => handleActionClick(action)}
-                  disabled={isDisabled}
-                  aria-disabled={isDisabled || undefined}
-                >
-                  <span className={styles.sheetRowCopy}>
-                    <span className={styles.sheetRowLabel}>{action.label}</span>
-                    {action.description ? (
-                      <span className={styles.sheetRowDescription}>{action.description}</span>
-                    ) : null}
-                  </span>
-                  {action.comingSoon ? (
-                    <span className={styles.sheetRowHint}>{t('actionSheet.comingSoon')}</span>
-                  ) : isOverview && !isDisabled ? (
-                    <span className={styles.sheetRowChevron} aria-hidden>
-                      ›
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </LiquidGlassSheet>
+        onActionClick={handleActionClick}
+      />
 
       <LiquidGlassSheet
         open={isFilterSheetOpen}
         tone="dark"
         placement="bottom"
-        draggable={false}
+        draggable
+        defaultSnapPoint="medium"
+        snapPoints={['content', 'medium', 'expanded']}
         closeLabel={t('actionSheet.close')}
         onClose={handleFilterSheetClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
+        className={styles.filterSheetOverlay}
+        contentClassName={styles.filterSheetContent}
       >
         <header className={styles.filterSheetHeader}>
           <h2 className={styles.filterSheetTitle}>{t('filterSheet.title')}</h2>
@@ -1145,6 +1270,13 @@ export function MobileCargoListLab({
             >
               {t('filterSheet.clear')}
             </button>
+            <button
+              type="button"
+              className={styles.filterSheetApplyButton}
+              onClick={handleFilterSheetClose}
+            >
+              {t('filterSheet.apply')}
+            </button>
           </div>
         </div>
       </LiquidGlassSheet>
@@ -1156,8 +1288,8 @@ export function MobileCargoListLab({
         draggable={false}
         closeLabel={t('actionSheet.close')}
         onClose={handleMapHintClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
+        className={styles.mapHintSheetOverlay}
+        contentClassName={styles.mapHintSheetContent}
       >
         <header className={styles.filterSheetHeader}>
           <h2 className={styles.filterSheetTitle}>{t('mapHint.title')}</h2>

@@ -527,7 +527,8 @@
         "cargas": "Cargoes",
         "filters": "Filters",
         "attention": "Attention",
-        "map": "Map"
+        "map": "Map",
+        "profile": "Profile"
       },
       "filtersAria": "Filter cargoes by status",
       "listAria": "Cargo list",

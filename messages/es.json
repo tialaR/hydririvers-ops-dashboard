@@ -527,7 +527,8 @@
         "cargas": "Cargas",
         "filters": "Filtros",
         "attention": "Atención",
-        "map": "Mapa"
+        "map": "Mapa",
+        "profile": "Perfil"
       },
       "filtersAria": "Filtrar cargas por estado",
       "listAria": "Lista de cargas",

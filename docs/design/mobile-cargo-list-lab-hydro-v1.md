@@ -44,7 +44,7 @@ Aliases locais (módulo canvas): `--mobile-cargo-list-canvas-top|mid|bottom`, `-
 
 **Proibido** na lab: `--ios-*`, `--ds-*`, `--hx-*` (CSS), `--lab-*`.
 
-## Composição v1.7 (HIG + funcional)
+## Composição v1.8 (HIG + funcional)
 
 1. **Header large + compact glass** — título 34/40, subtítulo com total; botão circular de filtros (ícone + badge); header compacto translúcido ao rolar (`hidden`, não `aria-hidden`).
 2. **Sem hero dashboard** — contexto só no subtítulo (`N operações hidroviárias`).
@@ -52,8 +52,8 @@ Aliases locais (módulo canvas): `--mobile-cargo-list-canvas-top|mid|bottom`, `-
 4. **Chips horizontais** — Todas / Abertas / Cotação / Operação / Atenção; scroll com padding final.
 5. **Sheet de filtros** — header → botão filtros; Status, Atenção, Origem/Destino, limpar.
 6. **Cards** — código, status pill, título (2 linhas), rota, ETA, warning discreto; sem `(mock)` / `ETA ETA`.
-7. **Sheet de ações** — card → sheet; Visão geral → `/{locale}/cargas/{id}/mapa`; demais “Em breve”.
-8. **Bottom dock** — `LiquidGlassBottomDock`: Cargas / Atenção / Mapa (**sem Filtros**); bolha deslizante; oculto com sheet aberto; Mapa `disabled` sem carga selecionada.
+7. **Sheet de ações** — card → sheet; Visão geral → `/{locale}/cargas/{id}/mapa`; demais “Em breve”; drag expande visualmente para snap superior e escorrega para baixo no fechamento.
+8. **Bottom dock** — `LiquidGlassBottomDock`: Cargas / Atenção / Mapa (**sem Filtros**); bolha deslizante; tint/glow contextual por item ativo; oculto com sheet aberto; Mapa `disabled` sem carga selecionada.
 
 ## Acessibilidade / foco
 
@@ -80,10 +80,11 @@ Aliases locais (módulo canvas): `--mobile-cargo-list-canvas-top|mid|bottom`, `-
 - `src/shared/design-system/lab/mobile-cargo-list-lab-canvas/mobile-cargo-list-lab-canvas.module.scss`
 - `src/shared/design-system/primitives/liquid-glass-bottom-dock/*`
 - `docs/design/liquid-glass-bottom-dock.md`
+- `docs/design/mobile-cargo-list-reference-analysis-2026-05-27.md`
 
 ## Pendências
 
 - Smoke Playwright viewport 390×844.
-- Drag snap medium/expanded não usado na lab (apenas `content`).
+- Validar manualmente drag/snap de ações e filtros em viewport real 390×844.
 - Jornada / Documentos / Custos / Prioridade permanecem “Em breve”.
 - Não promovido para `/cargas` real nesta rodada.

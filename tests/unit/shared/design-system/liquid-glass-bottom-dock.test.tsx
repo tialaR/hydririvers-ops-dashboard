@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
@@ -21,6 +23,7 @@ describe('LiquidGlassBottomDock', () => {
     expect(html).toContain('Filtros');
     expect(html).toContain('data-active="true"');
     expect(html).toContain('aria-current="page"');
+    expect(html).toContain('data-active-id="filters"');
   });
 
   it('aplica estilo inline na bolha ativa após layout', () => {
@@ -38,5 +41,21 @@ describe('LiquidGlassBottomDock', () => {
 
     expect(html).toContain('Mapa');
     expect(html).toContain('aria-disabled="true"');
+  });
+});
+
+describe('LiquidGlassBottomDock styles', () => {
+  it('expõe tons contextuais para atenção e mapa sem depender de tokens globais alternativos', () => {
+    const source = readFileSync(
+      resolve(
+        process.cwd(),
+        'src/shared/design-system/primitives/liquid-glass-bottom-dock/liquid-glass-bottom-dock.module.scss',
+      ),
+      'utf8',
+    );
+
+    expect(source).toContain("data-active-id='attention'");
+    expect(source).toContain("data-active-id='map'");
+    expect(source).toContain('--hydro-color-success');
   });
 });

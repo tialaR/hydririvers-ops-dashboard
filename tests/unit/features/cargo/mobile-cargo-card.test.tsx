@@ -15,9 +15,7 @@ vi.mock('next/navigation', () => ({
 
 import {
   MobileCargoLabCard,
-  MobileCargoLabHero,
   MobileCargoListLab,
-  computeMobileCargoLabHeroSummary,
   filterMobileCargoList,
   formatLabEtaLabel,
   type MobileCargoListLabItem,
@@ -92,59 +90,6 @@ describe('MobileCargoListLab dark canvas', () => {
   });
 });
 
-describe('MobileCargoLabHero', () => {
-  it('renderiza summary glass com eyebrow, total e pills', () => {
-    const html = renderToStaticMarkup(
-      <MobileCargoLabHero
-        summary={{ activeCount: 2, attentionCount: 1, openCount: 3, nextEtaLabel: 'ETA 24h' }}
-        totalCount={8}
-        eyebrow="Operações"
-        subtitle="em acompanhamento"
-        activeLabel="Operação"
-        attentionLabel="Atenção"
-        openLabel="Abertas"
-      />,
-    );
-
-    expect(html).toContain('cargo-lab-hero');
-    expect(html).toContain('cargo-lab-hero-metrics');
-    expect(html).toContain('Operações');
-    expect(html).toContain('em acompanhamento');
-    expect(html).toContain('>8<');
-    expect(html).toContain('Operação');
-    expect(html).toContain('Atenção');
-    expect(html).not.toContain('ETA 24h');
-  });
-});
-
-describe('computeMobileCargoLabHeroSummary', () => {
-  const baseItem = (over: Partial<MobileCargoListItem> = {}): MobileCargoListItem => ({
-    id: 'cargo-001',
-    displayId: 'CARGO-001',
-    title: 'Carga',
-    origin: 'Belém',
-    destination: 'Manaus',
-    status: 'open',
-    statusBadgeTone: 'neutral',
-    etaLabel: 'ETA 24h',
-    needsAttention: false,
-    ...over,
-  });
-
-  it('agrega métricas de operação, atenção e próxima ETA', () => {
-    const summary = computeMobileCargoLabHeroSummary([
-      baseItem({ status: 'boarded', needsAttention: true, alertLabel: 'Atenção' }),
-      baseItem({ id: 'cargo-002', status: 'open', etaLabel: 'ETA 12h' }),
-      baseItem({ id: 'cargo-003', status: 'bidding' }),
-    ]);
-
-    expect(summary.activeCount).toBe(2);
-    expect(summary.attentionCount).toBe(1);
-    expect(summary.openCount).toBe(1);
-    expect(summary.nextEtaLabel).toBe('ETA 24h');
-  });
-});
-
 describe('getCargoActionItems', () => {
   it('marca overview como desabilitado quando não há carga selecionada', () => {
     const actions = getCargoActionItems(null);
@@ -213,7 +158,7 @@ describe('buildMobileCargoOverviewMapHref', () => {
 });
 
 describe('MobileCargoListLab shell markup', () => {
-  it('renderiza hero, search, filtros, cards e canvas dark local', () => {
+  it('renderiza search, filtros, cards, dock e canvas dark local sem hero', () => {
     const html = renderToStaticMarkup(
       <MobileCargoListLab
         locale="pt-BR"
