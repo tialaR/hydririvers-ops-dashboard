@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties, PointerEvent as ReactPointerEvent, RefObject } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -636,87 +636,68 @@ function CargoCardActionSheet({
   onClose: () => void;
   onActionClick: (action: CargoActionItem) => void;
 }) {
-  const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-    onClose();
-  };
-
   return (
-    <div
-      className={styles.cardActionOverlay}
-      data-open={open ? 'true' : 'false'}
-      inert={!open ? true : undefined}
-      onPointerDown={open ? handleOverlayPointerDown : undefined}
+    <LiquidGlassSheet
+      open={open}
+      tone="dark"
+      placement="bottom"
+      draggable
+      defaultSnapPoint="medium"
+      snapPoints={['content', 'medium', 'expanded']}
+      closeLabel={closeLabel}
+      onClose={onClose}
+      className={styles.cardActionSheetOverlay}
+      contentClassName={styles.cardActionSheetContent}
     >
-      <section
-        className={styles.cardActionSheet}
-        role="dialog"
-        aria-modal={open ? true : undefined}
-        aria-labelledby="mobile-cargo-action-sheet-title"
-        data-open={open ? 'true' : 'false'}
-      >
-        <div className={styles.cardActionGrabber} aria-hidden />
-        <button
-          type="button"
-          className={styles.cardActionCloseButton}
-          onClick={onClose}
-          aria-label={closeLabel}
-        >
-          <span aria-hidden>×</span>
-        </button>
+      <header className={styles.cardActionHeader}>
+        <h2 id="mobile-cargo-action-sheet-title" className={styles.cardActionTitle}>
+          {title}
+        </h2>
+        {selectedCargo ? (
+          <p className={styles.cardActionSubtitle}>
+            <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
+            <span className={styles.sheetLeadDot} aria-hidden>
+              ·
+            </span>
+            <span>{selectedCargo.statusLabel}</span>
+          </p>
+        ) : null}
+      </header>
 
-        <header className={styles.cardActionHeader}>
-          <h2 id="mobile-cargo-action-sheet-title" className={styles.cardActionTitle}>
-            {title}
-          </h2>
-          {selectedCargo ? (
-            <p className={styles.cardActionSubtitle}>
-              <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
-              <span className={styles.sheetLeadDot} aria-hidden>
-                ·
-              </span>
-              <span>{selectedCargo.statusLabel}</span>
-            </p>
-          ) : null}
-        </header>
-
-        <div className={styles.cardActionList}>
-          {actionItems.map((action, index) => {
-            const isOverview = action.id === 'overview';
-            const isDisabled = Boolean(action.disabled || action.comingSoon);
-            const isLast = index === actionItems.length - 1;
-            return (
-              <button
-                key={action.id}
-                type="button"
-                className={styles.cardActionRow}
-                data-overview={isOverview && !isDisabled ? 'true' : undefined}
-                data-last={isLast ? 'true' : undefined}
-                onClick={() => onActionClick(action)}
-                disabled={isDisabled}
-                aria-disabled={isDisabled || undefined}
-              >
-                <span className={styles.cardActionRowCopy}>
-                  <span className={styles.cardActionRowLabel}>{action.label}</span>
-                  {action.description ? (
-                    <span className={styles.cardActionRowDescription}>{action.description}</span>
-                  ) : null}
-                </span>
-                {action.comingSoon ? (
-                  <span className={styles.cardActionRowHint}>{comingSoonLabel}</span>
-                ) : isOverview && !isDisabled ? (
-                  <span className={styles.cardActionChevron} aria-hidden>
-                    ›
-                  </span>
+      <div className={styles.cardActionList} data-testid="cargo-card-action-list">
+        {actionItems.map((action, index) => {
+          const isOverview = action.id === 'overview';
+          const isDisabled = Boolean(action.disabled || action.comingSoon);
+          const isLast = index === actionItems.length - 1;
+          return (
+            <button
+              key={action.id}
+              type="button"
+              className={styles.cardActionRow}
+              data-overview={isOverview && !isDisabled ? 'true' : undefined}
+              data-last={isLast ? 'true' : undefined}
+              onClick={() => onActionClick(action)}
+              disabled={isDisabled}
+              aria-disabled={isDisabled || undefined}
+            >
+              <span className={styles.cardActionRowCopy}>
+                <span className={styles.cardActionRowLabel}>{action.label}</span>
+                {action.description ? (
+                  <span className={styles.cardActionRowDescription}>{action.description}</span>
                 ) : null}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-    </div>
+              </span>
+              {action.comingSoon ? (
+                <span className={styles.cardActionRowHint}>{comingSoonLabel}</span>
+              ) : isOverview && !isDisabled ? (
+                <span className={styles.cardActionChevron} aria-hidden>
+                  ›
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </LiquidGlassSheet>
   );
 }
 
@@ -1290,7 +1271,9 @@ export function MobileCargoListLab({
         open={isMapHintOpen}
         tone="dark"
         placement="bottom"
-        draggable={false}
+        draggable
+        defaultSnapPoint="content"
+        snapPoints={['content', 'medium', 'expanded']}
         closeLabel={t('actionSheet.close')}
         onClose={handleMapHintClose}
         className={styles.mapHintSheetOverlay}

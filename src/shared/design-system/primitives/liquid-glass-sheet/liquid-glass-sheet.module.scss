@@ -571,3 +571,37 @@
   height: 0;
   display: none;
 }
+
+/* Round 8: visible slide-out close and 95% expanded draggable sheet. */
+.overlay {
+  --sheet-motion: 380ms;
+  --sheet-easing: cubic-bezier(0.18, 0.95, 0.18, 1);
+}
+
+.variant_inspector,
+.sheet[data-draggable='true'].variant_inspector {
+  max-height: 95dvh;
+  padding-inline: 6px;
+  padding-block-end: max(8px, env(safe-area-inset-bottom, 0px));
+}
+
+.sheet[data-open='false'] {
+  opacity: 0;
+  transform: translateY(112%) scale(0.985);
+}
+
+.sheet[data-open='true'][data-snap-point='expanded'] {
+  border-radius: 28px 28px 0 0;
+}
+
+.content[data-scrollable='true'],
+.content[data-scrollable='false'] {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.grabber {
+  width: 72px;
+  height: 5px;
+}

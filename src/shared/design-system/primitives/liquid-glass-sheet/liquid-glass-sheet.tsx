@@ -14,8 +14,8 @@ export type LiquidGlassSheetSnapPoint = 'content' | 'medium' | 'expanded';
 export type LiquidGlassSheetPlacement = 'bottom' | 'center';
 
 const DEFAULT_SNAP_POINTS: LiquidGlassSheetSnapPoint[] = ['content', 'medium', 'expanded'];
-const CLOSE_DRAG_THRESHOLD_PX = 82;
-const SNAP_DRAG_THRESHOLD_RATIO = 0.16;
+const CLOSE_DRAG_THRESHOLD_PX = 74;
+const SNAP_DRAG_THRESHOLD_RATIO = 0.12;
 
 export type LiquidGlassSheetProps = {
   open: boolean;
@@ -55,17 +55,17 @@ function getSnapHeightPx(
 ): number {
   const toolbarPx = 54;
   const contentSnapHeight = Math.min(
-    contentHeightPx + toolbarPx + 12,
-    viewportHeightPx * 0.92,
+    Math.max(contentHeightPx + toolbarPx + 12, Math.round(viewportHeightPx * 0.38)),
+    viewportHeightPx * 0.46,
   );
 
   switch (snapPoint) {
     case 'content':
       return contentSnapHeight;
     case 'medium':
-      return Math.round(viewportHeightPx * 0.62);
+      return Math.round(viewportHeightPx * 0.52);
     case 'expanded':
-      return Math.round(viewportHeightPx * 0.88);
+      return Math.round(viewportHeightPx * 0.95);
     default:
       return contentSnapHeight;
   }
