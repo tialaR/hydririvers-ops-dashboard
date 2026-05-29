@@ -20,6 +20,10 @@ const items: MobileCargoListItem[] = [
     statusBadgeTone: 'info',
     etaLabel: 'ETA 36h',
     operationLabel: 'Corredor Tapajós',
+    cargoTypeLabel: 'Reefer',
+    vesselTypeLabel: 'Empurrador + balsa refrigerada',
+    cutoffWindowLabel: 'Cut-off 12h',
+    draftLimitLabel: 'calado até 1,6 m',
     needsAttention: false,
   },
   {
@@ -31,6 +35,10 @@ const items: MobileCargoListItem[] = [
     status: 'boarded',
     statusBadgeTone: 'success',
     etaLabel: 'ETA 4 dias',
+    cargoTypeLabel: 'Granel sólido',
+    vesselTypeLabel: 'Balsa graneleira',
+    cutoffWindowLabel: 'Cut-off 48h',
+    draftLimitLabel: 'calado até 2,8 m',
     needsAttention: true,
     alertLabel: 'Documento pendente',
   },
@@ -43,8 +51,12 @@ describe('mobile cargo list lab filters', () => {
         attentionOnly: true,
         origins: ['Manaus, AM'],
         destinations: [],
+        cargoTypes: [],
+        vesselTypes: [],
+        cutoffWindows: [],
+        draftLimits: [],
       }),
-    ).toBe(4);
+    ).toBe(3);
   });
 
   it('filtra por origem avançada', () => {
@@ -52,6 +64,10 @@ describe('mobile cargo list lab filters', () => {
       attentionOnly: false,
       origins: ['Belém, PA'],
       destinations: [],
+      cargoTypes: [],
+      vesselTypes: [],
+      cutoffWindows: [],
+      draftLimits: [],
     });
 
     expect(result).toHaveLength(1);
@@ -63,6 +79,10 @@ describe('mobile cargo list lab filters', () => {
       attentionOnly: true,
       origins: [],
       destinations: [],
+      cargoTypes: [],
+      vesselTypes: [],
+      cutoffWindows: [],
+      draftLimits: [],
     });
 
     expect(result).toHaveLength(1);
@@ -73,6 +93,8 @@ describe('mobile cargo list lab filters', () => {
     const locations = getUniqueCargoLocations(items);
     expect(locations.origins).toEqual(['Belém, PA', 'Manaus, AM']);
     expect(locations.destinations).toEqual(['Parintins, AM', 'Santarém, PA']);
+    expect(locations.cargoTypes).toEqual(['Granel sólido', 'Reefer']);
+    expect(locations.vesselTypes).toEqual(['Balsa graneleira', 'Empurrador + balsa refrigerada']);
   });
 });
 

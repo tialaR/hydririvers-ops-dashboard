@@ -94,6 +94,14 @@ export type MobileCargoListLabItem = {
   etaLabel?: string;
   operationLabel?: string;
   warningLabel?: string;
+  cargoTypeLabel?: string;
+  vesselTypeLabel?: string;
+  cutoffWindowLabel?: string;
+  grossWeightLabel?: string;
+  draftLimitLabel?: string;
+  waterwayLabel?: string;
+  availabilityLabel?: string;
+  environmentalRiskLabel?: string;
   status: MobileCargoListItem['status'];
   needsAttention: boolean;
 };
@@ -102,9 +110,14 @@ export type MobileCargoAdvancedFilters = {
   attentionOnly: boolean;
   origins: string[];
   destinations: string[];
+  cargoTypes: string[];
+  vesselTypes: string[];
+  cutoffWindows: string[];
+  draftLimits: string[];
 };
 
 type MobileCargoStatusFilter = 'all' | 'open' | 'quote' | 'operation' | 'attention';
+type MobileCargoBusinessFilterKind = 'cargoTypes' | 'vesselTypes' | 'cutoffWindows' | 'draftLimits';
 type MobileCargoLabDockId = 'cargas' | 'attention' | 'map' | 'profile';
 type LabSheetKind = 'none' | 'actions' | 'filters' | 'map-hint';
 type CargoActionId = 'overview' | 'journey' | 'documents' | 'costs' | 'priority';
@@ -114,6 +127,10 @@ const EMPTY_ADVANCED_FILTERS: MobileCargoAdvancedFilters = {
   attentionOnly: false,
   origins: [],
   destinations: [],
+  cargoTypes: [],
+  vesselTypes: [],
+  cutoffWindows: [],
+  draftLimits: [],
 };
 
 type CargoActionItem = {
@@ -175,6 +192,14 @@ function mapItemToLabItem(item: MobileCargoListItem, statusLabel: string): Mobil
       ? sanitizeMobileCargoLabDisplayText(item.operationLabel)
       : undefined,
     warningLabel: item.alertLabel ? sanitizeMobileCargoLabDisplayText(item.alertLabel) : undefined,
+    cargoTypeLabel: item.cargoTypeLabel,
+    vesselTypeLabel: item.vesselTypeLabel,
+    cutoffWindowLabel: item.cutoffWindowLabel,
+    grossWeightLabel: item.grossWeightLabel,
+    draftLimitLabel: item.draftLimitLabel,
+    waterwayLabel: item.waterwayLabel,
+    availabilityLabel: item.availabilityLabel,
+    environmentalRiskLabel: item.environmentalRiskLabel,
     status: item.status,
     needsAttention: item.needsAttention,
   };
@@ -226,18 +251,45 @@ function matchesAdvancedFilters(
     return false;
   }
 
+  if (advanced.cargoTypes.length > 0 && !advanced.cargoTypes.includes(item.cargoTypeLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.vesselTypes.length > 0 && !advanced.vesselTypes.includes(item.vesselTypeLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.cutoffWindows.length > 0 && !advanced.cutoffWindows.includes(item.cutoffWindowLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.draftLimits.length > 0 && !advanced.draftLimits.includes(item.draftLimitLabel ?? '')) {
+    return false;
+  }
+
   return true;
+}
+
+function uniqueSorted(values: Array<string | undefined>): string[] {
+  return [...new Set(values.filter((value): value is string => Boolean(value?.trim())))]
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function getUniqueCargoLocations(items: MobileCargoListItem[]): {
   origins: string[];
   destinations: string[];
+  cargoTypes: string[];
+  vesselTypes: string[];
+  cutoffWindows: string[];
+  draftLimits: string[];
 } {
-  const origins = [...new Set(items.map((item) => item.origin))].sort((a, b) => a.localeCompare(b));
-  const destinations = [...new Set(items.map((item) => item.destination))].sort((a, b) =>
-    a.localeCompare(b),
-  );
-  return { origins, destinations };
+  const origins = uniqueSorted(items.map((item) => item.origin));
+  const destinations = uniqueSorted(items.map((item) => item.destination));
+  const cargoTypes = uniqueSorted(items.map((item) => item.cargoTypeLabel));
+  const vesselTypes = uniqueSorted(items.map((item) => item.vesselTypeLabel));
+  const cutoffWindows = uniqueSorted(items.map((item) => item.cutoffWindowLabel));
+  const draftLimits = uniqueSorted(items.map((item) => item.draftLimitLabel));
+  return { origins, destinations, cargoTypes, vesselTypes, cutoffWindows, draftLimits };
 }
 
 export function countMobileCargoActiveFilters(
@@ -252,13 +304,25 @@ export function countMobileCargoActiveFilters(
   if (status !== 'all') {
     count += 1;
   }
-  if (advanced.attentionOnly) {
+  if (advanced.attentionOnly && status !== 'attention') {
     count += 1;
   }
   if (advanced.origins.length > 0) {
     count += 1;
   }
   if (advanced.destinations.length > 0) {
+    count += 1;
+  }
+  if (advanced.cargoTypes.length > 0) {
+    count += 1;
+  }
+  if (advanced.vesselTypes.length > 0) {
+    count += 1;
+  }
+  if (advanced.cutoffWindows.length > 0) {
+    count += 1;
+  }
+  if (advanced.draftLimits.length > 0) {
     count += 1;
   }
   return count;
@@ -294,6 +358,14 @@ export function filterMobileCargoList(
       item.etaLabel ?? '',
       item.operationLabel ?? '',
       item.alertLabel ?? '',
+      item.cargoTypeLabel ?? '',
+      item.vesselTypeLabel ?? '',
+      item.cutoffWindowLabel ?? '',
+      item.grossWeightLabel ?? '',
+      item.draftLimitLabel ?? '',
+      item.waterwayLabel ?? '',
+      item.availabilityLabel ?? '',
+      item.environmentalRiskLabel ?? '',
     ]
       .map(normalizeValue)
       .join(' ');
@@ -623,6 +695,50 @@ export function MobileCargoLabEmptyState({
   );
 }
 
+
+function FilterPillSection({
+  title,
+  options,
+  selectedValues,
+  onToggle,
+  multiselect = true,
+}: {
+  title: string;
+  options: string[];
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+  multiselect?: boolean;
+}) {
+  if (options.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className={styles.filterSheetSection}>
+      <h3 className={styles.filterSheetSectionTitle}>{title}</h3>
+      <div
+        className={styles.filterSheetChips}
+        data-multiselect={multiselect ? 'true' : 'false'}
+      >
+        {options.map((option) => {
+          const isActive = selectedValues.includes(option);
+          return (
+            <button
+              key={option}
+              type="button"
+              className={styles.filterSheetChip}
+              data-active={isActive ? 'true' : undefined}
+              onClick={() => onToggle(option)}
+            >
+              {option}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 function CargoCardActionSheet({
   open,
   title,
@@ -943,8 +1059,18 @@ export function MobileCargoListLab({
     }
   };
 
-  const toggleLocationFilter = (
+  const toggleSingleLocationFilter = (
     kind: 'origins' | 'destinations',
+    value: string,
+  ) => {
+    setAdvancedFilters((current) => {
+      const isSelected = current[kind].includes(value);
+      return { ...current, [kind]: isSelected ? [] : [value] };
+    });
+  };
+
+  const toggleBusinessFilter = (
+    kind: MobileCargoBusinessFilterKind,
     value: string,
   ) => {
     setAdvancedFilters((current) => {
@@ -1241,7 +1367,7 @@ export function MobileCargoListLab({
         <div className={styles.filterSheetBody} data-testid="cargo-lab-filter-sheet">
           <section className={styles.filterSheetSection}>
             <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.statusSection')}</h3>
-            <div className={styles.filterSheetChips}>
+            <div className={styles.filterSheetChips} data-multiselect="false">
               {filterChipItems.map((chip) => {
                 const isActive = statusFilter === chip.id;
                 return (
@@ -1260,68 +1386,49 @@ export function MobileCargoListLab({
             </div>
           </section>
 
-          <section className={styles.filterSheetSection}>
-            <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.attentionSection')}</h3>
-            <button
-              type="button"
-              className={styles.filterSheetToggle}
-              data-active={advancedFilters.attentionOnly ? 'true' : undefined}
-              onClick={() =>
-                setAdvancedFilters((current) => ({
-                  ...current,
-                  attentionOnly: !current.attentionOnly,
-                }))
-              }
-            >
-              {t('filterSheet.attentionOnly')}
-            </button>
-          </section>
+          <FilterPillSection
+            title={t('filterSheet.originSection')}
+            options={locationOptions.origins}
+            selectedValues={advancedFilters.origins}
+            multiselect={false}
+            onToggle={(origin) => toggleSingleLocationFilter('origins', origin)}
+          />
 
-          {locationOptions.origins.length > 0 ? (
-            <section className={styles.filterSheetSection}>
-              <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.originSection')}</h3>
-              <div className={styles.filterSheetChips}>
-                {locationOptions.origins.map((origin) => {
-                  const isActive = advancedFilters.origins.includes(origin);
-                  return (
-                    <button
-                      key={origin}
-                      type="button"
-                      className={styles.filterSheetChip}
-                      data-active={isActive ? 'true' : undefined}
-                      onClick={() => toggleLocationFilter('origins', origin)}
-                    >
-                      {origin}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
+          <FilterPillSection
+            title={t('filterSheet.destinationSection')}
+            options={locationOptions.destinations}
+            selectedValues={advancedFilters.destinations}
+            multiselect={false}
+            onToggle={(destination) => toggleSingleLocationFilter('destinations', destination)}
+          />
 
-          {locationOptions.destinations.length > 0 ? (
-            <section className={styles.filterSheetSection}>
-              <h3 className={styles.filterSheetSectionTitle}>
-                {t('filterSheet.destinationSection')}
-              </h3>
-              <div className={styles.filterSheetChips}>
-                {locationOptions.destinations.map((destination) => {
-                  const isActive = advancedFilters.destinations.includes(destination);
-                  return (
-                    <button
-                      key={destination}
-                      type="button"
-                      className={styles.filterSheetChip}
-                      data-active={isActive ? 'true' : undefined}
-                      onClick={() => toggleLocationFilter('destinations', destination)}
-                    >
-                      {destination}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
+          <FilterPillSection
+            title={t('filterSheet.cargoTypeSection')}
+            options={locationOptions.cargoTypes}
+            selectedValues={advancedFilters.cargoTypes}
+            onToggle={(cargoType) => toggleBusinessFilter('cargoTypes', cargoType)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.vesselTypeSection')}
+            options={locationOptions.vesselTypes}
+            selectedValues={advancedFilters.vesselTypes}
+            onToggle={(vesselType) => toggleBusinessFilter('vesselTypes', vesselType)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.cutoffSection')}
+            options={locationOptions.cutoffWindows}
+            selectedValues={advancedFilters.cutoffWindows}
+            onToggle={(cutoffWindow) => toggleBusinessFilter('cutoffWindows', cutoffWindow)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.draftSection')}
+            options={locationOptions.draftLimits}
+            selectedValues={advancedFilters.draftLimits}
+            onToggle={(draftLimit) => toggleBusinessFilter('draftLimits', draftLimit)}
+          />
 
           <div className={styles.filterSheetFooter}>
             <button

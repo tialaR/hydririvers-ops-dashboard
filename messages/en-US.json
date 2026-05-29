@@ -574,7 +574,11 @@
         "originSection": "Origin",
         "destinationSection": "Destination",
         "clear": "Clear filters",
-        "apply": "Apply"
+        "apply": "Apply",
+        "cargoTypeSection": "Cargo type",
+        "vesselTypeSection": "Vessel type",
+        "cutoffSection": "Availability / cut-off",
+        "draftSection": "Maximum allowed draft"
       },
       "mapHint": {
         "title": "Select a cargo",

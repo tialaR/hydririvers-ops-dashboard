@@ -574,7 +574,11 @@
         "originSection": "Origem",
         "destinationSection": "Destino",
         "clear": "Limpar filtros",
-        "apply": "Aplicar"
+        "apply": "Aplicar",
+        "cargoTypeSection": "Tipo de carga",
+        "vesselTypeSection": "Tipo de embarcação",
+        "cutoffSection": "Disponibilidade / cut-off",
+        "draftSection": "Calado máximo permitido"
       },
       "mapHint": {
         "title": "Selecione uma carga",

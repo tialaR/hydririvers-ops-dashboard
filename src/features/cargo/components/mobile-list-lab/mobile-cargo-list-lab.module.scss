@@ -3282,3 +3282,174 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Round 13 — filter sheet business value + visual cleanup */
+.filterSheetOverlay,
+.cardActionSheetOverlay,
+.sheetOverlay,
+.mapHintSheetOverlay {
+  --sheet-surface: rgba(46, 51, 52, 0.76);
+  --sheet-surface-elevated: rgba(46, 51, 52, 0.76);
+  --sheet-inspector-material:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(46, 51, 52, 0.78);
+  --sheet-overlay: rgba(4, 6, 7, 0.24);
+}
+
+.filterSheetOverlay :global([class*='sheet'][data-open='true']),
+.cardActionSheetOverlay :global([class*='sheet'][data-open='true']) {
+  max-height: 98dvh;
+}
+
+.filterSheetOverlay :global([class*='titleRow']),
+.cardActionSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']),
+.sheetOverlay :global([class*='titleRow']) {
+  padding-block-start: 12px !important;
+  padding-inline-end: 12px !important;
+  padding-inline-start: 22px !important;
+  min-height: 52px !important;
+}
+
+.filterSheetOverlay :global([class*='controlButton']),
+.cardActionSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']),
+.sheetOverlay :global([class*='controlButton']) {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  margin-block-start: 0 !important;
+  margin-inline-end: 0 !important;
+  transform: none !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 10px 22px rgba(0, 0, 0, 0.22) !important;
+}
+
+.filterSheetOverlay :global([class*='grabberWrap']),
+.cardActionSheetOverlay :global([class*='grabberWrap']) {
+  padding-block-start: 10px !important;
+}
+
+.filterSheetOverlay :global([class*='grabber']),
+.cardActionSheetOverlay :global([class*='grabber']) {
+  width: 58px !important;
+  height: 5px !important;
+  opacity: 0.8;
+}
+
+.filterSheetContent,
+.cardActionSheetContent {
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-inline: 24px !important;
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 18px) !important;
+}
+
+.filterSheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar,
+.filterSheetBody::-webkit-scrollbar,
+.filterSheetChips::-webkit-scrollbar {
+  display: none;
+}
+
+.filterSheetHeader {
+  padding-block-start: 0 !important;
+  padding-inline-end: 48px !important;
+  margin-block-end: 18px;
+}
+
+.filterSheetBody {
+  gap: 22px !important;
+  padding-block-start: 0 !important;
+  padding-block-end: 0 !important;
+  overflow-y: visible;
+}
+
+.filterSheetSection {
+  gap: 12px !important;
+}
+
+.filterSheetSectionTitle {
+  letter-spacing: 0.14em !important;
+  color: rgba(235, 239, 238, 0.48) !important;
+}
+
+.filterSheetChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px !important;
+}
+
+.filterSheetChip,
+.filterSheetToggle {
+  min-height: 42px !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid rgba(255, 255, 255, 0.105) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.08) !important;
+  color: rgba(235, 239, 238, 0.64) !important;
+}
+
+.filterSheetChip[data-active='true'],
+.filterSheetToggle[data-active='true'] {
+  color: #182110 !important;
+  background:
+    radial-gradient(circle at 24% 12%, rgba(255, 255, 255, 0.95), transparent 35%),
+    linear-gradient(145deg, rgba(242, 255, 231, 0.96), rgba(196, 241, 163, 0.94)) !important;
+  border-color: rgba(255, 255, 255, 0.68) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 12px 24px rgba(157, 218, 118, 0.16) !important;
+}
+
+.filterSheetFooter {
+  margin-block-start: 1.5rem !important;
+  padding-block-start: 0 !important;
+  padding-inline: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.filterSheetClearButton,
+.filterSheetApplyButton {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.035) !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 10px 18px rgba(0, 0, 0, 0.1) !important;
+}
+
+.filterSheetApplyButton {
+  color: #182110 !important;
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.95), transparent 36%),
+    linear-gradient(145deg, rgba(242, 255, 231, 0.98), rgba(196, 241, 163, 0.96)) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.cardActionInfoList,
+.cardActionCargoSummary,
+.cardActionList {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.085) !important;
+  box-shadow: none !important;
+}
+
+.cardActionInfoItem,
+.cardActionRow {
+  background: transparent !important;
+}
