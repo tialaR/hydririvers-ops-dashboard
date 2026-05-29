@@ -120,6 +120,7 @@ type MobileCargoStatusFilter = 'all' | 'open' | 'quote' | 'operation' | 'attenti
 type MobileCargoBusinessFilterKind = 'cargoTypes' | 'vesselTypes' | 'cutoffWindows' | 'draftLimits';
 type MobileCargoLabDockId = 'cargas' | 'attention' | 'map' | 'profile';
 type LabSheetKind = 'none' | 'actions' | 'filters' | 'map-hint';
+type MobileCargoFilterLauncherSource = 'header' | 'compact' | null;
 type CargoActionId = 'overview' | 'journey' | 'documents' | 'costs' | 'priority';
 
 const SCROLL_COMPACT_THRESHOLD_PX = 28;
@@ -562,12 +563,18 @@ function MobileCargoFilterButton({
   onClick,
   className,
   buttonRef,
+  launching = false,
+  launchLabel = 'Filtros',
+  launchDescription = 'Refine a lista',
 }: {
   activeCount: number;
   ariaLabel: string;
   onClick: () => void;
   className: string;
   buttonRef?: RefObject<HTMLButtonElement | null>;
+  launching?: boolean;
+  launchLabel?: string;
+  launchDescription?: string;
 }) {
   return (
     <button
@@ -576,8 +583,13 @@ function MobileCargoFilterButton({
       className={className}
       aria-label={ariaLabel}
       data-testid="cargo-lab-filter-button"
+      data-launching={launching ? 'true' : undefined}
       onClick={onClick}
     >
+      <span className={styles.filterLauncherLabel} aria-hidden data-visible={launching ? 'true' : undefined}>
+        <strong>{launchLabel}</strong>
+        <small>{launchDescription}</small>
+      </span>
       <span className={styles.filterButtonIcon} aria-hidden>
         <FilterSlidersIcon />
       </span>
@@ -936,7 +948,10 @@ export function MobileCargoListLab({
   const [activeSheet, setActiveSheet] = useState<LabSheetKind>('none');
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastFocusedCardId, setLastFocusedCardId] = useState<string | null>(null);
+  const [filterLauncherSource, setFilterLauncherSource] =
+    useState<MobileCargoFilterLauncherSource>(null);
 
+  const filterLauncherTimeoutRef = useRef<number | null>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
   const listScrollerRef = useRef<HTMLDivElement>(null);
   const headerFilterButtonRef = useRef<HTMLButtonElement>(null);
@@ -950,6 +965,14 @@ export function MobileCargoListLab({
   const isAnySheetOpen = activeSheet !== 'none';
 
   useLabSheetScrollLock(isAnySheetOpen);
+
+  useEffect(() => {
+    return () => {
+      if (filterLauncherTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const normalizedDraft = searchDraft.trim();
@@ -1037,15 +1060,33 @@ export function MobileCargoListLab({
   const openFilterSheet = (trigger: HTMLButtonElement | null) => {
     lastFilterTriggerRef.current = trigger;
     releaseFocusedElementInside(sheetRootSelector);
+    setFilterLauncherSource(null);
     setActiveSheet('filters');
   };
 
+  const triggerFilterLauncher = (
+    source: Exclude<MobileCargoFilterLauncherSource, null>,
+    trigger: HTMLButtonElement | null,
+  ) => {
+    if (filterLauncherTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherTimeoutRef.current);
+    }
+
+    lastFilterTriggerRef.current = trigger;
+    setFilterLauncherSource(source);
+
+    filterLauncherTimeoutRef.current = window.setTimeout(() => {
+      filterLauncherTimeoutRef.current = null;
+      openFilterSheet(trigger);
+    }, 420);
+  };
+
   const handleFilterShortcut = () => {
-    openFilterSheet(headerFilterButtonRef.current);
+    triggerFilterLauncher('header', headerFilterButtonRef.current);
   };
 
   const handleCompactFilterShortcut = () => {
-    openFilterSheet(compactFilterButtonRef.current);
+    triggerFilterLauncher('compact', compactFilterButtonRef.current);
   };
 
   const scrollListToTop = () => {
@@ -1237,6 +1278,9 @@ export function MobileCargoListLab({
             activeCount={activeFilterCount}
             ariaLabel={t('filterShortcutAria')}
             className={styles.compactFilterButton}
+            launching={filterLauncherSource === 'compact'}
+            launchLabel={t('filterSheet.title')}
+            launchDescription={t('filterSheet.subtitle')}
             onClick={handleCompactFilterShortcut}
           />
         </div>
@@ -1261,6 +1305,9 @@ export function MobileCargoListLab({
                   activeCount={activeFilterCount}
                   ariaLabel={t('filterShortcutAria')}
                   className={styles.headerFilterButton}
+                  launching={filterLauncherSource === 'header'}
+                  launchLabel={t('filterSheet.title')}
+                  launchDescription={t('filterSheet.subtitle')}
                   onClick={handleFilterShortcut}
                 />
               </div>
