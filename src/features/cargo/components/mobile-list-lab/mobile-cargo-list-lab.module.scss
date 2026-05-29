@@ -2505,3 +2505,264 @@
     display: none;
   }
 }
+
+/* Round 10 — visual unification, search debounce affordance, sheet and dock polish. */
+:global(html),
+:global(body) {
+  background: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+}
+
+.root {
+  --mobile-cargo-list-page-padding: 18px;
+  background: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+  background-color: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+}
+
+.root::before {
+  background:
+    radial-gradient(circle at 14% 0%, rgb(255 255 255 / 4%), transparent 18rem),
+    radial-gradient(circle at 96% 4%, rgb(185 240 138 / 4%), transparent 16rem) !important;
+}
+
+.viewport,
+.listSection,
+.listScroller,
+.controls,
+.header,
+.list {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.compactHeaderInner {
+  min-height: 58px;
+  border-block-end: 0 !important;
+  background: rgb(36 43 46 / 22%) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.08);
+  backdrop-filter: blur(26px) saturate(1.08);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 10%) !important;
+}
+
+.searchField,
+.filterChip,
+.cardSurface,
+.headerFilterButton,
+.compactFilterButton {
+  background:
+    radial-gradient(circle at 20% 0%, rgb(255 255 255 / 8%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1.5%)),
+    var(--mobile-cargo-list-unified-surface, rgb(255 255 255 / 6%)) !important;
+  border-color: var(--mobile-cargo-list-border, rgb(255 255 255 / 11%)) !important;
+}
+
+.searchField {
+  height: 54px;
+  border-radius: 22px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    inset 0 -14px 22px rgb(0 0 0 / 7%),
+    0 10px 22px rgb(0 0 0 / 16%) !important;
+}
+
+.searchField::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.searchField:focus-within {
+  transform: translateY(-1px) scale(1.006) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 11%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    var(--mobile-cargo-list-unified-surface-strong, rgb(255 255 255 / 8%)) !important;
+  border-color: rgb(255 255 255 / 18%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    inset 0 -14px 22px rgb(0 0 0 / 7%),
+    0 12px 24px rgb(0 0 0 / 18%),
+    0 0 0 2px rgb(185 240 138 / 8%) !important;
+}
+
+.searchInput {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-results-button,
+.searchInput::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.searchClearButton {
+  width: 24px;
+  height: 24px;
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  color: rgb(236 239 236 / 58%);
+}
+
+/* Horizontal filters keep scroll, but with soft fade and no foreign-color container. */
+.filterScroll {
+  background: transparent !important;
+  margin-block-end: 17px;
+  mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 56px), transparent 100%) !important;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 56px), transparent 100%) !important;
+}
+
+.filterChips {
+  background: transparent !important;
+}
+
+.filterChip {
+  height: 40px;
+  color: rgb(236 239 236 / 64%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 8px 16px rgb(0 0 0 / 14%) !important;
+}
+
+.filterChip[data-active='true'] {
+  color: rgb(16 20 17 / 92%);
+  background:
+    radial-gradient(circle at 28% 0%, rgb(255 255 255 / 80%), transparent 52%),
+    linear-gradient(145deg, rgb(233 255 205 / 94%), rgb(169 219 130 / 84%)) !important;
+  border-color: rgb(255 255 255 / 38%) !important;
+}
+
+.cardSurface {
+  border-radius: 29px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    inset 0 -22px 34px rgb(0 0 0 / 11%),
+    0 16px 30px rgb(0 0 0 / 22%) !important;
+}
+
+.cardSurface::after {
+  opacity: 0.28;
+}
+
+.cardRouteBlock {
+  border-block-color: rgb(255 255 255 / 8%);
+}
+
+/* Unified sheets: smaller close button, visible grabber, integrated transparent controls. */
+.cardActionSheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay,
+.sheetOverlay {
+  --sheet-overlay: rgb(0 0 0 / 32%);
+  --sheet-surface: rgb(36 43 46 / 94%);
+  --sheet-surface-elevated: rgb(36 43 46 / 92%);
+  --sheet-inspector-material:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 9%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1.5%)),
+    rgb(36 43 46 / 94%);
+}
+
+.cardActionSheetOverlay :global([class*='toolbar']),
+.filterSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']),
+.sheetOverlay :global([class*='toolbar']) {
+  min-height: 50px !important;
+  padding-block-end: 0 !important;
+}
+
+.cardActionSheetOverlay :global([class*='grabber']),
+.filterSheetOverlay :global([class*='grabber']),
+.mapHintSheetOverlay :global([class*='grabber']),
+.sheetOverlay :global([class*='grabber']) {
+  width: 72px !important;
+  height: 5px !important;
+  opacity: 0.85 !important;
+}
+
+.cardActionSheetOverlay :global([class*='titleRow']),
+.filterSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']),
+.sheetOverlay :global([class*='titleRow']) {
+  min-height: 44px !important;
+  padding-inline: 20px !important;
+  align-items: flex-start !important;
+}
+
+.cardActionSheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']),
+.sheetOverlay :global([class*='controlButton']) {
+  width: 40px !important;
+  height: 40px !important;
+  margin-block-start: 4px !important;
+  margin-inline-end: 4px !important;
+  padding: 0 !important;
+  background:
+    radial-gradient(circle at 26% 10%, rgb(255 255 255 / 14%), transparent 52%),
+    rgb(255 255 255 / 8%) !important;
+  border: 1px solid rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 8px 14px rgb(0 0 0 / 16%) !important;
+}
+
+.cardActionSheetContent,
+.filterSheetContent,
+.mapHintSheetContent,
+.sheetContent {
+  padding-inline: 20px !important;
+}
+
+.cardActionHeader {
+  padding-block: 0 12px !important;
+  padding-inline-end: 48px !important;
+}
+
+.cardActionTitle {
+  font-size: 23px !important;
+  line-height: 28px !important;
+}
+
+.cardActionCargoSummary,
+.cardActionList,
+.filterSheetFooter,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.filterSheetToggle,
+.filterSheetChip {
+  background: transparent !important;
+}
+
+.cardActionCargoSummary,
+.cardActionList {
+  border-color: rgb(255 255 255 / 8%) !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%) !important;
+}
+
+.cardActionRow,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.filterSheetToggle,
+.filterSheetChip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.filterSheetApplyButton {
+  color: var(--mobile-cargo-list-accent-strong, #d5ffb0) !important;
+  border-color: rgb(185 240 138 / 24%) !important;
+}
+
+.filterSheetClearButton {
+  border-color: rgb(255 255 255 / 10%) !important;
+}
+
+.filterSheetFooter {
+  background: linear-gradient(180deg, transparent, rgb(36 43 46 / 90%) 42%) !important;
+}
+
+@media (max-width: 374px) {
+  .root {
+    --mobile-cargo-list-page-padding: 16px;
+  }
+}

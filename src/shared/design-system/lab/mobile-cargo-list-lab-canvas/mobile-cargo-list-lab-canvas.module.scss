@@ -64,3 +64,31 @@
       var(--mobile-cargo-list-canvas-bottom) 100%
     );
 }
+
+/* Round 10 — single visual field. No visible patched blocks between canvas/list/header/cards. */
+.canvas {
+  --mobile-cargo-list-canvas-top: #242b2e;
+  --mobile-cargo-list-canvas-mid: #242b2e;
+  --mobile-cargo-list-canvas-bottom: #242b2e;
+  --mobile-cargo-list-panel: rgb(255 255 255 / 6%);
+  --mobile-cargo-list-panel-strong: rgb(255 255 255 / 8%);
+  --mobile-cargo-list-panel-soft: rgb(255 255 255 / 5%);
+  --mobile-cargo-list-border: rgb(255 255 255 / 11%);
+  --mobile-cargo-list-border-strong: rgb(255 255 255 / 18%);
+  --mobile-cargo-list-label-primary: rgb(251 253 251 / 94%);
+  --mobile-cargo-list-label-secondary: rgb(236 239 236 / 62%);
+  --mobile-cargo-list-label-tertiary: rgb(236 239 236 / 39%);
+  --mobile-cargo-list-separator: rgb(255 255 255 / 9%);
+  --mobile-cargo-list-accent: #b9f08a;
+  --mobile-cargo-list-accent-strong: #d5ffb0;
+  --mobile-cargo-list-accent-soft: rgb(185 240 138 / 12%);
+  --mobile-cargo-list-unified-bg: #242b2e;
+  --mobile-cargo-list-unified-surface: rgb(255 255 255 / 6%);
+  --mobile-cargo-list-unified-surface-strong: rgb(255 255 255 / 8%);
+
+  background-color: var(--mobile-cargo-list-unified-bg);
+  background-image:
+    radial-gradient(circle at 14% 0%, rgb(255 255 255 / 4%), transparent 18rem),
+    radial-gradient(circle at 96% 3%, rgb(185 240 138 / 4%), transparent 16rem),
+    linear-gradient(180deg, var(--mobile-cargo-list-unified-bg), var(--mobile-cargo-list-unified-bg));
+}

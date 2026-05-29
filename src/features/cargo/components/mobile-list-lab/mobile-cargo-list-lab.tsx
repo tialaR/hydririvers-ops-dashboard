@@ -737,6 +737,7 @@ export function MobileCargoListLab({
   const t = useTranslations('pages.devMobileCargoListLab');
   const tCommon = useTranslations('common');
 
+  const [searchDraft, setSearchDraft] = useState('');
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<MobileCargoStatusFilter>('all');
   const [advancedFilters, setAdvancedFilters] =
@@ -760,6 +761,17 @@ export function MobileCargoListLab({
   const isAnySheetOpen = activeSheet !== 'none';
 
   useLabSheetScrollLock(isAnySheetOpen);
+
+  useEffect(() => {
+    const normalizedDraft = searchDraft.trim();
+    const debounceMs = normalizedDraft.length >= 3 ? 320 : 180;
+
+    const timeout = window.setTimeout(() => {
+      setQuery(normalizedDraft.length >= 3 ? searchDraft : '');
+    }, debounceMs);
+
+    return () => window.clearTimeout(timeout);
+  }, [searchDraft]);
 
   const closeLabel = t('actionSheet.close');
 
@@ -826,6 +838,7 @@ export function MobileCargoListLab({
   const hasActiveFilters = activeFilterCount > 0;
 
   const handleClearFilters = () => {
+    setSearchDraft('');
     setQuery('');
     setStatusFilter('all');
     setAdvancedFilters(EMPTY_ADVANCED_FILTERS);
@@ -1068,22 +1081,25 @@ export function MobileCargoListLab({
                   </svg>
                 </span>
                 <input
-                  type="search"
+                  type="text"
                   className={styles.searchInput}
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  value={searchDraft}
+                  onChange={(event) => setSearchDraft(event.target.value)}
                   placeholder={t('searchPlaceholder')}
                   aria-label={t('searchAria')}
                   enterKeyHint="search"
                   autoComplete="off"
                   spellCheck={false}
                 />
-                {query.trim().length > 0 ? (
+                {searchDraft.trim().length > 0 ? (
                   <button
                     type="button"
                     className={styles.searchClearButton}
                     aria-label={t('searchClearAria')}
-                    onClick={() => setQuery('')}
+                    onClick={() => {
+                      setSearchDraft('');
+                      setQuery('');
+                    }}
                   >
                     <span aria-hidden>×</span>
                   </button>
