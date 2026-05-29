@@ -220,22 +220,31 @@ export function LiquidGlassSheet({
   );
 
   const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     event.preventDefault();
     event.stopPropagation();
+  };
 
-    if (event.target === event.currentTarget) {
-      onClose?.();
+  const handleOverlayPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
     }
+
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   const handleOverlayClick = (event: ReactMouseEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
+    if (event.target !== event.currentTarget) {
+      return;
+    }
 
-  const stopOverlayEvent = (event: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    onClose?.();
   };
 
   const handleDragStart = (event: ReactPointerEvent<HTMLElement>) => {
@@ -356,7 +365,7 @@ export function LiquidGlassSheet({
       data-placement={placement}
       inert={!open ? true : undefined}
       onPointerDown={open ? handleOverlayPointerDown : undefined}
-      onPointerUp={open ? stopOverlayEvent : undefined}
+      onPointerUp={open ? handleOverlayPointerUp : undefined}
       onClick={open ? handleOverlayClick : undefined}
     >
       {stacked ? <div className={styles.stackedRail} aria-hidden /> : null}

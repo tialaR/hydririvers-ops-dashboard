@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, RefObject } from 'react';
+import type { CSSProperties, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -582,18 +582,6 @@ function MobileCargoFilterButton({
 }) {
   const showLauncherActions = launching && activeCount > 0;
 
-  const handleActionKeyDown = (
-    event: ReactKeyboardEvent<HTMLDivElement>,
-    action: () => void,
-  ) => {
-    if (event.key !== 'Enter' && event.key !== ' ') {
-      return;
-    }
-
-    event.preventDefault();
-    event.stopPropagation();
-    action();
-  };
 
   return (
     <span
@@ -622,26 +610,26 @@ function MobileCargoFilterButton({
       </button>
 
       {showLauncherActions ? (
-        <span
+        <div
           className={styles.filterLauncherMenu}
           role="menu"
           aria-label="Ações dos filtros aplicados"
           data-testid="cargo-lab-filter-launcher-actions"
-          onClickCapture={(event) => event.stopPropagation()}
-          onPointerDownCapture={(event) => event.stopPropagation()}
-          onTouchStartCapture={(event) => event.stopPropagation()}
+          onClick={(event) => event.stopPropagation()}
+          onPointerDown={(event) => event.stopPropagation()}
+          onPointerUp={(event) => event.stopPropagation()}
+          onTouchStart={(event) => event.stopPropagation()}
         >
-          <div
+          <button
+            type="button"
             className={styles.filterLauncherMenuItem}
             data-variant="open"
             role="menuitem"
-            tabIndex={0}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               onOpenFilters?.();
             }}
-            onKeyDown={(event) => handleActionKeyDown(event, () => onOpenFilters?.())}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <FilterSlidersIcon />
@@ -650,18 +638,17 @@ function MobileCargoFilterButton({
             <span className={styles.filterLauncherMenuCount} aria-hidden>
               {activeCount}
             </span>
-          </div>
-          <div
+          </button>
+          <button
+            type="button"
             className={styles.filterLauncherMenuItem}
             data-variant="clear"
             role="menuitem"
-            tabIndex={0}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               onClearFilters?.();
             }}
-            onKeyDown={(event) => handleActionKeyDown(event, () => onClearFilters?.())}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -669,8 +656,8 @@ function MobileCargoFilterButton({
               </svg>
             </span>
             <span className={styles.filterLauncherMenuCopy}>{clearLabel}</span>
-          </div>
-        </span>
+          </button>
+        </div>
       ) : null}
     </span>
   );
@@ -1164,12 +1151,18 @@ export function MobileCargoListLab({
     const trigger = filterLauncherSource === 'compact'
       ? compactFilterButtonRef.current
       : headerFilterButtonRef.current;
-    openFilterSheet(trigger);
+    setFilterLauncherSource(null);
+    window.requestAnimationFrame(() => {
+      openFilterSheet(trigger);
+    });
   };
 
   const handleClearFiltersFromLauncher = () => {
     setFilterLauncherSource(null);
     handleClearFilters();
+    window.requestAnimationFrame(() => {
+      listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   };
 
   const scrollListToTop = () => {
