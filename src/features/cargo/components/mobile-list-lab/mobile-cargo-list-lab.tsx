@@ -429,10 +429,17 @@ function DockCargasIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
-        d="M4 6.5h12M4 10h12M4 13.5h8"
+        d="M4.2 6.8 10 3.6l5.8 3.2v6.4L10 16.4l-5.8-3.2V6.8Z"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.5 7 10 10.1 15.5 7M10 10.1v6"
         stroke="currentColor"
         strokeWidth="1.7"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -442,13 +449,12 @@ function DockAttentionIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
-        d="M10 4.5 16.5 15H3.5L10 4.5Z"
+        d="M6.2 8.6c0-2.25 1.55-3.85 3.8-3.85s3.8 1.6 3.8 3.85v2.2l1.2 2.05H5l1.2-2.05V8.6Z"
         stroke="currentColor"
         strokeWidth="1.7"
         strokeLinejoin="round"
       />
-      <path d="M10 9v3" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
-      <circle cx="10" cy="13.25" r="0.75" fill="currentColor" />
+      <path d="M8.6 15.1c.35.55.82.82 1.4.82s1.05-.27 1.4-.82" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   );
 }

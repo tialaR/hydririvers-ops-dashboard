@@ -222,10 +222,16 @@ export function LiquidGlassSheet({
   const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+  };
+
+  const handleOverlayClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
 
     if (event.target !== event.currentTarget) {
       return;
     }
+
     onClose?.();
   };
 
@@ -353,7 +359,7 @@ export function LiquidGlassSheet({
       inert={!open ? true : undefined}
       onPointerDown={open ? handleOverlayPointerDown : undefined}
       onPointerUp={open ? stopOverlayEvent : undefined}
-      onClick={open ? stopOverlayEvent : undefined}
+      onClick={open ? handleOverlayClick : undefined}
     >
       {stacked ? <div className={styles.stackedRail} aria-hidden /> : null}
 
