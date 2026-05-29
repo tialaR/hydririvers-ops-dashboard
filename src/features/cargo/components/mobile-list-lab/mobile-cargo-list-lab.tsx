@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties, RefObject } from 'react';
+import type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -582,6 +582,19 @@ function MobileCargoFilterButton({
 }) {
   const showLauncherActions = launching && activeCount > 0;
 
+  const handleActionKeyDown = (
+    event: ReactKeyboardEvent<HTMLDivElement>,
+    action: () => void,
+  ) => {
+    if (event.key !== 'Enter' && event.key !== ' ') {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+    action();
+  };
+
   return (
     <span
       className={styles.filterLauncherRoot}
@@ -610,50 +623,53 @@ function MobileCargoFilterButton({
 
       {showLauncherActions ? (
         <span
-          className={styles.filterLauncherActions}
+          className={styles.filterLauncherMenu}
           role="menu"
           aria-label="Ações dos filtros aplicados"
           data-testid="cargo-lab-filter-launcher-actions"
+          onClickCapture={(event) => event.stopPropagation()}
+          onPointerDownCapture={(event) => event.stopPropagation()}
+          onTouchStartCapture={(event) => event.stopPropagation()}
         >
-          <button
-            type="button"
-            className={styles.filterLauncherAction}
+          <div
+            className={styles.filterLauncherMenuItem}
             data-variant="open"
             role="menuitem"
-            onPointerDown={(event) => event.stopPropagation()}
+            tabIndex={0}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               onOpenFilters?.();
             }}
+            onKeyDown={(event) => handleActionKeyDown(event, () => onOpenFilters?.())}
           >
-            <span className={styles.filterLauncherActionIcon} aria-hidden>
+            <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <FilterSlidersIcon />
             </span>
-            <span className={styles.filterLauncherActionCopy}>{launchLabel}</span>
-            <span className={styles.filterLauncherActionCount} aria-hidden>
+            <span className={styles.filterLauncherMenuCopy}>{launchLabel}</span>
+            <span className={styles.filterLauncherMenuCount} aria-hidden>
               {activeCount}
             </span>
-          </button>
-          <button
-            type="button"
-            className={styles.filterLauncherAction}
+          </div>
+          <div
+            className={styles.filterLauncherMenuItem}
             data-variant="clear"
             role="menuitem"
-            onPointerDown={(event) => event.stopPropagation()}
+            tabIndex={0}
             onClick={(event) => {
               event.preventDefault();
               event.stopPropagation();
               onClearFilters?.();
             }}
+            onKeyDown={(event) => handleActionKeyDown(event, () => onClearFilters?.())}
           >
-            <span className={styles.filterLauncherActionIcon} aria-hidden>
+            <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                 <path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
               </svg>
             </span>
-            <span className={styles.filterLauncherActionCopy}>{clearLabel}</span>
-          </button>
+            <span className={styles.filterLauncherMenuCopy}>{clearLabel}</span>
+          </div>
         </span>
       ) : null}
     </span>
