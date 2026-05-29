@@ -585,45 +585,60 @@ function MobileCargoFilterButton({
   onClearFilters?: () => void;
 }) {
   const showLauncherActions = launching && activeCount > 0;
-  const actionPointerHandledRef = useRef(false);
+  const actionLockRef = useRef(false);
 
-  const runLauncherAction = (
-    event: ReactMouseEvent<HTMLButtonElement> | ReactPointerEvent<HTMLButtonElement>,
-    action?: () => void,
+  const resolveActionFromTarget = (target: EventTarget | null): 'open' | 'clear' | null => {
+    if (!(target instanceof Element)) {
+      return null;
+    }
+
+    const actionElement = target.closest<HTMLElement>('[data-filter-launcher-action]');
+    const action = actionElement?.dataset.filterLauncherAction;
+    return action === 'open' || action === 'clear' ? action : null;
+  };
+
+  const executeLauncherAction = (
+    event:
+      | ReactMouseEvent<HTMLElement>
+      | ReactPointerEvent<HTMLElement>,
+    action: 'open' | 'clear' | null,
   ) => {
     event.preventDefault();
     event.stopPropagation();
-    action?.();
-  };
 
-  const handleLauncherPointerDown = (
-    event: ReactPointerEvent<HTMLButtonElement>,
-    action?: () => void,
-  ) => {
-    actionPointerHandledRef.current = true;
-    runLauncherAction(event, action);
-    window.setTimeout(() => {
-      actionPointerHandledRef.current = false;
-    }, 80);
-  };
-
-  const handleLauncherMouseDown = (
-    event: ReactMouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleLauncherClick = (
-    event: ReactMouseEvent<HTMLButtonElement>,
-    action?: () => void,
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (actionPointerHandledRef.current) {
+    if (action == null || actionLockRef.current) {
       return;
     }
-    runLauncherAction(event, action);
+
+    actionLockRef.current = true;
+    window.setTimeout(() => {
+      actionLockRef.current = false;
+    }, 260);
+
+    // Round 22: defer the state transition until after the current pointer/click
+    // cycle has been consumed by the menu. This avoids the menu unmounting early
+    // and letting the trailing click hit the list/search/chips below it.
+    window.setTimeout(() => {
+      if (action === 'open') {
+        onOpenFilters?.();
+        return;
+      }
+
+      onClearFilters?.();
+    }, 0);
+  };
+
+  const handleMenuPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleMenuPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    executeLauncherAction(event, resolveActionFromTarget(event.target));
+  };
+
+  const handleMenuClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    executeLauncherAction(event, resolveActionFromTarget(event.target));
   };
 
   return (
@@ -658,19 +673,16 @@ function MobileCargoFilterButton({
           role="menu"
           aria-label="Ações dos filtros aplicados"
           data-testid="cargo-lab-filter-launcher-actions"
-          onClick={(event) => event.stopPropagation()}
-          onPointerDown={(event) => event.stopPropagation()}
-          onPointerUp={(event) => event.stopPropagation()}
-          onTouchStart={(event) => event.stopPropagation()}
+          onPointerDown={handleMenuPointerDown}
+          onPointerUp={handleMenuPointerUp}
+          onClick={handleMenuClick}
         >
           <button
             type="button"
             className={styles.filterLauncherMenuItem}
             data-variant="open"
+            data-filter-launcher-action="open"
             role="menuitem"
-            onPointerDown={(event) => handleLauncherPointerDown(event, onOpenFilters)}
-            onMouseDown={handleLauncherMouseDown}
-            onClick={(event) => handleLauncherClick(event, onOpenFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <FilterSlidersIcon />
@@ -684,10 +696,8 @@ function MobileCargoFilterButton({
             type="button"
             className={styles.filterLauncherMenuItem}
             data-variant="clear"
+            data-filter-launcher-action="clear"
             role="menuitem"
-            onPointerDown={(event) => handleLauncherPointerDown(event, onClearFilters)}
-            onMouseDown={handleLauncherMouseDown}
-            onClick={(event) => handleLauncherClick(event, onClearFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -1205,17 +1215,9 @@ export function MobileCargoListLab({
       filterLauncherTimeoutRef.current = null;
     }
 
-    // Round 21: reset every filter state directly from the contextual menu.
-    // Calling the sheet clear handler from inside the launcher can be swallowed by
-    // the launcher close cycle on touch devices, so the menu owns the full reset.
-    setSearchDraft('');
-    setQuery('');
-    setStatusFilter('all');
-    setAdvancedFilters(() => createEmptyAdvancedFilters());
-    setDockActiveId('cargas');
-    setActiveSheet('none');
-    setSelectedCargo(null);
-    setFilterLauncherSource(null);
+    // Round 22: use the same canonical clear function used by the sheet footer.
+    // Keeping one reset path prevents launcher-only state drift.
+    handleClearFilters();
 
     window.requestAnimationFrame(() => {
       listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
