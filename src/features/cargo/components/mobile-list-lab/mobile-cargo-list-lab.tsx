@@ -607,6 +607,7 @@ function MobileCargoFilterButton({
   ) => {
     event.preventDefault();
     event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
 
     if (action == null || actionLockRef.current) {
       return;
@@ -645,7 +646,24 @@ function MobileCargoFilterButton({
   const handleDismissPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
     onDismiss?.();
+  };
+
+  const handleOpenItemPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'open');
+  };
+
+  const handleClearItemPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'clear');
+  };
+
+  const handleOpenItemClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'open');
+  };
+
+  const handleClearItemClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'clear');
   };
 
   return (
@@ -674,13 +692,8 @@ function MobileCargoFilterButton({
         ) : null}
       </button>
 
-      {showLauncherActions ? (
+      {false ? (
         <>
-          <div
-            className={styles.filterLauncherTapShield}
-            aria-hidden
-            onPointerDown={handleDismissPointerDown}
-          />
           <div
             className={styles.filterLauncherMenu}
             role="menu"
@@ -695,6 +708,8 @@ function MobileCargoFilterButton({
             data-variant="open"
             data-filter-launcher-action="open"
             role="menuitem"
+            onPointerDown={handleOpenItemPointerDown}
+            onClick={handleOpenItemClick}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <FilterSlidersIcon />
@@ -710,6 +725,8 @@ function MobileCargoFilterButton({
             data-variant="clear"
             data-filter-launcher-action="clear"
             role="menuitem"
+            onPointerDown={handleClearItemPointerDown}
+            onClick={handleClearItemClick}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -1032,8 +1049,10 @@ export function MobileCargoListLab({
   const [lastFocusedCardId, setLastFocusedCardId] = useState<string | null>(null);
   const [filterLauncherSource, setFilterLauncherSource] =
     useState<MobileCargoFilterLauncherSource>(null);
+  const [filterLauncherGestureGuardActive, setFilterLauncherGestureGuardActive] = useState(false);
 
   const filterLauncherTimeoutRef = useRef<number | null>(null);
+  const filterLauncherGestureGuardTimeoutRef = useRef<number | null>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
   const listScrollerRef = useRef<HTMLDivElement>(null);
   const headerFilterButtonRef = useRef<HTMLButtonElement>(null);
@@ -1053,6 +1072,9 @@ export function MobileCargoListLab({
       if (filterLauncherTimeoutRef.current != null) {
         window.clearTimeout(filterLauncherTimeoutRef.current);
       }
+      if (filterLauncherGestureGuardTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -1061,30 +1083,55 @@ export function MobileCargoListLab({
       return undefined;
     }
 
-    const handlePointerDown = (event: PointerEvent) => {
+    const activateLocalGestureGuard = (durationMs = 520) => {
+      setFilterLauncherGestureGuardActive(true);
+
+      if (filterLauncherGestureGuardTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+      }
+
+      filterLauncherGestureGuardTimeoutRef.current = window.setTimeout(() => {
+        filterLauncherGestureGuardTimeoutRef.current = null;
+        setFilterLauncherGestureGuardActive(false);
+      }, durationMs);
+    };
+
+    const blockBackgroundInteraction = (event: Event) => {
       const target = event.target;
-      if (!(target instanceof Element)) {
+      if (target instanceof Element && target.closest('[data-filter-launcher-modal="true"]')) {
         return;
       }
 
-      if (target.closest('[data-filter-launcher-root="true"]')) {
-        return;
+      event.preventDefault();
+      event.stopPropagation();
+      if ('stopImmediatePropagation' in event) {
+        event.stopImmediatePropagation();
       }
 
       setFilterLauncherSource(null);
+      activateLocalGestureGuard(540);
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
         setFilterLauncherSource(null);
+        activateLocalGestureGuard(440);
       }
     };
 
-    window.addEventListener('pointerdown', handlePointerDown, { capture: true });
-    window.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('click', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('touchstart', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('touchend', blockBackgroundInteraction, { capture: true });
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
     return () => {
-      window.removeEventListener('pointerdown', handlePointerDown, { capture: true });
-      window.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('click', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('touchstart', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('touchend', blockBackgroundInteraction, { capture: true });
+      window.removeEventListener('keydown', handleKeyDown, { capture: true });
     };
   }, [filterLauncherSource]);
 
@@ -1100,6 +1147,32 @@ export function MobileCargoListLab({
   }, [searchDraft]);
 
   const closeLabel = t('actionSheet.close');
+
+  const activateFilterLauncherGestureGuard = useCallback((durationMs = 520) => {
+    setFilterLauncherGestureGuardActive(true);
+
+    if (filterLauncherGestureGuardTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+    }
+
+    filterLauncherGestureGuardTimeoutRef.current = window.setTimeout(() => {
+      filterLauncherGestureGuardTimeoutRef.current = null;
+      setFilterLauncherGestureGuardActive(false);
+    }, durationMs);
+  }, []);
+
+  const handleFilterLauncherShieldPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+    setFilterLauncherSource(null);
+  }, []);
+
+  const handleFilterLauncherShieldClick = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+  }, []);
 
   useEffect(() => {
     if (isActionSheetOpen) {
@@ -1213,28 +1286,67 @@ export function MobileCargoListLab({
   };
 
   const handleOpenFiltersFromLauncher = () => {
+    activateFilterLauncherGestureGuard();
     const trigger = filterLauncherSource === 'compact'
       ? compactFilterButtonRef.current
       : headerFilterButtonRef.current;
     setFilterLauncherSource(null);
-    window.requestAnimationFrame(() => {
-      openFilterSheet(trigger);
-    });
+    releaseFocusedElementInside(sheetRootSelector);
+    setActiveSheet('filters');
+    lastFilterTriggerRef.current = trigger;
   };
 
   const handleClearFiltersFromLauncher = () => {
+    activateFilterLauncherGestureGuard(680);
+
     if (filterLauncherTimeoutRef.current != null) {
       window.clearTimeout(filterLauncherTimeoutRef.current);
       filterLauncherTimeoutRef.current = null;
     }
 
-    // Round 22: use the same canonical clear function used by the sheet footer.
-    // Keeping one reset path prevents launcher-only state drift.
+    // Round 24: invoke the canonical reset path and keep a hit-test guard alive
+    // until the mobile click sequence finishes, preventing the search/cards behind
+    // the menu from receiving the released tap.
     handleClearFilters();
 
-    window.requestAnimationFrame(() => {
+    window.setTimeout(() => {
       listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    }, 0);
+  };
+
+
+  const stopFilterLauncherEvent = (
+    event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+  };
+
+  const handleFilterLauncherModalPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleFilterLauncherModalClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleOpenFiltersMenuAction = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+    handleOpenFiltersFromLauncher();
+  };
+
+  const handleClearFiltersMenuAction = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+    handleClearFiltersFromLauncher();
+  };
+
+  const handleOpenFiltersMenuClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleClearFiltersMenuClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
   };
 
   const scrollListToTop = () => {
@@ -1412,6 +1524,63 @@ export function MobileCargoListLab({
       data-scrolled={isScrolled ? 'true' : undefined}
       data-testid="mobile-cargo-list-lab"
     >
+      {(filterLauncherSource != null || filterLauncherGestureGuardActive) ? (
+        <div
+          className={styles.filterLauncherGlobalShield}
+          aria-hidden
+          data-active={filterLauncherSource != null ? 'true' : 'guard'}
+          onPointerDown={handleFilterLauncherShieldPointerDown}
+          onClick={handleFilterLauncherShieldClick}
+        />
+      ) : null}
+      {filterLauncherSource != null ? (
+        <div
+          className={styles.filterLauncherModalLayer}
+          data-filter-launcher-modal="true"
+          role="presentation"
+          onPointerDown={handleFilterLauncherModalPointerDown}
+          onClick={handleFilterLauncherModalClick}
+        >
+          <div
+            className={styles.filterLauncherModalMenu}
+            role="menu"
+            aria-label="Ações dos filtros aplicados"
+            data-testid="cargo-lab-filter-launcher-actions"
+          >
+            <button
+              type="button"
+              className={styles.filterLauncherModalItem}
+              data-variant="open"
+              role="menuitem"
+              onPointerDown={handleOpenFiltersMenuAction}
+              onClick={handleOpenFiltersMenuClick}
+            >
+              <span className={styles.filterLauncherModalIcon} aria-hidden>
+                <FilterSlidersIcon />
+              </span>
+              <span className={styles.filterLauncherModalCopy}>{t('filterSummary.view')}</span>
+              <span className={styles.filterLauncherModalCount} aria-hidden>
+                {activeFilterCount}
+              </span>
+            </button>
+            <button
+              type="button"
+              className={styles.filterLauncherModalItem}
+              data-variant="clear"
+              role="menuitem"
+              onPointerDown={handleClearFiltersMenuAction}
+              onClick={handleClearFiltersMenuClick}
+            >
+              <span className={styles.filterLauncherModalIcon} aria-hidden>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className={styles.filterLauncherModalCopy}>{t('filterSummary.clear')}</span>
+            </button>
+          </div>
+        </div>
+      ) : null}
       <header
         className={styles.compactHeader}
         data-visible={isScrolled ? 'true' : 'false'}
