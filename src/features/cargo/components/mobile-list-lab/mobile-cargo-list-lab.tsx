@@ -1,6 +1,6 @@
 'use client';
 
-import type { CSSProperties, RefObject } from 'react';
+import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -124,15 +124,19 @@ type MobileCargoFilterLauncherSource = 'header' | 'compact' | null;
 type CargoActionId = 'overview' | 'journey' | 'documents' | 'costs' | 'priority';
 
 const SCROLL_COMPACT_THRESHOLD_PX = 28;
-const EMPTY_ADVANCED_FILTERS: MobileCargoAdvancedFilters = {
-  attentionOnly: false,
-  origins: [],
-  destinations: [],
-  cargoTypes: [],
-  vesselTypes: [],
-  cutoffWindows: [],
-  draftLimits: [],
-};
+function createEmptyAdvancedFilters(): MobileCargoAdvancedFilters {
+  return {
+    attentionOnly: false,
+    origins: [],
+    destinations: [],
+    cargoTypes: [],
+    vesselTypes: [],
+    cutoffWindows: [],
+    draftLimits: [],
+  };
+}
+
+const EMPTY_ADVANCED_FILTERS: MobileCargoAdvancedFilters = createEmptyAdvancedFilters();
 
 type CargoActionItem = {
   id: CargoActionId;
@@ -581,7 +585,39 @@ function MobileCargoFilterButton({
   onClearFilters?: () => void;
 }) {
   const showLauncherActions = launching && activeCount > 0;
+  const actionPointerHandledRef = useRef(false);
 
+  const runLauncherAction = (
+    event: ReactMouseEvent<HTMLButtonElement> | ReactPointerEvent<HTMLButtonElement>,
+    action?: () => void,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    action?.();
+  };
+
+  const handleLauncherPointerDown = (
+    event: ReactPointerEvent<HTMLButtonElement>,
+    action?: () => void,
+  ) => {
+    actionPointerHandledRef.current = true;
+    runLauncherAction(event, action);
+    window.setTimeout(() => {
+      actionPointerHandledRef.current = false;
+    }, 0);
+  };
+
+  const handleLauncherClick = (
+    event: ReactMouseEvent<HTMLButtonElement>,
+    action?: () => void,
+  ) => {
+    if (actionPointerHandledRef.current) {
+      event.preventDefault();
+      event.stopPropagation();
+      return;
+    }
+    runLauncherAction(event, action);
+  };
 
   return (
     <span
@@ -625,11 +661,8 @@ function MobileCargoFilterButton({
             className={styles.filterLauncherMenuItem}
             data-variant="open"
             role="menuitem"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              onOpenFilters?.();
-            }}
+            onPointerDown={(event) => handleLauncherPointerDown(event, onOpenFilters)}
+            onClick={(event) => handleLauncherClick(event, onOpenFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <FilterSlidersIcon />
@@ -644,11 +677,8 @@ function MobileCargoFilterButton({
             className={styles.filterLauncherMenuItem}
             data-variant="clear"
             role="menuitem"
-            onClick={(event) => {
-              event.preventDefault();
-              event.stopPropagation();
-              onClearFilters?.();
-            }}
+            onPointerDown={(event) => handleLauncherPointerDown(event, onClearFilters)}
+            onClick={(event) => handleLauncherClick(event, onClearFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -962,7 +992,7 @@ export function MobileCargoListLab({
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<MobileCargoStatusFilter>('all');
   const [advancedFilters, setAdvancedFilters] =
-    useState<MobileCargoAdvancedFilters>(EMPTY_ADVANCED_FILTERS);
+    useState<MobileCargoAdvancedFilters>(() => createEmptyAdvancedFilters());
   const [dockActiveId, setDockActiveId] = useState<MobileCargoLabDockId>('cargas');
   const [selectedCargo, setSelectedCargo] = useState<MobileCargoListLabItem | null>(null);
   const [activeSheet, setActiveSheet] = useState<LabSheetKind>('none');
@@ -1105,8 +1135,11 @@ export function MobileCargoListLab({
     setSearchDraft('');
     setQuery('');
     setStatusFilter('all');
-    setAdvancedFilters(EMPTY_ADVANCED_FILTERS);
+    setAdvancedFilters(() => createEmptyAdvancedFilters());
     setDockActiveId('cargas');
+    setActiveSheet('none');
+    setSelectedCargo(null);
+    setFilterLauncherSource(null);
   };
 
   const openFilterSheet = (trigger: HTMLButtonElement | null) => {
