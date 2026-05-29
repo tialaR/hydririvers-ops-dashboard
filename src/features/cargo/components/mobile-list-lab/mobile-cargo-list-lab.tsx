@@ -1856,7 +1856,7 @@ export function MobileCargoListLab({
               className={styles.filterSheetApplyButton}
               onClick={handleFilterSheetClose}
             >
-              {t('filterSheet.apply')}
+              {t('filterSummary.view')}
             </button>
           </div>
         </div>
