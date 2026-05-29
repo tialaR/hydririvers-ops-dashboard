@@ -604,16 +604,23 @@ function MobileCargoFilterButton({
     runLauncherAction(event, action);
     window.setTimeout(() => {
       actionPointerHandledRef.current = false;
-    }, 0);
+    }, 80);
+  };
+
+  const handleLauncherMouseDown = (
+    event: ReactMouseEvent<HTMLButtonElement>,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   const handleLauncherClick = (
     event: ReactMouseEvent<HTMLButtonElement>,
     action?: () => void,
   ) => {
+    event.preventDefault();
+    event.stopPropagation();
     if (actionPointerHandledRef.current) {
-      event.preventDefault();
-      event.stopPropagation();
       return;
     }
     runLauncherAction(event, action);
@@ -662,6 +669,7 @@ function MobileCargoFilterButton({
             data-variant="open"
             role="menuitem"
             onPointerDown={(event) => handleLauncherPointerDown(event, onOpenFilters)}
+            onMouseDown={handleLauncherMouseDown}
             onClick={(event) => handleLauncherClick(event, onOpenFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
@@ -678,6 +686,7 @@ function MobileCargoFilterButton({
             data-variant="clear"
             role="menuitem"
             onPointerDown={(event) => handleLauncherPointerDown(event, onClearFilters)}
+            onMouseDown={handleLauncherMouseDown}
             onClick={(event) => handleLauncherClick(event, onClearFilters)}
           >
             <span className={styles.filterLauncherMenuIcon} aria-hidden>
@@ -1191,8 +1200,23 @@ export function MobileCargoListLab({
   };
 
   const handleClearFiltersFromLauncher = () => {
+    if (filterLauncherTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherTimeoutRef.current);
+      filterLauncherTimeoutRef.current = null;
+    }
+
+    // Round 21: reset every filter state directly from the contextual menu.
+    // Calling the sheet clear handler from inside the launcher can be swallowed by
+    // the launcher close cycle on touch devices, so the menu owns the full reset.
+    setSearchDraft('');
+    setQuery('');
+    setStatusFilter('all');
+    setAdvancedFilters(() => createEmptyAdvancedFilters());
+    setDockActiveId('cargas');
+    setActiveSheet('none');
+    setSelectedCargo(null);
     setFilterLauncherSource(null);
-    handleClearFilters();
+
     window.requestAnimationFrame(() => {
       listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
     });

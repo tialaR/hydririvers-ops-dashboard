@@ -224,8 +224,11 @@ export function LiquidGlassSheet({
       return;
     }
 
+    // Round 21: close on pointerdown so the overlay consumes the original
+    // gesture before the browser can dispatch a click to content behind it.
     event.preventDefault();
     event.stopPropagation();
+    onClose?.();
   };
 
   const handleOverlayPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -244,7 +247,6 @@ export function LiquidGlassSheet({
 
     event.preventDefault();
     event.stopPropagation();
-    onClose?.();
   };
 
   const handleDragStart = (event: ReactPointerEvent<HTMLElement>) => {
