@@ -696,6 +696,31 @@ function CargoCardActionSheet({
         </section>
       ) : null}
 
+      {selectedCargo ? (
+        <div className={styles.cardActionInfoList} aria-label="Informações rápidas da carga">
+          <button type="button" className={styles.cardActionInfoItem}>
+            <span className={styles.cardActionInfoLabel}>{routeOriginLabel}</span>
+            <span className={styles.cardActionInfoValue}>{selectedCargo.origin}</span>
+          </button>
+          <button type="button" className={styles.cardActionInfoItem}>
+            <span className={styles.cardActionInfoLabel}>{routeDestinationLabel}</span>
+            <span className={styles.cardActionInfoValue}>{selectedCargo.destination}</span>
+          </button>
+          {selectedCargo.etaLabel ? (
+            <button type="button" className={styles.cardActionInfoItem}>
+              <span className={styles.cardActionInfoLabel}>ETA</span>
+              <span className={styles.cardActionInfoValue}>{selectedCargo.etaLabel}</span>
+            </button>
+          ) : null}
+          {selectedCargo.warningLabel ? (
+            <button type="button" className={styles.cardActionInfoItem}>
+              <span className={styles.cardActionInfoLabel}>Janela</span>
+              <span className={styles.cardActionInfoValue}>{selectedCargo.warningLabel}</span>
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
       <div className={styles.cardActionList} data-testid="cargo-card-action-list">
         {actionItems.map((action, index) => {
           const isOverview = action.id === 'overview';

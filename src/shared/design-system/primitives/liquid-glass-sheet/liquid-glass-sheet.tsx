@@ -222,17 +222,15 @@ export function LiquidGlassSheet({
   const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
+
+    if (event.target === event.currentTarget) {
+      onClose?.();
+    }
   };
 
   const handleOverlayClick = (event: ReactMouseEvent<HTMLDivElement>) => {
     event.preventDefault();
     event.stopPropagation();
-
-    if (event.target !== event.currentTarget) {
-      return;
-    }
-
-    onClose?.();
   };
 
   const stopOverlayEvent = (event: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {

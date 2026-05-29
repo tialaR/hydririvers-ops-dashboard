@@ -494,3 +494,75 @@
     gap: 8px;
   }
 }
+
+/* Round 12 — compact reference dock: no dead side areas, transparent rail, soft active lens. */
+.root {
+  padding-inline: 0;
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 13px);
+  overflow: visible;
+}
+
+.track {
+  width: fit-content;
+  min-width: 0;
+  max-width: calc(100vw - 40px);
+  height: 56px;
+  padding: 5px;
+  gap: 14px;
+  justify-content: flex-start;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 4%), rgb(255 255 255 / 1%)),
+    rgb(4 5 5 / 44%);
+  border-color: rgb(255 255 255 / 7%);
+  box-shadow:
+    0 16px 28px rgb(0 0 0 / 22%),
+    inset 0 1px 0 rgb(255 255 255 / 6%);
+  overflow: hidden;
+}
+
+.activeBubble {
+  top: 5px;
+  bottom: 5px;
+  left: 5px;
+  width: 46px !important;
+  opacity: 1 !important;
+  background:
+    radial-gradient(circle at 35% 18%, rgb(255 255 255 / 100%), rgb(247 248 247 / 96%) 54%, rgb(219 222 219 / 91%));
+  box-shadow:
+    0 9px 18px rgb(0 0 0 / 26%),
+    inset 0 1px 0 rgb(255 255 255 / 88%),
+    inset 0 -9px 17px rgb(0 0 0 / 9%);
+}
+
+.item,
+.itemActive {
+  flex: 0 0 46px !important;
+  width: 46px !important;
+  min-width: 46px !important;
+  height: 46px !important;
+  padding: 0 !important;
+}
+
+.item:not(.itemActive) {
+  color: rgb(239 242 240 / 58%) !important;
+}
+
+.itemActive {
+  color: rgb(8 9 9 / 96%) !important;
+}
+
+@media (max-width: 374px) {
+  .track {
+    max-width: calc(100vw - 26px);
+    gap: 10px;
+  }
+
+  .item,
+  .itemActive {
+    flex-basis: 44px !important;
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+  }
+}
