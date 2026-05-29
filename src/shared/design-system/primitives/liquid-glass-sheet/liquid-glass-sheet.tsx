@@ -1,6 +1,6 @@
 'use client';
 
-import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react';
+import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import '../../tokens/generated/hydro.semantic.module.scss';
@@ -14,8 +14,8 @@ export type LiquidGlassSheetSnapPoint = 'content' | 'medium' | 'expanded';
 export type LiquidGlassSheetPlacement = 'bottom' | 'center';
 
 const DEFAULT_SNAP_POINTS: LiquidGlassSheetSnapPoint[] = ['content', 'medium', 'expanded'];
-const CLOSE_DRAG_THRESHOLD_PX = 74;
-const SNAP_DRAG_THRESHOLD_RATIO = 0.12;
+const CLOSE_DRAG_THRESHOLD_PX = 88;
+const SNAP_DRAG_THRESHOLD_RATIO = 0.1;
 
 export type LiquidGlassSheetProps = {
   open: boolean;
@@ -55,17 +55,17 @@ function getSnapHeightPx(
 ): number {
   const toolbarPx = 54;
   const contentSnapHeight = Math.min(
-    Math.max(contentHeightPx + toolbarPx + 12, Math.round(viewportHeightPx * 0.38)),
-    viewportHeightPx * 0.46,
+    Math.max(contentHeightPx + toolbarPx + 12, Math.round(viewportHeightPx * 0.42)),
+    viewportHeightPx * 0.48,
   );
 
   switch (snapPoint) {
     case 'content':
       return contentSnapHeight;
     case 'medium':
-      return Math.round(viewportHeightPx * 0.52);
+      return Math.round(viewportHeightPx * 0.56);
     case 'expanded':
-      return Math.round(viewportHeightPx * 0.95);
+      return Math.round(viewportHeightPx * 0.98);
     default:
       return contentSnapHeight;
   }
@@ -220,10 +220,18 @@ export function LiquidGlassSheet({
   );
 
   const handleOverlayPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     if (event.target !== event.currentTarget) {
       return;
     }
     onClose?.();
+  };
+
+  const stopOverlayEvent = (event: ReactPointerEvent<HTMLDivElement> | ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   const handleDragStart = (event: ReactPointerEvent<HTMLElement>) => {
@@ -344,6 +352,8 @@ export function LiquidGlassSheet({
       data-placement={placement}
       inert={!open ? true : undefined}
       onPointerDown={open ? handleOverlayPointerDown : undefined}
+      onPointerUp={open ? stopOverlayEvent : undefined}
+      onClick={open ? stopOverlayEvent : undefined}
     >
       {stacked ? <div className={styles.stackedRail} aria-hidden /> : null}
 

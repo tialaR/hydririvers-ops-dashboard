@@ -605,3 +605,61 @@
   width: 72px;
   height: 5px;
 }
+
+/* Round 9: stronger close glide and 98vh expanded sheet. */
+.overlay {
+  --sheet-motion: 420ms;
+  --sheet-easing: cubic-bezier(0.18, 0.95, 0.18, 1);
+  transition:
+    opacity var(--sheet-motion) var(--sheet-easing),
+    visibility 0ms linear var(--sheet-motion);
+}
+
+.overlay[data-open='true'] {
+  transition:
+    opacity 320ms var(--sheet-easing),
+    visibility 0ms linear 0ms;
+}
+
+.variant_inspector,
+.sheet[data-draggable='true'].variant_inspector {
+  max-height: 98dvh;
+}
+
+.sheet[data-open='false'] {
+  opacity: 0;
+  transform: translateY(118%) scale(0.982);
+}
+
+.sheet[data-open='true'] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.sheet[data-open='true'][data-snap-point='expanded'] {
+  border-radius: 24px 24px 0 0;
+}
+
+.grabber {
+  width: 72px;
+  height: 5px;
+}
+
+.controlButton,
+.primaryButton {
+  width: 50px;
+  height: 50px;
+}
+
+.content[data-scrollable='true'],
+.content[data-scrollable='false'] {
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.content::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}

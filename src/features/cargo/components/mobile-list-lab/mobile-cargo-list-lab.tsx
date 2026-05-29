@@ -624,6 +624,8 @@ function CargoCardActionSheet({
   actionItems,
   closeLabel,
   comingSoonLabel,
+  routeOriginLabel,
+  routeDestinationLabel,
   onClose,
   onActionClick,
 }: {
@@ -633,6 +635,8 @@ function CargoCardActionSheet({
   actionItems: CargoActionItem[];
   closeLabel: string;
   comingSoonLabel: string;
+  routeOriginLabel: string;
+  routeDestinationLabel: string;
   onClose: () => void;
   onActionClick: (action: CargoActionItem) => void;
 }) {
@@ -642,7 +646,7 @@ function CargoCardActionSheet({
       tone="dark"
       placement="bottom"
       draggable
-      defaultSnapPoint="medium"
+      defaultSnapPoint="content"
       snapPoints={['content', 'medium', 'expanded']}
       closeLabel={closeLabel}
       onClose={onClose}
@@ -663,6 +667,28 @@ function CargoCardActionSheet({
           </p>
         ) : null}
       </header>
+
+      {selectedCargo ? (
+        <section className={styles.cardActionCargoSummary} aria-label="Resumo da carga selecionada">
+          <div className={styles.cardActionRoutePoint}>
+            <span className={styles.cardActionRouteLabel}>{routeOriginLabel}</span>
+            <span className={styles.cardActionRouteValue}>{selectedCargo.origin}</span>
+          </div>
+          <span className={styles.cardActionRouteArrow} aria-hidden>
+            →
+          </span>
+          <div className={styles.cardActionRoutePoint}>
+            <span className={styles.cardActionRouteLabel}>{routeDestinationLabel}</span>
+            <span className={styles.cardActionRouteValue}>{selectedCargo.destination}</span>
+          </div>
+          {selectedCargo.etaLabel ? (
+            <p className={styles.cardActionEta}>{selectedCargo.etaLabel}</p>
+          ) : null}
+          {selectedCargo.warningLabel ? (
+            <p className={styles.cardActionWarning}>{selectedCargo.warningLabel}</p>
+          ) : null}
+        </section>
+      ) : null}
 
       <div className={styles.cardActionList} data-testid="cargo-card-action-list">
         {actionItems.map((action, index) => {
@@ -1142,6 +1168,8 @@ export function MobileCargoListLab({
         actionItems={actionItems}
         closeLabel={t('actionSheet.close')}
         comingSoonLabel={t('actionSheet.comingSoon')}
+        routeOriginLabel={t('routeOrigin')}
+        routeDestinationLabel={t('routeDestination')}
         onClose={handleActionSheetClose}
         onActionClick={handleActionClick}
       />

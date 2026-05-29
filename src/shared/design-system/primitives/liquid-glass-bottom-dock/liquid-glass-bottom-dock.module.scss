@@ -232,3 +232,95 @@
     transform: none;
   }
 }
+
+/* Round 9: stable reference-style dock. Active item carries the label, lens is internal. */
+.root {
+  padding-inline: 16px;
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  overflow: hidden;
+}
+
+.track {
+  width: min(360px, calc(100vw - 32px));
+  height: 58px;
+  gap: 7px;
+  padding: 5px;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1%)),
+    rgb(8 9 9 / 52%);
+  border-color: rgb(255 255 255 / 8%);
+  box-shadow:
+    0 14px 28px rgb(0 0 0 / 24%),
+    inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.activeBubble {
+  opacity: 0;
+  width: 0 !important;
+}
+
+.item {
+  flex: 0 0 46px;
+  width: 46px;
+  min-width: 46px;
+  height: 48px;
+  color: rgb(236 240 238 / 58%);
+}
+
+.itemActive {
+  flex: 0 0 124px;
+  width: 124px;
+  min-width: 124px;
+  justify-content: center;
+  gap: 9px;
+  padding-inline: 14px 16px;
+  color: rgb(18 19 19 / 96%);
+  background:
+    radial-gradient(circle at 28% 10%, rgb(255 255 255 / 100%), rgb(245 247 245 / 92%) 52%, rgb(215 221 214 / 88%));
+  border: 1px solid rgb(255 255 255 / 50%);
+  box-shadow:
+    0 9px 18px rgb(0 0 0 / 26%),
+    inset 0 1px 0 rgb(255 255 255 / 84%),
+    inset 0 -10px 18px rgb(0 0 0 / 10%);
+}
+
+.itemActive .label {
+  max-width: 76px;
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.label {
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 760;
+}
+
+.item:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.itemActive:active:not(:disabled) {
+  transform: scale(0.96);
+}
+
+@media (max-width: 374px) {
+  .track {
+    width: min(344px, calc(100vw - 24px));
+    gap: 5px;
+  }
+
+  .item {
+    flex-basis: 42px;
+    width: 42px;
+    min-width: 42px;
+  }
+
+  .itemActive {
+    flex-basis: 116px;
+    width: 116px;
+    min-width: 116px;
+    padding-inline: 12px;
+  }
+}
