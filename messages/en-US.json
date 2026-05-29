@@ -583,6 +583,11 @@
       "mapHint": {
         "title": "Select a cargo",
         "description": "Tap a card in the list to open the immersive map for that operation."
+      },
+      "filterSummary": {
+        "view": "View filters",
+        "clear": "Clear filters",
+        "active": "{count} active filters"
       }
     },
     "cargoes": {

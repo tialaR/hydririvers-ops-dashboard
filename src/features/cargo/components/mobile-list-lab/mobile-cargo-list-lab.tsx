@@ -696,6 +696,48 @@ export function MobileCargoLabEmptyState({
 }
 
 
+function MobileCargoActiveFilterBar({
+  activeCount,
+  viewLabel,
+  clearLabel,
+  onView,
+  onClear,
+}: {
+  activeCount: number;
+  viewLabel: string;
+  clearLabel: string;
+  onView: () => void;
+  onClear: () => void;
+}) {
+  if (activeCount <= 0) {
+    return null;
+  }
+
+  return (
+    <div className={styles.filterSummaryBar} data-testid="cargo-lab-active-filter-summary">
+      <button
+        type="button"
+        className={styles.filterSummaryButton}
+        data-variant="view"
+        onClick={onView}
+      >
+        {viewLabel}
+        <span className={styles.filterSummaryCount} aria-hidden>
+          {activeCount}
+        </span>
+      </button>
+      <button
+        type="button"
+        className={styles.filterSummaryButton}
+        data-variant="clear"
+        onClick={onClear}
+      >
+        {clearLabel}
+      </button>
+    </div>
+  );
+}
+
 function FilterPillSection({
   title,
   options,
@@ -1293,6 +1335,14 @@ export function MobileCargoListLab({
                   })}
                 </div>
               </div>
+
+              <MobileCargoActiveFilterBar
+                activeCount={activeFilterCount}
+                viewLabel={t('filterSummary.view')}
+                clearLabel={t('filterSummary.clear')}
+                onView={handleFilterShortcut}
+                onClear={handleClearFilters}
+              />
             </div>
 
             {listItems.length === 0 ? (

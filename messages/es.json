@@ -583,6 +583,11 @@
       "mapHint": {
         "title": "Selecciona una carga",
         "description": "Toca una tarjeta de la lista para abrir el mapa inmersivo de esa operación."
+      },
+      "filterSummary": {
+        "view": "Ver filtros",
+        "clear": "Limpiar filtros",
+        "active": "{count} filtros activos"
       }
     },
     "cargoes": {
