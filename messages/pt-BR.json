@@ -503,6 +503,83 @@
       "disclaimerAria": "Nota sobre uso interno",
       "disclaimer": "Esta tela é uma ferramenta interna/documental para orientar novos desenvolvedores e avaliadores do projeto. Ela não executa scripts nem lê arquivos do disco — apenas resume o que já está no repositório."
     },
+    "devMobileCargoListLab": {
+      "eyebrow": "Operações",
+      "title": "Cargas",
+      "subtitle": "{total, plural, one {# operação hidroviária} other {# operações hidroviárias}}",
+      "counter": "{count} de {total}",
+      "filterShortcutLabel": "Filtros",
+      "filterShortcutAria": "Abrir filtros",
+      "hero": {
+        "eyebrow": "Operações",
+        "subtitle": "em acompanhamento",
+        "active": "Operação",
+        "attention": "Atenção",
+        "open": "Abertas"
+      },
+      "routeOrigin": "Origem",
+      "routeDestination": "Destino",
+      "searchPlaceholder": "Buscar carga, origem ou destino",
+      "searchAria": "Buscar cargas",
+      "searchClearAria": "Limpar busca",
+      "dock": {
+        "aria": "Navegação inferior do laboratório",
+        "cargas": "Cargas",
+        "filters": "Filtros",
+        "attention": "Atenção",
+        "map": "Mapa"
+      },
+      "filtersAria": "Filtrar cargas por status",
+      "listAria": "Lista de cargas",
+      "emptyTitle": "Nenhuma carga disponível",
+      "emptyDescription": "Quando novas operações entrarem, elas aparecerão aqui.",
+      "emptyFilteredTitle": "Nenhum resultado",
+      "emptyFilteredDescription": "Ajuste a busca ou os filtros para ver outras cargas.",
+      "clearFiltersAction": "Limpar filtros",
+      "desktopGate": "Experiência mobile em validação. Use viewport mobile.",
+      "themeToggleAria": "Alternar tema claro ou escuro",
+      "filters": {
+        "all": "Todas",
+        "open": "Abertas",
+        "quote": "Cotação",
+        "operation": "Operação",
+        "bidding": "Cotação",
+        "contracting": "Contratando",
+        "reserved": "Em operação",
+        "boarded": "Em trânsito",
+        "attention": "Atenção"
+      },
+      "actionSheet": {
+        "ariaLabel": "Opções da carga selecionada",
+        "close": "Fechar",
+        "comingSoon": "Em breve",
+        "selectedSubtitle": "Carga selecionada",
+        "overviewTitle": "Visão geral",
+        "overviewDescription": "Mapa imersivo, progresso e rota hidroviária.",
+        "journeyTitle": "Jornada",
+        "journeyDescription": "Eventos, checkpoints e linha do tempo.",
+        "documentsTitle": "Documentos",
+        "documentsDescription": "Pacote documental, pendências e validações.",
+        "costsTitle": "Custos",
+        "costsDescription": "Resumo financeiro, saving e composição.",
+        "priorityTitle": "Prioridade"
+      },
+      "filterSheet": {
+        "title": "Filtros",
+        "subtitle": "Refine a lista de cargas",
+        "statusSection": "Status",
+        "attentionSection": "Atenção",
+        "attentionOnly": "Somente cargas que precisam de atenção",
+        "originSection": "Origem",
+        "destinationSection": "Destino",
+        "clear": "Limpar filtros",
+        "apply": "Aplicar"
+      },
+      "mapHint": {
+        "title": "Selecione uma carga",
+        "description": "Toque em um card da lista para abrir o mapa imersivo desta operação."
+      }
+    },
     "cargoes": {
       "eyebrow": "Marketplace",
       "title": "Cargas públicas",

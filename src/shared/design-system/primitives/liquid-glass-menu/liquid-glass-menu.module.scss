@@ -1,0 +1,515 @@
+/* Liquid Glass Menu (Figma Menus / Context Menus / Edit Menu) — tokenized. */
+
+.menuShell {
+  --menu-radius: 30px;
+  --menu-shadow: 0 20px 76px rgba(0, 0, 0, 0.22);
+  --menu-item-height: 44px;
+  --menu-padding-x: 16px;
+  --menu-separator: rgba(60, 60, 67, 0.18);
+  --menu-font-size: 17px;
+  --menu-line-height: 20px;
+  --menu-section-font-size: 12px;
+
+  --menu-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #8a8a8a);
+  --menu-sep-color: var(--hydro-color-separator, var(--menu-separator));
+  --menu-danger: var(--hydro-color-danger, #ff3b30);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.16));
+
+  --menu-motion: var(--hydro-motion-control, 220ms);
+  --menu-easing: var(
+    --hydro-motion-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+
+  position: relative;
+  isolation: isolate;
+  display: block;
+
+  border-radius: var(--menu-radius);
+  background: transparent;
+  color: var(--menu-label-primary);
+
+  font-family: var(--menu-font-family);
+}
+
+.menuShell::before,
+.menuShell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* Fill + shadow */
+.menuShell::before {
+  z-index: 0;
+  background:
+    linear-gradient(
+        0deg,
+        color-mix(in srgb, rgba(245, 245, 245, 0.6) 100%, transparent) 0%,
+        color-mix(in srgb, rgba(245, 245, 245, 0.6) 100%, transparent) 100%
+      ),
+    var(--hydro-color-surface-elevated, #262626);
+  background-blend-mode: normal, color-dodge;
+  box-shadow: var(--menu-shadow);
+  opacity: 0.9;
+}
+
+/* Glass effect */
+.menuShell::after {
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.004);
+}
+
+.menuShell[data-tone='light'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #bfbfbf);
+
+  --menu-sep-color: rgba(60, 60, 67, 0.18);
+
+  &::before {
+    background:
+      linear-gradient(0deg, rgba(245, 245, 245, 0.6), rgba(245, 245, 245, 0.6)),
+      #262626;
+    background-blend-mode: normal, color-dodge;
+  }
+
+  &::after {
+    background: rgba(0, 0, 0, 0.004);
+  }
+}
+
+.menuShell[data-tone='dark'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #f5f5f5);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #aeaeb2);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #8a8a8a);
+
+  --menu-sep-color: rgba(26, 26, 26, 1);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.24));
+
+  &::before {
+    background:
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.06)
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      #cccccc;
+    background-blend-mode: normal, normal, color-burn;
+    opacity: 0.67;
+  }
+
+  &::after {
+    background: rgba(0, 0, 0, 0.004);
+  }
+}
+
+:global([data-theme='light']) .menuShell[data-tone='auto'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #bfbfbf);
+  --menu-sep-color: rgba(60, 60, 67, 0.18);
+
+  &::before {
+    background:
+      linear-gradient(0deg, rgba(245, 245, 245, 0.6), rgba(245, 245, 245, 0.6)),
+      #262626;
+    background-blend-mode: normal, color-dodge;
+  }
+
+  &::after {
+    background: rgba(0, 0, 0, 0.004);
+  }
+}
+
+:global([data-theme='dark']) .menuShell[data-tone='auto'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #f5f5f5);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #aeaeb2);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #8a8a8a);
+  --menu-sep-color: rgba(26, 26, 26, 1);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.24));
+
+  &::before {
+    background:
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.06)
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      #cccccc;
+    background-blend-mode: normal, normal, color-burn;
+    opacity: 0.67;
+  }
+
+  &::after {
+    background: rgba(0, 0, 0, 0.004);
+  }
+}
+
+/* Size */
+.menuShell_md {
+  --menu-item-height: 44px;
+  --menu-font-size: 17px;
+  --menu-line-height: 20px;
+}
+
+.menuShell_sm {
+  --menu-item-height: 40px;
+  --menu-font-size: 15px;
+  --menu-line-height: 18px;
+}
+
+.menuItemBlock {
+  position: relative;
+  z-index: 2;
+}
+
+.sectionTitle {
+  padding: 4px var(--menu-padding-x) 10px;
+  font-size: var(--menu-section-font-size);
+  line-height: 15px;
+  letter-spacing: -0.08px;
+  color: var(--menu-label-tertiary);
+}
+
+.menuItemButton {
+  width: 100%;
+  min-height: var(--menu-item-height);
+  height: var(--menu-item-height);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  padding-inline: var(--menu-padding-x);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  font-family: var(--menu-font-family);
+  color: var(--menu-label-primary);
+
+  transition:
+    background var(--menu-motion) var(--menu-easing),
+    opacity var(--menu-motion) var(--menu-easing),
+    filter var(--menu-motion) var(--menu-easing);
+}
+
+.menuItemButton:active:not(:disabled) {
+  filter: brightness(1.03);
+}
+
+.menuItemButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--menu-fill-secondary) 75%, transparent);
+}
+
+.menuItemButton:focus {
+  outline: none;
+}
+
+.menuItemButton:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--hydro-color-accent, #0091ff) 72%, transparent);
+  outline-offset: 2px;
+}
+
+.menuItemButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.menuItemDisabled {
+  opacity: 0.45;
+}
+
+.menuItemDestructive {
+  --menu-item-label-primary: var(--menu-danger);
+  color: var(--menu-danger);
+}
+
+.itemLeading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.iconSlot {
+  width: 28px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+
+.itemLabel {
+  font-size: var(--menu-font-size);
+  line-height: var(--menu-line-height);
+  letter-spacing: -0.43px;
+  color: currentColor;
+}
+
+.itemSubtitle {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--menu-label-secondary);
+}
+
+.itemTrailing {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-left: 12px;
+}
+
+.shortcut {
+  font-size: 15px;
+  line-height: 18px;
+  color: var(--menu-label-tertiary);
+  letter-spacing: -0.2px;
+}
+
+.submenuChevron {
+  font-size: 17px;
+  line-height: 20px;
+  color: var(--menu-label-secondary);
+}
+
+/* Edit menu (horizontal) */
+.editMenuShell {
+  --edit-menu-height: 44px;
+  --menu-font-size: 17px;
+  --menu-line-height: 20px;
+
+  --menu-radius: var(--hydro-radius-card, 30px);
+  --menu-shadow: 0 20px 76px rgba(0, 0, 0, 0.22);
+  --menu-separator-fallback: rgba(60, 60, 67, 0.18);
+  --menu-separator: var(--hydro-color-separator, var(--menu-separator-fallback));
+  --menu-padding-x: 16px;
+
+  --menu-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #bfbfbf);
+  --menu-danger: var(--hydro-color-danger, #ff3b30);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.16));
+
+  --menu-sep-color: var(--menu-separator);
+  --menu-motion: var(--hydro-motion-control, 220ms);
+  --menu-easing: var(
+    --hydro-motion-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+
+  border-radius: var(--menu-radius);
+  background: transparent;
+  color: var(--menu-label-primary);
+
+  padding: 0;
+  font-family: var(--menu-font-family);
+}
+
+.editMenuShell::before,
+.editMenuShell::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.editMenuShell::before {
+  z-index: 0;
+  background:
+    linear-gradient(0deg, rgba(245, 245, 245, 0.6), rgba(245, 245, 245, 0.6)),
+    #262626;
+  background-blend-mode: normal, color-dodge;
+  box-shadow: var(--menu-shadow);
+  opacity: 0.9;
+}
+
+.editMenuShell::after {
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.004);
+}
+
+.editMenuShell[data-tone='dark'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #f5f5f5);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #aeaeb2);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #8a8a8a);
+  --menu-danger: var(--hydro-color-danger, #ff4245);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.24));
+  --menu-sep-color: rgba(26, 26, 26, 1);
+
+  &::before {
+    background:
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.06)
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      #cccccc;
+    background-blend-mode: normal, normal, color-burn;
+    opacity: 0.67;
+  }
+}
+
+:global([data-theme='light']) .editMenuShell[data-tone='auto'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #bfbfbf);
+  --menu-danger: var(--hydro-color-danger, #ff3b30);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.16));
+  --menu-sep-color: var(--menu-separator);
+}
+
+:global([data-theme='dark']) .editMenuShell[data-tone='auto'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #f5f5f5);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #aeaeb2);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #8a8a8a);
+  --menu-danger: var(--hydro-color-danger, #ff4245);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.24));
+  --menu-sep-color: rgba(26, 26, 26, 1);
+
+  &::before {
+    background:
+      linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.06)
+      ),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      #cccccc;
+    background-blend-mode: normal, normal, color-burn;
+    opacity: 0.67;
+  }
+}
+
+.editMenuShell[data-tone='light'] {
+  --menu-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --menu-label-secondary: var(--hydro-color-label-secondary, #727272);
+  --menu-label-tertiary: var(--hydro-color-label-tertiary, #bfbfbf);
+  --menu-danger: var(--hydro-color-danger, #ff3b30);
+  --menu-fill-secondary: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.16));
+  --menu-sep-color: var(--menu-separator);
+}
+
+.editMenuItemBlock {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.editMenuSeparator {
+  width: 1px;
+  background: var(--menu-sep-color);
+  opacity: 1;
+  margin-block: calc((var(--edit-menu-height) - 18px) / 2);
+}
+
+.editMenuItemButton {
+  height: var(--edit-menu-height);
+  min-height: var(--edit-menu-height);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0px 16px 0px 0px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+
+  font-family: var(--menu-font-family);
+  color: var(--menu-label-primary);
+
+  transition:
+    background var(--menu-motion) var(--menu-easing),
+    opacity var(--menu-motion) var(--menu-easing),
+    filter var(--menu-motion) var(--menu-easing);
+}
+
+.editMenuItemButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--menu-fill-secondary) 75%, transparent);
+}
+
+.editMenuItemButton:active:not(:disabled) {
+  filter: brightness(1.03);
+}
+
+.editMenuItemButton:focus {
+  outline: none;
+}
+
+.editMenuItemButton:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--hydro-color-accent, #0091ff) 72%, transparent);
+  outline-offset: 2px;
+}
+
+.editMenuItemButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.editMenuItemLabel {
+  font-size: 15px;
+  line-height: 18px;
+  letter-spacing: -0.6px;
+  color: currentColor;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menuItemButton,
+  .editMenuItemButton {
+    transition: none;
+  }
+
+  .menuItemButton:active:not(:disabled),
+  .editMenuItemButton:active:not(:disabled) {
+    filter: none;
+  }
+}
+

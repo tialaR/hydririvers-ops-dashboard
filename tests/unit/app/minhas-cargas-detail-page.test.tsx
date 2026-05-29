@@ -51,7 +51,7 @@ vi.mock('@/shared/i18n/mock-content', () => ({
   translateMock: (_locale: string, value: string) => value
 }));
 
-import MyCargoDetailPage from '@/app/[locale]/minhas-cargas/[id]/page';
+import MyCargoDetailPage from '@/app/[locale]/(product-shell)/minhas-cargas/[id]/page';
 
 const cargo = {
   id: 'MY-CARGO-001',

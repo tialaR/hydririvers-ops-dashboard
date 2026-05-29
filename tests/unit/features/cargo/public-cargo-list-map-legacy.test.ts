@@ -51,7 +51,10 @@ describe('legado visao-geral / CargoMapImmersiveClient', () => {
   it('mapa oficial usa cargoMap, não query view', () => {
     const routes = readFileSync(join(SRC_ROOT, 'shared/routing/app-routes.ts'), 'utf8');
     expect(routes).toMatch(/cargoMap:\s*\(cargoId: string\)/);
-    const mapPage = readFileSync(join(SRC_ROOT, 'app/[locale]/cargas/[id]/mapa/page.tsx'), 'utf8');
+    const mapPage = readFileSync(
+      join(SRC_ROOT, 'app/[locale]/(product-shell)/cargas/[id]/mapa/page.tsx'),
+      'utf8',
+    );
     expect(mapPage).toContain('resolveCargoHydrowayMapModel');
     expect(mapPage).not.toMatch(/visao-geral/);
   });

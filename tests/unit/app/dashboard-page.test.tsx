@@ -35,7 +35,7 @@ vi.mock('@/shared/ui/hydro-icon/hydro-icon', () => ({
   HydroIcon: () => <span data-testid="hydro-icon" />
 }));
 
-import DashboardPage from '@/app/[locale]/dashboard/page';
+import DashboardPage from '@/app/[locale]/(product-shell)/dashboard/page';
 
 describe('dashboard page', () => {
   beforeEach(() => {

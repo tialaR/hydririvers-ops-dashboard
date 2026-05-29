@@ -1,0 +1,257 @@
+/* Liquid Glass Window — Figma Window / Window Controls / Window Resize, tokenized. */
+
+/* ── Window Controls ─────────────────────────────────────────────────────── */
+
+.controls {
+  --window-controls-width: 44px;
+  --window-controls-height: 22px;
+  --window-dot-size: 6px;
+  --window-controls-gap: 3px;
+  --window-controls-padding-block: 8px;
+  --window-controls-padding-inline: 10px;
+  --window-controls-radius: var(--hydro-radius-pill, 100px);
+  --window-controls-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --window-dot-close: #ff5f57;
+  --window-dot-minimize: #febc2f;
+  --window-dot-expand: #27c840;
+  --window-dot-inactive: rgba(60, 60, 67, 0.6);
+  --window-controls-inactive-bg: rgba(0, 0, 0, 0.05);
+  --window-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --window-glass-before-blend: darken, color-burn, normal;
+  --window-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --window-motion: var(--hydro-motion-control, 220ms);
+  --window-easing: var(
+    --hydro-motion-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+  --window-font: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--window-controls-width);
+  height: var(--window-controls-height);
+  padding: var(--window-controls-padding-block) var(--window-controls-padding-inline);
+  gap: var(--window-controls-gap);
+  border: 0;
+  border-radius: var(--window-controls-radius);
+  background: transparent;
+  font-family: var(--window-font);
+  flex-shrink: 0;
+}
+
+.controls::before,
+.controls::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.controls::before {
+  z-index: 0;
+  opacity: 0;
+  background: var(--window-glass-before-bg);
+  background-blend-mode: var(--window-glass-before-blend);
+  box-shadow: var(--window-controls-shadow);
+  transition: opacity var(--window-motion) var(--window-easing);
+}
+
+.controls::after {
+  z-index: 1;
+  opacity: 0;
+  background: var(--window-glass-after-bg);
+  transition: opacity var(--window-motion) var(--window-easing);
+}
+
+.controls[data-state='active']::before,
+.controls[data-state='active']::after {
+  opacity: 1;
+}
+
+.controls[data-state='inactive'] {
+  background: var(--window-controls-inactive-bg);
+}
+
+.dot {
+  position: relative;
+  z-index: 2;
+  display: block;
+  flex: none;
+  width: var(--window-dot-size);
+  height: var(--window-dot-size);
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  margin: 0;
+  background: var(--window-dot-inactive);
+  cursor: default;
+}
+
+.controls[data-state='active'] .dotClose {
+  background: var(--window-dot-close);
+}
+
+.controls[data-state='active'] .dotMinimize {
+  background: var(--window-dot-minimize);
+}
+
+.controls[data-state='active'] .dotExpand {
+  background: var(--window-dot-expand);
+}
+
+.dotButton {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--window-motion) var(--window-easing);
+}
+
+.dotButton:focus {
+  outline: none;
+}
+
+.dotButton:focus-visible {
+  outline: 2px solid var(--hydro-color-accent, #007aff);
+  outline-offset: 2px;
+}
+
+.dotButton:active {
+  transform: scale(0.92);
+}
+
+/* ── Resize Handle ───────────────────────────────────────────────────────── */
+
+.resizeHandle {
+  --window-resize-size: 65px;
+  --window-resize-grabber-size: 55.5px;
+  --window-resize-border: 3px;
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: var(--window-resize-size);
+  height: var(--window-resize-size);
+  color: var(--hydro-color-label-primary, #000000);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.resizeHandle[data-visible='false'] {
+  visibility: hidden;
+}
+
+.resizeGrabber {
+  display: block;
+  box-sizing: border-box;
+  width: var(--window-resize-grabber-size);
+  height: var(--window-resize-grabber-size);
+  border: var(--window-resize-border) solid currentColor;
+  border-radius: 0;
+}
+
+/* ── Window Panel ────────────────────────────────────────────────────────── */
+
+.panel {
+  --window-panel-radius: 34px;
+  --window-panel-shadow: 0 20px 76px rgba(0, 0, 0, 0.2);
+  --window-panel-surface: var(
+    --hydro-color-surface-elevated,
+    var(--hydro-kit-colors-backgrounds-primary, #ffffff)
+  );
+  --window-panel-label: var(--hydro-color-label-primary, #1a1a1a);
+  --window-panel-min-size: 400px;
+  --window-panel-padding: 0;
+  --window-font: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: var(--window-panel-min-size);
+  min-height: var(--window-panel-min-size);
+  padding: var(--window-panel-padding);
+  border-radius: var(--window-panel-radius);
+  background: var(--window-panel-surface);
+  box-shadow: var(--window-panel-shadow);
+  font-family: var(--window-font);
+  color: var(--window-panel-label);
+}
+
+.panel[data-tone='light'] {
+  --window-panel-surface: var(
+    --hydro-kit-colors-backgrounds-primary,
+    #ffffff
+  );
+}
+
+.panel[data-tone='dark'] {
+  --window-panel-surface: var(
+    --hydro-color-surface-elevated,
+    var(--hydro-kit-colors-backgrounds-secondary, #1c1c1e)
+  );
+  --window-panel-label: var(--hydro-color-label-primary, #ffffff);
+  --window-panel-shadow: 0 20px 76px rgba(0, 0, 0, 0.45);
+}
+
+.panel[data-tone='auto'] {
+  color-scheme: light dark;
+}
+
+.controlsSlot {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  display: flex;
+  align-items: flex-start;
+  pointer-events: auto;
+}
+
+.body {
+  position: relative;
+  z-index: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.size_sm {
+  --window-panel-min-size: 280px;
+  --window-panel-radius: var(--hydro-radius-card, 28px);
+}
+
+.size_md {
+  --window-panel-min-size: 400px;
+  --window-panel-radius: 34px;
+}
+
+.size_lg {
+  --window-panel-min-size: 520px;
+  --window-panel-radius: 38px;
+}

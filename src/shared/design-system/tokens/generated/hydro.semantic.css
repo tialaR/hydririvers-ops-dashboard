@@ -1,0 +1,37 @@
+/* Generated semantic HydriRivers aliases — do not edit. */
+
+:root {
+  --hydro-color-canvas: var(--hydro-kit-colors-backgrounds-grouped-primary);
+  --hydro-color-surface: var(--hydro-kit-colors-backgrounds-primary);
+  --hydro-color-surface-elevated: var(--hydro-kit-colors-backgrounds-secondary);
+  --hydro-color-surface-grouped: var(--hydro-kit-colors-backgrounds-grouped-secondary);
+  --hydro-color-label-primary: var(--hydro-kit-colors-labels-primary);
+  --hydro-color-label-secondary: var(--hydro-kit-colors-labels-secondary);
+  --hydro-color-label-tertiary: var(--hydro-kit-colors-labels-tertiary);
+  --hydro-color-separator: var(--hydro-kit-colors-separators-non-opaque);
+  --hydro-color-fill-primary: var(--hydro-kit-colors-fills-primary);
+  --hydro-color-fill-secondary: var(--hydro-kit-colors-fills-secondary);
+  --hydro-color-accent: var(--hydro-kit-colors-accents-blue);
+  --hydro-color-warning: var(--hydro-kit-colors-accents-orange);
+  --hydro-color-success: var(--hydro-kit-colors-accents-green);
+  --hydro-color-danger: var(--hydro-kit-colors-accents-red);
+  --hydro-color-overlay: var(--hydro-kit-colors-grays-black);
+  --hydro-radius-control: var(--hydro-kit-shape-corner-small);
+  --hydro-radius-card: var(--hydro-kit-shape-corner-large);
+  --hydro-radius-sheet: var(--hydro-kit-sheet-iphone-top-radius);
+  --hydro-radius-pill: var(--hydro-kit-shape-corner-full);
+  --hydro-size-touch-target: var(--hydro-kit-size-space-1200);
+  --hydro-size-search-height: var(--hydro-kit-size-icon-large);
+  --hydro-size-tabbar-height: var(--hydro-kit-size-space-1200);
+  --hydro-font-large-title: var(--hydro-kit-typescale-static-display-small-size);
+  --hydro-font-title: var(--hydro-kit-typescale-static-title-medium-size);
+  --hydro-font-headline: var(--hydro-kit-typescale-static-headline-medium-size);
+  --hydro-font-body: var(--hydro-kit-typescale-static-body-medium-size);
+  --hydro-font-footnote: var(--hydro-kit-typescale-static-label-medium-size);
+  --hydro-font-caption: var(--hydro-kit-typescale-static-body-small-size);
+  --hydro-motion-tap: 120ms;
+  --hydro-motion-control: 220ms;
+  --hydro-motion-sheet: 320ms;
+  --hydro-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --hydro-font-family-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", sans-serif;
+}

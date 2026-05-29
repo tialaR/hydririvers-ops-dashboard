@@ -53,8 +53,8 @@ vi.mock('@/shared/ui/breadcrumb/breadcrumb', () => ({
   )
 }));
 
-import GovernmentPage from '@/app/[locale]/governo/page';
-import VesselDetailPage from '@/app/[locale]/embarcacoes/[id]/page';
+import GovernmentPage from '@/app/[locale]/(product-shell)/governo/page';
+import VesselDetailPage from '@/app/[locale]/(product-shell)/embarcacoes/[id]/page';
 
 describe('restricted route pages', () => {
   beforeEach(() => {

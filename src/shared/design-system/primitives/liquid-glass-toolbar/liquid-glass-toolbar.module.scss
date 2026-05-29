@@ -1,0 +1,311 @@
+/* Liquid Glass Toolbar — Figma Toolbar Top iPhone / Sheet, tokenized. */
+
+.toolbar {
+  --toolbar-height-default: 54px;
+  --toolbar-height-sheet: 70px;
+  --toolbar-control-size: 44px;
+  --toolbar-horizontal-padding: 16px;
+  --toolbar-bottom-padding: 10px;
+  --toolbar-grabber-width: 36px;
+  --toolbar-grabber-height: 5px;
+  --toolbar-grabber-color: #cccccc;
+  --toolbar-title-size: 17px;
+  --toolbar-title-line-height: 22px;
+  --toolbar-title-weight: 590;
+  --toolbar-title-letter-spacing: -0.43px;
+  --toolbar-two-line-title-size: 15px;
+  --toolbar-two-line-title-line-height: 18px;
+  --toolbar-two-line-title-letter-spacing: -0.23px;
+  --toolbar-large-title-size: 34px;
+  --toolbar-large-title-line-height: 41px;
+  --toolbar-large-title-letter-spacing: 0.4px;
+  --toolbar-subtitle-size: 12px;
+  --toolbar-subtitle-line-height: 14px;
+  --toolbar-large-subtitle-size: 15px;
+  --toolbar-large-subtitle-line-height: 20px;
+  --toolbar-subtitle-weight: 510;
+  --toolbar-accent: var(--hydro-color-accent, #0088ff);
+  --toolbar-title-color: var(--hydro-color-label-primary, #1a1a1a);
+  --toolbar-subtitle-color: var(--hydro-color-label-secondary, #727272);
+  --toolbar-leading-fill: rgba(120, 120, 128, 0.16);
+  --toolbar-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  padding: 0 var(--toolbar-horizontal-padding) var(--toolbar-bottom-padding);
+  font-family: var(--toolbar-font-family);
+  color: var(--toolbar-title-color);
+}
+
+.context_page {
+  min-height: var(--toolbar-height-default);
+}
+
+.context_sheet {
+  min-height: var(--toolbar-height-sheet);
+  padding-bottom: var(--toolbar-bottom-padding);
+}
+
+/* Theme: light */
+.toolbar[data-tone='light'] {
+  --toolbar-title-color: #1a1a1a;
+  --toolbar-subtitle-color: #727272;
+  --toolbar-leading-fill: rgba(120, 120, 128, 0.16);
+  --toolbar-accent: #0088ff;
+}
+
+/* Theme: dark */
+.toolbar[data-tone='dark'] {
+  --toolbar-title-color: #f5f5f5;
+  --toolbar-subtitle-color: #8a8a8a;
+  --toolbar-leading-fill: rgba(120, 120, 128, 0.24);
+  --toolbar-accent: #0091ff;
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .toolbar[data-tone='auto'] {
+  --toolbar-title-color: #1a1a1a;
+  --toolbar-subtitle-color: #727272;
+  --toolbar-leading-fill: rgba(120, 120, 128, 0.16);
+  --toolbar-accent: #0088ff;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .toolbar[data-tone='auto'] {
+  --toolbar-title-color: #f5f5f5;
+  --toolbar-subtitle-color: #8a8a8a;
+  --toolbar-leading-fill: rgba(120, 120, 128, 0.24);
+  --toolbar-accent: #0091ff;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .toolbar[data-tone='auto'] {
+    --toolbar-title-color: #1a1a1a;
+    --toolbar-subtitle-color: #727272;
+    --toolbar-leading-fill: rgba(120, 120, 128, 0.16);
+    --toolbar-accent: #0088ff;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .toolbar[data-tone='auto'] {
+    --toolbar-title-color: #f5f5f5;
+    --toolbar-subtitle-color: #8a8a8a;
+    --toolbar-leading-fill: rgba(120, 120, 128, 0.24);
+    --toolbar-accent: #0091ff;
+  }
+}
+
+.grabberWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  width: var(--toolbar-grabber-width);
+  padding-top: 5px;
+  min-height: 16px;
+}
+
+.grabber {
+  width: var(--toolbar-grabber-width);
+  height: var(--toolbar-grabber-height);
+  border-radius: var(--hydro-radius-pill, 100px);
+  background: var(--toolbar-grabber-color);
+}
+
+.controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: var(--toolbar-control-size);
+  width: 100%;
+  isolation: isolate;
+}
+
+.controls_twoLine {
+  position: relative;
+  align-items: flex-start;
+  padding-bottom: 0;
+}
+
+.controls_compactLarge {
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.leading,
+.trailing {
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-height: var(--toolbar-control-size);
+}
+
+.leadingSpacer,
+.trailingSpacer,
+.controlsSpacer {
+  flex: 0 0 var(--toolbar-control-size);
+  width: var(--toolbar-control-size);
+  min-width: var(--toolbar-control-size);
+  height: var(--toolbar-control-size);
+}
+
+.controlsSpacer {
+  flex: 0 0 8px;
+  width: 8px;
+  min-width: 8px;
+}
+
+.actionButton {
+  width: var(--toolbar-control-size);
+  min-width: var(--toolbar-control-size);
+  height: var(--toolbar-control-size);
+  min-height: var(--toolbar-control-size);
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-style: normal;
+  font-weight: var(--toolbar-title-weight);
+  font-size: var(--toolbar-title-size);
+  line-height: var(--toolbar-title-line-height);
+  letter-spacing: var(--toolbar-title-letter-spacing);
+  color: var(--toolbar-title-color);
+}
+
+.subtitle {
+  margin: 0;
+  font-style: normal;
+  font-weight: var(--toolbar-subtitle-weight);
+  font-size: var(--toolbar-subtitle-size);
+  line-height: var(--toolbar-subtitle-line-height);
+  color: var(--toolbar-subtitle-color);
+}
+
+/* default — centered title overlay */
+.variant_default .controls {
+  position: relative;
+}
+
+.variant_default .titleBlock {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  max-width: calc(100% - (var(--toolbar-control-size) * 2) - 24px);
+}
+
+/* twoLine — centered title + subtitle overlay */
+.variant_twoLine .titleBlock {
+  position: absolute;
+  left: 50%;
+  top: 6px;
+  transform: translateX(-50%);
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  max-width: 250px;
+  width: 100%;
+}
+
+.variant_twoLine .title {
+  font-size: var(--toolbar-two-line-title-size);
+  line-height: var(--toolbar-two-line-title-line-height);
+  letter-spacing: var(--toolbar-two-line-title-letter-spacing);
+}
+
+/* twoLineLeft — title block grows between leading and trailing */
+.variant_twoLineLeft .titleBlock {
+  flex: 1 1 auto;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1px 0 0 2px;
+}
+
+.variant_twoLineLeft .title {
+  font-size: var(--toolbar-two-line-title-size);
+  line-height: var(--toolbar-two-line-title-line-height);
+  letter-spacing: var(--toolbar-two-line-title-letter-spacing);
+}
+
+/* largeTitle — stacked controls + title block */
+.variant_largeTitle .controls {
+  padding: 0;
+}
+
+.variant_largeTitle .titleBlock {
+  align-items: flex-start;
+  padding: 5px 0 0;
+  gap: 0;
+}
+
+.variant_largeTitle .title {
+  font-weight: 700;
+  font-size: var(--toolbar-large-title-size);
+  line-height: var(--toolbar-large-title-line-height);
+  letter-spacing: var(--toolbar-large-title-letter-spacing);
+}
+
+.variant_largeTitle .subtitle {
+  font-size: var(--toolbar-large-subtitle-size);
+  line-height: var(--toolbar-large-subtitle-line-height);
+  letter-spacing: -0.25px;
+}
+
+/* compactLarge — large title inline with trailing */
+.variant_compactLarge .titleBlock {
+  flex: 1 1 auto;
+  justify-content: flex-end;
+  min-height: var(--toolbar-large-title-line-height);
+}
+
+.variant_compactLarge .title {
+  font-weight: 700;
+  font-size: var(--toolbar-large-title-size);
+  line-height: var(--toolbar-large-title-line-height);
+  letter-spacing: var(--toolbar-large-title-letter-spacing);
+}
+
+/* Sheet context — grabber + slightly taller layout */
+.context_sheet.variant_default .controls,
+.context_sheet.variant_twoLine .controls,
+.context_sheet.variant_twoLineLeft .controls {
+  padding: 0;
+}
+
+.context_sheet.variant_twoLine .titleBlock {
+  top: 22px;
+}
+
+.context_sheet.variant_twoLine .subtitle {
+  margin-top: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toolbar {
+    transition: none;
+  }
+}

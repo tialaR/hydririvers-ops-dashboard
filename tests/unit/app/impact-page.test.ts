@@ -39,7 +39,7 @@ vi.mock('@/shared/ui/page-shell/page-shell', () => ({
     )
 }));
 
-import ImpactPage from '@/app/[locale]/impacto/page';
+import ImpactPage from '@/app/[locale]/(product-shell)/impacto/page';
 
 describe('impact page', () => {
   beforeEach(() => {
