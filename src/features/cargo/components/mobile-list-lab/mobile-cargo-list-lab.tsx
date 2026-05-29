@@ -572,6 +572,7 @@ function MobileCargoFilterButton({
   clearLabel = 'Limpar filtros',
   onOpenFilters,
   onClearFilters,
+  onDismiss,
 }: {
   activeCount: number;
   ariaLabel: string;
@@ -583,6 +584,7 @@ function MobileCargoFilterButton({
   clearLabel?: string;
   onOpenFilters?: () => void;
   onClearFilters?: () => void;
+  onDismiss?: () => void;
 }) {
   const showLauncherActions = launching && activeCount > 0;
   const actionLockRef = useRef(false);
@@ -615,30 +617,35 @@ function MobileCargoFilterButton({
       actionLockRef.current = false;
     }, 260);
 
-    // Round 22: defer the state transition until after the current pointer/click
-    // cycle has been consumed by the menu. This avoids the menu unmounting early
-    // and letting the trailing click hit the list/search/chips below it.
-    window.setTimeout(() => {
-      if (action === 'open') {
-        onOpenFilters?.();
-        return;
-      }
+    if (action === 'open') {
+      onOpenFilters?.();
+      return;
+    }
 
-      onClearFilters?.();
-    }, 0);
+    onClearFilters?.();
   };
 
   const handleMenuPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
-    event.preventDefault();
-    event.stopPropagation();
-  };
-
-  const handleMenuPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
     executeLauncherAction(event, resolveActionFromTarget(event.target));
   };
 
   const handleMenuClick = (event: ReactMouseEvent<HTMLDivElement>) => {
-    executeLauncherAction(event, resolveActionFromTarget(event.target));
+    const action = resolveActionFromTarget(event.target);
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Pointer events execute the command on touch/mouse devices. Keyboard users
+    // still need click/Enter/Space support, so only execute here when a pointer
+    // event did not already lock the action.
+    if (action != null && !actionLockRef.current) {
+      executeLauncherAction(event, action);
+    }
+  };
+
+  const handleDismissPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    onDismiss?.();
   };
 
   return (
@@ -668,15 +675,20 @@ function MobileCargoFilterButton({
       </button>
 
       {showLauncherActions ? (
-        <div
-          className={styles.filterLauncherMenu}
-          role="menu"
-          aria-label="Ações dos filtros aplicados"
-          data-testid="cargo-lab-filter-launcher-actions"
-          onPointerDown={handleMenuPointerDown}
-          onPointerUp={handleMenuPointerUp}
-          onClick={handleMenuClick}
-        >
+        <>
+          <div
+            className={styles.filterLauncherTapShield}
+            aria-hidden
+            onPointerDown={handleDismissPointerDown}
+          />
+          <div
+            className={styles.filterLauncherMenu}
+            role="menu"
+            aria-label="Ações dos filtros aplicados"
+            data-testid="cargo-lab-filter-launcher-actions"
+            onPointerDown={handleMenuPointerDown}
+            onClick={handleMenuClick}
+          >
           <button
             type="button"
             className={styles.filterLauncherMenuItem}
@@ -706,7 +718,8 @@ function MobileCargoFilterButton({
             </span>
             <span className={styles.filterLauncherMenuCopy}>{clearLabel}</span>
           </button>
-        </div>
+          </div>
+        </>
       ) : null}
     </span>
   );
@@ -1418,6 +1431,7 @@ export function MobileCargoListLab({
             clearLabel={t('filterSummary.clear')}
             onOpenFilters={handleOpenFiltersFromLauncher}
             onClearFilters={handleClearFiltersFromLauncher}
+            onDismiss={() => setFilterLauncherSource(null)}
             onClick={handleCompactFilterShortcut}
           />
         </div>
@@ -1447,6 +1461,7 @@ export function MobileCargoListLab({
                   clearLabel={t('filterSummary.clear')}
                   onOpenFilters={handleOpenFiltersFromLauncher}
                   onClearFilters={handleClearFiltersFromLauncher}
+                  onDismiss={() => setFilterLauncherSource(null)}
                   onClick={handleFilterShortcut}
                 />
               </div>
