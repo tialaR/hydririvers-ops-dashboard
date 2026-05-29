@@ -620,9 +620,17 @@ function MobileCargoFilterButton({
             className={styles.filterLauncherAction}
             data-variant="open"
             role="menuitem"
-            onClick={onOpenFilters}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onOpenFilters?.();
+            }}
           >
-            <span>{launchLabel}</span>
+            <span className={styles.filterLauncherActionIcon} aria-hidden>
+              <FilterSlidersIcon />
+            </span>
+            <span className={styles.filterLauncherActionCopy}>{launchLabel}</span>
             <span className={styles.filterLauncherActionCount} aria-hidden>
               {activeCount}
             </span>
@@ -632,9 +640,19 @@ function MobileCargoFilterButton({
             className={styles.filterLauncherAction}
             data-variant="clear"
             role="menuitem"
-            onClick={onClearFilters}
+            onPointerDown={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.preventDefault();
+              event.stopPropagation();
+              onClearFilters?.();
+            }}
           >
-            {clearLabel}
+            <span className={styles.filterLauncherActionIcon} aria-hidden>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </span>
+            <span className={styles.filterLauncherActionCopy}>{clearLabel}</span>
           </button>
         </span>
       ) : null}
