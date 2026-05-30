@@ -1,10 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { type CSSProperties, useMemo, useState } from 'react';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
 
 type CargoStatus = 'cotacao' | 'transito' | 'reservada' | 'atencao';
+type StatusFilter = 'todos' | CargoStatus;
+type SheetMode = 'filters' | 'details' | null;
+type VisualTheme = 'dark' | 'light';
 
 type CargoItem = {
   id: string;
@@ -25,57 +28,57 @@ type CargoItem = {
 
 const CARGOES: CargoItem[] = [
   {
-    id: 'CARGO-011',
-    title: 'Farinha de mandioca ensacada',
-    subtitle: 'casa de farinha · lote 3',
-    origin: 'Obidos, PA',
-    originTerminal: 'Terminal de Obidos',
-    destination: 'Santarem, PA',
-    destinationTerminal: 'Terminal Fluvial de Santarem',
-    eta: '4-7 dias',
-    confidence: 'Confianca media',
+    id: 'CRG-7845',
+    title: 'Eletronicos e componentes',
+    subtitle: 'cabos, placas e sensores',
+    origin: 'Sao Paulo, SP',
+    originTerminal: 'Terminal Barra Funda',
+    destination: 'Manaus, AM',
+    destinationTerminal: 'Porto Chibatao',
+    eta: '24 Mai, 14:00',
+    confidence: 'Entrega prevista em 2 dias',
     volume: '18 t',
-    status: 'cotacao',
-    statusLabel: 'Em cotacao',
-    vessel: 'Balsa graneleira',
+    status: 'transito',
+    statusLabel: 'Em transito',
+    vessel: 'Balsa porta-conteineres',
     cutoff: 'Hoje, 18:00',
   },
   {
-    id: 'CARGO-009',
-    title: 'Madeira serrada',
-    subtitle: 'lote fechado',
-    origin: 'Itaituba, PA',
-    originTerminal: 'Porto de Itaituba',
-    destination: 'Santarem, PA',
-    destinationTerminal: 'Terminal Fluvial de Santarem',
-    eta: '3-5 dias',
-    confidence: 'Alta confianca',
+    id: 'CRG-3921',
+    title: 'Maquinas industriais',
+    subtitle: 'carga projeto',
+    origin: 'Curitiba, PR',
+    originTerminal: 'Terminal CIC',
+    destination: 'Salvador, BA',
+    destinationTerminal: 'Terminal Aratu',
+    eta: '28 Mai, 09:30',
+    confidence: 'Janela confirmada',
     volume: '32 t',
     status: 'cotacao',
-    statusLabel: 'Em cotacao',
+    statusLabel: 'Agendado',
     vessel: 'Convoio empurrado',
     cutoff: 'Amanha, 10:00',
   },
   {
-    id: 'CARGO-007',
-    title: 'Oleo de palma bruto',
-    subtitle: 'tanques · lote 12',
-    origin: 'Acara, PA',
-    originTerminal: 'Porto de Acara',
-    destination: 'Belem, PA',
-    destinationTerminal: 'Porto de Belem',
+    id: 'CRG-7012',
+    title: 'Insumos refrigerados',
+    subtitle: 'cadeia fria',
+    origin: 'Belem, PA',
+    originTerminal: 'Porto de Belem',
+    destination: 'Santarem, PA',
+    destinationTerminal: 'Terminal Fluvial de Santarem',
     eta: '2-4 dias',
     confidence: 'Alta confianca',
     volume: '24 t',
     status: 'reservada',
     statusLabel: 'Reservada',
-    vessel: 'Balsa tanque',
+    vessel: 'Balsa refrigerada',
     cutoff: 'Sex, 12:00',
   },
   {
-    id: 'CARGO-005',
+    id: 'CRG-4510',
     title: 'Graos de milho',
-    subtitle: 'granel · lote 21',
+    subtitle: 'granel solido · lote 21',
     origin: 'Miritituba, PA',
     originTerminal: 'Porto de Miritituba',
     destination: 'Santarem, PA',
@@ -83,21 +86,20 @@ const CARGOES: CargoItem[] = [
     eta: '4-6 dias',
     confidence: 'Confianca media',
     volume: '28 t',
-    status: 'transito',
-    statusLabel: 'Em transito',
+    status: 'cotacao',
+    statusLabel: 'Em cotacao',
     vessel: 'Balsa graneleira',
     cutoff: 'Seg, 08:00',
   },
 ];
 
-const statusFilters = [
+const statusFilters: Array<{ id: StatusFilter; label: string }> = [
   { id: 'todos', label: 'Todos' },
-  { id: 'cotacao', label: 'Cotacao' },
-  { id: 'transito', label: 'Transito' },
+  { id: 'transito', label: 'Em transito' },
+  { id: 'cotacao', label: 'Agendado' },
+  { id: 'reservada', label: 'Reservada' },
   { id: 'atencao', label: 'Atencao' },
-] as const;
-
-type StatusFilter = (typeof statusFilters)[number]['id'];
+];
 
 function FilterIcon() {
   return (
@@ -137,6 +139,15 @@ function BoatIcon() {
   );
 }
 
+function TagIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 11V5h6l10 10-6 6L4 11Z" />
+      <path d="M8 8h.01" />
+    </svg>
+  );
+}
+
 function ChevronIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -145,7 +156,24 @@ function ChevronIcon() {
   );
 }
 
-function NavIcon({ type }: { type: 'cargo' | 'quotes' | 'vessel' | 'alerts' | 'more' }) {
+function ThemeIcon({ theme }: { theme: VisualTheme }) {
+  if (theme === 'dark') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a7 7 0 1 0 11.5 11.5Z" />
+    </svg>
+  );
+}
+
+function NavIcon({ type }: { type: 'cargo' | 'quotes' | 'vessel' | 'alerts' | 'profile' }) {
   if (type === 'cargo') return <CubeIcon />;
   if (type === 'vessel') return <BoatIcon />;
   if (type === 'alerts') {
@@ -155,25 +183,22 @@ function NavIcon({ type }: { type: 'cargo' | 'quotes' | 'vessel' | 'alerts' | 'm
       </svg>
     );
   }
-  if (type === 'more') {
+  if (type === 'profile') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M5 12h.01M12 12h.01M19 12h.01" />
+        <path d="M20 21a8 8 0 0 0-16 0" />
+        <circle cx="12" cy="8" r="4" />
       </svg>
     );
   }
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 17 12 5l7 12H5Z" />
-      <path d="M12 10v3M12 16h.01" />
-    </svg>
-  );
+  return <TagIcon />;
 }
 
 export function MobileCargoListLabV2() {
+  const [theme, setTheme] = useState<VisualTheme>('dark');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('todos');
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [sheetMode, setSheetMode] = useState<SheetMode>(null);
   const [selectedCargo, setSelectedCargo] = useState<CargoItem | null>(null);
 
   const filteredCargoes = useMemo(() => {
@@ -194,9 +219,18 @@ export function MobileCargoListLabV2() {
   const activeFilterCount = (status !== 'todos' ? 1 : 0) + (query.trim().length >= 2 ? 1 : 0);
   const sheetCargo = selectedCargo ?? filteredCargoes[0] ?? CARGOES[0];
 
+  function openFilters() {
+    setSelectedCargo(null);
+    setSheetMode('filters');
+  }
+
   function openCargoSheet(cargo: CargoItem) {
     setSelectedCargo(cargo);
-    setIsSheetOpen(true);
+    setSheetMode('details');
+  }
+
+  function closeSheet() {
+    setSheetMode(null);
   }
 
   function resetFilters() {
@@ -205,21 +239,39 @@ export function MobileCargoListLabV2() {
   }
 
   return (
-    <main className={styles.root}>
+    <main className={styles.root} data-theme={theme}>
       <section className={styles.phoneShell} aria-label="Experiencia visual dev v2 da lista de cargas">
         <div className={styles.backdrop} aria-hidden="true" />
+        <div className={styles.statusBar} aria-hidden="true">
+          <span>9:41</span>
+          <span>▴ ))) ▱</span>
+        </div>
 
         <header className={styles.header}>
           <div>
-            <p className={styles.routeEyebrow}>DEV-V2 · Light cargo experience</p>
             <h1>Cargas</h1>
             <p>{filteredCargoes.length} de {CARGOES.length} cargas</p>
           </div>
 
-          <button className={styles.headerIconButton} type="button" onClick={() => setIsSheetOpen(true)} aria-label="Abrir filtros">
-            <FilterIcon />
-            {activeFilterCount > 0 ? <span>{activeFilterCount}</span> : null}
-          </button>
+          <div className={styles.headerActions}>
+            <button
+              className={styles.headerIconButton}
+              type="button"
+              onClick={openFilters}
+              aria-label="Abrir filtros"
+            >
+              <FilterIcon />
+              {activeFilterCount > 0 ? <span>{activeFilterCount}</span> : null}
+            </button>
+            <button
+              className={styles.headerIconButton}
+              type="button"
+              onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+              aria-label={theme === 'dark' ? 'Ativar light mode' : 'Ativar dark mode'}
+            >
+              <ThemeIcon theme={theme} />
+            </button>
+          </div>
         </header>
 
         <div className={styles.searchRow}>
@@ -228,40 +280,14 @@ export function MobileCargoListLabV2() {
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar carga, origem ou destino"
+              placeholder="Buscar cargas..."
               aria-label="Buscar carga, origem ou destino"
             />
           </label>
-          <button className={styles.filterPill} type="button" onClick={() => setIsSheetOpen(true)}>
+          <button className={styles.filterSquare} type="button" onClick={openFilters} aria-label="Visualizar filtros">
             <FilterIcon />
-            <span>{activeFilterCount > 0 ? 'Filtros ativos' : 'Filtrar'}</span>
-            {activeFilterCount > 0 ? <strong>{activeFilterCount}</strong> : null}
           </button>
         </div>
-
-        <div className={styles.chipScroller} aria-label="Filtros rapidos de status">
-          {statusFilters.map((item) => (
-            <button
-              key={item.id}
-              className={styles.statusChip}
-              data-active={status === item.id}
-              type="button"
-              onClick={() => setStatus(item.id)}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-
-        {activeFilterCount > 0 ? (
-          <section className={styles.activeFilters} aria-label="Filtros ativos">
-            <div>
-              <span>Filtros ativos</span>
-              <strong>{activeFilterCount}</strong>
-            </div>
-            <button type="button" onClick={resetFilters}>Limpar tudo</button>
-          </section>
-        ) : null}
 
         <section className={styles.list} aria-label="Lista de cargas dev v2">
           {filteredCargoes.map((cargo, index) => (
@@ -269,62 +295,44 @@ export function MobileCargoListLabV2() {
               key={cargo.id}
               className={styles.cargoCard}
               type="button"
-              style={{ '--card-index': index } as React.CSSProperties}
+              style={{ '--card-index': index } as CSSProperties}
               onClick={() => openCargoSheet(cargo)}
             >
-              <div className={styles.cardMain}>
-                <div className={styles.cardTopline}>
-                  <span className={styles.cargoIcon}><CubeIcon /></span>
-                  <span className={styles.cargoId}>{cargo.id}</span>
-                  <span className={styles.statusBadge} data-status={cargo.status}>{cargo.statusLabel}</span>
-                </div>
-
-                <h2>{cargo.title}</h2>
-                <p className={styles.cardSubtitle}>{cargo.subtitle}</p>
-
-                <div className={styles.routeGrid}>
-                  <div>
-                    <span>Origem</span>
-                    <strong>{cargo.origin}</strong>
-                    <small>{cargo.originTerminal}</small>
-                  </div>
-                  <BoatIcon />
-                  <div>
-                    <span>Destino</span>
-                    <strong>{cargo.destination}</strong>
-                    <small>{cargo.destinationTerminal}</small>
-                  </div>
-                </div>
+              <div className={styles.cardTopline}>
+                <span className={styles.cargoIcon}><CubeIcon /></span>
+                <span className={styles.cargoId}>{cargo.id}</span>
+                <span className={styles.statusBadge} data-status={cargo.status}>{cargo.statusLabel}</span>
               </div>
 
-              <aside className={styles.cardAside}>
-                <div>
-                  <span>ETA</span>
-                  <strong>{cargo.eta}</strong>
-                  <small>{cargo.confidence}</small>
-                </div>
-                <div>
-                  <span>Volume</span>
-                  <strong>{cargo.volume}</strong>
-                  <small>{cargo.vessel}</small>
-                </div>
-                <ChevronIcon />
-              </aside>
+              <h2>{cargo.title}</h2>
+              <p className={styles.cardSubtitle}>{cargo.subtitle}</p>
+
+              <div className={styles.routeLine}>
+                <span>{cargo.origin}</span>
+                <i aria-hidden="true" />
+                <BoatIcon />
+                <i aria-hidden="true" />
+                <span>{cargo.destination}</span>
+              </div>
+
+              <footer className={styles.cardFooter}>
+                <div><span>ETA</span><strong>{cargo.eta}</strong></div>
+                <button type="button" onClick={(event) => { event.stopPropagation(); openCargoSheet(cargo); }}>Acompanhar <ChevronIcon /></button>
+              </footer>
             </button>
           ))}
         </section>
 
         <nav className={styles.bottomDock} aria-label="Navegacao principal dev v2">
-          <button className={styles.logoButton} type="button" aria-label="HydriRivers">N</button>
           <button className={styles.navItem} data-active="true" type="button"><NavIcon type="cargo" /><span>Cargas</span></button>
           <button className={styles.navItem} type="button"><NavIcon type="quotes" /><span>Cotacoes</span></button>
           <button className={styles.navItem} type="button"><NavIcon type="vessel" /><span>Embarcacoes</span></button>
           <button className={styles.navItem} type="button"><NavIcon type="alerts" /><span>Alertas</span></button>
-          <button className={styles.navItem} type="button"><NavIcon type="more" /><span>Mais</span></button>
+          <button className={styles.navItem} type="button"><NavIcon type="profile" /><span>Perfil</span></button>
         </nav>
 
-        {isSheetOpen ? (
-          <div className={styles.sheetOverlay} role="presentation" onPointerDown={() => setIsSheetOpen(false)}>
+        {sheetMode ? (
+          <div className={styles.sheetOverlay} role="presentation" onPointerDown={closeSheet}>
             <section
               className={styles.bottomSheet}
               role="dialog"
@@ -333,48 +341,60 @@ export function MobileCargoListLabV2() {
               onPointerDown={(event) => event.stopPropagation()}
             >
               <div className={styles.sheetGrabber} aria-hidden="true" />
-              <button className={styles.sheetClose} type="button" onClick={() => setIsSheetOpen(false)} aria-label="Fechar sheet">×</button>
+              <button className={styles.sheetClose} type="button" onClick={closeSheet} aria-label="Fechar sheet">×</button>
 
-              <div className={styles.sheetHero}>
-                <span className={styles.cargoIcon}><CubeIcon /></span>
-                <div>
-                  <p>{sheetCargo.id}</p>
-                  <h2>{selectedCargo ? sheetCargo.title : 'Visualizar filtros'}</h2>
-                  <span>{selectedCargo ? sheetCargo.statusLabel : 'Refine a lista por operacao, origem e destino'}</span>
-                </div>
-              </div>
-
-              {!selectedCargo ? (
+              {sheetMode === 'filters' ? (
                 <div className={styles.sheetFilters}>
+                  <h2>Visualizar filtros</h2>
+                  <p className={styles.sheetLead}>Refine a lista por status, origem, destino e operacao.</p>
+
                   <div className={styles.sheetSectionTitle}>Status</div>
                   <div className={styles.sheetChipGrid}>
                     {statusFilters.map((item) => (
                       <button key={item.id} type="button" data-active={status === item.id} onClick={() => setStatus(item.id)}>{item.label}</button>
                     ))}
                   </div>
+
                   <div className={styles.sheetSectionTitle}>Operacional</div>
                   <div className={styles.sheetMetricsGrid}>
-                    <div><span>Tipo de embarcacao</span><strong>Balsa graneleira</strong></div>
+                    <div><span>Tipo de embarcacao</span><strong>Balsa porta-conteineres</strong></div>
                     <div><span>Cut-off</span><strong>Hoje, 18:00</strong></div>
                     <div><span>Calado max.</span><strong>2.8 m</strong></div>
                     <div><span>Janela</span><strong>Portuaria</strong></div>
                   </div>
+
                   <div className={styles.sheetFooterActions}>
                     <button type="button" onClick={resetFilters}>Limpar filtros</button>
-                    <button type="button" data-primary="true" onClick={() => setIsSheetOpen(false)}>Visualizar filtros</button>
+                    <button type="button" data-primary="true" onClick={closeSheet}>Aplicar</button>
                   </div>
                 </div>
               ) : (
                 <div className={styles.sheetDetails}>
-                  <div className={styles.sheetRouteCard}>
-                    <div><span>Origem</span><strong>{sheetCargo.origin}</strong><small>{sheetCargo.originTerminal}</small></div>
-                    <BoatIcon />
-                    <div><span>Destino</span><strong>{sheetCargo.destination}</strong><small>{sheetCargo.destinationTerminal}</small></div>
+                  <div className={styles.detailHeader}>
+                    <span className={styles.cargoIcon}><CubeIcon /></span>
+                    <div>
+                      <p>{sheetCargo.id}</p>
+                      <span className={styles.statusBadge} data-status={sheetCargo.status}>{sheetCargo.statusLabel}</span>
+                    </div>
                   </div>
-                  <button type="button"><span>Visao geral</span><small>Resumo operacional e rota hidroviaria</small><ChevronIcon /></button>
-                  <button type="button"><span>Jornada</span><small>Eventos, checkpoints e prazos</small><ChevronIcon /></button>
+
+                  <h2>{sheetCargo.title}</h2>
+
+                  <div className={styles.sheetRouteCard}>
+                    <div><span>{sheetCargo.origin}</span><small>{sheetCargo.originTerminal}</small></div>
+                    <BoatIcon />
+                    <div><span>{sheetCargo.destination}</span><small>{sheetCargo.destinationTerminal}</small></div>
+                  </div>
+
+                  <div className={styles.sheetMetricsGrid}>
+                    <div><span>ETA</span><strong>{sheetCargo.eta}</strong></div>
+                    <div><span>Entrega prevista</span><strong>{sheetCargo.confidence}</strong></div>
+                  </div>
+
+                  <button type="button"><span>Visao geral</span><small>Informacoes principais da carga</small><ChevronIcon /></button>
+                  <button type="button"><span>Jornada</span><small>Rastreamento e eventos</small><ChevronIcon /></button>
                   <button type="button"><span>Documentos</span><small>Conhecimentos, notas e certificados</small><ChevronIcon /></button>
-                  <button type="button"><span>Custos</span><small>Frete estimado, taxas e margem</small><ChevronIcon /></button>
+                  <button type="button"><span>Custos</span><small>Detalhamento e pagamentos</small><ChevronIcon /></button>
                 </div>
               )}
             </section>
