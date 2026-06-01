@@ -50,16 +50,20 @@ function findElement(
 }
 
 describe('LiquidGlassSheet', () => {
-  it('aplica inert quando open=false sem usar aria-hidden', () => {
+  it('aplica inert no overlay quando open=false sem aria-hidden no root', () => {
     const html = renderToStaticMarkup(
       <LiquidGlassSheet open={false} title="Filtros">
         Conteúdo
       </LiquidGlassSheet>,
     );
 
+    const closedOverlayTag = html.match(/<div[^>]*data-open="false"[^>]*inert=""/);
+
     expect(html).toContain('data-open="false"');
     expect(html).toContain('inert=""');
-    expect(html).not.toContain('aria-hidden="true"');
+    expect(closedOverlayTag).not.toBeNull();
+    expect(closedOverlayTag?.[0]).not.toContain('aria-hidden="true"');
+    expect(html).toContain('aria-hidden="true"');
   });
 
   it('renderiza title', () => {

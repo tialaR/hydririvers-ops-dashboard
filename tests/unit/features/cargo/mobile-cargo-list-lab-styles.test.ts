@@ -12,6 +12,36 @@ const labSourcePath = resolve(
   'src/features/cargo/components/mobile-list-lab/mobile-cargo-list-lab.tsx',
 );
 
+/** Lê o corpo de cada bloco `.selector { ... }` sem atravessar chaves aninhadas. */
+function selectorBlocks(source: string, selector: string): string[] {
+  const blocks: string[] = [];
+  const re = new RegExp(`\\.${selector}\\s*\\{`, 'g');
+  let match: RegExpExecArray | null;
+
+  while ((match = re.exec(source)) !== null) {
+    let depth = 1;
+    let cursor = match.index + match[0].length;
+
+    while (cursor < source.length && depth > 0) {
+      const char = source[cursor];
+      if (char === '{') {
+        depth += 1;
+      } else if (char === '}') {
+        depth -= 1;
+      }
+      cursor += 1;
+    }
+
+    blocks.push(source.slice(match.index + match[0].length, cursor - 1));
+  }
+
+  return blocks;
+}
+
+function blocksUseStickyPosition(blocks: string[]): boolean {
+  return blocks.some((block) => /position:\s*sticky/.test(block));
+}
+
 describe('mobile cargo list lab styles and scroll contract', () => {
   it('não usa prefixos CSS proibidos no módulo da lab', () => {
     const source = readFileSync(labStylesPath, 'utf8');
@@ -44,7 +74,7 @@ describe('mobile cargo list lab styles and scroll contract', () => {
 
     expect(labSource).toContain('--mobile-cargo-list-label-primary');
     expect(labSource).toContain('composes: canvas');
-    expect(canvasSource).toContain('--hydro-color-canvas');
+    expect(canvasSource).toContain('composes: hydroSemanticTheme');
     expect(canvasSource).toContain('--mobile-cargo-list-canvas-top');
     expect(canvasSource).not.toMatch(/--mcl-/);
   });
@@ -68,8 +98,9 @@ describe('mobile cargo list lab styles and scroll contract', () => {
     expect(source).toContain('.dockHost');
     expect(source).not.toContain('.heroSurface');
     expect(source).toContain('padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 120px)');
-    expect(source).not.toMatch(/\.controls\s*\{[\s\S]*?position:\s*sticky/);
-    expect(source).not.toMatch(/\.header\s*\{[\s\S]*?position:\s*sticky/);
+    expect(blocksUseStickyPosition(selectorBlocks(source, 'controls'))).toBe(false);
+    expect(blocksUseStickyPosition(selectorBlocks(source, 'header'))).toBe(false);
+    expect(blocksUseStickyPosition(selectorBlocks(source, 'filterSheetFooter'))).toBe(true);
   });
 
   it('não expõe texto mock nem ETA duplicado no componente', () => {
