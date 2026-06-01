@@ -38,10 +38,11 @@ Inspirado nos vídeos de referência iOS do projeto (`APP-IOS-VIDEOS-REFERENCES`
 - `tone="dark"` (recomendado na lab): cores inativas legíveis, accent via `--hydro-color-accent`.
 - Track usa `--hydro-color-fill-secondary` e `--hydro-color-separator` com fallbacks glass.
 - Bolha ativa: gradiente translúcido + borda leve (lens), não bloco azul sólido.
+- `data-active-id` permite tint contextual: lista usa accent, atenção usa warning e mapa usa success como glow discreto.
 
 ## Safe area
 
-- `padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 10px)` no host.
+- `padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 12px)` no host.
 - Track em cápsula (`border-radius: var(--hydro-radius-pill)`), largura máx. ~`360px`, altura `76px`.
 
 ## Bolha ativa (lens)

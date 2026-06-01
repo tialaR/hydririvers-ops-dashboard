@@ -66,6 +66,7 @@ describe('mobile cargo list lab styles and scroll contract', () => {
     expect(source).toContain('.compactHeader');
     expect(source).toContain('data-scrolled');
     expect(source).toContain('.dockHost');
+    expect(source).not.toContain('.heroSurface');
     expect(source).toContain('padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 120px)');
     expect(source).not.toMatch(/\.controls\s*\{[\s\S]*?position:\s*sticky/);
     expect(source).not.toMatch(/\.header\s*\{[\s\S]*?position:\s*sticky/);

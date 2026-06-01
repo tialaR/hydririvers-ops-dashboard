@@ -50,7 +50,7 @@ function findElement(
 }
 
 describe('LiquidGlassSheet', () => {
-  it('aplica estado fechado quando open=false', () => {
+  it('aplica inert quando open=false sem usar aria-hidden', () => {
     const html = renderToStaticMarkup(
       <LiquidGlassSheet open={false} title="Filtros">
         Conteúdo
@@ -58,7 +58,8 @@ describe('LiquidGlassSheet', () => {
     );
 
     expect(html).toContain('data-open="false"');
-    expect(html).toContain('aria-hidden="true"');
+    expect(html).toContain('inert=""');
+    expect(html).not.toContain('aria-hidden="true"');
   });
 
   it('renderiza title', () => {
@@ -213,5 +214,16 @@ describe('LiquidGlassSheet', () => {
     expect(html).toContain('data-draggable="true"');
     expect(html).toContain('data-snap-point="content"');
     expect(html).toContain('data-scrollable="false"');
+  });
+
+  it('mantém altura inline em sheets arrastáveis para animar snap vertical', () => {
+    const html = renderToStaticMarkup(
+      <LiquidGlassSheet open draggable defaultSnapPoint="medium">
+        Conteúdo
+      </LiquidGlassSheet>,
+    );
+
+    expect(html).toContain('height:');
+    expect(html).toContain('data-draggable="true"');
   });
 });

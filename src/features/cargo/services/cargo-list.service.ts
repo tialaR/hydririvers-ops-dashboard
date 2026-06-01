@@ -15,6 +15,76 @@ const MAX_ALERT_LENGTH = 72;
 
 const LAB_UI_MARKER_PATTERN = /\s*\((mock|dev|fixture)\)\s*/gi;
 
+const HYDRO_FILTER_ENRICHMENT = [
+  {
+    cargoTypeLabel: 'Contêiner',
+    vesselTypeLabel: 'Balsa porta-contêineres',
+    cutoffWindowLabel: 'Janela 24h',
+    grossWeightLabel: 'até 1.200 t',
+    draftLimitLabel: 'calado até 2,1 m',
+    waterwayLabel: 'Corredor Amazonas',
+    availabilityLabel: 'Spot disponível',
+    environmentalRiskLabel: 'Baixo risco ambiental',
+  },
+  {
+    cargoTypeLabel: 'Granel sólido',
+    vesselTypeLabel: 'Balsa graneleira',
+    cutoffWindowLabel: 'Cut-off 48h',
+    grossWeightLabel: '1.200–3.000 t',
+    draftLimitLabel: 'calado até 2,8 m',
+    waterwayLabel: 'Madeira–Amazonas',
+    availabilityLabel: 'Janela portuária',
+    environmentalRiskLabel: 'Atenção a sedimentos',
+  },
+  {
+    cargoTypeLabel: 'Carga geral',
+    vesselTypeLabel: 'Convoio misto',
+    cutoffWindowLabel: 'Próxima maré',
+    grossWeightLabel: 'até 800 t',
+    draftLimitLabel: 'calado até 1,8 m',
+    waterwayLabel: 'Baixo Tocantins',
+    availabilityLabel: 'Programada',
+    environmentalRiskLabel: 'Inspeção documental',
+  },
+  {
+    cargoTypeLabel: 'Granel líquido',
+    vesselTypeLabel: 'Balsa tanque',
+    cutoffWindowLabel: 'Operação noturna restrita',
+    grossWeightLabel: '800–1.800 t',
+    draftLimitLabel: 'calado até 2,4 m',
+    waterwayLabel: 'Solimões–Amazonas',
+    availabilityLabel: 'Aguardando atracação',
+    environmentalRiskLabel: 'Plano de contenção exigido',
+  },
+  {
+    cargoTypeLabel: 'Reefer',
+    vesselTypeLabel: 'Empurrador + balsa refrigerada',
+    cutoffWindowLabel: 'Cut-off 12h',
+    grossWeightLabel: 'até 650 t',
+    draftLimitLabel: 'calado até 1,6 m',
+    waterwayLabel: 'Pará–Amapá',
+    availabilityLabel: 'Prioritária',
+    environmentalRiskLabel: 'Controle de resíduos',
+  },
+] satisfies Array<Pick<MobileCargoListItem,
+  | 'cargoTypeLabel'
+  | 'vesselTypeLabel'
+  | 'cutoffWindowLabel'
+  | 'grossWeightLabel'
+  | 'draftLimitLabel'
+  | 'waterwayLabel'
+  | 'availabilityLabel'
+  | 'environmentalRiskLabel'
+>>;
+
+function enrichCargoForHydroFilters(
+  item: MobileCargoListItem,
+  index: number,
+): MobileCargoListItem {
+  const enrichment = HYDRO_FILTER_ENRICHMENT[index % HYDRO_FILTER_ENRICHMENT.length];
+  return { ...item, ...enrichment };
+}
+
 /** Evita prefixo duplicado quando o mock já traz "ETA …". */
 export function normalizeMobileCargoEtaLabel(value: string): string {
   const trimmed = value.trim();
@@ -129,7 +199,7 @@ export class CargoListService {
 
   async listMobileCargoes(): Promise<MobileCargoListItem[]> {
     const cargoes = await this.repository.listMobileCargoes();
-    return cargoes.map(mapCargoToMobileListItem);
+    return cargoes.map(mapCargoToMobileListItem).map(enrichCargoForHydroFilters);
   }
 
   async getCargoListFilters(): Promise<MobileCargoListFilters> {
@@ -138,7 +208,7 @@ export class CargoListService {
 
   async getCargoById(id: string): Promise<MobileCargoListItem | undefined> {
     const cargo = await this.repository.getCargoById(id);
-    return cargo ? mapCargoToMobileListItem(cargo) : undefined;
+    return cargo ? enrichCargoForHydroFilters(mapCargoToMobileListItem(cargo), 0) : undefined;
   }
 
   async getMobileCargoListViewModel(): Promise<MobileCargoListViewModel> {

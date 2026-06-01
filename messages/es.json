@@ -527,7 +527,8 @@
         "cargas": "Cargas",
         "filters": "Filtros",
         "attention": "Atención",
-        "map": "Mapa"
+        "map": "Mapa",
+        "profile": "Perfil"
       },
       "filtersAria": "Filtrar cargas por estado",
       "listAria": "Lista de cargas",
@@ -573,11 +574,20 @@
         "originSection": "Origen",
         "destinationSection": "Destino",
         "clear": "Limpiar filtros",
-        "apply": "Aplicar"
+        "apply": "Aplicar",
+        "cargoTypeSection": "Tipo de carga",
+        "vesselTypeSection": "Tipo de embarcación",
+        "cutoffSection": "Disponibilidad / cut-off",
+        "draftSection": "Calado máximo permitido"
       },
       "mapHint": {
         "title": "Selecciona una carga",
         "description": "Toca una tarjeta de la lista para abrir el mapa inmersivo de esa operación."
+      },
+      "filterSummary": {
+        "view": "Ver filtros",
+        "clear": "Limpiar filtros",
+        "active": "{count} filtros activos"
       }
     },
     "cargoes": {

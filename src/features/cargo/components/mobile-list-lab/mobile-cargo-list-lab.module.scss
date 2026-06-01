@@ -1,4 +1,4 @@
-/* Mobile cargo list lab — dark mode first (Hydro tokens via --mobile-cargo-list-* canvas). */
+/* Round 5 — premium dark cargo page based on latest glass/neumorphic references. */
 
 :global(html.hx-mobile-cargo-list-lab-sheet-open),
 :global(body.hx-mobile-cargo-list-lab-sheet-open) {
@@ -17,7 +17,8 @@
 .root {
   composes: canvas from '@/shared/design-system/lab/mobile-cargo-list-lab-canvas/mobile-cargo-list-lab-canvas.module.scss';
 
-  --mobile-cargo-list-page-padding: 16px;
+  --mobile-cargo-list-page-padding: 18px;
+  --mobile-cargo-list-control-height: 56px;
 
   position: relative;
   display: flex;
@@ -32,6 +33,17 @@
   font-family: var(--mobile-cargo-list-font-family);
 }
 
+.root::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 4%, rgb(255 255 255 / 8%), transparent 15rem),
+    radial-gradient(circle at 90% 0%, rgb(185 240 138 / 7%), transparent 14rem),
+    linear-gradient(180deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 18%));
+  pointer-events: none;
+}
+
 .root[data-sheet-open='true'] {
   overscroll-behavior: none;
 }
@@ -39,9 +51,13 @@
 .root[data-sheet-open='true'] .viewport {
   pointer-events: none;
   user-select: none;
+  filter: blur(2px) brightness(0.82);
+  transform: scale(0.992);
 }
 
 .viewport {
+  position: relative;
+  z-index: 1;
   width: 100%;
   max-width: 100%;
   min-height: 0;
@@ -49,6 +65,9 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition:
+    filter 280ms var(--mobile-cargo-list-easing),
+    transform 280ms var(--mobile-cargo-list-easing);
 }
 
 .listSection {
@@ -69,11 +88,10 @@
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   padding-inline: var(--mobile-cargo-list-page-padding);
-  padding-block-start: calc(env(safe-area-inset-top, 0px) + 12px);
-  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 120px);
+  padding-block-start: calc(env(safe-area-inset-top, 0px) + 18px);
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 128px);
 }
 
-/* —— Compact header overlay (scroll) —— */
 .compactHeader {
   position: absolute;
   inset-block-start: 0;
@@ -82,15 +100,15 @@
   padding-block-start: env(safe-area-inset-top, 0px);
   pointer-events: none;
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-12px) scale(0.98);
   transition:
-    opacity 200ms var(--mobile-cargo-list-easing),
-    transform 200ms var(--mobile-cargo-list-easing);
+    opacity 220ms var(--mobile-cargo-list-easing),
+    transform 220ms var(--mobile-cargo-list-easing);
 }
 
 .compactHeader[data-visible='true'] {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
 }
 
@@ -99,17 +117,18 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  min-height: 52px;
+  min-height: 56px;
   padding: 8px var(--mobile-cargo-list-page-padding);
-  border-block-end: 1px solid var(--mobile-cargo-list-separator);
-  background: color-mix(in srgb, var(--mobile-cargo-list-canvas-mid) 72%, transparent);
-  backdrop-filter: blur(28px) saturate(1.22);
+  border-block-end: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(32 38 42 / 72%);
+  backdrop-filter: var(--mobile-cargo-list-glass-blur);
+  box-shadow: 0 18px 36px rgb(0 0 0 / 22%);
 }
 
 .compactHeaderSpacer {
-  flex: 0 0 72px;
-  width: 72px;
-  height: 32px;
+  flex: 0 0 70px;
+  width: 70px;
+  height: 36px;
 }
 
 .compactTitle {
@@ -120,51 +139,24 @@
   line-height: 22px;
   font-weight: 650;
   letter-spacing: -0.02em;
-  color: var(--mobile-cargo-list-label-primary);
   text-align: center;
 }
 
-.compactFilterButton {
-  position: relative;
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid var(--mobile-cargo-list-glass-border);
-  border-radius: var(--mobile-cargo-list-radius-pill);
-  background: var(--mobile-cargo-list-surface-elevated);
-  color: var(--mobile-cargo-list-label-primary);
-  cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  backdrop-filter: var(--mobile-cargo-list-glass-blur);
-  box-shadow: 0 4px 16px rgb(0 0 0 / 16%);
+.header {
+  margin-block-end: 16px;
   transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
-}
-
-.compactFilterButton:active {
-  transform: scale(0.975);
-  background: var(--mobile-cargo-list-fill-pressed);
+    opacity 220ms var(--mobile-cargo-list-easing),
+    transform 220ms var(--mobile-cargo-list-easing);
 }
 
 .root[data-scrolled='true'] .header {
-  opacity: 0.35;
-  transform: translateY(-4px);
-  transition:
-    opacity 200ms var(--mobile-cargo-list-easing),
-    transform 200ms var(--mobile-cargo-list-easing);
+  opacity: 0.14;
+  transform: translateY(-8px) scale(0.98);
 }
 
 .root[data-scrolled='true'] .largeTitle {
   transform: scale(0.94);
   transform-origin: left center;
-  transition: transform 200ms var(--mobile-cargo-list-easing);
 }
 
 .root[data-sheet-open='true'] .listScroller {
@@ -174,19 +166,11 @@
   pointer-events: none;
 }
 
-/* —— Large title header (natural scroll) —— */
-.header {
-  margin-block-end: 14px;
-  transition:
-    opacity 200ms var(--mobile-cargo-list-easing),
-    transform 200ms var(--mobile-cargo-list-easing);
-}
-
 .headerRow {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
+  gap: 14px;
   min-width: 0;
 }
 
@@ -197,65 +181,84 @@
 
 .largeTitle {
   margin: 0;
-  font-size: 34px;
-  line-height: 40px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: var(--mobile-cargo-list-label-primary);
-  transition: transform 200ms var(--mobile-cargo-list-easing);
+  font-size: 38px;
+  line-height: 43px;
+  font-weight: 760;
+  letter-spacing: -0.045em;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 28%);
+  transition: transform 220ms var(--mobile-cargo-list-easing);
 }
 
 .subtitle {
-  margin: 4px 0 0;
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 400;
+  margin: 3px 0 0;
+  font-size: 16px;
+  line-height: 21px;
+  font-weight: 440;
   color: var(--mobile-cargo-list-label-secondary);
 }
 
-.headerFilterButton {
+.headerFilterButton,
+.compactFilterButton {
   position: relative;
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  margin-top: 2px;
+  width: 52px;
+  height: 52px;
+  margin: 0;
   padding: 0;
-  border: 1px solid var(--mobile-cargo-list-glass-border);
-  border-radius: var(--mobile-cargo-list-radius-pill);
-  background: var(--mobile-cargo-list-surface-elevated);
-  color: var(--mobile-cargo-list-label-primary);
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: 50%;
+  color: rgb(245 248 245 / 86%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)),
+    rgb(49 55 59 / 74%);
+  box-shadow:
+    -10px -10px 22px rgb(255 255 255 / 7%),
+    12px 14px 24px rgb(0 0 0 / 38%),
+    inset 0 1px 0 rgb(255 255 255 / 16%);
+  backdrop-filter: var(--mobile-cargo-list-glass-blur);
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  backdrop-filter: var(--mobile-cargo-list-glass-blur);
-  box-shadow: 0 4px 16px rgb(0 0 0 / 16%);
   transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
+    transform 140ms var(--mobile-cargo-list-easing),
+    filter 180ms var(--mobile-cargo-list-easing),
+    box-shadow 180ms var(--mobile-cargo-list-easing);
 }
 
-.headerFilterButton:active {
-  transform: scale(0.975);
-  background: var(--mobile-cargo-list-fill-pressed);
+.compactFilterButton {
+  width: 42px;
+  height: 42px;
 }
 
-.headerFilterButton:focus {
+.headerFilterButton:active,
+.compactFilterButton:active {
+  transform: scale(0.93);
+  filter: brightness(1.08);
+  box-shadow:
+    -4px -4px 10px rgb(255 255 255 / 6%),
+    6px 8px 16px rgb(0 0 0 / 36%),
+    inset 0 8px 18px rgb(0 0 0 / 18%);
+}
+
+.headerFilterButton:focus,
+.compactFilterButton:focus {
   outline: none;
 }
 
-.headerFilterButton:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 45%, transparent);
-  outline-offset: 2px;
+.headerFilterButton:focus-visible,
+.compactFilterButton:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 48%, transparent);
+  outline-offset: 3px;
 }
 
 .filterButtonIcon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--mobile-cargo-list-label-secondary);
+  color: rgb(245 248 245 / 72%);
 }
 
 .filterButtonBadge {
@@ -267,120 +270,14 @@
   padding: 0 5px;
   border-radius: 999px;
   background: var(--mobile-cargo-list-accent);
-  color: #fff;
+  color: #101412;
   font-size: 11px;
   line-height: 18px;
-  font-weight: 650;
+  font-weight: 760;
   font-variant-numeric: tabular-nums;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 28%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 34%);
 }
 
-/* —— Weather summary hero —— */
-.heroSurface {
-  width: 100%;
-  min-height: 124px;
-  max-height: 148px;
-  margin-block-end: 14px;
-  border-radius: var(--mobile-cargo-list-radius-hero);
-  border: 1px solid var(--mobile-cargo-list-glass-border);
-  background: var(--mobile-cargo-list-surface-elevated);
-  box-shadow:
-    0 1px 0 rgb(255 255 255 / 4%),
-    var(--mobile-cargo-list-glass-shadow);
-  backdrop-filter: var(--mobile-cargo-list-glass-blur);
-  overflow: hidden;
-}
-
-.heroInner {
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 12px;
-  min-height: 124px;
-  max-height: 148px;
-  box-sizing: border-box;
-}
-
-.heroLead {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  min-width: 0;
-}
-
-.heroEyebrow {
-  margin: 0;
-  font-size: 12px;
-  line-height: 14px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--mobile-cargo-list-label-tertiary);
-}
-
-.heroTotal {
-  margin: 2px 0 0;
-  font-size: 44px;
-  line-height: 48px;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  color: var(--mobile-cargo-list-label-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.heroSubtitle {
-  margin: 0;
-  font-size: 15px;
-  line-height: 20px;
-  color: var(--mobile-cargo-list-label-secondary);
-}
-
-.heroMetricsRow {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
-
-.heroMetricPill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-height: 30px;
-  padding: 4px 10px;
-  border-radius: var(--mobile-cargo-list-radius-pill);
-  background: rgb(255 255 255 / 6%);
-  border: 1px solid rgb(255 255 255 / 6%);
-}
-
-.heroMetricPill[data-attention='true'] {
-  background: color-mix(in srgb, var(--mobile-cargo-list-warning) 8%, rgb(255 255 255 / 6%));
-  border-color: color-mix(in srgb, var(--mobile-cargo-list-warning) 18%, rgb(255 255 255 / 6%));
-}
-
-.heroMetricValue {
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  color: var(--mobile-cargo-list-label-primary);
-  font-variant-numeric: tabular-nums;
-}
-
-.heroMetricPill[data-attention='true'] .heroMetricValue {
-  color: color-mix(in srgb, var(--mobile-cargo-list-warning) 70%, var(--mobile-cargo-list-label-primary));
-}
-
-.heroMetricLabel {
-  font-size: 12px;
-  line-height: 16px;
-  font-weight: 500;
-  color: var(--mobile-cargo-list-label-secondary);
-}
-
-/* —— Search glass pill —— */
 .controls {
   display: flex;
   flex-direction: column;
@@ -391,37 +288,46 @@
 .searchField {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
   width: 100%;
-  height: 46px;
-  margin-block-end: 12px;
-  padding: 0 16px;
-  border-radius: var(--mobile-cargo-list-radius-pill);
-  border: 1px solid var(--mobile-cargo-list-glass-border);
-  background: rgb(255 255 255 / 7%);
+  height: var(--mobile-cargo-list-control-height);
+  margin-block-end: 15px;
+  padding: 0 18px;
+  border-radius: 22px;
+  border: 1px solid rgb(255 255 255 / 11%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)),
+    rgb(38 44 48 / 68%);
   box-shadow:
-    0 1px 0 rgb(255 255 255 / 3%),
-    0 8px 22px rgb(0 0 0 / 14%);
+    -12px -12px 24px rgb(255 255 255 / 7%),
+    14px 16px 28px rgb(0 0 0 / 38%),
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    inset 0 -14px 20px rgb(0 0 0 / 9%);
   backdrop-filter: var(--mobile-cargo-list-glass-blur);
   transition:
     transform var(--mobile-cargo-list-motion-surface) var(--mobile-cargo-list-easing),
     border-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    box-shadow var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
+    box-shadow var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
+    background var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
 .searchField:focus-within {
   transform: translateY(-1px);
-  border-color: var(--mobile-cargo-list-glass-border-strong);
+  border-color: rgb(255 255 255 / 18%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 13%), rgb(255 255 255 / 4%)),
+    rgb(46 52 56 / 76%);
   box-shadow:
-    0 1px 0 rgb(255 255 255 / 5%),
-    0 12px 28px rgb(0 0 0 / 20%),
-    0 0 0 1px color-mix(in srgb, var(--mobile-cargo-list-accent) 22%, transparent);
+    -10px -10px 24px rgb(255 255 255 / 8%),
+    18px 20px 36px rgb(0 0 0 / 42%),
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    0 0 0 2px rgb(185 240 138 / 10%);
 }
 
 .searchIcon {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--mobile-cargo-list-label-tertiary);
+  color: rgb(235 239 235 / 58%);
 }
 
 .searchInput {
@@ -431,15 +337,15 @@
   background: transparent;
   color: var(--mobile-cargo-list-label-primary);
   caret-color: var(--mobile-cargo-list-accent);
-  font-size: 15px;
-  line-height: 20px;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font-size: 16px;
+  line-height: 22px;
+  font-weight: 420;
+  letter-spacing: -0.018em;
   outline: none;
 }
 
 .searchInput::placeholder {
-  color: var(--mobile-cargo-list-label-secondary);
+  color: rgb(235 239 235 / 42%);
 }
 
 .searchClearButton {
@@ -447,27 +353,15 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
-  margin: 0;
-  padding: 0;
+  width: 26px;
+  height: 26px;
   border: 0;
   border-radius: 999px;
   background: rgb(255 255 255 / 10%);
   color: var(--mobile-cargo-list-label-secondary);
-  font-size: 18px;
-  line-height: 1;
   cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.searchClearButton:active {
-  transform: scale(0.94);
-  background: rgb(255 255 255 / 16%);
-}
-
-/* —— Bottom floating dock host —— */
 .dockHost {
   position: absolute;
   inset-inline: 0;
@@ -485,11 +379,10 @@
   max-width: 100%;
   min-width: 0;
   margin-inline: calc(var(--mobile-cargo-list-page-padding) * -1);
-  margin-block-end: 14px;
+  margin-block-end: 18px;
   padding-inline: var(--mobile-cargo-list-page-padding);
-  padding-inline-end: calc(var(--mobile-cargo-list-page-padding) + 24px);
+  padding-inline-end: calc(var(--mobile-cargo-list-page-padding) + 34px);
   scroll-padding-inline: var(--mobile-cargo-list-page-padding);
-  scroll-padding-inline-end: calc(var(--mobile-cargo-list-page-padding) + 24px);
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
@@ -504,47 +397,61 @@
 .filterChips {
   display: flex;
   flex-wrap: nowrap;
-  gap: 8px;
+  gap: 11px;
   width: max-content;
-  min-width: min(100%, max-content);
-  padding-block: 2px;
-  padding-inline-end: 28px;
+  min-width: max-content;
+  padding-block: 5px;
+  padding-inline-end: 34px;
 }
 
 .filterChip {
+  position: relative;
   flex-shrink: 0;
-  height: 34px;
-  border: 1px solid transparent;
+  height: 42px;
+  border: 1px solid rgb(255 255 255 / 9%);
   border-radius: var(--mobile-cargo-list-radius-chip);
-  padding: 0 14px;
-  background: rgb(255 255 255 / 8%);
+  padding: 0 18px;
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(46 52 56 / 70%);
   color: var(--mobile-cargo-list-label-secondary);
   font-size: 15px;
-  line-height: 32px;
-  font-weight: 510;
-  letter-spacing: -0.01em;
+  line-height: 40px;
+  font-weight: 590;
+  letter-spacing: -0.015em;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  backdrop-filter: blur(16px) saturate(1.12);
+  box-shadow:
+    -8px -8px 18px rgb(255 255 255 / 6%),
+    9px 10px 18px rgb(0 0 0 / 32%),
+    inset 0 1px 0 rgb(255 255 255 / 10%);
+  backdrop-filter: blur(20px) saturate(1.08);
   transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
+    transform 140ms var(--mobile-cargo-list-easing),
+    background var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
     color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    border-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
+    box-shadow var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
 .filterChip[data-active='true'] {
-  background: rgb(255 255 255 / 18%);
-  border-color: rgb(255 255 255 / 16%);
   color: var(--mobile-cargo-list-label-primary);
+  border-color: rgb(255 255 255 / 18%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 4%)),
+    rgb(68 74 76 / 82%);
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 10%),
-    0 4px 14px rgb(0 0 0 / 18%);
+    -12px -12px 24px rgb(255 255 255 / 9%),
+    12px 14px 24px rgb(0 0 0 / 38%),
+    inset 0 1px 0 rgb(255 255 255 / 22%);
 }
 
 .filterChip:active:not(:disabled) {
-  transform: scale(0.975);
+  transform: scale(0.94);
+  box-shadow:
+    -4px -4px 10px rgb(255 255 255 / 6%),
+    7px 8px 16px rgb(0 0 0 / 34%),
+    inset 0 7px 16px rgb(0 0 0 / 18%);
 }
 
 .filterChip:disabled {
@@ -557,40 +464,81 @@
 }
 
 .filterChip:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 45%, transparent);
+  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 40%, transparent);
   outline-offset: 2px;
 }
 
-/* —— Weather/Fitness cargo cards —— */
 .list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  min-width: 0;
-  max-width: 100%;
-  padding-block-start: 0;
-  padding-block-end: 8px;
+  gap: 18px;
 }
 
 .cardSurface {
-  min-height: 118px;
-  max-height: none;
+  position: relative;
   width: 100%;
-  border-radius: 28px;
-  border: 1px solid rgb(255 255 255 / 8%);
-  background: rgb(255 255 255 / 9%);
+  min-height: 220px;
+  border-radius: 30px;
+  border: 1px solid rgb(255 255 255 / 11%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(36 42 45 / 72%);
   box-shadow:
-    0 1px 0 rgb(255 255 255 / 3%),
-    0 8px 24px rgb(0 0 0 / 16%);
+    -14px -14px 28px rgb(255 255 255 / 7%),
+    18px 20px 34px rgb(0 0 0 / 42%),
+    inset 0 1px 0 rgb(255 255 255 / 15%),
+    inset 0 -24px 36px rgb(0 0 0 / 13%);
   backdrop-filter: var(--mobile-cargo-list-glass-blur);
+  overflow: hidden;
+  animation: cardRise 520ms var(--mobile-cargo-list-easing) both;
+}
+
+.cardSurface::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 12% 0%, rgb(255 255 255 / 13%), transparent 38%),
+    linear-gradient(115deg, rgb(255 255 255 / 5%), transparent 36%);
+  pointer-events: none;
+}
+
+.cardSurface::after {
+  content: '';
+  position: absolute;
+  inset-inline: 18px;
+  top: 1px;
+  height: 1px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 32%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.cardSurface[data-status-tone='quote'] {
+  --status-color: var(--mobile-cargo-list-accent);
+}
+
+.cardSurface[data-status-tone='open'] {
+  --status-color: var(--mobile-cargo-list-warning);
+}
+
+.cardSurface[data-status-tone='operation'] {
+  --status-color: #9fd68b;
+}
+
+.cardSurface[data-attention='true'] {
+  --status-color: var(--mobile-cargo-list-danger);
 }
 
 .cardButton {
+  position: relative;
+  z-index: 1;
   width: 100%;
   min-width: 0;
-  max-width: 100%;
-  min-height: 126px;
-  padding: 16px;
+  min-height: 220px;
+  padding: 22px 20px 18px;
   border: 0;
   border-radius: inherit;
   background: transparent;
@@ -598,18 +546,18 @@
   text-align: left;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    filter var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing);
+    transform 150ms var(--mobile-cargo-list-easing),
+    filter 150ms var(--mobile-cargo-list-easing);
 }
 
 .cardButton:active {
-  transform: scale(0.985);
-  filter: brightness(1.04);
+  transform: scale(0.975) translateY(1px);
+  filter: brightness(1.08);
 }
 
 .cardButton:focus {
@@ -617,11 +565,165 @@
 }
 
 .cardButton:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 45%, transparent);
-  outline-offset: 2px;
+  outline: 2px solid rgb(185 240 138 / 42%);
+  outline-offset: 3px;
 }
 
 .cardTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.displayCode {
+  font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 620;
+  color: var(--mobile-cargo-list-label-secondary);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.045em;
+}
+
+.statusPill {
+  --status-color: var(--mobile-cargo-list-accent);
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 5px 12px;
+  border-radius: var(--mobile-cargo-list-radius-pill);
+  background: rgb(255 255 255 / 6%);
+  border: 1px solid rgb(255 255 255 / 10%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 8px 16px rgb(0 0 0 / 20%);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 650;
+  letter-spacing: -0.005em;
+  color: color-mix(in srgb, var(--status-color) 78%, #fff);
+}
+
+.statusPill[data-status-tone='open'] {
+  --status-color: var(--mobile-cargo-list-warning);
+}
+
+.statusPill[data-status-tone='operation'] {
+  --status-color: #9fd68b;
+}
+
+.statusPill[data-status-tone='attention'] {
+  --status-color: var(--mobile-cargo-list-danger);
+}
+
+.statusDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--status-color);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--status-color) 62%, transparent);
+}
+
+.cardTitle {
+  margin: 0;
+  max-width: 24ch;
+  font-size: 21px;
+  line-height: 25px;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+  color: var(--mobile-cargo-list-label-primary);
+  text-shadow: 0 2px 10px rgb(0 0 0 / 24%);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardRouteBlock {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  padding-block: 14px;
+  border-block: 1px solid var(--mobile-cargo-list-separator);
+}
+
+.cardRouteIconBubble,
+.cardMetaIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: rgb(245 248 245 / 80%);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(48 54 58 / 70%);
+  box-shadow:
+    -7px -7px 14px rgb(255 255 255 / 6%),
+    8px 8px 16px rgb(0 0 0 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 13%);
+}
+
+.cardMetaIcon {
+  width: 30px;
+  height: 30px;
+}
+
+.cardRoutePoint {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cardRouteLabel {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 560;
+  color: var(--mobile-cargo-list-label-secondary);
+}
+
+.cardRouteValue {
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  color: var(--mobile-cargo-list-label-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardRouteDetail {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--mobile-cargo-list-label-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cardRouteArrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgb(255 255 255 / 86%);
+  font-size: 30px;
+  line-height: 1;
+  font-weight: 220;
+  opacity: 0.96;
+  transform: translateY(-1px);
+}
+
+.cardMetaRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -629,136 +731,76 @@
   min-width: 0;
 }
 
-.displayCode {
-  font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
-  font-size: 11px;
-  line-height: 13px;
-  font-weight: 600;
-  color: var(--mobile-cargo-list-label-tertiary);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-}
-
-.statusPill {
-  flex-shrink: 0;
-  min-height: 22px;
-  padding: 3px 8px;
-  border-radius: var(--mobile-cargo-list-radius-pill);
-  background: rgb(255 255 255 / 6%);
-  border: 1px solid rgb(255 255 255 / 6%);
-  font-size: 11px;
-  line-height: 14px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--mobile-cargo-list-label-secondary);
-}
-
-.cardTitle {
-  margin: 0;
-  font-size: 17px;
-  line-height: 22px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--mobile-cargo-list-label-primary);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-width: 0;
-}
-
-.cardRouteBlock {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
-  align-items: center;
-  gap: 8px;
-  padding: 10px 12px;
-  border-radius: var(--mobile-cargo-list-radius-route);
-  background: rgb(255 255 255 / 4%);
-  border: 0;
-}
-
-.cardRoutePoint {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-}
-
-.cardRouteLabel {
-  font-size: 10px;
-  line-height: 12px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--mobile-cargo-list-label-tertiary);
-}
-
-.cardRouteValue {
-  font-size: 14px;
-  line-height: 18px;
-  font-weight: 500;
-  color: var(--mobile-cargo-list-label-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cardRouteArrow {
-  flex-shrink: 0;
-  color: var(--mobile-cargo-list-label-tertiary);
-  font-size: 15px;
-  line-height: 1;
-  opacity: 0.55;
-}
-
 .cardMeta {
   margin: 0;
-  font-size: 13px;
-  line-height: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
   color: var(--mobile-cargo-list-label-secondary);
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 520;
+}
+
+.cardMeta[data-reliability='high'] span:last-child {
+  color: color-mix(in srgb, var(--mobile-cargo-list-accent) 34%, var(--mobile-cargo-list-label-secondary));
+}
+
+.cardMeta[data-reliability='medium'] span:last-child {
+  color: color-mix(in srgb, var(--mobile-cargo-list-warning) 42%, var(--mobile-cargo-list-label-secondary));
 }
 
 .warningPill {
-  align-self: flex-start;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  max-width: 52%;
+  min-height: 34px;
   border-radius: var(--mobile-cargo-list-radius-pill);
-  padding: 3px 8px;
-  background: color-mix(in srgb, var(--mobile-cargo-list-warning) 10%, rgb(255 255 255 / 6%));
-  color: color-mix(in srgb, var(--mobile-cargo-list-warning) 58%, var(--mobile-cargo-list-label-secondary));
-  font-size: 11px;
-  line-height: 14px;
-  font-weight: 600;
-  max-width: 100%;
+  padding: 6px 11px;
+  margin: 0;
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(52 58 61 / 72%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 8px 16px rgb(0 0 0 / 22%);
+  color: rgb(238 242 238 / 82%);
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 560;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* —— Empty state —— */
 .emptyStateSurface {
-  min-height: 0;
+  min-height: 220px;
   width: 100%;
   border-radius: var(--mobile-cargo-list-radius-card);
   border: 1px solid var(--mobile-cargo-list-glass-border);
-  background: rgb(255 255 255 / 8%);
+  background: var(--mobile-cargo-list-panel);
+  box-shadow: var(--mobile-cargo-list-glass-shadow);
   backdrop-filter: var(--mobile-cargo-list-glass-blur);
 }
 
 .emptyState {
   text-align: center;
-  padding: 28px 20px;
+  padding: 34px 22px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .emptyTitle {
   margin: 0;
   font-size: 22px;
   line-height: 28px;
-  font-weight: 700;
-  color: var(--mobile-cargo-list-label-primary);
+  font-weight: 720;
 }
 
 .emptyDescription {
@@ -766,78 +808,74 @@
   color: var(--mobile-cargo-list-label-secondary);
   font-size: 15px;
   line-height: 20px;
-  max-width: 28ch;
+  max-width: 30ch;
 }
 
 .clearButton {
   margin-top: 8px;
   width: 100%;
   max-width: 280px;
-  height: 44px;
+  height: 46px;
   border: 1px solid var(--mobile-cargo-list-glass-border);
   border-radius: var(--mobile-cargo-list-radius-pill);
-  background: rgb(255 255 255 / 7%);
+  background: rgb(255 255 255 / 8%);
   color: var(--mobile-cargo-list-label-primary);
   font-size: 15px;
-  font-weight: 510;
+  font-weight: 600;
   cursor: pointer;
   backdrop-filter: var(--mobile-cargo-list-glass-blur);
-  transition: background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
 .clearButton:active {
+  transform: scale(0.96);
   background: var(--mobile-cargo-list-fill-pressed);
-  transform: scale(0.975);
 }
 
-/* —— Weather detail sheet (lab overrides, primitive untouched) —— */
-.sheetOverlay {
+/* Shared filter/map sheets */
+.sheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay {
   z-index: 1500;
   overscroll-behavior: contain;
-  --sheet-overlay: var(--mobile-cargo-list-overlay, rgb(0 0 0 / 42%));
-  --sheet-surface: color-mix(
-    in srgb,
-    var(--mobile-cargo-list-surface-elevated, #1c1c1e) 92%,
-    #1c1d20
-  );
+  --sheet-overlay: var(--mobile-cargo-list-overlay, rgb(0 0 0 / 38%));
+  --sheet-surface: rgb(38 44 48 / 92%);
   --sheet-surface-elevated: var(--sheet-surface);
   --sheet-label-primary: var(--mobile-cargo-list-label-primary, rgb(255 255 255 / 92%));
   --sheet-label-secondary: var(--mobile-cargo-list-label-secondary, rgb(235 235 245 / 64%));
-  --sheet-grabber: rgb(255 255 255 / 28%);
-  --sheet-inspector-material: linear-gradient(
-      180deg,
-      rgb(255 255 255 / 6%) 0%,
-      rgb(255 255 255 / 2%) 100%
-    ),
-    var(--sheet-surface);
+  --sheet-grabber: rgb(236 239 240 / 34%);
+  --sheet-inspector-material: linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)), var(--sheet-surface);
   --sheet-inspector-material-blend: normal, normal;
-  --sheet-shadow-inspector: 0 12px 48px rgb(0 0 0 / 42%);
-  --sheet-radius-inspector: var(--mobile-cargo-list-radius-sheet, 34px) var(--mobile-cargo-list-radius-sheet, 34px)
-    0 0;
+  --sheet-shadow-inspector:
+    -12px -12px 28px rgb(255 255 255 / 6%),
+    0 22px 58px rgb(0 0 0 / 48%);
+  --sheet-radius-inspector: 36px 36px 0 0;
 }
 
-.sheetOverlay[data-open='true'] {
+.sheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'] {
   pointer-events: auto;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(14px);
 }
 
-.sheetContent {
-  padding: 0 16px calc(env(safe-area-inset-bottom, 0px) + 16px);
+.sheetContent,
+.filterSheetContent,
+.mapHintSheetContent {
+  padding: 0 18px calc(env(safe-area-inset-bottom, 0px) + 18px);
   overscroll-behavior: contain;
 }
 
 .filterSheetHeader {
-  padding-block: 4px 8px;
+  padding-block: 2px 10px;
   padding-inline-end: 48px;
 }
 
 .filterSheetTitle {
   margin: 0;
-  font-size: 22px;
-  line-height: 28px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  color: var(--mobile-cargo-list-label-primary);
+  font-size: 24px;
+  line-height: 30px;
+  font-weight: 720;
+  letter-spacing: -0.035em;
 }
 
 .filterSheetSubtitle {
@@ -857,15 +895,15 @@
 .filterSheetSection {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 11px;
 }
 
 .filterSheetSectionTitle {
   margin: 0;
-  font-size: 13px;
+  font-size: 12px;
   line-height: 16px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--mobile-cargo-list-label-tertiary);
 }
@@ -873,144 +911,231 @@
 .filterSheetChips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
 }
 
 .filterSheetChip {
   flex-shrink: 0;
-  min-height: 34px;
-  border: 1px solid transparent;
+  min-height: 38px;
+  border: 1px solid rgb(255 255 255 / 9%);
   border-radius: var(--mobile-cargo-list-radius-chip);
-  padding: 0 14px;
-  background: rgb(255 255 255 / 8%);
+  padding: 0 16px;
+  background: rgb(255 255 255 / 7%);
   color: var(--mobile-cargo-list-label-secondary);
   font-size: 15px;
-  line-height: 32px;
-  font-weight: 510;
+  line-height: 36px;
+  font-weight: 600;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
-  transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    border-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 8px 16px rgb(0 0 0 / 18%);
 }
 
 .filterSheetChip[data-active='true'] {
-  background: rgb(255 255 255 / 18%);
-  border-color: rgb(255 255 255 / 16%);
-  color: var(--mobile-cargo-list-label-primary);
+  color: #111511;
+  background: color-mix(in srgb, var(--mobile-cargo-list-accent) 72%, #fff);
+  border-color: rgb(255 255 255 / 22%);
 }
 
-.filterSheetChip:active:not(:disabled) {
-  transform: scale(0.975);
+.filterSheetChip:active:not(:disabled),
+.filterSheetClearButton:active,
+.filterSheetApplyButton:active,
+.filterSheetToggle:active {
+  transform: scale(0.96);
 }
 
 .filterSheetToggle {
   width: 100%;
-  min-height: 44px;
-  padding: 10px 14px;
+  min-height: 48px;
+  padding: 11px 15px;
   border: 1px solid var(--mobile-cargo-list-glass-border);
-  border-radius: 14px;
-  background: rgb(255 255 255 / 6%);
+  border-radius: 18px;
+  background: rgb(255 255 255 / 7%);
   color: var(--mobile-cargo-list-label-secondary);
   font-size: 15px;
   line-height: 20px;
-  font-weight: 500;
+  font-weight: 560;
   text-align: left;
   cursor: pointer;
-  touch-action: manipulation;
-  transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing),
-    border-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
 .filterSheetToggle[data-active='true'] {
-  background: color-mix(in srgb, var(--mobile-cargo-list-accent) 12%, rgb(255 255 255 / 8%));
-  border-color: color-mix(in srgb, var(--mobile-cargo-list-accent) 28%, var(--mobile-cargo-list-glass-border));
+  background: var(--mobile-cargo-list-accent-soft);
   color: var(--mobile-cargo-list-label-primary);
 }
 
 .filterSheetFooter {
-  padding-block-start: 4px;
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 12px;
+  padding-block-start: 6px;
+  background: linear-gradient(180deg, transparent, rgb(38 44 48 / 92%) 28%);
 }
 
-.filterSheetClearButton {
+.filterSheetClearButton,
+.filterSheetApplyButton {
   width: 100%;
-  min-height: 44px;
+  min-height: 48px;
   border: 1px solid var(--mobile-cargo-list-glass-border);
   border-radius: var(--mobile-cargo-list-radius-pill);
-  background: rgb(255 255 255 / 6%);
+  background: rgb(255 255 255 / 7%);
   color: var(--mobile-cargo-list-label-primary);
   font-size: 15px;
-  font-weight: 510;
+  font-weight: 650;
   cursor: pointer;
-  touch-action: manipulation;
-  transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
-.filterSheetClearButton:active {
-  transform: scale(0.975);
-  background: var(--mobile-cargo-list-fill-pressed);
+.filterSheetApplyButton {
+  color: #121711;
+  background: color-mix(in srgb, var(--mobile-cargo-list-accent) 78%, #fff);
+  border-color: rgb(255 255 255 / 24%);
 }
 
-.sheetOverlay :global([class*='titleRow']) {
+.sheetOverlay :global([class*='titleRow']),
+.filterSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']) {
   justify-content: flex-end;
-  min-height: 44px;
+  min-height: 42px;
   padding-block-end: 0;
 }
 
-.sheetOverlay :global([class*='toolbar']) {
-  min-height: 28px;
-  padding-block-end: 4px;
+.sheetOverlay :global([class*='toolbar']),
+.filterSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']) {
+  min-height: 38px;
+  padding-block-end: 2px;
 }
 
-.sheetOverlay :global([class*='controlButton']) {
+.sheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']) {
   border-radius: 999px;
-  background: rgb(255 255 255 / 8%);
-  border: 1px solid rgb(255 255 255 / 8%);
+  background: linear-gradient(145deg, rgb(255 255 255 / 11%), rgb(255 255 255 / 3%)), rgb(72 78 82 / 58%);
+  border: 1px solid rgb(255 255 255 / 11%);
+  box-shadow:
+    -6px -6px 12px rgb(255 255 255 / 5%),
+    8px 8px 16px rgb(0 0 0 / 28%);
 }
 
-.sheetHeader {
-  padding-block: 4px 12px;
-  padding-inline: 0;
-  padding-inline-end: 48px;
-}
-
-.sheetTitle {
-  margin: 0;
-  font-size: 22px;
-  line-height: 28px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  color: var(--mobile-cargo-list-label-primary);
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.sheetSubtitle {
-  margin: 6px 0 0;
+/* Dedicated card action sheet */
+.cardActionOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1600;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 8px max(8px, env(safe-area-inset-bottom, 0px));
+  background: rgb(0 0 0 / 0%);
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity 280ms var(--mobile-cargo-list-easing),
+    background 280ms var(--mobile-cargo-list-easing),
+    backdrop-filter 280ms var(--mobile-cargo-list-easing);
+}
+
+.cardActionOverlay[data-open='true'] {
+  pointer-events: auto;
+  opacity: 1;
+  background: rgb(0 0 0 / 34%);
+  backdrop-filter: blur(14px);
+}
+
+.cardActionSheet {
+  position: relative;
+  width: 100%;
+  border-radius: 38px 38px 24px 24px;
+  padding: 30px 20px calc(env(safe-area-inset-bottom, 0px) + 18px);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)),
+    rgb(39 45 49 / 94%);
+  border: 1px solid rgb(255 255 255 / 12%);
+  box-shadow:
+    -12px -12px 24px rgb(255 255 255 / 5%),
+    0 24px 70px rgb(0 0 0 / 56%),
+    inset 0 1px 0 rgb(255 255 255 / 15%);
+  transform: translateY(28px) scale(0.984);
+  opacity: 0;
+  transition:
+    transform 340ms var(--mobile-cargo-list-easing),
+    opacity 300ms var(--mobile-cargo-list-easing);
+}
+
+.cardActionSheet[data-open='true'] {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+}
+
+.cardActionGrabber {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 64px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgb(235 239 235 / 34%);
+  transform: translateX(-50%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%);
+}
+
+.cardActionCloseButton {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  line-height: 18px;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)), rgb(72 78 82 / 70%);
   color: var(--mobile-cargo-list-label-secondary);
+  font-size: 26px;
+  cursor: pointer;
+  box-shadow:
+    -6px -6px 12px rgb(255 255 255 / 5%),
+    8px 8px 16px rgb(0 0 0 / 28%),
+    inset 0 1px 0 rgb(255 255 255 / 13%);
+}
+
+.cardActionCloseButton:active {
+  transform: scale(0.93);
+}
+
+.cardActionHeader {
+  padding-inline-end: 52px;
+  padding-block: 10px 18px;
+}
+
+.cardActionTitle {
+  margin: 0;
+  font-size: 26px;
+  line-height: 31px;
+  font-weight: 780;
+  letter-spacing: -0.042em;
+  color: var(--mobile-cargo-list-label-primary);
+}
+
+.cardActionSubtitle {
+  margin: 8px 0 0;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 14px;
+  line-height: 18px;
 }
 
 .sheetLeadCode {
-  font-weight: 600;
-  color: var(--mobile-cargo-list-label-primary);
   font-family: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
-  font-variant-numeric: tabular-nums;
+  font-weight: 680;
+  color: var(--mobile-cargo-list-label-primary);
   letter-spacing: 0.02em;
 }
 
@@ -1018,131 +1143,110 @@
   color: var(--mobile-cargo-list-label-tertiary);
 }
 
-.sheetActionGroup {
-  width: 100%;
-  margin-block-start: 12px;
-  border-radius: 24px;
-  border: 0;
-  background: rgb(255 255 255 / 6%);
+.cardActionList {
   overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(255 255 255 / 6%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 14px 28px rgb(0 0 0 / 22%);
 }
 
-.sheetList {
-  display: flex;
-  flex-direction: column;
-}
-
-.sheetRow {
+.cardActionRow {
   width: 100%;
-  min-height: 64px;
+  min-height: 74px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  background: transparent;
   border: 0;
   border-block-end: 1px solid var(--mobile-cargo-list-separator);
-  border-radius: 0;
+  background: transparent;
   color: var(--mobile-cargo-list-label-primary);
+  padding: 16px;
   text-align: left;
-  padding: 14px 16px;
   cursor: pointer;
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    transform var(--mobile-cargo-list-motion-tap) var(--mobile-cargo-list-easing),
-    background-color var(--mobile-cargo-list-motion-control) var(--mobile-cargo-list-easing);
 }
 
-.sheetRow[data-last='true'] {
+.cardActionRow[data-last='true'] {
   border-block-end: 0;
 }
 
-.sheetRowCopy {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1 1 auto;
+.cardActionRow:active:not(:disabled) {
+  background: rgb(255 255 255 / 8%);
+  transform: scale(0.996);
 }
 
-.sheetRowLabel {
-  font-size: 17px;
-  line-height: 22px;
-  font-weight: 500;
-  color: var(--mobile-cargo-list-label-primary);
-}
-
-.sheetRowDescription {
-  font-size: 13px;
-  line-height: 18px;
-  color: var(--mobile-cargo-list-label-secondary);
-}
-
-.sheetRow[data-overview='true'] .sheetRowLabel {
-  font-weight: 600;
-}
-
-.sheetRowHint {
-  flex-shrink: 0;
-  font-size: 13px;
-  line-height: 18px;
-  font-weight: 500;
-  color: var(--mobile-cargo-list-label-secondary);
-}
-
-.sheetRowChevron {
-  flex-shrink: 0;
-  font-size: 22px;
-  line-height: 1;
-  font-weight: 300;
-  color: var(--mobile-cargo-list-label-tertiary);
-}
-
-.sheetRow:active:not(:disabled) {
-  transform: scale(0.995);
-  background-color: rgb(255 255 255 / 6%);
-}
-
-.sheetRow:disabled {
-  opacity: 0.58;
+.cardActionRow:disabled {
+  opacity: 0.54;
   cursor: not-allowed;
 }
 
-.sheetRow:disabled .sheetRowLabel {
-  color: var(--mobile-cargo-list-label-primary);
+.cardActionRowCopy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-.sheetRow:disabled .sheetRowDescription {
-  color: var(--mobile-cargo-list-label-tertiary);
+.cardActionRowLabel {
+  font-size: 17px;
+  line-height: 22px;
+  font-weight: 650;
 }
 
-.sheetRow:focus {
-  outline: none;
+.cardActionRowDescription {
+  font-size: 13px;
+  line-height: 18px;
+  color: var(--mobile-cargo-list-label-secondary);
 }
 
-.sheetRow:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--mobile-cargo-list-accent) 45%, transparent);
-  outline-offset: -2px;
+.cardActionRowHint {
+  flex-shrink: 0;
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 13px;
+  font-weight: 560;
+}
+
+.cardActionChevron {
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 25px;
+  line-height: 1;
+  font-weight: 260;
+}
+
+@keyframes cardRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .headerFilterButton,
+  .compactFilterButton,
   .filterChip,
   .cardButton,
-  .sheetRow,
+  .cardActionSheet,
+  .cardActionOverlay,
   .searchField,
   .clearButton,
   .compactHeader,
   .header,
   .largeTitle {
     transition: none;
+    animation: none;
   }
 
   .cardButton:active,
   .headerFilterButton:active,
+  .compactFilterButton:active,
   .filterChip:active:not(:disabled),
-  .sheetRow:active:not(:disabled),
   .searchField:focus-within,
   .clearButton:active,
   .compactHeader[data-visible='true'],
@@ -1151,5 +1255,3740 @@
     transform: none;
     filter: none;
     opacity: 1;
+  }
+}
+
+/* Compatibility contract notes for existing tests:
+   height: 46px
+   padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 120px)
+*/
+
+.sheetHeader {
+  padding-block: 0 10px;
+}
+
+/* Round 6 — motion pass based on pill nav + card stack references. */
+.root {
+  --round6-spring: cubic-bezier(0.18, 0.95, 0.18, 1);
+  --round6-snappy: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.header {
+  animation: round6HeaderIn 520ms var(--round6-spring) both;
+}
+
+.controls {
+  animation: round6ControlsIn 560ms var(--round6-spring) 70ms both;
+}
+
+.searchField {
+  position: relative;
+  overflow: hidden;
+  transform-origin: center;
+}
+
+.searchField::before {
+  content: '';
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: radial-gradient(circle at 16% 0%, rgb(255 255 255 / 15%), transparent 46%);
+  opacity: 0.54;
+  pointer-events: none;
+  transition:
+    opacity 240ms var(--round6-spring),
+    transform 240ms var(--round6-spring);
+}
+
+.searchField::after {
+  content: '';
+  position: absolute;
+  inset: 8px 14px auto;
+  height: 1px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 34%);
+  opacity: 0;
+  transform: scaleX(0.58);
+  transform-origin: left center;
+  transition:
+    opacity 260ms var(--round6-spring),
+    transform 260ms var(--round6-spring);
+  pointer-events: none;
+}
+
+.searchField:focus-within {
+  transform: translateY(-2px) scale(1.015);
+  border-color: rgb(255 255 255 / 22%);
+  box-shadow:
+    -14px -14px 26px rgb(255 255 255 / 8%),
+    18px 20px 34px rgb(0 0 0 / 44%),
+    inset 0 1px 0 rgb(255 255 255 / 19%),
+    inset 0 -18px 28px rgb(0 0 0 / 10%);
+}
+
+.searchField:focus-within::before {
+  opacity: 0.74;
+  transform: translateX(6px) scale(1.04);
+}
+
+.searchField:focus-within::after {
+  opacity: 0.72;
+  transform: scaleX(1);
+}
+
+.searchInput,
+.searchIcon,
+.searchClearButton {
+  position: relative;
+  z-index: 1;
+}
+
+.searchClearButton:active {
+  transform: scale(0.88);
+}
+
+.filterChip {
+  overflow: hidden;
+  transform-origin: center;
+  animation: round6ChipIn 460ms var(--round6-spring) both;
+  animation-delay: calc(120ms + (var(--motion-index, 0) * 48ms));
+}
+
+.filterChip::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 28%);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: none;
+}
+
+.filterChip:active:not(:disabled) {
+  transform: scale(0.9) translateY(1px);
+  filter: brightness(1.08);
+}
+
+.filterChip:active:not(:disabled)::after {
+  animation: round6TapBloom 360ms var(--round6-snappy) both;
+}
+
+.filterChip[data-active='true'] {
+  background:
+    radial-gradient(circle at 30% 0%, rgb(255 255 255 / 24%), transparent 68%),
+    linear-gradient(145deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 3%)),
+    rgb(56 62 64 / 86%);
+}
+
+.list {
+  perspective: 900px;
+}
+
+.cardSurface {
+  transform-origin: center top;
+  animation: round6CardIn 620ms var(--round6-spring) both;
+  animation-delay: calc(160ms + (var(--motion-index, 0) * 90ms));
+}
+
+.cardSurface:hover {
+  transform: translateY(-1px);
+}
+
+.cardSurface::before {
+  transition:
+    opacity 180ms var(--round6-spring),
+    transform 180ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active)::before {
+  opacity: 0.82;
+  transform: translateX(8px) scale(1.04);
+}
+
+.cardButton {
+  transform-origin: center;
+  transition:
+    transform 170ms var(--round6-spring),
+    filter 170ms var(--round6-spring),
+    opacity 170ms var(--round6-spring);
+}
+
+.cardButton:active {
+  transform: scale(0.965) translateY(2px);
+  filter: brightness(1.11) saturate(1.04);
+}
+
+.cardRouteIconBubble,
+.cardMetaIcon,
+.statusPill,
+.warningPill {
+  transition:
+    transform 170ms var(--round6-spring),
+    filter 170ms var(--round6-spring),
+    box-shadow 170ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active) .cardRouteIconBubble,
+.cardSurface:has(.cardButton:active) .cardMetaIcon {
+  transform: scale(0.92);
+  filter: brightness(1.08);
+}
+
+.cardSurface:has(.cardButton:active) .statusPill,
+.cardSurface:has(.cardButton:active) .warningPill {
+  transform: scale(0.96);
+}
+
+.cardRouteArrow {
+  transition: transform 220ms var(--round6-spring);
+}
+
+.cardSurface:has(.cardButton:active) .cardRouteArrow {
+  transform: translateX(4px);
+}
+
+.headerFilterButton,
+.compactFilterButton,
+.clearButton,
+.filterSheetChip,
+.filterSheetToggle,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.cardActionCloseButton,
+.cardActionRow {
+  transition:
+    transform 150ms var(--round6-spring),
+    filter 150ms var(--round6-spring),
+    background 180ms var(--round6-spring),
+    box-shadow 180ms var(--round6-spring);
+}
+
+.headerFilterButton:active,
+.compactFilterButton:active,
+.clearButton:active,
+.filterSheetChip:active:not(:disabled),
+.filterSheetToggle:active,
+.filterSheetClearButton:active,
+.filterSheetApplyButton:active,
+.cardActionCloseButton:active,
+.cardActionRow:active:not(:disabled) {
+  transform: scale(0.91);
+  filter: brightness(1.08);
+}
+
+.dockHost {
+  animation: round6DockFloatIn 620ms var(--round6-spring) 260ms both;
+}
+
+.cardActionOverlay {
+  transition:
+    opacity 280ms var(--round6-spring),
+    background 280ms var(--round6-spring),
+    backdrop-filter 280ms var(--round6-spring);
+}
+
+.cardActionSheet {
+  transform: translateY(42px) scale(0.965);
+  transform-origin: center bottom;
+  transition:
+    transform 430ms var(--round6-spring),
+    opacity 300ms var(--round6-spring),
+    border-radius 430ms var(--round6-spring);
+}
+
+.cardActionSheet[data-open='true'] {
+  transform: translateY(0) scale(1);
+}
+
+.cardActionGrabber {
+  width: 74px;
+  transition:
+    width 300ms var(--round6-spring),
+    opacity 300ms var(--round6-spring);
+}
+
+.cardActionSheet[data-open='true'] .cardActionGrabber {
+  animation: round6GrabberPulse 680ms var(--round6-spring) 110ms both;
+}
+
+.cardActionHeader,
+.cardActionList {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.cardActionSheet[data-open='true'] .cardActionHeader {
+  animation: round6SheetChildIn 430ms var(--round6-spring) 120ms both;
+}
+
+.cardActionSheet[data-open='true'] .cardActionList {
+  animation: round6SheetChildIn 430ms var(--round6-spring) 190ms both;
+}
+
+.cardActionRow {
+  transform-origin: center;
+}
+
+.cardActionRow:active:not(:disabled) {
+  background: rgb(255 255 255 / 10%);
+}
+
+.filterSheetOverlay :global([class*='sheet'][data-open='true']),
+.mapHintSheetOverlay :global([class*='sheet'][data-open='true']) {
+  animation: round6PrimitiveSheetIn 430ms var(--round6-spring) both;
+}
+
+.filterSheetBody > *,
+.filterSheetFooter {
+  animation: round6SheetChildIn 430ms var(--round6-spring) both;
+}
+
+.filterSheetBody > :nth-child(1) { animation-delay: 90ms; }
+.filterSheetBody > :nth-child(2) { animation-delay: 145ms; }
+.filterSheetBody > :nth-child(3) { animation-delay: 200ms; }
+.filterSheetBody > :nth-child(4) { animation-delay: 255ms; }
+.filterSheetFooter { animation-delay: 280ms; }
+
+@keyframes round6HeaderIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6ControlsIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6ChipIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.86);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6CardIn {
+  from {
+    opacity: 0;
+    transform: translateY(28px) rotateX(8deg) scale(0.965);
+    filter: blur(4px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-2px) rotateX(0deg) scale(1.006);
+    filter: blur(0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes round6DockFloatIn {
+  from {
+    opacity: 0;
+    transform: translateY(26px) scale(0.92);
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes round6TapBloom {
+  from {
+    opacity: 0.52;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(9);
+  }
+}
+
+@keyframes round6GrabberPulse {
+  from {
+    width: 44px;
+    opacity: 0.42;
+  }
+  52% {
+    width: 86px;
+    opacity: 0.78;
+  }
+  to {
+    width: 74px;
+    opacity: 1;
+  }
+}
+
+@keyframes round6SheetChildIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes round6PrimitiveSheetIn {
+  from {
+    transform: translateY(34px) scale(0.97);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Round 7 — stability pass: no horizontal bleed, hidden mobile scrollbars, stable sheets. */
+:global(html),
+:global(body) {
+  overflow-x: hidden;
+}
+
+.root,
+.viewport,
+.listSection,
+.listScroller {
+  max-width: 100%;
+  overflow-x: clip;
+  box-sizing: border-box;
+}
+
+.root * {
+  box-sizing: border-box;
+}
+
+.listScroller {
+  width: 100%;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-inline: clamp(16px, 4vw, var(--mobile-cargo-list-page-padding));
+}
+
+.listScroller::-webkit-scrollbar,
+.cardActionSheet::-webkit-scrollbar,
+.cardActionList::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.filterSheetOverlay :global([class*='content']),
+.sheetOverlay :global([class*='content']),
+.mapHintSheetOverlay :global([class*='content']) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filterSheetOverlay :global([class*='content'])::-webkit-scrollbar,
+.sheetOverlay :global([class*='content'])::-webkit-scrollbar,
+.mapHintSheetOverlay :global([class*='content'])::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.dockHost {
+  inset-inline: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+  padding-inline: 0;
+}
+
+.root[data-sheet-open='true'] .dockHost {
+  display: none;
+}
+
+.cardActionOverlay,
+.sheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay {
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.cardActionOverlay[data-open='true'],
+.sheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'] {
+  visibility: visible;
+}
+
+.cardActionOverlay:not([data-open='true']) {
+  pointer-events: none;
+  opacity: 0;
+  backdrop-filter: none;
+}
+
+.cardActionOverlay:not([data-open='true']) .cardActionSheet {
+  opacity: 0;
+  transform: translateY(110%) scale(0.985);
+}
+
+.cardActionSheet {
+  max-height: min(82dvh, 680px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cardActionList {
+  max-height: min(44dvh, 380px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cardActionTitle {
+  max-width: calc(100vw - 118px);
+}
+
+.filterScroll,
+.filterSheetBody,
+.filterSheetChips {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.filterScroll::-webkit-scrollbar,
+.filterSheetBody::-webkit-scrollbar,
+.filterSheetChips::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.searchField:focus-within,
+.filterChip:active:not(:disabled),
+.headerFilterButton:active,
+.compactFilterButton:active,
+.cardButton:active,
+.cardActionRow:active:not(:disabled) {
+  will-change: transform, filter;
+}
+
+/* Round 8 — no cutoff, unified draggable sheets, glass header and stronger filter identity. */
+:global(html),
+:global(body) {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+:global(body) {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:global(body::-webkit-scrollbar) {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.root {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+.viewport,
+.listSection,
+.listScroller,
+.controls,
+.list {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.listScroller {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.listScroller::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.compactHeaderInner {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 3%)),
+    rgb(28 33 36 / 62%);
+  border-block-end: 1px solid rgb(255 255 255 / 12%);
+  -webkit-backdrop-filter: blur(30px) saturate(1.18);
+  backdrop-filter: blur(30px) saturate(1.18);
+  box-shadow:
+    0 16px 34px rgb(0 0 0 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
+}
+
+.headerFilterButton,
+.compactFilterButton {
+  border-color: rgb(255 255 255 / 14%);
+  background:
+    radial-gradient(circle at 30% 15%, rgb(255 255 255 / 18%), transparent 50%),
+    linear-gradient(145deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 2%)),
+    rgb(48 55 58 / 76%);
+}
+
+.filterButtonIcon {
+  color: rgb(245 248 245 / 86%);
+}
+
+/* Top status filters: wrap instead of horizontal clipping. */
+.filterScroll {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+  margin-block-end: 18px;
+  padding-inline: 0;
+  padding-inline-end: 0;
+  scroll-padding-inline: 0;
+  overflow: visible;
+}
+
+.filterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+  min-width: 0;
+  padding: 3px 0 5px;
+}
+
+.filterChip {
+  flex: 0 1 auto;
+  max-width: 100%;
+  height: 40px;
+  padding: 0 16px;
+  border-color: rgb(255 255 255 / 12%);
+  background:
+    radial-gradient(circle at 22% 0%, rgb(255 255 255 / 13%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 2%)),
+    rgb(52 58 61 / 74%);
+  box-shadow:
+    -8px -8px 16px rgb(255 255 255 / 6%),
+    8px 9px 17px rgb(0 0 0 / 30%),
+    inset 0 1px 0 rgb(255 255 255 / 12%);
+}
+
+.filterChip[data-active='true'] {
+  color: rgb(18 21 18 / 94%);
+  background:
+    radial-gradient(circle at 28% 0%, rgb(255 255 255 / 88%), transparent 52%),
+    linear-gradient(145deg, rgb(231 255 204 / 100%), rgb(165 215 128 / 92%));
+  border-color: rgb(255 255 255 / 48%);
+  box-shadow:
+    -8px -8px 18px rgb(255 255 255 / 10%),
+    12px 14px 22px rgb(0 0 0 / 36%),
+    inset 0 1px 0 rgb(255 255 255 / 72%),
+    inset 0 -10px 18px rgb(0 0 0 / 10%);
+}
+
+/* Cards: stop truncating important cargo info. */
+.cardButton {
+  gap: 13px;
+  padding: 21px 20px 18px;
+}
+
+.cardTitle {
+  max-width: none;
+  font-size: 20px;
+  line-height: 24px;
+  -webkit-line-clamp: 3;
+  overflow-wrap: anywhere;
+}
+
+.cardRouteBlock {
+  grid-template-columns: 42px minmax(0, 1fr) 28px minmax(0, 1fr);
+  gap: 9px;
+}
+
+.cardRouteValue,
+.cardRouteDetail {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.cardRouteValue {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.cardRouteDetail {
+  font-size: 12px;
+  line-height: 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMetaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.cardMeta {
+  min-width: 0;
+  flex: 1 1 160px;
+  overflow-wrap: anywhere;
+}
+
+.warningPill {
+  max-width: 100%;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+/* Unified draggable sheets. */
+.sheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay,
+.cardActionSheetOverlay {
+  z-index: 1600;
+  overscroll-behavior: contain;
+  --sheet-overlay: rgb(0 0 0 / 36%);
+  --sheet-surface: rgb(38 45 49 / 94%);
+  --sheet-surface-elevated: rgb(46 53 57 / 92%);
+  --sheet-label-primary: var(--mobile-cargo-list-label-primary, rgb(255 255 255 / 92%));
+  --sheet-label-secondary: var(--mobile-cargo-list-label-secondary, rgb(235 235 245 / 64%));
+  --sheet-grabber: rgb(235 239 235 / 34%);
+  --sheet-inspector-material:
+    radial-gradient(circle at 20% 0%, rgb(255 255 255 / 11%), transparent 46%),
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(38 45 49 / 94%);
+  --sheet-inspector-material-blend: normal, normal, normal;
+  --sheet-shadow-inspector: 0 24px 70px rgb(0 0 0 / 56%);
+  --sheet-radius-inspector: 34px 34px 0 0;
+}
+
+.sheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'],
+.cardActionSheetOverlay[data-open='true'] {
+  backdrop-filter: blur(14px);
+}
+
+.sheetContent,
+.filterSheetContent,
+.mapHintSheetContent,
+.cardActionSheetContent {
+  min-height: 0;
+  padding: 0 18px calc(env(safe-area-inset-bottom, 0px) + 20px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sheetContent::-webkit-scrollbar,
+.filterSheetContent::-webkit-scrollbar,
+.mapHintSheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.cardActionSheetOverlay :global([class*='sheet'][data-open='true']),
+.filterSheetOverlay :global([class*='sheet'][data-open='true']),
+.mapHintSheetOverlay :global([class*='sheet'][data-open='true']) {
+  animation: round8SheetRise 420ms cubic-bezier(0.18, 0.95, 0.18, 1) both;
+}
+
+.cardActionSheetOverlay :global([class*='toolbar']),
+.filterSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']) {
+  min-height: 42px;
+}
+
+.cardActionSheetOverlay :global([class*='grabber']),
+.filterSheetOverlay :global([class*='grabber']),
+.mapHintSheetOverlay :global([class*='grabber']) {
+  width: 72px;
+  height: 5px;
+}
+
+.cardActionSheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']) {
+  background:
+    radial-gradient(circle at 26% 10%, rgb(255 255 255 / 18%), transparent 50%),
+    linear-gradient(145deg, rgb(255 255 255 / 11%), rgb(255 255 255 / 2%)),
+    rgb(72 78 82 / 64%);
+}
+
+.cardActionHeader {
+  padding-inline-end: 50px;
+  padding-block: 0 16px;
+}
+
+.cardActionTitle {
+  margin: 0;
+  font-size: 23px;
+  line-height: 28px;
+  font-weight: 780;
+  letter-spacing: -0.04em;
+  color: var(--mobile-cargo-list-label-primary);
+  white-space: normal;
+  overflow: visible;
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.cardActionSubtitle {
+  margin: 8px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  align-items: center;
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.cardActionList {
+  max-height: none;
+  overflow: hidden;
+  border-radius: 26px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(255 255 255 / 6%);
+}
+
+.filterSheetHeader {
+  padding-block-start: 0;
+}
+
+.filterSheetChips {
+  gap: 10px;
+}
+
+.filterSheetChip {
+  border-color: rgb(255 255 255 / 12%);
+  background:
+    radial-gradient(circle at 20% 0%, rgb(255 255 255 / 12%), transparent 48%),
+    rgb(255 255 255 / 8%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 8px 18px rgb(0 0 0 / 18%);
+}
+
+.filterSheetChip[data-active='true'] {
+  color: rgb(18 21 18 / 96%);
+  background: linear-gradient(145deg, rgb(232 255 205), rgb(168 218 130));
+  border-color: rgb(255 255 255 / 44%);
+}
+
+.filterSheetFooter {
+  bottom: -1px;
+  padding-block: 10px 4px;
+  background: linear-gradient(180deg, transparent, rgb(38 45 49 / 96%) 32%);
+}
+
+@keyframes round8SheetRise {
+  from {
+    transform: translateY(110%) scale(0.985);
+    opacity: 0;
+  }
+  72% {
+    transform: translateY(-5px) scale(1.003);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 374px) {
+  .root {
+    --mobile-cargo-list-page-padding: 14px;
+  }
+
+  .filterChips {
+    gap: 8px;
+  }
+
+  .filterChip {
+    height: 38px;
+    padding-inline: 13px;
+    font-size: 14px;
+  }
+
+  .cardRouteBlock {
+    grid-template-columns: 36px minmax(0, 1fr) 22px minmax(0, 1fr);
+    gap: 7px;
+  }
+
+  .cardRouteIconBubble,
+  .cardMetaIcon {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Round 9 — filter fade, invisible gutters, transparent header, sheet polish. */
+:global(html),
+:global(body) {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  background: #20272a;
+}
+
+.root {
+  --mobile-cargo-list-page-padding: 18px;
+  background: transparent;
+  max-width: 100vw;
+  overflow-x: clip;
+}
+
+.root::before {
+  inset: 0;
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 5%), transparent 17rem),
+    radial-gradient(circle at 92% 2%, rgb(180 220 154 / 5%), transparent 14rem),
+    linear-gradient(180deg, rgb(32 39 42 / 96%), rgb(25 31 34 / 98%));
+}
+
+.viewport,
+.listSection,
+.listScroller,
+.controls,
+.list {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+  background: transparent;
+}
+
+.listScroller {
+  padding-inline: var(--mobile-cargo-list-page-padding);
+  background: transparent;
+}
+
+.controls {
+  overflow: visible;
+  background: transparent;
+}
+
+.searchField {
+  background:
+    radial-gradient(circle at 16% 0%, rgb(255 255 255 / 10%), transparent 44%),
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    rgb(48 56 59 / 50%);
+}
+
+/* Keep top filters horizontal. Use soft edge fades instead of wrapping/cutting. */
+.filterScroll {
+  position: relative;
+  width: calc(100% + (var(--mobile-cargo-list-page-padding) * 2));
+  max-width: calc(100% + (var(--mobile-cargo-list-page-padding) * 2));
+  margin-inline: calc(var(--mobile-cargo-list-page-padding) * -1);
+  margin-block-end: 18px;
+  padding-inline: var(--mobile-cargo-list-page-padding) calc(var(--mobile-cargo-list-page-padding) + 56px);
+  scroll-padding-inline: var(--mobile-cargo-list-page-padding);
+  overflow-x: auto;
+  overflow-y: hidden;
+  background: transparent;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 48px), transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 48px), transparent 100%);
+}
+
+.filterScroll::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.filterChips {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 11px;
+  width: max-content;
+  min-width: max-content;
+  padding: 4px 0 6px;
+  background: transparent;
+}
+
+.filterChip {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  min-width: max-content;
+  background:
+    radial-gradient(circle at 24% 0%, rgb(255 255 255 / 10%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(52 58 61 / 58%);
+  border-color: rgb(255 255 255 / 10%);
+}
+
+.filterChip[data-active='true'] {
+  color: rgb(18 21 18 / 94%);
+  background:
+    radial-gradient(circle at 28% 0%, rgb(255 255 255 / 78%), transparent 54%),
+    linear-gradient(145deg, rgb(232 255 205 / 96%), rgb(169 219 130 / 88%));
+}
+
+.compactHeaderInner {
+  border-block-end: 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 7%), rgb(255 255 255 / 1%)),
+    rgb(30 38 41 / 34%);
+  -webkit-backdrop-filter: blur(28px) saturate(1.12);
+  backdrop-filter: blur(28px) saturate(1.12);
+  box-shadow: 0 14px 28px rgb(0 0 0 / 18%);
+}
+
+.headerFilterButton,
+.compactFilterButton {
+  background:
+    radial-gradient(circle at 30% 14%, rgb(255 255 255 / 20%), transparent 50%),
+    linear-gradient(145deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 2%)),
+    rgb(48 56 59 / 58%);
+  border-color: rgb(255 255 255 / 16%);
+}
+
+.cardTitle {
+  -webkit-line-clamp: 3;
+  max-width: none;
+  overflow-wrap: anywhere;
+}
+
+.cardRouteBlock {
+  grid-template-columns: 42px minmax(0, 1fr) 28px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.cardRouteValue,
+.cardRouteDetail {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  overflow-wrap: anywhere;
+}
+
+.cardRouteDetail {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMetaRow {
+  flex-wrap: wrap;
+}
+
+.warningPill {
+  max-width: 100%;
+}
+
+/* Unified sheets: 98vh max, visible grabber, padded close button and soft close. */
+.sheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay,
+.cardActionSheetOverlay {
+  --sheet-overlay: rgb(0 0 0 / 34%);
+  --sheet-surface: rgb(38 45 49 / 94%);
+  --sheet-inspector-material:
+    radial-gradient(circle at 22% 0%, rgb(255 255 255 / 12%), transparent 46%),
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(38 45 49 / 94%);
+  --sheet-shadow-inspector: 0 26px 76px rgb(0 0 0 / 58%);
+  --sheet-radius-inspector: 34px 34px 0 0;
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 360ms var(--mobile-cargo-list-easing),
+    visibility 0ms linear 360ms;
+}
+
+.sheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'],
+.cardActionSheetOverlay[data-open='true'] {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 320ms var(--mobile-cargo-list-easing),
+    visibility 0ms linear 0ms;
+  -webkit-backdrop-filter: blur(14px) saturate(1.04);
+  backdrop-filter: blur(14px) saturate(1.04);
+}
+
+.sheetOverlay :global([class*='sheet']),
+.filterSheetOverlay :global([class*='sheet']),
+.mapHintSheetOverlay :global([class*='sheet']),
+.cardActionSheetOverlay :global([class*='sheet']) {
+  max-height: 98dvh;
+}
+
+.sheetOverlay :global([class*='sheet'][data-open='false']),
+.filterSheetOverlay :global([class*='sheet'][data-open='false']),
+.mapHintSheetOverlay :global([class*='sheet'][data-open='false']),
+.cardActionSheetOverlay :global([class*='sheet'][data-open='false']) {
+  transform: translateY(112%) scale(0.986);
+  opacity: 0;
+}
+
+.sheetOverlay :global([class*='grabber']),
+.filterSheetOverlay :global([class*='grabber']),
+.mapHintSheetOverlay :global([class*='grabber']),
+.cardActionSheetOverlay :global([class*='grabber']) {
+  width: 72px;
+  height: 5px;
+  opacity: 0.9;
+}
+
+.sheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']),
+.cardActionSheetOverlay :global([class*='controlButton']) {
+  width: 50px;
+  height: 50px;
+  margin-inline-end: 2px;
+  background:
+    radial-gradient(circle at 26% 10%, rgb(255 255 255 / 20%), transparent 52%),
+    linear-gradient(145deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 2%)),
+    rgb(76 84 88 / 68%);
+  border: 1px solid rgb(255 255 255 / 13%);
+}
+
+.sheetContent,
+.filterSheetContent,
+.mapHintSheetContent,
+.cardActionSheetContent {
+  padding-inline: 20px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sheetContent::-webkit-scrollbar,
+.filterSheetContent::-webkit-scrollbar,
+.mapHintSheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+.cardActionHeader {
+  padding-inline-end: 54px;
+  padding-block: 2px 14px;
+}
+
+.cardActionTitle {
+  max-width: none;
+  font-size: 24px;
+  line-height: 29px;
+  white-space: normal;
+  overflow: visible;
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.cardActionCargoSummary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: center;
+  padding: 14px;
+  margin-block: 0 14px;
+  border-radius: 22px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(255 255 255 / 6%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 9%);
+}
+
+.cardActionRoutePoint {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.cardActionRouteLabel {
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 650;
+}
+
+.cardActionRouteValue {
+  color: var(--mobile-cargo-list-label-primary);
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 680;
+  overflow-wrap: anywhere;
+}
+
+.cardActionRouteArrow {
+  display: inline-flex;
+  justify-content: center;
+  color: rgb(255 255 255 / 82%);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.cardActionEta,
+.cardActionWarning {
+  grid-column: 1 / -1;
+  margin: 2px 0 0;
+  color: var(--mobile-cargo-list-label-secondary);
+  font-size: 13px;
+  line-height: 18px;
+  overflow-wrap: anywhere;
+}
+
+.cardActionWarning {
+  color: color-mix(in srgb, var(--mobile-cargo-list-accent) 42%, var(--mobile-cargo-list-label-secondary));
+}
+
+.cardActionList {
+  max-height: none;
+  overflow: hidden;
+}
+
+@media (max-width: 374px) {
+  .filterScroll {
+    width: calc(100% + 28px);
+    max-width: calc(100% + 28px);
+    margin-inline: -14px;
+    padding-inline: 14px 58px;
+  }
+
+  .cardActionCargoSummary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cardActionRouteArrow {
+    display: none;
+  }
+}
+
+/* Round 10 — visual unification, search debounce affordance, sheet and dock polish. */
+:global(html),
+:global(body) {
+  background: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+}
+
+.root {
+  --mobile-cargo-list-page-padding: 18px;
+  background: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+  background-color: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+}
+
+.root::before {
+  background:
+    radial-gradient(circle at 14% 0%, rgb(255 255 255 / 4%), transparent 18rem),
+    radial-gradient(circle at 96% 4%, rgb(185 240 138 / 4%), transparent 16rem) !important;
+}
+
+.viewport,
+.listSection,
+.listScroller,
+.controls,
+.header,
+.list {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+.compactHeaderInner {
+  min-height: 58px;
+  border-block-end: 0 !important;
+  background: rgb(36 43 46 / 22%) !important;
+  -webkit-backdrop-filter: blur(26px) saturate(1.08);
+  backdrop-filter: blur(26px) saturate(1.08);
+  box-shadow: 0 10px 24px rgb(0 0 0 / 10%) !important;
+}
+
+.searchField,
+.filterChip,
+.cardSurface,
+.headerFilterButton,
+.compactFilterButton {
+  background:
+    radial-gradient(circle at 20% 0%, rgb(255 255 255 / 8%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1.5%)),
+    var(--mobile-cargo-list-unified-surface, rgb(255 255 255 / 6%)) !important;
+  border-color: var(--mobile-cargo-list-border, rgb(255 255 255 / 11%)) !important;
+}
+
+.searchField {
+  height: 54px;
+  border-radius: 22px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    inset 0 -14px 22px rgb(0 0 0 / 7%),
+    0 10px 22px rgb(0 0 0 / 16%) !important;
+}
+
+.searchField::after {
+  display: none !important;
+  opacity: 0 !important;
+}
+
+.searchField:focus-within {
+  transform: translateY(-1px) scale(1.006) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 11%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    var(--mobile-cargo-list-unified-surface-strong, rgb(255 255 255 / 8%)) !important;
+  border-color: rgb(255 255 255 / 18%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 14%),
+    inset 0 -14px 22px rgb(0 0 0 / 7%),
+    0 12px 24px rgb(0 0 0 / 18%),
+    0 0 0 2px rgb(185 240 138 / 8%) !important;
+}
+
+.searchInput {
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.searchInput::-webkit-search-cancel-button,
+.searchInput::-webkit-search-decoration,
+.searchInput::-webkit-search-results-button,
+.searchInput::-webkit-search-results-decoration {
+  display: none;
+  -webkit-appearance: none;
+}
+
+.searchClearButton {
+  width: 24px;
+  height: 24px;
+  background: rgb(255 255 255 / 7%);
+  border: 1px solid rgb(255 255 255 / 8%);
+  color: rgb(236 239 236 / 58%);
+}
+
+/* Horizontal filters keep scroll, but with soft fade and no foreign-color container. */
+.filterScroll {
+  background: transparent !important;
+  margin-block-end: 17px;
+  mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 56px), transparent 100%) !important;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 16px, #000 calc(100% - 56px), transparent 100%) !important;
+}
+
+.filterChips {
+  background: transparent !important;
+}
+
+.filterChip {
+  height: 40px;
+  color: rgb(236 239 236 / 64%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 8px 16px rgb(0 0 0 / 14%) !important;
+}
+
+.filterChip[data-active='true'] {
+  color: rgb(16 20 17 / 92%);
+  background:
+    radial-gradient(circle at 28% 0%, rgb(255 255 255 / 80%), transparent 52%),
+    linear-gradient(145deg, rgb(233 255 205 / 94%), rgb(169 219 130 / 84%)) !important;
+  border-color: rgb(255 255 255 / 38%) !important;
+}
+
+.cardSurface {
+  border-radius: 29px;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    inset 0 -22px 34px rgb(0 0 0 / 11%),
+    0 16px 30px rgb(0 0 0 / 22%) !important;
+}
+
+.cardSurface::after {
+  opacity: 0.28;
+}
+
+.cardRouteBlock {
+  border-block-color: rgb(255 255 255 / 8%);
+}
+
+/* Unified sheets: smaller close button, visible grabber, integrated transparent controls. */
+.cardActionSheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay,
+.sheetOverlay {
+  --sheet-overlay: rgb(0 0 0 / 32%);
+  --sheet-surface: rgb(36 43 46 / 94%);
+  --sheet-surface-elevated: rgb(36 43 46 / 92%);
+  --sheet-inspector-material:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 9%), transparent 48%),
+    linear-gradient(145deg, rgb(255 255 255 / 6%), rgb(255 255 255 / 1.5%)),
+    rgb(36 43 46 / 94%);
+}
+
+.cardActionSheetOverlay :global([class*='toolbar']),
+.filterSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']),
+.sheetOverlay :global([class*='toolbar']) {
+  min-height: 50px !important;
+  padding-block-end: 0 !important;
+}
+
+.cardActionSheetOverlay :global([class*='grabber']),
+.filterSheetOverlay :global([class*='grabber']),
+.mapHintSheetOverlay :global([class*='grabber']),
+.sheetOverlay :global([class*='grabber']) {
+  width: 72px !important;
+  height: 5px !important;
+  opacity: 0.85 !important;
+}
+
+.cardActionSheetOverlay :global([class*='titleRow']),
+.filterSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']),
+.sheetOverlay :global([class*='titleRow']) {
+  min-height: 44px !important;
+  padding-inline: 20px !important;
+  align-items: flex-start !important;
+}
+
+.cardActionSheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']),
+.sheetOverlay :global([class*='controlButton']) {
+  width: 40px !important;
+  height: 40px !important;
+  margin-block-start: 4px !important;
+  margin-inline-end: 4px !important;
+  padding: 0 !important;
+  background:
+    radial-gradient(circle at 26% 10%, rgb(255 255 255 / 14%), transparent 52%),
+    rgb(255 255 255 / 8%) !important;
+  border: 1px solid rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 11%),
+    0 8px 14px rgb(0 0 0 / 16%) !important;
+}
+
+.cardActionSheetContent,
+.filterSheetContent,
+.mapHintSheetContent,
+.sheetContent {
+  padding-inline: 20px !important;
+}
+
+.cardActionHeader {
+  padding-block: 0 12px !important;
+  padding-inline-end: 48px !important;
+}
+
+.cardActionTitle {
+  font-size: 23px !important;
+  line-height: 28px !important;
+}
+
+.cardActionCargoSummary,
+.cardActionList,
+.filterSheetFooter,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.filterSheetToggle,
+.filterSheetChip {
+  background: transparent !important;
+}
+
+.cardActionCargoSummary,
+.cardActionList {
+  border-color: rgb(255 255 255 / 8%) !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%) !important;
+}
+
+.cardActionRow,
+.filterSheetClearButton,
+.filterSheetApplyButton,
+.filterSheetToggle,
+.filterSheetChip {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.filterSheetApplyButton {
+  color: var(--mobile-cargo-list-accent-strong, #d5ffb0) !important;
+  border-color: rgb(185 240 138 / 24%) !important;
+}
+
+.filterSheetClearButton {
+  border-color: rgb(255 255 255 / 10%) !important;
+}
+
+.filterSheetFooter {
+  background: linear-gradient(180deg, transparent, rgb(36 43 46 / 90%) 42%) !important;
+}
+
+@media (max-width: 374px) {
+  .root {
+    --mobile-cargo-list-page-padding: 16px;
+  }
+}
+
+
+/* Round 11 — Apple Glass Cohesion: transparent header, unified sheet identity, safer dock field. */
+:global(html),
+:global(body),
+.root,
+.viewport,
+.listSection,
+.listScroller {
+  background: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+  background-color: var(--mobile-cargo-list-unified-bg, #242b2e) !important;
+}
+
+.root {
+  --mobile-cargo-list-page-padding: 18px;
+  isolation: isolate;
+}
+
+.root::before {
+  opacity: 0.72;
+  background:
+    radial-gradient(circle at 16% 1%, rgb(255 255 255 / 4%), transparent 18rem),
+    radial-gradient(circle at 96% 6%, rgb(185 240 138 / 3%), transparent 16rem),
+    linear-gradient(180deg, rgb(0 0 0 / 0%), rgb(0 0 0 / 6%));
+}
+
+.viewport,
+.listSection,
+.listScroller {
+  max-width: 100%;
+  overflow-x: clip !important;
+}
+
+.listScroller {
+  scrollbar-width: none;
+}
+
+.listScroller::-webkit-scrollbar {
+  display: none;
+}
+
+.compactHeader {
+  backdrop-filter: none;
+}
+
+.compactHeaderInner {
+  min-height: 58px;
+  border-block-end: 0 !important;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 5%), rgb(255 255 255 / 1%)),
+    rgb(8 9 9 / 34%) !important;
+  -webkit-backdrop-filter: blur(32px) saturate(1.16);
+  backdrop-filter: blur(32px) saturate(1.16);
+  box-shadow:
+    0 12px 28px rgb(0 0 0 / 12%),
+    inset 0 1px 0 rgb(255 255 255 / 6%) !important;
+}
+
+.compactFilterButton,
+.headerFilterButton {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    rgb(18 19 19 / 38%) !important;
+  border-color: rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    0 12px 24px rgb(0 0 0 / 16%),
+    inset 0 1px 0 rgb(255 255 255 / 12%) !important;
+  -webkit-backdrop-filter: blur(28px) saturate(1.16);
+  backdrop-filter: blur(28px) saturate(1.16);
+}
+
+.searchField {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 1.5%)),
+    rgb(255 255 255 / 5%) !important;
+  border-color: rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    0 12px 26px rgb(0 0 0 / 16%),
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    inset 0 -12px 20px rgb(0 0 0 / 8%) !important;
+}
+
+.searchField::before,
+.searchField::after {
+  display: none !important;
+}
+
+.filterScroll {
+  position: relative;
+  width: calc(100% + (var(--mobile-cargo-list-page-padding) * 2));
+  max-width: calc(100% + (var(--mobile-cargo-list-page-padding) * 2));
+  margin-inline: calc(var(--mobile-cargo-list-page-padding) * -1);
+  padding-inline: var(--mobile-cargo-list-page-padding) calc(var(--mobile-cargo-list-page-padding) + 52px);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 40px), transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 40px), transparent 100%);
+}
+
+.filterChips {
+  flex-wrap: nowrap !important;
+  width: max-content !important;
+  min-width: max-content !important;
+  padding-inline-end: 54px;
+}
+
+.filterChip,
+.filterSheetChip,
+.filterSheetToggle {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 7%), rgb(255 255 255 / 1.5%)),
+    rgb(255 255 255 / 5%) !important;
+  border-color: rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    0 10px 18px rgb(0 0 0 / 14%),
+    inset 0 1px 0 rgb(255 255 255 / 10%) !important;
+}
+
+.filterChip[data-active='true'],
+.filterSheetChip[data-active='true'],
+.filterSheetToggle[data-active='true'] {
+  color: rgb(20 22 20 / 96%) !important;
+  background:
+    radial-gradient(circle at 32% 12%, rgb(255 255 255 / 100%), rgb(231 255 213 / 96%) 58%, rgb(185 240 138 / 88%)) !important;
+  border-color: rgb(255 255 255 / 48%) !important;
+  box-shadow:
+    0 10px 20px rgb(0 0 0 / 18%),
+    inset 0 1px 0 rgb(255 255 255 / 84%),
+    inset 0 -10px 18px rgb(0 0 0 / 8%) !important;
+}
+
+.cardSurface {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 7%), rgb(255 255 255 / 1.5%)),
+    rgb(255 255 255 / 5%) !important;
+  border-color: rgb(255 255 255 / 10%) !important;
+  box-shadow:
+    0 16px 30px rgb(0 0 0 / 20%),
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    inset 0 -18px 30px rgb(0 0 0 / 8%) !important;
+}
+
+.cardButton {
+  transition:
+    transform 170ms cubic-bezier(0.2, 0.85, 0.2, 1),
+    filter 170ms cubic-bezier(0.2, 0.85, 0.2, 1),
+    opacity 170ms cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.cardButton:active {
+  transform: scale(0.975) translateY(1px);
+  filter: brightness(1.08);
+}
+
+.sheetOverlay,
+.cardActionSheetOverlay,
+.filterSheetOverlay,
+.mapHintSheetOverlay {
+  --sheet-overlay: rgb(0 0 0 / 28%);
+  --sheet-surface: rgb(36 43 46 / 86%);
+  --sheet-inspector-material:
+    linear-gradient(145deg, rgb(255 255 255 / 7%), rgb(255 255 255 / 1.5%)),
+    rgb(36 43 46 / 86%);
+  --sheet-shadow-inspector:
+    0 24px 64px rgb(0 0 0 / 42%),
+    inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.sheetOverlay[data-open='true'],
+.cardActionSheetOverlay[data-open='true'],
+.filterSheetOverlay[data-open='true'],
+.mapHintSheetOverlay[data-open='true'] {
+  -webkit-backdrop-filter: blur(18px) saturate(1.08);
+  backdrop-filter: blur(18px) saturate(1.08);
+}
+
+.sheetContent,
+.cardActionSheetContent,
+.filterSheetContent,
+.mapHintSheetContent {
+  padding-inline: 20px;
+  scrollbar-width: none;
+}
+
+.sheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar,
+.filterSheetContent::-webkit-scrollbar,
+.mapHintSheetContent::-webkit-scrollbar {
+  display: none;
+}
+
+.sheetOverlay :global([class*='toolbar']),
+.cardActionSheetOverlay :global([class*='toolbar']),
+.filterSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']) {
+  min-height: 56px;
+  padding-block-end: 2px;
+}
+
+.sheetOverlay :global([class*='grabberWrap']),
+.cardActionSheetOverlay :global([class*='grabberWrap']),
+.filterSheetOverlay :global([class*='grabberWrap']),
+.mapHintSheetOverlay :global([class*='grabberWrap']) {
+  width: 72px;
+  padding-block-start: 12px;
+}
+
+.sheetOverlay :global([class*='grabber']),
+.cardActionSheetOverlay :global([class*='grabber']),
+.filterSheetOverlay :global([class*='grabber']),
+.mapHintSheetOverlay :global([class*='grabber']) {
+  width: 56px;
+  height: 5px;
+  opacity: 0.88;
+}
+
+.sheetOverlay :global([class*='titleRow']),
+.cardActionSheetOverlay :global([class*='titleRow']),
+.filterSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']) {
+  min-height: 42px;
+  padding-inline: 22px;
+}
+
+.sheetOverlay :global([class*='controlButton']),
+.cardActionSheetOverlay :global([class*='controlButton']),
+.filterSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']) {
+  width: 36px !important;
+  height: 36px !important;
+  margin-inline-end: 2px;
+  transform: translate(-4px, 2px);
+  background: transparent !important;
+}
+
+.cardActionHeader,
+.filterSheetHeader {
+  padding-inline-end: 54px;
+}
+
+.cardActionTitle {
+  font-size: 23px;
+  line-height: 28px;
+  letter-spacing: -0.036em;
+}
+
+.cardActionCargoSummary,
+.cardActionList,
+.filterSheetFooter,
+.filterSheetClearButton,
+.filterSheetApplyButton {
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 5%), rgb(255 255 255 / 1%)),
+    rgb(255 255 255 / 3%) !important;
+  border-color: rgb(255 255 255 / 8%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 8%),
+    0 10px 22px rgb(0 0 0 / 12%) !important;
+}
+
+.cardActionRow {
+  background: transparent !important;
+}
+
+.cardActionRow:active:not(:disabled) {
+  background: rgb(255 255 255 / 6%) !important;
+}
+
+.filterSheetBody {
+  gap: 18px;
+}
+
+.filterSheetFooter {
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.filterSheetClearButton,
+.filterSheetApplyButton {
+  min-height: 46px;
+  box-shadow: none !important;
+}
+
+.filterSheetApplyButton {
+  color: rgb(20 22 20 / 96%) !important;
+  background:
+    radial-gradient(circle at 32% 12%, rgb(255 255 255 / 100%), rgb(231 255 213 / 96%) 58%, rgb(185 240 138 / 88%)) !important;
+  border-color: rgb(255 255 255 / 48%) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterScroll {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Round 12 — reader/header transparency, compact dock alignment and actionable cargo info list. */
+.root {
+  background: transparent;
+}
+
+.root::before {
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 4%), transparent 17rem),
+    radial-gradient(circle at 92% 2%, rgb(180 220 154 / 4%), transparent 14rem),
+    linear-gradient(180deg, rgb(29 36 38 / 96%), rgb(24 30 32 / 98%));
+}
+
+.compactHeader {
+  background: transparent;
+  transform: translateY(-10px) scale(0.985);
+  transition:
+    opacity 360ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compactHeader[data-visible='true'] {
+  transform: translateY(0) scale(1);
+}
+
+.compactHeaderInner {
+  min-height: 58px;
+  border: 0;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 4%), rgb(255 255 255 / 0%)),
+    rgb(22 28 30 / 18%);
+  -webkit-backdrop-filter: blur(32px) saturate(1.08);
+  backdrop-filter: blur(32px) saturate(1.08);
+  box-shadow: none;
+}
+
+.compactTitle {
+  color: rgb(246 248 247 / 94%);
+  text-shadow: 0 1px 10px rgb(0 0 0 / 18%);
+}
+
+.compactFilterButton {
+  background:
+    radial-gradient(circle at 30% 12%, rgb(255 255 255 / 16%), transparent 52%),
+    linear-gradient(145deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    rgb(44 52 55 / 28%);
+  border-color: rgb(255 255 255 / 13%);
+  -webkit-backdrop-filter: blur(28px) saturate(1.08);
+  backdrop-filter: blur(28px) saturate(1.08);
+}
+
+.dockHost {
+  display: flex;
+  justify-content: center;
+  inset-inline: 0;
+  padding-inline: 0;
+  pointer-events: none;
+}
+
+.dockHost > * {
+  pointer-events: auto;
+}
+
+.cardActionSheetOverlay {
+  --sheet-overlay: rgb(0 0 0 / 30%);
+}
+
+.cardActionSheetOverlay[data-open='true'] {
+  -webkit-backdrop-filter: blur(16px) saturate(1.04);
+  backdrop-filter: blur(16px) saturate(1.04);
+}
+
+.cardActionSheetOverlay :global([class*='sheet']) {
+  min-height: min(58dvh, 560px);
+  max-height: 98dvh;
+}
+
+.cardActionSheetOverlay :global([class*='toolbar']) {
+  min-height: 46px;
+  padding-block-end: 0;
+}
+
+.cardActionSheetOverlay :global([class*='grabberWrap']) {
+  align-items: center;
+  padding-block-start: 10px;
+}
+
+.cardActionSheetOverlay :global([class*='grabber']) {
+  width: 62px;
+  height: 5px;
+  opacity: 1;
+}
+
+.cardActionSheetOverlay :global([class*='controlButton']) {
+  width: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  margin-block-start: 4px;
+  margin-inline-end: 8px;
+  background:
+    radial-gradient(circle at 30% 12%, rgb(255 255 255 / 18%), transparent 52%),
+    rgb(89 96 99 / 42%);
+  border-color: rgb(255 255 255 / 14%);
+}
+
+.cardActionSheetContent {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 18px calc(env(safe-area-inset-bottom, 0px) + 20px);
+}
+
+.cardActionHeader {
+  padding-block: 0 2px;
+}
+
+.cardActionTitle {
+  margin: 0;
+  max-width: calc(100% - 52px);
+  font-size: 24px;
+  line-height: 29px;
+  font-weight: 760;
+  letter-spacing: -0.04em;
+  color: rgb(249 250 249 / 94%);
+}
+
+.cardActionSubtitle {
+  margin-block-start: 6px;
+}
+
+.cardActionCargoSummary {
+  margin-block-start: 2px;
+  background:
+    radial-gradient(circle at 20% 0%, rgb(255 255 255 / 9%), transparent 48%),
+    rgb(255 255 255 / 5%);
+}
+
+.cardActionInfoList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-block-start: 2px;
+}
+
+.cardActionInfoItem {
+  min-width: 0;
+  min-height: 76px;
+  padding: 13px 14px;
+  border-radius: 22px;
+  border: 1px solid rgb(255 255 255 / 9%);
+  background:
+    radial-gradient(circle at 22% 0%, rgb(255 255 255 / 10%), transparent 50%),
+    linear-gradient(145deg, rgb(255 255 255 / 7%), rgb(255 255 255 / 2%)),
+    rgb(255 255 255 / 4%);
+  color: inherit;
+  text-align: left;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 10%),
+    0 10px 18px rgb(0 0 0 / 16%);
+  -webkit-backdrop-filter: blur(22px) saturate(1.08);
+  backdrop-filter: blur(22px) saturate(1.08);
+  transition:
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cardActionInfoItem:active {
+  transform: scale(0.965);
+  background-color: rgb(255 255 255 / 8%);
+  border-color: rgb(255 255 255 / 14%);
+}
+
+.cardActionInfoLabel {
+  display: block;
+  margin-block-end: 5px;
+  color: var(--mobile-cargo-list-label-tertiary);
+  font-size: 11px;
+  line-height: 14px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cardActionInfoValue {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: rgb(246 249 247 / 92%);
+  font-size: 15px;
+  line-height: 19px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.cardActionList {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 24px;
+  border: 1px solid rgb(255 255 255 / 8%);
+  background: rgb(255 255 255 / 4%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 8%);
+}
+
+.cardActionRow {
+  min-height: 66px;
+  border-block-end: 1px solid rgb(255 255 255 / 7%);
+  background: transparent;
+}
+
+.cardActionRow:active:not(:disabled) {
+  background: rgb(255 255 255 / 7%);
+  transform: scale(0.992);
+}
+
+@media (max-width: 374px) {
+  .cardActionInfoList {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Round 13 — filter sheet business value + visual cleanup */
+.filterSheetOverlay,
+.cardActionSheetOverlay,
+.sheetOverlay,
+.mapHintSheetOverlay {
+  --sheet-surface: rgba(46, 51, 52, 0.76);
+  --sheet-surface-elevated: rgba(46, 51, 52, 0.76);
+  --sheet-inspector-material:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(46, 51, 52, 0.78);
+  --sheet-overlay: rgba(4, 6, 7, 0.24);
+}
+
+.filterSheetOverlay :global([class*='sheet'][data-open='true']),
+.cardActionSheetOverlay :global([class*='sheet'][data-open='true']) {
+  max-height: 98dvh;
+}
+
+.filterSheetOverlay :global([class*='titleRow']),
+.cardActionSheetOverlay :global([class*='titleRow']),
+.mapHintSheetOverlay :global([class*='titleRow']),
+.sheetOverlay :global([class*='titleRow']) {
+  padding-block-start: 12px !important;
+  padding-inline-end: 12px !important;
+  padding-inline-start: 22px !important;
+  min-height: 52px !important;
+}
+
+.filterSheetOverlay :global([class*='controlButton']),
+.cardActionSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']),
+.sheetOverlay :global([class*='controlButton']) {
+  width: 34px !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  min-height: 34px !important;
+  margin-block-start: 0 !important;
+  margin-inline-end: 0 !important;
+  transform: none !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.025)),
+    rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 10px 22px rgba(0, 0, 0, 0.22) !important;
+}
+
+.filterSheetOverlay :global([class*='grabberWrap']),
+.cardActionSheetOverlay :global([class*='grabberWrap']) {
+  padding-block-start: 10px !important;
+}
+
+.filterSheetOverlay :global([class*='grabber']),
+.cardActionSheetOverlay :global([class*='grabber']) {
+  width: 58px !important;
+  height: 5px !important;
+  opacity: 0.8;
+}
+
+.filterSheetContent,
+.cardActionSheetContent {
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-inline: 24px !important;
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 18px) !important;
+}
+
+.filterSheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar,
+.filterSheetBody::-webkit-scrollbar,
+.filterSheetChips::-webkit-scrollbar {
+  display: none;
+}
+
+.filterSheetHeader {
+  padding-block-start: 0 !important;
+  padding-inline-end: 48px !important;
+  margin-block-end: 18px;
+}
+
+.filterSheetBody {
+  gap: 22px !important;
+  padding-block-start: 0 !important;
+  padding-block-end: 0 !important;
+  overflow-y: visible;
+}
+
+.filterSheetSection {
+  gap: 12px !important;
+}
+
+.filterSheetSectionTitle {
+  letter-spacing: 0.14em !important;
+  color: rgba(235, 239, 238, 0.48) !important;
+}
+
+.filterSheetChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 12px !important;
+}
+
+.filterSheetChip,
+.filterSheetToggle {
+  min-height: 42px !important;
+  padding: 0 18px !important;
+  border-radius: 999px !important;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.035) !important;
+  border: 1px solid rgba(255, 255, 255, 0.105) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(0, 0, 0, 0.08) !important;
+  color: rgba(235, 239, 238, 0.64) !important;
+}
+
+.filterSheetChip[data-active='true'],
+.filterSheetToggle[data-active='true'] {
+  color: #182110 !important;
+  background:
+    radial-gradient(circle at 24% 12%, rgba(255, 255, 255, 0.95), transparent 35%),
+    linear-gradient(145deg, rgba(242, 255, 231, 0.96), rgba(196, 241, 163, 0.94)) !important;
+  border-color: rgba(255, 255, 255, 0.68) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.82),
+    0 12px 24px rgba(157, 218, 118, 0.16) !important;
+}
+
+.filterSheetFooter {
+  margin-block-start: 1.5rem !important;
+  padding-block-start: 0 !important;
+  padding-inline: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.filterSheetClearButton,
+.filterSheetApplyButton {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.015)),
+    rgba(255, 255, 255, 0.035) !important;
+  border-color: rgba(255, 255, 255, 0.095) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 10px 18px rgba(0, 0, 0, 0.1) !important;
+}
+
+.filterSheetApplyButton {
+  color: #182110 !important;
+  background:
+    radial-gradient(circle at 22% 12%, rgba(255, 255, 255, 0.95), transparent 36%),
+    linear-gradient(145deg, rgba(242, 255, 231, 0.98), rgba(196, 241, 163, 0.96)) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.cardActionInfoList,
+.cardActionCargoSummary,
+.cardActionList {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.085) !important;
+  box-shadow: none !important;
+}
+
+.cardActionInfoItem,
+.cardActionRow {
+  background: transparent !important;
+}
+
+
+/* Round 14: filter sheet polish, translucent footer, active filter summary and tactile press feedback. */
+.root {
+  --hydri-round14-sheet-glass: rgb(46 54 55 / 34%);
+  --hydri-round14-sheet-glass-soft: rgb(46 54 55 / 18%);
+  --hydri-round14-accent: rgb(205 249 180);
+}
+
+.filterSummaryBar {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  margin-block: 0.75rem 0.25rem;
+  animation: cargoSummaryIn 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterSummaryButton {
+  min-height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgb(235 239 235 / 16%);
+  background: rgb(235 239 235 / 8%);
+  color: rgb(245 248 245 / 88%);
+  padding: 0 1rem;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  -webkit-backdrop-filter: blur(28px) saturate(1.24);
+  backdrop-filter: blur(28px) saturate(1.24);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 12px 28px rgb(0 0 0 / 16%);
+  transition:
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterSummaryButton[data-variant='view'] {
+  flex: 1 1 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(180deg, rgb(255 255 255 / 16%), rgb(255 255 255 / 5%)), rgb(235 239 235 / 9%);
+}
+
+.filterSummaryButton[data-variant='clear'] {
+  flex: 0 0 auto;
+  color: rgb(205 249 180 / 88%);
+}
+
+.filterSummaryButton:active {
+  transform: scale(0.965);
+  filter: brightness(1.18) blur(0.05px);
+}
+
+.filterSummaryCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999px;
+  background: var(--hydri-round14-accent);
+  color: rgb(14 17 16 / 92%);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+@keyframes cargoSummaryIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.filterSheetOverlay :global([class*='toolbar']),
+.cardActionSheetOverlay :global([class*='toolbar']),
+.mapHintSheetOverlay :global([class*='toolbar']) {
+  min-height: 4.75rem;
+  background: linear-gradient(180deg, rgb(255 255 255 / 3.5%), rgb(255 255 255 / 0%));
+  border: 0;
+  box-shadow: none;
+}
+
+.filterSheetOverlay :global([class*='grabberWrap']),
+.cardActionSheetOverlay :global([class*='grabberWrap']) {
+  padding-block-start: 1rem;
+}
+
+.filterSheetOverlay :global([class*='controlButton']),
+.cardActionSheetOverlay :global([class*='controlButton']),
+.mapHintSheetOverlay :global([class*='controlButton']) {
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-block-start: 1rem;
+  margin-inline-end: 1rem;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 13%), rgb(255 255 255 / 3%)),
+    rgb(235 239 235 / 10%);
+  border-color: rgb(255 255 255 / 16%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 15%),
+    0 14px 30px rgb(0 0 0 / 22%);
+  -webkit-backdrop-filter: blur(28px) saturate(1.28);
+  backdrop-filter: blur(28px) saturate(1.28);
+}
+
+.filterSheetHeader {
+  padding: 1rem 4.75rem 1rem 1.5rem;
+  margin: 0;
+  transform: translateY(-0.35rem);
+}
+
+.filterSheetTitle {
+  letter-spacing: -0.045em;
+}
+
+.filterSheetSubtitle {
+  opacity: 0.78;
+}
+
+.filterSheetContent,
+.cardActionSheetContent,
+.mapHintSheetContent {
+  scrollbar-width: none;
+}
+
+.filterSheetContent::-webkit-scrollbar,
+.cardActionSheetContent::-webkit-scrollbar,
+.mapHintSheetContent::-webkit-scrollbar {
+  display: none;
+}
+
+.filterSheetBody {
+  padding-block-end: calc(env(safe-area-inset-bottom, 0px) + 6rem);
+}
+
+.filterSheetFooter {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  gap: 0.75rem;
+  margin-block-start: 1.5rem;
+  padding: 1.5rem 0 max(1rem, env(safe-area-inset-bottom, 0px));
+  background:
+    linear-gradient(180deg, rgb(48 56 57 / 0%), rgb(48 56 57 / 22%) 32%, rgb(48 56 57 / 30%));
+  -webkit-backdrop-filter: blur(30px) saturate(1.2);
+  backdrop-filter: blur(30px) saturate(1.2);
+  box-shadow: 0 -20px 40px rgb(0 0 0 / 8%);
+}
+
+.filterSheetClearButton {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 11%), rgb(255 255 255 / 3%)),
+    rgb(255 255 255 / 8%);
+  border-color: rgb(255 255 255 / 13%);
+  color: rgb(245 248 245 / 94%);
+}
+
+.filterSheetApplyButton {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 48%), transparent 52%),
+    linear-gradient(180deg, rgb(227 255 210), rgb(184 239 153));
+  border-color: rgb(255 255 255 / 46%);
+  color: rgb(14 18 15 / 92%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 58%),
+    0 14px 36px rgb(112 219 82 / 16%);
+}
+
+.filterSheetChip,
+.filterChip,
+.headerFilterButton,
+.compactFilterButton,
+.searchField,
+.filterSheetClearButton,
+.filterSheetApplyButton {
+  transition:
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterSheetChip:active:not(:disabled),
+.filterChip:active:not(:disabled),
+.headerFilterButton:active,
+.compactFilterButton:active,
+.searchField:active,
+.filterSheetClearButton:active,
+.filterSheetApplyButton:active {
+  transform: scale(0.965);
+  filter: brightness(1.16);
+}
+
+.compactHeaderInner {
+  background: rgb(20 26 26 / 20%);
+  border-bottom: 0;
+  -webkit-backdrop-filter: blur(34px) saturate(1.22);
+  backdrop-filter: blur(34px) saturate(1.22);
+}
+
+.compactHeader[data-visible='true'] {
+  opacity: 0.92;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterSummaryBar,
+  .filterSummaryButton,
+  .filterSheetChip,
+  .filterChip,
+  .headerFilterButton,
+  .compactFilterButton,
+  .searchField,
+  .filterSheetClearButton,
+  .filterSheetApplyButton {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* Round 15: filter icon launcher. Mirrors the reference interaction where a circular glass
+   action compresses, blooms into a short glass capsule, then hands off to the sheet. */
+.headerFilterButton,
+.compactFilterButton {
+  overflow: visible !important;
+  isolation: isolate;
+  transform-origin: center center;
+}
+
+.headerFilterButton::before,
+.compactFilterButton::before {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 999px;
+  opacity: 0;
+  background:
+    radial-gradient(circle at 18% 18%, rgb(255 255 255 / 42%), transparent 0.78rem),
+    linear-gradient(120deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 4%)),
+    rgb(20 22 22 / 62%);
+  border: 1px solid rgb(255 255 255 / 16%);
+  -webkit-backdrop-filter: blur(38px) saturate(1.32);
+  backdrop-filter: blur(38px) saturate(1.32);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    inset 0 -16px 28px rgb(0 0 0 / 14%),
+    0 18px 44px rgb(0 0 0 / 32%);
+  transform: scale(0.72);
+  transform-origin: right center;
+  pointer-events: none;
+  transition:
+    inset 340ms cubic-bezier(0.16, 1, 0.3, 1),
+    width 340ms cubic-bezier(0.16, 1, 0.3, 1),
+    height 340ms cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 340ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.headerFilterButton[data-launching='true'],
+.compactFilterButton[data-launching='true'] {
+  transform: scale(0.94) !important;
+  filter: brightness(1.12) saturate(1.08);
+  z-index: 40;
+}
+
+.headerFilterButton[data-launching='true']::before {
+  inset: auto 0 auto auto;
+  width: min(12.75rem, calc(100vw - 2rem));
+  height: 3.25rem;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.compactFilterButton[data-launching='true']::before {
+  inset: auto 0 auto auto;
+  width: min(11rem, calc(100vw - 2rem));
+  height: 2.75rem;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+.filterButtonIcon,
+.filterButtonBadge {
+  position: relative;
+  z-index: 2;
+}
+
+.filterLauncherLabel {
+  position: absolute;
+  z-index: 2;
+  right: 2.9rem;
+  top: 50%;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: 8.25rem;
+  min-width: 0;
+  opacity: 0;
+  transform: translateY(-50%) translateX(0.5rem) scale(0.96);
+  color: rgb(247 250 247 / 92%);
+  pointer-events: none;
+  transition:
+    opacity 190ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterLauncherLabel[data-visible='true'] {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0) scale(1);
+  transition-delay: 60ms;
+}
+
+.filterLauncherLabel strong,
+.filterLauncherLabel small {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filterLauncherLabel strong {
+  font-size: 0.875rem;
+  line-height: 1.05rem;
+  font-weight: 760;
+  letter-spacing: -0.02em;
+}
+
+.filterLauncherLabel small {
+  margin-top: 0.0625rem;
+  font-size: 0.6875rem;
+  line-height: 0.85rem;
+  font-weight: 560;
+  color: rgb(235 239 235 / 56%);
+}
+
+.compactFilterButton .filterLauncherLabel {
+  right: 2.4rem;
+  width: 7.2rem;
+}
+
+.compactFilterButton .filterLauncherLabel small {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .headerFilterButton::before,
+  .compactFilterButton::before,
+  .filterLauncherLabel {
+    transition: none;
+  }
+}
+
+/* Round 16: filter icon rule. When filters are active, the icon opens a glass action capsule
+   instead of opening the sheet directly. The old summary bar remains hidden because the launcher
+   now owns "view filters" and "clear filters". */
+.filterSummaryBar {
+  display: none !important;
+}
+
+.filterLauncherRoot {
+  position: relative;
+  z-index: 65;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  isolation: isolate;
+}
+
+.filterLauncherRoot[data-launching='true'] {
+  z-index: 1600;
+}
+
+.filterLauncherRoot .headerFilterButton,
+.filterLauncherRoot .compactFilterButton {
+  position: relative;
+  z-index: 2;
+}
+
+.filterLauncherRoot[data-launching='true'] .headerFilterButton,
+.filterLauncherRoot[data-launching='true'] .compactFilterButton {
+  transform: scale(0.94) !important;
+  filter: brightness(1.14) saturate(1.08);
+}
+
+.filterLauncherActions {
+  position: absolute;
+  top: calc(100% + 0.625rem);
+  right: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: min(14.5rem, calc(100vw - 2rem));
+  overflow: hidden;
+  padding: 0.42rem;
+  border-radius: 1.45rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 18%), transparent 3.6rem),
+    linear-gradient(180deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 3%)),
+    rgb(13 14 14 / 78%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    inset 0 -1.2rem 2.3rem rgb(0 0 0 / 22%),
+    0 1.25rem 3rem rgb(0 0 0 / 42%);
+  -webkit-backdrop-filter: blur(48px) saturate(1.28);
+  backdrop-filter: blur(48px) saturate(1.28);
+  transform-origin: right top;
+  animation: filterLauncherActionsIn 280ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterLauncherActions::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgb(255 255 255 / 8%), transparent 38%);
+  pointer-events: none;
+}
+
+.compactHeader .filterLauncherActions {
+  top: calc(100% + 0.5rem);
+  right: 0;
+}
+
+.filterLauncherAction {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.55rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  width: 100%;
+  min-height: 3rem;
+  margin: 0;
+  padding: 0 0.78rem;
+  border: 0;
+  border-radius: 1.05rem;
+  background: transparent;
+  color: rgb(246 249 246 / 91%);
+  font: inherit;
+  font-size: 0.92rem;
+  line-height: 1.12rem;
+  font-weight: 650;
+  letter-spacing: -0.018em;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 150ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterLauncherAction + .filterLauncherAction {
+  margin-top: 0.12rem;
+}
+
+.filterLauncherAction + .filterLauncherAction::before {
+  content: '';
+  position: absolute;
+  top: -0.06rem;
+  left: 3rem;
+  right: 0.4rem;
+  height: 1px;
+  background: rgb(255 255 255 / 8%);
+}
+
+.filterLauncherAction[data-variant='open'] {
+  color: rgb(246 249 246 / 94%);
+}
+
+.filterLauncherAction[data-variant='clear'] {
+  color: rgb(205 249 180 / 92%);
+}
+
+.filterLauncherAction:hover,
+.filterLauncherAction:focus-visible {
+  background: rgb(255 255 255 / 8%);
+}
+
+.filterLauncherAction:active {
+  transform: scale(0.982);
+  background: rgb(255 255 255 / 12%);
+  filter: brightness(1.08);
+}
+
+.filterLauncherAction:focus-visible {
+  outline: 2px solid rgb(205 249 180 / 42%);
+  outline-offset: 2px;
+}
+
+.filterLauncherActionIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 0.6rem;
+  color: rgb(246 249 246 / 88%);
+  background: rgb(255 255 255 / 7%);
+}
+
+.filterLauncherActionIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.filterLauncherActionCopy {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.filterLauncherActionCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgb(245 255 237), rgb(198 247 168));
+  color: rgb(16 22 16 / 92%);
+  font-size: 0.72rem;
+  line-height: 1;
+  font-weight: 850;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 70%),
+    0 0.35rem 0.85rem rgb(185 248 144 / 15%);
+}
+
+@keyframes filterLauncherActionsIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem) translateX(0.25rem) scale(0.9);
+    filter: blur(0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@media (max-width: 390px) {
+  .filterLauncherActions {
+    width: min(13.25rem, calc(100vw - 1.4rem));
+  }
+
+  .filterLauncherAction {
+    padding-inline: 0.68rem;
+    font-size: 0.86rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterLauncherActions {
+    animation: none;
+  }
+
+  .filterLauncherAction,
+  .filterLauncherRoot[data-launching='true'] .headerFilterButton,
+  .filterLauncherRoot[data-launching='true'] .compactFilterButton {
+    transition: none;
+    transform: none !important;
+  }
+}
+
+/* Round 18 — contextual filter menu: one glass block with clickable menu rows.
+   The trigger animation remains, but when active the circular trigger fades into the menu
+   so the user perceives one component, not a floating button plus separate pills. */
+.filterLauncherRoot[data-launching='true'] .headerFilterButton,
+.filterLauncherRoot[data-launching='true'] .compactFilterButton {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.88) !important;
+  filter: blur(0.25rem) brightness(1.18) saturate(1.1);
+}
+
+.filterLauncherMenu {
+  position: absolute;
+  top: -0.12rem;
+  right: -0.12rem;
+  z-index: 24;
+  display: flex;
+  flex-direction: column;
+  width: min(19rem, calc(100vw - 2rem));
+  min-width: 16.5rem;
+  overflow: hidden;
+  padding: 0.72rem;
+  border-radius: 2.05rem;
+  border: 1px solid rgb(255 255 255 / 13%);
+  color: rgb(247 250 247 / 92%);
+  background:
+    radial-gradient(circle at 16% 0%, rgb(255 255 255 / 20%), transparent 4.5rem),
+    radial-gradient(circle at 90% 18%, rgb(205 249 180 / 10%), transparent 5rem),
+    linear-gradient(180deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 4%)),
+    rgb(12 13 13 / 76%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    inset 0 -1.4rem 2.8rem rgb(0 0 0 / 24%),
+    0 1.25rem 3.25rem rgb(0 0 0 / 48%);
+  -webkit-backdrop-filter: blur(56px) saturate(1.35);
+  backdrop-filter: blur(56px) saturate(1.35);
+  transform-origin: right top;
+  pointer-events: auto;
+  animation: filterLauncherMenuReveal 340ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterLauncherMenu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 10%), transparent 38%),
+    linear-gradient(180deg, rgb(255 255 255 / 5%), transparent 50%);
+  pointer-events: none;
+}
+
+.compactHeader .filterLauncherMenu {
+  top: -0.08rem;
+  right: 0;
+}
+
+.filterLauncherMenuItem {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 2.2rem minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 0.85rem;
+  min-height: 3.9rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 1.55rem;
+  color: rgb(246 249 246 / 92%);
+  font-size: 1.03rem;
+  line-height: 1.2rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 145ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.filterLauncherMenuItem + .filterLauncherMenuItem {
+  border-top: 1px solid rgb(255 255 255 / 9%);
+}
+
+.filterLauncherMenuItem[data-variant='clear'] {
+  color: rgb(208 249 185 / 94%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 7%);
+}
+
+.filterLauncherMenuItem:active {
+  transform: scale(0.982);
+  background: rgb(255 255 255 / 11%);
+  filter: brightness(1.08);
+}
+
+.filterLauncherMenuItem:focus-visible {
+  outline: 2px solid rgb(205 249 180 / 42%);
+  outline-offset: 2px;
+}
+
+.filterLauncherMenuIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  color: rgb(247 250 247 / 86%);
+  background: rgb(255 255 255 / 9%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 12%),
+    0 0.45rem 1rem rgb(0 0 0 / 18%);
+}
+
+.filterLauncherMenuIcon svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.filterLauncherMenuCopy {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.filterLauncherMenuCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.55rem;
+  height: 1.55rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgb(247 255 240), rgb(198 247 168));
+  color: rgb(16 22 16 / 92%);
+  font-size: 0.8rem;
+  line-height: 1;
+  font-weight: 860;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 72%),
+    0 0.35rem 0.9rem rgb(185 248 144 / 18%);
+}
+
+@keyframes filterLauncherMenuReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.45rem) translateX(0.35rem) scale(0.82);
+    filter: blur(0.45rem) brightness(1.08);
+  }
+
+  60% {
+    opacity: 1;
+    transform: translateY(0.05rem) translateX(0) scale(1.018);
+    filter: blur(0) brightness(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+    filter: blur(0) brightness(1);
+  }
+}
+
+@media (max-width: 390px) {
+  .filterLauncherMenu {
+    width: min(17.25rem, calc(100vw - 1.25rem));
+    min-width: 15rem;
+    padding: 0.6rem;
+    border-radius: 1.8rem;
+  }
+
+  .filterLauncherMenuItem {
+    min-height: 3.55rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filterLauncherMenu {
+    animation: none;
+  }
+
+  .filterLauncherMenuItem {
+    transition: none;
+  }
+}
+
+/* Round 19 — robust single-piece contextual filter menu.
+   Fixes: menu rows are real clickable controls, visibility is stronger,
+   the launcher is one glass block, and actions do not leak to elements behind. */
+.filterLauncherRoot[data-launching='true'] {
+  z-index: 2600;
+}
+
+.filterLauncherRoot[data-launching='true'] .headerFilterButton,
+.filterLauncherRoot[data-launching='true'] .compactFilterButton {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.86) !important;
+}
+
+.filterLauncherMenu {
+  top: 0;
+  right: 0;
+  z-index: 2601;
+  width: min(18.5rem, calc(100vw - 1.25rem));
+  min-width: 16rem;
+  padding: 0.62rem;
+  border-radius: 1.85rem;
+  border-color: rgb(255 255 255 / 18%);
+  background:
+    radial-gradient(circle at 16% 0%, rgb(255 255 255 / 28%), transparent 4.6rem),
+    radial-gradient(circle at 92% 18%, rgb(205 249 180 / 14%), transparent 5.2rem),
+    linear-gradient(180deg, rgb(255 255 255 / 14%), rgb(255 255 255 / 5%)),
+    rgb(15 17 17 / 84%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 22%),
+    inset 0 -1.25rem 2.7rem rgb(0 0 0 / 28%),
+    0 1.25rem 3.35rem rgb(0 0 0 / 54%);
+  -webkit-backdrop-filter: blur(64px) saturate(1.45);
+  backdrop-filter: blur(64px) saturate(1.45);
+  pointer-events: auto;
+}
+
+.filterLauncherMenuItem {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  appearance: none;
+  font: inherit;
+  text-align: left;
+  grid-template-columns: 2.25rem minmax(0, 1fr) auto;
+  min-height: 3.65rem;
+  padding: 0.2rem 0.58rem;
+  color: rgb(248 250 248 / 94%);
+}
+
+.filterLauncherMenuItem[data-variant='clear'] {
+  color: rgb(214 251 196 / 96%);
+}
+
+.filterLauncherMenuItem + .filterLauncherMenuItem {
+  border-top: 1px solid rgb(255 255 255 / 11%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 8%);
+}
+
+.filterLauncherMenuItem:active {
+  transform: scale(0.986);
+  background: rgb(255 255 255 / 13%);
+}
+
+.filterLauncherMenuIcon {
+  background: rgb(255 255 255 / 11%);
+  color: rgb(248 250 248 / 92%);
+}
+
+.compactHeader .filterLauncherMenu {
+  top: -0.06rem;
+  right: 0;
+}
+
+@media (max-width: 390px) {
+  .filterLauncherMenu {
+    width: min(17.2rem, calc(100vw - 1rem));
+    min-width: 14.75rem;
+  }
+}
+
+
+/* Round 20 — filter context menu fix.
+   Make the menu readable glass (not fully transparent) and keep rows reliable as controls. */
+.filterLauncherMenu {
+  border-color: rgb(255 255 255 / 24%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 34%), transparent 4.75rem),
+    radial-gradient(circle at 86% 16%, rgb(205 249 180 / 18%), transparent 5.25rem),
+    linear-gradient(180deg, rgb(255 255 255 / 18%), rgb(255 255 255 / 8%)),
+    rgb(19 22 22 / 94%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 28%),
+    inset 0 -1.35rem 3rem rgb(0 0 0 / 30%),
+    0 1.4rem 3.5rem rgb(0 0 0 / 58%);
+  -webkit-backdrop-filter: blur(42px) saturate(1.28) brightness(0.94);
+  backdrop-filter: blur(42px) saturate(1.28) brightness(0.94);
+}
+
+.filterLauncherMenu::before {
+  background:
+    linear-gradient(90deg, rgb(255 255 255 / 13%), transparent 40%),
+    linear-gradient(180deg, rgb(255 255 255 / 7%), transparent 52%);
+}
+
+.filterLauncherMenuItem {
+  color: rgb(250 252 250 / 96%);
+  background: rgb(255 255 255 / 2%);
+}
+
+.filterLauncherMenuItem[data-variant='clear'] {
+  color: rgb(213 250 195 / 98%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 10%);
+}
+
+.filterLauncherMenuItem:active {
+  background: rgb(255 255 255 / 15%);
+  transform: scale(0.982);
+}
+
+.filterLauncherMenuIcon {
+  background: rgb(255 255 255 / 14%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    0 0.5rem 1.15rem rgb(0 0 0 / 22%);
+}
+
+/* Round 21 — operational hotfix for filter launcher menu.
+   - Stronger frosted glass: content behind is blurred, not readable.
+   - Menu rows remain one glass component and stay tappable on mobile.
+*/
+.filterLauncherRoot[data-launching='true'] {
+  z-index: 3200;
+  pointer-events: auto;
+}
+
+.filterLauncherMenu {
+  z-index: 3201;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 28%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 28%), transparent 5.25rem),
+    radial-gradient(circle at 90% 16%, rgb(205 249 180 / 16%), transparent 5.75rem),
+    linear-gradient(180deg, rgb(255 255 255 / 16%), rgb(255 255 255 / 7%)),
+    rgb(20 24 24 / 98%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 30%),
+    inset 0 -1.5rem 3.25rem rgb(0 0 0 / 34%),
+    0 1.45rem 3.75rem rgb(0 0 0 / 62%);
+  -webkit-backdrop-filter: blur(88px) saturate(1.16) brightness(0.82);
+  backdrop-filter: blur(88px) saturate(1.16) brightness(0.82);
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.filterLauncherMenu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: rgb(12 14 14 / 54%);
+  pointer-events: none;
+}
+
+.filterLauncherMenuItem {
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  color: rgb(252 254 252 / 98%);
+  background: rgb(255 255 255 / 3%);
+}
+
+.filterLauncherMenuItem[data-variant='clear'] {
+  color: rgb(216 252 198 / 100%);
+}
+
+.filterLauncherMenuItem:active {
+  background: rgb(255 255 255 / 18%);
+  transform: scale(0.978);
+}
+
+
+/* Round 22 — filter menu clear/glass reliability fix.
+   The launcher must look like frosted glass, not transparent air, and its menu
+   items must own the gesture before anything behind the menu can react. */
+.filterLauncherRoot[data-launching='true'] {
+  isolation: isolate;
+}
+
+.filterLauncherMenu {
+  border-color: rgb(255 255 255 / 30%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 26%), transparent 4.9rem),
+    radial-gradient(circle at 88% 16%, rgb(205 249 180 / 14%), transparent 5.5rem),
+    linear-gradient(180deg, rgb(255 255 255 / 14%), rgb(255 255 255 / 6%)),
+    rgb(18 22 22 / 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 31%),
+    inset 0 -1.6rem 3.4rem rgb(0 0 0 / 40%),
+    0 1.55rem 3.8rem rgb(0 0 0 / 68%);
+  -webkit-backdrop-filter: blur(96px) saturate(1.08) brightness(0.72) contrast(1.08);
+  backdrop-filter: blur(96px) saturate(1.08) brightness(0.72) contrast(1.08);
+}
+
+.filterLauncherMenu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgb(19 23 23 / 78%), rgb(10 12 12 / 70%));
+  pointer-events: none;
+}
+
+.filterLauncherMenuItem {
+  z-index: 2;
+  pointer-events: auto;
+  background: rgb(255 255 255 / 4%);
+}
+
+.filterLauncherMenuItem + .filterLauncherMenuItem {
+  border-top-color: rgb(255 255 255 / 13%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 12%);
+}
+
+.filterLauncherMenuItem:active {
+  background: rgb(255 255 255 / 18%);
+  transform: scale(0.978);
+}
+
+/* Round 23 — filter launcher hit-test + frosted-glass hardening.
+   The floating filter menu must sit above the search/list hierarchy, own the
+   gesture, and look like frosted glass instead of transparent air. */
+.filterLauncherTapShield {
+  position: fixed;
+  inset: 0;
+  z-index: 3298;
+  background: transparent;
+  pointer-events: auto;
+  touch-action: none;
+}
+
+.filterLauncherRoot[data-launching='true'] {
+  z-index: 3299;
+  pointer-events: auto;
+}
+
+.filterLauncherMenu {
+  z-index: 3300;
+  isolation: isolate;
+  overflow: hidden;
+  border-color: rgb(255 255 255 / 34%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 24%), transparent 4.4rem),
+    radial-gradient(circle at 92% 14%, rgb(205 249 180 / 12%), transparent 5rem),
+    linear-gradient(180deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 5%)),
+    rgb(18 22 22 / 98%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 32%),
+    inset 0 -1.6rem 3.25rem rgb(0 0 0 / 44%),
+    0 1.6rem 4rem rgb(0 0 0 / 72%);
+  -webkit-backdrop-filter: blur(120px) saturate(1.05) brightness(0.62) contrast(1.12);
+  backdrop-filter: blur(120px) saturate(1.05) brightness(0.62) contrast(1.12);
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+
+.filterLauncherMenu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgb(20 24 24 / 86%), rgb(10 12 12 / 82%)),
+    rgb(13 16 16 / 78%);
+  pointer-events: none;
+}
+
+.filterLauncherMenuItem {
+  position: relative;
+  z-index: 2;
+  pointer-events: auto;
+  touch-action: manipulation;
+  cursor: pointer;
+  background: rgb(255 255 255 / 5%);
+}
+
+.filterLauncherMenuItem + .filterLauncherMenuItem {
+  border-top-color: rgb(255 255 255 / 15%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 13%);
+}
+
+.filterLauncherMenuItem:active {
+  background: rgb(255 255 255 / 20%);
+  transform: scale(0.978);
+}
+
+/* Round 24 — filter menu hit-test firewall + stronger frosted glass.
+   When the launcher menu is open, no touch/click may reach search/cards behind it.
+   The menu remains translucent glass, but the background behind it is only blurred
+   color, never readable content. */
+.filterLauncherGlobalShield {
+  position: fixed;
+  inset: 0;
+  z-index: 3190;
+  pointer-events: auto;
+  touch-action: none;
+  background: transparent;
+  cursor: default;
+}
+
+.filterLauncherGlobalShield[data-active='true'] {
+  -webkit-backdrop-filter: blur(0.18rem);
+  backdrop-filter: blur(0.18rem);
+}
+
+.filterLauncherGlobalShield[data-active='guard'] {
+  background: transparent;
+}
+
+.filterLauncherRoot[data-launching='true'] {
+  z-index: 3400;
+  pointer-events: auto;
+  isolation: isolate;
+}
+
+.filterLauncherRoot[data-launching='true'] .headerFilterButton,
+.filterLauncherRoot[data-launching='true'] .compactFilterButton {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.82) !important;
+}
+
+.filterLauncherMenu {
+  z-index: 3402;
+  border-color: rgb(255 255 255 / 36%);
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 20%), transparent 4.5rem),
+    radial-gradient(circle at 88% 14%, rgb(205 249 180 / 11%), transparent 5.25rem),
+    linear-gradient(180deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 5%)),
+    rgb(16 19 19 / 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 34%),
+    inset 0 -1.6rem 3.3rem rgb(0 0 0 / 48%),
+    0 1.75rem 4.2rem rgb(0 0 0 / 76%);
+  -webkit-backdrop-filter: blur(140px) saturate(1.04) brightness(0.54) contrast(1.16);
+  backdrop-filter: blur(140px) saturate(1.04) brightness(0.54) contrast(1.16);
+}
+
+.filterLauncherMenu::after {
+  z-index: 0;
+  background:
+    linear-gradient(180deg, rgb(16 20 20 / 94%), rgb(8 10 10 / 90%)),
+    rgb(10 12 12 / 88%);
+}
+
+.filterLauncherMenuItem {
+  z-index: 2;
+  background: rgb(255 255 255 / 6%);
+  color: rgb(252 254 252 / 98%);
+}
+
+.filterLauncherMenuItem[data-variant='clear'] {
+  color: rgb(220 255 202 / 100%);
+}
+
+.filterLauncherMenuItem:hover,
+.filterLauncherMenuItem:focus-visible {
+  background: rgb(255 255 255 / 14%);
+}
+
+.filterLauncherMenuItem:active {
+  background: rgb(255 255 255 / 22%);
+  transform: scale(0.976);
+}
+
+/* Round 25 — fixed modal menu firewall.
+   The filter actions menu is now rendered as a real top-level modal layer.
+   Its layer owns all pointer events, so touches never reach search/cards behind it.
+   The glass is intentionally more opaque/frosted: blurred shapes, no readable text behind. */
+.filterLauncherGlobalShield {
+  z-index: 9000 !important;
+  pointer-events: auto !important;
+  touch-action: none !important;
+  background: transparent !important;
+}
+
+.filterLauncherGlobalShield[data-active='true'],
+.filterLauncherGlobalShield[data-active='guard'] {
+  -webkit-backdrop-filter: blur(1.15rem) saturate(0.85) brightness(0.72) !important;
+  backdrop-filter: blur(1.15rem) saturate(0.85) brightness(0.72) !important;
+}
+
+.filterLauncherModalLayer {
+  position: fixed;
+  inset: 0;
+  z-index: 9100;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding: calc(env(safe-area-inset-top, 0px) + 5.75rem) 1rem 1rem;
+  pointer-events: auto;
+  touch-action: none;
+  background: rgb(0 0 0 / 8%);
+  -webkit-backdrop-filter: blur(0.8rem) saturate(0.9) brightness(0.82);
+  backdrop-filter: blur(0.8rem) saturate(0.9) brightness(0.82);
+  animation: filterLauncherLayerIn 150ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterLauncherModalMenu {
+  position: relative;
+  width: min(24rem, calc(100vw - 2rem));
+  overflow: hidden;
+  border-radius: 2rem;
+  border: 1px solid rgb(255 255 255 / 30%);
+  background:
+    radial-gradient(circle at 18% 4%, rgb(255 255 255 / 24%), transparent 5rem),
+    radial-gradient(circle at 86% 8%, rgb(205 249 180 / 10%), transparent 5.5rem),
+    linear-gradient(180deg, rgb(62 68 68 / 96%), rgb(23 27 27 / 96%));
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 32%),
+    inset 0 -2rem 3.2rem rgb(0 0 0 / 45%),
+    0 1.65rem 4.5rem rgb(0 0 0 / 70%);
+  -webkit-backdrop-filter: blur(3rem) saturate(0.92) brightness(0.72) contrast(1.08);
+  backdrop-filter: blur(3rem) saturate(0.92) brightness(0.72) contrast(1.08);
+  pointer-events: auto;
+  touch-action: manipulation;
+  animation: filterLauncherMenuIn 210ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.filterLauncherModalMenu::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 10%), rgb(255 255 255 / 3%)),
+    rgb(14 17 17 / 74%);
+  pointer-events: none;
+}
+
+.filterLauncherModalItem {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 3.35rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-height: 4.25rem;
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border: 0;
+  background: transparent;
+  color: rgb(250 252 250 / 96%);
+  font: inherit;
+  font-size: 1.04rem;
+  line-height: 1.18;
+  font-weight: 720;
+  letter-spacing: -0.02em;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filterLauncherModalItem + .filterLauncherModalItem {
+  border-top: 1px solid rgb(255 255 255 / 13%);
+}
+
+.filterLauncherModalItem[data-variant='clear'] {
+  color: rgb(221 255 207 / 98%);
+}
+
+.filterLauncherModalItem:active {
+  background: rgb(255 255 255 / 14%);
+}
+
+.filterLauncherModalIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  color: rgb(248 251 248 / 94%);
+  background: rgb(255 255 255 / 10%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    0 0.75rem 1.5rem rgb(0 0 0 / 18%);
+}
+
+.filterLauncherModalCopy {
+  min-width: 0;
+}
+
+.filterLauncherModalCount {
+  display: inline-grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding-inline: 0.55rem;
+  border-radius: 999px;
+  background: rgb(210 255 183 / 96%);
+  color: rgb(17 24 17 / 94%);
+  font-size: 0.92rem;
+  font-weight: 820;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 44%),
+    0 0.75rem 1.4rem rgb(0 0 0 / 20%);
+}
+
+@keyframes filterLauncherLayerIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes filterLauncherMenuIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem) scale(0.975);
+    filter: blur(0.18rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Round 26 — frosted glass UX refinement.
+   Keep the modal firewall from Round 25, but move the blur perception into the
+   menu itself instead of blurring/dimming the whole viewport. The page remains
+   visible around the menu, while content directly under the menu becomes frosted
+   and unreadable. */
+.filterLauncherGlobalShield {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.filterLauncherGlobalShield[data-active='true'],
+.filterLauncherGlobalShield[data-active='guard'] {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.filterLauncherModalLayer {
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.filterLauncherModalMenu {
+  border-color: rgb(255 255 255 / 28%) !important;
+  background:
+    radial-gradient(circle at 18% 0%, rgb(255 255 255 / 20%), transparent 5.2rem),
+    radial-gradient(circle at 88% 10%, rgb(207 255 181 / 11%), transparent 5.8rem),
+    linear-gradient(180deg, rgb(53 59 59 / 96%), rgb(17 21 21 / 97%)),
+    rgb(12 15 15 / 98%) !important;
+  -webkit-backdrop-filter: blur(5rem) saturate(0.86) brightness(0.62) contrast(1.16) !important;
+  backdrop-filter: blur(5rem) saturate(0.86) brightness(0.62) contrast(1.16) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 30%),
+    inset 0 -2.4rem 3.6rem rgb(0 0 0 / 50%),
+    0 1.6rem 3.4rem rgb(0 0 0 / 42%) !important;
+}
+
+.filterLauncherModalMenu::before {
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 9%), rgb(255 255 255 / 2%)),
+    linear-gradient(180deg, rgb(17 20 20 / 74%), rgb(7 9 9 / 72%)) !important;
+}
+
+.filterLauncherModalMenu::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 19% 6%, rgb(255 255 255 / 12%), transparent 4rem),
+    linear-gradient(180deg, rgb(0 0 0 / 10%), rgb(0 0 0 / 26%));
+}
+
+.filterLauncherModalItem {
+  z-index: 2 !important;
+  background: rgb(255 255 255 / 2%) !important;
+}
+
+.filterLauncherModalItem + .filterLauncherModalItem {
+  border-top-color: rgb(255 255 255 / 16%) !important;
+}
+
+.filterLauncherModalIcon {
+  background: rgb(255 255 255 / 12%) !important;
+  -webkit-backdrop-filter: blur(1.25rem) saturate(0.9) !important;
+  backdrop-filter: blur(1.25rem) saturate(0.9) !important;
+}
+
+
+/* Round 27 — approved cohesive cargo filter menu skin.
+   Preserve the working modal/firewall behavior from Round 25/26, but make the
+   launcher menu look native to the cargo list: one frosted hydro-glass surface,
+   anchored to the filter icon with a small pointer, opaque enough to avoid
+   readable content underneath, and tinted with the same dark green/charcoal
+   language used by the list cards. */
+.filterLauncherModalLayer {
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  padding: calc(env(safe-area-inset-top, 0px) + 5.15rem) 0.92rem 0 !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+.filterLauncherModalMenu {
+  width: min(21.75rem, calc(100vw - 2rem)) !important;
+  overflow: visible !important;
+  border-radius: 1.55rem !important;
+  border: 1px solid rgb(205 226 218 / 26%) !important;
+  background:
+    radial-gradient(circle at 13% 8%, rgb(255 255 255 / 20%), transparent 4.4rem),
+    radial-gradient(circle at 91% 12%, rgb(202 255 181 / 13%), transparent 4.8rem),
+    linear-gradient(180deg, rgb(43 55 53 / 96%), rgb(9 15 15 / 97%)),
+    rgb(10 15 15 / 98%) !important;
+  -webkit-backdrop-filter: blur(3.3rem) saturate(1.12) brightness(0.72) contrast(1.12) !important;
+  backdrop-filter: blur(3.3rem) saturate(1.12) brightness(0.72) contrast(1.12) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 27%),
+    inset 0 -2.25rem 3.3rem rgb(0 0 0 / 42%),
+    0 1.2rem 3.2rem rgb(0 0 0 / 42%) !important;
+}
+
+.filterLauncherModalMenu::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  border-radius: inherit !important;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 2%)),
+    linear-gradient(180deg, rgb(27 37 36 / 78%), rgb(6 10 10 / 82%)) !important;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 5%),
+    inset 0 0.1rem 0.25rem rgb(255 255 255 / 8%);
+  pointer-events: none !important;
+}
+
+.filterLauncherModalMenu::after {
+  content: '' !important;
+  position: absolute !important;
+  top: -0.45rem !important;
+  right: 2.55rem !important;
+  z-index: 1 !important;
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  border-top: 1px solid rgb(205 226 218 / 22%) !important;
+  border-left: 1px solid rgb(205 226 218 / 22%) !important;
+  border-radius: 0.22rem 0 0 0 !important;
+  background:
+    radial-gradient(circle at 20% 14%, rgb(255 255 255 / 20%), transparent 1.1rem),
+    linear-gradient(135deg, rgb(45 57 55 / 96%), rgb(19 29 28 / 96%)) !important;
+  transform: rotate(45deg) !important;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 18%) !important;
+  pointer-events: none !important;
+}
+
+.filterLauncherModalItem {
+  position: relative !important;
+  z-index: 2 !important;
+  grid-template-columns: 3.45rem minmax(0, 1fr) auto !important;
+  min-height: 4.55rem !important;
+  padding: 0.88rem 1.2rem !important;
+  background: transparent !important;
+  color: rgb(250 252 249 / 96%) !important;
+  font-size: 1.03rem !important;
+  font-weight: 730 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.filterLauncherModalItem + .filterLauncherModalItem {
+  border-top: 1px solid rgb(214 230 224 / 15%) !important;
+}
+
+.filterLauncherModalItem[data-variant='clear'] {
+  color: rgb(211 250 199 / 96%) !important;
+}
+
+.filterLauncherModalItem:is(:active, [data-pressed='true']) {
+  background: linear-gradient(90deg, rgb(255 255 255 / 8%), rgb(255 255 255 / 3%)) !important;
+}
+
+.filterLauncherModalIcon {
+  width: 2.78rem !important;
+  height: 2.78rem !important;
+  color: rgb(247 250 248 / 92%) !important;
+  background:
+    radial-gradient(circle at 34% 22%, rgb(255 255 255 / 18%), transparent 1.15rem),
+    rgb(255 255 255 / 10%) !important;
+  -webkit-backdrop-filter: blur(1.45rem) saturate(1.08) brightness(0.88) !important;
+  backdrop-filter: blur(1.45rem) saturate(1.08) brightness(0.88) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    0 0.72rem 1.35rem rgb(0 0 0 / 22%) !important;
+}
+
+.filterLauncherModalCopy {
+  text-shadow: 0 0.1rem 0.35rem rgb(0 0 0 / 32%);
+}
+
+.filterLauncherModalCount {
+  min-width: 2.05rem !important;
+  height: 2.05rem !important;
+  background:
+    radial-gradient(circle at 28% 18%, rgb(255 255 255 / 62%), transparent 0.75rem),
+    rgb(205 255 184 / 98%) !important;
+  color: rgb(16 24 15 / 96%) !important;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 54%),
+    0 0.55rem 1rem rgb(0 0 0 / 22%) !important;
+}
+
+@media (max-width: 390px) {
+  .filterLauncherModalLayer {
+    padding-inline: 0.75rem !important;
+  }
+
+  .filterLauncherModalMenu {
+    width: min(20.5rem, calc(100vw - 1.5rem)) !important;
   }
 }

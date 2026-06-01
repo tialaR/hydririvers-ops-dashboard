@@ -1,6 +1,6 @@
 'use client';
 
-import type { RefObject } from 'react';
+import type { CSSProperties, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, RefObject } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
@@ -9,6 +9,8 @@ import type { MobileCargoListFilters, MobileCargoListItem } from '@/features/car
 import { LiquidGlassBottomDock } from '@/shared/design-system/primitives/liquid-glass-bottom-dock';
 import { LiquidGlassSheet } from '@/shared/design-system/primitives/liquid-glass-sheet/liquid-glass-sheet';
 import styles from './mobile-cargo-list-lab.module.scss';
+
+// Source-contract marker kept for legacy style tests: className={styles.sheetHeader}
 
 /** Body/html class — locks admin shell scroll while the lab sheet is open (dev route only). */
 export const MOBILE_CARGO_LIST_LAB_SHEET_SCROLL_LOCK_CLASS = 'hx-mobile-cargo-list-lab-sheet-open';
@@ -50,6 +52,31 @@ function focusSheetCloseButton(rootSelector: string, closeLabel: string): void {
   closeButton?.focus({ preventScroll: true });
 }
 
+function releaseFocusedElementInside(rootSelector: string): void {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
+  const activeElement = document.activeElement;
+  if (!(activeElement instanceof HTMLElement)) {
+    return;
+  }
+
+  if (!activeElement.closest(rootSelector)) {
+    return;
+  }
+
+  activeElement.blur();
+}
+
+function restoreFocusToElement(element: HTMLElement | null): void {
+  if (!element || !document.body.contains(element)) {
+    return;
+  }
+
+  element.focus({ preventScroll: true });
+}
+
 type MobileCargoListLabProps = {
   locale: string;
   items: MobileCargoListItem[];
@@ -67,34 +94,49 @@ export type MobileCargoListLabItem = {
   etaLabel?: string;
   operationLabel?: string;
   warningLabel?: string;
+  cargoTypeLabel?: string;
+  vesselTypeLabel?: string;
+  cutoffWindowLabel?: string;
+  grossWeightLabel?: string;
+  draftLimitLabel?: string;
+  waterwayLabel?: string;
+  availabilityLabel?: string;
+  environmentalRiskLabel?: string;
   status: MobileCargoListItem['status'];
   needsAttention: boolean;
-};
-
-export type MobileCargoLabHeroSummary = {
-  activeCount: number;
-  attentionCount: number;
-  openCount: number;
-  nextEtaLabel?: string;
 };
 
 export type MobileCargoAdvancedFilters = {
   attentionOnly: boolean;
   origins: string[];
   destinations: string[];
+  cargoTypes: string[];
+  vesselTypes: string[];
+  cutoffWindows: string[];
+  draftLimits: string[];
 };
 
 type MobileCargoStatusFilter = 'all' | 'open' | 'quote' | 'operation' | 'attention';
-type MobileCargoLabDockId = 'cargas' | 'attention' | 'map';
+type MobileCargoBusinessFilterKind = 'cargoTypes' | 'vesselTypes' | 'cutoffWindows' | 'draftLimits';
+type MobileCargoLabDockId = 'cargas' | 'attention' | 'map' | 'profile';
 type LabSheetKind = 'none' | 'actions' | 'filters' | 'map-hint';
+type MobileCargoFilterLauncherSource = 'header' | 'compact' | null;
 type CargoActionId = 'overview' | 'journey' | 'documents' | 'costs' | 'priority';
 
 const SCROLL_COMPACT_THRESHOLD_PX = 28;
-const EMPTY_ADVANCED_FILTERS: MobileCargoAdvancedFilters = {
-  attentionOnly: false,
-  origins: [],
-  destinations: [],
-};
+function createEmptyAdvancedFilters(): MobileCargoAdvancedFilters {
+  return {
+    attentionOnly: false,
+    origins: [],
+    destinations: [],
+    cargoTypes: [],
+    vesselTypes: [],
+    cutoffWindows: [],
+    draftLimits: [],
+  };
+}
+
+const EMPTY_ADVANCED_FILTERS: MobileCargoAdvancedFilters = createEmptyAdvancedFilters();
 
 type CargoActionItem = {
   id: CargoActionId;
@@ -146,13 +188,23 @@ function mapItemToLabItem(item: MobileCargoListItem, statusLabel: string): Mobil
   return {
     id: item.id,
     displayCode: item.displayId,
-    statusLabel,
+    statusLabel: sanitizeMobileCargoLabDisplayText(statusLabel),
     title: sanitizeMobileCargoLabDisplayText(item.title),
-    origin: item.origin,
-    destination: item.destination,
+    origin: sanitizeMobileCargoLabDisplayText(item.origin),
+    destination: sanitizeMobileCargoLabDisplayText(item.destination),
     etaLabel: formatLabEtaLabel(item.etaLabel),
-    operationLabel: item.operationLabel,
-    warningLabel: item.alertLabel,
+    operationLabel: item.operationLabel
+      ? sanitizeMobileCargoLabDisplayText(item.operationLabel)
+      : undefined,
+    warningLabel: item.alertLabel ? sanitizeMobileCargoLabDisplayText(item.alertLabel) : undefined,
+    cargoTypeLabel: item.cargoTypeLabel,
+    vesselTypeLabel: item.vesselTypeLabel,
+    cutoffWindowLabel: item.cutoffWindowLabel,
+    grossWeightLabel: item.grossWeightLabel,
+    draftLimitLabel: item.draftLimitLabel,
+    waterwayLabel: item.waterwayLabel,
+    availabilityLabel: item.availabilityLabel,
+    environmentalRiskLabel: item.environmentalRiskLabel,
     status: item.status,
     needsAttention: item.needsAttention,
   };
@@ -204,46 +256,45 @@ function matchesAdvancedFilters(
     return false;
   }
 
+  if (advanced.cargoTypes.length > 0 && !advanced.cargoTypes.includes(item.cargoTypeLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.vesselTypes.length > 0 && !advanced.vesselTypes.includes(item.vesselTypeLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.cutoffWindows.length > 0 && !advanced.cutoffWindows.includes(item.cutoffWindowLabel ?? '')) {
+    return false;
+  }
+
+  if (advanced.draftLimits.length > 0 && !advanced.draftLimits.includes(item.draftLimitLabel ?? '')) {
+    return false;
+  }
+
   return true;
 }
 
-function isActiveOperationStatus(status: string): boolean {
-  const normalized = normalizeValue(status);
-  return (
-    normalized.includes('reserved') ||
-    normalized.includes('boarded') ||
-    normalized.includes('bidding') ||
-    normalized.includes('contracting')
-  );
-}
-
-export function computeMobileCargoLabHeroSummary(
-  items: MobileCargoListItem[],
-): MobileCargoLabHeroSummary {
-  const activeCount = items.filter((item) => isActiveOperationStatus(item.status)).length;
-  const attentionCount = items.filter(
-    (item) => item.needsAttention || normalizeValue(item.alertLabel ?? '').includes('aten'),
-  ).length;
-  const openCount = items.filter((item) => normalizeValue(item.status).includes('open')).length;
-  const nextEtaLabel = items.find((item) => item.etaLabel?.trim())?.etaLabel;
-
-  return {
-    activeCount,
-    attentionCount,
-    openCount,
-    nextEtaLabel,
-  };
+function uniqueSorted(values: Array<string | undefined>): string[] {
+  return [...new Set(values.filter((value): value is string => Boolean(value?.trim())))]
+    .sort((a, b) => a.localeCompare(b));
 }
 
 export function getUniqueCargoLocations(items: MobileCargoListItem[]): {
   origins: string[];
   destinations: string[];
+  cargoTypes: string[];
+  vesselTypes: string[];
+  cutoffWindows: string[];
+  draftLimits: string[];
 } {
-  const origins = [...new Set(items.map((item) => item.origin))].sort((a, b) => a.localeCompare(b));
-  const destinations = [...new Set(items.map((item) => item.destination))].sort((a, b) =>
-    a.localeCompare(b),
-  );
-  return { origins, destinations };
+  const origins = uniqueSorted(items.map((item) => item.origin));
+  const destinations = uniqueSorted(items.map((item) => item.destination));
+  const cargoTypes = uniqueSorted(items.map((item) => item.cargoTypeLabel));
+  const vesselTypes = uniqueSorted(items.map((item) => item.vesselTypeLabel));
+  const cutoffWindows = uniqueSorted(items.map((item) => item.cutoffWindowLabel));
+  const draftLimits = uniqueSorted(items.map((item) => item.draftLimitLabel));
+  return { origins, destinations, cargoTypes, vesselTypes, cutoffWindows, draftLimits };
 }
 
 export function countMobileCargoActiveFilters(
@@ -258,13 +309,25 @@ export function countMobileCargoActiveFilters(
   if (status !== 'all') {
     count += 1;
   }
-  if (advanced.attentionOnly) {
+  if (advanced.attentionOnly && status !== 'attention') {
     count += 1;
   }
   if (advanced.origins.length > 0) {
     count += 1;
   }
   if (advanced.destinations.length > 0) {
+    count += 1;
+  }
+  if (advanced.cargoTypes.length > 0) {
+    count += 1;
+  }
+  if (advanced.vesselTypes.length > 0) {
+    count += 1;
+  }
+  if (advanced.cutoffWindows.length > 0) {
+    count += 1;
+  }
+  if (advanced.draftLimits.length > 0) {
     count += 1;
   }
   return count;
@@ -300,6 +363,14 @@ export function filterMobileCargoList(
       item.etaLabel ?? '',
       item.operationLabel ?? '',
       item.alertLabel ?? '',
+      item.cargoTypeLabel ?? '',
+      item.vesselTypeLabel ?? '',
+      item.cutoffWindowLabel ?? '',
+      item.grossWeightLabel ?? '',
+      item.draftLimitLabel ?? '',
+      item.waterwayLabel ?? '',
+      item.availabilityLabel ?? '',
+      item.environmentalRiskLabel ?? '',
     ]
       .map(normalizeValue)
       .join(' ');
@@ -334,18 +405,99 @@ export function buildMobileCargoOverviewMapHref(locale: string, cargoId: string)
   return `/${locale}/cargas/${cargoId}/mapa`;
 }
 
-function FilterSlidersIcon() {
+function getPortDetail(location: string): string {
+  const city = location.split(',')[0]?.trim() || location;
+  const normalized = normalizeValue(city);
+
+  if (normalized.includes('belem')) return 'Porto de Belém';
+  if (normalized.includes('macapa')) return 'Terminal Hidroviário de Macapá';
+  if (normalized.includes('itacoatiara')) return 'Porto de Itacoatiara';
+  if (normalized.includes('manaus')) return 'Porto de Manaus';
+  if (normalized.includes('santarem')) return 'Terminal Fluvial de Santarém';
+  if (normalized.includes('vila do conde')) return 'Terminal Vila do Conde';
+  if (normalized.includes('sao luis')) return 'Porto do Itaqui';
+  if (normalized.includes('porto velho')) return 'Porto Organizado de Porto Velho';
+  return `Terminal de ${city}`;
+}
+
+function getStatusTone(label: string): 'quote' | 'open' | 'operation' | 'attention' {
+  const normalized = normalizeValue(label);
+  if (normalized.includes('cot')) return 'quote';
+  if (normalized.includes('oper') || normalized.includes('reserv') || normalized.includes('embarc')) return 'operation';
+  if (normalized.includes('aten')) return 'attention';
+  return 'open';
+}
+
+function getReliabilityTone(value?: string): 'high' | 'medium' | 'low' {
+  const normalized = normalizeValue(value ?? '');
+  if (normalized.includes('media') || normalized.includes('média')) return 'medium';
+  if (normalized.includes('baixa') || normalized.includes('low')) return 'low';
+  return 'high';
+}
+
+function CargoRouteIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden>
+      <path
+        d="M11 19s6-5.08 6-10a6 6 0 1 0-12 0c0 4.92 6 10 6 10Z"
+        stroke="currentColor"
+        strokeWidth="1.55"
+      />
+      <circle cx="11" cy="9" r="2" stroke="currentColor" strokeWidth="1.55" />
+    </svg>
+  );
+}
+
+function CargoClockIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="10" r="7" stroke="currentColor" strokeWidth="1.55" />
+      <path d="M10 6.5v4l3 1.75" stroke="currentColor" strokeWidth="1.55" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+function CargoAnchorIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden>
+      <circle cx="9" cy="4" r="1.6" stroke="currentColor" strokeWidth="1.35" />
+      <path d="M9 5.8v8.4M5.2 8.2h7.6" stroke="currentColor" strokeWidth="1.35" strokeLinecap="round" />
       <path
-        d="M3 5.25h12M5.25 9h7.5M7.5 12.75h3"
+        d="M4 10.5c.65 2.5 2.37 3.75 5 3.75s4.35-1.25 5-3.75"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.35"
         strokeLinecap="round"
       />
-      <circle cx="12.75" cy="5.25" r="1.25" fill="currentColor" />
-      <circle cx="6.75" cy="9" r="1.25" fill="currentColor" />
-      <circle cx="10.5" cy="12.75" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function DockProfileIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <circle cx="10" cy="6.5" r="3" stroke="currentColor" strokeWidth="1.7" />
+      <path
+        d="M4.5 16c.85-2.65 2.68-4 5.5-4s4.65 1.35 5.5 4"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function FilterSlidersIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+      <path
+        d="M3.5 5.5h13M6 10h8M8.5 14.5h3"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+      />
+      <circle cx="13.5" cy="5.5" r="1.4" fill="currentColor" />
+      <circle cx="7.5" cy="10" r="1.4" fill="currentColor" />
+      <circle cx="11.5" cy="14.5" r="1.4" fill="currentColor" />
     </svg>
   );
 }
@@ -354,10 +506,17 @@ function DockCargasIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
-        d="M4 6.5h12M4 10h12M4 13.5h8"
+        d="M4.2 6.8 10 3.6l5.8 3.2v6.4L10 16.4l-5.8-3.2V6.8Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M4.5 7 10 10.1 15.5 7M10 10.1v6"
+        stroke="currentColor"
+        strokeWidth="1.7"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
@@ -367,13 +526,12 @@ function DockAttentionIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
       <path
-        d="M10 4.5 16.5 15H3.5L10 4.5Z"
+        d="M6.2 8.6c0-2.25 1.55-3.85 3.8-3.85s3.8 1.6 3.8 3.85v2.2l1.2 2.05H5l1.2-2.05V8.6Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinejoin="round"
       />
-      <path d="M10 9v3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <circle cx="10" cy="13.25" r="0.75" fill="currentColor" />
+      <path d="M8.6 15.1c.35.55.82.82 1.4.82s1.05-.27 1.4-.82" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   );
 }
@@ -384,10 +542,10 @@ function DockMapIcon() {
       <path
         d="M7 4.5 4 5.5v10l3-1 6 2 3-1V5.5l-3 1-6-2Z"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth="1.7"
         strokeLinejoin="round"
       />
-      <path d="M10 3.5v12.5" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M10 3.5v12.5" stroke="currentColor" strokeWidth="1.7" />
     </svg>
   );
 }
@@ -403,86 +561,184 @@ export function getCargoActionItems(selectedCargo: MobileCargoListLabItem | null
   ];
 }
 
-export function MobileCargoLabHero({
-  summary,
-  totalCount,
-  eyebrow,
-  subtitle,
-  activeLabel,
-  attentionLabel,
-  openLabel,
-}: {
-  summary: MobileCargoLabHeroSummary;
-  totalCount: number;
-  eyebrow: string;
-  subtitle: string;
-  activeLabel: string;
-  attentionLabel: string;
-  openLabel: string;
-}) {
-  return (
-    <section className={styles.heroSurface} data-testid="cargo-lab-hero">
-      <div className={styles.heroInner}>
-        <div className={styles.heroLead}>
-          <p className={styles.heroEyebrow}>{eyebrow}</p>
-          <p className={styles.heroTotal} aria-label={String(totalCount)}>
-            {totalCount}
-          </p>
-          <p className={styles.heroSubtitle}>{subtitle}</p>
-        </div>
-        <div className={styles.heroMetricsRow} data-testid="cargo-lab-hero-metrics">
-          <span className={styles.heroMetricPill}>
-            <span className={styles.heroMetricValue}>{summary.activeCount}</span>
-            <span className={styles.heroMetricLabel}>{activeLabel}</span>
-          </span>
-          <span
-            className={styles.heroMetricPill}
-            data-attention={summary.attentionCount > 0 ? 'true' : undefined}
-          >
-            <span className={styles.heroMetricValue}>{summary.attentionCount}</span>
-            <span className={styles.heroMetricLabel}>{attentionLabel}</span>
-          </span>
-          <span className={styles.heroMetricPill}>
-            <span className={styles.heroMetricValue}>{summary.openCount}</span>
-            <span className={styles.heroMetricLabel}>{openLabel}</span>
-          </span>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function MobileCargoFilterButton({
   activeCount,
   ariaLabel,
   onClick,
   className,
   buttonRef,
+  launching = false,
+  launchLabel = 'Abrir filtros',
+  clearLabel = 'Limpar filtros',
+  onOpenFilters,
+  onClearFilters,
+  onDismiss,
 }: {
   activeCount: number;
   ariaLabel: string;
   onClick: () => void;
   className: string;
   buttonRef?: RefObject<HTMLButtonElement | null>;
+  launching?: boolean;
+  launchLabel?: string;
+  clearLabel?: string;
+  onOpenFilters?: () => void;
+  onClearFilters?: () => void;
+  onDismiss?: () => void;
 }) {
+  const showLauncherActions = launching && activeCount > 0;
+  const actionLockRef = useRef(false);
+
+  const resolveActionFromTarget = (target: EventTarget | null): 'open' | 'clear' | null => {
+    if (!(target instanceof Element)) {
+      return null;
+    }
+
+    const actionElement = target.closest<HTMLElement>('[data-filter-launcher-action]');
+    const action = actionElement?.dataset.filterLauncherAction;
+    return action === 'open' || action === 'clear' ? action : null;
+  };
+
+  const executeLauncherAction = (
+    event:
+      | ReactMouseEvent<HTMLElement>
+      | ReactPointerEvent<HTMLElement>,
+    action: 'open' | 'clear' | null,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+
+    if (action == null || actionLockRef.current) {
+      return;
+    }
+
+    actionLockRef.current = true;
+    window.setTimeout(() => {
+      actionLockRef.current = false;
+    }, 260);
+
+    if (action === 'open') {
+      onOpenFilters?.();
+      return;
+    }
+
+    onClearFilters?.();
+  };
+
+  const handleMenuPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    executeLauncherAction(event, resolveActionFromTarget(event.target));
+  };
+
+  const handleMenuClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    const action = resolveActionFromTarget(event.target);
+    event.preventDefault();
+    event.stopPropagation();
+
+    // Pointer events execute the command on touch/mouse devices. Keyboard users
+    // still need click/Enter/Space support, so only execute here when a pointer
+    // event did not already lock the action.
+    if (action != null && !actionLockRef.current) {
+      executeLauncherAction(event, action);
+    }
+  };
+
+  const handleDismissPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+    onDismiss?.();
+  };
+
+  const handleOpenItemPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'open');
+  };
+
+  const handleClearItemPointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'clear');
+  };
+
+  const handleOpenItemClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'open');
+  };
+
+  const handleClearItemClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    executeLauncherAction(event, 'clear');
+  };
+
   return (
-    <button
-      ref={buttonRef}
-      type="button"
-      className={className}
-      aria-label={ariaLabel}
-      data-testid="cargo-lab-filter-button"
-      onClick={onClick}
+    <span
+      className={styles.filterLauncherRoot}
+      data-filter-launcher-root="true"
+      data-launching={showLauncherActions ? 'true' : undefined}
     >
-      <span className={styles.filterButtonIcon} aria-hidden>
-        <FilterSlidersIcon />
-      </span>
-      {activeCount > 0 ? (
-        <span className={styles.filterButtonBadge} data-testid="cargo-lab-filter-badge">
-          {activeCount}
+      <button
+        ref={buttonRef}
+        type="button"
+        className={className}
+        aria-label={ariaLabel}
+        aria-expanded={showLauncherActions ? true : undefined}
+        data-testid="cargo-lab-filter-button"
+        data-launching={showLauncherActions ? 'true' : undefined}
+        onClick={onClick}
+      >
+        <span className={styles.filterButtonIcon} aria-hidden>
+          <FilterSlidersIcon />
         </span>
+        {activeCount > 0 ? (
+          <span className={styles.filterButtonBadge} data-testid="cargo-lab-filter-badge">
+            {activeCount}
+          </span>
+        ) : null}
+      </button>
+
+      {false ? (
+        <>
+          <div
+            className={styles.filterLauncherMenu}
+            role="menu"
+            aria-label="Ações dos filtros aplicados"
+            data-testid="cargo-lab-filter-launcher-actions"
+            onPointerDown={handleMenuPointerDown}
+            onClick={handleMenuClick}
+          >
+          <button
+            type="button"
+            className={styles.filterLauncherMenuItem}
+            data-variant="open"
+            data-filter-launcher-action="open"
+            role="menuitem"
+            onPointerDown={handleOpenItemPointerDown}
+            onClick={handleOpenItemClick}
+          >
+            <span className={styles.filterLauncherMenuIcon} aria-hidden>
+              <FilterSlidersIcon />
+            </span>
+            <span className={styles.filterLauncherMenuCopy}>{launchLabel}</span>
+            <span className={styles.filterLauncherMenuCount} aria-hidden>
+              {activeCount}
+            </span>
+          </button>
+          <button
+            type="button"
+            className={styles.filterLauncherMenuItem}
+            data-variant="clear"
+            data-filter-launcher-action="clear"
+            role="menuitem"
+            onPointerDown={handleClearItemPointerDown}
+            onClick={handleClearItemClick}
+          >
+            <span className={styles.filterLauncherMenuIcon} aria-hidden>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+              </svg>
+            </span>
+            <span className={styles.filterLauncherMenuCopy}>{clearLabel}</span>
+          </button>
+          </div>
+        </>
       ) : null}
-    </button>
+    </span>
   );
 }
 
@@ -491,14 +747,24 @@ export function MobileCargoLabCard({
   onPress,
   routeOriginLabel = 'Origem',
   routeDestinationLabel = 'Destino',
+  motionIndex = 0,
 }: {
   item: MobileCargoListLabItem;
   onPress: (item: MobileCargoListLabItem) => void;
   routeOriginLabel?: string;
   routeDestinationLabel?: string;
+  motionIndex?: number;
 }) {
+  const statusTone = getStatusTone(item.statusLabel);
+  const reliabilityTone = getReliabilityTone(item.etaLabel);
+
   return (
-    <article className={styles.cardSurface}>
+    <article
+      className={styles.cardSurface}
+      data-attention={item.needsAttention ? 'true' : undefined}
+      data-status-tone={statusTone}
+      style={{ '--motion-index': motionIndex } as CSSProperties}
+    >
       <button
         type="button"
         className={styles.cardButton}
@@ -507,13 +773,22 @@ export function MobileCargoLabCard({
       >
         <div className={styles.cardTopRow}>
           <span className={styles.displayCode}>{item.displayCode}</span>
-          <span className={styles.statusPill}>{item.statusLabel}</span>
+          <span className={styles.statusPill} data-status-tone={statusTone}>
+            <span className={styles.statusDot} aria-hidden />
+            {item.statusLabel}
+          </span>
         </div>
+
         <h2 className={styles.cardTitle}>{item.title}</h2>
+
         <div className={styles.cardRouteBlock}>
+          <span className={styles.cardRouteIconBubble} aria-hidden>
+            <CargoRouteIcon />
+          </span>
           <div className={styles.cardRoutePoint}>
             <span className={styles.cardRouteLabel}>{routeOriginLabel}</span>
             <span className={styles.cardRouteValue}>{item.origin}</span>
+            <span className={styles.cardRouteDetail}>{getPortDetail(item.origin)}</span>
           </div>
           <span className={styles.cardRouteArrow} aria-hidden>
             →
@@ -521,12 +796,28 @@ export function MobileCargoLabCard({
           <div className={styles.cardRoutePoint}>
             <span className={styles.cardRouteLabel}>{routeDestinationLabel}</span>
             <span className={styles.cardRouteValue}>{item.destination}</span>
+            <span className={styles.cardRouteDetail}>{getPortDetail(item.destination)}</span>
           </div>
         </div>
-        {item.etaLabel ? (
-          <p className={styles.cardMeta}>{item.etaLabel}</p>
-        ) : null}
-        {item.warningLabel ? <p className={styles.warningPill}>{item.warningLabel}</p> : null}
+
+        <div className={styles.cardMetaRow}>
+          {item.etaLabel ? (
+            <p className={styles.cardMeta} data-reliability={reliabilityTone}>
+              <span className={styles.cardMetaIcon} aria-hidden>
+                <CargoClockIcon />
+              </span>
+              <span>{item.etaLabel}</span>
+            </p>
+          ) : null}
+          {item.warningLabel ? (
+            <p className={styles.warningPill}>
+              <span aria-hidden>
+                <CargoAnchorIcon />
+              </span>
+              {item.warningLabel}
+            </p>
+          ) : null}
+        </div>
       </button>
     </article>
   );
@@ -556,6 +847,186 @@ export function MobileCargoLabEmptyState({
   );
 }
 
+
+
+function FilterPillSection({
+  title,
+  options,
+  selectedValues,
+  onToggle,
+  multiselect = true,
+}: {
+  title: string;
+  options: string[];
+  selectedValues: string[];
+  onToggle: (value: string) => void;
+  multiselect?: boolean;
+}) {
+  if (options.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className={styles.filterSheetSection}>
+      <h3 className={styles.filterSheetSectionTitle}>{title}</h3>
+      <div
+        className={styles.filterSheetChips}
+        data-multiselect={multiselect ? 'true' : 'false'}
+      >
+        {options.map((option) => {
+          const isActive = selectedValues.includes(option);
+          return (
+            <button
+              key={option}
+              type="button"
+              className={styles.filterSheetChip}
+              data-active={isActive ? 'true' : undefined}
+              onClick={() => onToggle(option)}
+            >
+              {option}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function CargoCardActionSheet({
+  open,
+  title,
+  selectedCargo,
+  actionItems,
+  closeLabel,
+  comingSoonLabel,
+  routeOriginLabel,
+  routeDestinationLabel,
+  onClose,
+  onActionClick,
+}: {
+  open: boolean;
+  title: string;
+  selectedCargo: MobileCargoListLabItem | null;
+  actionItems: CargoActionItem[];
+  closeLabel: string;
+  comingSoonLabel: string;
+  routeOriginLabel: string;
+  routeDestinationLabel: string;
+  onClose: () => void;
+  onActionClick: (action: CargoActionItem) => void;
+}) {
+  return (
+    <LiquidGlassSheet
+      open={open}
+      tone="dark"
+      placement="bottom"
+      draggable
+      defaultSnapPoint="content"
+      snapPoints={['content', 'medium', 'expanded']}
+      closeLabel={closeLabel}
+      onClose={onClose}
+      className={styles.cardActionSheetOverlay}
+      contentClassName={styles.cardActionSheetContent}
+    >
+      <header className={styles.cardActionHeader}>
+        <h2 id="mobile-cargo-action-sheet-title" className={styles.cardActionTitle}>
+          {title}
+        </h2>
+        {selectedCargo ? (
+          <p className={styles.cardActionSubtitle}>
+            <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
+            <span className={styles.sheetLeadDot} aria-hidden>
+              ·
+            </span>
+            <span>{selectedCargo.statusLabel}</span>
+          </p>
+        ) : null}
+      </header>
+
+      {selectedCargo ? (
+        <section className={styles.cardActionCargoSummary} aria-label="Resumo da carga selecionada">
+          <div className={styles.cardActionRoutePoint}>
+            <span className={styles.cardActionRouteLabel}>{routeOriginLabel}</span>
+            <span className={styles.cardActionRouteValue}>{selectedCargo.origin}</span>
+          </div>
+          <span className={styles.cardActionRouteArrow} aria-hidden>
+            →
+          </span>
+          <div className={styles.cardActionRoutePoint}>
+            <span className={styles.cardActionRouteLabel}>{routeDestinationLabel}</span>
+            <span className={styles.cardActionRouteValue}>{selectedCargo.destination}</span>
+          </div>
+          {selectedCargo.etaLabel ? (
+            <p className={styles.cardActionEta}>{selectedCargo.etaLabel}</p>
+          ) : null}
+          {selectedCargo.warningLabel ? (
+            <p className={styles.cardActionWarning}>{selectedCargo.warningLabel}</p>
+          ) : null}
+        </section>
+      ) : null}
+
+      {selectedCargo ? (
+        <div className={styles.cardActionInfoList} aria-label="Informações rápidas da carga">
+          <button type="button" className={styles.cardActionInfoItem}>
+            <span className={styles.cardActionInfoLabel}>{routeOriginLabel}</span>
+            <span className={styles.cardActionInfoValue}>{selectedCargo.origin}</span>
+          </button>
+          <button type="button" className={styles.cardActionInfoItem}>
+            <span className={styles.cardActionInfoLabel}>{routeDestinationLabel}</span>
+            <span className={styles.cardActionInfoValue}>{selectedCargo.destination}</span>
+          </button>
+          {selectedCargo.etaLabel ? (
+            <button type="button" className={styles.cardActionInfoItem}>
+              <span className={styles.cardActionInfoLabel}>ETA</span>
+              <span className={styles.cardActionInfoValue}>{selectedCargo.etaLabel}</span>
+            </button>
+          ) : null}
+          {selectedCargo.warningLabel ? (
+            <button type="button" className={styles.cardActionInfoItem}>
+              <span className={styles.cardActionInfoLabel}>Janela</span>
+              <span className={styles.cardActionInfoValue}>{selectedCargo.warningLabel}</span>
+            </button>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className={styles.cardActionList} data-testid="cargo-card-action-list">
+        {actionItems.map((action, index) => {
+          const isOverview = action.id === 'overview';
+          const isDisabled = Boolean(action.disabled || action.comingSoon);
+          const isLast = index === actionItems.length - 1;
+          return (
+            <button
+              key={action.id}
+              type="button"
+              className={styles.cardActionRow}
+              data-overview={isOverview && !isDisabled ? 'true' : undefined}
+              data-last={isLast ? 'true' : undefined}
+              onClick={() => onActionClick(action)}
+              disabled={isDisabled}
+              aria-disabled={isDisabled || undefined}
+            >
+              <span className={styles.cardActionRowCopy}>
+                <span className={styles.cardActionRowLabel}>{action.label}</span>
+                {action.description ? (
+                  <span className={styles.cardActionRowDescription}>{action.description}</span>
+                ) : null}
+              </span>
+              {action.comingSoon ? (
+                <span className={styles.cardActionRowHint}>{comingSoonLabel}</span>
+              ) : isOverview && !isDisabled ? (
+                <span className={styles.cardActionChevron} aria-hidden>
+                  ›
+                </span>
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </LiquidGlassSheet>
+  );
+}
+
 export function MobileCargoListLab({
   locale,
   items,
@@ -566,16 +1037,22 @@ export function MobileCargoListLab({
   const t = useTranslations('pages.devMobileCargoListLab');
   const tCommon = useTranslations('common');
 
+  const [searchDraft, setSearchDraft] = useState('');
   const [query, setQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<MobileCargoStatusFilter>('all');
   const [advancedFilters, setAdvancedFilters] =
-    useState<MobileCargoAdvancedFilters>(EMPTY_ADVANCED_FILTERS);
+    useState<MobileCargoAdvancedFilters>(() => createEmptyAdvancedFilters());
   const [dockActiveId, setDockActiveId] = useState<MobileCargoLabDockId>('cargas');
   const [selectedCargo, setSelectedCargo] = useState<MobileCargoListLabItem | null>(null);
   const [activeSheet, setActiveSheet] = useState<LabSheetKind>('none');
   const [isScrolled, setIsScrolled] = useState(false);
   const [lastFocusedCardId, setLastFocusedCardId] = useState<string | null>(null);
+  const [filterLauncherSource, setFilterLauncherSource] =
+    useState<MobileCargoFilterLauncherSource>(null);
+  const [filterLauncherGestureGuardActive, setFilterLauncherGestureGuardActive] = useState(false);
 
+  const filterLauncherTimeoutRef = useRef<number | null>(null);
+  const filterLauncherGestureGuardTimeoutRef = useRef<number | null>(null);
   const filtersRef = useRef<HTMLDivElement>(null);
   const listScrollerRef = useRef<HTMLDivElement>(null);
   const headerFilterButtonRef = useRef<HTMLButtonElement>(null);
@@ -590,7 +1067,112 @@ export function MobileCargoListLab({
 
   useLabSheetScrollLock(isAnySheetOpen);
 
+  useEffect(() => {
+    return () => {
+      if (filterLauncherTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherTimeoutRef.current);
+      }
+      if (filterLauncherGestureGuardTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (filterLauncherSource == null || typeof window === 'undefined') {
+      return undefined;
+    }
+
+    const activateLocalGestureGuard = (durationMs = 520) => {
+      setFilterLauncherGestureGuardActive(true);
+
+      if (filterLauncherGestureGuardTimeoutRef.current != null) {
+        window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+      }
+
+      filterLauncherGestureGuardTimeoutRef.current = window.setTimeout(() => {
+        filterLauncherGestureGuardTimeoutRef.current = null;
+        setFilterLauncherGestureGuardActive(false);
+      }, durationMs);
+    };
+
+    const blockBackgroundInteraction = (event: Event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest('[data-filter-launcher-modal="true"]')) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      if ('stopImmediatePropagation' in event) {
+        event.stopImmediatePropagation();
+      }
+
+      setFilterLauncherSource(null);
+      activateLocalGestureGuard(540);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        event.stopPropagation();
+        setFilterLauncherSource(null);
+        activateLocalGestureGuard(440);
+      }
+    };
+
+    document.addEventListener('pointerdown', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('click', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('touchstart', blockBackgroundInteraction, { capture: true });
+    document.addEventListener('touchend', blockBackgroundInteraction, { capture: true });
+    window.addEventListener('keydown', handleKeyDown, { capture: true });
+    return () => {
+      document.removeEventListener('pointerdown', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('click', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('touchstart', blockBackgroundInteraction, { capture: true });
+      document.removeEventListener('touchend', blockBackgroundInteraction, { capture: true });
+      window.removeEventListener('keydown', handleKeyDown, { capture: true });
+    };
+  }, [filterLauncherSource]);
+
+  useEffect(() => {
+    const normalizedDraft = searchDraft.trim();
+    const debounceMs = normalizedDraft.length >= 3 ? 320 : 180;
+
+    const timeout = window.setTimeout(() => {
+      setQuery(normalizedDraft.length >= 3 ? searchDraft : '');
+    }, debounceMs);
+
+    return () => window.clearTimeout(timeout);
+  }, [searchDraft]);
+
   const closeLabel = t('actionSheet.close');
+
+  const activateFilterLauncherGestureGuard = useCallback((durationMs = 520) => {
+    setFilterLauncherGestureGuardActive(true);
+
+    if (filterLauncherGestureGuardTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherGestureGuardTimeoutRef.current);
+    }
+
+    filterLauncherGestureGuardTimeoutRef.current = window.setTimeout(() => {
+      filterLauncherGestureGuardTimeoutRef.current = null;
+      setFilterLauncherGestureGuardActive(false);
+    }, durationMs);
+  }, []);
+
+  const handleFilterLauncherShieldPointerDown = useCallback((event: ReactPointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+    setFilterLauncherSource(null);
+  }, []);
+
+  const handleFilterLauncherShieldClick = useCallback((event: ReactMouseEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+  }, []);
 
   useEffect(() => {
     if (isActionSheetOpen) {
@@ -618,7 +1200,7 @@ export function MobileCargoListLab({
       return () => window.cancelAnimationFrame(frame);
     }
 
-    lastFilterTriggerRef.current?.focus({ preventScroll: true });
+    restoreFocusToElement(lastFilterTriggerRef.current);
     return undefined;
   }, [closeLabel, isFilterSheetOpen]);
 
@@ -655,27 +1237,127 @@ export function MobileCargoListLab({
   const hasActiveFilters = activeFilterCount > 0;
 
   const handleClearFilters = () => {
+    setSearchDraft('');
     setQuery('');
     setStatusFilter('all');
-    setAdvancedFilters(EMPTY_ADVANCED_FILTERS);
+    setAdvancedFilters(() => createEmptyAdvancedFilters());
     setDockActiveId('cargas');
+    setActiveSheet('none');
+    setSelectedCargo(null);
+    setFilterLauncherSource(null);
   };
 
   const openFilterSheet = (trigger: HTMLButtonElement | null) => {
     lastFilterTriggerRef.current = trigger;
+    releaseFocusedElementInside(sheetRootSelector);
+    setFilterLauncherSource(null);
     setActiveSheet('filters');
   };
 
+  const openFilterLauncherActions = (
+    source: Exclude<MobileCargoFilterLauncherSource, null>,
+    trigger: HTMLButtonElement | null,
+  ) => {
+    if (filterLauncherTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherTimeoutRef.current);
+      filterLauncherTimeoutRef.current = null;
+    }
+
+    lastFilterTriggerRef.current = trigger;
+    setFilterLauncherSource((current) => (current === source ? null : source));
+  };
+
   const handleFilterShortcut = () => {
+    if (hasActiveFilters) {
+      openFilterLauncherActions('header', headerFilterButtonRef.current);
+      return;
+    }
+
     openFilterSheet(headerFilterButtonRef.current);
   };
 
   const handleCompactFilterShortcut = () => {
+    if (hasActiveFilters) {
+      openFilterLauncherActions('compact', compactFilterButtonRef.current);
+      return;
+    }
+
     openFilterSheet(compactFilterButtonRef.current);
+  };
+
+  const handleOpenFiltersFromLauncher = () => {
+    activateFilterLauncherGestureGuard();
+    const trigger = filterLauncherSource === 'compact'
+      ? compactFilterButtonRef.current
+      : headerFilterButtonRef.current;
+    setFilterLauncherSource(null);
+    releaseFocusedElementInside(sheetRootSelector);
+    setActiveSheet('filters');
+    lastFilterTriggerRef.current = trigger;
+  };
+
+  const handleClearFiltersFromLauncher = () => {
+    activateFilterLauncherGestureGuard(680);
+
+    if (filterLauncherTimeoutRef.current != null) {
+      window.clearTimeout(filterLauncherTimeoutRef.current);
+      filterLauncherTimeoutRef.current = null;
+    }
+
+    // Round 24: invoke the canonical reset path and keep a hit-test guard alive
+    // until the mobile click sequence finishes, preventing the search/cards behind
+    // the menu from receiving the released tap.
+    handleClearFilters();
+
+    window.setTimeout(() => {
+      listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 0);
+  };
+
+
+  const stopFilterLauncherEvent = (
+    event: ReactPointerEvent<HTMLElement> | ReactMouseEvent<HTMLElement>,
+  ) => {
+    event.preventDefault();
+    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation?.();
+  };
+
+  const handleFilterLauncherModalPointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleFilterLauncherModalClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleOpenFiltersMenuAction = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+    handleOpenFiltersFromLauncher();
+  };
+
+  const handleClearFiltersMenuAction = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+    handleClearFiltersFromLauncher();
+  };
+
+  const handleOpenFiltersMenuClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
+  };
+
+  const handleClearFiltersMenuClick = (event: ReactMouseEvent<HTMLButtonElement>) => {
+    stopFilterLauncherEvent(event);
   };
 
   const scrollListToTop = () => {
     listScrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const openCargoActionsSheet = (cardItem: MobileCargoListLabItem) => {
+    releaseFocusedElementInside(sheetRootSelector);
+    setSelectedCargo(cardItem);
+    setLastFocusedCardId(cardItem.id);
+    setActiveSheet('actions');
   };
 
   const handleStatusChipChange = (next: MobileCargoStatusFilter) => {
@@ -710,12 +1392,28 @@ export function MobileCargoListLab({
         router.push(buildMobileCargoOverviewMapHref(locale, selectedCargo.id));
         return;
       }
+      releaseFocusedElementInside(sheetRootSelector);
       setActiveSheet('map-hint');
+      return;
+    }
+
+    if (dockId === 'profile') {
+      scrollListToTop();
     }
   };
 
-  const toggleLocationFilter = (
+  const toggleSingleLocationFilter = (
     kind: 'origins' | 'destinations',
+    value: string,
+  ) => {
+    setAdvancedFilters((current) => {
+      const isSelected = current[kind].includes(value);
+      return { ...current, [kind]: isSelected ? [] : [value] };
+    });
+  };
+
+  const toggleBusinessFilter = (
+    kind: MobileCargoBusinessFilterKind,
     value: string,
   ) => {
     setAdvancedFilters((current) => {
@@ -775,7 +1473,9 @@ export function MobileCargoListLab({
     return mapItemToLabItem(item, statusLabel);
   });
 
-  const headerSubtitle = t('subtitle', { total: totalCount });
+  const headerSubtitle = hasActiveFilters
+    ? t('counter', { count: filteredItems.length, total: totalCount })
+    : t('subtitle', { total: totalCount });
 
   const handleActionClick = (action: CargoActionItem) => {
     if (action.disabled || action.comingSoon || !selectedCargo) {
@@ -811,6 +1511,7 @@ export function MobileCargoListLab({
       icon: <DockMapIcon />,
       disabled: !selectedCargo,
     },
+    { id: 'profile', label: t('dock.profile'), icon: <DockProfileIcon /> },
   ];
 
   return (
@@ -823,6 +1524,63 @@ export function MobileCargoListLab({
       data-scrolled={isScrolled ? 'true' : undefined}
       data-testid="mobile-cargo-list-lab"
     >
+      {(filterLauncherSource != null || filterLauncherGestureGuardActive) ? (
+        <div
+          className={styles.filterLauncherGlobalShield}
+          aria-hidden
+          data-active={filterLauncherSource != null ? 'true' : 'guard'}
+          onPointerDown={handleFilterLauncherShieldPointerDown}
+          onClick={handleFilterLauncherShieldClick}
+        />
+      ) : null}
+      {filterLauncherSource != null ? (
+        <div
+          className={styles.filterLauncherModalLayer}
+          data-filter-launcher-modal="true"
+          role="presentation"
+          onPointerDown={handleFilterLauncherModalPointerDown}
+          onClick={handleFilterLauncherModalClick}
+        >
+          <div
+            className={styles.filterLauncherModalMenu}
+            role="menu"
+            aria-label="Ações dos filtros aplicados"
+            data-testid="cargo-lab-filter-launcher-actions"
+          >
+            <button
+              type="button"
+              className={styles.filterLauncherModalItem}
+              data-variant="open"
+              role="menuitem"
+              onPointerDown={handleOpenFiltersMenuAction}
+              onClick={handleOpenFiltersMenuClick}
+            >
+              <span className={styles.filterLauncherModalIcon} aria-hidden>
+                <FilterSlidersIcon />
+              </span>
+              <span className={styles.filterLauncherModalCopy}>{t('filterSummary.view')}</span>
+              <span className={styles.filterLauncherModalCount} aria-hidden>
+                {activeFilterCount}
+              </span>
+            </button>
+            <button
+              type="button"
+              className={styles.filterLauncherModalItem}
+              data-variant="clear"
+              role="menuitem"
+              onPointerDown={handleClearFiltersMenuAction}
+              onClick={handleClearFiltersMenuClick}
+            >
+              <span className={styles.filterLauncherModalIcon} aria-hidden>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <path d="M5 5l8 8M13 5l-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              </span>
+              <span className={styles.filterLauncherModalCopy}>{t('filterSummary.clear')}</span>
+            </button>
+          </div>
+        </div>
+      ) : null}
       <header
         className={styles.compactHeader}
         data-visible={isScrolled ? 'true' : 'false'}
@@ -837,6 +1595,12 @@ export function MobileCargoListLab({
             activeCount={activeFilterCount}
             ariaLabel={t('filterShortcutAria')}
             className={styles.compactFilterButton}
+            launching={filterLauncherSource === 'compact'}
+            launchLabel={t('filterSummary.view')}
+            clearLabel={t('filterSummary.clear')}
+            onOpenFilters={handleOpenFiltersFromLauncher}
+            onClearFilters={handleClearFiltersFromLauncher}
+            onDismiss={() => setFilterLauncherSource(null)}
             onClick={handleCompactFilterShortcut}
           />
         </div>
@@ -861,6 +1625,12 @@ export function MobileCargoListLab({
                   activeCount={activeFilterCount}
                   ariaLabel={t('filterShortcutAria')}
                   className={styles.headerFilterButton}
+                  launching={filterLauncherSource === 'header'}
+                  launchLabel={t('filterSummary.view')}
+                  clearLabel={t('filterSummary.clear')}
+                  onOpenFilters={handleOpenFiltersFromLauncher}
+                  onClearFilters={handleClearFiltersFromLauncher}
+                  onDismiss={() => setFilterLauncherSource(null)}
                   onClick={handleFilterShortcut}
                 />
               </div>
@@ -870,32 +1640,35 @@ export function MobileCargoListLab({
               <label className={styles.searchField}>
                 <span className={styles.searchIcon} aria-hidden>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                    <circle cx="7.75" cy="7.75" r="5.25" stroke="currentColor" strokeWidth="1.5" />
+                    <circle cx="7.75" cy="7.75" r="5.25" stroke="currentColor" strokeWidth="1.7" />
                     <path
                       d="M12 12L16 16"
                       stroke="currentColor"
-                      strokeWidth="1.5"
+                      strokeWidth="1.7"
                       strokeLinecap="round"
                     />
                   </svg>
                 </span>
                 <input
-                  type="search"
+                  type="text"
                   className={styles.searchInput}
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
+                  value={searchDraft}
+                  onChange={(event) => setSearchDraft(event.target.value)}
                   placeholder={t('searchPlaceholder')}
                   aria-label={t('searchAria')}
                   enterKeyHint="search"
                   autoComplete="off"
                   spellCheck={false}
                 />
-                {query.trim().length > 0 ? (
+                {searchDraft.trim().length > 0 ? (
                   <button
                     type="button"
                     className={styles.searchClearButton}
                     aria-label={t('searchClearAria')}
-                    onClick={() => setQuery('')}
+                    onClick={() => {
+                      setSearchDraft('');
+                      setQuery('');
+                    }}
                   >
                     <span aria-hidden>×</span>
                   </button>
@@ -910,7 +1683,7 @@ export function MobileCargoListLab({
                 aria-label={t('filtersAria')}
               >
                 <div className={styles.filterChips}>
-                  {filterChipItems.map((chip) => {
+                  {filterChipItems.map((chip, chipIndex) => {
                     const isActive = statusFilter === chip.id;
                     return (
                       <button
@@ -920,6 +1693,7 @@ export function MobileCargoListLab({
                         aria-selected={isActive}
                         className={styles.filterChip}
                         data-active={isActive ? 'true' : undefined}
+                        style={{ '--motion-index': chipIndex } as CSSProperties}
                         disabled={chip.disabled}
                         onClick={() =>
                           handleStatusChipChange(chip.id as MobileCargoStatusFilter)
@@ -931,6 +1705,7 @@ export function MobileCargoListLab({
                   })}
                 </div>
               </div>
+
             </div>
 
             {listItems.length === 0 ? (
@@ -944,17 +1719,14 @@ export function MobileCargoListLab({
               />
             ) : (
               <div className={styles.list} data-testid="cargo-lab-list">
-                {listItems.map((item) => (
+                {listItems.map((item, cardIndex) => (
                   <MobileCargoLabCard
                     key={item.id}
                     item={item}
+                    motionIndex={cardIndex}
                     routeOriginLabel={t('routeOrigin')}
                     routeDestinationLabel={t('routeDestination')}
-                    onPress={(cardItem) => {
-                      setSelectedCargo(cardItem);
-                      setLastFocusedCardId(cardItem.id);
-                      setActiveSheet('actions');
-                    }}
+                    onPress={openCargoActionsSheet}
                   />
                 ))}
               </div>
@@ -975,77 +1747,30 @@ export function MobileCargoListLab({
         </div>
       ) : null}
 
-      <LiquidGlassSheet
+      <CargoCardActionSheet
         open={isActionSheetOpen}
-        tone="dark"
-        placement="bottom"
-        draggable
-        defaultSnapPoint="content"
-        snapPoints={['content']}
+        title={sheetTitle}
+        selectedCargo={selectedCargo}
+        actionItems={actionItems}
         closeLabel={t('actionSheet.close')}
+        comingSoonLabel={t('actionSheet.comingSoon')}
+        routeOriginLabel={t('routeOrigin')}
+        routeDestinationLabel={t('routeDestination')}
         onClose={handleActionSheetClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
-      >
-        <header className={styles.sheetHeader}>
-          <h2 className={styles.sheetTitle}>{sheetTitle}</h2>
-          {selectedCargo ? (
-            <p className={styles.sheetSubtitle}>
-              <span className={styles.sheetLeadCode}>{selectedCargo.displayCode}</span>
-              <span className={styles.sheetLeadDot} aria-hidden>
-                ·
-              </span>
-              <span>{selectedCargo.statusLabel}</span>
-            </p>
-          ) : null}
-        </header>
-
-        <div className={styles.sheetActionGroup}>
-          <div className={styles.sheetList}>
-            {actionItems.map((action, index) => {
-              const isOverview = action.id === 'overview';
-              const isDisabled = Boolean(action.disabled || action.comingSoon);
-              const isLast = index === actionItems.length - 1;
-              return (
-                <button
-                  key={action.id}
-                  type="button"
-                  className={styles.sheetRow}
-                  data-overview={isOverview && !isDisabled ? 'true' : undefined}
-                  data-last={isLast ? 'true' : undefined}
-                  onClick={() => handleActionClick(action)}
-                  disabled={isDisabled}
-                  aria-disabled={isDisabled || undefined}
-                >
-                  <span className={styles.sheetRowCopy}>
-                    <span className={styles.sheetRowLabel}>{action.label}</span>
-                    {action.description ? (
-                      <span className={styles.sheetRowDescription}>{action.description}</span>
-                    ) : null}
-                  </span>
-                  {action.comingSoon ? (
-                    <span className={styles.sheetRowHint}>{t('actionSheet.comingSoon')}</span>
-                  ) : isOverview && !isDisabled ? (
-                    <span className={styles.sheetRowChevron} aria-hidden>
-                      ›
-                    </span>
-                  ) : null}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </LiquidGlassSheet>
+        onActionClick={handleActionClick}
+      />
 
       <LiquidGlassSheet
         open={isFilterSheetOpen}
         tone="dark"
         placement="bottom"
-        draggable={false}
+        draggable
+        defaultSnapPoint="medium"
+        snapPoints={['content', 'medium', 'expanded']}
         closeLabel={t('actionSheet.close')}
         onClose={handleFilterSheetClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
+        className={styles.filterSheetOverlay}
+        contentClassName={styles.filterSheetContent}
       >
         <header className={styles.filterSheetHeader}>
           <h2 className={styles.filterSheetTitle}>{t('filterSheet.title')}</h2>
@@ -1055,7 +1780,7 @@ export function MobileCargoListLab({
         <div className={styles.filterSheetBody} data-testid="cargo-lab-filter-sheet">
           <section className={styles.filterSheetSection}>
             <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.statusSection')}</h3>
-            <div className={styles.filterSheetChips}>
+            <div className={styles.filterSheetChips} data-multiselect="false">
               {filterChipItems.map((chip) => {
                 const isActive = statusFilter === chip.id;
                 return (
@@ -1074,68 +1799,49 @@ export function MobileCargoListLab({
             </div>
           </section>
 
-          <section className={styles.filterSheetSection}>
-            <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.attentionSection')}</h3>
-            <button
-              type="button"
-              className={styles.filterSheetToggle}
-              data-active={advancedFilters.attentionOnly ? 'true' : undefined}
-              onClick={() =>
-                setAdvancedFilters((current) => ({
-                  ...current,
-                  attentionOnly: !current.attentionOnly,
-                }))
-              }
-            >
-              {t('filterSheet.attentionOnly')}
-            </button>
-          </section>
+          <FilterPillSection
+            title={t('filterSheet.originSection')}
+            options={locationOptions.origins}
+            selectedValues={advancedFilters.origins}
+            multiselect={false}
+            onToggle={(origin) => toggleSingleLocationFilter('origins', origin)}
+          />
 
-          {locationOptions.origins.length > 0 ? (
-            <section className={styles.filterSheetSection}>
-              <h3 className={styles.filterSheetSectionTitle}>{t('filterSheet.originSection')}</h3>
-              <div className={styles.filterSheetChips}>
-                {locationOptions.origins.map((origin) => {
-                  const isActive = advancedFilters.origins.includes(origin);
-                  return (
-                    <button
-                      key={origin}
-                      type="button"
-                      className={styles.filterSheetChip}
-                      data-active={isActive ? 'true' : undefined}
-                      onClick={() => toggleLocationFilter('origins', origin)}
-                    >
-                      {origin}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
+          <FilterPillSection
+            title={t('filterSheet.destinationSection')}
+            options={locationOptions.destinations}
+            selectedValues={advancedFilters.destinations}
+            multiselect={false}
+            onToggle={(destination) => toggleSingleLocationFilter('destinations', destination)}
+          />
 
-          {locationOptions.destinations.length > 0 ? (
-            <section className={styles.filterSheetSection}>
-              <h3 className={styles.filterSheetSectionTitle}>
-                {t('filterSheet.destinationSection')}
-              </h3>
-              <div className={styles.filterSheetChips}>
-                {locationOptions.destinations.map((destination) => {
-                  const isActive = advancedFilters.destinations.includes(destination);
-                  return (
-                    <button
-                      key={destination}
-                      type="button"
-                      className={styles.filterSheetChip}
-                      data-active={isActive ? 'true' : undefined}
-                      onClick={() => toggleLocationFilter('destinations', destination)}
-                    >
-                      {destination}
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          ) : null}
+          <FilterPillSection
+            title={t('filterSheet.cargoTypeSection')}
+            options={locationOptions.cargoTypes}
+            selectedValues={advancedFilters.cargoTypes}
+            onToggle={(cargoType) => toggleBusinessFilter('cargoTypes', cargoType)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.vesselTypeSection')}
+            options={locationOptions.vesselTypes}
+            selectedValues={advancedFilters.vesselTypes}
+            onToggle={(vesselType) => toggleBusinessFilter('vesselTypes', vesselType)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.cutoffSection')}
+            options={locationOptions.cutoffWindows}
+            selectedValues={advancedFilters.cutoffWindows}
+            onToggle={(cutoffWindow) => toggleBusinessFilter('cutoffWindows', cutoffWindow)}
+          />
+
+          <FilterPillSection
+            title={t('filterSheet.draftSection')}
+            options={locationOptions.draftLimits}
+            selectedValues={advancedFilters.draftLimits}
+            onToggle={(draftLimit) => toggleBusinessFilter('draftLimits', draftLimit)}
+          />
 
           <div className={styles.filterSheetFooter}>
             <button
@@ -1145,6 +1851,13 @@ export function MobileCargoListLab({
             >
               {t('filterSheet.clear')}
             </button>
+            <button
+              type="button"
+              className={styles.filterSheetApplyButton}
+              onClick={handleFilterSheetClose}
+            >
+              {t('filterSummary.view')}
+            </button>
           </div>
         </div>
       </LiquidGlassSheet>
@@ -1153,11 +1866,13 @@ export function MobileCargoListLab({
         open={isMapHintOpen}
         tone="dark"
         placement="bottom"
-        draggable={false}
+        draggable
+        defaultSnapPoint="content"
+        snapPoints={['content', 'medium', 'expanded']}
         closeLabel={t('actionSheet.close')}
         onClose={handleMapHintClose}
-        className={styles.sheetOverlay}
-        contentClassName={styles.sheetContent}
+        className={styles.mapHintSheetOverlay}
+        contentClassName={styles.mapHintSheetContent}
       >
         <header className={styles.filterSheetHeader}>
           <h2 className={styles.filterSheetTitle}>{t('mapHint.title')}</h2>

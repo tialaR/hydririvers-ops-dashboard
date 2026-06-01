@@ -1,71 +1,49 @@
-/* Lab canvas — dark mode first hierarchy (Hydro semantic tokens + local aliases). */
+/* Round 5 canvas — premium dark glass/neumorphic cargo reference. */
 
 .canvas {
   composes: hydroSemanticTheme from '@/shared/design-system/tokens/generated/hydro.semantic.module.scss';
 
-  --mobile-cargo-list-canvas-top: color-mix(
-    in srgb,
-    var(--hydro-color-canvas, #101114) 12%,
-    #22262c
-  );
-  --mobile-cargo-list-canvas-mid: color-mix(
-    in srgb,
-    var(--hydro-color-canvas, #101114) 55%,
-    #17191d
-  );
-  --mobile-cargo-list-canvas-bottom: var(--hydro-color-canvas, #101114);
-
-  --mobile-cargo-list-surface: color-mix(
-    in srgb,
-    var(--hydro-color-fill-secondary, rgb(255 255 255 / 8%)) 100%,
-    transparent
-  );
-  --mobile-cargo-list-surface-elevated: color-mix(
-    in srgb,
-    var(--hydro-color-surface-elevated, rgb(255 255 255 / 10%)) 18%,
-    rgb(255 255 255 / 10%)
-  );
-  --mobile-cargo-list-surface-strong: rgb(255 255 255 / 14%);
-
-  --mobile-cargo-list-border: var(--hydro-color-separator, rgb(255 255 255 / 8%));
-  --mobile-cargo-list-border-strong: rgb(255 255 255 / 14%);
-
-  --mobile-cargo-list-label-primary: var(--hydro-color-label-primary, rgb(255 255 255 / 92%));
-  --mobile-cargo-list-label-secondary: var(
-    --hydro-color-label-secondary,
-    rgb(235 235 245 / 64%)
-  );
-  --mobile-cargo-list-label-tertiary: var(--hydro-color-label-tertiary, rgb(235 235 245 / 42%));
-
-  --mobile-cargo-list-separator: var(--hydro-color-separator, rgb(255 255 255 / 8%));
-  --mobile-cargo-list-fill-primary: var(--hydro-color-fill-primary, rgb(255 255 255 / 12%));
-  --mobile-cargo-list-fill-secondary: var(--hydro-color-fill-secondary, rgb(255 255 255 / 8%));
-  --mobile-cargo-list-fill-pressed: rgb(255 255 255 / 14%);
-
-  --mobile-cargo-list-accent: var(--hydro-color-accent, #0091ff);
-  --mobile-cargo-list-accent-soft: color-mix(in srgb, var(--mobile-cargo-list-accent) 16%, transparent);
-  --mobile-cargo-list-warning: var(--hydro-color-warning, #ffb340);
-  --mobile-cargo-list-danger: var(--hydro-color-danger, #ff453a);
-  --mobile-cargo-list-overlay: rgb(0 0 0 / 42%);
-
-  --mobile-cargo-list-radius-card: var(--hydro-radius-card, 28px);
-  --mobile-cargo-list-radius-hero: 32px;
-  --mobile-cargo-list-radius-route: 18px;
-  --mobile-cargo-list-radius-sheet: var(--hydro-radius-sheet, 34px);
-  --mobile-cargo-list-radius-chip: var(--hydro-radius-pill, 999px);
-  --mobile-cargo-list-radius-pill: var(--hydro-radius-pill, 999px);
-
+  --mobile-cargo-list-canvas-top: #33393e;
+  --mobile-cargo-list-canvas-mid: #20262a;
+  --mobile-cargo-list-canvas-bottom: #111518;
+  --mobile-cargo-list-panel: rgb(41 47 51 / 72%);
+  --mobile-cargo-list-panel-strong: rgb(48 54 58 / 84%);
+  --mobile-cargo-list-panel-soft: rgb(255 255 255 / 7%);
+  --mobile-cargo-list-border: rgb(255 255 255 / 10%);
+  --mobile-cargo-list-border-strong: rgb(255 255 255 / 18%);
+  --mobile-cargo-list-label-primary: rgb(255 255 255 / 94%);
+  --mobile-cargo-list-label-secondary: rgb(236 239 240 / 66%);
+  --mobile-cargo-list-label-tertiary: rgb(236 239 240 / 42%);
+  --mobile-cargo-list-separator: rgb(255 255 255 / 9%);
+  --mobile-cargo-list-fill-primary: rgb(255 255 255 / 12%);
+  --mobile-cargo-list-fill-secondary: rgb(255 255 255 / 8%);
+  --mobile-cargo-list-fill-pressed: rgb(255 255 255 / 17%);
+  --mobile-cargo-list-accent: #b9f08a;
+  --mobile-cargo-list-accent-strong: #cfff9b;
+  --mobile-cargo-list-accent-soft: rgb(185 240 138 / 16%);
+  --mobile-cargo-list-warning: #f5d66f;
+  --mobile-cargo-list-danger: #ff6b5f;
+  --mobile-cargo-list-overlay: rgb(0 0 0 / 38%);
+  --mobile-cargo-list-radius-card: 30px;
+  --mobile-cargo-list-radius-hero: 34px;
+  --mobile-cargo-list-radius-route: 24px;
+  --mobile-cargo-list-radius-sheet: 36px;
+  --mobile-cargo-list-radius-chip: 999px;
+  --mobile-cargo-list-radius-pill: 999px;
   --mobile-cargo-list-glass-border: var(--mobile-cargo-list-border);
   --mobile-cargo-list-glass-border-strong: var(--mobile-cargo-list-border-strong);
-  --mobile-cargo-list-glass-blur: blur(28px) saturate(1.18);
-  --mobile-cargo-list-glass-shadow: 0 10px 32px rgb(0 0 0 / 22%);
-
-  --mobile-cargo-list-motion-tap: var(--hydro-motion-tap, 120ms);
-  --mobile-cargo-list-motion-control: var(--hydro-motion-control, 180ms);
-  --mobile-cargo-list-motion-surface: 220ms;
-  --mobile-cargo-list-motion-sheet: var(--hydro-motion-sheet, 320ms);
-  --mobile-cargo-list-easing: cubic-bezier(0.22, 1, 0.36, 1);
-
+  --mobile-cargo-list-glass-blur: blur(34px) saturate(1.18);
+  --mobile-cargo-list-glass-shadow:
+    -14px -14px 28px rgb(255 255 255 / 7%),
+    16px 18px 30px rgb(0 0 0 / 42%);
+  --mobile-cargo-list-inner-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 13%),
+    inset 0 -18px 28px rgb(0 0 0 / 12%);
+  --mobile-cargo-list-motion-tap: 120ms;
+  --mobile-cargo-list-motion-control: 190ms;
+  --mobile-cargo-list-motion-surface: 260ms;
+  --mobile-cargo-list-motion-sheet: 360ms;
+  --mobile-cargo-list-easing: cubic-bezier(0.16, 1, 0.3, 1);
   --mobile-cargo-list-font-family: var(
     --hydro-font-family-system,
     -apple-system,
@@ -77,16 +55,40 @@
 
   background-color: var(--mobile-cargo-list-canvas-bottom);
   background-image:
-    radial-gradient(
-      circle at 20% -8%,
-      color-mix(in srgb, var(--mobile-cargo-list-accent) 14%, transparent),
-      transparent 28rem
-    ),
-    radial-gradient(circle at 90% 4%, rgb(0 145 255 / 6%), transparent 24rem),
+    radial-gradient(circle at 28% -10%, rgb(255 255 255 / 9%), transparent 20rem),
+    radial-gradient(circle at 92% 6%, rgb(185 240 138 / 8%), transparent 22rem),
     linear-gradient(
       180deg,
       var(--mobile-cargo-list-canvas-top) 0%,
-      var(--mobile-cargo-list-canvas-mid) 44%,
+      var(--mobile-cargo-list-canvas-mid) 42%,
       var(--mobile-cargo-list-canvas-bottom) 100%
     );
+}
+
+/* Round 10 — single visual field. No visible patched blocks between canvas/list/header/cards. */
+.canvas {
+  --mobile-cargo-list-canvas-top: #242b2e;
+  --mobile-cargo-list-canvas-mid: #242b2e;
+  --mobile-cargo-list-canvas-bottom: #242b2e;
+  --mobile-cargo-list-panel: rgb(255 255 255 / 6%);
+  --mobile-cargo-list-panel-strong: rgb(255 255 255 / 8%);
+  --mobile-cargo-list-panel-soft: rgb(255 255 255 / 5%);
+  --mobile-cargo-list-border: rgb(255 255 255 / 11%);
+  --mobile-cargo-list-border-strong: rgb(255 255 255 / 18%);
+  --mobile-cargo-list-label-primary: rgb(251 253 251 / 94%);
+  --mobile-cargo-list-label-secondary: rgb(236 239 236 / 62%);
+  --mobile-cargo-list-label-tertiary: rgb(236 239 236 / 39%);
+  --mobile-cargo-list-separator: rgb(255 255 255 / 9%);
+  --mobile-cargo-list-accent: #b9f08a;
+  --mobile-cargo-list-accent-strong: #d5ffb0;
+  --mobile-cargo-list-accent-soft: rgb(185 240 138 / 12%);
+  --mobile-cargo-list-unified-bg: #242b2e;
+  --mobile-cargo-list-unified-surface: rgb(255 255 255 / 6%);
+  --mobile-cargo-list-unified-surface-strong: rgb(255 255 255 / 8%);
+
+  background-color: var(--mobile-cargo-list-unified-bg);
+  background-image:
+    radial-gradient(circle at 14% 0%, rgb(255 255 255 / 4%), transparent 18rem),
+    radial-gradient(circle at 96% 3%, rgb(185 240 138 / 4%), transparent 16rem),
+    linear-gradient(180deg, var(--mobile-cargo-list-unified-bg), var(--mobile-cargo-list-unified-bg));
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import type { PointerEvent as ReactPointerEvent, ReactNode } from 'react';
+import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode } from 'react';
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import '../../tokens/generated/hydro.semantic.module.scss';
@@ -14,8 +14,8 @@ export type LiquidGlassSheetSnapPoint = 'content' | 'medium' | 'expanded';
 export type LiquidGlassSheetPlacement = 'bottom' | 'center';
 
 const DEFAULT_SNAP_POINTS: LiquidGlassSheetSnapPoint[] = ['content', 'medium', 'expanded'];
-const CLOSE_DRAG_THRESHOLD_PX = 72;
-const SNAP_DRAG_THRESHOLD_RATIO = 0.18;
+const CLOSE_DRAG_THRESHOLD_PX = 88;
+const SNAP_DRAG_THRESHOLD_RATIO = 0.1;
 
 export type LiquidGlassSheetProps = {
   open: boolean;
@@ -53,10 +53,10 @@ function getSnapHeightPx(
   contentHeightPx: number,
   viewportHeightPx: number,
 ): number {
-  const toolbarPx = 70;
+  const toolbarPx = 54;
   const contentSnapHeight = Math.min(
-    contentHeightPx + toolbarPx + 12,
-    viewportHeightPx * 0.92,
+    Math.max(contentHeightPx + toolbarPx + 12, Math.round(viewportHeightPx * 0.42)),
+    viewportHeightPx * 0.48,
   );
 
   switch (snapPoint) {
@@ -65,10 +65,25 @@ function getSnapHeightPx(
     case 'medium':
       return Math.round(viewportHeightPx * 0.56);
     case 'expanded':
-      return Math.round(viewportHeightPx * 0.9);
+      return Math.round(viewportHeightPx * 0.98);
     default:
       return contentSnapHeight;
   }
+}
+
+function getSnapHeightExtentsPx(
+  snapPoints: LiquidGlassSheetSnapPoint[],
+  contentHeightPx: number,
+  viewportHeightPx: number,
+): { min: number; max: number } {
+  const heights = snapPoints.map((point) =>
+    getSnapHeightPx(point, contentHeightPx, viewportHeightPx),
+  );
+
+  return {
+    min: Math.min(...heights),
+    max: Math.max(...heights),
+  };
 }
 
 function pickNearestSnapPoint(
@@ -208,7 +223,30 @@ export function LiquidGlassSheet({
     if (event.target !== event.currentTarget) {
       return;
     }
+
+    // Round 21: close on pointerdown so the overlay consumes the original
+    // gesture before the browser can dispatch a click to content behind it.
+    event.preventDefault();
+    event.stopPropagation();
     onClose?.();
+  };
+
+  const handleOverlayPointerUp = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const handleOverlayClick = (event: ReactMouseEvent<HTMLDivElement>) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    event.preventDefault();
+    event.stopPropagation();
   };
 
   const handleDragStart = (event: ReactPointerEvent<HTMLElement>) => {
@@ -221,6 +259,7 @@ export function LiquidGlassSheet({
       return;
     }
 
+    measureContent();
     event.currentTarget.setPointerCapture(event.pointerId);
     dragStartRef.current = {
       pointerY: event.clientY,
@@ -236,7 +275,17 @@ export function LiquidGlassSheet({
     }
 
     const delta = event.clientY - dragStartRef.current.pointerY;
-    setDragOffsetPx(Math.max(0, dragStartRef.current.offsetPx + delta));
+    const baseHeight = getSnapHeightPx(
+      dragStartRef.current.snapPoint,
+      contentHeightPx,
+      viewportHeightPx,
+    );
+    const { max } = getSnapHeightExtentsPx(snapPoints, contentHeightPx, viewportHeightPx);
+    const minOffsetPx = Math.min(0, baseHeight - max);
+    const maxOffsetPx = Math.round(viewportHeightPx * 0.55);
+    const nextOffset = dragStartRef.current.offsetPx + delta;
+
+    setDragOffsetPx(Math.min(maxOffsetPx, Math.max(minOffsetPx, nextOffset)));
   };
 
   const handleDragEnd = (event: ReactPointerEvent<HTMLElement>) => {
@@ -256,13 +305,15 @@ export function LiquidGlassSheet({
       viewportHeightPx,
     );
     const projectedHeight = Math.max(0, baseHeight - dragOffsetPx);
-    const lowestSnap = snapPoints[snapPoints.length - 1] ?? 'content';
-    const lowestHeight = getSnapHeightPx(lowestSnap, contentHeightPx, viewportHeightPx);
+    const { min: lowestHeight } = getSnapHeightExtentsPx(
+      snapPoints,
+      contentHeightPx,
+      viewportHeightPx,
+    );
+    const isDraggingBelowLowestSnap = dragOffsetPx >= CLOSE_DRAG_THRESHOLD_PX &&
+      projectedHeight <= lowestHeight * (1 - SNAP_DRAG_THRESHOLD_RATIO);
 
-    if (
-      dragOffsetPx >= CLOSE_DRAG_THRESHOLD_PX &&
-      projectedHeight <= lowestHeight * (1 - SNAP_DRAG_THRESHOLD_RATIO)
-    ) {
+    if (isDraggingBelowLowestSnap) {
       setDragOffsetPx(0);
       onClose?.();
       return;
@@ -294,10 +345,15 @@ export function LiquidGlassSheet({
     : undefined;
   const contentScrollable = draggable && snapPoint !== 'content';
 
-  const sheetStyle =
+  const expandedDragHeightPx =
     draggable && open && sheetHeightPx != null
+      ? sheetHeightPx - Math.min(0, dragOffsetPx)
+      : undefined;
+
+  const sheetStyle =
+    draggable && open && expandedDragHeightPx != null
       ? {
-          height: `${sheetHeightPx}px`,
+          height: `${expandedDragHeightPx}px`,
           transform: dragOffsetPx > 0 ? `translateY(${dragOffsetPx}px)` : undefined,
         }
       : undefined;
@@ -311,6 +367,8 @@ export function LiquidGlassSheet({
       data-placement={placement}
       inert={!open ? true : undefined}
       onPointerDown={open ? handleOverlayPointerDown : undefined}
+      onPointerUp={open ? handleOverlayPointerUp : undefined}
+      onClick={open ? handleOverlayClick : undefined}
     >
       {stacked ? <div className={styles.stackedRail} aria-hidden /> : null}
 

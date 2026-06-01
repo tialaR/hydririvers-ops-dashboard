@@ -3,6 +3,7 @@ import { getCargoById, getPublicCargos } from '@/features/cargo/services/cargo.s
 import type { CargoListRepository } from '@/features/cargo/repositories/cargo-list.repository';
 import type { MobileCargoListFilters } from '@/features/cargo/domain/cargo-list.types';
 
+
 const DEFAULT_FILTERS: MobileCargoListFilters = {
   chips: [
     { id: 'all', labelKey: 'filters.all' },

@@ -95,8 +95,13 @@ export function LiquidGlassBottomDock({
   const rootClassName = [styles.root, className].filter(Boolean).join(' ');
 
   return (
-    <nav className={rootClassName} aria-label={ariaLabel} data-tone={tone}>
-      <div ref={trackRef} className={styles.track} data-tone={tone}>
+    <nav
+      className={rootClassName}
+      aria-label={ariaLabel}
+      data-tone={tone}
+      data-active-id={activeId}
+    >
+      <div ref={trackRef} className={styles.track} data-tone={tone} data-active-id={activeId}>
         <span
           className={styles.activeBubble}
           style={bubbleStyle}

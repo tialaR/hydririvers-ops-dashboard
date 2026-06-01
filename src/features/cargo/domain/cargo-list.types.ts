@@ -23,6 +23,14 @@ export type MobileCargoListItem = {
   etaLabel: string;
   operationLabel?: string;
   alertLabel?: string;
+  cargoTypeLabel?: string;
+  vesselTypeLabel?: string;
+  cutoffWindowLabel?: string;
+  grossWeightLabel?: string;
+  draftLimitLabel?: string;
+  waterwayLabel?: string;
+  availabilityLabel?: string;
+  environmentalRiskLabel?: string;
   needsAttention: boolean;
 };
 

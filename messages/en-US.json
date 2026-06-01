@@ -527,7 +527,8 @@
         "cargas": "Cargoes",
         "filters": "Filters",
         "attention": "Attention",
-        "map": "Map"
+        "map": "Map",
+        "profile": "Profile"
       },
       "filtersAria": "Filter cargoes by status",
       "listAria": "Cargo list",
@@ -573,11 +574,20 @@
         "originSection": "Origin",
         "destinationSection": "Destination",
         "clear": "Clear filters",
-        "apply": "Apply"
+        "apply": "Apply",
+        "cargoTypeSection": "Cargo type",
+        "vesselTypeSection": "Vessel type",
+        "cutoffSection": "Availability / cut-off",
+        "draftSection": "Maximum allowed draft"
       },
       "mapHint": {
         "title": "Select a cargo",
         "description": "Tap a card in the list to open the immersive map for that operation."
+      },
+      "filterSummary": {
+        "view": "View filters",
+        "clear": "Clear filters",
+        "active": "{count} active filters"
       }
     },
     "cargoes": {
