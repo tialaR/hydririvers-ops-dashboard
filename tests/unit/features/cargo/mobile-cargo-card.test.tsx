@@ -221,8 +221,8 @@ describe('MobileCargoListLab shell markup', () => {
 
     expect(html).not.toContain('data-sheet-open="true"');
     expect(html).toContain('data-draggable="true"');
-    expect(html).toContain('sheetHeader');
-    expect(html).toContain('sheetActionGroup');
+    expect(html).toContain('filterSheetHeader');
+    expect(html).toContain('filterSheetFooter');
     expect(html).toContain('cargo-lab-filter-sheet');
   });
 });

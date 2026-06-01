@@ -72,6 +72,6 @@ describe('mobile cargo list lab sheet scroll lock', () => {
     expect(source).toContain('.filterScroll');
     expect(source).toContain('height: 100dvh');
     expect(source).toContain('.sheetHeader');
-    expect(source).toContain('.sheetActionGroup');
+    expect(source).toContain('.filterSheetFooter');
   });
 });
