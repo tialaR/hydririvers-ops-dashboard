@@ -1,105 +1,145 @@
 'use client';
 
-import { type CSSProperties, useMemo, useState } from 'react';
+import { type CSSProperties, type KeyboardEvent, useMemo, useState } from 'react';
+
+import {
+  cargoCapacityFilterOptions,
+  cargoCutoffFilterOptions,
+  cargoDestinationFilterOptions,
+  cargoOriginFilterOptions,
+  cargoStatusFilterOptions,
+  cargoTypeFilterOptions,
+  cargoVesselTypeFilterOptions,
+  type CargoCapacityFilterValue,
+  type CargoCutoffFilterValue,
+  type CargoDestinationFilterValue,
+  type CargoOriginFilterValue,
+  type CargoStatusFilterValue,
+  type CargoTypeFilterValue,
+  type CargoVesselTypeFilterValue,
+} from '@/features/cargo/mocks/cargo-filter-options.mock';
+import { BottomSheet } from '@/shared/components/bottom-sheet';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
 
-type CargoStatus = 'cotacao' | 'transito' | 'reservada' | 'atencao';
-type StatusFilter = 'todos' | CargoStatus;
-type SheetMode = 'filters' | 'details' | null;
-type VisualTheme = 'dark' | 'light';
+type ThemeMode = 'dark' | 'light';
+type CargoStatus = 'transito' | 'agendado' | 'cotacao' | 'atencao';
+type SheetMode = 'filters' | 'cargo' | null;
+type StatusFilter = CargoStatusFilterValue;
+type CargoTypeFilter = CargoTypeFilterValue;
+type VesselTypeFilter = CargoVesselTypeFilterValue;
+type CutoffFilter = CargoCutoffFilterValue;
+type CapacityFilter = CargoCapacityFilterValue;
+type OriginFilter = CargoOriginFilterValue;
+type DestinationFilter = CargoDestinationFilterValue;
 
-type CargoItem = {
+type Cargo = {
   id: string;
   title: string;
   subtitle: string;
+  status: CargoStatus;
+  statusLabel: string;
   origin: string;
   originTerminal: string;
   destination: string;
   destinationTerminal: string;
   eta: string;
-  confidence: string;
+  delivery: string;
   volume: string;
-  status: CargoStatus;
-  statusLabel: string;
   vessel: string;
-  cutoff: string;
+  cargoType: string;
 };
 
-const CARGOES: CargoItem[] = [
+const CARGOES: Cargo[] = [
   {
     id: 'CRG-7845',
-    title: 'Eletronicos e componentes',
+    title: 'Eletrônicos e componentes',
     subtitle: 'cabos, placas e sensores',
-    origin: 'Sao Paulo, SP',
+    status: 'transito',
+    statusLabel: 'Em trânsito',
+    origin: 'São Paulo, SP',
     originTerminal: 'Terminal Barra Funda',
     destination: 'Manaus, AM',
-    destinationTerminal: 'Porto Chibatao',
+    destinationTerminal: 'Porto Chibatão',
     eta: '24 Mai, 14:00',
-    confidence: 'Entrega prevista em 2 dias',
+    delivery: 'Em 2 dias',
     volume: '18 t',
-    status: 'transito',
-    statusLabel: 'Em transito',
-    vessel: 'Balsa porta-conteineres',
-    cutoff: 'Hoje, 18:00',
+    vessel: 'Balsa porta-contêineres',
+    cargoType: 'Contêiner',
   },
   {
     id: 'CRG-3921',
-    title: 'Maquinas industriais',
+    title: 'Máquinas industriais',
     subtitle: 'carga projeto',
+    status: 'agendado',
+    statusLabel: 'Agendado',
     origin: 'Curitiba, PR',
     originTerminal: 'Terminal CIC',
     destination: 'Salvador, BA',
     destinationTerminal: 'Terminal Aratu',
     eta: '28 Mai, 09:30',
-    confidence: 'Janela confirmada',
+    delivery: 'Em 5 dias',
     volume: '32 t',
-    status: 'cotacao',
-    statusLabel: 'Agendado',
-    vessel: 'Convoio empurrado',
-    cutoff: 'Amanha, 10:00',
+    vessel: 'Comboio empurrado',
+    cargoType: 'Projeto',
   },
   {
     id: 'CRG-7012',
     title: 'Insumos refrigerados',
     subtitle: 'cadeia fria',
-    origin: 'Belem, PA',
-    originTerminal: 'Porto de Belem',
-    destination: 'Santarem, PA',
-    destinationTerminal: 'Terminal Fluvial de Santarem',
+    status: 'transito',
+    statusLabel: 'Em trânsito',
+    origin: 'Belém, PA',
+    originTerminal: 'Porto de Belém',
+    destination: 'Santarém, PA',
+    destinationTerminal: 'Terminal Fluvial de Santarém',
     eta: '2-4 dias',
-    confidence: 'Alta confianca',
+    delivery: 'Janela confirmada',
     volume: '24 t',
-    status: 'reservada',
-    statusLabel: 'Reservada',
     vessel: 'Balsa refrigerada',
-    cutoff: 'Sex, 12:00',
+    cargoType: 'Refrigerada',
   },
   {
     id: 'CRG-4510',
-    title: 'Graos de milho',
-    subtitle: 'granel solido · lote 21',
+    title: 'Grãos de milho',
+    subtitle: 'granel sólido · lote 21',
+    status: 'cotacao',
+    statusLabel: 'Em cotação',
     origin: 'Miritituba, PA',
     originTerminal: 'Porto de Miritituba',
-    destination: 'Santarem, PA',
-    destinationTerminal: 'Terminal Fluvial de Santarem',
+    destination: 'Santarém, PA',
+    destinationTerminal: 'Terminal Fluvial de Santarém',
     eta: '4-6 dias',
-    confidence: 'Confianca media',
+    delivery: 'Confiança média',
     volume: '28 t',
-    status: 'cotacao',
-    statusLabel: 'Em cotacao',
     vessel: 'Balsa graneleira',
-    cutoff: 'Seg, 08:00',
+    cargoType: 'Granel sólido',
   },
 ];
 
-const statusFilters: Array<{ id: StatusFilter; label: string }> = [
-  { id: 'todos', label: 'Todos' },
-  { id: 'transito', label: 'Em transito' },
-  { id: 'cotacao', label: 'Agendado' },
-  { id: 'reservada', label: 'Reservada' },
-  { id: 'atencao', label: 'Atencao' },
-];
+const CARGO_TYPE_MATCHES: Record<Exclude<CargoTypeFilter, 'todos'>, string[]> = {
+  'granel-solido': ['granel solido', 'granel sólido'],
+  'granel-liquido': ['granel liquido', 'granel líquido'],
+  'carga-geral': ['projeto', 'fracionada', 'refrigerada', 'carga geral'],
+  conteiner: ['conteiner', 'contêiner'],
+};
+
+const VESSEL_TYPE_MATCHES: Record<Exclude<VesselTypeFilter, 'todos'>, string[]> = {
+  empurrador: ['empurrador'],
+  barcaca: ['balsa', 'barcaça', 'barcaca'],
+  comboio: ['comboio', 'convoio'],
+  'balsa-graneleira': ['balsa graneleira'],
+  'balsa-porta-conteineres': ['balsa porta-conteineres', 'balsa porta-contêineres'],
+};
+
+function SearchIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="11" cy="11" r="7" />
+      <path d="m16.5 16.5 4 4" />
+    </svg>
+  );
+}
 
 function FilterIcon() {
   return (
@@ -108,6 +148,25 @@ function FilterIcon() {
       <circle cx="16" cy="7" r="1.7" />
       <circle cx="9" cy="12" r="1.7" />
       <circle cx="13" cy="17" r="1.7" />
+    </svg>
+  );
+}
+
+function EyeIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12s-3.5 6.5-9.5 6.5S2.5 12 2.5 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function DashboardIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 11.5 12 4l8 7.5" />
+      <path d="M6.5 10.5V20h11v-9.5" />
+      <path d="M9.5 20v-5h5v5" />
     </svg>
   );
 }
@@ -121,11 +180,12 @@ function CubeIcon() {
   );
 }
 
-function SearchIcon() {
+function ContainerIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="11" cy="11" r="7" />
-      <path d="m16.5 16.5 4 4" />
+      <path d="M3 9h18v11H3z" />
+      <path d="M5 9V7h14v2" />
+      <path d="M8 9v11M12 9v11M16 9v11" />
     </svg>
   );
 }
@@ -139,11 +199,38 @@ function BoatIcon() {
   );
 }
 
+function RouteBoatIcon() {
+  return (
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <path d="M5 17.5h21.5l-3.4 5.2H9.1L5 17.5Z" />
+      <path d="M9.5 17.5v-5.8H18v5.8M12.5 11.7V7.5h4.8v4.2" />
+      <path d="M7.8 24.7c1.7 1 3.3 1 5 0s3.3-1 5 0 3.3 1 5 0" />
+    </svg>
+  );
+}
+
 function TagIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M4 11V5h6l10 10-6 6L4 11Z" />
       <path d="M8 8h.01" />
+    </svg>
+  );
+}
+
+function BellIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16l-2-2ZM10 21h4" />
+    </svg>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M20 21a8 8 0 0 0-16 0" />
+      <circle cx="12" cy="8" r="4" />
     </svg>
   );
 }
@@ -156,95 +243,510 @@ function ChevronIcon() {
   );
 }
 
-function ThemeIcon({ theme }: { theme: VisualTheme }) {
+function SunMoonIcon({ theme }: { theme: ThemeMode }) {
   if (theme === 'dark') {
     return (
       <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
         <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
       </svg>
     );
   }
 
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4a7 7 0 1 0 11.5 11.5Z" />
+      <path d="M20 15.4A8.4 8.4 0 0 1 8.6 4 7 7 0 1 0 20 15.4Z" />
     </svg>
   );
 }
 
-function NavIcon({ type }: { type: 'cargo' | 'quotes' | 'vessel' | 'alerts' | 'profile' }) {
+function NavIcon({ type }: { type: 'vision' | 'dashboard' | 'cargo' | 'vessels' | 'profile' }) {
+  if (type === 'vision') return <EyeIcon />;
+  if (type === 'dashboard') return <DashboardIcon />;
   if (type === 'cargo') return <CubeIcon />;
-  if (type === 'vessel') return <BoatIcon />;
-  if (type === 'alerts') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M18 16v-5a6 6 0 0 0-12 0v5l-2 2h16l-2-2ZM10 21h4" />
-      </svg>
-    );
+  if (type === 'vessels') return <BoatIcon />;
+  return <UserIcon />;
+}
+
+function StatusBadge({ cargo }: { cargo: Cargo }) {
+  return (
+    <span className={styles.statusBadge} data-status={cargo.status}>
+      {cargo.statusLabel}
+    </span>
+  );
+}
+
+function matchesStatusFilter(cargo: Cargo, status: StatusFilter) {
+  if (status === 'todos') return true;
+  if (status === 'spot') return cargo.status === 'cotacao' || cargo.status === 'agendado';
+  if (status === 'atracada') return cargo.status === 'agendado';
+  if (status === 'concluida') return cargo.statusLabel.toLowerCase().includes('conclu');
+  if (status === 'atrasada') return cargo.status === 'atencao' || cargo.delivery.toLowerCase().includes('atras');
+  return cargo.status === status;
+}
+
+function getCargoWeight(cargo: Cargo) {
+  return Number.parseFloat(cargo.volume.replace(',', '.'));
+}
+
+function matchesCutoffFilter(cargo: Cargo, cutoff: CutoffFilter) {
+  if (cutoff === 'todos') return true;
+  const operationalWindow = `${cargo.eta} ${cargo.delivery}`.toLowerCase();
+
+  if (cutoff === 'hoje') return operationalWindow.includes('hoje') || operationalWindow.includes('24h');
+  if (cutoff === '2-4-dias') return operationalWindow.includes('2 dias') || operationalWindow.includes('2-4');
+  if (cutoff === '5-dias') return operationalWindow.includes('5 dias') || operationalWindow.includes('4-6');
+  if (cutoff === 'navegacao-noturna-restrita') return operationalWindow.includes('noturna');
+  return operationalWindow.includes('atraca') || operationalWindow.includes('janela');
+}
+
+function matchesCapacityFilter(cargo: Cargo, capacity: CapacityFilter) {
+  if (capacity === 'todos') return true;
+  const weight = getCargoWeight(cargo);
+
+  if (capacity === 'ate-20t') return weight <= 20;
+  if (capacity === '20-30t') return weight > 20 && weight <= 30;
+  if (capacity === 'acima-30t') return weight > 30;
+  if (capacity === 'canal-raso-restricao-sazonal') return cargo.delivery.toLowerCase().includes('sazonal');
+  return weight > 30 || cargo.vessel.toLowerCase().includes('comboio');
+}
+
+function CargoCard({ cargo, index, onOpen }: { cargo: Cargo; index: number; onOpen: (cargo: Cargo) => void }) {
+  function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
+    if (event.target !== event.currentTarget || (event.key !== 'Enter' && event.key !== ' ')) {
+      return;
+    }
+
+    event.preventDefault();
+    onOpen(cargo);
   }
-  if (type === 'profile') {
-    return (
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M20 21a8 8 0 0 0-16 0" />
-        <circle cx="12" cy="8" r="4" />
-      </svg>
-    );
-  }
-  return <TagIcon />;
+
+  return (
+    <article
+      className={styles.cargoCard}
+      style={{ '--card-index': index } as CSSProperties}
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpen(cargo)}
+      onKeyDown={handleKeyDown}
+    >
+      <div className={styles.cardHeader}>
+        <span className={styles.cargoIcon}>
+          {cargo.cargoType === 'Projeto' ? <ContainerIcon /> : <CubeIcon />}
+        </span>
+        <span className={styles.cargoId}>{cargo.id}</span>
+        <StatusBadge cargo={cargo} />
+      </div>
+
+      <h2>{cargo.title}</h2>
+
+      <div className={styles.routeLine}>
+        <div className={styles.routeEndpoint}>
+          <span className={styles.routeDot} data-tone="origin" aria-hidden="true" />
+          <span className={styles.routeCity}>{cargo.origin}</span>
+        </div>
+        <span className={styles.dashedRoute} aria-hidden="true"><RouteBoatIcon /></span>
+        <div className={styles.routeEndpoint}>
+          <span className={styles.routeDot} data-tone="destination" aria-hidden="true" />
+          <span className={styles.routeCity}>{cargo.destination}</span>
+        </div>
+      </div>
+
+      <div className={styles.cardFooter}>
+        <div>
+          <span>ETA</span>
+          <strong>{cargo.eta}</strong>
+        </div>
+        <span className={styles.cardAction} aria-hidden="true">
+          {cargo.status === 'agendado' ? 'Ver detalhes' : 'Acompanhar'} <ChevronIcon />
+        </span>
+      </div>
+    </article>
+  );
+}
+
+function BottomNav() {
+  return (
+    <nav className={styles.bottomNav} aria-label="Navegacao principal dev v2">
+      <button className={styles.navItem} data-active="false" type="button">
+        <span className={styles.navIcon}>
+          <NavIcon type="vision" />
+        </span>
+        <span className={styles.navLabel}>Visão</span>
+      </button>
+      <button className={styles.navItem} data-active="false" type="button">
+        <span className={styles.navIcon}>
+          <NavIcon type="dashboard" />
+        </span>
+        <span className={styles.navLabel}>Dashboard</span>
+      </button>
+      <button className={`${styles.navItem} ${styles.navItemActive}`} data-active="true" type="button">
+        <span className={styles.activeNavBubble}>
+          <span className={styles.activeNavIcon}>
+            <NavIcon type="cargo" />
+          </span>
+          <span className={styles.activeNavLabel}>Cargas</span>
+        </span>
+      </button>
+      <button className={styles.navItem} data-active="false" type="button">
+        <span className={styles.navIcon}>
+          <NavIcon type="vessels" />
+        </span>
+        <span className={styles.navLabel}>Embarcações</span>
+      </button>
+      <button className={styles.navItem} data-active="false" type="button">
+        <span className={styles.navIcon}>
+          <NavIcon type="profile" />
+        </span>
+        <span className={styles.navLabel}>Perfil</span>
+      </button>
+    </nav>
+  );
+}
+
+function LocationPinIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 21s7-5.2 7-11a7 7 0 1 0-14 0c0 5.8 7 11 7 11Z" />
+      <circle cx="12" cy="10" r="2.4" />
+    </svg>
+  );
+}
+
+function PackageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z" />
+      <path d="m4 7.5 8 4.5 8-4.5M12 12v9" />
+    </svg>
+  );
+}
+
+function CalendarIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M7 3v4M17 3v4M4.5 9h15" />
+      <path d="M6.5 5h11A2.5 2.5 0 0 1 20 7.5v10A2.5 2.5 0 0 1 17.5 20h-11A2.5 2.5 0 0 1 4 17.5v-10A2.5 2.5 0 0 1 6.5 5Z" />
+      <path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01" />
+    </svg>
+  );
+}
+
+function ScaleIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 4v16M5 7h14M7 7l-3 6h6L7 7ZM17 7l-3 6h6l-3-6Z" />
+      <path d="M9 20h6" />
+    </svg>
+  );
+}
+
+function FiltersSheet({
+  status,
+  cargoType,
+  origin,
+  destination,
+  vesselType,
+  cutoff,
+  capacity,
+  onStatusChange,
+  onCargoTypeChange,
+  onOriginChange,
+  onDestinationChange,
+  onVesselTypeChange,
+  onCutoffChange,
+  onCapacityChange,
+}: {
+  status: StatusFilter;
+  cargoType: CargoTypeFilter;
+  origin: OriginFilter;
+  destination: DestinationFilter;
+  vesselType: VesselTypeFilter;
+  cutoff: CutoffFilter;
+  capacity: CapacityFilter;
+  onStatusChange: (status: StatusFilter) => void;
+  onCargoTypeChange: (cargoType: CargoTypeFilter) => void;
+  onOriginChange: (origin: OriginFilter) => void;
+  onDestinationChange: (destination: DestinationFilter) => void;
+  onVesselTypeChange: (vesselType: VesselTypeFilter) => void;
+  onCutoffChange: (cutoff: CutoffFilter) => void;
+  onCapacityChange: (capacity: CapacityFilter) => void;
+}) {
+  return (
+    <div className={styles.filterSheetContent}>
+      <section className={styles.filterSheetSection}>
+        <h3>Status</h3>
+        <div className={styles.filterChipGrid}>
+          {cargoStatusFilterOptions.map((item) => (
+            <button key={item.id} type="button" data-active={item.value === status} onClick={() => onStatusChange(item.value)}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <LocationPinIcon />
+          Origem
+        </h3>
+        <div className={styles.filterChipGrid} aria-label="Selecionar origem">
+          {cargoOriginFilterOptions.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              data-active={item.value === origin}
+              aria-pressed={item.value === origin}
+              onClick={() => onOriginChange(item.value)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <LocationPinIcon />
+          Destino
+        </h3>
+        <div className={styles.filterChipGrid} aria-label="Selecionar destino">
+          {cargoDestinationFilterOptions.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              data-active={item.value === destination}
+              aria-pressed={item.value === destination}
+              onClick={() => onDestinationChange(item.value)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <PackageIcon />
+          Tipo de carga
+        </h3>
+        <div className={styles.filterChipGrid}>
+          {cargoTypeFilterOptions.map((item) => (
+            <button key={item.id} type="button" data-active={item.value === cargoType} onClick={() => onCargoTypeChange(item.value)}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <BoatIcon />
+          Tipo de embarcação
+        </h3>
+        <div className={styles.filterChipGrid}>
+          {cargoVesselTypeFilterOptions.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              data-active={item.value === vesselType}
+              onClick={() => onVesselTypeChange(item.value)}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <CalendarIcon />
+          Disponibilidade / Data de corte
+        </h3>
+        <div className={styles.filterChipGrid}>
+          {cargoCutoffFilterOptions.map((item) => (
+            <button key={item.id} type="button" data-active={item.value === cutoff} onClick={() => onCutoffChange(item.value)}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.filterSheetSection}>
+        <h3>
+          <ScaleIcon />
+          Capacidade / Peso bruto
+        </h3>
+        <div className={styles.filterChipGrid}>
+          {cargoCapacityFilterOptions.map((item) => (
+            <button key={item.id} type="button" data-active={item.value === capacity} onClick={() => onCapacityChange(item.value)}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function FilterSheetActions({ onReset, onApply }: { onReset: () => void; onApply: () => void }) {
+  return (
+    <div className={styles.filterSheetActions}>
+      <button type="button" onClick={onReset}>Limpar filtros</button>
+      <button type="button" data-primary="true" onClick={onApply}>Aplicar</button>
+    </div>
+  );
+}
+
+function CargoSheet({ cargo }: { cargo: Cargo }) {
+  const actions = [
+    { label: 'Visão geral', description: 'Informações principais da carga', icon: <CubeIcon /> },
+    { label: 'Jornada', description: 'Rastreamento e eventos', icon: <BoatIcon /> },
+    { label: 'Documentos', description: 'Conhecimentos, notas e certificados', icon: <TagIcon /> },
+    { label: 'Custos', description: 'Detalhamento e pagamentos', icon: <BellIcon /> },
+  ];
+
+  return (
+    <div className={styles.cargoSheetContent}>
+      <div className={styles.cargoSheetHeader}>
+        <span className={styles.cargoSheetIcon}>
+          <CubeIcon />
+        </span>
+        <div>
+          <span className={styles.cargoSheetId}>{cargo.id}</span>
+          <StatusBadge cargo={cargo} />
+        </div>
+      </div>
+
+      <h2 className={styles.cargoSheetTitle}>{cargo.title}</h2>
+
+      <div className={styles.sheetRouteBox}>
+        <div>
+          <strong>{cargo.origin}</strong>
+          <span>{cargo.originTerminal}</span>
+        </div>
+        <span aria-hidden="true"><BoatIcon /></span>
+        <div>
+          <strong>{cargo.destination}</strong>
+          <span>{cargo.destinationTerminal}</span>
+        </div>
+      </div>
+
+      <div className={styles.sheetStats}>
+        <div>
+          <span>ETA</span>
+          <strong>{cargo.eta}</strong>
+        </div>
+        <div>
+          <span>Entrega prevista</span>
+          <strong data-tone="success">{cargo.delivery}</strong>
+        </div>
+      </div>
+
+      <div className={styles.sheetActionList}>
+        {actions.map((item) => (
+          <button key={item.label} type="button">
+            <span>{item.icon}</span>
+            <span>
+              <strong>{item.label}</strong>
+              <small>{item.description}</small>
+            </span>
+            <ChevronIcon />
+          </button>
+        ))}
+      </div>
+
+      <button type="button" className={styles.moreCargoActions}>
+        Ações da carga <span>•••</span>
+      </button>
+    </div>
+  );
 }
 
 export function MobileCargoListLabV2() {
-  const [theme, setTheme] = useState<VisualTheme>('dark');
+  const [theme, setTheme] = useState<ThemeMode>('dark');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('todos');
+  const [cargoType, setCargoType] = useState<CargoTypeFilter>('todos');
+  const [origin, setOrigin] = useState<OriginFilter>('todos');
+  const [destination, setDestination] = useState<DestinationFilter>('todos');
+  const [vesselType, setVesselType] = useState<VesselTypeFilter>('todos');
+  const [cutoff, setCutoff] = useState<CutoffFilter>('todos');
+  const [capacity, setCapacity] = useState<CapacityFilter>('todos');
   const [sheetMode, setSheetMode] = useState<SheetMode>(null);
-  const [selectedCargo, setSelectedCargo] = useState<CargoItem | null>(null);
+  const [selectedCargo, setSelectedCargo] = useState<Cargo | null>(null);
 
   const filteredCargoes = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     return CARGOES.filter((cargo) => {
-      const matchesStatus = status === 'todos' || cargo.status === status;
+      const matchesStatus = matchesStatusFilter(cargo, status);
+      const normalizedCargoType = cargo.cargoType.trim().toLowerCase();
+      const matchesCargoType = cargoType === 'todos' || CARGO_TYPE_MATCHES[cargoType].some((type) => normalizedCargoType === type);
+      const normalizedVessel = cargo.vessel.trim().toLowerCase();
+      const matchesOrigin = origin === 'todos' || cargo.originTerminal === origin;
+      const matchesDestination = destination === 'todos' || cargo.destinationTerminal === destination;
+      const matchesVesselType =
+        vesselType === 'todos' || VESSEL_TYPE_MATCHES[vesselType].some((type) => normalizedVessel.includes(type));
+      const matchesCutoff = matchesCutoffFilter(cargo, cutoff);
+      const matchesCapacity = matchesCapacityFilter(cargo, capacity);
       const matchesQuery =
         normalizedQuery.length < 2 ||
-        `${cargo.id} ${cargo.title} ${cargo.subtitle} ${cargo.origin} ${cargo.destination} ${cargo.vessel}`
+        `${cargo.id} ${cargo.title} ${cargo.subtitle} ${cargo.origin} ${cargo.destination} ${cargo.vessel} ${cargo.cargoType}`
           .toLowerCase()
           .includes(normalizedQuery);
 
-      return matchesStatus && matchesQuery;
+      return (
+        matchesStatus &&
+        matchesCargoType &&
+        matchesOrigin &&
+        matchesDestination &&
+        matchesVesselType &&
+        matchesCutoff &&
+        matchesCapacity &&
+        matchesQuery
+      );
     });
-  }, [query, status]);
+  }, [capacity, cargoType, cutoff, destination, origin, query, status, vesselType]);
 
-  const activeFilterCount = (status !== 'todos' ? 1 : 0) + (query.trim().length >= 2 ? 1 : 0);
-  const sheetCargo = selectedCargo ?? filteredCargoes[0] ?? CARGOES[0];
+  const activeFilterCount =
+    (status !== 'todos' ? 1 : 0) +
+    (cargoType !== 'todos' ? 1 : 0) +
+    (origin !== 'todos' ? 1 : 0) +
+    (destination !== 'todos' ? 1 : 0) +
+    (vesselType !== 'todos' ? 1 : 0) +
+    (cutoff !== 'todos' ? 1 : 0) +
+    (capacity !== 'todos' ? 1 : 0) +
+    (query.trim().length >= 2 ? 1 : 0);
+  const cargoForSheet = selectedCargo ?? filteredCargoes[0] ?? CARGOES[0];
+  const isSheetOpen = sheetMode !== null;
 
-  function openFilters() {
-    setSelectedCargo(null);
-    setSheetMode('filters');
+  function resetFilters() {
+    setQuery('');
+    setStatus('todos');
+    setCargoType('todos');
+    setOrigin('todos');
+    setDestination('todos');
+    setVesselType('todos');
+    setCutoff('todos');
+    setCapacity('todos');
   }
 
-  function openCargoSheet(cargo: CargoItem) {
+  function openCargoSheet(cargo: Cargo) {
     setSelectedCargo(cargo);
-    setSheetMode('details');
+    setSheetMode('cargo');
   }
 
   function closeSheet() {
     setSheetMode(null);
   }
 
-  function resetFilters() {
-    setQuery('');
-    setStatus('todos');
-  }
-
   return (
     <main className={styles.root} data-theme={theme}>
       <section className={styles.phoneShell} aria-label="Experiencia visual dev v2 da lista de cargas">
-        <div className={styles.backdrop} aria-hidden="true" />
         <div className={styles.statusBar} aria-hidden="true">
           <span>9:41</span>
-          <span>▴ ))) ▱</span>
+          <span>●●● ))) ▱</span>
         </div>
 
         <header className={styles.header}>
@@ -252,24 +754,18 @@ export function MobileCargoListLabV2() {
             <h1>Cargas</h1>
             <p>{filteredCargoes.length} de {CARGOES.length} cargas</p>
           </div>
-
           <div className={styles.headerActions}>
-            <button
-              className={styles.headerIconButton}
-              type="button"
-              onClick={openFilters}
-              aria-label="Abrir filtros"
-            >
+            <button className={styles.headerButton} type="button" onClick={() => setSheetMode('filters')} aria-label="Abrir filtros">
               <FilterIcon />
               {activeFilterCount > 0 ? <span>{activeFilterCount}</span> : null}
             </button>
             <button
-              className={styles.headerIconButton}
+              className={styles.headerButton}
               type="button"
               onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
-              aria-label={theme === 'dark' ? 'Ativar light mode' : 'Ativar dark mode'}
+              aria-label="Alternar modo claro e escuro"
             >
-              <ThemeIcon theme={theme} />
+              <SunMoonIcon theme={theme} />
             </button>
           </div>
         </header>
@@ -277,129 +773,85 @@ export function MobileCargoListLabV2() {
         <div className={styles.searchRow}>
           <label className={styles.searchField}>
             <SearchIcon />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Buscar cargas..."
-              aria-label="Buscar carga, origem ou destino"
-            />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar cargas..." />
           </label>
-          <button className={styles.filterSquare} type="button" onClick={openFilters} aria-label="Visualizar filtros">
+          <button className={styles.filterSquare} type="button" onClick={() => setSheetMode('filters')} aria-label="Visualizar filtros">
             <FilterIcon />
           </button>
         </div>
 
-        <section className={styles.list} aria-label="Lista de cargas dev v2">
+        <section className={styles.cargoList} aria-label="Lista de cargas dev v2">
           {filteredCargoes.map((cargo, index) => (
-            <button
-              key={cargo.id}
-              className={styles.cargoCard}
-              type="button"
-              style={{ '--card-index': index } as CSSProperties}
-              onClick={() => openCargoSheet(cargo)}
-            >
-              <div className={styles.cardTopline}>
-                <span className={styles.cargoIcon}><CubeIcon /></span>
-                <span className={styles.cargoId}>{cargo.id}</span>
-                <span className={styles.statusBadge} data-status={cargo.status}>{cargo.statusLabel}</span>
-              </div>
-
-              <h2>{cargo.title}</h2>
-              <p className={styles.cardSubtitle}>{cargo.subtitle}</p>
-
-              <div className={styles.routeLine}>
-                <span>{cargo.origin}</span>
-                <i aria-hidden="true" />
-                <BoatIcon />
-                <i aria-hidden="true" />
-                <span>{cargo.destination}</span>
-              </div>
-
-              <footer className={styles.cardFooter}>
-                <div><span>ETA</span><strong>{cargo.eta}</strong></div>
-                <button type="button" onClick={(event) => { event.stopPropagation(); openCargoSheet(cargo); }}>Acompanhar <ChevronIcon /></button>
-              </footer>
-            </button>
+            <CargoCard key={cargo.id} cargo={cargo} index={index} onOpen={openCargoSheet} />
           ))}
         </section>
 
-        <nav className={styles.bottomDock} aria-label="Navegacao principal dev v2">
-          <button className={styles.navItem} data-active="true" type="button"><NavIcon type="cargo" /><span>Cargas</span></button>
-          <button className={styles.navItem} type="button"><NavIcon type="quotes" /><span>Cotacoes</span></button>
-          <button className={styles.navItem} type="button"><NavIcon type="vessel" /><span>Embarcacoes</span></button>
-          <button className={styles.navItem} type="button"><NavIcon type="alerts" /><span>Alertas</span></button>
-          <button className={styles.navItem} type="button"><NavIcon type="profile" /><span>Perfil</span></button>
-        </nav>
+        {!isSheetOpen ? <BottomNav /> : null}
 
-        {sheetMode ? (
-          <div className={styles.sheetOverlay} role="presentation" onPointerDown={closeSheet}>
-            <section
-              className={styles.bottomSheet}
-              role="dialog"
-              aria-modal="true"
-              aria-label="Detalhes e filtros da lista de cargas"
-              onPointerDown={(event) => event.stopPropagation()}
-            >
-              <div className={styles.sheetGrabber} aria-hidden="true" />
-              <button className={styles.sheetClose} type="button" onClick={closeSheet} aria-label="Fechar sheet">×</button>
+        <BottomSheet
+          open={sheetMode === 'filters'}
+          onOpenChange={(open) => {
+            if (!open) closeSheet();
+          }}
+          title="Visualizar filtros"
+          closeAriaLabel="Fechar filtros"
+          dragHandleAriaLabel="Expandir ou recolher filtros"
+          snapHeights={{
+            collapsed: '40dvh',
+            expanded: '98dvh',
+          }}
+          snapOrder={['collapsed', 'expanded']}
+          initialSnap="expanded"
+          viewportAnchor="flush"
+          enableDrag
+          closeOnOverlayClick
+          variant="strong"
+          overlayVariant="strong"
+          className={styles.filterBottomSheet}
+          bodyClassName={styles.filterBottomSheetBody}
+          footer={<FilterSheetActions onReset={resetFilters} onApply={closeSheet} />}
+        >
+          <FiltersSheet
+            status={status}
+            cargoType={cargoType}
+            origin={origin}
+            destination={destination}
+            vesselType={vesselType}
+            cutoff={cutoff}
+            capacity={capacity}
+            onStatusChange={setStatus}
+            onCargoTypeChange={setCargoType}
+            onOriginChange={setOrigin}
+            onDestinationChange={setDestination}
+            onVesselTypeChange={setVesselType}
+            onCutoffChange={setCutoff}
+            onCapacityChange={setCapacity}
+          />
+        </BottomSheet>
 
-              {sheetMode === 'filters' ? (
-                <div className={styles.sheetFilters}>
-                  <h2>Visualizar filtros</h2>
-                  <p className={styles.sheetLead}>Refine a lista por status, origem, destino e operacao.</p>
-
-                  <div className={styles.sheetSectionTitle}>Status</div>
-                  <div className={styles.sheetChipGrid}>
-                    {statusFilters.map((item) => (
-                      <button key={item.id} type="button" data-active={status === item.id} onClick={() => setStatus(item.id)}>{item.label}</button>
-                    ))}
-                  </div>
-
-                  <div className={styles.sheetSectionTitle}>Operacional</div>
-                  <div className={styles.sheetMetricsGrid}>
-                    <div><span>Tipo de embarcacao</span><strong>Balsa porta-conteineres</strong></div>
-                    <div><span>Cut-off</span><strong>Hoje, 18:00</strong></div>
-                    <div><span>Calado max.</span><strong>2.8 m</strong></div>
-                    <div><span>Janela</span><strong>Portuaria</strong></div>
-                  </div>
-
-                  <div className={styles.sheetFooterActions}>
-                    <button type="button" onClick={resetFilters}>Limpar filtros</button>
-                    <button type="button" data-primary="true" onClick={closeSheet}>Aplicar</button>
-                  </div>
-                </div>
-              ) : (
-                <div className={styles.sheetDetails}>
-                  <div className={styles.detailHeader}>
-                    <span className={styles.cargoIcon}><CubeIcon /></span>
-                    <div>
-                      <p>{sheetCargo.id}</p>
-                      <span className={styles.statusBadge} data-status={sheetCargo.status}>{sheetCargo.statusLabel}</span>
-                    </div>
-                  </div>
-
-                  <h2>{sheetCargo.title}</h2>
-
-                  <div className={styles.sheetRouteCard}>
-                    <div><span>{sheetCargo.origin}</span><small>{sheetCargo.originTerminal}</small></div>
-                    <BoatIcon />
-                    <div><span>{sheetCargo.destination}</span><small>{sheetCargo.destinationTerminal}</small></div>
-                  </div>
-
-                  <div className={styles.sheetMetricsGrid}>
-                    <div><span>ETA</span><strong>{sheetCargo.eta}</strong></div>
-                    <div><span>Entrega prevista</span><strong>{sheetCargo.confidence}</strong></div>
-                  </div>
-
-                  <button type="button"><span>Visao geral</span><small>Informacoes principais da carga</small><ChevronIcon /></button>
-                  <button type="button"><span>Jornada</span><small>Rastreamento e eventos</small><ChevronIcon /></button>
-                  <button type="button"><span>Documentos</span><small>Conhecimentos, notas e certificados</small><ChevronIcon /></button>
-                  <button type="button"><span>Custos</span><small>Detalhamento e pagamentos</small><ChevronIcon /></button>
-                </div>
-              )}
-            </section>
-          </div>
-        ) : null}
+        <BottomSheet
+          open={sheetMode === 'cargo'}
+          onOpenChange={(open) => {
+            if (!open) closeSheet();
+          }}
+          title={cargoForSheet.title}
+          closeAriaLabel="Fechar detalhes"
+          dragHandleAriaLabel="Expandir ou recolher detalhes da carga"
+          snapHeights={{
+            expanded: '90dvh',
+          }}
+          snapOrder={['expanded']}
+          initialSnap="expanded"
+          viewportAnchor="flush"
+          enableDrag
+          closeOnOverlayClick
+          variant="strong"
+          overlayVariant="strong"
+          className={styles.cargoBottomSheet}
+          bodyClassName={styles.cargoBottomSheetBody}
+        >
+          <CargoSheet cargo={cargoForSheet} />
+        </BottomSheet>
       </section>
     </main>
   );
