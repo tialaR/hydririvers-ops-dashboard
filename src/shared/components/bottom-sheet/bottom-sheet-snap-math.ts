@@ -38,22 +38,47 @@ export function readSafeAreaInsetBottomPx(): number {
   return value;
 }
 
+export type BottomSheetSnapResolveOptions = {
+  maxHeightPx?: number;
+  viewportHeightPx?: number;
+};
+
 export function resolveSnapIndexFromTranslate(
   translatePx: number,
   offsetsPx: number[],
   velocityY: number,
   closeThresholdPx: number,
+  options?: BottomSheetSnapResolveOptions,
 ): { index: number; shouldClose: boolean } {
   if (!offsetsPx.length) {
     return { index: 0, shouldClose: false };
   }
 
-  const lowestOffset = offsetsPx[0];
-  if (translatePx > lowestOffset + closeThresholdPx) {
+  const collapsedOffset = offsetsPx[0];
+  const expandedIndex = offsetsPx.length - 1;
+
+  if (translatePx > collapsedOffset + closeThresholdPx) {
     return { index: 0, shouldClose: true };
   }
 
   const projected = translatePx + velocityY * 0.12;
+  const { maxHeightPx, viewportHeightPx } = options ?? {};
+
+  if (maxHeightPx && viewportHeightPx && offsetsPx.length >= 2) {
+    const halfScreenPx = viewportHeightPx * 0.5;
+    const visibleHeightPx = maxHeightPx - projected;
+
+    if (visibleHeightPx >= halfScreenPx) {
+      return { index: expandedIndex, shouldClose: false };
+    }
+
+    if (projected > collapsedOffset + closeThresholdPx * 0.5 && velocityY > 0.12) {
+      return { index: 0, shouldClose: true };
+    }
+
+    return { index: 0, shouldClose: false };
+  }
+
   let nearestIndex = 0;
   let nearestDistance = Number.POSITIVE_INFINITY;
 

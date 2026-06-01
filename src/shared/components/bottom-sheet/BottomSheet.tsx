@@ -13,7 +13,8 @@ import {
 import styles from './BottomSheet.module.scss';
 
 /** Duração alinhada ao CSS do sheet (transform). */
-export const BOTTOM_SHEET_TRANSITION_MS = 320;
+export const BOTTOM_SHEET_TRANSITION_MS = 300;
+const BOTTOM_SHEET_PRESS_DELAY_MS = 160;
 
 export type BottomSheetSnapPoint = 'auto' | '60vh' | '75vh' | '90vh' | '92vh' | '96vh' | 'fullscreen';
 
@@ -184,6 +185,8 @@ export function BottomSheet({
   const [present, setPresent] = useState(open);
   const [visible, setVisible] = useState(false);
   const [motionReady, setMotionReady] = useState(false);
+  const [closeButtonPressing, setCloseButtonPressing] = useState(false);
+  const closePressTimerRef = useRef<number | null>(null);
   const prevOpenRef = useRef(open);
   const closeFallbackTimerRef = useRef<number | null>(null);
   const closeFinishedRef = useRef(false);
@@ -232,6 +235,13 @@ export function BottomSheet({
       setDragTranslateYpx(null);
     }
   }, [initialSnapIndex, open]);
+
+  function clearClosePressTimer() {
+    if (closePressTimerRef.current !== null) {
+      window.clearTimeout(closePressTimerRef.current);
+      closePressTimerRef.current = null;
+    }
+  }
 
   function clearCloseFallbackTimer() {
     if (closeFallbackTimerRef.current !== null) {
@@ -316,6 +326,13 @@ export function BottomSheet({
     };
   }, [onClose, onOpenChange]);
 
+  useEffect(() => () => {
+    if (closePressTimerRef.current !== null) {
+      window.clearTimeout(closePressTimerRef.current);
+      closePressTimerRef.current = null;
+    }
+  }, []);
+
   useLockBodyScroll(present);
 
   useEffect(() => {
@@ -399,8 +416,18 @@ export function BottomSheet({
     if (closeOnOverlayClick) requestClose();
   }
 
+  function queueCloseWithPressFeedback() {
+    setCloseButtonPressing(true);
+    clearClosePressTimer();
+    closePressTimerRef.current = window.setTimeout(() => {
+      setCloseButtonPressing(false);
+      clearClosePressTimer();
+      requestClose();
+    }, BOTTOM_SHEET_PRESS_DELAY_MS);
+  }
+
   function resetAndClose() {
-    requestClose();
+    queueCloseWithPressFeedback();
   }
 
   const maxSnapIndex = usesNamedSnaps
@@ -446,6 +473,10 @@ export function BottomSheet({
         snapMetrics.offsetsPx,
         velocityY,
         closeThresholdPx,
+        {
+          maxHeightPx: snapMetrics.maxHeightPx,
+          viewportHeightPx: viewportHeight,
+        },
       );
 
       if (resolved.shouldClose) {
@@ -617,7 +648,18 @@ export function BottomSheet({
             <h2 id={labelledById ?? titleId} className={styles.title}>{title}</h2>
             {description ? <p id={describedById ?? descriptionId} className={styles.description}>{description}</p> : null}
           </div>
-          <button ref={closeButtonRef} type="button" className={styles.closeButton} onClick={resetAndClose} aria-label={closeAriaLabel ?? title}>
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className={styles.closeButton}
+            data-pressing={closeButtonPressing ? "true" : undefined}
+            onPointerDown={() => setCloseButtonPressing(true)}
+            onPointerUp={() => setCloseButtonPressing(false)}
+            onPointerLeave={() => setCloseButtonPressing(false)}
+            onPointerCancel={() => setCloseButtonPressing(false)}
+            onClick={resetAndClose}
+            aria-label={closeAriaLabel ?? title}
+          >
             <X size={18} />
           </button>
         </header>
