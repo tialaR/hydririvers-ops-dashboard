@@ -417,7 +417,7 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | **PR-1** | ✅ `src/shared/styles/tokens/_hy-v2-light.scss` + mixin `hy-v2-light-tokens` | typecheck; sem consumo no lab | Baixo |
 | **PR-2** | ✅ Alias `--v2-*` ← `--hy-*` em `.root[data-theme='light']` | visual neutro; 2 tokens literais | Baixo |
 | **PR-3** | ✅ Tokenizar hardcodes repetidos no lab SCSS via `var(--v2-*)` (light) | visual neutro; portal body mirror | Médio |
-| **PR-4** | Extrair `HyIconButton` (wrapper + module usando tokens + pressable) | lab usa wrapper; pixel diff mínimo | Médio |
+| **PR-4** | ✅ `IconButton` shared + migração icon buttons `/dev-v2` + close em `BottomSheet` (lab) | visual neutro; testes unitários | Médio |
 | **PR-5** | Extrair `HySearchField` | idem | Médio |
 | **PR-6** | Extrair `HyFilterChip` + `usePressFeedback` | chips filtros iguais | Médio — a11y `aria-pressed` |
 | **PR-7** | Extrair `HyStatusBadge` | card + sheet header | Baixo |
@@ -634,7 +634,51 @@ Neutro por design — substituições referenciam os mesmos valores já renderiz
 
 ### Próximo passo (PR-4)
 
-Extrair primeiro primitive React (**IconButton** ou **StatusBadge**), props mínimas, SCSS fino com `--v2-*`.
+Concluído — ver §19.
+
+---
+
+## 19. PR-4 — `IconButton` shared e migração `/dev-v2`
+
+**Componente:** `src/shared/components/icon-button/IconButton.tsx` (+ `IconButton.module.scss`, `index.ts`).
+
+**API:**
+
+| Prop | Tipo | Notas |
+| --- | --- | --- |
+| `ariaLabel` | `string` | obrigatório (`aria-label`) |
+| `icon` | `ReactNode` | conteúdo do ícone |
+| `variant` | `default` \| `filter` \| `theme` \| `close` \| `map` \| `alert` | glass 52px em default/filter/theme |
+| `size` | `sm` \| `md` \| `lg` | ignorado em `close` (estilo via `className`) |
+| `isActive` | `boolean` | `aria-pressed` + `data-active` |
+| `badgeCount` | `number` | badge canto superior direito se `> 0` |
+| `disabled`, `className`, `onClick`, `type` | — | repassa ao `<button>`; `forwardRef` |
+
+**Usos migrados:**
+
+| Local | Variante | Notas |
+| --- | --- | --- |
+| Header — abrir filtros | `default` + `badgeCount` | `className={styles.headerButton}` |
+| Header — tema claro/escuro | `theme` | `className={styles.headerButton}` |
+| Search row — filtro | `filter` | `className={styles.filterSquare}` |
+| `BottomSheet` — fechar | `close` + `className={styles.closeButton}` | press feedback preservado; overrides lab em `> header button` |
+
+**Não migrados:**
+
+| Uso | Motivo |
+| --- | --- |
+| Bottom nav `navItem` | navegação com label/ícone+texto, não icon-only compact |
+| Filter chips / sheet chips | padrão chip textual, não icon button |
+| `FilterSheetActions` / CTAs | botões com texto |
+| `moreCargoActions`, ações cargo sheet | texto + estrutura composta |
+| Ícones em `CargoCard` / rota / `cargoSheetIcon` | decorativos ou não clicáveis |
+| Catálogo `/dev-v2/design-system` | ausente nesta branch |
+
+**Testes:** `tests/unit/shared/components/icon-button.component.test.tsx` (aria-label, onClick, disabled, badge, active, variant).
+
+**Visual:** neutro — estilos glass 52px movidos para o module do `IconButton`; overrides light/dark do lab em `.headerButton` / `.filterSquare` e `> header button` nos sheets mantidos.
+
+**Próximo passo (PR-5):** extrair **StatusBadge** ou **FilterChip** (recomendado StatusBadge — menor superfície).
 
 ---
 
@@ -676,6 +720,16 @@ Extrair primeiro primitive React (**IconButton** ou **StatusBadge**), props mín
 | `npm run typecheck` | OK |
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
+
+### PR-4 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
+| `npm test` (icon-button + bottom-sheet) | OK — 9 testes |
 
 ---
 

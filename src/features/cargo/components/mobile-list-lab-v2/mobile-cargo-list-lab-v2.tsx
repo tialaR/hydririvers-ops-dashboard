@@ -19,6 +19,7 @@ import {
   type CargoVesselTypeFilterValue,
 } from '@/features/cargo/mocks/cargo-filter-options.mock';
 import { BottomSheet } from '@/shared/components/bottom-sheet';
+import { IconButton } from '@/shared/components/icon-button';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
 
@@ -940,18 +941,21 @@ export function MobileCargoListLabV2() {
             <p>{filteredCargoes.length} de {CARGOES.length} cargas</p>
           </div>
           <div className={styles.headerActions}>
-            <button className={styles.headerButton} type="button" onClick={() => setSheetMode('filters')} aria-label="Abrir filtros">
-              <FilterIcon />
-              {activeFilterCount > 0 ? <span>{activeFilterCount}</span> : null}
-            </button>
-            <button
+            <IconButton
               className={styles.headerButton}
-              type="button"
+              variant="default"
+              ariaLabel="Abrir filtros"
+              icon={<FilterIcon />}
+              badgeCount={activeFilterCount > 0 ? activeFilterCount : undefined}
+              onClick={() => setSheetMode('filters')}
+            />
+            <IconButton
+              className={styles.headerButton}
+              variant="theme"
+              ariaLabel="Alternar modo claro e escuro"
+              icon={<SunMoonIcon theme={theme} />}
               onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
-              aria-label="Alternar modo claro e escuro"
-            >
-              <SunMoonIcon theme={theme} />
-            </button>
+            />
           </div>
         </header>
 
@@ -960,9 +964,13 @@ export function MobileCargoListLabV2() {
             <SearchIcon />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar cargas..." />
           </label>
-          <button className={styles.filterSquare} type="button" onClick={() => setSheetMode('filters')} aria-label="Visualizar filtros">
-            <FilterIcon />
-          </button>
+          <IconButton
+            className={styles.filterSquare}
+            variant="filter"
+            ariaLabel="Visualizar filtros"
+            icon={<FilterIcon />}
+            onClick={() => setSheetMode('filters')}
+          />
         </div>
 
         <section className={styles.cargoList} aria-label="Lista de cargas dev v2">

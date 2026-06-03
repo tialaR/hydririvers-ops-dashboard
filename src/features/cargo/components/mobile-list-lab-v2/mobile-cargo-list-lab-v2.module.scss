@@ -195,8 +195,6 @@
   gap: 9px;
 }
 
-.headerButton,
-.filterSquare,
 .cargoCard,
 .navItem,
 .sheetChipGrid button,
@@ -209,55 +207,6 @@
 .moreCargoActions {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-}
-
-.headerButton,
-.filterSquare {
-  @include pressable.pressableIconButton;
-
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 52px;
-  height: 52px;
-  border: 1px solid rgba(214, 228, 246, 0.14);
-  border-radius: 19px;
-  color: rgba(238, 245, 252, 0.9);
-  background:
-    radial-gradient(circle at 34% 8%, rgba(255, 255, 255, 0.1), transparent 38%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018)),
-    rgba(18, 30, 42, 0.66);
-  box-shadow:
-    0 13px 28px rgba(0, 0, 0, 0.22),
-    inset 0 1px 0 rgba(255, 255, 255, 0.09);
-  -webkit-backdrop-filter: blur(24px) saturate(1.08);
-  backdrop-filter: blur(24px) saturate(1.08);
-
-  svg {
-    width: 21px;
-    height: 21px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-
-  span {
-    position: absolute;
-    top: -7px;
-    right: -7px;
-    display: grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 999px;
-    color: white;
-    background: linear-gradient(135deg, var(--v2-blue-strong), #6aa8ff);
-    box-shadow: 0 12px 22px rgba(49, 130, 255, 0.36);
-    font-size: 13px;
-    font-weight: 920;
-  }
 }
 
 .searchRow {
