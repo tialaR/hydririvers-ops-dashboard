@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 
+import { cargoDsV2ThemeRootClassName } from '@/features/cargo/constants/cargo-ds-v2-theme-scope';
 import { CargoCard } from '@/features/cargo/components/cargo-card';
 import { CargoDetailSheetContent } from '@/features/cargo/components/cargo-detail-sheet-content';
 import {
@@ -188,7 +189,7 @@ const DEV_V2_BOTTOM_NAV_ITEMS = [
 ] as const;
 
 export function MobileCargoListLabV2() {
-  const [theme, setTheme] = useState<ThemeMode>('dark');
+  const [theme, setTheme] = useState<ThemeMode>('light');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<StatusFilter>('todos');
   const [cargoType, setCargoType] = useState<CargoTypeFilter>('todos');
@@ -271,7 +272,7 @@ export function MobileCargoListLabV2() {
   }
 
   return (
-    <main className={styles.root} data-theme={theme}>
+    <main className={cargoDsV2ThemeRootClassName(styles.root)} data-theme={theme}>
       <section className={styles.phoneShell} aria-label="Experiencia visual dev v2 da lista de cargas">
         <header className={styles.header}>
           <div>

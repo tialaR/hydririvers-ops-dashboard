@@ -1544,7 +1544,9 @@
       "emptyDescription": "There are no cargoes available in this view yet. As soon as new operations arrive, they will appear here.",
       "emptyFilteredTitle": "No cargo found",
       "emptyFilteredDescription": "We couldn't find cargoes with the current filters. You can clear the filters and try again.",
-      "clearFiltersAction": "Clear filters"
+      "clearFiltersAction": "Clear filters",
+      "cardActionView": "View details",
+      "cardActionTrack": "Track"
     },
     "filters": {
       "eyebrow": "FILTERS",

@@ -55,6 +55,8 @@ export function CargoCard({
     <article
       className={[styles.card, className].filter(Boolean).join(' ')}
       style={{ '--card-index': index } as CSSProperties}
+      data-cargo-id={cargo.id}
+      data-cargo-label={cargo.title}
       role={onClick || onPrimaryAction ? 'button' : undefined}
       tabIndex={onClick || onPrimaryAction ? 0 : undefined}
       aria-disabled={isDisabled || undefined}

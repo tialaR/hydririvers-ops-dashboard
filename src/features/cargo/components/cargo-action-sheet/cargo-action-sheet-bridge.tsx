@@ -46,7 +46,8 @@ type CargoOptionButtonProps = {
 const MOBILE_VIEWPORT_MAX_WIDTH = 860;
 const MOBILE_QUERY = `(max-width: ${MOBILE_VIEWPORT_MAX_WIDTH}px)`;
 const MAX_LABEL_LENGTH = 96;
-const CARGO_CARD_SELECTOR = 'button[data-cargo-id], button.hr-cargo-card';
+const CARGO_CARD_SELECTOR =
+  'button[data-cargo-id], button.hr-cargo-card, article[data-cargo-id]';
 const CARGO_CODE_SELECTOR = '.hr-cargo-card__code';
 
 function isModifiedNavigation(event: ReactMouseEvent<HTMLDivElement>): boolean {
@@ -106,7 +107,7 @@ function getCargoIdFromAnchor(anchor: HTMLAnchorElement, locale: string): string
   return cargoId;
 }
 
-function getCargoIdFromCard(card: HTMLButtonElement): string | null {
+function getCargoIdFromCard(card: HTMLElement): string | null {
   const dataCargoId = card.dataset.cargoId?.trim();
 
   if (dataCargoId && !isIgnoredCargoSegment(dataCargoId)) {
@@ -141,10 +142,11 @@ function getCargoLabelFromAnchor(anchor: HTMLAnchorElement, cargoId: string): st
   );
 }
 
-function getCargoLabelFromCard(card: HTMLButtonElement, cargoId: string): string {
+function getCargoLabelFromCard(card: HTMLElement, cargoId: string): string {
   return (
     normalizeLabel(card.dataset.cargoLabel) ??
     normalizeLabel(card.querySelector('.hr-cargo-card__title')?.textContent) ??
+    normalizeLabel(card.querySelector('h2')?.textContent) ??
     normalizeLabel(card.getAttribute('aria-label')) ??
     cargoId
   );
@@ -287,7 +289,7 @@ export function CargoActionSheetBridge({
 
     const card = target.closest(CARGO_CARD_SELECTOR);
 
-    if (!(card instanceof HTMLButtonElement)) {
+    if (!(card instanceof HTMLElement)) {
       return;
     }
 

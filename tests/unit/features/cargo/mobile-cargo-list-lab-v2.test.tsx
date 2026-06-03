@@ -63,6 +63,8 @@ describe('MobileCargoListLabV2', () => {
   it('renderiza a tela dev-v2 sem erro', () => {
     const html = renderToStaticMarkup(<MobileCargoListLabV2 />);
 
+    expect(html).toContain('data-theme="light"');
+    expect(html).toMatch(/\broot\b/);
     expect(html).toContain('Cargas');
     expect(html).toContain('4 de 4 cargas');
     expect(html).toContain('Buscar cargas...');
@@ -152,6 +154,12 @@ describe('MobileCargoListLabV2', () => {
 });
 
 describe('MobileCargoListLabV2 source contracts', () => {
+  it('inicia o lab dev-v2 em light mode para referencia visual', () => {
+    const source = readFileSync(v2SourcePath, 'utf8');
+
+    expect(source).toContain("useState<ThemeMode>('light')");
+  });
+
   it('abre filtros pelos botões dedicados no header e na busca', () => {
     const source = readFileSync(v2SourcePath, 'utf8');
 

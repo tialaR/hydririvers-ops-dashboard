@@ -24,6 +24,7 @@ export default async function CargoesPage({ params }: { params: Promise<{ locale
             trackingEvents={trackingEvents}
             vessels={vessels}
             locale={locale}
+            mobileExperience="public-cargas"
           />
         </CargoActionSheetBridge>
       </ScreenTransition>

@@ -825,7 +825,7 @@ Shell da página (`root`, `phoneShell`, header, busca, lista grid, bottom nav), 
 | `cardAction` como `<span>` | CTA visual dentro do card; não é botão isolado (evita nested buttons) |
 | `sheetFooterActions`, `sheetChipGrid`, `metricTile` | Sem uso no TSX atual do lab v2 |
 | Regras de filtro / contagem | Permanecem no orquestrador do lab |
-| `/cargas`, `/minhas-cargas` | Fora de escopo desta rodada |
+| `/cargas`, `/minhas-cargas` | Fora de escopo desta rodada (PR-8) |
 
 ### Testes
 
@@ -833,9 +833,76 @@ Shell da página (`root`, `phoneShell`, header, busca, lista grid, bottom nav), 
 
 ### Próximos passos recomendados
 
-1. Aplicar componentes/tokens na `/cargas` pública mobile.
+1. ~~Aplicar componentes/tokens na `/cargas` pública mobile.~~ — ver §24.
 2. Depois aplicar em `/minhas-cargas` privada.
 3. Reforçar testes do fluxo embarcador mobile.
+
+---
+
+## 24. PR-9 — `/cargas` pública mobile (DS v2)
+
+Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mobile (`≤860px`), sem alterar desktop, `/minhas-cargas`, `/dev-v2` nem regras de negócio de filtro.
+
+### Arquivos principais
+
+| Área | Path |
+| --- | --- |
+| Lista mobile | `src/features/cargo/components/public-cargas-mobile/` |
+| Mapper marketplace → lab v2 | `src/features/cargo/utils/map-marketplace-cargo-to-lab-v2.ts` |
+| ETA helper | `src/features/cargo/utils/parse-cargo-eta-meta.ts` |
+| Shell light tokens | `src/features/cargo/styles/_cargo-v2-light-shell.scss` |
+| Integração rota | `operations-board.tsx` (`mobileExperience="public-cargas"` opt-in em `/cargas`; default preserva `/rastreio`) |
+| Bridge ações | `cargo-action-sheet-bridge.tsx` (`article[data-cargo-id]`) |
+
+### Componentes reutilizados
+
+`CargoCard`, `CargoRouteLine`, `CargoEtaBlock`, `CargoLabV2StatusBadge`, `CargoFilterSheetFooter`, `SearchField`, `IconButton`, `FilterChip`, `Button`, `BottomSheet`.
+
+### Escopo de rota (correção PR-9)
+
+- `OperationsBoard` expõe `mobileExperience?: 'public-cargas' | 'default'` (default).
+- `/[locale]/cargas` passa `mobileExperience="public-cargas"` → `PublicCargasMobileList` só em viewport mobile.
+- `/[locale]/rastreio` não passa a prop → timeline/fluxo mobile anterior preservado.
+- Testes: `tests/unit/features/dashboard/operations-board-mobile-experience.test.ts`, `cargoes-page.test.tsx`.
+
+### Light-first (mobile DS v2)
+
+- `/cargas` mobile e `/dev-v2` não dependem do tema global (`html[data-theme]`) para a primeira pintura dos cards.
+- `PublicCargasMobileList` fixa `data-theme="light"` no SSR e aplica `cargo-v2-light-shell` no root do módulo.
+- `MobileCargoListLabV2` inicia em `light` (`useState('light')`).
+- Cards e satélites DS v2 usam `:global(.root[data-theme='light'])`; o root expõe a classe global `root` via `cargoDsV2ThemeRootClassName` (`src/features/cargo/constants/cargo-ds-v2-theme-scope.ts`).
+- `ThemeToggle` deriva o ícone diretamente de `useTheme()` no SSR (sem `useSyncExternalStore`), evitando hydration mismatch; dark mode global permanece no `ThemeProvider` / cookie.
+
+### Patch light-first — filter sheet e icon buttons (PR-9 visual)
+
+**Causa filter sheet escuro:** `BottomSheet` portaled em `document.body` usa fallback `--hx-card` / `--hx-card-2` escuros quando o painel não define bridge light; estilos locais de superfície não bastavam sem `--hx-*` + tokens `--v2-*` em `body:has([data-theme='light'])`.
+
+**Causa icon buttons escuros:** `IconButton` shared aplica superfície dark por padrão; faltavam overrides `.root[data-theme='light']` em `public-cargas-mobile-list.module.scss` (padrão já existente no lab `/dev-v2`).
+
+**Correção aplicada:**
+
+| Área | Mudança |
+| --- | --- |
+| `_cargo-v2-light-shell.scss` | Mixins `cargo-v2-light-portal-tokens`, `cargo-v2-light-filter-sheet-hx-bridge`, `cargo-v2-light-icon-button-surfaces`, chips e `cargo-v2-light-filter-bottom-sheet` |
+| `public-cargas-mobile-list.module.scss` | Overrides light para `.headerButton`, `.filterSquare`, `.filterBottomSheet`, chips; `body:has([data-theme='light'])` com tokens completos |
+| `public-cargas-mobile-filter-sheet.tsx` | Classe global `root` no painel + `data-theme="light"` no sheet portaled (client) |
+
+**Pendências intencionais (próxima rodada):**
+
+- Bottom nav: refinamento visual light-first pendente.
+- Cargo detail sheet: bridge antigo (`CargoActionSheetBridge`) ainda abre no card; substituição/refino DS v2 depois.
+- Filtros horizontais (status scroller) e botão “Limpar todos”: avaliar remoção/ajuste em rodada própria.
+- Chrome externo do dashboard (shell/layout fora da lista): rodada dedicada.
+
+### Fluxo preservado
+
+- Filtros e busca: mesma lógica do `OperationsBoard` (não mocks do lab).
+- Detalhe: `CargoActionSheetBridge` (não `CargoDetailSheetContent`).
+- Dados sensíveis: sem telefone/valor no card público; CTA apenas visual.
+
+### i18n novo
+
+`operationsBoard.list.cardActionView`, `operationsBoard.list.cardActionTrack` (pt-BR, en-US, es).
 
 ---
 

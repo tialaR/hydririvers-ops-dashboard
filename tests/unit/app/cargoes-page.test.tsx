@@ -23,7 +23,8 @@ vi.mock('next-intl/server', () => ({
 }));
 
 vi.mock('@/features/dashboard/components/operations-board/operations-board', () => ({
-  OperationsBoard: ({ cargoes, locale }: { cargoes: unknown[]; locale: string }) => mockOperationsBoard(cargoes, locale)
+  OperationsBoard: (props: { cargoes: unknown[]; locale: string; mobileExperience?: string }) =>
+    mockOperationsBoard(props)
 }));
 
 vi.mock('@/shared/ui/page-shell/page-shell', () => ({
@@ -54,7 +55,11 @@ describe('cargas page', () => {
     mockListNegotiations.mockResolvedValue([]);
     mockListTrackingEvents.mockResolvedValue([]);
     mockListVessels.mockResolvedValue([]);
-    mockOperationsBoard.mockImplementation((cargoes: unknown[]) => <div data-testid="operations-board" data-count={cargoes.length} />);
+    mockOperationsBoard.mockImplementation(
+      ({ cargoes }: { cargoes: unknown[] }) => (
+        <div data-testid="operations-board" data-count={cargoes.length} />
+      ),
+    );
     mockGetTranslations.mockImplementation(({ namespace }: { namespace: string }) => {
       if (namespace === 'pages.cargoes') {
         return Promise.resolve({
@@ -72,6 +77,9 @@ describe('cargas page', () => {
     const html = renderToStaticMarkup(tree as React.ReactElement);
 
     expect(mockGetPublicCargos).toHaveBeenCalledTimes(1);
+    expect(mockOperationsBoard).toHaveBeenCalledWith(
+      expect.objectContaining({ mobileExperience: 'public-cargas', locale: 'pt-BR' }),
+    );
     expect(html).toContain('Cargas públicas');
     expect(html).toContain('Marketplace de cargas fluviais e de cabotagem prontas para receber propostas.');
     expect(html).toContain('operations-board');
