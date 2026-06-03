@@ -1,0 +1,44 @@
+@use '../../styles/interactions/pressable' as pressable;
+
+.nav {
+  /* Visual shell definido no lab via className (fixed, glass, grid). */
+}
+
+.item {
+  @include pressable.pressableBubble;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+}
+
+.item:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.item:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.item:focus-visible {
+  outline: 2px solid var(--v2-focus-ring, rgba(104, 167, 255, 0.72));
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item:active {
+    transform: none;
+  }
+}

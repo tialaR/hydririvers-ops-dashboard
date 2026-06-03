@@ -1,0 +1,158 @@
+// HydriRivers Design System v2 — light mode tokens (source: /dev-v2 lab audit).
+// Apply with @include hy-v2-light-tokens on a scoped selector; does not emit global CSS by itself.
+// Dark mode: future PR (_hy-v2-dark.scss).
+
+@mixin hy-v2-light-tokens {
+  /* Background */
+  --hy-color-background-app: #eef4ff;
+  --hy-color-background-mid: #f7faff;
+  --hy-color-background-bottom: #e8eef8;
+  --hy-color-background-elevated: rgba(255, 255, 255, 0.78);
+
+  /* Text */
+  --hy-color-text-primary: #111827;
+  --hy-color-text-title: #0f172a;
+  --hy-color-text-secondary: rgba(71, 85, 105, 0.74);
+  --hy-color-text-muted: rgba(100, 116, 139, 0.72);
+  --hy-color-text-accent: rgba(37, 99, 235, 0.86);
+
+  /* Brand / semantic */
+  --hy-color-brand: #2563eb;
+  --hy-color-brand-strong: #1d4ed8;
+  --hy-color-success: #16a34a;
+  --hy-color-warning: #ca8a04;
+  --hy-color-cyan: #0891b2;
+
+  /* Surfaces */
+  --hy-color-surface-card: rgba(229, 236, 247, 0.72);
+  --hy-color-surface-sheet: rgba(248, 251, 255, 0.92);
+  --hy-color-surface-search: rgba(226, 234, 246, 0.66);
+  --hy-color-surface-bottom-nav: rgba(226, 234, 246, 0.76);
+  --hy-color-glass-surface: rgba(255, 255, 255, 0.78);
+  --hy-color-glass-strong: rgba(255, 255, 255, 0.92);
+  --hy-color-glass-soft: rgba(255, 255, 255, 0.64);
+  --hy-color-border-subtle: rgba(15, 23, 42, 0.1);
+  --hy-color-border-strong: rgba(15, 23, 42, 0.18);
+  --hy-color-line-subtle: rgba(15, 23, 42, 0.1);
+
+  /* Actions */
+  --hy-color-action-primary-start: #2f7bff;
+  --hy-color-action-primary-end: #29d2a9;
+  --hy-color-action-secondary: rgba(241, 245, 249, 0.64);
+  --hy-color-focus-ring: #2563eb;
+
+  /* Route */
+  --hy-color-route-origin: #16a34a;
+  --hy-color-route-destination: #2563eb;
+
+  /* Overlay */
+  --hy-color-overlay-sheet: rgba(3, 8, 14, 0.3);
+
+  /* Status — lab card variants + reserved completed/blocked (catalog parity) */
+  --hy-color-status-in-transit-bg: rgba(220, 252, 231, 0.72);
+  --hy-color-status-in-transit-text: #15803d;
+  --hy-color-status-in-transit-border: rgba(22, 163, 74, 0.16);
+  --hy-color-status-scheduled-bg: rgba(219, 234, 254, 0.72);
+  --hy-color-status-scheduled-text: #1d4ed8;
+  --hy-color-status-scheduled-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.72);
+  --hy-color-status-quotation-text: #1d4ed8;
+  --hy-color-status-quotation-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-delayed-bg: rgba(254, 243, 199, 0.74);
+  --hy-color-status-delayed-text: #a16207;
+  --hy-color-status-delayed-border: rgba(202, 138, 4, 0.24);
+  --hy-color-status-completed-bg: rgba(209, 250, 229, 0.8);
+  --hy-color-status-completed-text: #047857;
+  --hy-color-status-completed-border: rgba(5, 150, 105, 0.24);
+  --hy-color-status-blocked-bg: rgba(254, 226, 226, 0.84);
+  --hy-color-status-blocked-text: #b91c1c;
+  --hy-color-status-blocked-border: rgba(220, 38, 38, 0.24);
+
+  /* Layout / control sizes (rem, from lab measurements) */
+  --hy-size-shell-max-width: 26.875rem;
+  --hy-size-control-height: 3.25rem;
+  --hy-size-bottom-nav-height: 4.375rem;
+  --hy-size-bottom-nav-active-bubble-height: 3.625rem;
+  --hy-size-icon-button: 3.25rem;
+  --hy-size-cargo-icon: 2.625rem;
+  --hy-spacing-shell-padding-inline: 1.125rem;
+  --hy-spacing-shell-padding-bottom-nav: 8rem;
+  --hy-spacing-card-gap: 0.875rem;
+  --hy-spacing-chip-gap: 0.5625rem;
+
+  /* Radius */
+  --hy-radius-card: 1.4375rem;
+  --hy-radius-sheet-top: 2rem;
+  --hy-radius-sheet: 1.8125rem;
+  --hy-radius-chip: 999rem;
+  --hy-radius-badge: 999rem;
+  --hy-radius-button: 1rem;
+  --hy-radius-icon-button: 1.1875rem;
+  --hy-radius-bottom-nav: 999rem;
+  --hy-radius-search: 1.125rem;
+  --hy-radius-cargo-icon: 0.75rem;
+
+  /* Shadow */
+  --hy-shadow-app: 0 1.625rem 4.5rem rgba(15, 23, 42, 0.14);
+  --hy-shadow-card-soft: 0 1.625rem 4.5rem rgba(15, 23, 42, 0.14);
+  --hy-shadow-card-elevated: 0 1.125rem 2.625rem rgba(15, 23, 42, 0.12), 0 0.25rem 0.75rem rgba(15, 23, 42, 0.08);
+  --hy-shadow-sheet: 0 1.75rem 5.375rem rgba(15, 23, 42, 0.18);
+  --hy-shadow-bottom-nav: 0 0.625rem 1.5rem rgba(15, 23, 42, 0.14);
+  --hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12);
+  --hy-shadow-focus: 0 0 0 0.1875rem rgba(37, 99, 235, 0.28);
+
+  /* Blur / glass */
+  --hy-blur-surface-soft: blur(1.125rem) saturate(1.05);
+  --hy-blur-sheet-backdrop: blur(1.75rem) saturate(1.14);
+  --hy-blur-bottom-nav: blur(1.5rem) saturate(1.08);
+  --hy-blur-overlay: blur(0.625rem) saturate(1.02);
+
+  /* Typography */
+  --hy-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+  --hy-font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --hy-font-size-display: 2.75rem;
+  --hy-font-size-sheet-title: 2.6875rem;
+  --hy-font-size-sheet-cargo-title: 1.4375rem;
+  --hy-font-size-title: 1.125rem;
+  --hy-font-size-subtitle: 0.9375rem;
+  --hy-font-size-body: 0.875rem;
+  --hy-font-size-chip: 0.84375rem;
+  --hy-font-size-label: 0.75rem;
+  --hy-font-size-caption: 0.6875rem;
+  --hy-font-size-micro: 0.625rem;
+  --hy-font-size-nav: 0.578125rem;
+  --hy-font-weight-regular: 400;
+  --hy-font-weight-medium: 500;
+  --hy-font-weight-semibold: 620;
+  --hy-font-weight-bold: 720;
+  --hy-font-weight-heavy: 780;
+  --hy-font-weight-display: 690;
+  --hy-font-weight-black: 900;
+  --hy-line-height-display: 0.98;
+  --hy-line-height-sheet-title: 1.12;
+  --hy-line-height-sheet-cargo-title: 1.08;
+  --hy-line-height-title: 1.2;
+  --hy-line-height-subtitle: 1.25;
+  --hy-line-height-body: 1.35;
+  --hy-line-height-label: 1.2;
+  --hy-line-height-caption: 1.1;
+  --hy-letter-spacing-display: -0.075em;
+  --hy-letter-spacing-sheet-title: -0.04em;
+  --hy-letter-spacing-sheet-cargo-title: -0.055em;
+  --hy-letter-spacing-title: -0.018em;
+  --hy-letter-spacing-label: 0.065em;
+  --hy-letter-spacing-caption: 0;
+  --hy-letter-spacing-code: 0.01em;
+  --hy-letter-spacing-nav: 0.01em;
+
+  /* Motion (pressable + lab enter animations) */
+  --hy-motion-press-duration: 160ms;
+  --hy-motion-press-scale: 1.045;
+  --hy-motion-press-scale-card: 1.035;
+  --hy-motion-press-scale-icon: 1.06;
+  --hy-motion-press-scale-focus: 1.025;
+  --hy-motion-duration-enter: 560ms;
+  --hy-motion-stagger-card: 82ms;
+  --hy-motion-ease-standard: cubic-bezier(0.2, 1, 0.2, 1);
+  --hy-motion-ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

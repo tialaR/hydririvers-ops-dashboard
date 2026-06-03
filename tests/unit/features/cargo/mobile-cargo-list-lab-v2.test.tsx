@@ -63,6 +63,8 @@ describe('MobileCargoListLabV2', () => {
   it('renderiza a tela dev-v2 sem erro', () => {
     const html = renderToStaticMarkup(<MobileCargoListLabV2 />);
 
+    expect(html).toContain('data-theme="light"');
+    expect(html).toMatch(/\broot\b/);
     expect(html).toContain('Cargas');
     expect(html).toContain('4 de 4 cargas');
     expect(html).toContain('Buscar cargas...');
@@ -97,22 +99,25 @@ describe('MobileCargoListLabV2', () => {
     expect(html).toContain('role="button"');
 
     const source = readFileSync(v2SourcePath, 'utf8');
-    expect(source).toContain('onClick={() => onOpen(cargo)}');
+    expect(source).toContain('onClick={openCargoSheet}');
+    expect(source).toContain('CargoCard');
     expect(source).toContain("setSheetMode('cargo')");
     expect(source).toContain('open={sheetMode === \'cargo\'}');
   });
 
   it('não aninha button dentro de button no card', () => {
     const source = readFileSync(v2SourcePath, 'utf8');
-    const cargoCardStart = source.indexOf('function CargoCard');
-    const cargoCardEnd = source.indexOf('function BottomNav');
-    const cargoCardSource = source.slice(cargoCardStart, cargoCardEnd);
+    const cargoCardPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/cargo-card/CargoCard.tsx',
+    );
+    const cargoCardSource = readFileSync(cargoCardPath, 'utf8');
 
     expect(cargoCardSource).toContain('<article');
-    expect(cargoCardSource).toContain('role="button"');
-    expect(cargoCardSource).toContain('<span className={styles.cardAction}');
+    expect(cargoCardSource).toContain('role={onClick || onPrimaryAction ? \'button\' : undefined}');
+    expect(cargoCardSource).toContain('className={styles.cardAction}');
     expect(cargoCardSource).toContain('aria-hidden="true"');
-    expect(cargoCardSource).not.toContain('<button');
+    expect(cargoCardSource).not.toMatch(/<button[^>]*className=\{styles\.cardAction/);
   });
 
   it('"Limpar filtros" reseta filtros e fecha o sheet', () => {
@@ -126,7 +131,13 @@ describe('MobileCargoListLabV2', () => {
     expect(source).toContain('resetFilters();');
     expect(source).toContain('closeSheet();');
     expect(source).toContain('onReset={clearFiltersAndClose}');
-    expect(source).toContain("scheduleAction('reset')");
+    expect(source).toContain('CargoFilterSheetFooter');
+
+    const footerPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/cargo-filter-sheet-content/CargoFilterSheetContent.tsx',
+    );
+    expect(readFileSync(footerPath, 'utf8')).toContain("scheduleAction('reset')");
   });
 
   it('"Ver cargas" fecha o sheet sem limpar filtros', () => {
@@ -137,30 +148,43 @@ describe('MobileCargoListLabV2', () => {
 
     const source = readFileSync(v2SourcePath, 'utf8');
     expect(source).toContain('onViewCargoes={closeSheet}');
-    expect(source).toContain("scheduleAction('view')");
+    expect(source).toContain('CargoFilterSheetFooter');
     expect(source).not.toContain('onViewCargoes={clearFiltersAndClose}');
   });
 });
 
 describe('MobileCargoListLabV2 source contracts', () => {
+  it('inicia o lab dev-v2 em light mode para referencia visual', () => {
+    const source = readFileSync(v2SourcePath, 'utf8');
+
+    expect(source).toContain("useState<ThemeMode>('light')");
+  });
+
   it('abre filtros pelos botões dedicados no header e na busca', () => {
     const source = readFileSync(v2SourcePath, 'utf8');
 
     expect(source).toContain("setSheetMode('filters')");
     expect(source).toContain('open={sheetMode === \'filters\'}');
-    expect(source).toContain('aria-label="Abrir filtros"');
-    expect(source).toContain('aria-label="Visualizar filtros"');
+    expect(source).toContain('ariaLabel="Abrir filtros"');
+    expect(source).toContain('ariaLabel="Visualizar filtros"');
   });
 
   it('usa mocks de filtros compartilhados para todos os grupos', () => {
-    const source = readFileSync(v2SourcePath, 'utf8');
+    const filterSource = readFileSync(
+      resolve(
+        process.cwd(),
+        'src/features/cargo/components/cargo-filter-sheet-content/CargoFilterSheetContent.tsx',
+      ),
+      'utf8',
+    );
 
-    expect(source).toContain('cargoStatusFilterOptions');
-    expect(source).toContain('cargoOriginFilterOptions');
-    expect(source).toContain('cargoDestinationFilterOptions');
-    expect(source).toContain('cargoTypeFilterOptions');
-    expect(source).toContain('cargoVesselTypeFilterOptions');
-    expect(source).toContain('cargoCutoffFilterOptions');
-    expect(source).toContain('cargoCapacityFilterOptions');
+    expect(readFileSync(v2SourcePath, 'utf8')).toContain('CargoFilterSheetContent');
+    expect(filterSource).toContain('cargoStatusFilterOptions');
+    expect(filterSource).toContain('cargoOriginFilterOptions');
+    expect(filterSource).toContain('cargoDestinationFilterOptions');
+    expect(filterSource).toContain('cargoTypeFilterOptions');
+    expect(filterSource).toContain('cargoVesselTypeFilterOptions');
+    expect(filterSource).toContain('cargoCutoffFilterOptions');
+    expect(filterSource).toContain('cargoCapacityFilterOptions');
   });
 });

@@ -1,61 +1,29 @@
 'use client';
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
-import { persistStoredTheme, readStoredTheme } from '@/shared/preferences/client-preferences';
+import { persistStoredTheme } from '@/shared/preferences/client-preferences';
+import { useTheme } from '@/shared/providers/theme-provider';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import styles from './theme-toggle.module.scss';
 
-type Theme = 'light' | 'dark';
 type ThemeToggleVariant = 'icon' | 'pill';
-
-const defaultThemeLabels = {
-  light: 'lightMode',
-  dark: 'darkMode'
-} as const;
 
 type ThemeToggleProps = {
   ariaLabel?: string;
   variant?: ThemeToggleVariant;
 };
 
-function resolveTheme(): Theme {
-  if (typeof window === 'undefined') return 'dark';
-  const fromDom = document.documentElement.dataset.theme;
-  if (fromDom === 'light' || fromDom === 'dark') return fromDom;
-  const stored = readStoredTheme('dark');
-  if (stored === 'light' || stored === 'dark') return stored;
-  return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-}
-
 export function ThemeToggle({ ariaLabel, variant = 'icon' }: ThemeToggleProps) {
   const t = useTranslations('common');
-  const [theme, setTheme] = useState<Theme>(() => resolveTheme());
-  const mounted = useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false
-  );
-
-  useEffect(() => {
-    const onThemeChange = (event: Event) => {
-      const nextTheme = (event as CustomEvent<Theme>).detail;
-      if (nextTheme === 'light' || nextTheme === 'dark') {
-        setTheme(nextTheme);
-      }
-    };
-    window.addEventListener('hydrorivers:theme-change', onThemeChange);
-    return () => window.removeEventListener('hydrorivers:theme-change', onThemeChange);
-  }, []);
+  const { theme } = useTheme();
 
   function toggleTheme() {
     const nextTheme = theme === 'dark' ? 'light' : 'dark';
     persistStoredTheme(nextTheme);
     window.dispatchEvent(new CustomEvent('hydrorivers:theme-change', { detail: nextTheme }));
-    setTheme(nextTheme);
   }
 
-  const currentIcon = mounted && theme === 'light' ? 'sun' : 'moon';
+  const currentIcon = theme === 'light' ? 'sun' : 'moon';
   const themeLabel = theme === 'light' ? t('lightMode') : t('darkMode');
 
   if (variant === 'pill') {

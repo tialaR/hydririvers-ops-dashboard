@@ -11,6 +11,7 @@ describe('CargoActionSheetBridge', () => {
 
     expect(source).toContain("from '@/shared/components/bottom-sheet/BottomSheet'");
     expect(source).toContain('<BottomSheet');
+    expect(source).toContain('article[data-cargo-id]');
     expect(source).not.toContain('createPortal');
     expect(source).not.toContain('cargoActionSheetOverlayIn');
   });

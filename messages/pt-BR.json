@@ -1544,7 +1544,9 @@
       "emptyDescription": "Ainda não há cargas disponíveis nesta visão. Assim que novas operações entrarem, elas aparecerão aqui.",
       "emptyFilteredTitle": "Nenhuma carga encontrada",
       "emptyFilteredDescription": "Não encontramos cargas com os filtros atuais. Você pode limpar os filtros e tentar novamente.",
-      "clearFiltersAction": "Limpar filtros"
+      "clearFiltersAction": "Limpar filtros",
+      "cardActionView": "Ver detalhes",
+      "cardActionTrack": "Acompanhar"
     },
     "filters": {
       "eyebrow": "FILTROS",
