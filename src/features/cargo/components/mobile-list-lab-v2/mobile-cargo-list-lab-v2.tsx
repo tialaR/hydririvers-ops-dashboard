@@ -19,8 +19,11 @@ import {
   type CargoVesselTypeFilterValue,
 } from '@/features/cargo/mocks/cargo-filter-options.mock';
 import { BottomSheet } from '@/shared/components/bottom-sheet';
+import { BottomNav } from '@/shared/components/bottom-nav';
+import { Button } from '@/shared/components/button';
 import { IconButton } from '@/shared/components/icon-button';
 import { FilterChip } from '@/shared/components/filter-chip';
+import { SearchField } from '@/shared/components/search-field';
 import { StatusBadge, type StatusBadgeStatus } from '@/shared/components/status-badge';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
@@ -380,44 +383,13 @@ function CargoCard({ cargo, index, onOpen }: { cargo: Cargo; index: number; onOp
   );
 }
 
-function BottomNav() {
-  return (
-    <nav className={styles.bottomNav} aria-label="Navegacao principal dev v2">
-      <button className={styles.navItem} data-active="false" type="button">
-        <span className={styles.navIcon}>
-          <NavIcon type="vision" />
-        </span>
-        <span className={styles.navLabel}>Visão</span>
-      </button>
-      <button className={styles.navItem} data-active="false" type="button">
-        <span className={styles.navIcon}>
-          <NavIcon type="dashboard" />
-        </span>
-        <span className={styles.navLabel}>Dashboard</span>
-      </button>
-      <button className={`${styles.navItem} ${styles.navItemActive}`} data-active="true" type="button">
-        <span className={styles.activeNavBubble}>
-          <span className={styles.activeNavIcon}>
-            <NavIcon type="cargo" />
-          </span>
-          <span className={styles.activeNavLabel}>Cargas</span>
-        </span>
-      </button>
-      <button className={styles.navItem} data-active="false" type="button">
-        <span className={styles.navIcon}>
-          <NavIcon type="vessels" />
-        </span>
-        <span className={styles.navLabel}>Embarcações</span>
-      </button>
-      <button className={styles.navItem} data-active="false" type="button">
-        <span className={styles.navIcon}>
-          <NavIcon type="profile" />
-        </span>
-        <span className={styles.navLabel}>Perfil</span>
-      </button>
-    </nav>
-  );
-}
+const DEV_V2_BOTTOM_NAV_ITEMS = [
+  { id: 'vision', label: 'Visão', icon: <NavIcon type="vision" /> },
+  { id: 'dashboard', label: 'Dashboard', icon: <NavIcon type="dashboard" /> },
+  { id: 'cargo', label: 'Cargas', icon: <NavIcon type="cargo" /> },
+  { id: 'vessels', label: 'Embarcações', icon: <NavIcon type="vessels" /> },
+  { id: 'profile', label: 'Perfil', icon: <NavIcon type="profile" /> },
+] as const;
 
 function LocationPinIcon() {
   return (
@@ -657,8 +629,8 @@ function FilterSheetActions({ onReset, onViewCargoes }: { onReset: () => void; o
 
   return (
     <div className={styles.filterSheetActions}>
-      <button
-        type="button"
+      <Button
+        variant="secondary"
         data-pressing={pressingAction === 'reset' ? 'true' : undefined}
         onPointerDown={() => setPressingAction('reset')}
         onPointerUp={() => setPressingAction(null)}
@@ -667,10 +639,9 @@ function FilterSheetActions({ onReset, onViewCargoes }: { onReset: () => void; o
         onClick={() => scheduleAction('reset')}
       >
         Limpar filtros
-      </button>
-      <button
-        type="button"
-        data-primary="true"
+      </Button>
+      <Button
+        variant="primary"
         data-pressing={pressingAction === 'view' ? 'true' : undefined}
         onPointerDown={() => setPressingAction('view')}
         onPointerUp={() => setPressingAction(null)}
@@ -679,7 +650,7 @@ function FilterSheetActions({ onReset, onViewCargoes }: { onReset: () => void; o
         onClick={() => scheduleAction('view')}
       >
         Ver cargas
-      </button>
+      </Button>
     </div>
   );
 }
@@ -860,10 +831,14 @@ export function MobileCargoListLabV2() {
         </header>
 
         <div className={styles.searchRow}>
-          <label className={styles.searchField}>
-            <SearchIcon />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar cargas..." />
-          </label>
+          <SearchField
+            className={styles.searchField}
+            value={query}
+            onChange={setQuery}
+            placeholder="Buscar cargas..."
+            ariaLabel="Buscar cargas"
+            icon={<SearchIcon />}
+          />
           <IconButton
             className={styles.filterSquare}
             variant="filter"
@@ -879,7 +854,23 @@ export function MobileCargoListLabV2() {
           ))}
         </section>
 
-        {!isSheetOpen ? <BottomNav /> : null}
+        {!isSheetOpen ? (
+          <BottomNav
+            className={styles.bottomNav}
+            ariaLabel="Navegacao principal dev v2"
+            items={[...DEV_V2_BOTTOM_NAV_ITEMS]}
+            activeId="cargo"
+            classNames={{
+              item: styles.navItem,
+              itemActive: styles.navItemActive,
+              icon: styles.navIcon,
+              label: styles.navLabel,
+              activeBubble: styles.activeNavBubble,
+              activeIcon: styles.activeNavIcon,
+              activeLabel: styles.activeNavLabel,
+            }}
+          />
+        ) : null}
 
         <BottomSheet
           open={sheetMode === 'filters'}

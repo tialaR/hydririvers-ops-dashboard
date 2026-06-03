@@ -420,7 +420,7 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | **PR-4** | ✅ `IconButton` shared + migração icon buttons `/dev-v2` + close em `BottomSheet` (lab) | visual neutro; testes unitários | Médio |
 | **PR-5** | ✅ `StatusBadge` shared + migração badges `/dev-v2` | visual neutro; testes unitários | Baixo |
 | **PR-6** | ✅ `FilterChip` shared + migração chips do filter sheet `/dev-v2` | visual neutro; Bubble Press; testes | Médio |
-| **PR-7** | Extrair `SearchField` ou `Button` (footer sheet) | idem | Médio |
+| **PR-7** | ✅ `Button`, `SearchField`, `BottomNav` shared + migração `/dev-v2` | visual neutro; testes | Médio |
 | **PR-8** | Extrair `HyButton` primary/secondary | filter sheet footer | Médio — ícones mask CSS |
 | **PR-9** | Documentar bridge `hy`→`hx` em theme partial para sheets | filter/cargo sheets iguais | Alto — muitos seletores globais |
 | **PR-10** | Catálogo: consumir tokens shared; reduzir duplicação `hy-*` no catalog scss | rota design-system | Baixo |
@@ -742,7 +742,44 @@ Concluído — ver §19.
 
 **Visual:** neutro — estilos dark no module shared; overrides light em `.filterChipGrid .filterChip` + portal `body:has` no lab SCSS.
 
-**Próximo passo (PR-7):** extrair **Button** (footer do filter sheet) ou **SearchField**.
+**Próximo passo (PR-7):** concluído — ver §22.
+
+---
+
+## 22. PR-7 — `Button`, `SearchField`, `BottomNav` (shared)
+
+### Button — `src/shared/components/button/`
+
+| Prop | Notas |
+| --- | --- |
+| `children`, `variant` (`primary` \| `secondary` \| …), `size`, `iconLeft`, `iconRight` | |
+| `isLoading`, `disabled`, `fullWidth`, `className`, `onClick` | `data-primary` em `primary`; ícones mask em `secondary`/`primary` via SCSS |
+
+**Migrado:** footer do filter sheet — `Limpar filtros` (`secondary`), `Ver cargas` (`primary`), com press delay 160ms preservado.
+
+**Não migrado:** `cardAction` (span decorativo no card), `sheetActionList`, `moreCargoActions`, `sheetFooterActions`.
+
+### SearchField — `src/shared/components/search-field/`
+
+| Prop | Notas |
+| --- | --- |
+| `value`, `onChange(value)`, `placeholder`, `icon`, `rightSlot`, `disabled`, `ariaLabel` | label + input `type="search"` |
+
+**Migrado:** barra de busca principal (`searchRow` + `IconButton` filtro ao lado, layout externo).
+
+### BottomNav — `src/shared/components/bottom-nav/`
+
+| Prop | Notas |
+| --- | --- |
+| `items`, `activeId`, `onItemSelect`, `classNames` (lab skins), `ariaLabel` | bubble ativo preservado via classes do lab |
+
+**Migrado:** nav fixa do lab (5 itens, `activeId="cargo"`, mock local sem roteamento).
+
+**Testes:** `button.component.test.tsx`, `search-field.component.test.tsx`, `bottom-nav.component.test.tsx`.
+
+**Visual:** neutro — estilos base nos modules shared; overrides light/portal e shell `.bottomNav` / `.navItem` / `.activeNavBubble` no lab SCSS.
+
+**Próximo passo (PR-8):** extrair **CargoCard** ou primitives de card.
 
 ---
 
@@ -814,6 +851,16 @@ Concluído — ver §19.
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
 | `npm test` (filter-chip) | OK — 5 testes |
+
+### PR-7 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
+| `npm test` (button, search-field, bottom-nav) | OK — 15 testes |
 
 ---
 
