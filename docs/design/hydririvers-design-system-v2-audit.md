@@ -415,7 +415,7 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | PR | Escopo | Critério de aceite | Risco |
 | --- | --- | --- | --- |
 | **PR-1** | ✅ `src/shared/styles/tokens/_hy-v2-light.scss` + mixin `hy-v2-light-tokens` | typecheck; sem consumo no lab | Baixo |
-| **PR-2** | Lab: alias `--v2-*` ← `hy-*` no `.root` light/dark | screenshot `/dev-v2` light igual | Médio — conferir dark |
+| **PR-2** | ✅ Alias `--v2-*` ← `--hy-*` em `.root[data-theme='light']` | visual neutro; 2 tokens literais | Baixo |
 | **PR-3** | Substituir 10–15 rgba mais repetidos no lab por `var(--hy-*)` (card, search, header) | lint + visual light | Médio |
 | **PR-4** | Extrair `HyIconButton` (wrapper + module usando tokens + pressable) | lab usa wrapper; pixel diff mínimo | Médio |
 | **PR-5** | Extrair `HySearchField` | idem | Médio |
@@ -534,13 +534,71 @@ npm run build
 | Typography | family, sizes (display → nav), weights, line-heights, letter-spacing |
 | Motion | press duration/scale variants, enter duration, stagger, easing |
 
-**Consumo:** nenhum arquivo inclui o mixin ainda → **zero impacto visual** em `/pt-BR/dev-v2`.
-
-**Próximo passo (PR-2):** no `.root` do lab, alias `--v2-*` → `var(--hy-*)` via `@include hy-v2-light-tokens` em `[data-theme='light']` (e preparar hook para dark).
+**Consumo:** mixin incluído no lab a partir do PR-2 (light).
 
 ---
 
-## 16. Resultado das validações
+## 16. PR-2 — alias `--v2-*` → `--hy-*` no lab (light)
+
+**Status:** concluído. Escopo: `.root[data-theme='light']` em `mobile-cargo-list-lab-v2.module.scss`.
+
+| Arquivo | Ação |
+| --- | --- |
+| `mobile-cargo-list-lab-v2.module.scss` | `@use` + `@include hy-v2-light-tokens` + aliases |
+| `docs/design/hydririvers-design-system-v2-audit.md` | Esta seção |
+
+**Contrato após PR-2:**
+
+- `--hy-*` — fonte shared (mixin `hy-v2-light-tokens`) no escopo light do lab.
+- `--v2-*` — API local do lab; estilos existentes continuam usando `var(--v2-*)`.
+- Dark mode — inalterado; continua com literais no `.root` base.
+
+### Aliases aplicados (`--v2-*` → `var(--hy-*)`)
+
+| `--v2-*` | `--hy-*` |
+| --- | --- |
+| `--v2-bg-top` | `--hy-color-background-app` |
+| `--v2-bg-mid` | `--hy-color-background-mid` |
+| `--v2-bg-bottom` | `--hy-color-background-bottom` |
+| `--v2-text` | `--hy-color-text-primary` |
+| `--v2-title` | `--hy-color-text-title` |
+| `--v2-muted` | `--hy-color-text-secondary` |
+| `--v2-soft` | `--hy-color-text-muted` |
+| `--v2-blue` | `--hy-color-brand` |
+| `--v2-blue-strong` | `--hy-color-brand-strong` |
+| `--v2-cyan` | `--hy-color-cyan` |
+| `--v2-green` | `--hy-color-success` |
+| `--v2-yellow` | `--hy-color-warning` |
+| `--v2-glass` | `--hy-color-glass-surface` |
+| `--v2-glass-strong` | `--hy-color-glass-strong` |
+| `--v2-glass-soft` | `--hy-color-glass-soft` |
+| `--v2-border-strong` | `--hy-color-border-strong` |
+| `--v2-line` | `--hy-color-line-subtle` |
+| `--v2-shadow` | `--hy-shadow-app` |
+
+### Aliases evitados (valor lab ≠ token `hy-*`)
+
+| Token | Motivo |
+| --- | --- |
+| `--v2-border` | Lab `rgba(15,23,42,0.12)` vs `hy-color-border-subtle` `0.1` |
+| `--v2-card-shadow` | Lab `0 28px 74px` vs `hy-shadow-card-soft` `0 26px 72px` (1.625rem/4.5rem) |
+
+### Não definidos no bloco light (sem alias nesta rodada)
+
+| Token | Notas |
+| --- | --- |
+| `--v2-blur` | Só no `.root` dark; light herda — fora do escopo PR-2 |
+| `--v2-font-family` | Só no `.root` dark; stack idêntica — PR futuro dark/light unificado |
+
+**Hardcodes, radius, blur, motion, status, route, overlay:** permanecem como antes; PR-3 em lotes.
+
+**Próximo passo (PR-3):** alinhar `hy-color-border-subtle` / `hy-shadow-card-soft` com o lab OU substituir hardcodes repetidos por `var(--hy-*)` onde seguro.
+
+**Validação visual:** neutra por design — valores aliasados são byte-equivalentes aos literais anteriores (exceto tokens evitados, mantidos literais).
+
+---
+
+## 17. Resultado das validações
 
 ### Auditoria (2026-06-02)
 
@@ -560,6 +618,16 @@ npm run build
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK — rota `/dev-v2` inalterada; sem `/dev-v2/design-system` no bundle |
 
+### PR-2 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
+| `npm run dev` | OK — preview em `http://localhost:3000/pt-BR/dev-v2` (toggle light) |
+
 ---
 
 ## Apêndice A — Mapeamento `--v2-*` → `--hy-*` (light)
@@ -578,9 +646,9 @@ npm run build
 | `--v2-green` | `--hy-color-success` |
 | `--v2-yellow` | `--hy-color-warning` |
 | `--v2-glass` | `--hy-color-glass-surface` |
-| `--v2-border` | `--hy-color-border-subtle` |
+| `--v2-border` | `--hy-color-border-subtle` (PR-2: **não** aliasado — alpha 0.12 vs 0.1) |
 | `--v2-border-strong` | `--hy-color-border-strong` |
-| `--v2-card-shadow` | `--hy-shadow-card-soft` |
+| `--v2-card-shadow` | `--hy-shadow-card-soft` (PR-2: **não** aliasado — 28px/74px vs 26px/72px) |
 | `--v2-font-family` | `--hy-font-family-base` |
 
 ## Apêndice B — Bridge sheet `--hx-*` (light, no lab)

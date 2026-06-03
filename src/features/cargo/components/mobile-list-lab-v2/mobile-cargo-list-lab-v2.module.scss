@@ -1,4 +1,5 @@
 @use '../../../../shared/styles/interactions/pressable' as pressable;
+@use '../../../../shared/styles/tokens/hy-v2-light' as hyV2Light;
 
 .root {
   --v2-bg-top: #061423;
@@ -36,25 +37,30 @@
 }
 
 .root[data-theme='light'] {
-  --v2-bg-top: #eef4ff;
-  --v2-bg-mid: #f7faff;
-  --v2-bg-bottom: #e8eef8;
-  --v2-text: #111827;
-  --v2-title: #0f172a;
-  --v2-muted: rgba(71, 85, 105, 0.74);
-  --v2-soft: rgba(100, 116, 139, 0.72);
-  --v2-blue: #2563eb;
-  --v2-blue-strong: #1d4ed8;
-  --v2-cyan: #0891b2;
-  --v2-green: #16a34a;
-  --v2-yellow: #ca8a04;
-  --v2-glass: rgba(255, 255, 255, 0.78);
-  --v2-glass-strong: rgba(255, 255, 255, 0.92);
-  --v2-glass-soft: rgba(255, 255, 255, 0.64);
+  @include hyV2Light.hy-v2-light-tokens;
+
+  /* PR-2: --v2-* remain the lab API; values resolve via shared --hy-* (light). */
+  --v2-bg-top: var(--hy-color-background-app);
+  --v2-bg-mid: var(--hy-color-background-mid);
+  --v2-bg-bottom: var(--hy-color-background-bottom);
+  --v2-text: var(--hy-color-text-primary);
+  --v2-title: var(--hy-color-text-title);
+  --v2-muted: var(--hy-color-text-secondary);
+  --v2-soft: var(--hy-color-text-muted);
+  --v2-blue: var(--hy-color-brand);
+  --v2-blue-strong: var(--hy-color-brand-strong);
+  --v2-cyan: var(--hy-color-cyan);
+  --v2-green: var(--hy-color-success);
+  --v2-yellow: var(--hy-color-warning);
+  --v2-glass: var(--hy-color-glass-surface);
+  --v2-glass-strong: var(--hy-color-glass-strong);
+  --v2-glass-soft: var(--hy-color-glass-soft);
+  /* Kept literal: hy-color-border-subtle is 0.1 alpha; lab --v2-border is 0.12 — PR-3 */
   --v2-border: rgba(15, 23, 42, 0.12);
-  --v2-border-strong: rgba(15, 23, 42, 0.18);
-  --v2-line: rgba(15, 23, 42, 0.1);
-  --v2-shadow: 0 26px 72px rgba(15, 23, 42, 0.14);
+  --v2-border-strong: var(--hy-color-border-strong);
+  --v2-line: var(--hy-color-line-subtle);
+  --v2-shadow: var(--hy-shadow-app);
+  /* Kept literal: hy-shadow-card-soft is 26px/72px; lab uses 28px/74px — PR-3 token alignment */
   --v2-card-shadow: 0 28px 74px rgba(15, 23, 42, 0.14);
 
   background:
