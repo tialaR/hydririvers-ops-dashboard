@@ -1,0 +1,37 @@
+.cardBadge {
+  margin-left: auto;
+}
+
+.sheetBadge {
+  margin: 0;
+  width: max-content;
+  min-height: 25px;
+  padding: 5px 12px;
+  color: rgba(82, 231, 141, 0.95);
+  background: rgba(28, 119, 73, 0.44);
+  font-size: 12px;
+  font-weight: 820;
+}
+
+:global(.root[data-theme='light']) .cardBadge {
+  border-color: var(--v2-status-in-transit-border);
+  color: var(--v2-status-in-transit-text);
+  background: var(--v2-status-in-transit-bg);
+}
+
+:global(.root[data-theme='light']) .cardBadge[data-status='agendado'],
+:global(.root[data-theme='light']) .cardBadge[data-status='cotacao'] {
+  border-color: var(--v2-status-scheduled-border);
+  color: var(--v2-blue-strong);
+  background: var(--v2-status-scheduled-bg);
+}
+
+:global(.root[data-theme='light']) .cardBadge[data-status='atencao'] {
+  color: var(--v2-status-delayed-text);
+  background: var(--v2-status-delayed-bg);
+}
+
+:global(body:has([data-theme='light'])) .sheetBadge {
+  color: var(--v2-status-in-transit-text);
+  background: var(--v2-status-in-transit-bg-sheet);
+}

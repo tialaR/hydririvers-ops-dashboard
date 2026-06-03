@@ -779,7 +779,63 @@ Concluído — ver §19.
 
 **Visual:** neutro — estilos base nos modules shared; overrides light/portal e shell `.bottomNav` / `.navItem` / `.activeNavBubble` no lab SCSS.
 
-**Próximo passo (PR-8):** extrair **CargoCard** ou primitives de card.
+**Próximo passo (PR-8):** concluído — ver §23.
+
+---
+
+## 23. PR-8 — componentes de domínio cargo (`/dev-v2`)
+
+Extração feature-owned a partir de `mobile-cargo-list-lab-v2`, sem mudança visual intencional em `/pt-BR/dev-v2`.
+
+### Componentes extraídos (`src/features/cargo/components/`)
+
+| Componente | Path | Responsabilidade |
+| --- | --- | --- |
+| `CargoCard` | `cargo-card/` | Card clicável: tile, código, `StatusBadge`, título, rota, ETA, CTA decorativo |
+| `CargoRouteLine` | `cargo-route-line/` | Rota card (pontos + tracejado + barco) e variant sheet (`sheetRouteBox`) |
+| `CargoEtaBlock` | `cargo-eta-block/` | Métrica ETA no card; grid ETA + entrega no detail sheet |
+| `CargoFilterSheetContent` | `cargo-filter-sheet-content/` | Corpo do filter sheet + `CargoFilterSheetFooter` (160ms) |
+| `CargoDetailSheetContent` | `cargo-detail-sheet-content/` | Corpo do cargo detail sheet (header, rota, stats, seções, ações) |
+| `CargoLabV2StatusBadge` | `cargo-lab-v2/` | Wrapper `StatusBadge` + mapa de status do lab |
+| Ícones lab | `cargo-lab-v2/cargo-lab-v2-icons.tsx` | SVGs usados por cards/sheets |
+
+**Tipos e mocks:** `src/features/cargo/types/cargo-lab-v2.types.ts`, `src/features/cargo/data/cargo-lab-v2.mock.ts` (determinísticos, dev-only).
+
+### Permanece em `shared/`
+
+`BottomSheet` (shell), `Button`, `IconButton`, `SearchField`, `FilterChip`, `StatusBadge`, `BottomNav`, tokens `--hy-*` / aliases `--v2-*`, helpers `pressable`.
+
+### Permanece no lab (`mobile-list-lab-v2`)
+
+Shell da página (`root`, `phoneShell`, header, busca, lista grid, bottom nav), estilos dos wrappers `filterBottomSheet` / `cargoBottomSheet`, portal light `body:has([data-theme='light'])` para tokens e chrome dos sheets, lógica de filtro (`matchesStatusFilter`, etc.), ícones de header/nav, toggle de tema.
+
+### Usos migrados no `/dev-v2`
+
+| Antes (inline no lab) | Depois |
+| --- | --- |
+| `CargoCard` | `<CargoCard onClick={openCargoSheet} />` |
+| `FiltersSheet` | `<CargoFilterSheetContent … />` |
+| `FilterSheetActions` | `<CargoFilterSheetFooter … />` |
+| `CargoSheet` | `<CargoDetailSheetContent cargo={…} />` |
+
+### Não migrados (motivo)
+
+| Item | Motivo |
+| --- | --- |
+| `cardAction` como `<span>` | CTA visual dentro do card; não é botão isolado (evita nested buttons) |
+| `sheetFooterActions`, `sheetChipGrid`, `metricTile` | Sem uso no TSX atual do lab v2 |
+| Regras de filtro / contagem | Permanecem no orquestrador do lab |
+| `/cargas`, `/minhas-cargas` | Fora de escopo desta rodada |
+
+### Testes
+
+`tests/unit/features/cargo/cargo-*.component.test.tsx` + ajustes em `mobile-cargo-list-lab-v2.test.tsx`.
+
+### Próximos passos recomendados
+
+1. Aplicar componentes/tokens na `/cargas` pública mobile.
+2. Depois aplicar em `/minhas-cargas` privada.
+3. Reforçar testes do fluxo embarcador mobile.
 
 ---
 
