@@ -198,7 +198,7 @@
 .cargoCard,
 .navItem,
 .sheetChipGrid button,
-.filterChipGrid button,
+.filterChipGrid .filterChip,
 .filterSelect,
 .metricTile,
 .sheetFooterActions button,
@@ -1201,50 +1201,6 @@
   display: flex;
   flex-wrap: wrap;
   gap: 9px 10px;
-
-  button {
-    @include pressable.pressableBubble;
-
-    &[data-pressing='true'] {
-      transform: scale(1.045);
-    }
-
-    min-height: 38px;
-    padding: 0 16px;
-    border-radius: 999px;
-    border: 1px solid rgba(209, 224, 240, 0.13);
-    color: rgba(220, 231, 242, 0.7);
-    background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.022)),
-      rgba(255, 255, 255, 0.045);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.07),
-      0 8px 16px rgba(0, 0, 0, 0.11);
-    font: inherit;
-    font-size: 13.5px;
-    font-weight: 710;
-  }
-
-  button[data-active='true'] {
-    border-color: rgba(125, 184, 255, 0.72);
-    color: rgba(225, 238, 252, 0.95);
-    background:
-      radial-gradient(circle at 38% 0%, rgba(104, 167, 255, 0.16), transparent 52%),
-      linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.022)),
-      rgba(17, 30, 42, 0.62);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.1),
-      inset 0 0 0 1px rgba(104, 167, 255, 0.18),
-      inset 0 0 18px rgba(79, 141, 224, 0.08),
-      0 0 0 1px rgba(79, 141, 224, 0.08),
-      0 7px 16px rgba(31, 96, 172, 0.12);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    button[data-pressing='true'] {
-      transform: none;
-    }
-  }
 }
 
 .filterSelect {
@@ -1852,7 +1808,7 @@
   }
 }
 
-.root[data-theme='light'] .filterChipGrid button {
+.root[data-theme='light'] .filterChipGrid .filterChip {
   border-color: var(--v2-border-slate-12);
   color: var(--v2-text-slate-78);
   background:
@@ -1863,7 +1819,7 @@
     0 10px 20px var(--v2-line-faint);
 }
 
-.root[data-theme='light'] .filterChipGrid button[data-active='true'] {
+.root[data-theme='light'] .filterChipGrid .filterChip[data-active='true'] {
   border-color: rgba(37, 99, 235, 0.54);
   color: rgba(29, 78, 216, 0.86);
   background:
@@ -2166,7 +2122,7 @@
 }
 
 :global(body:has([data-theme='light'])) .sheetChipGrid button,
-:global(body:has([data-theme='light'])) .filterChipGrid button {
+:global(body:has([data-theme='light'])) .filterChipGrid .filterChip {
   border-color: var(--v2-border-slate-12);
   color: var(--v2-text-slate-78);
   background:
@@ -2188,7 +2144,7 @@
     0 8px 18px rgba(37, 99, 235, 0.08);
 }
 
-:global(body:has([data-theme='light'])) .filterChipGrid button[data-active='true'] {
+:global(body:has([data-theme='light'])) .filterChipGrid .filterChip[data-active='true'] {
   border-color: rgba(37, 99, 235, 0.54);
   color: rgba(29, 78, 216, 0.86);
   background:

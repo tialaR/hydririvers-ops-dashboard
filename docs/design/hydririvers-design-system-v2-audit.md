@@ -419,8 +419,8 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | **PR-3** | ✅ Tokenizar hardcodes repetidos no lab SCSS via `var(--v2-*)` (light) | visual neutro; portal body mirror | Médio |
 | **PR-4** | ✅ `IconButton` shared + migração icon buttons `/dev-v2` + close em `BottomSheet` (lab) | visual neutro; testes unitários | Médio |
 | **PR-5** | ✅ `StatusBadge` shared + migração badges `/dev-v2` | visual neutro; testes unitários | Baixo |
-| **PR-6** | Extrair `FilterChip` + press feedback | chips filtros iguais | Médio — a11y `aria-pressed` |
-| **PR-7** | Extrair `HySearchField` | idem | Médio |
+| **PR-6** | ✅ `FilterChip` shared + migração chips do filter sheet `/dev-v2` | visual neutro; Bubble Press; testes | Médio |
+| **PR-7** | Extrair `SearchField` ou `Button` (footer sheet) | idem | Médio |
 | **PR-8** | Extrair `HyButton` primary/secondary | filter sheet footer | Médio — ícones mask CSS |
 | **PR-9** | Documentar bridge `hy`→`hx` em theme partial para sheets | filter/cargo sheets iguais | Alto — muitos seletores globais |
 | **PR-10** | Catálogo: consumir tokens shared; reduzir duplicação `hy-*` no catalog scss | rota design-system | Baixo |
@@ -713,7 +713,36 @@ Concluído — ver §19.
 
 **Visual:** neutro — estilos base/dark no module shared; overrides light (`.cargoCard .statusBadge`, `.cargoSheetHeader .statusBadge`) e portal `body:has` mantidos no lab SCSS.
 
-**Próximo passo (PR-6):** extrair **FilterChip**.
+**Próximo passo (PR-6):** concluído — ver §21.
+
+---
+
+## 21. PR-6 — `FilterChip` shared e migração `/dev-v2`
+
+**Componente:** `src/shared/components/filter-chip/FilterChip.tsx` (+ `FilterChip.module.scss`, `index.ts`).
+
+**API:**
+
+| Prop | Tipo | Notas |
+| --- | --- | --- |
+| `children` | `ReactNode` | label do chip |
+| `isSelected` | `boolean` | `data-active="true"` |
+| `disabled` | `boolean` | bloqueia interação |
+| `onClick` | — | handler de seleção |
+| `ariaPressed` | `boolean` | toggle explícito (origem/destino) |
+| `className`, `type` | — | repassa ao `<button>` |
+
+**Comportamento:** Bubble Press (`pressableBubble`, 160ms), `pointer capture`, `focus-visible` via `--v2-focus-ring`, `aria-pressed` quando selecionado.
+
+**Usos migrados:** 7 grupos no filter bottom sheet (`FiltersSheet`) — status, origem, destino, tipo de carga, embarcação, cutoff, capacidade (~40 chips via mocks).
+
+**Não migrados:** chips no header/lista (inexistentes no lab v2), `sheetChipGrid` (sem uso em TSX), `StatusBadge`, CTAs do footer, `filterSelect`, catálogo ausente.
+
+**Testes:** `tests/unit/shared/components/filter-chip.component.test.tsx`.
+
+**Visual:** neutro — estilos dark no module shared; overrides light em `.filterChipGrid .filterChip` + portal `body:has` no lab SCSS.
+
+**Próximo passo (PR-7):** extrair **Button** (footer do filter sheet) ou **SearchField**.
 
 ---
 
@@ -775,6 +804,16 @@ Concluído — ver §19.
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
 | `npm test` (status-badge) | OK — 5 testes |
+
+### PR-6 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
+| `npm test` (filter-chip) | OK — 5 testes |
 
 ---
 

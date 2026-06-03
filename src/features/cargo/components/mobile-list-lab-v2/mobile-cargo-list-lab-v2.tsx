@@ -20,6 +20,7 @@ import {
 } from '@/features/cargo/mocks/cargo-filter-options.mock';
 import { BottomSheet } from '@/shared/components/bottom-sheet';
 import { IconButton } from '@/shared/components/icon-button';
+import { FilterChip } from '@/shared/components/filter-chip';
 import { StatusBadge, type StatusBadgeStatus } from '@/shared/components/status-badge';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
@@ -455,58 +456,6 @@ function ScaleIcon() {
   );
 }
 
-function getFilterChipKey(group: string, value: string) {
-  return `${group}:${value}`;
-}
-
-function FilterChipButton({
-  group,
-  value,
-  isActive,
-  pressedKey,
-  onPressStart,
-  onPressEnd,
-  onClick,
-  children,
-  'aria-pressed': ariaPressed,
-}: {
-  group: string;
-  value: string;
-  isActive: boolean;
-  pressedKey: string | null;
-  onPressStart: (group: string, value: string) => void;
-  onPressEnd: () => void;
-  onClick: () => void;
-  children: ReactNode;
-  'aria-pressed'?: boolean;
-}) {
-  const chipKey = getFilterChipKey(group, value);
-
-  return (
-    <button
-      type="button"
-      data-active={isActive}
-      data-pressing={pressedKey === chipKey ? 'true' : undefined}
-      aria-pressed={ariaPressed}
-      onPointerDown={(event) => {
-        event.currentTarget.setPointerCapture(event.pointerId);
-        onPressStart(group, value);
-      }}
-      onPointerUp={(event) => {
-        if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-          event.currentTarget.releasePointerCapture(event.pointerId);
-        }
-        onPressEnd();
-      }}
-      onPointerLeave={onPressEnd}
-      onPointerCancel={onPressEnd}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
 function FiltersSheet({
   status,
   cargoType,
@@ -538,58 +487,20 @@ function FiltersSheet({
   onCutoffChange: (cutoff: CutoffFilter) => void;
   onCapacityChange: (capacity: CapacityFilter) => void;
 }) {
-  const [pressedFilterChipKey, setPressedFilterChipKey] = useState<string | null>(null);
-  const pressClearTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (pressClearTimeoutRef.current) {
-        clearTimeout(pressClearTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  function handleFilterChipPointerDown(group: string, chipValue: string) {
-    if (pressClearTimeoutRef.current) {
-      clearTimeout(pressClearTimeoutRef.current);
-      pressClearTimeoutRef.current = null;
-    }
-
-    setPressedFilterChipKey(getFilterChipKey(group, chipValue));
-
-    pressClearTimeoutRef.current = setTimeout(() => {
-      setPressedFilterChipKey(null);
-      pressClearTimeoutRef.current = null;
-    }, 160);
-  }
-
-  function handleFilterChipPointerEnd() {
-    if (pressClearTimeoutRef.current) {
-      clearTimeout(pressClearTimeoutRef.current);
-      pressClearTimeoutRef.current = null;
-    }
-
-    setPressedFilterChipKey(null);
-  }
-
   return (
     <div className={styles.filterSheetContent}>
       <section className={styles.filterSheetSection}>
         <h3>Status</h3>
         <div className={styles.filterChipGrid}>
           {cargoStatusFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="status"
-              value={item.value}
-              isActive={item.value === status}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === status}
               onClick={() => onStatusChange(item.value)}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -601,19 +512,15 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid} aria-label="Selecionar origem">
           {cargoOriginFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="origin"
-              value={item.value}
-              isActive={item.value === origin}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === origin}
               onClick={() => onOriginChange(item.value)}
-              aria-pressed={item.value === origin}
+              ariaPressed={item.value === origin}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -625,19 +532,15 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid} aria-label="Selecionar destino">
           {cargoDestinationFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="destination"
-              value={item.value}
-              isActive={item.value === destination}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === destination}
               onClick={() => onDestinationChange(item.value)}
-              aria-pressed={item.value === destination}
+              ariaPressed={item.value === destination}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -649,18 +552,14 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid}>
           {cargoTypeFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="cargo-type"
-              value={item.value}
-              isActive={item.value === cargoType}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === cargoType}
               onClick={() => onCargoTypeChange(item.value)}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -672,18 +571,14 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid}>
           {cargoVesselTypeFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="vessel-type"
-              value={item.value}
-              isActive={item.value === vesselType}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === vesselType}
               onClick={() => onVesselTypeChange(item.value)}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -695,18 +590,14 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid}>
           {cargoCutoffFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="cutoff"
-              value={item.value}
-              isActive={item.value === cutoff}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === cutoff}
               onClick={() => onCutoffChange(item.value)}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
@@ -718,18 +609,14 @@ function FiltersSheet({
         </h3>
         <div className={styles.filterChipGrid}>
           {cargoCapacityFilterOptions.map((item) => (
-            <FilterChipButton
+            <FilterChip
               key={item.id}
-              group="capacity"
-              value={item.value}
-              isActive={item.value === capacity}
-              pressedKey={pressedFilterChipKey}
-              onPressStart={handleFilterChipPointerDown}
-              onPressEnd={handleFilterChipPointerEnd}
+              className={styles.filterChip}
+              isSelected={item.value === capacity}
               onClick={() => onCapacityChange(item.value)}
             >
               {item.label}
-            </FilterChipButton>
+            </FilterChip>
           ))}
         </div>
       </section>
