@@ -416,7 +416,7 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | --- | --- | --- | --- |
 | **PR-1** | ✅ `src/shared/styles/tokens/_hy-v2-light.scss` + mixin `hy-v2-light-tokens` | typecheck; sem consumo no lab | Baixo |
 | **PR-2** | ✅ Alias `--v2-*` ← `--hy-*` em `.root[data-theme='light']` | visual neutro; 2 tokens literais | Baixo |
-| **PR-3** | Substituir 10–15 rgba mais repetidos no lab por `var(--hy-*)` (card, search, header) | lint + visual light | Médio |
+| **PR-3** | ✅ Tokenizar hardcodes repetidos no lab SCSS via `var(--v2-*)` (light) | visual neutro; portal body mirror | Médio |
 | **PR-4** | Extrair `HyIconButton` (wrapper + module usando tokens + pressable) | lab usa wrapper; pixel diff mínimo | Médio |
 | **PR-5** | Extrair `HySearchField` | idem | Médio |
 | **PR-6** | Extrair `HyFilterChip` + `usePressFeedback` | chips filtros iguais | Médio — a11y `aria-pressed` |
@@ -590,11 +590,51 @@ npm run build
 | `--v2-blur` | Só no `.root` dark; light herda — fora do escopo PR-2 |
 | `--v2-font-family` | Só no `.root` dark; stack idêntica — PR futuro dark/light unificado |
 
-**Hardcodes, radius, blur, motion, status, route, overlay:** permanecem como antes; PR-3 em lotes.
+**Hardcodes no lab (light):** PR-3 substituiu repetições por `var(--v2-*)`; ver §18.
 
-**Próximo passo (PR-3):** alinhar `hy-color-border-subtle` / `hy-shadow-card-soft` com o lab OU substituir hardcodes repetidos por `var(--hy-*)` onde seguro.
+**Validação visual (PR-2):** neutra — alias `--hy-*` byte-equivalente aos literais anteriores (exceto `--v2-border` / `--v2-card-shadow` mantidos literais).
 
-**Validação visual:** neutra por design — valores aliasados são byte-equivalentes aos literais anteriores (exceto tokens evitados, mantidos literais).
+---
+
+## 18. PR-3 — tokenizar hardcodes repetidos no lab (light)
+
+**Objetivo:** reduzir literais visuais duplicados em `mobile-cargo-list-lab-v2.module.scss` via API local `--v2-*`, sem mudança visual em `/pt-BR/dev-v2`.
+
+**Arquivos:** `src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.module.scss`, este audit.
+
+### Grupos substituídos
+
+| Grupo | Exemplos antes | Token(s) |
+| --- | --- | --- |
+| Texto primário / título | `#0f172a`, `rgba(15, 23, 42, 0.78–0.9)` | `--v2-title`, `--v2-text`, `--v2-text-strong`, `--v2-text-body*` |
+| Texto secundário | `rgba(71, 85, 105, …)`, `rgba(100, 116, 139, …)` | `--v2-muted`, `--v2-soft`, `--v2-text-secondary-*`, `--v2-text-slate-*` |
+| Superfícies frost | `rgba(241, 245, 249, 0.58–0.72)` | `--v2-surface-frosted-*`, `--v2-surface-card`, `--v2-surface-search` |
+| Bordas slate | `rgba(71, 85, 105, 0.1–0.14)` | `--v2-border-slate-*` |
+| Status badges/chips | rgba de status | `--v2-status-*` |
+| Brand / accent | `#2563eb` | `--v2-blue`, `--v2-blue-strong` |
+| Card / sheet bridge | `--hx-text`, `--hx-line-soft`, `--hx-cyan` | `var(--v2-title)`, `var(--v2-line)`, `var(--v2-blue)` |
+
+**Exemplo:** `color: var(--v2-title)` no lugar de `#0f172a`; `border-color: var(--v2-border-slate-14)` no lugar de `rgba(71, 85, 105, 0.14)`.
+
+### Literais centralizados (sem match exato `hy-*`)
+
+`--v2-border-slate-10` … `--v2-border-slate-14`, `--v2-surface-frosted-*`, `--v2-text-slate-*`, `--v2-text-route-city`, `--v2-line-faint`, `--v2-highlight-inset`.
+
+### Portal
+
+`:global(body:has([data-theme='light']))` inclui mixin + espelho de `--v2-*` para bottom sheets portaled.
+
+### Preservados
+
+`--v2-border` (0.12), `--v2-card-shadow` (28/74), gradientes de fundo únicos, `--hx-card` / `--hx-card-2`, dark mode, `430px`, snaps `dvh`, radius/font soltos sem repetição clara, SVG/timings.
+
+### Visual
+
+Neutro por design — substituições referenciam os mesmos valores já renderizados no light.
+
+### Próximo passo (PR-4)
+
+Extrair primeiro primitive React (**IconButton** ou **StatusBadge**), props mínimas, SCSS fino com `--v2-*`.
 
 ---
 
@@ -627,6 +667,15 @@ npm run build
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
 | `npm run dev` | OK — preview em `http://localhost:3000/pt-BR/dev-v2` (toggle light) |
+
+### PR-3 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
 
 ---
 
