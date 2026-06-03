@@ -1,0 +1,65 @@
+.badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.size_sm {
+  gap: 0;
+  min-height: 26px;
+  padding: 5px 12px;
+  border: 1px solid rgba(74, 222, 128, 0.14);
+  color: rgba(134, 239, 172, 0.86);
+  background: rgba(19, 74, 48, 0.44);
+  font-weight: 620;
+}
+
+.size_md {
+  gap: 6px;
+  padding: 7px 11px;
+  color: var(--v2-green, rgba(134, 239, 172, 0.86));
+  background: rgba(34, 197, 94, 0.14);
+  font-weight: 850;
+}
+
+.withDot::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.noDot::before {
+  content: none;
+  display: none;
+}
+
+.badge[data-status='agendado'],
+.badge[data-status='cotacao'] {
+  border-color: rgba(104, 167, 255, 0.16);
+  color: rgba(147, 197, 253, 0.86);
+  background: rgba(30, 73, 126, 0.48);
+}
+
+.size_md[data-status='agendado'],
+.size_md[data-status='cotacao'] {
+  border: 0;
+  color: var(--v2-blue, #68a7ff);
+  background: rgba(49, 130, 255, 0.15);
+}
+
+.badge[data-status='atencao'] {
+  color: rgba(253, 230, 138, 0.88);
+  background: rgba(120, 83, 9, 0.34);
+}
+
+.size_md[data-status='atencao'] {
+  border: 0;
+  color: var(--v2-yellow, #f4c247);
+  background: rgba(244, 194, 71, 0.16);
+}

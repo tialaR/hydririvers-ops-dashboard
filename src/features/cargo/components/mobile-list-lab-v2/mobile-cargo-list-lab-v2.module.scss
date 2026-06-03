@@ -406,40 +406,6 @@
   color: var(--v2-text-accent);
 }
 
-.cargoCard .statusBadge {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0;
-  min-height: 26px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid rgba(74, 222, 128, 0.14);
-  color: rgba(134, 239, 172, 0.86);
-  background: rgba(19, 74, 48, 0.44);
-  font-size: 12px;
-  font-weight: 620;
-  line-height: 1.2;
-  letter-spacing: 0;
-}
-
-.cargoCard .statusBadge::before {
-  content: none;
-  display: none;
-}
-
-.cargoCard .statusBadge[data-status='agendado'],
-.cargoCard .statusBadge[data-status='cotacao'] {
-  border-color: rgba(104, 167, 255, 0.16);
-  color: rgba(147, 197, 253, 0.86);
-  background: rgba(30, 73, 126, 0.48);
-}
-
-.cargoCard .statusBadge[data-status='atencao'] {
-  color: rgba(253, 230, 138, 0.88);
-  background: rgba(120, 83, 9, 0.34);
-}
-
 .root[data-theme='light'] .cargoCard .statusBadge {
   border-color: var(--v2-status-in-transit-border);
   color: var(--v2-status-in-transit-text);
@@ -456,38 +422,6 @@
 .root[data-theme='light'] .cargoCard .statusBadge[data-status='atencao'] {
   color: var(--v2-status-delayed-text);
   background: var(--v2-status-delayed-bg);
-}
-
-.statusBadge {
-  margin-left: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 11px;
-  border-radius: 999px;
-  color: var(--v2-green);
-  background: rgba(34, 197, 94, 0.14);
-  font-size: 12px;
-  font-weight: 850;
-}
-
-.statusBadge::before {
-  content: '';
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: currentColor;
-}
-
-.statusBadge[data-status='agendado'],
-.statusBadge[data-status='cotacao'] {
-  color: var(--v2-blue);
-  background: rgba(49, 130, 255, 0.15);
-}
-
-.statusBadge[data-status='atencao'] {
-  color: var(--v2-yellow);
-  background: rgba(244, 194, 71, 0.16);
 }
 
 .cargoCard .routeLine {

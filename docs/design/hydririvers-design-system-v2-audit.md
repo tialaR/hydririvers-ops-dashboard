@@ -418,9 +418,9 @@ Prefixo **`hy-`** = Design System v2 derivado do lab. **`hx-`** permanece contra
 | **PR-2** | ✅ Alias `--v2-*` ← `--hy-*` em `.root[data-theme='light']` | visual neutro; 2 tokens literais | Baixo |
 | **PR-3** | ✅ Tokenizar hardcodes repetidos no lab SCSS via `var(--v2-*)` (light) | visual neutro; portal body mirror | Médio |
 | **PR-4** | ✅ `IconButton` shared + migração icon buttons `/dev-v2` + close em `BottomSheet` (lab) | visual neutro; testes unitários | Médio |
-| **PR-5** | Extrair `HySearchField` | idem | Médio |
-| **PR-6** | Extrair `HyFilterChip` + `usePressFeedback` | chips filtros iguais | Médio — a11y `aria-pressed` |
-| **PR-7** | Extrair `HyStatusBadge` | card + sheet header | Baixo |
+| **PR-5** | ✅ `StatusBadge` shared + migração badges `/dev-v2` | visual neutro; testes unitários | Baixo |
+| **PR-6** | Extrair `FilterChip` + press feedback | chips filtros iguais | Médio — a11y `aria-pressed` |
+| **PR-7** | Extrair `HySearchField` | idem | Médio |
 | **PR-8** | Extrair `HyButton` primary/secondary | filter sheet footer | Médio — ícones mask CSS |
 | **PR-9** | Documentar bridge `hy`→`hx` em theme partial para sheets | filter/cargo sheets iguais | Alto — muitos seletores globais |
 | **PR-10** | Catálogo: consumir tokens shared; reduzir duplicação `hy-*` no catalog scss | rota design-system | Baixo |
@@ -678,7 +678,42 @@ Concluído — ver §19.
 
 **Visual:** neutro — estilos glass 52px movidos para o module do `IconButton`; overrides light/dark do lab em `.headerButton` / `.filterSquare` e `> header button` nos sheets mantidos.
 
-**Próximo passo (PR-5):** extrair **StatusBadge** ou **FilterChip** (recomendado StatusBadge — menor superfície).
+**Próximo passo (PR-5):** concluído — ver §20.
+
+---
+
+## 20. PR-5 — `StatusBadge` shared e migração `/dev-v2`
+
+**Componente:** `src/shared/components/status-badge/StatusBadge.tsx` (+ `StatusBadge.module.scss`, `status-badge-utils.ts`, `index.ts`).
+
+**API:**
+
+| Prop | Tipo | Notas |
+| --- | --- | --- |
+| `status` | `inTransit` \| `scheduled` \| `quotation` \| `delayed` \| `completed` \| `blocked` | mapeia `data-status` legado (`transito`, `agendado`, …) |
+| `children` | `ReactNode` | opcional; default PT-BR por status |
+| `showDot` | `boolean` | default `true`; `false` no card |
+| `size` | `sm` \| `md` | `sm` = card compact; `md` = sheet com dot |
+| `className`, `ariaLabel` | — | repassa ao `<span>` |
+
+**Statuses com estilo no lab:** `inTransit`, `scheduled`, `quotation`, `delayed` (tokens `--v2-status-*` no light via overrides do lab).
+
+**`completed` / `blocked`:** API + `data-status` preparados; sem tokens/estilos dedicados no lab atual — usam base `inTransit` até PR-12.
+
+**Usos migrados:**
+
+| Local | Config |
+| --- | --- |
+| `CargoCard` header | `CargoStatusBadge` → `size="sm"`, `showDot={false}`, label do mock |
+| `CargoSheet` header | `CargoStatusBadge` → `size="md"`, dot ativo |
+
+**Não migrados:** filter chips, CTAs, ícones decorativos, catálogo ausente nesta branch.
+
+**Testes:** `tests/unit/shared/components/status-badge.component.test.tsx`.
+
+**Visual:** neutro — estilos base/dark no module shared; overrides light (`.cargoCard .statusBadge`, `.cargoSheetHeader .statusBadge`) e portal `body:has` mantidos no lab SCSS.
+
+**Próximo passo (PR-6):** extrair **FilterChip**.
 
 ---
 
@@ -730,6 +765,16 @@ Concluído — ver §19.
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
 | `npm test` (icon-button + bottom-sheet) | OK — 9 testes |
+
+### PR-5 (2026-06-02)
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1971 keys |
+| `npm run build` | OK |
+| `npm test` (status-badge) | OK — 5 testes |
 
 ---
 

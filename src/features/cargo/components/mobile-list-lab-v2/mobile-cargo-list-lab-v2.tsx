@@ -20,6 +20,7 @@ import {
 } from '@/features/cargo/mocks/cargo-filter-options.mock';
 import { BottomSheet } from '@/shared/components/bottom-sheet';
 import { IconButton } from '@/shared/components/icon-button';
+import { StatusBadge, type StatusBadgeStatus } from '@/shared/components/status-badge';
 
 import styles from './mobile-cargo-list-lab-v2.module.scss';
 
@@ -269,11 +270,23 @@ function NavIcon({ type }: { type: 'vision' | 'dashboard' | 'cargo' | 'vessels' 
   return <UserIcon />;
 }
 
-function StatusBadge({ cargo }: { cargo: Cargo }) {
+function mapCargoStatusToBadgeStatus(status: CargoStatus): StatusBadgeStatus {
+  if (status === 'agendado') return 'scheduled';
+  if (status === 'cotacao') return 'quotation';
+  if (status === 'atencao') return 'delayed';
+  return 'inTransit';
+}
+
+function CargoStatusBadge({ cargo, showDot = true, size = 'md' }: { cargo: Cargo; showDot?: boolean; size?: 'sm' | 'md' }) {
   return (
-    <span className={styles.statusBadge} data-status={cargo.status}>
+    <StatusBadge
+      className={styles.statusBadge}
+      status={mapCargoStatusToBadgeStatus(cargo.status)}
+      showDot={showDot}
+      size={size}
+    >
       {cargo.statusLabel}
-    </span>
+    </StatusBadge>
   );
 }
 
@@ -336,7 +349,7 @@ function CargoCard({ cargo, index, onOpen }: { cargo: Cargo; index: number; onOp
           {cargo.cargoType === 'Projeto' ? <ContainerIcon /> : <CubeIcon />}
         </span>
         <span className={styles.cargoId}>{cargo.id}</span>
-        <StatusBadge cargo={cargo} />
+        <CargoStatusBadge cargo={cargo} showDot={false} size="sm" />
       </div>
 
       <h2>{cargo.title}</h2>
@@ -800,7 +813,7 @@ function CargoSheet({ cargo }: { cargo: Cargo }) {
         </span>
         <div>
           <span className={styles.cargoSheetId}>{cargo.id}</span>
-          <StatusBadge cargo={cargo} />
+          <CargoStatusBadge cargo={cargo} />
         </div>
       </div>
 

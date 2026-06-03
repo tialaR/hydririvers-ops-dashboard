@@ -31,6 +31,8 @@ export default defineConfig({
       'tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx',
       'tests/unit/features/cargo/mobile-cargo-empty-state.test.tsx',
       'tests/unit/shared/components/bottom-sheet.component.test.tsx',
+      'tests/unit/shared/components/icon-button.component.test.tsx',
+      'tests/unit/shared/components/status-badge.component.test.tsx',
       'tests/unit/app/mobile-cargo-list-lab-page.test.tsx',
       'tests/unit/shared/design-system/liquid-glass-button.test.tsx',
       'tests/unit/shared/design-system/liquid-glass-popover.test.tsx',
