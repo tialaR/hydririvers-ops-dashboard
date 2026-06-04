@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { readStoredLocale, readStoredTheme, storedLocaleSchema, storedThemeSchema } from '@/shared/preferences/client-preferences';
+import { DEFAULT_STORED_THEME } from '@/shared/preferences/resolve-server-theme';
 
 function createLocalStorageStub() {
   const store = new Map<string, string>();
@@ -31,7 +32,7 @@ describe('client preferences', () => {
 
   it('falls back to the default theme when storage is invalid', () => {
     localStorageStub.setItem('hydrorivers:theme', 'purple');
-    expect(readStoredTheme('dark')).toBe('dark');
+    expect(readStoredTheme(DEFAULT_STORED_THEME)).toBe('light');
   });
 
   it('falls back to the default locale when storage is invalid', () => {
