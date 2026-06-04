@@ -6,18 +6,17 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/core/i18n/navigation';
 import type { Cargo, CargoStatus, Negotiation, Vessel } from '@/features/marketplace/domain/marketplace.types';
 import { CargoCard } from '@/features/cargo/components/cargo-card';
-import {
-  getPublicCargoCardActionLabel,
-  mapMarketplaceCargoToLabV2,
-} from '@/features/cargo/utils/map-marketplace-cargo-to-lab-v2';
+import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
+import { mapMarketplaceCargoToLabV2 } from '@/features/cargo/utils/map-marketplace-cargo-to-lab-v2';
 import { parseCargoEtaMeta } from '@/features/cargo/utils/parse-cargo-eta-meta';
 import { Button } from '@/shared/components/button';
-import { FilterChip } from '@/shared/components/filter-chip';
 import { IconButton } from '@/shared/components/icon-button';
 import { SearchField } from '@/shared/components/search-field';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
 import { cargoDsV2ThemeRootClassName } from '@/features/cargo/constants/cargo-ds-v2-theme-scope';
+import { PublicCargoActionSheet } from './public-cargo-action-sheet';
+import { useMobileShellChrome } from '@/shared/layout/mobile-product-shell';
 import { PublicCargasMobileFilterSheet, type PublicCargasFilterOption } from './public-cargas-mobile-filter-sheet';
 import styles from './public-cargas-mobile-list.module.scss';
 
@@ -34,6 +33,7 @@ type AdvancedFilters = {
 };
 
 export type PublicCargasMobileListProps = {
+  locale: string;
   filteredCargoes: Cargo[];
   query: string;
   onQueryChange: (value: string) => void;
@@ -95,6 +95,7 @@ function toFilterOptions(values: string[]): PublicCargasFilterOption[] {
 }
 
 export function PublicCargasMobileList({
+  locale,
   filteredCargoes,
   query,
   onQueryChange,
@@ -114,9 +115,11 @@ export function PublicCargasMobileList({
   const tCommon = useTranslations('common');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilterClosing, setIsFilterClosing] = useState(false);
+  const [selectedCargo, setSelectedCargo] = useState<CargoLabV2 | null>(null);
   const [mobileVisibleCount, setMobileVisibleCount] = useState(MOBILE_INITIAL_VISIBLE_COUNT);
   const mobileListSentinelRef = useRef<HTMLDivElement | null>(null);
   const filterCloseTimerRef = useRef<number | null>(null);
+  const { setBottomNavSuppressed } = useMobileShellChrome();
 
   const visibleCargoes = filteredCargoes.slice(0, mobileVisibleCount);
   const hasMoreCargoes = mobileVisibleCount < filteredCargoes.length;
@@ -140,6 +143,11 @@ export function PublicCargasMobileList({
       }
     };
   }, []);
+
+  useEffect(() => {
+    setBottomNavSuppressed(drawerOpen || isFilterClosing || Boolean(selectedCargo));
+    return () => setBottomNavSuppressed(false);
+  }, [drawerOpen, isFilterClosing, selectedCargo, setBottomNavSuppressed]);
 
   useEffect(() => {
     if (!hasMoreCargoes || !mobileListSentinelRef.current) {
@@ -228,9 +236,11 @@ export function PublicCargasMobileList({
   }
 
   return (
+    <>
     <section
       className={cargoDsV2ThemeRootClassName(styles.root)}
       data-theme="light"
+      data-public-cargas-mobile="true"
       aria-label={tBoard('list.title')}
     >
       <div className={styles.shell}>
@@ -284,7 +294,7 @@ export function PublicCargasMobileList({
               className={styles.searchField}
               value={query}
               onChange={handleQueryChange}
-              placeholder={tBoard('list.searchPlaceholder')}
+              placeholder={tBoard('list.publicMobileSearchPlaceholder')}
               ariaLabel={tBoard('list.searchAria')}
               icon={<SearchIcon />}
             />
@@ -303,20 +313,6 @@ export function PublicCargasMobileList({
               }}
             />
           </div>
-
-          <div className={styles.statusScroller} aria-label={tBoard('tabs.aria')}>
-            {statusOptions.map((item) => (
-              <FilterChip
-                key={item.value}
-                className={styles.statusChip}
-                isSelected={statusFilter === item.value}
-                onClick={() => handleStatusToggle(item.value as 'all' | CargoStatus)}
-                ariaPressed={statusFilter === item.value}
-              >
-                {item.label}
-              </FilterChip>
-            ))}
-          </div>
         </header>
 
         <div className={styles.cargoList}>
@@ -327,7 +323,6 @@ export function PublicCargasMobileList({
                 tBoard,
                 tCommon,
               );
-              const actionKind = getPublicCargoCardActionLabel(cargo.status);
               const labCargo = mapMarketplaceCargoToLabV2(cargo, {
                 statusLabel: tCommon(`cargoStatus.${cargo.status}`),
                 vesselLabel: vesselName(cargo, negotiations, vessels),
@@ -343,11 +338,9 @@ export function PublicCargasMobileList({
                   cargo={labCargo}
                   index={index}
                   className={styles.cargoCard}
-                  actionLabel={
-                    actionKind === 'view'
-                      ? tBoard('list.cardActionView')
-                      : tBoard('list.cardActionTrack')
-                  }
+                  actionLabel={tBoard('list.cardActionRoute')}
+                  primaryActionHref={intlAppPaths.cargos.cargoMap(labCargo.id)}
+                  onClick={() => setSelectedCargo(labCargo)}
                 />
               );
             })
@@ -382,6 +375,18 @@ export function PublicCargasMobileList({
         </div>
       </div>
 
+      {selectedCargo ? (
+        <PublicCargoActionSheet
+          cargo={selectedCargo}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedCargo(null);
+            }
+          }}
+        />
+      ) : null}
+
       <PublicCargasMobileFilterSheet
         open={drawerOpen}
         isClosing={isFilterClosing}
@@ -409,5 +414,6 @@ export function PublicCargasMobileList({
         onApplyFilters={closeFilterSheet}
       />
     </section>
+    </>
   );
 }

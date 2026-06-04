@@ -271,7 +271,19 @@ export function CargoActionSheetBridge({
 
     const anchor = target.closest('a[href]');
 
+    if (target.closest('[data-public-cargo-action-sheet="true"]')) {
+      return;
+    }
+
     if (anchor instanceof HTMLAnchorElement) {
+      if (
+        anchor.closest('[data-public-cargas-mobile="true"]') ||
+        anchor.hasAttribute('data-public-cargo-action') ||
+        anchor.closest('[data-public-cargo-action-sheet="true"]')
+      ) {
+        return;
+      }
+
       const cargoId = getCargoIdFromAnchor(anchor, locale);
 
       if (!cargoId) {
@@ -290,6 +302,13 @@ export function CargoActionSheetBridge({
     const card = target.closest(CARGO_CARD_SELECTOR);
 
     if (!(card instanceof HTMLElement)) {
+      return;
+    }
+
+    if (
+      card.closest('[data-public-cargas-mobile="true"]') ||
+      card.closest('[data-public-cargo-action-sheet="true"]')
+    ) {
       return;
     }
 

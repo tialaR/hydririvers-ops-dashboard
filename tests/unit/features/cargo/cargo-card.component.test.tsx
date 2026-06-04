@@ -4,6 +4,14 @@ import { describe, expect, it, vi } from 'vitest';
 import { CargoCard } from '@/features/cargo/components/cargo-card';
 import { CARGO_LAB_V2_MOCKS } from '@/features/cargo/data/cargo-lab-v2.mock';
 
+vi.mock('@/core/i18n/navigation', () => ({
+  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 const cargo = CARGO_LAB_V2_MOCKS[0];
 
 describe('CargoCard', () => {
@@ -34,5 +42,20 @@ describe('CargoCard', () => {
     const scheduled = CARGO_LAB_V2_MOCKS[1];
     const html = renderToStaticMarkup(<CargoCard cargo={scheduled} onClick={() => undefined} />);
     expect(html).toContain('Ver detalhes');
+  });
+
+  it('renderiza CTA como link quando primaryActionHref está definido', () => {
+    const html = renderToStaticMarkup(
+      <CargoCard
+        cargo={cargo}
+        onClick={() => undefined}
+        actionLabel="Ver rota"
+        primaryActionHref="/cargas/CRG-7845/mapa"
+      />,
+    );
+
+    expect(html).toContain('href="/cargas/CRG-7845/mapa"');
+    expect(html).toContain('data-public-cargo-action="true"');
+    expect(html).toContain('Ver rota');
   });
 });

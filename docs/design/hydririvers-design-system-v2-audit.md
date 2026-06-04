@@ -22,6 +22,8 @@ O shell de bottom sheet já é **shared** (`BottomSheet` + tokens `--hx-*` sobre
 
 **Decisão desta rodada:** documentar inventário, hardcodes, proposta `hy-*`, ownership e plano de PRs pequenos. **Não** alterar a UI visível de `/dev-v2`, mocks, i18n ou rotas de produto.
 
+**Phase 5 addendum (produto mobile):** casca mobile do `(product-shell)` passou a `src/shared/layout/mobile-product-shell/` — header light (`data-mobile-product-shell`, `data-theme="light"`), título por rota (`resolveMobilePageTitleKey`), ações `IconButton` (idioma → notificações → perfil), bottom nav DS v2 portaled (`ProductMobileBottomNav`). Tokens em `src/shared/styles/shells/_mobile-product-v2-light-shell.scss`.
+
 **Divergência global:** `layout` do app usa **Geist** (`--font-sans`); o lab v2 usa **system stack** (`--v2-font-family`). O catálogo DS v2 replica a stack do lab via import do SCSS real.
 
 ---
@@ -865,13 +867,13 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 - `/[locale]/rastreio` não passa a prop → timeline/fluxo mobile anterior preservado.
 - Testes: `tests/unit/features/dashboard/operations-board-mobile-experience.test.ts`, `cargoes-page.test.tsx`.
 
-### Light-first (mobile DS v2)
+### Light-first (global + mobile DS v2)
 
-- `/cargas` mobile e `/dev-v2` não dependem do tema global (`html[data-theme]`) para a primeira pintura dos cards.
-- `PublicCargasMobileList` fixa `data-theme="light"` no SSR e aplica `cargo-v2-light-shell` no root do módulo.
+- **Tema global (SSR):** `resolveServerTheme` em `src/shared/preferences/resolve-server-theme.ts` — cookie ausente ou inválido => `light` (não usa `prefers-color-scheme`). `src/app/[locale]/layout.tsx` aplica `data-theme`, `colorScheme` e classe `dark` no `<html>` já no primeiro HTML.
+- **Persistência:** toggle grava cookie `hydrorivers.theme` + `localStorage`; cookie `dark`/`light` continua prevalecendo no SSR; ausência de cookie nunca gera dark.
+- `/cargas` mobile e `/dev-v2` alinham com light global; shells DS v2 (`data-mobile-product-v2-shell`, `PublicCargasMobileList`) mantêm `data-theme="light"` local para tokens `--v2-*` / `:global(.root[data-theme='light'])`.
 - `MobileCargoListLabV2` inicia em `light` (`useState('light')`).
-- Cards e satélites DS v2 usam `:global(.root[data-theme='light'])`; o root expõe a classe global `root` via `cargoDsV2ThemeRootClassName` (`src/features/cargo/constants/cargo-ds-v2-theme-scope.ts`).
-- `ThemeToggle` deriva o ícone diretamente de `useTheme()` no SSR (sem `useSyncExternalStore`), evitando hydration mismatch; dark mode global permanece no `ThemeProvider` / cookie.
+- `ThemeToggle` deriva o ícone de `useTheme()` no SSR (sem `useSyncExternalStore`); `ThemeProvider` não altera dark→light após hidratação quando o servidor já enviou `light`.
 
 ### Patch light-first — filter sheet e icon buttons (PR-9 visual)
 
@@ -887,22 +889,38 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `public-cargas-mobile-list.module.scss` | Overrides light para `.headerButton`, `.filterSquare`, `.filterBottomSheet`, chips; `body:has([data-theme='light'])` com tokens completos |
 | `public-cargas-mobile-filter-sheet.tsx` | Classe global `root` no painel + `data-theme="light"` no sheet portaled (client) |
 
-**Pendências intencionais (próxima rodada):**
+**Phase 5B — shell mobile produto (global):**
 
-- Bottom nav: refinamento visual light-first pendente.
-- Cargo detail sheet: bridge antigo (`CargoActionSheetBridge`) ainda abre no card; substituição/refino DS v2 depois.
-- Filtros horizontais (status scroller) e botão “Limpar todos”: avaliar remoção/ajuste em rodada própria.
-- Chrome externo do dashboard (shell/layout fora da lista): rodada dedicada.
+| Área | Mudança |
+| --- | --- |
+| `mobile-product-shell/` | `MobileProductHeader` (light, título por rota i18n), `ProductMobileBottomNav` (portal fixo, DS v2), `resolve-mobile-page-title.ts`, `MobileShellChromeProvider` |
+| `admin-chrome.tsx` | Header/bottom nav legado removidos do JSX; shell light `data-mobile-product-v2-shell` + `data-theme="light"` em viewport ≤860px |
+| `public-cargas-mobile-list` | Sem bottom nav local; `setBottomNavSuppressed` em sheets; `padding-bottom` reserva altura do nav global |
+| `adminChrome.mobile.pageTitles.*` + `nav.*` | Títulos por rota em pt-BR / en-US / es |
+| Testes | `admin-chrome-mobile-product-shell`, `resolve-mobile-page-title`, `product-mobile-bottom-nav`, E2E navegação Cargas → Negociações → Rastreio |
+
+**Entregue (rodada public mobile `/cargas`):**
+
+- Filtros horizontais de status removidos da lista; status permanece no filter sheet.
+- Search placeholder público: `operationsBoard.list.publicMobileSearchPlaceholder` (`Buscar cargas...`).
+- CTA do card: `operationsBoard.list.cardActionRoute` (`Ver rota`).
+- Sheet: `PublicCargoActionSheet` (light, `BottomSheet` shared com portal, ações com href via `intlAppPaths`); bridge ignora cards e links em `[data-public-cargas-mobile]` / `data-public-cargo-action`.
+- Ações do sheet público: Detalhes da carga, Ver rota, Documentos da carga, Custos e valores, Prioridade e riscos, Abrir negociações — hrefs sem prefixo de locale (next-intl `Link`).
+- CTA `Ver rota` no card: `primaryActionHref` → `/cargas/[id]/mapa` (navegação direta, sem abrir sheet).
+
+**Pendências intencionais:**
+
+- Conteúdo escuro por rota (ex.: boards desktop-first) pode coexistir; casca mobile (header + bottom nav + fundo scroll) permanece light-first.
 
 ### Fluxo preservado
 
-- Filtros e busca: mesma lógica do `OperationsBoard` (não mocks do lab).
-- Detalhe: `CargoActionSheetBridge` (não `CargoDetailSheetContent`).
-- Dados sensíveis: sem telefone/valor no card público; CTA apenas visual.
+- Filtros e busca: mesma lógica do `OperationsBoard` (filter sheet + query).
+- Desktop e `/rastreio`: inalterados (`mobileExperience` default).
+- Dados sensíveis: sem telefone/valor no card público.
 
 ### i18n novo
 
-`operationsBoard.list.cardActionView`, `operationsBoard.list.cardActionTrack` (pt-BR, en-US, es).
+`operationsBoard.list.publicMobileSearchPlaceholder`, `operationsBoard.list.cardActionRoute`, `operationsBoard.publicActionSheet.*` (pt-BR, en-US, es).
 
 ---
 
@@ -984,6 +1002,26 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `npm run check:i18n` | OK — 1971 keys |
 | `npm run build` | OK |
 | `npm test` (button, search-field, bottom-nav) | OK — 15 testes |
+
+### Phase 4 — Public cargo mobile stabilization (2026-06-03)
+
+**Decisão arquitetural final:**
+
+- **Single shared `BottomSheet`** (`src/shared/components/bottom-sheet/BottomSheet.tsx`) para filter sheet e action sheet públicos; props light compartilhadas via `publicCargoLightSheetDefaults` em `public-cargas-mobile/public-cargo-light-sheet-defaults.ts`.
+- **Feature-owned light token layer** via `_cargo-v2-light-shell.scss` + `usePublicCargoLightSheetPortal` (aplica `data-theme="light"` no painel portaled).
+- **`/[locale]/cargas` mobile público light-first** (`data-public-cargas-mobile="true"`, cards/sheets/nav light).
+- **Preservados sem alteração:** desktop `/cargas`, `/rastreio`, `/minhas-cargas`, `/dev-v2`, auth, mock mode.
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1990 keys |
+| `npm run test:unit -- tests/unit/features/cargo/` | OK — 629 testes (115 arquivos) |
+| `npm run build` | OK |
+| `npm run test:e2e -- tests/e2e/public-cargas-mobile.spec.ts` | OK — 3/3 (console guard, overlay fixed, z-index, hrefs, negociações) |
+
+**Consolidação Phase 4:** `publicCargoLightSheetDefaults` + `usePublicCargoLightSheetPortal` em `public-cargo-light-sheet-defaults.ts`; action sheet abre em `initialSnap="expanded"` para expor as 6 ações; CSS morto `.statusScroller`/`.statusChip` removido.
 
 ---
 

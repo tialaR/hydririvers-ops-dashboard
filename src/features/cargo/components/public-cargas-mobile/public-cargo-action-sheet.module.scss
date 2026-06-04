@@ -1,0 +1,127 @@
+@use '../../styles/cargo-v2-light-shell' as cargoV2Shell;
+
+.sheet {
+  @include cargoV2Shell.cargo-v2-light-filter-bottom-sheet;
+
+  width: min(calc(100% - 1.25rem), 26.875rem);
+  max-width: 26.875rem;
+  margin-inline: auto;
+  border-radius: 2rem 2rem 0 0;
+
+  > header {
+    border-bottom-color: var(--v2-line-faint, rgba(15, 23, 42, 0.08));
+  }
+
+  > header h2 {
+    color: var(--v2-title);
+    font-size: 1rem;
+    font-weight: 750;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+}
+
+.body {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 0.5rem;
+}
+
+.summary {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.summaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.cargoCode {
+  color: var(--v2-text-slate-84, rgba(30, 41, 59, 0.84));
+  font-size: 0.8125rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.summaryTitle {
+  margin: 0;
+  color: var(--v2-title);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+}
+
+.actionList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+}
+
+.actionItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.72rem;
+  width: 100%;
+  padding: 0.9rem 0.1rem;
+  border: 0;
+  border-bottom: 1px solid var(--v2-line-faint, rgba(15, 23, 42, 0.08));
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.actionItem:last-child {
+  border-bottom: 0;
+}
+
+.actionItem:active {
+  background: rgba(15, 23, 42, 0.04);
+}
+
+.actionIcon {
+  display: grid;
+  place-items: center;
+  width: 1.95rem;
+  height: 1.95rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.08);
+  color: rgba(37, 99, 235, 0.82);
+}
+
+.actionIcon svg,
+.actionArrow {
+  width: 0.94rem;
+  height: 0.94rem;
+}
+
+.actionCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+}
+
+.actionCopy strong {
+  color: var(--v2-title);
+  font-size: 0.9rem;
+  line-height: 1.15;
+  font-weight: 650;
+}
+
+.actionCopy small {
+  color: var(--v2-text-secondary-muted, rgba(100, 116, 139, 0.82));
+  font-size: 0.73rem;
+  line-height: 1.25;
+}
+
+.actionArrow {
+  color: rgba(100, 116, 139, 0.42);
+}

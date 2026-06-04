@@ -1540,8 +1540,7 @@ export function OperationsBoard({
   const [selectedId, setSelectedId] = useState(cargoes[0]?.id ?? '');
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const usePublicCargasMobileList =
-    isMobileViewport && mobileExperience === 'public-cargas';
+  const isPublicCargasExperience = mobileExperience === 'public-cargas';
   const listRef = useRef<HTMLDivElement | null>(null);
   const visualCargoes = useMemo(() => buildVisualCargoPool(cargoes), [cargoes]);
   const vesselVisualMap = useMemo(
@@ -1688,32 +1687,34 @@ export function OperationsBoard({
     return () => mediaQuery.removeEventListener('change', updateViewport);
   }, []);
 
-  if (!selectedCargo) {
-    if (usePublicCargasMobileList) {
-      return (
-        <section className={`hx-dashboard ${styles.mobileBoard}`}>
-          <PublicCargasMobileList
-            filteredCargoes={filteredCargoes}
-            query={query}
-            onQueryChange={setQuery}
-            statusFilter={statusFilter}
-            onStatusFilterToggle={handleStatusFilterToggle}
-            advancedFilters={advancedFilters}
-            onToggleAdvancedFilter={toggleMobileFilter}
-            activeFilters={activeFilters}
-            hasAppliedFilters={hasAppliedFilters}
-            onResetFilters={resetFilters}
-            onSyncListViewport={syncListViewport}
-            negotiations={negotiations}
-            vessels={vessels}
-            filterOptions={options}
-          />
-        </section>
-      );
-    }
+  const publicCargasMobileList = isPublicCargasExperience ? (
+    <section className={`hx-dashboard ${styles.mobileBoard} ${styles.publicCargasMobileLayer}`}>
+      <PublicCargasMobileList
+        locale={locale}
+        filteredCargoes={filteredCargoes}
+        query={query}
+        onQueryChange={setQuery}
+        statusFilter={statusFilter}
+        onStatusFilterToggle={handleStatusFilterToggle}
+        advancedFilters={advancedFilters}
+        onToggleAdvancedFilter={toggleMobileFilter}
+        activeFilters={activeFilters}
+        hasAppliedFilters={hasAppliedFilters}
+        onResetFilters={resetFilters}
+        onSyncListViewport={syncListViewport}
+        negotiations={negotiations}
+        vessels={vessels}
+        filterOptions={options}
+      />
+    </section>
+  ) : null;
 
-    return (
-      <section className="hx-dashboard hr-dashboard-grid">
+  if (!selectedCargo) {
+    const emptyDesktopBoard = (
+      <section
+        className="hx-dashboard hr-dashboard-grid"
+        data-legacy-cargo-list={isPublicCargasExperience ? 'true' : undefined}
+      >
         <div className={styles.emptyState} role="status">
           <AlertCircle size={22} aria-hidden="true" />
           <h3>{tBoard('list.emptyTitle')}</h3>
@@ -1721,6 +1722,17 @@ export function OperationsBoard({
         </div>
       </section>
     );
+
+    if (isPublicCargasExperience) {
+      return (
+        <>
+          {publicCargasMobileList}
+          <div className={styles.publicCargasDesktopLayer}>{emptyDesktopBoard}</div>
+        </>
+      );
+    }
+
+    return emptyDesktopBoard;
   }
 
   const selectedVessel = vesselName(selectedCargo, negotiations, vessels);
@@ -1786,31 +1798,11 @@ export function OperationsBoard({
       </div>
     </>
   );
-  if (usePublicCargasMobileList) {
-    return (
-      <section className={`hx-dashboard ${styles.mobileBoard}`}>
-        <PublicCargasMobileList
-          filteredCargoes={filteredCargoes}
-          query={query}
-          onQueryChange={setQuery}
-          statusFilter={statusFilter}
-          onStatusFilterToggle={handleStatusFilterToggle}
-          advancedFilters={advancedFilters}
-          onToggleAdvancedFilter={toggleMobileFilter}
-          activeFilters={activeFilters}
-          hasAppliedFilters={hasAppliedFilters}
-          onResetFilters={resetFilters}
-          onSyncListViewport={syncListViewport}
-          negotiations={negotiations}
-          vessels={vessels}
-          filterOptions={options}
-        />
-      </section>
-    );
-  }
-
-  return (
-    <section className="hx-dashboard hr-dashboard-grid">
+  const desktopBoard = (
+    <section
+      className="hx-dashboard hr-dashboard-grid"
+      data-legacy-cargo-list={isPublicCargasExperience ? 'true' : undefined}
+    >
       <aside className="hr-cargo-list-column">
         <section className="hx-cargo-panel hr-cargo-list-panel">
         <div className="hx-panel-head hr-cargo-list-header">
@@ -2442,6 +2434,17 @@ export function OperationsBoard({
 
     </section>
   );
+
+  if (isPublicCargasExperience) {
+    return (
+      <>
+        {publicCargasMobileList}
+        <div className={styles.publicCargasDesktopLayer}>{desktopBoard}</div>
+      </>
+    );
+  }
+
+  return desktopBoard;
 }
 
 function FilterSelect({

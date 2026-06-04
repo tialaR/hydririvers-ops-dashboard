@@ -4,13 +4,16 @@
   @include cargoV2Shell.cargo-v2-light-shell;
 
   min-height: 100%;
-  padding-bottom: calc(var(--mobile-bottom-nav-height, 5.75rem) + 0.5rem + env(safe-area-inset-bottom));
 }
 
 .shell {
   width: min(100%, 26.875rem);
   margin: 0 auto;
-  padding: 1.25rem 1.125rem 1.5rem;
+  padding: 1.25rem 1.125rem
+    calc(
+      1.5rem + var(--hy-size-bottom-nav-height, 4.375rem) + 0.875rem +
+        env(safe-area-inset-bottom, 0px)
+    );
 }
 
 .header {
@@ -83,30 +86,29 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) 3.25rem;
   gap: 0.75rem;
+  margin-top: 0.35rem;
 }
 
 .searchField {
   min-width: 0;
+  height: 3.25rem;
+  gap: 0.75rem;
+  padding: 0 1.0625rem;
+  border-radius: var(--hy-radius-search, 1.125rem);
+
+  :global(svg) {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+
+  :global(input) {
+    font-size: 0.875rem;
+    font-weight: 620;
+  }
 }
 
 .filterSquare {
   flex-shrink: 0;
-}
-
-.statusScroller {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  padding-bottom: 0.15rem;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.statusChip {
-  flex: 0 0 auto;
 }
 
 .cargoList {
@@ -238,6 +240,29 @@
   @include cargoV2Shell.cargo-v2-light-icon-button-surfaces;
 }
 
+.root[data-theme='light'] .searchField {
+  border-color: var(--v2-border-slate-13);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.82), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(226, 234, 246, 0.44)),
+    var(--v2-surface-search);
+  box-shadow:
+    var(--v2-highlight-inset),
+    0 0.875rem 1.875rem rgba(15, 23, 42, 0.1);
+
+  :global(svg) {
+    stroke: rgba(51, 65, 85, 0.62);
+  }
+
+  :global(input) {
+    color: var(--v2-title);
+  }
+
+  :global(input)::placeholder {
+    color: var(--v2-text-secondary-dim, rgba(71, 85, 105, 0.58));
+  }
+}
+
 .root[data-theme='light'] .filterBottomSheet,
 .root[data-theme='light'] .filterBottomSheet.filterBottomSheet {
   @include cargoV2Shell.cargo-v2-light-filter-bottom-sheet;
@@ -255,7 +280,8 @@
   @include cargoV2Shell.cargo-v2-light-filter-chip-selected;
 }
 
-:global(body):has(.filterBottomSheet) :global([role='presentation'][data-viewport-anchor='flush'][data-variant='strong']) {
+:global(body):has(.filterBottomSheet) :global([role='presentation'][data-viewport-anchor='flush'][data-variant='light']),
+:global(body):has([data-public-cargo-action-sheet='true']) :global([role='presentation'][data-viewport-anchor='flush'][data-variant='light']) {
   background:
     radial-gradient(circle at 50% -8%, rgba(66, 99, 128, 0.08), transparent 62%),
     rgba(241, 245, 249, 0.42);
@@ -271,6 +297,10 @@
 :global(body:has([data-theme='light'])) .filterBottomSheet,
 :global(body:has([data-theme='light'])) .filterBottomSheet.filterBottomSheet {
   @include cargoV2Shell.cargo-v2-light-filter-bottom-sheet;
+}
+
+:global(body:has([data-public-cargo-action-sheet='true'])) {
+  @include cargoV2Shell.cargo-v2-light-portal-tokens;
 }
 
 :global(body:has([data-theme='light'])) .filterSection h3 {

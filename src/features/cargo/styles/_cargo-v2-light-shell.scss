@@ -1,4 +1,5 @@
 @use '../../../shared/styles/tokens/hy-v2-light' as hyV2Light;
+@use '../../../shared/styles/interactions/pressable' as pressable;
 
 /** Tokens `--v2-*` para sheets portaled (`body:has([data-theme='light'])`). */
 @mixin cargo-v2-light-portal-tokens {
@@ -41,6 +42,7 @@
   --v2-text-strong: rgba(15, 23, 42, 0.9);
   --v2-text-body: rgba(15, 23, 42, 0.78);
   --v2-text-secondary-muted: rgba(100, 116, 139, 0.82);
+  --v2-text-secondary-dim: rgba(71, 85, 105, 0.58);
   --v2-line-faint: rgba(15, 23, 42, 0.08);
   --v2-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.78);
 }
@@ -132,6 +134,176 @@
   }
 }
 
+/** Shell fixo do bottom nav DS v2 light (paridade visual com /dev-v2). */
+@mixin cargo-v2-light-bottom-nav-shell {
+  position: fixed;
+  z-index: 200;
+  left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--hy-size-bottom-nav-height, 4.375rem);
+  min-height: var(--hy-size-bottom-nav-height, 4.375rem);
+  padding: 0.25rem;
+  border: 1px solid rgba(51, 65, 85, 0.12);
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.62), transparent 42%),
+    radial-gradient(circle at 50% -38%, rgba(96, 165, 250, 0.14), transparent 54%),
+    linear-gradient(180deg, rgba(241, 245, 249, 0.78), rgba(226, 232, 240, 0.62)),
+    var(--v2-surface-bottom-nav, var(--hy-color-surface-bottom-nav));
+  box-shadow: var(--hy-shadow-bottom-nav, 0 0.625rem 1.5rem rgba(15, 23, 42, 0.14));
+  -webkit-backdrop-filter: var(--hy-blur-bottom-nav, blur(1.5rem) saturate(1.08));
+  backdrop-filter: var(--hy-blur-bottom-nav, blur(1.5rem) saturate(1.08));
+}
+
+@mixin cargo-v2-light-bottom-nav-item {
+  @include pressable.pressableBubble;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  height: 3.125rem;
+  min-height: 3.125rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(51, 65, 85, 0.7);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--hy-letter-spacing-nav, 0.01em);
+  text-decoration: none;
+  white-space: nowrap;
+  transform-origin: center;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.85;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@mixin cargo-v2-light-bottom-nav-item-active {
+  color: var(--v2-text-body-muted, rgba(15, 23, 42, 0.88));
+  font-weight: 800;
+  height: 3.875rem;
+  min-height: 3.875rem;
+}
+
+@mixin cargo-v2-light-bottom-nav-item-press-halo {
+  content: '';
+  position: absolute;
+  inset: 0.1875rem 0.4375rem;
+  z-index: -1;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(114, 184, 255, 0.1), transparent 50%),
+    rgba(93, 166, 255, 0.025);
+  opacity: 0;
+  transform: scale(0.72);
+  transition:
+    opacity 180ms cubic-bezier(0.2, 1, 0.2, 1),
+    transform 180ms cubic-bezier(0.2, 1, 0.2, 1);
+  pointer-events: none;
+}
+
+@mixin cargo-v2-light-bottom-nav-icon {
+  display: grid;
+  place-items: center;
+  width: 1.5625rem;
+  height: 1.5625rem;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  border: 1px solid transparent;
+  color: rgba(51, 65, 85, 0.7);
+}
+
+@mixin cargo-v2-light-bottom-nav-label {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(51, 65, 85, 0.7);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+@mixin cargo-v2-light-bottom-nav-active-bubble {
+  position: relative;
+  display: flex;
+  flex: 0 0 3.625rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  box-sizing: border-box;
+  width: 4.5rem;
+  height: 3.625rem;
+  min-height: 3.625rem;
+  padding: 0.5rem 0.8125rem 0.4375rem;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  color: #ffffff;
+  transform: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 36% 18%, rgba(255, 255, 255, 0.54), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(37, 99, 235, 0.12), transparent 50%),
+    linear-gradient(145deg, rgba(219, 234, 254, 0.78), rgba(96, 165, 250, 0.42));
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.04),
+    0 0.1875rem 0.5rem var(--hy-color-status-scheduled-border, rgba(37, 99, 235, 0.16)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+}
+
+@mixin cargo-v2-light-bottom-nav-active-icon {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  color: rgba(30, 58, 95, 0.92);
+  position: relative;
+  z-index: 1;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.95;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: none;
+  }
+}
+
+@mixin cargo-v2-light-bottom-nav-active-label {
+  display: block;
+  max-width: 100%;
+  color: rgba(15, 23, 42, 0.84);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+}
+
 @mixin cargo-v2-light-shell {
   @include hyV2Light.hy-v2-light-tokens;
 
@@ -177,6 +349,9 @@
   --v2-status-delayed-bg: var(--hy-color-status-delayed-bg);
   --v2-status-in-transit-bg-sheet: rgba(220, 252, 231, 0.82);
   --v2-font-family: var(--hy-font-family-base);
+  --v2-surface-bottom-nav: var(--hy-color-surface-bottom-nav);
+  --v2-text-body-muted: rgba(15, 23, 42, 0.88);
+  --mobile-bottom-nav-height: var(--hy-size-bottom-nav-height, 4.375rem);
 
   color: var(--v2-text);
   font-family: var(--v2-font-family);

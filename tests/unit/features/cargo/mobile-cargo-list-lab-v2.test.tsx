@@ -5,6 +5,14 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { MobileCargoListLabV2 } from '@/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2';
 
+vi.mock('@/core/i18n/navigation', () => ({
+  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 const v2SourcePath = resolve(
   process.cwd(),
   'src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx',

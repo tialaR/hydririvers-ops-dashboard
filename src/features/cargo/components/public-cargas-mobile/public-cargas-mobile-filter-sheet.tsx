@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { SlidersHorizontal } from 'lucide-react';
 
@@ -9,6 +8,11 @@ import { cargoDsV2ThemeRootClassName } from '@/features/cargo/constants/cargo-ds
 import { BottomSheet } from '@/shared/components/bottom-sheet';
 import { FilterChip } from '@/shared/components/filter-chip';
 
+import {
+  publicCargoLightSheetDefaults,
+  publicCargoLightSheetSnapHeights,
+  usePublicCargoLightSheetPortal,
+} from './public-cargo-light-sheet-defaults';
 import styles from './public-cargas-mobile-list.module.scss';
 
 export type PublicCargasFilterOption = {
@@ -111,27 +115,7 @@ export function PublicCargasMobileFilterSheet({
   const resolvedStatus = statusFilter === 'all' ? ['all'] : [statusFilter];
   const filterSheetPanelClass = cargoDsV2ThemeRootClassName(styles.filterBottomSheet);
 
-  useEffect(() => {
-    if (!open) {
-      return undefined;
-    }
-
-    const frame = window.requestAnimationFrame(() => {
-      const panels = document.querySelectorAll<HTMLElement>('[data-testid="bottom-sheet-panel"]');
-
-      panels.forEach((panel) => {
-        if (!panel.classList.contains(styles.filterBottomSheet)) {
-          return;
-        }
-
-        panel.setAttribute('data-theme', 'light');
-      });
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frame);
-    };
-  }, [open]);
+  usePublicCargoLightSheetPortal(open, styles.filterBottomSheet);
 
   return (
     <BottomSheet
@@ -140,17 +124,8 @@ export function PublicCargasMobileFilterSheet({
       title={tBoard('filters.mobileTitle')}
       closeAriaLabel={tBoard('filters.close')}
       dragHandleAriaLabel={tBoard('filters.mobileTitle')}
-      snapHeights={{
-        collapsed: '40dvh',
-        expanded: '98dvh',
-      }}
-      snapOrder={['collapsed', 'expanded']}
-      initialSnap="collapsed"
-      viewportAnchor="flush"
-      enableDrag
-      closeOnOverlayClick
-      variant="strong"
-      overlayVariant="strong"
+      snapHeights={publicCargoLightSheetSnapHeights}
+      {...publicCargoLightSheetDefaults}
       className={[filterSheetPanelClass, isClosing ? styles.filterBottomSheetClosing : '']
         .filter(Boolean)
         .join(' ')}

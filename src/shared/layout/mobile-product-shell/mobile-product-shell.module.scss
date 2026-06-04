@@ -1,0 +1,193 @@
+@use '../../styles/shells/mobile-product-v2-light-shell' as mobileShell;
+
+.shell {
+  @include mobileShell.mobile-product-v2-light-shell;
+}
+
+@media (max-width: 860px) {
+  .mobileScrollStage {
+    @include mobileShell.mobile-product-v2-light-page-background;
+  }
+}
+
+.header {
+  display: grid;
+  gap: 0.65rem;
+  padding: calc(env(safe-area-inset-top, 0px) + 0.75rem) 1.125rem 0.65rem;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(241, 245, 249, 0.42)),
+    rgba(241, 245, 249, 0.55);
+  -webkit-backdrop-filter: blur(1rem) saturate(1.04);
+  backdrop-filter: blur(1rem) saturate(1.04);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  padding: 0.25rem 0.35rem 0.25rem 0.25rem;
+  border-radius: 999rem;
+  border: 1px solid rgba(71, 85, 105, 0.1);
+  color: var(--v2-title, var(--hy-color-text-title));
+  text-decoration: none;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.82), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(226, 234, 246, 0.44)),
+    rgba(241, 245, 249, 0.72);
+  box-shadow: var(--v2-highlight-inset), 0 0.625rem 1.25rem rgba(15, 23, 42, 0.08);
+
+  strong {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+  }
+}
+
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999rem;
+  color: rgba(29, 78, 216, 0.9);
+  background:
+    radial-gradient(circle at 34% 12%, rgba(255, 255, 255, 0.9), transparent 42%),
+    linear-gradient(145deg, rgba(191, 219, 254, 0.9), rgba(147, 197, 253, 0.72));
+}
+
+.headerActions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.headerIconButton {
+  @include mobileShell.mobile-product-v2-light-header-icon-button;
+}
+
+.headerIconButton :global(.badge) {
+  top: -4px;
+  right: -4px;
+  width: 1.125rem;
+  height: 1.125rem;
+  font-size: 0.625rem;
+  font-weight: 800;
+}
+
+.profileButton {
+  @include mobileShell.mobile-product-v2-light-header-icon-button;
+
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.profileAvatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+.profileInitials {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.pageTitle {
+  margin: 0;
+  color: var(--v2-title, var(--hy-color-text-title));
+  font-size: 1.625rem;
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+}
+
+.bottomNavHost {
+  display: contents;
+}
+
+.bottomNav {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-shell;
+}
+
+.navItem {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-item;
+
+  &::after {
+    @include mobileShell.mobile-product-v2-light-bottom-nav-item-press-halo;
+  }
+}
+
+.navItemActive {
+  position: relative;
+  overflow: visible;
+}
+
+.navItem[data-active='true'] {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-item-active;
+}
+
+.navIcon {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-icon;
+}
+
+.navLabel {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-label;
+}
+
+.activeNavBubble {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-active-bubble;
+}
+
+.activeNavIcon {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-active-icon;
+}
+
+.activeNavLabel {
+  @include mobileShell.mobile-product-v2-light-bottom-nav-active-label;
+}
+
+.localeSheet {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.localeOption {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 2.75rem;
+  padding: 0 0.85rem;
+  border: 1px solid rgba(71, 85, 105, 0.12);
+  border-radius: 0.85rem;
+  background: rgba(241, 245, 249, 0.72);
+  color: var(--v2-title);
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.localeOption[data-selected='true'] {
+  border-color: rgba(37, 99, 235, 0.42);
+  background: rgba(219, 234, 254, 0.72);
+}
+
+@media (min-width: 861px) {
+  .header {
+    display: none;
+  }
+}

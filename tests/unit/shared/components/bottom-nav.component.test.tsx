@@ -4,6 +4,14 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { BottomNav, type BottomNavProps } from '@/shared/components/bottom-nav';
 
+vi.mock('@/core/i18n/navigation', () => ({
+  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
+    <a href={href} {...rest}>
+      {children}
+    </a>
+  ),
+}));
+
 const classNames = {
   item: 'nav-item',
   itemActive: 'nav-item-active',
@@ -71,5 +79,18 @@ describe('BottomNav', () => {
     );
 
     expect(html).toContain('disabled');
+  });
+
+  it('renderiza href com Link localizado', () => {
+    const html = renderToStaticMarkup(
+      <BottomNav
+        activeId="cargo"
+        classNames={classNames}
+        items={[{ id: 'cargo', label: 'Cargas', icon: <span>C</span>, href: '/cargas' }]}
+      />,
+    );
+
+    expect(html).toContain('href="/cargas"');
+    expect(html).toContain('data-active="true"');
   });
 });

@@ -23,6 +23,7 @@ import {
   Package,
   RadioTower,
   Route,
+  Languages,
   Search,
   Settings,
   ShieldCheck,
@@ -52,6 +53,13 @@ import { filterMainNavigationForUser, mainNavigation, resolveActiveNavigationHre
 import { persistStoredLocale, type StoredLocale } from '@/shared/preferences/client-preferences';
 import { intlAppPaths, isAuthPublicShellPathname, isCargoHydrowayMapPathname } from '@/shared/routing/app-routes';
 import styles from './admin-chrome.module.scss';
+import shellStyles from '../mobile-product-shell/mobile-product-shell.module.scss';
+import {
+  MobileProductHeader,
+  MobileShellChromeProvider,
+  ProductMobileBottomNav,
+  useMobileShellChrome,
+} from '../mobile-product-shell';
 import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
 import { ThemeToggle } from '@/shared/ui/theme-toggle/theme-toggle';
 import { OPEN_MOCK_PANEL_EVENT } from '@/shared/ui/mock-mode/mock-mode';
@@ -166,6 +174,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
   const [accountSheetOpen, setAccountSheetOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mobileSearchQuery, setMobileSearchQuery] = useState('');
+  const [mobileLocaleSheetOpen, setMobileLocaleSheetOpen] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
   const notificationsRef = useRef<HTMLDivElement>(null);
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
@@ -209,12 +218,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
     return navigation.filter((item) => !mobileBottomHrefSet.has(item.href) && !primaryExtra.has(item.href));
   }, [navigation, mobileBottomHrefSet]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
-  const isCargoWorkspacePath =
-    normalizedPathname === intlAppPaths.cargos.marketplace
-    || normalizedPathname.startsWith(`${intlAppPaths.cargos.marketplace}/`);
-  const activeNavLabel = isCargoWorkspacePath
-    ? tChrome('header.title')
-    : (activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title'));
+  const activeNavLabel = activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title');
   const activeNavSubtitle = activeHref === intlAppPaths.home
     ? tChrome('header.homeSubtitle')
     : tChrome('header.subtitle');
@@ -430,13 +434,22 @@ export function AdminChrome({ children }: AdminChromeProps) {
   function openMobileAccountSheet() {
     setNotificationsOpen(false);
     setMobileSearchOpen(false);
+    setMobileLocaleSheetOpen(false);
     setAccountSheetOpen(true);
   }
 
   function toggleMobileNotificationsSheet() {
     setAccountSheetOpen(false);
     setMobileSearchOpen(false);
+    setMobileLocaleSheetOpen(false);
     setNotificationsOpen((current) => !current);
+  }
+
+  function toggleMobileLocaleSheet() {
+    setAccountSheetOpen(false);
+    setMobileSearchOpen(false);
+    setNotificationsOpen(false);
+    setMobileLocaleSheetOpen((current) => !current);
   }
 
   function openMobileSearchSheet() {
@@ -511,7 +524,15 @@ export function AdminChrome({ children }: AdminChromeProps) {
   }
 
   return (
-    <div className={sidebarCollapsed ? 'hx-shell hr-shell is-sidebar-collapsed' : 'hx-shell hr-shell'}>
+    <div
+      className={[
+        sidebarCollapsed ? 'hx-shell hr-shell is-sidebar-collapsed' : 'hx-shell hr-shell',
+        isMobileViewport ? shellStyles.shell : '',
+      ]
+        .filter(Boolean)
+        .join(' ')}
+      {...(isMobileViewport ? { 'data-mobile-product-v2-shell': 'true', 'data-theme': 'light' } : {})}
+    >
       <aside className={sidebarCollapsed ? 'hx-sidebar hr-sidebar is-collapsed' : 'hx-sidebar hr-sidebar'} aria-label={t('primaryNavigation')}>
         <div className="hr-sidebar-inner">
           <Link href={intlAppPaths.dashboard.home} className="hx-sidebar-brand" aria-label={tChrome('brandAria')} title="HydroRivers">
@@ -649,68 +670,31 @@ export function AdminChrome({ children }: AdminChromeProps) {
         </div>
       </aside>
 
+      <MobileShellChromeProvider>
       <div className="hx-main hr-main">
         <main className="hx-content hr-dashboard-page">
           <div
             ref={dashboardScrollRef}
             className={[
               'hr-dashboard-scroll',
+              shellStyles.mobileScrollStage,
               suppressMobileShellChrome ? styles.mobileHydrowayMapScrollLock : '',
             ]
               .filter(Boolean)
               .join(' ')}
           >
           {!suppressMobileShellChrome ? (
-          <header className="hx-mobile-topbar" aria-label={tChrome('mobile.headerAria')}>
-            <div className="hx-mobile-topbar__row">
-              <Link href={intlAppPaths.dashboard.home} className="hx-mobile-brand" aria-label={tChrome('brandAria')}>
-                <span><Waves size={18} /></span>
-                <strong>HydroRivers</strong>
-              </Link>
-
-              <div className="hx-mobile-topbar__actions">
-                <button
-                  type="button"
-                  className={styles.mobileSearchTrigger}
-                  aria-label={tChrome('mobile.searchSheet.openAria')}
-                  aria-expanded={mobileSearchOpen}
-                  onClick={openMobileSearchSheet}
-                >
-                  <Search size={18} />
-                </button>
-                <button
-                  type="button"
-                  className="hx-bell"
-                  aria-label={tChrome('header.notificationsAria', { count: unreadNotificationsCount })}
-                  aria-expanded={notificationsOpen}
-                  onClick={toggleMobileNotificationsSheet}
-                >
-                  <Bell size={18} />
-                  {unreadNotificationsCount > 0 ? (
-                    <span className="hx-bell-badge" aria-hidden>{unreadNotificationsCount > 9 ? '9+' : unreadNotificationsCount}</span>
-                  ) : null}
-                </button>
-                <button
-                  type="button"
-                  className="hx-mobile-avatar"
-                  aria-label={navigationUser ? tChrome('profile.openAria', { name: profileDisplayName(navigationUser?.name) }) : t('login')}
-                  onClick={openMobileAccountSheet}
-                >
-                  {navigationUser?.avatarUrl ? (
-                    <Image src={navigationUser.avatarUrl} alt="" width={38} height={38} sizes="38px" unoptimized />
-                  ) : (
-                    getCompactDisplayInitials(navigationUser?.name ?? '')
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <div className="hx-mobile-topbar__row hx-mobile-topbar__row--page-title">
-              <h1 className="hx-mobile-title">
-                <strong>{activeNavLabel}</strong>
-              </h1>
-            </div>
-          </header>
+            <MobileProductHeader
+              normalizedPathname={normalizedPathname}
+              brandHref={intlAppPaths.dashboard.home}
+              unreadNotificationsCount={unreadNotificationsCount}
+              navigationUser={navigationUser}
+              onOpenLocale={toggleMobileLocaleSheet}
+              onOpenNotifications={toggleMobileNotificationsSheet}
+              onOpenProfile={openMobileAccountSheet}
+              localeSheetOpen={mobileLocaleSheetOpen}
+              notificationsOpen={notificationsOpen}
+            />
           ) : null}
 
           <div className={styles.desktopChromeShell}>
@@ -851,46 +835,9 @@ export function AdminChrome({ children }: AdminChromeProps) {
       </div>
 
       {!suppressMobileShellChrome ? (
-      <nav className={`${styles.mobileBottomNav} hx-mobile-bottom-nav`} aria-label={t('mobileMenu')}>
-        {MOBILE_BOTTOM_NAV.map((slot) => {
-          const Icon = iconByKey[slot.iconKey];
-          const active = activeHref === slot.href;
-          return (
-            <Link
-              key={slot.href}
-              href={slot.href}
-              className={active ? `${styles.mobileBottomNavItem} ${styles.mobileBottomNavItemActive}` : styles.mobileBottomNavItem}
-              aria-current={active ? 'page' : undefined}
-              aria-label={tChrome(`mobile.bottomNav.${slot.labelKey}`)}
-              onMouseEnter={() => prefetchScreen(slot.href)}
-              onClick={(event) => {
-                const shouldForceCargoListReturn =
-                  slot.href === intlAppPaths.cargos.marketplace && isCargoDetailPath;
-
-                if (active && !shouldForceCargoListReturn) {
-                  return;
-                }
-
-                event.preventDefault();
-
-                if (shouldForceCargoListReturn) {
-                  router.replace(slot.href as never);
-                  return;
-                }
-
-                navigateWithTransition(slot.href);
-              }}
-            >
-              <span className={styles.mobileBottomNavItemInner}>
-                <span className={styles.mobileBottomNavIconBubble}>
-                  <Icon size={18} />
-                </span>
-                <span className={styles.mobileBottomNavLabel}>{tChrome(`mobile.bottomNav.${slot.labelKey}`)}</span>
-              </span>
-            </Link>
-          );
-        })}
-      </nav>
+        <AdminChromeMobileBottomNav
+          hidden={notificationsOpen || accountSheetOpen || mobileLocaleSheetOpen}
+        />
       ) : null}
 
       <BottomSheet
@@ -1052,6 +999,42 @@ export function AdminChrome({ children }: AdminChromeProps) {
       </BottomSheet>
 
       <BottomSheet
+        open={isMobileViewport && mobileLocaleSheetOpen}
+        onOpenChange={(next) => {
+          setMobileLocaleSheetOpen(next);
+          if (next) {
+            setAccountSheetOpen(false);
+            setNotificationsOpen(false);
+            setMobileSearchOpen(false);
+          }
+        }}
+        title={tChrome('mobile.localeSheetTitle')}
+        closeAriaLabel={tChrome('mobile.localeSheetClose')}
+        snapPoints={['60vh']}
+        variant="light"
+        viewportAnchor="flush"
+      >
+        <div className={shellStyles.localeSheet}>
+          {SIDEBAR_LOCALES.map((item) => {
+            const selected = item.value === locale;
+            return (
+              <button
+                key={item.value}
+                type="button"
+                className={shellStyles.localeOption}
+                data-selected={selected ? 'true' : 'false'}
+                aria-current={selected ? 'true' : undefined}
+                onClick={() => changeSidebarLocale(item.value)}
+              >
+                <span aria-hidden>{item.flag}</span>
+                <span>{item.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </BottomSheet>
+
+      <BottomSheet
         open={isMobileViewport && mobileSearchOpen}
         onOpenChange={(next) => {
           setMobileSearchOpen(next);
@@ -1090,6 +1073,12 @@ export function AdminChrome({ children }: AdminChromeProps) {
           </nav>
         </div>
       </BottomSheet>
+      </MobileShellChromeProvider>
     </div>
   );
+}
+
+function AdminChromeMobileBottomNav({ hidden }: { hidden: boolean }) {
+  const { bottomNavSuppressed } = useMobileShellChrome();
+  return <ProductMobileBottomNav hidden={hidden || bottomNavSuppressed} />;
 }

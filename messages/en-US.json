@@ -1445,6 +1445,17 @@
     },
     "mobile": {
       "headerAria": "HydroRivers mobile header",
+      "localeToggleAria": "Change language",
+      "localeSheetTitle": "Language",
+      "localeSheetClose": "Close language selection",
+      "pageTitles": {
+        "cargoDetail": "Cargo details",
+        "cargoMap": "Cargo route",
+        "cargoPublish": "New cargo",
+        "negotiationDetail": "Deal details",
+        "vesselDetail": "Vessel details",
+        "impactDetail": "Impact details"
+      },
       "bottomNav": {
         "overview": "Overview",
         "dashboard": "Dashboard",
@@ -1521,6 +1532,23 @@
       "cost": "Cost",
       "priority": "Priority"
     },
+    "publicActionSheet": {
+      "ariaLabel": "Cargo actions",
+      "navigationAria": "Cargo navigation",
+      "close": "Close",
+      "detailTitle": "Cargo details",
+      "detailDescription": "View the full cargo page",
+      "routeTitle": "View route",
+      "routeDescription": "Immersive map and waterway progress",
+      "documentsTitle": "Cargo documents",
+      "documentsDescription": "Document package, pending items and validations",
+      "costsTitle": "Costs and values",
+      "costsDescription": "Financial summary, savings and composition",
+      "priorityTitle": "Priority and risks",
+      "priorityDescription": "Operational SLA, urgency and criticality",
+      "negotiationsTitle": "Open negotiations",
+      "negotiationsDescription": "View proposals and negotiate cargoes"
+    },
     "actionSheet": {
       "ariaLabel": "Choose cargo view",
       "navigationAria": "Cargo views",
@@ -1536,6 +1564,7 @@
       "trackingTitle": "Tracked operations",
       "newCargo": "New cargo",
       "searchPlaceholder": "Search by cargo, origin, destination...",
+      "publicMobileSearchPlaceholder": "Search cargoes...",
       "searchAria": "Search cargoes",
       "filterAria": "Filter cargoes",
       "showing": "Showing {pageCount} of {totalCount} cargoes",
@@ -1546,7 +1575,8 @@
       "emptyFilteredDescription": "We couldn't find cargoes with the current filters. You can clear the filters and try again.",
       "clearFiltersAction": "Clear filters",
       "cardActionView": "View details",
-      "cardActionTrack": "Track"
+      "cardActionTrack": "Track",
+      "cardActionRoute": "View route"
     },
     "filters": {
       "eyebrow": "FILTERS",

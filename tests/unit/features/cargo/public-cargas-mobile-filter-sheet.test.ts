@@ -12,7 +12,8 @@ describe('PublicCargasMobileFilterSheet', () => {
     const source = readFileSync(filterSheetSourcePath, 'utf8');
 
     expect(source).toContain('cargoDsV2ThemeRootClassName');
-    expect(source).toContain("setAttribute('data-theme', 'light')");
+    expect(source).toContain('usePublicCargoLightSheetPortal');
+    expect(source).toContain('publicCargoLightSheetDefaults');
     expect(source).toContain('styles.filterBottomSheet');
   });
 });

@@ -1,3 +1,6 @@
+@use '../../styles/shells/auth-v2-light-shell' as authShell;
+@use '../../styles/shells/mobile-product-v2-light-shell' as mobileProductShell;
+
 .app {
   height: 100vh;
   display: grid;
@@ -358,6 +361,8 @@
 
 /* Login / cadastro: apenas conteúdo da página, sem chrome logado */
 .publicAuthWrap {
+  @include authShell.auth-v2-light-shell;
+  @include authShell.auth-v2-light-page-background;
   isolation: isolate;
   height: 100dvh;
   min-height: 0;
@@ -368,11 +373,7 @@
   overflow-x: clip;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  background:
-    radial-gradient(120% 85% at 50% 0%, color-mix(in srgb, #14d8c4 16%, transparent) 0%, transparent 48%),
-    radial-gradient(90% 55% at 85% 100%, color-mix(in srgb, #45a6ff 14%, transparent) 0%, transparent 42%),
-    linear-gradient(180deg, #05080b 0%, #020407 100%);
-  color: #eef7f6;
+  color: var(--auth-text-body);
   padding-top: max(0.5rem, env(safe-area-inset-top));
   padding-bottom: max(1.25rem, env(safe-area-inset-bottom));
 }
@@ -714,6 +715,17 @@
 }
 
 @media (max-width: 860px) {
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true']) {
+    @include mobileProductShell.mobile-product-v2-light-page-background;
+
+    color: var(--hy-color-text-primary, #0f172a);
+  }
+
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-main),
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-dashboard-page) {
+    background: transparent;
+  }
+
   .mobileBottomNav {
     display: grid;
   }

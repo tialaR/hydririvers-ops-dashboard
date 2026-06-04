@@ -2,6 +2,8 @@
 
 import type { ReactNode } from 'react';
 
+import { Link } from '@/core/i18n/navigation';
+
 import styles from './BottomNav.module.scss';
 
 export type BottomNavItem = {
@@ -65,7 +67,7 @@ export function BottomNav({
 
         if (item.href) {
           return (
-            <a
+            <Link
               key={item.id}
               href={item.href}
               className={itemClassName}
@@ -74,7 +76,7 @@ export function BottomNav({
               aria-disabled={item.disabled ? true : undefined}
             >
               {content}
-            </a>
+            </Link>
           );
         }
 
