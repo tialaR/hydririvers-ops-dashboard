@@ -86,7 +86,8 @@ describe('Mobile product shell layout ownership', () => {
     expect(shellStyles).toContain('--hy-mobile-header-compact-padding-bottom');
   });
 
-  it('frost glass fica invisível no repouso e aparece ao compactar no scroll', () => {
+  it('frost glass fica visível no repouso e intensifica ao compactar no scroll', () => {
+    expect(shellStyles).toContain('--hy-mobile-header-frost-opacity-rest: 0.94');
     expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-rest, 0)');
     expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-compact, 1)');
   });

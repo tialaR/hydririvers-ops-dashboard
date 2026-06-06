@@ -960,13 +960,14 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       });
 
       expect(beforeMetrics.fontSize).toBeGreaterThan(28);
-      expect(beforeMetrics.frostOpacity).toBeLessThanOrEqual(0.05);
+      expect(beforeMetrics.frostOpacity).toBeGreaterThanOrEqual(0.85);
       expect(beforeMetrics.backgroundImage).not.toBe('none');
       expect(beforeMetrics.headerPosition).toBe('fixed');
       await expect(header).toHaveAttribute('data-mobile-header-glass', 'true');
 
-      await scrollMobileProductShell(page, 120);
+      await scrollMobileProductShell(page, 160);
       await expectMobileHeaderCompact(page, true);
+      await expect(title).toHaveAttribute('data-mobile-page-title-compact-offset', 'true');
 
       const afterMetrics = await title.evaluate((element) => {
         const style = window.getComputedStyle(element);

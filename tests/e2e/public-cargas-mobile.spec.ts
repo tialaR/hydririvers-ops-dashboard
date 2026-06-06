@@ -443,13 +443,17 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     });
 
     expect(before.titleFontSize).toBeGreaterThan(28);
-    expect(before.frostOpacity).toBeLessThanOrEqual(0.05);
+    expect(before.frostOpacity).toBeGreaterThanOrEqual(0.85);
     expect(before.backgroundImage).not.toBe('none');
     expect(before.backdropFilter).not.toBe('none');
     expect(before.headerPosition).toBe('fixed');
 
-    await scrollMobileProductShell(page, 120);
+    await scrollMobileProductShell(page, 160);
     await expectMobileHeaderCompact(page, true);
+    await expect(header.locator('[data-mobile-page-title="true"]')).toHaveAttribute(
+      'data-mobile-page-title-compact-offset',
+      'true',
+    );
 
     const after = await header.evaluate((headerEl) => {
       const titleEl = headerEl.querySelector('[data-mobile-page-title="true"]')!;
