@@ -16,4 +16,12 @@ describe('PublicCargasMobileFilterSheet', () => {
     expect(source).toContain('publicCargoLightSheetDefaults');
     expect(source).toContain('styles.filterBottomSheet');
   });
+
+  it('passa description e footer global do BottomSheet shared', () => {
+    const source = readFileSync(filterSheetSourcePath, 'utf8');
+
+    expect(source).toContain("description={tBoard('filters.mobileDescription')}");
+    expect(source).toContain('CargoFilterSheetFooter');
+    expect(source).toContain('footer={');
+  });
 });

@@ -71,12 +71,19 @@ describe('BottomSheet component', () => {
     vi.unstubAllGlobals();
   });
 
+  it('expõe marker data-bottom-sheet-root no overlay portaled', () => {
+    const source = readFileSync(bottomSheetSourcePath, 'utf8');
+    expect(source).toContain('data-bottom-sheet-root="true"');
+  });
+
   it('renderiza título, children e acessibilidade básica quando aberto', () => {
     const html = renderToStaticMarkup(
       <BottomSheet open title="Filtros" closeAriaLabel="Fechar filtros">
         <p>Conteúdo do sheet</p>
       </BottomSheet>,
     );
+
+    expect(html).toContain('data-bottom-sheet-root="true"');
 
     expect(html).toContain('Filtros');
     expect(html).toContain('Conteúdo do sheet');
@@ -85,6 +92,47 @@ describe('BottomSheet component', () => {
     expect(html).toContain('data-testid="bottom-sheet-panel"');
     expect(html).toContain('aria-labelledby="bottom-sheet-title-id"');
     expect(html).toContain('aria-label="Fechar filtros"');
+    expect(html).toContain('data-bottom-sheet-title="true"');
+    expect(html).toContain('data-bottom-sheet-header="true"');
+    expect(html).toContain('data-bottom-sheet-body="true"');
+  });
+
+  it('renderiza description opcional com aria-describedby', () => {
+    const html = renderToStaticMarkup(
+      <BottomSheet open title="Filtros" description="Refine os resultados da lista.">
+        Conteúdo
+      </BottomSheet>,
+    );
+
+    expect(html).toContain('Refine os resultados da lista.');
+    expect(html).toContain('data-bottom-sheet-description="true"');
+    expect(html).toContain('aria-describedby=');
+  });
+
+  it('não renderiza description quando ausente', () => {
+    const html = renderToStaticMarkup(
+      <BottomSheet open title="Filtros">
+        Conteúdo
+      </BottomSheet>,
+    );
+
+    expect(html).not.toContain('data-bottom-sheet-description="true"');
+    expect(html).not.toContain('aria-describedby=');
+  });
+
+  it('renderiza footer com marker quando footer é passado', () => {
+    const html = renderToStaticMarkup(
+      <BottomSheet
+        open
+        title="Filtros"
+        footer={<button type="button">Aplicar</button>}
+      >
+        Conteúdo
+      </BottomSheet>,
+    );
+
+    expect(html).toContain('data-bottom-sheet-footer="true"');
+    expect(html).toContain('Aplicar');
   });
 
   it('não renderiza markup quando fechado', () => {
@@ -97,9 +145,27 @@ describe('BottomSheet component', () => {
     expect(html).toBe('');
   });
 
-  it('liga botão X ao fluxo de fechamento com feedback de press', () => {
+  it('título usa classe padrão e body com respiro após header', () => {
+    const scssPath = resolve(
+      process.cwd(),
+      'src/shared/components/bottom-sheet/BottomSheet.module.scss',
+    );
+    const scss = readFileSync(scssPath, 'utf8');
+
+    expect(scss).toContain('.title');
+    expect(scss).toContain('--hy-font-size-sheet-title');
+    expect(scss).toContain('--hy-space-sheet-body-padding-block');
+    expect(scss).toContain('.body');
+    expect(scss).toMatch(/\.body\s*\{[^}]*padding:/s);
+  });
+
+  it('usa IconButton global v2 com marker data-bottom-sheet-close', () => {
     const source = readFileSync(bottomSheetSourcePath, 'utf8');
 
+    expect(source).toContain('iconButtonRole="sheet"');
+    expect(source).toContain('iconName="close"');
+    expect(source).not.toContain('variant="sheetClose"');
+    expect(source).toContain('data-bottom-sheet-close="true"');
     expect(source).toContain('onClick={resetAndClose}');
     expect(source).toContain('queueCloseWithPressFeedback');
     expect(source).toContain('requestClose()');

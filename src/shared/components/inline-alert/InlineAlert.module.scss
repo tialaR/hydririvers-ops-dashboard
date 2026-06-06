@@ -1,0 +1,26 @@
+.alert {
+  margin: 0;
+  padding: 0.75rem 0.95rem;
+  border-radius: var(--auth-radius-md, var(--hy-radius-button));
+  font-size: var(--hy-font-size-body, 0.875rem);
+  font-weight: var(--hy-font-weight-semibold, 620);
+  line-height: var(--hy-line-height-body, 1.35);
+}
+
+.tone_error {
+  color: var(--auth-danger, var(--hy-color-danger-text));
+  background: var(--hy-color-danger-surface);
+  border: 1px solid var(--hy-color-danger-border);
+}
+
+.tone_success {
+  color: var(--auth-success, var(--hy-color-success));
+  background: var(--hy-color-status-completed-bg);
+  border: 1px solid var(--hy-color-status-completed-border);
+}
+
+.tone_info {
+  color: var(--auth-brand, var(--hy-color-brand));
+  background: var(--hy-color-status-scheduled-bg);
+  border: 1px solid var(--hy-color-status-scheduled-border);
+}

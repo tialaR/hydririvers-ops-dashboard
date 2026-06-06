@@ -72,7 +72,7 @@ describe('Public mobile bottom sheets shell parity', () => {
 
     expect(actionSource).toContain('publicCargoActionSheetPortalAttributes');
     expect(actionSource).toContain('usePublicCargoLightSheetPortal');
-    expect(actionSource).toContain("title={tBoard('publicActionSheet.ariaLabel')}");
+    expect(actionSource).toContain("title={tBoard('publicActionSheet.title')}");
     expect(actionSource).not.toContain('title={cargo.title}');
     expect(actionSource).not.toContain('locale:');
     expect(contentSource).toContain('styles.summaryTitle');

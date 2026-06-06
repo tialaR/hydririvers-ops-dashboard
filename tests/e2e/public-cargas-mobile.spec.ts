@@ -1,6 +1,7 @@
 import { expect, test, type ConsoleMessage, type Page } from '@playwright/test';
 
 import { resetMockScenarioThenLogin } from './support/cargo-context';
+import { expectMobileHeaderCompact, scrollMobileProductShell } from './support/mobile-header-scroll';
 
 const shipper = { email: 'tiala@hydrorivers.com', password: 'hydro123' } as const;
 
@@ -60,17 +61,23 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     await resetMockScenarioThenLogin(page, 'market-active', shipper);
   });
 
-  test('mobile shell DS v2: header light, título Cargas e icon buttons uniformes', async ({ page }) => {
+  test('mobile shell DS v2: header Cargas, filtro único, brand limpa e actions uniformes', async ({ page }) => {
     await gotoPublicCargasMobile(page);
 
-    const header = page.locator('[data-mobile-product-shell="true"]');
+    const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"]');
+    const header = page.locator('[data-mobile-product-shell="true"][data-mobile-header-glass="true"]');
+    const mobileList = page.locator('[data-public-cargas-mobile="true"]');
+    await expect(scrollStage).toBeVisible();
     await expect(header).toBeVisible();
     await expect(header).toHaveAttribute('data-theme', 'light');
     await expect(header.getByText('HydroRivers')).toBeVisible();
     await expect(page.locator('[data-mobile-page-title="true"]')).toHaveText('Cargas');
     await expect(header.locator('.hx-mobile-title')).toHaveCount(0);
+    await expect(mobileList).toHaveAttribute('data-public-cargas-mobile-page-background', 'none');
+    await expect(mobileList.getByText('Lista de cargas', { exact: true })).toHaveCount(0);
+    await expect(mobileList.locator('[data-mobile-cargas-filter-button="true"]')).toHaveCount(1);
 
-    const actionButtons = header.locator('[data-mobile-header-actions="true"] button');
+    const actionButtons = header.locator('[data-mobile-header-actions="true"] [data-icon-button-global="true"]');
     await expect(actionButtons).toHaveCount(3);
 
     const sizes = await actionButtons.evaluateAll((elements) =>
@@ -322,7 +329,7 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
       expect(cargoId).toBeTruthy();
 
       const routeCta = firstCard.locator('[data-cargo-primary-action="true"]');
-      await expect(routeCta).toContainText('Ver rota');
+      await expect(routeCta).toContainText('Ver detalhes');
       await routeCta.click();
 
       await expect(page).toHaveURL(new RegExp(`/pt-BR/cargas/${cargoId}/mapa`));
@@ -351,6 +358,117 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     } finally {
       consoleGuard.detach();
     }
+  });
+
+  test('Phase 5U: background global cobre viewport até o BottomNav com lista curta', async ({ page }) => {
+    await gotoPublicCargasMobile(page);
+
+    const shellRoot = page.locator('[data-mobile-product-v2-shell="true"][data-mobile-shell-background="root"]');
+    const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"][data-ds-v2-mobile-canvas="true"]');
+    const mobileList = page.locator('[data-public-cargas-mobile="true"]');
+
+    await expect(shellRoot).toBeVisible();
+    await expect(scrollStage).toBeVisible();
+    await expect(mobileList).toHaveAttribute('data-public-cargas-mobile-page-background', 'none');
+
+    await mobileList.locator('[type="search"]').fill('zzzznomatchcargo');
+    await expect(mobileList.locator('[data-mobile-content-results="true"]')).toContainText('0 resultados');
+
+    const viewport = page.viewportSize();
+    const [shellBackground, stageHeight] = await Promise.all([
+      shellRoot.evaluate((element) => window.getComputedStyle(element).backgroundImage.includes('gradient')),
+      scrollStage.evaluate((element) => element.getBoundingClientRect().height),
+    ]);
+
+    expect(shellBackground).toBe(true);
+    expect(stageHeight).toBeGreaterThanOrEqual((viewport?.height ?? 0) - 8);
+  });
+
+  test('Phase 5U: empty state filtrado centralizado sem botão grande de limpar', async ({ page }) => {
+    await gotoPublicCargasMobile(page);
+
+    const mobileList = page.locator('[data-public-cargas-mobile="true"]');
+    await mobileList.locator('[type="search"]').fill('zzzznomatchcargo');
+    await expect(mobileList.locator('[data-mobile-content-results="true"]')).toContainText('0 resultados');
+
+    const emptyState = mobileList.locator('[data-public-cargas-empty-state="true"][data-public-cargas-empty-variant="filtered"]');
+    await expect(emptyState).toBeVisible();
+    await expect(mobileList.locator('[data-mobile-clear-filters="true"]')).toHaveText('Limpar filtros');
+    await expect(emptyState.getByRole('button', { name: 'Limpar filtros' })).toHaveCount(0);
+
+    const emptyLayout = await emptyState.evaluate((element) => {
+      const icon = element.querySelector('[data-public-cargas-empty-icon="true"]') as HTMLElement | null;
+      const containerBox = element.getBoundingClientRect();
+      const iconBox = icon?.getBoundingClientRect();
+      const rootStyle = window.getComputedStyle(element);
+      return {
+        justifyItems: rootStyle.justifyItems,
+        textAlign: rootStyle.textAlign,
+        iconWidth: iconBox?.width ?? 0,
+        iconCenterDelta:
+          iconBox && containerBox.width
+            ? Math.abs(iconBox.left + iconBox.width / 2 - (containerBox.left + containerBox.width / 2))
+            : 999,
+      };
+    });
+
+    expect(emptyLayout.justifyItems).toBe('center');
+    expect(emptyLayout.textAlign).toBe('center');
+    expect(emptyLayout.iconWidth).toBeGreaterThanOrEqual(48);
+    expect(emptyLayout.iconCenterDelta).toBeLessThanOrEqual(6);
+
+    await mobileList.locator('[data-mobile-clear-filters="true"]').click();
+    await expect(mobileList.locator('[data-public-cargas-empty-state="true"]')).toHaveCount(0);
+    await expect(mobileList.locator('article[data-cargo-id]').first()).toBeVisible();
+  });
+
+  test('header fixo global compacta título ao scroll da lista mobile', async ({ page }) => {
+    await gotoPublicCargasMobile(page);
+
+    const header = page.locator('[data-mobile-product-shell="true"][data-mobile-header-glass="true"]');
+    await expect(page.locator('[data-public-cargas-mobile="true"] article[data-cargo-id]').first()).toBeVisible();
+    await expectMobileHeaderCompact(page, false);
+
+    const before = await header.evaluate((headerEl) => {
+      const titleEl = headerEl.querySelector('[data-mobile-page-title="true"]')!;
+      const titleStyle = window.getComputedStyle(titleEl);
+      const headerBefore = window.getComputedStyle(headerEl, '::before');
+      return {
+        titleFontSize: Number.parseFloat(titleStyle.fontSize),
+        frostOpacity: Number.parseFloat(headerBefore.opacity),
+        backgroundImage: headerBefore.backgroundImage,
+        backdropFilter: headerBefore.backdropFilter,
+        headerPosition: window.getComputedStyle(headerEl).position,
+      };
+    });
+
+    expect(before.titleFontSize).toBeGreaterThan(28);
+    expect(before.frostOpacity).toBeGreaterThan(0.2);
+    expect(before.backgroundImage).not.toBe('none');
+    expect(before.backdropFilter).not.toBe('none');
+    expect(before.headerPosition).toBe('fixed');
+
+    await scrollMobileProductShell(page, 120);
+    await expectMobileHeaderCompact(page, true);
+
+    const after = await header.evaluate((headerEl) => {
+      const titleEl = headerEl.querySelector('[data-mobile-page-title="true"]')!;
+      const titleStyle = window.getComputedStyle(titleEl);
+      const headerBefore = window.getComputedStyle(headerEl, '::before');
+      return {
+        titleFontSize: Number.parseFloat(titleStyle.fontSize),
+        frostOpacity: Number.parseFloat(headerBefore.opacity),
+        backgroundImage: headerBefore.backgroundImage,
+        backdropFilter: headerBefore.backdropFilter,
+      };
+    });
+
+    expect(after.titleFontSize).toBeLessThan(before.titleFontSize);
+    expect(after.frostOpacity).toBeGreaterThan(before.frostOpacity);
+    expect(after.backgroundImage).not.toBe('none');
+    expect(after.backdropFilter).not.toBe('none');
+    await expect(header.locator('[data-mobile-brand="true"]')).toBeVisible();
+    await expect(header.locator('[data-mobile-header-actions="true"]')).toBeVisible();
   });
 
   test('ação negociações navega para /pt-BR/negociacoes', async ({ page }) => {

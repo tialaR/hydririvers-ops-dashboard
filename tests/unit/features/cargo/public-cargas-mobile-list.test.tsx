@@ -16,6 +16,18 @@ vi.mock('next-intl', () => ({
     if (namespace === 'operationsBoard' && key === 'filters.results' && values?.count != null) {
       return `${values.count} resultados`;
     }
+    if (namespace === 'operationsBoard' && key === 'filters.clearAction') {
+      return 'Limpar filtros';
+    }
+    if (namespace === 'common' && key === 'cargoStatus.boarded') {
+      return 'Em trânsito';
+    }
+    if (namespace === 'common' && key === 'eta') {
+      return 'ETA';
+    }
+    if (namespace === 'common' && key === 'emptyValue') {
+      return '—';
+    }
     return `${namespace}.${key}`;
   },
 }));
@@ -28,23 +40,10 @@ vi.mock('@/core/i18n/navigation', () => ({
   ),
 }));
 
-vi.mock('@/shared/components/bottom-sheet', () => ({
-  BottomSheet: ({
-    open,
-    title,
-    children,
-    variant,
-  }: {
-    open: boolean;
-    title: string;
-    children: React.ReactNode;
-    variant?: string;
-  }) =>
-    open ? (
-      <section data-testid="public-cargo-action-sheet" data-variant={variant} data-title={title}>
-        {children}
-      </section>
-    ) : null,
+vi.mock('@/shared/layout/mobile-product-shell', () => ({
+  useMobileShellChrome: () => ({
+    setBottomNavSuppressed: vi.fn(),
+  }),
 }));
 
 const mockCargo: Cargo = {
@@ -103,114 +102,90 @@ describe('PublicCargasMobileList', () => {
 
     expect(html).toContain('data-theme="light"');
     expect(html).toContain('data-public-cargas-mobile="true"');
-    expect(html).toMatch(/\broot\b/);
+    expect(html).toContain('data-public-cargas-mobile-page-background="none"');
   });
 
-  it('suprime bottom nav do shell quando sheets públicos estão abertos', () => {
+  it('nao define background de pagina concorrente com o mobile shell', () => {
     const source = readFileSync(listSourcePath, 'utf8');
-
-    expect(source).toContain('useMobileShellChrome');
-    expect(source).toContain('setBottomNavSuppressed');
-    expect(source).not.toContain('PublicCargasMobileBottomNav');
-  });
-
-  it('reserva respiro inferior na shell da lista para o bottom nav fixo do produto', () => {
     const stylesPath = resolve(
       process.cwd(),
       'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 
-    expect(stylesSource).toContain('--hy-size-bottom-nav-height');
-    expect(stylesSource).toContain('.shell');
-    expect(stylesSource).toContain('padding:');
-    expect(stylesSource).not.toContain('cargo-v2-light-bottom-nav-shell');
-    expect(stylesSource).not.toContain('.bottomNav');
+    expect(source).toContain('data-public-cargas-mobile-page-background="none"');
+    expect(stylesSource).toContain('background: transparent');
   });
 
-  it('nao depende do toggle global para o tema inicial do shell', () => {
+  it('nao repete titulo Lista de cargas no conteudo mobile', () => {
     const source = readFileSync(listSourcePath, 'utf8');
-
-    expect(source).toContain('data-theme="light"');
-    expect(source).toContain('data-public-cargas-mobile="true"');
-    expect(source).not.toContain('PublicCargasMobileBottomNav');
-    expect(source).toContain('PublicCargoActionSheet');
-    expect(source).toContain('cargoDsV2ThemeRootClassName');
-    expect(source).not.toContain('useTheme(');
-  });
-
-  it('nao renderiza filtros horizontais de status abaixo da search', () => {
-    const source = readFileSync(listSourcePath, 'utf8');
-
-    expect(source).not.toContain('statusScroller');
-    expect(source).not.toContain('FilterChip');
-  });
-
-  it('usa placeholder publicMobileSearchPlaceholder da lista publica', () => {
-    const source = readFileSync(listSourcePath, 'utf8');
-
-    expect(source).toContain("tBoard('list.publicMobileSearchPlaceholder')");
-    expect(source).not.toContain("tBoard('list.searchPlaceholder')");
-  });
-
-  it('renderiza CTA Ver rota e abre sheet light ao clicar no card', () => {
     const html = renderToStaticMarkup(
-      <PublicCargasMobileList
-        {...baseProps}
-        filteredCargoes={[mockCargo]}
-      />,
+      <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} />,
     );
 
-    expect(html).toContain('operationsBoard.list.cardActionRoute');
-    expect(html).not.toContain('operationsBoard.list.cardActionView');
-    expect(html).toContain('role="button"');
-    expect(html).toContain('data-cargo-id="CRG-7845"');
-    expect(html).not.toContain('statusScroller');
-    expect(html).toContain('placeholder="operationsBoard.list.publicMobileSearchPlaceholder"');
+    expect(source).not.toContain("tBoard('list.title')");
+    expect(html).toContain('data-mobile-content-results="true"');
+    expect(html).not.toContain('<h1');
   });
-});
 
-describe('PublicCargasMobileList action sheet (source)', () => {
-  it('sheet publico usa variant light, BottomSheet shared e acoes mapeadas', () => {
-    const sheetSource = readFileSync(
-      resolve(
-        process.cwd(),
-        'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet.tsx',
-      ),
-      'utf8',
+  it('renderiza apenas um botao de filtro visivel ao lado da search', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+    const html = renderToStaticMarkup(
+      <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} />,
     );
 
-    expect(sheetSource).toContain("from '@/shared/components/bottom-sheet'");
-    expect(sheetSource).toContain('variant="light"');
-    expect(sheetSource).toContain('overlayVariant="light"');
-    expect(sheetSource).toContain('viewportAnchor="flush"');
-    expect(sheetSource).toContain('PublicCargoActionSheetContent');
-    expect(sheetSource).toContain('usePublicCargoLightSheetPortal');
-    expect(sheetSource).toContain('publicCargoLightSheetDefaults');
+    expect(source).toContain('data-mobile-cargas-filter-button="true"');
+    expect(source).toContain('iconButtonRole="field"');
+    expect((html.match(/data-mobile-cargas-filter-button="true"/g) ?? []).length).toBe(1);
   });
 
-  it('conteúdo público expõe ações mapeadas sem duplicar header', () => {
-    const contentSource = readFileSync(
-      resolve(
-        process.cwd(),
-        'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet-content.tsx',
-      ),
-      'utf8',
+  it('mostra Limpar filtros discreto ao lado do contador quando filtros estão ativos', () => {
+    const htmlWithFilters = renderToStaticMarkup(
+      <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} hasAppliedFilters />,
+    );
+    const htmlWithoutFilters = renderToStaticMarkup(
+      <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} hasAppliedFilters={false} />,
     );
 
-    expect(contentSource).toContain('getPublicCargoActionRoutes');
-    expect(contentSource).toContain('publicActionSheet.documentsTitle');
-    expect(contentSource).toContain('publicActionSheet.costsTitle');
-    expect(contentSource).toContain('publicActionSheet.priorityTitle');
-    expect(contentSource).toContain('publicActionSheet.negotiationsTitle');
-    expect(contentSource).toContain('data-public-cargo-action="true"');
-    expect(contentSource).toContain('styles.summaryTitle');
+    expect(htmlWithFilters).toContain('data-mobile-clear-filters="true"');
+    expect(htmlWithFilters).toContain('Limpar filtros');
+    expect(htmlWithoutFilters).not.toContain('data-mobile-clear-filters="true"');
   });
 
-  it('CTA Ver rota navega direto para mapa sem abrir sheet antigo', () => {
-    const listSource = readFileSync(listSourcePath, 'utf8');
+  it('empty state filtrado não renderiza botão grande de limpar filtros', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+    const html = renderToStaticMarkup(
+      <PublicCargasMobileList {...baseProps} hasAppliedFilters activeFilters={1} />,
+    );
 
-    expect(listSource).toContain('primaryActionHref={intlAppPaths.cargos.cargoMap(labCargo.id)}');
-    expect(listSource).toContain("tBoard('list.cardActionRoute')");
+    expect(source).not.toContain("tBoard('list.clearFiltersAction')");
+    expect(html).toContain('data-public-cargas-empty-state="true"');
+    expect(html).toContain('data-public-cargas-empty-variant="filtered"');
+    expect(html).toContain('data-public-cargas-empty-icon="true"');
+    expect(html).not.toContain('variant="secondary"');
+  });
+
+  it('empty state usa ícone centralizado com marker', () => {
+    const stylesPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+    );
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+
+    expect(stylesSource).toContain('.emptyStateIcon');
+    expect(stylesSource).toContain('justify-items: center');
+    expect(stylesSource).toContain('text-align: center');
+    expect(stylesSource).toContain('--hy-color-empty-state-icon');
+    expect(stylesSource).toContain('width: 3.5rem');
+  });
+
+  it('renderiza CTA Ver detalhes no card', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+    const html = renderToStaticMarkup(
+      <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} />,
+    );
+
+    expect(source).toContain("tBoard('list.cardActionView')");
+    expect(html).toContain('operationsBoard.list.cardActionView');
   });
 });

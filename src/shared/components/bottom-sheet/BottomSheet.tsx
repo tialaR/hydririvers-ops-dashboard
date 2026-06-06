@@ -2,7 +2,7 @@
 
 import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode, type PointerEvent as ReactPointerEvent } from 'react';
-import { X } from 'lucide-react';
+import { IconButton } from '@/shared/components/icon-button';
 import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
 import { zIndex } from '@/shared/constants/z-index';
 import {
@@ -50,6 +50,7 @@ export type BottomSheetProps = {
   describedById?: string;
   className?: string;
   bodyClassName?: string;
+  footerClassName?: string;
   /** Accessible label for the close control (defaults to `title` when omitted). */
   closeAriaLabel?: string;
   /** Rótulo acessível da zona de arraste (handle). */
@@ -140,6 +141,7 @@ export function BottomSheet({
   describedById,
   className,
   bodyClassName,
+  footerClassName,
   closeAriaLabel,
   dragHandleAriaLabel,
   variant = 'default',
@@ -185,7 +187,6 @@ export function BottomSheet({
   const [present, setPresent] = useState(open);
   const [visible, setVisible] = useState(false);
   const [motionReady, setMotionReady] = useState(false);
-  const [closeButtonPressing, setCloseButtonPressing] = useState(false);
   const closePressTimerRef = useRef<number | null>(null);
   const prevOpenRef = useRef(open);
   const closeFallbackTimerRef = useRef<number | null>(null);
@@ -417,10 +418,8 @@ export function BottomSheet({
   }
 
   function queueCloseWithPressFeedback() {
-    setCloseButtonPressing(true);
     clearClosePressTimer();
     closePressTimerRef.current = window.setTimeout(() => {
-      setCloseButtonPressing(false);
       clearClosePressTimer();
       requestClose();
     }, BOTTOM_SHEET_PRESS_DELAY_MS);
@@ -604,6 +603,7 @@ export function BottomSheet({
   return createPortal(
     <div
       className={styles.overlay}
+      data-bottom-sheet-root="true"
       data-variant={resolvedOverlayVariant}
       data-viewport-anchor={viewportAnchor}
       data-visible={visible ? 'true' : 'false'}
@@ -643,32 +643,51 @@ export function BottomSheet({
           <span className={styles.handle} aria-hidden="true" />
         </div>
 
-        <header className={styles.header}>
+        <header className={styles.header} data-bottom-sheet-header="true">
           <div className={styles.copy}>
-            <h2 id={labelledById ?? titleId} className={styles.title}>{title}</h2>
-            {description ? <p id={describedById ?? descriptionId} className={styles.description}>{description}</p> : null}
+            <h2
+              id={labelledById ?? titleId}
+              className={styles.title}
+              data-bottom-sheet-title="true"
+            >
+              {title}
+            </h2>
+            {description ? (
+              <p
+                id={describedById ?? descriptionId}
+                className={styles.description}
+                data-bottom-sheet-description="true"
+              >
+                {description}
+              </p>
+            ) : null}
           </div>
-          <button
+          <IconButton
             ref={closeButtonRef}
-            type="button"
             className={styles.closeButton}
-            data-pressing={closeButtonPressing ? "true" : undefined}
-            onPointerDown={() => setCloseButtonPressing(true)}
-            onPointerUp={() => setCloseButtonPressing(false)}
-            onPointerLeave={() => setCloseButtonPressing(false)}
-            onPointerCancel={() => setCloseButtonPressing(false)}
+            iconButtonRole="sheet"
+            data-bottom-sheet-close="true"
+            ariaLabel={closeAriaLabel ?? title}
+            iconName="close"
             onClick={resetAndClose}
-            aria-label={closeAriaLabel ?? title}
-          >
-            <X size={18} />
-          </button>
+          />
         </header>
 
-        <div className={[styles.body, bodyClassName].filter(Boolean).join(' ')}>
+        <div
+          className={[styles.body, bodyClassName].filter(Boolean).join(' ')}
+          data-bottom-sheet-body="true"
+        >
           {children}
         </div>
 
-        {footer ? <div className={styles.footer}>{footer}</div> : null}
+        {footer ? (
+          <div
+            className={[styles.footer, footerClassName].filter(Boolean).join(' ')}
+            data-bottom-sheet-footer="true"
+          >
+            {footer}
+          </div>
+        ) : null}
       </section>
     </div>,
     document.body

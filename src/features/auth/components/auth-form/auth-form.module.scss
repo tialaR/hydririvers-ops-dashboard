@@ -1,25 +1,28 @@
+@use '../../styles/auth-v2-light-shell' as authShell;
 
 .shell {
+  @include authShell.auth-v2-light-shell;
+
   --auth-pad-x: max(1rem, env(safe-area-inset-left), env(safe-area-inset-right));
   --auth-pad-bottom: max(1.75rem, env(safe-area-inset-bottom));
-  --line: var(--hx-line-soft, rgba(255, 255, 255, .09));
-  --line-strong: var(--hx-line, rgba(120, 255, 229, .14));
-  --surface: var(--hx-card, rgba(9, 19, 24, .82));
-  --surface-strong: var(--hx-card-2, rgba(11, 23, 30, .72));
-  --surface-glass: color-mix(in srgb, var(--hx-card, rgba(9, 19, 24, .82)) 92%, transparent);
-  --text: var(--hx-text, #eef7f6);
-  --muted: var(--hx-muted, rgba(229, 239, 240, .62));
-  --brand: var(--hx-cyan, #14d8c4);
-  --river: var(--hx-blue, #45a6ff);
-  --danger: var(--hx-red, #d96672);
-  --glow: rgba(20, 216, 196, .16);
-  --shadow-soft: var(--hx-shadow, 0 22px 64px rgba(0, 0, 0, .36));
-  --brand-soft-line: color-mix(in srgb, var(--hx-cyan, #14d8c4) 28%, transparent);
-  --radius-xl: var(--hx-radius-lg, 24px);
-  --radius-lg: var(--hx-radius, 18px);
-  --radius-md: 14px;
-  --radius-sm: 12px;
-  --radius-pill: 999px;
+  --line: var(--auth-line);
+  --line-strong: var(--auth-line-strong);
+  --surface: var(--auth-surface-card);
+  --surface-strong: var(--auth-surface);
+  --surface-glass: var(--auth-surface-soft);
+  --text: var(--auth-text);
+  --muted: var(--auth-muted);
+  --brand: var(--auth-brand);
+  --river: var(--auth-accent);
+  --danger: var(--auth-danger);
+  --glow: var(--auth-brand-glow);
+  --shadow-soft: var(--auth-shadow);
+  --brand-soft-line: var(--auth-brand-soft-line);
+  --radius-xl: var(--auth-radius-xl);
+  --radius-lg: var(--auth-radius-lg);
+  --radius-md: var(--auth-radius-md);
+  --radius-sm: var(--auth-radius-sm);
+  --radius-pill: var(--auth-radius-pill);
   width: min(1180px, calc(100% - var(--auth-pad-x) * 2));
   margin: 0 auto;
   min-height: 100dvh;
@@ -31,13 +34,7 @@
   box-sizing: border-box;
 }
 .panel, .story {
-  border: 1px solid var(--line);
-  border-radius: var(--radius-xl);
-  background:
-    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 10%, transparent), transparent 11rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--surface-strong) 82%, transparent), color-mix(in srgb, var(--surface) 96%, transparent));
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(18px);
+  @include authShell.auth-v2-light-glass-card;
   padding: clamp(1.25rem, 4vw, 2.2rem);
 }
 .panel {
@@ -63,8 +60,8 @@
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  border: 1px solid color-mix(in srgb, var(--brand) 20%, var(--line));
-  box-shadow: 0 16px 36px rgba(0, 0, 0, .22);
+  border: 1px solid color-mix(in srgb, var(--brand) 18%, var(--line));
+  box-shadow: var(--hy-shadow-icon-button, 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12));
 }
 
 .brandIcon svg {
@@ -450,7 +447,10 @@
   font-weight: 650;
   font-size: .92rem;
 }
-.submit { width: 100%; margin-top: .3rem; }
+.submit {
+  width: 100%;
+  margin-top: 0.3rem;
+}
 .submit:disabled {
   background: color-mix(in srgb, var(--surface) 92%, transparent);
   color: color-mix(in srgb, var(--muted) 88%, var(--text));
@@ -636,8 +636,8 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--brand) 74%, white 8%), color-mix(in srgb, var(--river) 80%, white 6%));
-  color: #07110e;
+  background: linear-gradient(135deg, var(--hy-color-action-primary-start), var(--hy-color-action-primary-end));
+  color: rgba(255, 255, 255, 0.96);
 }
 .otpStageCard {
   display: grid;

@@ -1058,3 +1058,31 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `--hx-cyan` | `#2563eb` (accent; nome legado) |
 
 Proposta: gerar a partir de `hy-*` em `cargo-sheet-theme.scss` da feature para não duplicar hex.
+
+---
+
+## Phase 5U — Background global, header glass e empty state de filtros (/cargas)
+
+**Ownership do background (mobile product shell)**
+
+| Camada | Responsabilidade |
+| --- | --- |
+| `.hr-shell[data-mobile-product-v2-shell]` | Canvas DS v2 light em toda a viewport (`min-height: 100dvh`); marker `data-mobile-shell-background="root"` |
+| `.mobileScrollStage` (`.hr-dashboard-scroll`) | Scroll transparente; marker `data-mobile-shell-background="true"` + `data-ds-v2-mobile-canvas` |
+| Rotas / features | Transparentes; surfaces internas apenas em cards/sheets |
+| `PublicCargasMobileList` | `data-public-cargas-mobile-page-background="none"` + `background: transparent` |
+
+**Header global — glassmorphism**
+
+- Marker `data-mobile-header-glass="true"` em `MobileProductHeader`
+- Camada `header::before` com tokens `--hy-mobile-header-glass-*` e `backdrop-filter`
+- Compact global via `useMobileHeaderScroll` + `data-mobile-header-compact`
+
+**Empty state de filtros (/cargas)**
+
+- Ação única: `operationsBoard.filters.clearAction` = **"Limpar filtros"** (metadado abaixo da search)
+- Sem botão grande `list.clearFiltersAction` dentro do empty state
+- Layout centralizado com ícone `Info` ≥48px e tokens `--hy-color-empty-state-*`
+- Markers: `data-public-cargas-empty-state`, `-icon`, `-title`, `-description`
+
+**Testes:** `tests/e2e/public-cargas-mobile.spec.ts`, `tests/e2e/ds-v2-visual-contract.spec.ts`, `tests/unit/features/cargo/public-cargas-mobile-list.test.tsx`, `tests/unit/shared/layout/*`.

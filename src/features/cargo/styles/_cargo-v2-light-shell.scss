@@ -355,8 +355,4 @@
 
   color: var(--v2-text);
   font-family: var(--v2-font-family);
-  background:
-    radial-gradient(circle at 82% 8%, rgba(37, 99, 235, 0.16), transparent 16rem),
-    radial-gradient(circle at 8% 32%, rgba(8, 145, 178, 0.08), transparent 18rem),
-    linear-gradient(180deg, var(--v2-bg-top), var(--v2-bg-mid) 46%, var(--v2-bg-bottom));
 }

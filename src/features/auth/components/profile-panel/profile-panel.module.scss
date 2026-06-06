@@ -1,5 +1,18 @@
+@use '../../styles/auth-v2-light-shell' as authShell;
 
 .shell {
+  @include authShell.auth-v2-light-shell;
+
+  --text: var(--auth-text);
+  --muted: var(--auth-muted);
+  --line: var(--auth-line);
+  --surface: var(--auth-surface-card);
+  --surface-strong: var(--auth-surface);
+  --brand: var(--auth-brand);
+  --brand-strong: var(--auth-brand-strong);
+  --river: var(--auth-accent);
+  --radius-xl: var(--auth-radius-xl);
+
   width: min(1180px, calc(100% - 2rem));
   max-width: 100%;
   margin: 0 auto;
@@ -18,17 +31,17 @@
 .inlineStatus,
 .inlineLead {
   margin: 0;
-  color: var(--hx-text, var(--text));
-  font-size: .95rem;
-  font-weight: 700;
+  color: var(--auth-text);
+  font-size: var(--hy-font-size-body, 0.875rem);
+  font-weight: var(--hy-font-weight-bold, 720);
 }
 
 .inlineMuted {
   margin: 0;
-  color: var(--hx-muted, var(--muted));
-  font-size: .86rem;
-  font-weight: 620;
-  line-height: 1.45;
+  color: var(--auth-muted);
+  font-size: var(--hy-font-size-label, 0.75rem);
+  font-weight: var(--hy-font-weight-semibold, 620);
+  line-height: var(--hy-line-height-body, 1.35);
 }
 
 .grid {
@@ -42,11 +55,7 @@
 .details,
 .formCard,
 .guidanceCard {
-  border: 1px solid var(--hx-line-soft, var(--line)) !important;
-  border-radius: var(--hx-radius-lg, var(--radius-xl));
-  background:
-    radial-gradient(circle at 92% 0%, color-mix(in srgb, var(--hx-cyan, var(--river)) 8%, transparent), transparent 10rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 82%, transparent), color-mix(in srgb, var(--hx-card, var(--surface)) 94%, transparent)) !important;
+  @include authShell.auth-v2-light-glass-card;
 }
 
 .identity {
@@ -63,13 +72,13 @@
   height: min(8.8rem, 42vw);
   max-width: 8.8rem;
   max-height: 8.8rem;
-  border-radius: 18px;
+  border-radius: var(--auth-radius-lg);
   overflow: hidden;
   display: grid;
   place-items: center;
-  color: var(--hx-yellow, var(--brand));
-  background: color-mix(in srgb, var(--hx-yellow, var(--brand)) 12%, var(--hx-card, var(--surface)));
-  border: 1px solid color-mix(in srgb, var(--hx-yellow, var(--brand)) 22%, transparent);
+  color: var(--auth-brand);
+  background: color-mix(in srgb, var(--auth-brand) 12%, var(--auth-surface-card));
+  border: 1px solid color-mix(in srgb, var(--auth-brand) 22%, transparent);
   padding: 0;
   line-height: 0;
   margin-bottom: .2rem;
@@ -449,7 +458,10 @@
 .removeAvatar:hover { border-color: var(--hx-cyan, var(--brand)); }
 .removeAvatar { color: var(--hx-muted, var(--muted)); }
 
-.error { color: #ff8a8a !important; font-weight: 680; }
+.error {
+  color: var(--auth-danger);
+  font-weight: var(--hy-font-weight-semibold, 620);
+}
 
 .hiddenFileInput {
   position: absolute;
@@ -463,7 +475,7 @@
   position: fixed;
   inset: 0;
   z-index: 2500;
-  background: color-mix(in srgb, #020617 58%, transparent);
+  background: var(--hy-color-overlay-sheet);
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -471,10 +483,10 @@
 
 .viewerDialog {
   width: min(92vw, 38rem);
-  border: 1px solid var(--hx-line-soft, var(--line));
-  border-radius: 16px;
-  background: var(--hx-card, var(--surface));
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+  border: 1px solid var(--auth-line);
+  border-radius: var(--auth-radius-lg);
+  background: var(--auth-surface);
+  box-shadow: var(--hy-shadow-sheet);
   padding: .8rem;
   position: relative;
 }

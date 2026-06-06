@@ -248,19 +248,6 @@
   backdrop-filter: blur(24px) saturate(1.08);
 }
 
-.root[data-theme='light'] .bottomNav {
-  border-color: rgba(51, 65, 85, 0.12);
-  background:
-    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.62), transparent 42%),
-    radial-gradient(circle at 50% -38%, rgba(96, 165, 250, 0.14), transparent 54%),
-    linear-gradient(180deg, rgba(241, 245, 249, 0.78), rgba(226, 232, 240, 0.62)),
-    var(--v2-surface-bottom-nav);
-  box-shadow:
-    0 10px 24px rgba(15, 23, 42, 0.14),
-    0 0 12px rgba(37, 99, 235, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.72);
-}
-
 .navItem {
   @include pressable.pressableBubble;
 
@@ -306,12 +293,6 @@
   line-height: 1;
 }
 
-.root[data-theme='light'] .navItem,
-.root[data-theme='light'] .navLabel,
-.root[data-theme='light'] .navIcon {
-  color: rgba(51, 65, 85, 0.7);
-}
-
 .navItemActive {
   position: relative;
   overflow: visible;
@@ -339,10 +320,6 @@
     opacity 180ms cubic-bezier(0.2, 1, 0.2, 1),
     transform 180ms cubic-bezier(0.2, 1, 0.2, 1);
   pointer-events: none;
-}
-
-.root[data-theme='light'] .navItem[data-active='true'] {
-  color: var(--v2-text-body-muted);
 }
 
 .activeNavBubble {
@@ -397,19 +374,6 @@
   pointer-events: none;
 }
 
-.root[data-theme='light'] .activeNavBubble {
-  border-color: rgba(37, 99, 235, 0.18);
-  color: #ffffff;
-  background:
-    radial-gradient(circle at 36% 18%, rgba(255, 255, 255, 0.54), transparent 24%),
-    radial-gradient(circle at 50% 70%, rgba(37, 99, 235, 0.12), transparent 50%),
-    linear-gradient(145deg, rgba(219, 234, 254, 0.78), rgba(96, 165, 250, 0.42));
-  box-shadow:
-    0 0 0 1px rgba(37, 99, 235, 0.04),
-    0 3px 8px var(--v2-status-scheduled-border),
-    inset 0 1px 0 rgba(255, 255, 255, 0.68);
-}
-
 .activeNavIcon {
   display: grid;
   place-items: center;
@@ -445,14 +409,6 @@
   stroke: rgba(15, 41, 66, 0.62);
 }
 
-.root[data-theme='light'] .activeNavIcon {
-  color: rgba(30, 58, 95, 0.92);
-
-  svg {
-    filter: none;
-  }
-}
-
 .activeNavLabel {
   display: block;
   max-width: 100%;
@@ -463,11 +419,6 @@
   text-shadow: 0 1px 3px rgba(4, 12, 22, 0.46);
   position: relative;
   z-index: 1;
-}
-
-.root[data-theme='light'] .activeNavLabel {
-  color: rgba(15, 23, 42, 0.84);
-  text-shadow: none;
 }
 
 .navIcon {

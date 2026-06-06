@@ -29,13 +29,27 @@ describe('AdminChrome mobile product shell', () => {
 
   it('header actions: language, notifications, profile com IconButton', () => {
     expect(headerSource).toContain("from '@/shared/components/icon-button'");
-    expect(headerSource).toContain('<Languages');
-    expect(headerSource).toContain('<Bell');
-    expect(headerSource).toContain('<User');
+    expect(headerSource).toContain('iconName="language"');
+    expect(headerSource).toContain('iconName="notifications"');
+    expect(headerSource).toContain("'profile'");
     expect(headerSource).toContain('data-mobile-header-actions="true"');
     expect(headerSource.indexOf('onOpenLocale')).toBeLessThan(headerSource.indexOf('onOpenNotifications'));
     expect(headerSource.indexOf('onOpenNotifications')).toBeLessThan(headerSource.indexOf('onOpenProfile'));
     expect(headerSource).not.toContain('Painel');
+  });
+
+  it('shell root e scroll stage compartilham ownership do background global', () => {
+    const adminStylesPath = resolve(
+      process.cwd(),
+      'src/shared/layout/admin-chrome/admin-chrome.module.scss',
+    );
+    const adminStyles = readFileSync(adminStylesPath, 'utf8');
+
+    expect(adminSource).toContain("'data-mobile-shell-background': 'root'");
+    expect(adminStyles).toContain('min-height: 100dvh');
+    expect(adminStyles).toContain('flex-direction: column');
+    expect(adminStyles).toContain('.mobileContentStage');
+    expect(adminStyles).toContain('padding: 0 !important');
   });
 
   it('marca shell mobile light-first no AdminChrome', () => {

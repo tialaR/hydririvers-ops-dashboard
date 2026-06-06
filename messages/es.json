@@ -1572,7 +1572,7 @@
       "emptyTitle": "No se encontró ninguna carga",
       "emptyDescription": "Todavía no hay cargas disponibles en esta vista. En cuanto entren nuevas operaciones, aparecerán aquí.",
       "emptyFilteredTitle": "No se encontró ninguna carga",
-      "emptyFilteredDescription": "No encontramos cargas con los filtros actuales. Puedes limpiar los filtros e intentarlo de nuevo.",
+      "emptyFilteredDescription": "No encontramos cargas con los filtros actuales. Limpia los filtros e inténtalo de nuevo.",
       "clearFiltersAction": "Limpiar filtros",
       "cardActionView": "Ver detalles",
       "cardActionTrack": "Seguir",
@@ -1598,7 +1598,8 @@
       "closeAction": "Cerrar",
       "mobileApplyAction": "Visualizar cargas",
       "mobileApplyActionCount": "Visualizar {count} cargas",
-      "mobileClearAction": "Limpiar todo"
+      "mobileClearAction": "Limpiar filtros",
+      "clearAction": "Limpiar filtros"
     },
     "statusFilters": {
       "all": "Todas",

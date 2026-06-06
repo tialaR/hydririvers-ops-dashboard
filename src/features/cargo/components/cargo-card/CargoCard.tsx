@@ -12,6 +12,7 @@ import {
 import { CargoEtaBlock } from '@/features/cargo/components/cargo-eta-block';
 import { CargoRouteLine } from '@/features/cargo/components/cargo-route-line';
 import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
+import { normalizeEtaValue } from '@/features/cargo/utils/normalize-eta-value';
 
 import styles from './CargoCard.module.scss';
 
@@ -38,8 +39,12 @@ export function CargoCard({
   className,
   isDisabled = false,
 }: CargoCardProps) {
+  const etaValue = normalizeEtaValue(cargo.eta);
   const resolvedActionLabel =
-    actionLabel ?? (cargo.status === 'agendado' ? 'Ver detalhes' : 'Acompanhar');
+    actionLabel ??
+    (cargo.status === 'agendado' || cargo.status === 'operacao' || cargo.status === 'aberta' || cargo.status === 'cotacao'
+      ? 'Ver detalhes'
+      : 'Acompanhar');
 
   function handleOpen(event?: MouseEvent<HTMLElement>) {
     if (isDisabled) return;
@@ -66,6 +71,7 @@ export function CargoCard({
       style={{ '--card-index': index } as CSSProperties}
       data-cargo-id={cargo.id}
       data-cargo-label={cargo.title}
+      data-ds-v2-cargo-card="true"
       role={onClick || onPrimaryAction ? 'button' : undefined}
       tabIndex={onClick || onPrimaryAction ? 0 : undefined}
       aria-disabled={isDisabled || undefined}
@@ -77,7 +83,7 @@ export function CargoCard({
           {cargo.cargoType === 'Projeto' ? <ContainerIcon /> : <CubeIcon />}
         </span>
         <span className={styles.cargoId}>{cargo.id}</span>
-        <CargoLabV2StatusBadge cargo={cargo} showDot={false} size="sm" variant="card" />
+        <CargoLabV2StatusBadge cargo={cargo} size="sm" variant="card" />
       </div>
 
       <h2>{cargo.title}</h2>
@@ -85,7 +91,7 @@ export function CargoCard({
       <CargoRouteLine originLabel={cargo.origin} destinationLabel={cargo.destination} />
 
       <div className={styles.footer}>
-        <CargoEtaBlock label="ETA" value={cargo.eta} />
+        <CargoEtaBlock label="ETA" value={etaValue || '—'} />
         {primaryActionHref ? (
           <Link
             href={primaryActionHref}

@@ -105,7 +105,46 @@
   --hy-blur-surface-soft: blur(1.125rem) saturate(1.05);
   --hy-blur-sheet-backdrop: blur(1.75rem) saturate(1.14);
   --hy-blur-bottom-nav: blur(1.5rem) saturate(1.08);
+  --hy-mobile-header-z-index: 160;
+  --hy-mobile-header-glass-height: 100%;
+  --hy-mobile-header-compact-height: auto;
+  --hy-mobile-header-frost-opacity-rest: 0.58;
+  --hy-mobile-header-frost-opacity-compact: 0.82;
+  --hy-mobile-header-compact-title-offset: -0.1875rem;
+  --hy-mobile-header-compact-padding-bottom: 0.55rem;
+  --hy-blur-mobile-header: blur(1rem) saturate(1.04);
+  --hy-mobile-header-glass-blur: blur(1rem) saturate(1.04);
   --hy-blur-overlay: blur(0.625rem) saturate(1.02);
+  --hy-color-mobile-header-glass-top: rgba(255, 255, 255, 0.72);
+  --hy-color-mobile-header-glass-bottom: rgba(241, 245, 249, 0.42);
+  --hy-mobile-header-glass-bg:
+    linear-gradient(
+      180deg,
+      var(--hy-color-mobile-header-glass-top),
+      var(--hy-color-mobile-header-glass-bottom) 88%,
+      rgba(241, 245, 249, 0.55) 100%
+    ),
+    radial-gradient(circle at 70% 0%, rgba(147, 197, 253, 0.14), transparent 55%);
+  --hy-shadow-mobile-header-glass: 0 0.0625rem 0 rgba(148, 163, 184, 0.12);
+  --hy-shadow-mobile-header-glass-compact: 0 0.0625rem 0 rgba(148, 163, 184, 0.14);
+
+  /* Typography — mobile header navigation title */
+  --hy-font-size-page-title-expanded: 2.75rem;
+  --hy-font-size-nav-title-compact: 0.875rem;
+
+  /* Action subtle — links/contextual secondary actions */
+  --hy-color-action-subtle-text: rgba(37, 99, 235, 0.78);
+  --hy-color-action-subtle-hover: rgba(29, 78, 216, 0.92);
+  --hy-color-action-subtle-focus-ring: rgba(96, 165, 250, 0.36);
+  --hy-color-action-subtle-underline: rgba(37, 99, 235, 0.28);
+
+  /* Empty state — breathing room above informational cards in feature lists */
+  --hy-space-empty-state-offset: 1.25rem;
+  --hy-color-empty-state-icon: rgba(37, 99, 235, 0.62);
+  --hy-color-empty-state-title: rgba(37, 99, 235, 0.78);
+  --hy-color-empty-state-description: rgba(71, 85, 105, 0.74);
+  --hy-color-empty-state-surface: rgba(241, 245, 249, 0.64);
+  --hy-shadow-empty-state: 0 1.125rem 2.625rem rgba(15, 23, 42, 0.08);
 
   /* Typography */
   --hy-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;

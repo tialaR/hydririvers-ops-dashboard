@@ -21,6 +21,14 @@
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transform-origin: center;
+  transition:
+    transform var(--hy-motion-press-duration, 160ms) var(--hy-motion-ease-press, cubic-bezier(0.2, 0.8, 0.2, 1)),
+    color 220ms var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1));
+}
+
+.item.isPressing,
+.item[data-pressing='true'] {
+  transform: scale(var(--hy-motion-press-scale, 1.045));
 }
 
 .item:disabled {

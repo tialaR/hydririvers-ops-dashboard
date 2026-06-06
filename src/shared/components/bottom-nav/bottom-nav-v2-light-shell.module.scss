@@ -1,0 +1,247 @@
+@use '../../styles/interactions/pressable' as pressable;
+@use '../../styles/tokens/hy-v2-light' as hyV2Light;
+
+/* Casca visual homologada em /dev-v2 light — fonte única para lab e product shell. */
+.shell {
+  @include hyV2Light.hy-v2-light-tokens;
+
+  --v2-surface-bottom-nav: var(--hy-color-surface-bottom-nav);
+  --v2-status-scheduled-border: var(--hy-color-status-scheduled-border);
+  --v2-text-body-muted: rgba(15, 23, 42, 0.88);
+
+  position: fixed;
+  z-index: 200;
+  left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  height: var(--hy-size-bottom-nav-height, 4.375rem);
+  min-height: var(--hy-size-bottom-nav-height, 4.375rem);
+  box-sizing: border-box;
+  padding: 0.25rem;
+  border: 1px solid rgba(51, 65, 85, 0.12);
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  overflow: hidden;
+  isolation: isolate;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.72), transparent 42%),
+    radial-gradient(circle at 50% -38%, rgba(96, 165, 250, 0.16), transparent 54%),
+    linear-gradient(180deg, rgba(241, 245, 249, 0.72), rgba(226, 232, 240, 0.56)),
+    var(--v2-surface-bottom-nav);
+  box-shadow: var(--hy-shadow-bottom-nav);
+  -webkit-backdrop-filter: var(--hy-blur-bottom-nav, blur(1.75rem) saturate(1.12));
+  backdrop-filter: var(--hy-blur-bottom-nav, blur(1.75rem) saturate(1.12));
+}
+
+.item {
+  @include pressable.pressableBubble;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  height: 3.125rem;
+  min-height: 3.125rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(51, 65, 85, 0.7);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--hy-letter-spacing-nav, 0.01em);
+  text-decoration: none;
+  white-space: nowrap;
+  transform-origin: center;
+  transition:
+    color 220ms cubic-bezier(0.2, 1, 0.2, 1),
+    height 220ms cubic-bezier(0.2, 1, 0.2, 1),
+    min-height 220ms cubic-bezier(0.2, 1, 0.2, 1),
+    font-weight 220ms cubic-bezier(0.2, 1, 0.2, 1);
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.85;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0.1875rem 0.4375rem;
+    z-index: -1;
+    border-radius: var(--hy-radius-bottom-nav, 999rem);
+    background:
+      radial-gradient(circle at 50% 48%, rgba(114, 184, 255, 0.1), transparent 50%),
+      rgba(93, 166, 255, 0.025);
+    opacity: 0;
+    transform: scale(0.72);
+    transition:
+      opacity 180ms cubic-bezier(0.2, 1, 0.2, 1),
+      transform 180ms cubic-bezier(0.2, 1, 0.2, 1);
+    pointer-events: none;
+  }
+
+  &[data-pressing='true']::after,
+  &:active::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &[data-pressing='true'] {
+    transform: scale(var(--hy-motion-press-scale, 1.045));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item[data-pressing='true'] {
+    transform: none;
+  }
+}
+
+.itemActive {
+  position: relative;
+  overflow: visible;
+}
+
+.item[data-active='true'] {
+  color: var(--v2-text-body-muted);
+  font-weight: 800;
+  height: 3.875rem;
+  min-height: 3.875rem;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  width: 1.5625rem;
+  height: 1.5625rem;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  border: 1px solid transparent;
+  color: rgba(51, 65, 85, 0.7);
+}
+
+.label {
+  display: block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: rgba(51, 65, 85, 0.7);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.activeBubble {
+  position: relative;
+  display: flex;
+  flex: 0 0 3.625rem;
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  box-sizing: border-box;
+  width: var(--hy-size-bottom-nav-active-bubble-width, 4.5rem);
+  height: var(--hy-size-bottom-nav-active-bubble-height, 3.625rem);
+  min-height: var(--hy-size-bottom-nav-active-bubble-height, 3.625rem);
+  padding: 0.5rem 0.8125rem 0.4375rem;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  color: #ffffff;
+  transform: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 36% 18%, rgba(255, 255, 255, 0.54), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(37, 99, 235, 0.12), transparent 50%),
+    linear-gradient(145deg, rgba(219, 234, 254, 0.78), rgba(96, 165, 250, 0.42));
+  -webkit-backdrop-filter: var(--hy-blur-surface-soft, blur(1.125rem) saturate(1.05));
+  backdrop-filter: var(--hy-blur-surface-soft, blur(1.125rem) saturate(1.05));
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.04),
+    0 0.1875rem 0.5rem var(--v2-status-scheduled-border),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  animation: bottomNavActiveBubbleIn 170ms cubic-bezier(0.2, 1, 0.2, 1);
+  transition:
+    transform 170ms cubic-bezier(0.2, 1, 0.2, 1),
+    border-color 220ms cubic-bezier(0.2, 1, 0.2, 1),
+    background 220ms cubic-bezier(0.2, 1, 0.2, 1),
+    box-shadow 220ms cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+@keyframes bottomNavActiveBubbleIn {
+  from {
+    opacity: 0.88;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .activeBubble {
+    animation: none;
+  }
+}
+
+.activeBubble::before {
+  content: none;
+}
+
+.activeBubble::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(168, 226, 255, 0.2), transparent 40%),
+    radial-gradient(circle at 50% 83%, rgba(64, 138, 225, 0.1), transparent 54%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.065), transparent 44%);
+  pointer-events: none;
+}
+
+.activeIcon {
+  display: grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 0;
+  color: var(--hy-color-nav-active-icon, rgba(29, 78, 216, 0.94));
+  position: relative;
+  z-index: 1;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.95;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: none;
+  }
+}
+
+.activeLabel {
+  display: block;
+  max-width: 100%;
+  color: var(--hy-color-nav-active-label, rgba(15, 23, 42, 0.92));
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: none;
+  position: relative;
+  z-index: 1;
+}

@@ -9,6 +9,7 @@ describe('parseCargoEtaMeta', () => {
   it('returns missing label when value is empty', () => {
     expect(parseCargoEtaMeta(undefined, tBoard, tCommon)).toEqual({
       etaLabel: 'ETA indisponível',
+      etaValue: '',
       confidenceLabel: '',
     });
   });
@@ -16,6 +17,15 @@ describe('parseCargoEtaMeta', () => {
   it('splits eta and confidence parts', () => {
     expect(parseCargoEtaMeta('12/06 • alta confiança', tBoard, tCommon)).toEqual({
       etaLabel: 'ETA 12/06',
+      etaValue: '12/06',
+      confidenceLabel: 'predictability.high',
+    });
+  });
+
+  it('normaliza etaValue sem prefixo duplicado', () => {
+    expect(parseCargoEtaMeta('ETA 30–42h • alta confiança', tBoard, tCommon)).toEqual({
+      etaLabel: 'ETA 30–42h',
+      etaValue: '30–42h',
       confidenceLabel: 'predictability.high',
     });
   });

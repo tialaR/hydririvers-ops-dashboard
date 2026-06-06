@@ -23,6 +23,8 @@ import {
 } from '@/features/cargo/utils/get-public-cargo-action-routes';
 import { Link } from '@/core/i18n/navigation';
 
+import { normalizeEtaValue, stripEtaPrefix } from '@/features/cargo/utils/normalize-eta-value';
+
 import styles from './public-cargo-action-sheet.module.scss';
 
 const ACTION_ICONS: Record<PublicCargoActionRouteId, ReactNode> = {
@@ -44,6 +46,7 @@ export function PublicCargoActionSheetContent({
   onActionNavigate,
 }: PublicCargoActionSheetContentProps) {
   const tBoard = useTranslations('operationsBoard');
+  const tCommon = useTranslations('common');
 
   const actions = getPublicCargoActionRoutes(cargo.id, {
     detail: {
@@ -91,7 +94,11 @@ export function PublicCargoActionSheetContent({
         />
 
         {cargo.eta ? (
-          <CargoEtaBlock variant="sheet" metrics={[{ label: 'ETA', value: cargo.eta }]} />
+          <CargoEtaBlock
+            variant="sheet"
+            className={styles.summaryEta}
+            metrics={[{ label: tCommon('eta'), value: normalizeEtaValue(cargo.eta) || stripEtaPrefix(cargo.eta) }]}
+          />
         ) : null}
       </div>
 

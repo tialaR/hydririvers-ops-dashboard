@@ -3,15 +3,22 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
 import styles from './StatusBadge.module.scss';
-import { STATUS_BADGE_DATA_ATTR, STATUS_BADGE_DEFAULT_LABEL } from './status-badge-utils';
+import {
+  STATUS_BADGE_DATA_ATTR,
+  STATUS_BADGE_DEFAULT_LABEL,
+  STATUS_BADGE_TONE,
+} from './status-badge-utils';
 
 export type StatusBadgeStatus =
-  | 'inTransit'
-  | 'scheduled'
+  | 'open'
   | 'quotation'
-  | 'delayed'
+  | 'contracting'
+  | 'operating'
+  | 'inTransit'
   | 'completed'
-  | 'blocked';
+  | 'delayed'
+  | 'blocked'
+  | 'unknown';
 
 export type StatusBadgeSize = 'sm' | 'md';
 
@@ -34,6 +41,7 @@ export function StatusBadge({
   ...props
 }: StatusBadgeProps) {
   const label = children ?? STATUS_BADGE_DEFAULT_LABEL[status];
+  const resolvedStatus = STATUS_BADGE_DATA_ATTR[status] ? status : 'unknown';
 
   return (
     <span
@@ -45,7 +53,8 @@ export function StatusBadge({
       ]
         .filter(Boolean)
         .join(' ')}
-      data-status={STATUS_BADGE_DATA_ATTR[status]}
+      data-status={STATUS_BADGE_DATA_ATTR[resolvedStatus]}
+      data-status-tone={STATUS_BADGE_TONE[resolvedStatus]}
       aria-label={ariaLabel}
       {...props}
     >

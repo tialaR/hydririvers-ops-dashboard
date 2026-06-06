@@ -1,15 +1,25 @@
-import { createElement } from 'react';
+import { createElement, type MouseEvent } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { describe, expect, it, vi } from 'vitest';
 
-import { BottomNav, type BottomNavProps } from '@/shared/components/bottom-nav';
+import {
+  BottomNav,
+  bottomNavV2LightClassNames,
+  isBottomNavItemPending,
+  resolveVisualActiveId,
+  shouldBypassPressFeedback,
+  type BottomNavProps,
+} from '@/shared/components/bottom-nav';
+
+vi.mock('next-intl', () => ({
+  useLocale: () => 'pt-BR',
+}));
 
 vi.mock('@/core/i18n/navigation', () => ({
-  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
-    <a href={href} {...rest}>
-      {children}
-    </a>
-  ),
+  getPathname: ({ href }: { href: string }) => href,
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 const classNames = {
@@ -81,7 +91,7 @@ describe('BottomNav', () => {
     expect(html).toContain('disabled');
   });
 
-  it('renderiza href com Link localizado', () => {
+  it('renderiza href localizado em anchor nativo', () => {
     const html = renderToStaticMarkup(
       <BottomNav
         activeId="cargo"
@@ -92,5 +102,124 @@ describe('BottomNav', () => {
 
     expect(html).toContain('href="/cargas"');
     expect(html).toContain('data-active="true"');
+  });
+
+  it('item com href usa anchor e preserva callback de seleção', () => {
+    const onItemSelect = vi.fn();
+    const html = renderToStaticMarkup(
+      <BottomNav
+        activeId="cargo"
+        classNames={classNames}
+        onItemSelect={onItemSelect}
+        items={[
+          {
+            id: 'profile',
+            label: 'Perfil',
+            href: '/perfil',
+            iconOutlined: <span>P</span>,
+          },
+        ]}
+      />,
+    );
+
+    expect(html).toContain('href="/perfil"');
+    expect(onItemSelect).toBeDefined();
+  });
+
+  it('item ativo usa ícone outlined, bolha e label com marker semântico', () => {
+    const html = renderToStaticMarkup(
+      <BottomNav
+        activeId="cargo"
+        classNames={classNames}
+        items={[
+          {
+            id: 'cargo',
+            label: 'Cargas',
+            iconOutlined: <span data-testid="outlined">O</span>,
+            iconFilled: <span data-testid="filled">F</span>,
+          },
+          { id: 'profile', label: 'Perfil', iconOutlined: <span>P</span> },
+        ]}
+      />,
+    );
+
+    expect(html).toContain('data-bottom-nav-icon-variant="outlined"');
+    expect(html).toContain('data-bottom-nav-icon-state="active"');
+    expect(html).toContain('data-bottom-nav-icon-active="true"');
+    expect(html).toContain('data-bottom-nav-label-active="true"');
+    expect(html).toContain('data-testid="outlined"');
+    expect(html).not.toContain('data-bottom-nav-icon-variant="filled"');
+    expect(html).not.toContain('data-testid="filled"');
+    expect(html).toContain('data-bottom-nav-global="true"');
+    expect(html).toContain('data-bottom-nav-glass="true"');
+  });
+
+  it('exporta casca visual homologada /dev-v2 light para reuso', () => {
+    expect(bottomNavV2LightClassNames.shell).toBeTruthy();
+    expect(bottomNavV2LightClassNames.item).toBeTruthy();
+    expect(bottomNavV2LightClassNames.activeBubble).toBeTruthy();
+
+    const html = renderToStaticMarkup(
+      <BottomNav
+        className={bottomNavV2LightClassNames.shell}
+        activeId="cargo"
+        classNames={{
+          item: bottomNavV2LightClassNames.item,
+          itemActive: bottomNavV2LightClassNames.itemActive,
+          icon: bottomNavV2LightClassNames.icon,
+          label: bottomNavV2LightClassNames.label,
+          activeBubble: bottomNavV2LightClassNames.activeBubble,
+          activeIcon: bottomNavV2LightClassNames.activeIcon,
+          activeLabel: bottomNavV2LightClassNames.activeLabel,
+        }}
+        items={[{ id: 'cargo', label: 'Cargas', iconOutlined: <span>C</span> }]}
+      />,
+    );
+
+    expect(html).toContain(bottomNavV2LightClassNames.shell);
+    expect(html).toContain(bottomNavV2LightClassNames.activeBubble);
+  });
+
+  it('implementa pending active otimista com pointerdown e markers nativos', () => {
+    const source = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+
+    expect(source).toContain('pendingItemId');
+    expect(source).toContain('onPendingSelect?.(item.id)');
+    expect(source).toContain('setPendingItemId(null)');
+    expect(source).toContain('onPointerDown={handlePointerDown}');
+    expect(source).toContain('data-bottom-nav-pending');
+    expect(source).toContain('data-bottom-nav-glass="true"');
+    expect(source).toContain('scheduleNavigation');
+    expect(source).toContain('navigationTimerRef');
+    expect(source).not.toContain('data-bottom-nav-icon-variant="filled"');
+  });
+
+  it('não define pending em modified click', () => {
+    expect(shouldBypassPressFeedback({ metaKey: true, ctrlKey: false, shiftKey: false, altKey: false, button: 0 } as MouseEvent)).toBe(true);
+    expect(shouldBypassPressFeedback({ metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, button: 0 } as MouseEvent)).toBe(false);
+
+    const source = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+    expect(source).toContain('shouldBypassPressFeedback(event)');
+  });
+
+  it('visualActiveId e pending derivam de helpers compartilhados', () => {
+    expect(resolveVisualActiveId('cargos', 'negotiations')).toBe('negotiations');
+    expect(isBottomNavItemPending('negotiations', 'cargos', 'negotiations')).toBe(true);
+  });
+
+  it('casca shared expõe blur/transparência via classNames homologados', () => {
+    const shellSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-v2-light-shell.module.scss'),
+      'utf8',
+    );
+
+    expect(shellSource).toContain('backdrop-filter');
+    expect(shellSource).toContain('bottomNavActiveBubbleIn');
   });
 });

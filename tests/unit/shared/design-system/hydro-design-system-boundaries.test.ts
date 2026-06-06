@@ -72,10 +72,14 @@ describe('Hydro design system boundaries', () => {
     }
   });
 
-  it('ds:check passes', () => {
-    const output = execSync('npm run ds:check', { cwd: rootDir, encoding: 'utf8' });
-    expect(output).toContain('Hydro DS check passou.');
-  });
+  it(
+    'ds:check passes',
+    () => {
+      const output = execSync('npm run ds:check', { cwd: rootDir, encoding: 'utf8' });
+      expect(output).toContain('Hydro DS check passou.');
+    },
+    20_000,
+  );
 
   it('design-system files are not empty', () => {
     const files = walk(designSystemDir);

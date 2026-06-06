@@ -1,0 +1,128 @@
+@use '../../../../shared/styles/tokens/hy-v2-light' as hyV2Light;
+
+@mixin skeleton-block {
+  border-radius: var(--hy-radius-card, 1.4375rem);
+  background:
+    linear-gradient(
+      90deg,
+      rgba(226, 234, 246, 0.55) 0%,
+      rgba(241, 245, 249, 0.88) 48%,
+      rgba(226, 234, 246, 0.55) 100%
+    );
+  background-size: 200% 100%;
+  animation: public-cargas-mobile-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.root {
+  @include hyV2Light.hy-v2-light-tokens;
+
+  display: grid;
+  gap: 0.875rem;
+  padding: 0 0
+    calc(
+      1.5rem + var(--hy-size-bottom-nav-height, 4.375rem) + 0.875rem +
+        env(safe-area-inset-bottom, 0px)
+    );
+}
+
+.actionsRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.publishLink {
+  @include skeleton-block;
+
+  width: 7.5rem;
+  height: 2.5rem;
+  border-radius: 999px;
+}
+
+.resultsLead {
+  @include skeleton-block;
+
+  width: 8.5rem;
+  height: 1.125rem;
+  border-radius: 0.5rem;
+}
+
+.searchRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 3.25rem;
+  gap: 0.75rem;
+}
+
+.searchBar {
+  @include skeleton-block;
+
+  height: 3.25rem;
+  border-radius: var(--hy-radius-search, 1.125rem);
+}
+
+.filterButton {
+  @include skeleton-block;
+
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: var(--hy-radius-icon-button, 1.1875rem);
+}
+
+.cardList {
+  display: grid;
+  gap: 0.875rem;
+}
+
+.card {
+  @include skeleton-block;
+
+  display: grid;
+  gap: 0.75rem;
+  min-height: 9.5rem;
+  padding: 1rem;
+}
+
+.cardRoute {
+  width: 72%;
+  height: 1rem;
+  border-radius: 0.375rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+.cardMetaRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.cardMeta {
+  height: 0.875rem;
+  border-radius: 0.375rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+.cardAction {
+  width: 100%;
+  height: 2.75rem;
+  border-radius: 1rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+@keyframes public-cargas-mobile-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .publishLink,
+  .resultsLead,
+  .searchBar,
+  .filterButton,
+  .card {
+    animation: none;
+  }
+}

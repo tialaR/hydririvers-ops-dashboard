@@ -531,7 +531,13 @@ export function AdminChrome({ children }: AdminChromeProps) {
       ]
         .filter(Boolean)
         .join(' ')}
-      {...(isMobileViewport ? { 'data-mobile-product-v2-shell': 'true', 'data-theme': 'light' } : {})}
+      {...(isMobileViewport
+        ? {
+            'data-mobile-product-v2-shell': 'true',
+            'data-mobile-shell-background': 'root',
+            'data-theme': 'light',
+          }
+        : {})}
     >
       <aside className={sidebarCollapsed ? 'hx-sidebar hr-sidebar is-collapsed' : 'hx-sidebar hr-sidebar'} aria-label={t('primaryNavigation')}>
         <div className="hr-sidebar-inner">
@@ -673,16 +679,6 @@ export function AdminChrome({ children }: AdminChromeProps) {
       <MobileShellChromeProvider>
       <div className="hx-main hr-main">
         <main className="hx-content hr-dashboard-page">
-          <div
-            ref={dashboardScrollRef}
-            className={[
-              'hr-dashboard-scroll',
-              shellStyles.mobileScrollStage,
-              suppressMobileShellChrome ? styles.mobileHydrowayMapScrollLock : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          >
           {!suppressMobileShellChrome ? (
             <MobileProductHeader
               normalizedPathname={normalizedPathname}
@@ -694,6 +690,29 @@ export function AdminChrome({ children }: AdminChromeProps) {
               onOpenProfile={openMobileAccountSheet}
               localeSheetOpen={mobileLocaleSheetOpen}
               notificationsOpen={notificationsOpen}
+            />
+          ) : null}
+          <div
+            ref={dashboardScrollRef}
+            className={[
+              'hr-dashboard-scroll',
+              shellStyles.mobileScrollStage,
+              suppressMobileShellChrome ? styles.mobileHydrowayMapScrollLock : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+            {...(isMobileViewport && !suppressMobileShellChrome
+              ? {
+                  'data-mobile-shell-background': 'true',
+                  'data-ds-v2-mobile-canvas': 'true',
+                }
+              : {})}
+          >
+          {!suppressMobileShellChrome ? (
+            <div
+              className={shellStyles.mobileHeaderSpacer}
+              data-mobile-header-spacer="true"
+              aria-hidden="true"
             />
           ) : null}
 

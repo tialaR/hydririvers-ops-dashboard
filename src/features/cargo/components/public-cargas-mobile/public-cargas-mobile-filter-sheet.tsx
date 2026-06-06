@@ -122,6 +122,7 @@ export function PublicCargasMobileFilterSheet({
       open={open}
       onOpenChange={onOpenChange}
       title={tBoard('filters.mobileTitle')}
+      description={tBoard('filters.mobileDescription')}
       closeAriaLabel={tBoard('filters.close')}
       dragHandleAriaLabel={tBoard('filters.mobileTitle')}
       snapHeights={publicCargoLightSheetSnapHeights}

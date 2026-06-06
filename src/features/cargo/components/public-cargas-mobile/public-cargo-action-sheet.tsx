@@ -35,10 +35,10 @@ export function PublicCargoActionSheet({
     <BottomSheet
       open={open}
       onOpenChange={onOpenChange}
-      ariaLabel={tBoard('publicActionSheet.ariaLabel')}
-      title={tBoard('publicActionSheet.ariaLabel')}
+      title={tBoard('publicActionSheet.title')}
+      description={tBoard('publicActionSheet.description')}
       closeAriaLabel={tBoard('publicActionSheet.close')}
-      dragHandleAriaLabel={tBoard('publicActionSheet.ariaLabel')}
+      dragHandleAriaLabel={tBoard('publicActionSheet.title')}
       snapHeights={publicCargoLightSheetSnapHeights}
       {...publicCargoLightSheetDefaults}
       className={sheetClassName}

@@ -598,6 +598,12 @@
   min-height: 100%;
 }
 
+@media (max-width: 860px) {
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true']) .mobileContentStage {
+    padding: 0 !important;
+  }
+}
+
 .mobileHydrowayMapContentStage {
   overflow: hidden;
   min-height: 0;
@@ -718,15 +724,53 @@
   :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true']) {
     @include mobileProductShell.mobile-product-v2-light-page-background;
 
+    position: relative;
+    isolation: isolate;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background-attachment: fixed;
     color: var(--hy-color-text-primary, #0f172a);
+
+    &::before {
+      @include mobileProductShell.mobile-product-v2-light-canvas-depth;
+
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      min-height: 100dvh;
+      pointer-events: none;
+    }
   }
 
-  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-main),
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-main) {
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
+    z-index: 1;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    background: transparent;
+  }
+
   :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-dashboard-page) {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    height: auto !important;
+    background: transparent;
+  }
+
+  :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true'] .hr-dashboard-scroll) {
+    flex: 1 1 auto !important;
+    min-height: 100% !important;
+    min-height: 100dvh !important;
     background: transparent;
   }
 
   .mobileBottomNav {
-    display: grid;
+    display: none;
   }
 }
