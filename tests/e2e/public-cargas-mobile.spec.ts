@@ -443,7 +443,7 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     });
 
     expect(before.titleFontSize).toBeGreaterThan(28);
-    expect(before.frostOpacity).toBeGreaterThan(0.2);
+    expect(before.frostOpacity).toBeLessThanOrEqual(0.05);
     expect(before.backgroundImage).not.toBe('none');
     expect(before.backdropFilter).not.toBe('none');
     expect(before.headerPosition).toBe('fixed');

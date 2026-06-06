@@ -960,8 +960,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       });
 
       expect(beforeMetrics.fontSize).toBeGreaterThan(28);
-      expect(beforeMetrics.frostOpacity).toBeGreaterThan(0.45);
-      expect(beforeMetrics.frostOpacity).toBeLessThan(0.72);
+      expect(beforeMetrics.frostOpacity).toBeLessThanOrEqual(0.05);
       expect(beforeMetrics.backgroundImage).not.toBe('none');
       expect(beforeMetrics.headerPosition).toBe('fixed');
       await expect(header).toHaveAttribute('data-mobile-header-glass', 'true');
@@ -992,7 +991,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       expect(afterMetrics.headerY).toBeGreaterThanOrEqual(beforeMetrics.headerY - 4);
       expect(afterMetrics.headerTop).toBeLessThanOrEqual(4);
       expect(afterMetrics.frostOpacity).toBeGreaterThan(beforeMetrics.frostOpacity);
-      expect(afterMetrics.frostOpacity).toBeLessThan(0.9);
+      expect(afterMetrics.frostOpacity).toBeGreaterThanOrEqual(0.9);
       expect(afterMetrics.frostBackdrop).not.toBe('none');
       expect(afterMetrics.backgroundImage).not.toBe('none');
       await expect(title).toHaveAttribute('data-mobile-page-title-compact-offset', 'true');

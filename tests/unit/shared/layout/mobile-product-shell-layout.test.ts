@@ -86,12 +86,17 @@ describe('Mobile product shell layout ownership', () => {
     expect(shellStyles).toContain('--hy-mobile-header-compact-padding-bottom');
   });
 
+  it('frost glass fica invisível no repouso e aparece ao compactar no scroll', () => {
+    expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-rest, 0)');
+    expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-compact, 1)');
+  });
+
   it('frost glass usa opacidades translúcidas sem barra sólida no compact', () => {
     const tokensPath = resolve(process.cwd(), 'src/shared/styles/tokens/_hy-v2-light.scss');
     const tokensSource = readFileSync(tokensPath, 'utf8');
 
-    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-rest: 0.5');
-    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-compact: 0.88');
+    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-rest: 0');
+    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-compact: 1');
     expect(tokensSource).toContain('--hy-mobile-header-glass-bleed');
     expect(shellStyles).toContain('--hy-mobile-header-glass-bleed');
     expect(tokensSource).toMatch(/--hy-shadow-mobile-header-glass-compact:[^;]+0\.0625rem/);

@@ -49,18 +49,18 @@
   --hy-color-overlay-sheet: rgba(3, 8, 14, 0.3);
 
   /* Status — semantic tones (card + sheet badges) */
-  --hy-color-status-open-bg: rgba(224, 242, 254, 0.78);
-  --hy-color-status-open-text: #0369a1;
-  --hy-color-status-open-border: rgba(2, 132, 199, 0.2);
-  --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.72);
+  --hy-color-status-open-bg: rgba(204, 251, 241, 0.78);
+  --hy-color-status-open-text: #0f766e;
+  --hy-color-status-open-border: rgba(13, 148, 136, 0.22);
+  --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.78);
   --hy-color-status-quotation-text: #1d4ed8;
-  --hy-color-status-quotation-border: rgba(37, 99, 235, 0.16);
-  --hy-color-status-contracting-bg: rgba(237, 233, 254, 0.78);
-  --hy-color-status-contracting-text: #5b21b6;
-  --hy-color-status-contracting-border: rgba(109, 40, 217, 0.2);
-  --hy-color-status-operating-bg: rgba(219, 234, 254, 0.72);
-  --hy-color-status-operating-text: #1d4ed8;
-  --hy-color-status-operating-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-quotation-border: rgba(37, 99, 235, 0.18);
+  --hy-color-status-contracting-bg: rgba(237, 233, 254, 0.82);
+  --hy-color-status-contracting-text: #6d28d9;
+  --hy-color-status-contracting-border: rgba(109, 40, 217, 0.22);
+  --hy-color-status-operating-bg: rgba(224, 231, 255, 0.8);
+  --hy-color-status-operating-text: #4338ca;
+  --hy-color-status-operating-border: rgba(67, 56, 202, 0.22);
   --hy-color-status-in-transit-bg: rgba(220, 252, 231, 0.72);
   --hy-color-status-in-transit-text: #15803d;
   --hy-color-status-in-transit-border: rgba(22, 163, 74, 0.16);
@@ -117,9 +117,9 @@
   --hy-mobile-header-z-index: 160;
   --hy-mobile-header-glass-height: 100%;
   --hy-mobile-header-compact-height: auto;
-  --hy-mobile-header-frost-opacity-rest: 0.5;
-  --hy-mobile-header-frost-opacity-compact: 0.88;
-  --hy-mobile-header-glass-bleed: 1.25rem;
+  --hy-mobile-header-frost-opacity-rest: 0;
+  --hy-mobile-header-frost-opacity-compact: 1;
+  --hy-mobile-header-glass-bleed: 0;
   --hy-mobile-header-compact-title-offset: -0.1875rem;
   --hy-mobile-header-compact-padding-bottom: 0.55rem;
   --hy-blur-mobile-header: blur(1.25rem) saturate(1.08);
