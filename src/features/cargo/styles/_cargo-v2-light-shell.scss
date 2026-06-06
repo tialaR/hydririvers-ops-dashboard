@@ -114,7 +114,19 @@
   }
 
   > header h2 {
+    margin: 0;
     color: var(--v2-title);
+    font-size: var(--hy-font-size-sheet-header-title, 1.0625rem);
+    font-weight: var(--hy-font-weight-nav-title, 760);
+    line-height: var(--hy-line-height-sheet-header-title, 1.15);
+    letter-spacing: var(--hy-letter-spacing-sheet-header-title, -0.025em);
+  }
+
+  > header p {
+    margin: 0;
+    color: var(--hy-color-sheet-description, var(--v2-text-secondary-muted, rgba(100, 116, 139, 0.82)));
+    font-size: var(--hy-font-size-sheet-description, 0.8125rem);
+    line-height: 1.45;
   }
 
   > header button {

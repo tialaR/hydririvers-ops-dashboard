@@ -1533,6 +1533,8 @@
       "priority": "Priority"
     },
     "publicActionSheet": {
+      "title": "Cargo actions",
+      "description": "Choose how to continue with this cargo",
       "ariaLabel": "Cargo actions",
       "navigationAria": "Cargo navigation",
       "close": "Close",

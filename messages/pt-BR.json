@@ -1533,6 +1533,8 @@
       "priority": "Prioridade"
     },
     "publicActionSheet": {
+      "title": "Ações da carga",
+      "description": "Escolha como continuar com esta carga",
       "ariaLabel": "Ações da carga",
       "navigationAria": "Navegação da carga",
       "close": "Fechar",

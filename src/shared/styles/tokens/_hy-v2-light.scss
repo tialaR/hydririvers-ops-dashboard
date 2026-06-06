@@ -48,16 +48,25 @@
   /* Overlay */
   --hy-color-overlay-sheet: rgba(3, 8, 14, 0.3);
 
-  /* Status — lab card variants + reserved completed/blocked (catalog parity) */
-  --hy-color-status-in-transit-bg: rgba(220, 252, 231, 0.72);
-  --hy-color-status-in-transit-text: #15803d;
-  --hy-color-status-in-transit-border: rgba(22, 163, 74, 0.16);
-  --hy-color-status-scheduled-bg: rgba(219, 234, 254, 0.72);
-  --hy-color-status-scheduled-text: #1d4ed8;
-  --hy-color-status-scheduled-border: rgba(37, 99, 235, 0.16);
+  /* Status — semantic tones (card + sheet badges) */
+  --hy-color-status-open-bg: rgba(224, 242, 254, 0.78);
+  --hy-color-status-open-text: #0369a1;
+  --hy-color-status-open-border: rgba(2, 132, 199, 0.2);
   --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.72);
   --hy-color-status-quotation-text: #1d4ed8;
   --hy-color-status-quotation-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-contracting-bg: rgba(237, 233, 254, 0.78);
+  --hy-color-status-contracting-text: #5b21b6;
+  --hy-color-status-contracting-border: rgba(109, 40, 217, 0.2);
+  --hy-color-status-operating-bg: rgba(219, 234, 254, 0.72);
+  --hy-color-status-operating-text: #1d4ed8;
+  --hy-color-status-operating-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-in-transit-bg: rgba(220, 252, 231, 0.72);
+  --hy-color-status-in-transit-text: #15803d;
+  --hy-color-status-in-transit-border: rgba(22, 163, 74, 0.16);
+  --hy-color-status-scheduled-bg: var(--hy-color-status-operating-bg);
+  --hy-color-status-scheduled-text: var(--hy-color-status-operating-text);
+  --hy-color-status-scheduled-border: var(--hy-color-status-operating-border);
   --hy-color-status-delayed-bg: rgba(254, 243, 199, 0.74);
   --hy-color-status-delayed-text: #a16207;
   --hy-color-status-delayed-border: rgba(202, 138, 4, 0.24);
@@ -150,6 +159,9 @@
   --hy-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
   --hy-font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --hy-font-size-display: 2.75rem;
+  --hy-font-size-nav-title: 1.0625rem;
+  --hy-font-size-sheet-header-title: 1.0625rem;
+  --hy-font-size-sheet-description: 0.8125rem;
   --hy-font-size-sheet-title: 2.6875rem;
   --hy-font-size-sheet-cargo-title: 1.4375rem;
   --hy-font-size-title: 1.125rem;
@@ -168,6 +180,7 @@
   --hy-font-weight-display: 690;
   --hy-font-weight-black: 900;
   --hy-line-height-display: 0.98;
+  --hy-line-height-sheet-header-title: 1.15;
   --hy-line-height-sheet-title: 1.12;
   --hy-line-height-sheet-cargo-title: 1.08;
   --hy-line-height-title: 1.2;
@@ -176,8 +189,12 @@
   --hy-line-height-label: 1.2;
   --hy-line-height-caption: 1.1;
   --hy-letter-spacing-display: -0.075em;
+  --hy-letter-spacing-sheet-header-title: -0.025em;
   --hy-letter-spacing-sheet-title: -0.04em;
   --hy-letter-spacing-sheet-cargo-title: -0.055em;
+  --hy-font-weight-nav-title: 760;
+  --hy-space-sheet-header-gap: 0.25rem;
+  --hy-color-sheet-description: rgba(100, 116, 139, 0.82);
   --hy-letter-spacing-title: -0.018em;
   --hy-letter-spacing-label: 0.065em;
   --hy-letter-spacing-caption: 0;

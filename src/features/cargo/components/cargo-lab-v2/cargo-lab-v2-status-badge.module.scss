@@ -6,3 +6,30 @@
   margin: 0;
   width: max-content;
 }
+
+:global(.root[data-theme='light']) .cardBadge[data-status-tone='inTransit'],
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='inTransit'] {
+  color: var(--hy-color-status-in-transit-text);
+  background: var(--hy-color-status-in-transit-bg);
+  border-color: var(--hy-color-status-in-transit-border);
+}
+
+:global(.root[data-theme='light']) .cardBadge[data-status-tone='operating'],
+:global(.root[data-theme='light']) .cardBadge[data-status-tone='quotation'],
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='operating'],
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='quotation'] {
+  color: var(--hy-color-status-operating-text);
+  background: var(--hy-color-status-operating-bg);
+  border-color: var(--hy-color-status-operating-border);
+}
+
+:global(.root[data-theme='light']) .cardBadge[data-status-tone='delayed'],
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='delayed'] {
+  color: var(--hy-color-status-delayed-text);
+  background: var(--hy-color-status-delayed-bg);
+  border-color: var(--hy-color-status-delayed-border);
+}
+
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='inTransit'] {
+  background: var(--v2-status-in-transit-bg-sheet, rgba(220, 252, 231, 0.82));
+}

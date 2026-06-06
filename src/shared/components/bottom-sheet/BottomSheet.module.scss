@@ -193,7 +193,7 @@
 .title {
   margin: 0;
   color: var(--hx-text, #eef7f6);
-  font-size: var(--hy-font-size-sheet-title, var(--hy-font-size-nav-title, 1.0625rem));
+  font-size: var(--hy-font-size-sheet-header-title, var(--hy-font-size-nav-title, 1.0625rem));
   font-weight: var(--hy-font-weight-nav-title, 760);
   line-height: var(--hy-line-height-sheet-header-title, var(--hy-line-height-nav-title, 1.15));
   letter-spacing: var(--hy-letter-spacing-sheet-header-title, var(--hy-letter-spacing-nav-title, -0.025em));

@@ -153,7 +153,7 @@ describe('BottomSheet component', () => {
     const scss = readFileSync(scssPath, 'utf8');
 
     expect(scss).toContain('.title');
-    expect(scss).toContain('--hy-font-size-sheet-title');
+    expect(scss).toContain('--hy-font-size-sheet-header-title');
     expect(scss).toContain('--hy-space-sheet-body-padding-block');
     expect(scss).toContain('.body');
     expect(scss).toMatch(/\.body\s*\{[^}]*padding:/s);
