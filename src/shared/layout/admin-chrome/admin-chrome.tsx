@@ -679,19 +679,6 @@ export function AdminChrome({ children }: AdminChromeProps) {
       <MobileShellChromeProvider>
       <div className="hx-main hr-main">
         <main className="hx-content hr-dashboard-page">
-          {!suppressMobileShellChrome ? (
-            <MobileProductHeader
-              normalizedPathname={normalizedPathname}
-              brandHref={intlAppPaths.dashboard.home}
-              unreadNotificationsCount={unreadNotificationsCount}
-              navigationUser={navigationUser}
-              onOpenLocale={toggleMobileLocaleSheet}
-              onOpenNotifications={toggleMobileNotificationsSheet}
-              onOpenProfile={openMobileAccountSheet}
-              localeSheetOpen={mobileLocaleSheetOpen}
-              notificationsOpen={notificationsOpen}
-            />
-          ) : null}
           <div
             ref={dashboardScrollRef}
             className={[
@@ -708,6 +695,19 @@ export function AdminChrome({ children }: AdminChromeProps) {
                 }
               : {})}
           >
+          {!suppressMobileShellChrome ? (
+            <MobileProductHeader
+              normalizedPathname={normalizedPathname}
+              brandHref={intlAppPaths.dashboard.home}
+              unreadNotificationsCount={unreadNotificationsCount}
+              navigationUser={navigationUser}
+              onOpenLocale={toggleMobileLocaleSheet}
+              onOpenNotifications={toggleMobileNotificationsSheet}
+              onOpenProfile={openMobileAccountSheet}
+              localeSheetOpen={mobileLocaleSheetOpen}
+              notificationsOpen={notificationsOpen}
+            />
+          ) : null}
           {!suppressMobileShellChrome ? (
             <div
               className={shellStyles.mobileHeaderSpacer}

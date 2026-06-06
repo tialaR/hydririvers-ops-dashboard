@@ -18,7 +18,7 @@
     -webkit-overflow-scrolling: touch;
     background: transparent;
 
-    > *:not([data-mobile-header-spacer='true']) {
+    > *:not([data-mobile-header-spacer='true']):not([data-mobile-product-shell='true']) {
       position: relative;
       z-index: 1;
     }
@@ -37,6 +37,8 @@
   position: sticky;
   top: 0;
   z-index: var(--hy-mobile-header-z-index, 160);
+  isolation: isolate;
+  overflow: visible;
   flex-shrink: 0;
   align-self: stretch;
   display: grid;
@@ -52,23 +54,29 @@
     gap 220ms cubic-bezier(0.2, 1, 0.2, 1),
     padding 220ms cubic-bezier(0.2, 1, 0.2, 1);
 
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+
   &::before {
     content: '';
     position: absolute;
     top: 0;
     right: 0;
     left: 0;
-    height: var(--hy-mobile-header-glass-height, 100%);
-    min-height: 100%;
-    z-index: -1;
+    bottom: calc(-1 * var(--hy-mobile-header-glass-bleed, 1.25rem));
+    z-index: 0;
     pointer-events: none;
-    opacity: var(--hy-mobile-header-frost-opacity-rest, 0.58);
+    opacity: var(--hy-mobile-header-frost-opacity-rest, 0.5);
     background: var(--hy-mobile-header-glass-bg);
     -webkit-backdrop-filter: var(--hy-mobile-header-glass-blur, var(--hy-blur-mobile-header, blur(1rem) saturate(1.04)));
     backdrop-filter: var(--hy-mobile-header-glass-blur, var(--hy-blur-mobile-header, blur(1rem) saturate(1.04)));
-    box-shadow: var(--hy-shadow-mobile-header-glass, 0 0.0625rem 0 rgba(148, 163, 184, 0.12));
+    box-shadow: var(--hy-shadow-mobile-header-glass, none);
     transition:
       opacity 220ms cubic-bezier(0.2, 1, 0.2, 1),
+      bottom 220ms cubic-bezier(0.2, 1, 0.2, 1),
+      background 220ms cubic-bezier(0.2, 1, 0.2, 1),
       box-shadow 220ms cubic-bezier(0.2, 1, 0.2, 1);
   }
 
@@ -81,8 +89,10 @@
 
   &[data-mobile-header-compact='true']::before,
   &[data-scroll-compact='true']::before {
-    opacity: var(--hy-mobile-header-frost-opacity-compact, 0.82);
-    box-shadow: var(--hy-shadow-mobile-header-glass-compact, 0 0.0625rem 0 rgba(148, 163, 184, 0.14));
+    bottom: 0;
+    opacity: var(--hy-mobile-header-frost-opacity-compact, 0.88);
+    background: var(--hy-mobile-header-glass-bg-compact, var(--hy-mobile-header-glass-bg));
+    box-shadow: var(--hy-shadow-mobile-header-glass-compact, 0 0.0625rem 0 rgba(148, 163, 184, 0.1));
   }
 }
 
@@ -254,6 +264,8 @@
     box-sizing: border-box;
     margin-inline: 0;
     padding-inline: var(--hy-spacing-shell-padding-inline, 1.125rem);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
   }
 }
 

@@ -38,6 +38,15 @@ describe('AdminChrome mobile product shell', () => {
     expect(headerSource).not.toContain('Painel');
   });
 
+  it('header mobile vive dentro do hr-dashboard-scroll para backdrop-filter real', () => {
+    expect(adminSource.indexOf('hr-dashboard-scroll')).toBeLessThan(
+      adminSource.indexOf('<MobileProductHeader'),
+    );
+    expect(adminSource.indexOf('<MobileProductHeader')).toBeLessThan(
+      adminSource.indexOf('data-mobile-header-spacer'),
+    );
+  });
+
   it('shell root e scroll stage compartilham ownership do background global', () => {
     const adminStylesPath = resolve(
       process.cwd(),

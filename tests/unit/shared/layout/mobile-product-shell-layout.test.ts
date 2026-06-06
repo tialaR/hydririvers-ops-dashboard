@@ -36,7 +36,9 @@ describe('Mobile product shell layout ownership', () => {
   it('header expõe marker de glassmorphism com área completa via ::before', () => {
     expect(headerSource).toContain('data-mobile-header-glass="true"');
     expect(shellStyles).toContain('backdrop-filter');
-    expect(shellStyles).toContain('--hy-mobile-header-glass-height');
+    expect(shellStyles).toContain('isolation: isolate');
+    expect(shellStyles).toContain('overflow: visible');
+    expect(shellStyles).toContain('--hy-mobile-header-glass-bleed');
     expect(shellStyles).toContain('--hy-mobile-header-glass-bg');
     expect(shellStyles).toContain('--hy-mobile-header-glass-blur');
     expect(shellStyles).not.toContain('mask-image: linear-gradient(180deg, #000 0%, #000 58%');
@@ -88,8 +90,10 @@ describe('Mobile product shell layout ownership', () => {
     const tokensPath = resolve(process.cwd(), 'src/shared/styles/tokens/_hy-v2-light.scss');
     const tokensSource = readFileSync(tokensPath, 'utf8');
 
-    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-rest: 0.58');
-    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-compact: 0.82');
+    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-rest: 0.5');
+    expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-compact: 0.88');
+    expect(tokensSource).toContain('--hy-mobile-header-glass-bleed');
+    expect(shellStyles).toContain('--hy-mobile-header-glass-bleed');
     expect(tokensSource).toMatch(/--hy-shadow-mobile-header-glass-compact:[^;]+0\.0625rem/);
     expect(shellStyles).not.toMatch(/&\[data-mobile-header-compact='true'\]::before[\s\S]*0\.375rem 1\.25rem/);
   });

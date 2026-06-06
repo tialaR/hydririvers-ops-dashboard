@@ -117,25 +117,36 @@
   --hy-mobile-header-z-index: 160;
   --hy-mobile-header-glass-height: 100%;
   --hy-mobile-header-compact-height: auto;
-  --hy-mobile-header-frost-opacity-rest: 0.58;
-  --hy-mobile-header-frost-opacity-compact: 0.82;
+  --hy-mobile-header-frost-opacity-rest: 0.5;
+  --hy-mobile-header-frost-opacity-compact: 0.88;
+  --hy-mobile-header-glass-bleed: 1.25rem;
   --hy-mobile-header-compact-title-offset: -0.1875rem;
   --hy-mobile-header-compact-padding-bottom: 0.55rem;
-  --hy-blur-mobile-header: blur(1rem) saturate(1.04);
-  --hy-mobile-header-glass-blur: blur(1rem) saturate(1.04);
+  --hy-blur-mobile-header: blur(1.25rem) saturate(1.08);
+  --hy-mobile-header-glass-blur: blur(1.25rem) saturate(1.08);
   --hy-blur-overlay: blur(0.625rem) saturate(1.02);
-  --hy-color-mobile-header-glass-top: rgba(255, 255, 255, 0.72);
-  --hy-color-mobile-header-glass-bottom: rgba(241, 245, 249, 0.42);
+  --hy-color-mobile-header-glass-top: rgba(255, 255, 255, 0.52);
+  --hy-color-mobile-header-glass-mid: rgba(255, 255, 255, 0.16);
+  --hy-color-mobile-header-glass-bottom: transparent;
   --hy-mobile-header-glass-bg:
     linear-gradient(
       180deg,
-      var(--hy-color-mobile-header-glass-top),
-      var(--hy-color-mobile-header-glass-bottom) 88%,
-      rgba(241, 245, 249, 0.55) 100%
+      var(--hy-color-mobile-header-glass-top) 0%,
+      var(--hy-color-mobile-header-glass-mid) 52%,
+      rgba(255, 255, 255, 0.03) 78%,
+      var(--hy-color-mobile-header-glass-bottom) 100%
+    ),
+    radial-gradient(circle at 70% 0%, rgba(147, 197, 253, 0.1), transparent 52%);
+  --hy-mobile-header-glass-bg-compact:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.84) 0%,
+      rgba(241, 245, 249, 0.62) 72%,
+      rgba(241, 245, 249, 0.18) 100%
     ),
     radial-gradient(circle at 70% 0%, rgba(147, 197, 253, 0.14), transparent 55%);
-  --hy-shadow-mobile-header-glass: 0 0.0625rem 0 rgba(148, 163, 184, 0.12);
-  --hy-shadow-mobile-header-glass-compact: 0 0.0625rem 0 rgba(148, 163, 184, 0.14);
+  --hy-shadow-mobile-header-glass: none;
+  --hy-shadow-mobile-header-glass-compact: 0 0.0625rem 0 rgba(148, 163, 184, 0.1);
 
   /* Typography — mobile header navigation title */
   --hy-font-size-page-title-expanded: 2.75rem;
