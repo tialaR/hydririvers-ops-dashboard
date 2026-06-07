@@ -3,7 +3,6 @@
 import {
   useCallback,
   useEffect,
-  useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
@@ -20,21 +19,25 @@ import {
   resolveVisualActiveId,
 } from './bottom-nav-state';
 import {
+  BOTTOM_NAV_ROUTE_COMMIT_ICON_LIFT_REM,
+  BOTTOM_NAV_ROUTE_COMMIT_ICON_SCALE,
   bottomNavActiveIconPressScale,
   bottomNavBubblePressInSpring,
   bottomNavBubblePressOutSpring,
   bottomNavContentSpring,
   bottomNavItemTapProps,
+  bottomNavRouteCommitSpring,
   BottomNavMotionProvider,
+  LayoutGroup,
   MotionButton,
   MotionLink,
   MotionSpan,
   useBottomNavReducedMotion,
+  useBottomNavRouteCommitNonce,
+  useBottomNavRouteCommitAnimating,
+  useBottomNavRouteCommitCycle,
 } from './bottom-nav-motion';
-import {
-  BottomNavGooeyPillLayer,
-  useBottomNavGooeyPillTransition,
-} from './bottom-nav-gooey-pill';
+import { BottomNavActivePill } from './bottom-nav-gooey-pill';
 import { shouldBypassPressFeedback } from './with-press-feedback';
 import styles from './BottomNav.module.sass';
 
@@ -56,6 +59,8 @@ export type BottomNavClassNames = {
   icon: string;
   label: string;
   activeBubble: string;
+  activeBubbleSurface?: string;
+  activeBubbleRim?: string;
   activeLiquidLayer?: string;
   activeIcon: string;
   activeLabel: string;
@@ -97,9 +102,8 @@ type BottomNavItemControlProps = {
   classNames: BottomNavClassNames;
   onItemSelect?: (id: string) => void | boolean;
   onPendingSelect?: (id: string) => void;
-  onBubblePressStart?: (id: string) => void;
-  onBubblePressEnd?: () => void;
   reducedMotion: boolean;
+  routeCommitNonce: number;
 };
 
 function BottomNavItemControl({
@@ -109,14 +113,16 @@ function BottomNavItemControl({
   classNames,
   onItemSelect,
   onPendingSelect,
-  onBubblePressStart,
-  onBubblePressEnd,
   reducedMotion,
+  routeCommitNonce,
 }: BottomNavItemControlProps) {
   const [pressing, setPressing] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
 
   const isRouteActive = item.id === routeActiveId;
+  const routeCommitNonceForItem = isRouteActive ? routeCommitNonce : 0;
+  const isRouteCommitAnimating = useBottomNavRouteCommitAnimating(routeCommitNonceForItem);
+  const isRouteCommitCycle = useBottomNavRouteCommitCycle(routeCommitNonceForItem);
   const visualActiveId = resolveVisualActiveId(routeActiveId, pendingItemId);
   const isVisualActive = item.id === visualActiveId;
   const isPending = item.href
@@ -145,6 +151,18 @@ function BottomNavItemControl({
     'data-pressing': pressing ? 'true' : undefined,
   } as const;
 
+  const activePill = isRouteActive ? (
+    <BottomNavActivePill
+      pressing={pressing}
+      isRouteCommitAnimating={isRouteCommitAnimating}
+      isRouteCommitCycle={isRouteCommitCycle}
+      reducedMotion={reducedMotion}
+      bubbleClassName={classNames.activeBubble}
+      surfaceClassName={classNames.activeBubbleSurface}
+      rimClassName={classNames.activeBubbleRim}
+    />
+  ) : null;
+
   const activeContent = (
     <>
       <MotionSpan
@@ -157,14 +175,32 @@ function BottomNavItemControl({
         animate={
           reducedMotion
             ? undefined
-            : { opacity: 1, scale: iconPressScale, y: 0 }
+            : isRouteCommitAnimating
+              ? {
+                  opacity: 1,
+                  scale: BOTTOM_NAV_ROUTE_COMMIT_ICON_SCALE,
+                  y: -BOTTOM_NAV_ROUTE_COMMIT_ICON_LIFT_REM,
+                }
+              : pressing
+                ? {
+                    opacity: 1,
+                    scale: iconPressScale,
+                    y: -0.0625,
+                  }
+                : {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                  }
         }
         transition={
           reducedMotion
             ? undefined
-            : pressing
-              ? iconPressTransition
-              : bottomNavContentSpring
+            : isRouteCommitAnimating || isRouteCommitCycle
+              ? bottomNavRouteCommitSpring
+              : pressing
+                ? iconPressTransition
+                : bottomNavContentSpring
         }
       >
         {icon}
@@ -201,8 +237,15 @@ function BottomNavItemControl({
 
   const content = (
     <>
+      {activePill ? (
+        <span className={styles.pillSlot} aria-hidden="true" data-bottom-nav-pill-slot="true">
+          {activePill}
+        </span>
+      ) : null}
       {pendingGlow}
-      {isVisualActive ? activeContent : inactiveContent}
+      <span className={styles.contentLayer} data-bottom-nav-content-layer="true">
+        {isVisualActive ? activeContent : inactiveContent}
+      </span>
     </>
   );
 
@@ -212,12 +255,10 @@ function BottomNavItemControl({
 
   function beginPressFeedback() {
     setPressing(true);
-    onBubblePressStart?.(item.id);
   }
 
   function endPressFeedback() {
     setPressing(false);
-    onBubblePressEnd?.();
   }
 
   function handlePointerDown(event: PointerEvent) {
@@ -336,8 +377,8 @@ export function BottomNav({
   classNames,
 }: BottomNavProps) {
   const reducedMotion = useBottomNavReducedMotion();
+  const routeCommitNonce = useBottomNavRouteCommitNonce(activeId);
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
-  const [bubblePressItemId, setBubblePressItemId] = useState<string | null>(null);
   const effectivePendingId =
     pendingItemId != null && pendingItemId !== activeId ? pendingItemId : null;
 
@@ -350,27 +391,6 @@ export function BottomNav({
     return () => window.clearTimeout(timer);
   }, [activeId, effectivePendingId]);
 
-  const gooeyEnabled = !reducedMotion;
-  const visualActiveId = resolveVisualActiveId(activeId, effectivePendingId);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const cellRefs = useRef(new Map<string, HTMLDivElement>());
-  const { metrics: pillMetrics, tailMetrics } = useBottomNavGooeyPillTransition(
-    visualActiveId,
-    trackRef,
-    cellRefs,
-    reducedMotion,
-  );
-  const bubblePressing =
-    bubblePressItemId != null && bubblePressItemId === visualActiveId;
-
-  const handleBubblePressStart = useCallback((id: string) => {
-    setBubblePressItemId(id);
-  }, []);
-
-  const handleBubblePressEnd = useCallback(() => {
-    setBubblePressItemId(null);
-  }, []);
-
   return (
     <BottomNavMotionProvider>
       <nav
@@ -378,78 +398,24 @@ export function BottomNav({
         aria-label={ariaLabel}
         data-bottom-nav-global="true"
         data-bottom-nav-glass="true"
-        data-hy-bottom-nav-gooey={gooeyEnabled ? 'true' : 'false'}
         data-hy-bottom-nav-reduced-motion={reducedMotion ? 'true' : 'false'}
         style={{ '--hy-bottom-nav-item-count': items.length } as CSSProperties}
       >
-        {gooeyEnabled ? (
-          <svg className={styles.gooeyDefs} aria-hidden="true" focusable="false">
-            <defs>
-              <filter id="hy-bottom-nav-goo" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
-                <feColorMatrix
-                  in="blur"
-                  type="matrix"
-                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
-                  result="goo"
-                />
-                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
-              </filter>
-            </defs>
-          </svg>
-        ) : null}
-        <div
-          ref={trackRef}
-          className={styles.gooeyTrack}
-          data-bottom-nav-gooey-track={gooeyEnabled ? 'true' : 'static'}
-          aria-hidden="true"
-        >
+        <LayoutGroup id="hy-bottom-nav-layout">
           {items.map((item) => (
-            <div
-              key={`track-${item.id}`}
-              ref={(node) => {
-                if (node) {
-                  cellRefs.current.set(item.id, node);
-                } else {
-                  cellRefs.current.delete(item.id);
-                }
-              }}
-              className={styles.gooeyCell}
-              data-bottom-nav-gooey-cell={item.id}
+            <BottomNavItemControl
+              key={item.id}
+              item={item}
+              routeActiveId={activeId}
+              pendingItemId={effectivePendingId}
+              classNames={classNames}
+              onItemSelect={onItemSelect}
+              onPendingSelect={setPendingItemId}
+              reducedMotion={reducedMotion}
+              routeCommitNonce={routeCommitNonce}
             />
           ))}
-          {pillMetrics ? (
-            <BottomNavGooeyPillLayer
-              metrics={pillMetrics}
-              tailMetrics={tailMetrics}
-              bubblePressing={bubblePressing}
-              reducedMotion={reducedMotion}
-              bubbleClassName={classNames.activeBubble}
-              liquidClassName={classNames.activeLiquidLayer}
-            />
-          ) : (
-            <span
-              className={classNames.activeBubble}
-              data-bottom-nav-active-bubble="true"
-              data-bottom-nav-active-bubble-measuring="true"
-              aria-hidden="true"
-            />
-          )}
-        </div>
-        {items.map((item) => (
-          <BottomNavItemControl
-            key={item.id}
-            item={item}
-            routeActiveId={activeId}
-            pendingItemId={effectivePendingId}
-            classNames={classNames}
-            onItemSelect={onItemSelect}
-            onPendingSelect={setPendingItemId}
-            onBubblePressStart={handleBubblePressStart}
-            onBubblePressEnd={handleBubblePressEnd}
-            reducedMotion={reducedMotion}
-          />
-        ))}
+        </LayoutGroup>
       </nav>
     </BottomNavMotionProvider>
   );

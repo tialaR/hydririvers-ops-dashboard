@@ -9,6 +9,8 @@ export const bottomNavHyLightClassNames = {
   icon: shellStyles.icon,
   label: shellStyles.label,
   activeBubble: shellStyles.activeBubble,
+  activeBubbleSurface: shellStyles.activeBubbleSurface,
+  activeBubbleRim: shellStyles.activeBubbleRim,
   activeLiquidLayer: shellStyles.activeLiquidLayer,
   activeIcon: shellStyles.activeIcon,
   activeLabel: shellStyles.activeLabel,

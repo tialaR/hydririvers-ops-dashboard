@@ -55,7 +55,7 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
   }));
 
   return createPortal(
-    <div data-mobile-product-bottom-nav="true">
+    <div data-mobile-product-bottom-nav="true" data-bottom-nav-viewport-anchor="true">
       <BottomNav
         className={bottomNavHyLightClassNames.shell}
         ariaLabel={tNav('mobileMenu')}
@@ -86,6 +86,8 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
           icon: bottomNavHyLightClassNames.icon,
           label: bottomNavHyLightClassNames.label,
           activeBubble: bottomNavHyLightClassNames.activeBubble,
+          activeBubbleSurface: bottomNavHyLightClassNames.activeBubbleSurface,
+          activeBubbleRim: bottomNavHyLightClassNames.activeBubbleRim,
           activeLiquidLayer: bottomNavHyLightClassNames.activeLiquidLayer,
           activeIcon: bottomNavHyLightClassNames.activeIcon,
           activeLabel: bottomNavHyLightClassNames.activeLabel,
