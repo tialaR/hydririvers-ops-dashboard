@@ -1216,6 +1216,18 @@ Proposta: gerar a partir de `hy-*` em `cargo-sheet-theme.scss` da feature para n
 
 **Loading boundaries:** `/cargas`, `/negociacoes` e `/rastreio` já possuem `loading.tsx` — nenhum arquivo novo nesta rodada.
 
+### BottomNav HY Liquid Glass v2 — refinamento (2026-06-07)
+
+**Status:** refinamento em andamento — contrato funcional estável; visual premium recalibrado nesta rodada.
+
+**Arquitetura:** shell glass light (`bottom-nav-hy-light-shell.module.sass`); active liquid gooey (`bottom-nav-gooey-pill.tsx` + track em `BottomNav.tsx`); conteúdo icon/label nítido acima; estados via data attrs + Sass Module.
+
+**Motion:** encapsulada em `bottom-nav-motion.tsx` (`LazyMotion` + `domMax` + `motion/react`); active pathname-only; pending separado; sem bounce.
+
+**Tokens:** `--hy-color-bottom-nav-*`, `--hy-shadow-bottom-nav*`, `--hy-blur-bottom-nav*`, `--hy-motion-bottom-nav-*` em `_hy-v2-light.scss`.
+
+**Débitos:** HY-DEBT-017 (perf gooey low-end); HY-DEBT-019 (alias `bottomNavV2LightClassNames` no lab); calibrar gooey em device real.
+
 ### Validação Phase 6 (2026-06-07)
 
 ```bash

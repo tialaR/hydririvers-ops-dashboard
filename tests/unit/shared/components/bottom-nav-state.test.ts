@@ -33,6 +33,11 @@ describe('bottom-nav-state', () => {
     expect(isBottomNavItemPending('cargos', routeActiveId, pendingItemId)).toBe(false);
   });
 
+  it('layoutId da pill ativa ignora pendingItemId', () => {
+    expect(resolveVisualActiveId('cargos', 'negotiations')).toBe('cargos');
+    expect(resolveVisualActiveId('negotiations', 'cargos')).toBe('negotiations');
+  });
+
   it('quando pathname confirma destino, active troca e pending deixa de aplicar', () => {
     const confirmedActiveId = 'negotiations';
 

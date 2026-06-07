@@ -80,8 +80,17 @@
   /* Layout / control sizes (rem, from lab measurements) */
   --hy-size-shell-max-width: 26.875rem;
   --hy-size-control-height: 3.25rem;
-  --hy-size-bottom-nav-height: 4.375rem;
-  --hy-size-bottom-nav-active-bubble-height: 3.625rem;
+  --hy-size-bottom-nav-height: 4.5rem;
+  --hy-size-bottom-nav-item-height: 3.5rem;
+  --hy-size-bottom-nav-active-pill-height: 3.375rem;
+  --hy-size-bottom-nav-active-bubble-height: var(--hy-size-bottom-nav-active-pill-height);
+  --hy-size-bottom-nav-icon: 1.4375rem;
+  --hy-size-bottom-nav-icon-active: 1.4375rem;
+  --hy-size-bottom-nav-icon-hit: 1.75rem;
+  --hy-spacing-bottom-nav-inset: 0.375rem;
+  --hy-spacing-bottom-nav-pill-gap: 0.1875rem;
+  --hy-spacing-bottom-nav-pill-padding-block: 0.4375rem;
+  --hy-spacing-bottom-nav-pill-padding-inline: 0.625rem;
   --hy-size-icon-button: 3.25rem;
   --hy-size-cargo-icon: 2.625rem;
   --hy-spacing-shell-padding-inline: 1.125rem;
@@ -106,14 +115,33 @@
   --hy-shadow-card-soft: 0 1.625rem 4.5rem rgba(15, 23, 42, 0.14);
   --hy-shadow-card-elevated: 0 1.125rem 2.625rem rgba(15, 23, 42, 0.12), 0 0.25rem 0.75rem rgba(15, 23, 42, 0.08);
   --hy-shadow-sheet: 0 1.75rem 5.375rem rgba(15, 23, 42, 0.18);
-  --hy-shadow-bottom-nav: 0 0.625rem 1.5rem rgba(15, 23, 42, 0.14);
+  --hy-shadow-bottom-nav:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.78),
+    0 0.25rem 0.75rem rgba(15, 23, 42, 0.05),
+    0 0.625rem 1.625rem rgba(15, 23, 42, 0.09),
+    0 1.125rem 2.75rem rgba(15, 23, 42, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.62);
+  --hy-shadow-bottom-nav-active-pill:
+    0 0.25rem 0.875rem rgba(37, 99, 235, 0.12),
+    0 0.625rem 1.5rem rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42),
+    inset 0 -0.0625rem 0 rgba(59, 130, 246, 0.14);
+  --hy-shadow-bottom-nav-active-pill-pressed:
+    0 0.375rem 1.125rem rgba(37, 99, 235, 0.18),
+    0 0.75rem 1.75rem rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.52),
+    inset 0 -0.0625rem 0 rgba(59, 130, 246, 0.22);
+  --hy-shadow-bottom-nav-active-pill-inner:
+    inset 0 0.3125rem 0.625rem rgba(255, 255, 255, 0.22),
+    inset 0 -0.1875rem 0.4375rem rgba(59, 130, 246, 0.08);
   --hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12);
   --hy-shadow-focus: 0 0 0 0.1875rem rgba(37, 99, 235, 0.28);
 
   /* Blur / glass */
   --hy-blur-surface-soft: blur(1.125rem) saturate(1.05);
   --hy-blur-sheet-backdrop: blur(1.75rem) saturate(1.14);
-  --hy-blur-bottom-nav: blur(1.5rem) saturate(1.08);
+  --hy-blur-bottom-nav: blur(2.25rem) saturate(1.62) brightness(1.03);
+  --hy-blur-bottom-nav-active-pill: blur(1.75rem) saturate(1.58);
   --hy-mobile-header-z-index: 160;
   --hy-mobile-header-glass-height: 100%;
   --hy-mobile-header-compact-height: auto;
@@ -189,7 +217,9 @@
   --hy-font-size-label: 0.75rem;
   --hy-font-size-caption: 0.6875rem;
   --hy-font-size-micro: 0.625rem;
-  --hy-font-size-nav: 0.578125rem;
+  --hy-font-size-nav: 0.6875rem;
+  --hy-font-size-bottom-nav-label: 0.6875rem;
+  --hy-font-size-bottom-nav-label-active: 0.8125rem;
   --hy-font-weight-regular: 400;
   --hy-font-weight-medium: 500;
   --hy-font-weight-semibold: 620;
@@ -230,4 +260,53 @@
   --hy-motion-stagger-card: 82ms;
   --hy-motion-ease-standard: cubic-bezier(0.2, 1, 0.2, 1);
   --hy-motion-ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Bottom nav — HY liquid glass light (prod /cargas mobile) */
+  --hy-color-bottom-nav-border: rgba(255, 255, 255, 0.72);
+  --hy-color-bottom-nav-shell-surface: rgba(255, 255, 255, 0.58);
+  --hy-color-bottom-nav-shell-surface-strong: rgba(248, 250, 252, 0.72);
+  --hy-color-bottom-nav-shell-surface-end: rgba(241, 245, 249, 0.48);
+  --hy-color-bottom-nav-shell-border: rgba(255, 255, 255, 0.88);
+  --hy-color-bottom-nav-shell-highlight: rgba(255, 255, 255, 0.56);
+  --hy-color-bottom-nav-shell-accent: rgba(191, 219, 254, 0.14);
+  --hy-color-bottom-nav-shell-top-highlight: rgba(255, 255, 255, 0.44);
+  --hy-color-bottom-nav-shell-rim-light: rgba(255, 255, 255, 0.34);
+  --hy-color-bottom-nav-highlight: rgba(255, 255, 255, 0.46);
+  --hy-color-bottom-nav-highlight-accent: rgba(147, 197, 253, 0.08);
+  --hy-color-bottom-nav-inactive-icon: rgba(71, 85, 105, 0.5);
+  --hy-color-bottom-nav-inactive-label: rgba(100, 116, 139, 0.68);
+  --hy-color-bottom-nav-disabled-icon: rgba(148, 163, 184, 0.46);
+  --hy-color-bottom-nav-disabled-label: rgba(148, 163, 184, 0.42);
+  --hy-opacity-bottom-nav-inactive-icon: 0.82;
+  --hy-opacity-bottom-nav-inactive-label: 0.8;
+  --hy-opacity-bottom-nav-disabled: 0.46;
+  --hy-color-bottom-nav-active-icon: #1d4ed8;
+  --hy-color-bottom-nav-active-label: #1e3a8a;
+  --hy-color-bottom-nav-active-border: rgba(147, 197, 253, 0.52);
+  --hy-color-bottom-nav-active-border-pressed: rgba(96, 165, 250, 0.62);
+  --hy-color-bottom-nav-active-highlight: rgba(219, 234, 254, 0.72);
+  --hy-color-bottom-nav-active-rim-start: rgba(59, 130, 246, 0.28);
+  --hy-color-bottom-nav-active-rim-mid: rgba(191, 219, 254, 0.82);
+  --hy-color-bottom-nav-active-rim-end: rgba(96, 165, 250, 0.38);
+  --hy-color-bottom-nav-active-liquid: rgba(147, 197, 253, 0.38);
+  --hy-color-bottom-nav-active-liquid-glow: rgba(59, 130, 246, 0.48);
+  --hy-color-bottom-nav-active-liquid-head: rgba(219, 234, 254, 0.28);
+  --hy-color-bottom-nav-active-liquid-tail: rgba(147, 197, 254, 0.24);
+  --hy-color-bottom-nav-active-surface-start: rgba(239, 246, 255, 0.82);
+  --hy-color-bottom-nav-active-surface-end: rgba(191, 219, 254, 0.46);
+  --hy-color-bottom-nav-pending-glow: rgba(100, 116, 139, 0.1);
+  --hy-color-bottom-nav-pending-glow-inner: rgba(148, 163, 184, 0.05);
+  --hy-color-bottom-nav-pending-label: rgba(71, 85, 105, 0.76);
+  --hy-color-bottom-nav-press-glow: rgba(59, 130, 246, 0.14);
+  --hy-color-bottom-nav-press-ring: rgba(37, 99, 235, 0.08);
+  --hy-motion-bottom-nav-press-scale: 0.97;
+  --hy-motion-bottom-nav-color-duration: 240ms;
+  --hy-motion-bottom-nav-press-duration: 200ms;
+  --hy-motion-bottom-nav-pending-duration: 1.2s;
+  --hy-motion-bottom-nav-spring-stiffness: 220;
+  --hy-motion-bottom-nav-spring-damping: 20;
+  --hy-motion-bottom-nav-spring-mass: 1.05;
+  --hy-motion-bottom-nav-press-spring-stiffness: 420;
+  --hy-motion-bottom-nav-press-spring-damping: 34;
+  --hy-motion-bottom-nav-press-spring-mass: 0.72;
 }

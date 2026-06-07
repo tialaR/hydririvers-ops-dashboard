@@ -4,7 +4,7 @@ import { useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 
-import { BottomNav, bottomNavV2LightClassNames } from '@/shared/components/bottom-nav';
+import { BottomNav, bottomNavHyLightClassNames } from '@/shared/components/bottom-nav';
 import { renderBottomNavIcon, type BottomNavIconId } from '@/shared/components/bottom-nav/bottom-nav-icons';
 import { usePathname, useRouter } from '@/core/i18n/navigation';
 import { intlAppPaths } from '@/shared/routing/app-routes';
@@ -57,7 +57,7 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
   return createPortal(
     <div data-mobile-product-bottom-nav="true">
       <BottomNav
-        className={bottomNavV2LightClassNames.shell}
+        className={bottomNavHyLightClassNames.shell}
         ariaLabel={tNav('mobileMenu')}
         items={items}
         activeId={activeId}
@@ -81,13 +81,15 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
           return false;
         }}
         classNames={{
-          item: bottomNavV2LightClassNames.item,
-          itemActive: bottomNavV2LightClassNames.itemActive,
-          icon: bottomNavV2LightClassNames.icon,
-          label: bottomNavV2LightClassNames.label,
-          activeBubble: bottomNavV2LightClassNames.activeBubble,
-          activeIcon: bottomNavV2LightClassNames.activeIcon,
-          activeLabel: bottomNavV2LightClassNames.activeLabel,
+          item: bottomNavHyLightClassNames.item,
+          itemActive: bottomNavHyLightClassNames.itemActive,
+          icon: bottomNavHyLightClassNames.icon,
+          label: bottomNavHyLightClassNames.label,
+          activeBubble: bottomNavHyLightClassNames.activeBubble,
+          activeLiquidLayer: bottomNavHyLightClassNames.activeLiquidLayer,
+          activeIcon: bottomNavHyLightClassNames.activeIcon,
+          activeLabel: bottomNavHyLightClassNames.activeLabel,
+          pendingGlow: bottomNavHyLightClassNames.pendingGlow,
         }}
       />
     </div>,

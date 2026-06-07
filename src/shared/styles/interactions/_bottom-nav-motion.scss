@@ -1,0 +1,28 @@
+@mixin bottomNavGooeyFallback {
+  [data-hy-bottom-nav-reduced-motion='true'] &,
+  [data-hy-bottom-nav-gooey='false'] & {
+    filter: none;
+  }
+}
+
+@mixin bottomNavPendingShimmer {
+  @keyframes hyBottomNavPendingShimmer {
+    0% {
+      opacity: 0.42;
+    }
+
+    50% {
+      opacity: 0.82;
+    }
+
+    100% {
+      opacity: 0.42;
+    }
+  }
+
+  animation: hyBottomNavPendingShimmer var(--hy-motion-bottom-nav-pending-duration, 1.2s) ease-in-out infinite;
+
+  [data-hy-bottom-nav-reduced-motion='true'] & {
+    animation: none;
+  }
+}

@@ -1,0 +1,239 @@
+@use '../../styles/interactions/pressable' as pressable
+@use '../../styles/interactions/bottom-nav-motion' as bottomNavMotion
+@use '../../styles/tokens/hy-v2-light' as hyV2Light
+
+.shell
+  @include hyV2Light.hy-v2-light-tokens
+
+  --v2-surface-bottom-nav: transparent
+  --v2-text-body-muted: var(--hy-color-text-title)
+
+  position: fixed
+  z-index: 200
+  left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
+  right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem)
+  display: grid
+  grid-template-columns: repeat(5, 1fr)
+  align-items: center
+  height: var(--hy-size-bottom-nav-height, 4.5rem)
+  min-height: var(--hy-size-bottom-nav-height, 4.5rem)
+  box-sizing: border-box
+  padding: var(--hy-spacing-bottom-nav-inset, 0.375rem)
+  border: 1px solid var(--hy-color-bottom-nav-shell-border, rgba(255, 255, 255, 0.86))
+  border-radius: var(--hy-radius-bottom-nav, 999rem)
+  overflow: visible
+  isolation: isolate
+  background: linear-gradient(180deg, var(--hy-color-bottom-nav-shell-highlight, rgba(255, 255, 255, 0.56)) 0%, transparent 32%), radial-gradient(circle at 14% 0%, var(--hy-color-bottom-nav-shell-top-highlight, rgba(255, 255, 255, 0.44)), transparent 48%), radial-gradient(circle at 86% 100%, var(--hy-color-bottom-nav-shell-accent, rgba(191, 219, 254, 0.14)), transparent 54%), linear-gradient(180deg, var(--hy-color-bottom-nav-shell-surface-strong, rgba(248, 250, 252, 0.72)), var(--hy-color-bottom-nav-shell-surface-end, rgba(241, 245, 249, 0.48))), var(--hy-color-bottom-nav-shell-surface, rgba(255, 255, 255, 0.58))
+  box-shadow: var(--hy-shadow-bottom-nav)
+  -webkit-backdrop-filter: var(--hy-blur-bottom-nav, blur(2.25rem) saturate(1.62) brightness(1.03))
+  backdrop-filter: var(--hy-blur-bottom-nav, blur(2.25rem) saturate(1.62) brightness(1.03))
+
+  &::before
+    content: ''
+    position: absolute
+    inset: 0
+    border-radius: inherit
+    pointer-events: none
+    box-shadow: inset 0 1px 0 var(--hy-color-bottom-nav-highlight, rgba(255, 255, 255, 0.46)), inset 0 -0.0625rem 0 var(--hy-color-bottom-nav-highlight-accent, rgba(147, 197, 253, 0.1))
+    z-index: 0
+
+  &::after
+    content: ''
+    position: absolute
+    inset: 0.0625rem 0.375rem auto
+    height: 38%
+    border-radius: inherit
+    pointer-events: none
+    background: linear-gradient(180deg, var(--hy-color-bottom-nav-shell-rim-light, rgba(255, 255, 255, 0.34)), transparent)
+    z-index: 0
+
+.item
+  @include pressable.pressableBubble
+
+  position: relative
+  z-index: 1
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 0.125rem
+  min-width: 0
+  height: var(--hy-size-bottom-nav-item-height, 3.5rem)
+  min-height: var(--hy-size-bottom-nav-item-height, 3.5rem)
+  padding: 0
+  border: 0
+  background: transparent
+  color: var(--hy-color-bottom-nav-inactive-label, rgba(100, 116, 139, 0.68))
+  font-size: var(--hy-font-size-bottom-nav-label, 0.6875rem)
+  font-weight: var(--hy-font-weight-bold, 720)
+  line-height: 1
+  letter-spacing: var(--hy-letter-spacing-nav, 0.01em)
+  text-decoration: none
+  white-space: nowrap
+  transform-origin: center
+  transition: color var(--hy-motion-bottom-nav-color-duration, 240ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1))
+
+  svg
+    width: var(--hy-size-bottom-nav-icon, 1.4375rem)
+    height: var(--hy-size-bottom-nav-icon, 1.4375rem)
+    fill: none
+    stroke: currentColor
+    stroke-width: 1.85
+    stroke-linecap: round
+    stroke-linejoin: round
+
+  &::after
+    content: ''
+    position: absolute
+    inset: 0.1875rem 0.4375rem
+    z-index: -1
+    border-radius: var(--hy-radius-bottom-nav, 999rem)
+    background: radial-gradient(circle at 50% 48%, var(--hy-color-bottom-nav-press-glow, rgba(59, 130, 246, 0.14)), transparent 54%)
+    opacity: 0
+    transform: scale(0.72)
+    transition: opacity var(--hy-motion-bottom-nav-press-duration, 200ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)), transform var(--hy-motion-bottom-nav-press-duration, 200ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1))
+    pointer-events: none
+
+  &[data-pressing='true']:not([data-active='true'])::after,
+  &:not([data-active='true']):active::after
+    opacity: 1
+    transform: scale(1)
+
+  &[data-pressing='true']:not([data-active='true'])
+    transform: scale(var(--hy-motion-bottom-nav-press-scale, 0.97))
+
+  &[data-bottom-nav-pending='true']:not([data-active='true'])
+    color: var(--hy-color-bottom-nav-pending-label, rgba(71, 85, 105, 0.76))
+
+  &:disabled
+    color: var(--hy-color-bottom-nav-disabled-label, rgba(148, 163, 184, 0.42))
+    cursor: not-allowed
+    opacity: var(--hy-opacity-bottom-nav-disabled, 0.46)
+
+    svg
+      color: var(--hy-color-bottom-nav-disabled-icon, rgba(148, 163, 184, 0.46))
+
+  &:focus:not(:focus-visible)
+    outline: none
+
+  &:focus-visible
+    outline: 0.125rem solid var(--hy-color-focus-ring, #2563eb)
+    outline-offset: 0.125rem
+
+@media (prefers-reduced-motion: reduce)
+  .item[data-pressing='true']:not([data-active='true'])
+    transform: none
+
+.itemActive
+  position: relative
+  overflow: visible
+
+.item[data-active='true']
+  color: var(--hy-color-bottom-nav-active-label, #1e3a8a)
+  font-weight: var(--hy-font-weight-heavy, 800)
+
+.icon
+  display: grid
+  place-items: center
+  width: var(--hy-size-bottom-nav-icon-hit, 1.75rem)
+  height: var(--hy-size-bottom-nav-icon-hit, 1.75rem)
+  border-radius: var(--hy-radius-bottom-nav, 999rem)
+  color: var(--hy-color-bottom-nav-inactive-icon, rgba(71, 85, 105, 0.5))
+  opacity: var(--hy-opacity-bottom-nav-inactive-icon, 0.82)
+
+.label
+  display: block
+  max-width: 100%
+  overflow: hidden
+  text-overflow: ellipsis
+  color: inherit
+  font-size: inherit
+  font-weight: inherit
+  line-height: 1
+  opacity: var(--hy-opacity-bottom-nav-inactive-label, 0.8)
+
+.pendingGlow
+  position: absolute
+  inset: 0.1875rem 0.4375rem
+  z-index: 0
+  border-radius: var(--hy-radius-bottom-nav, 999rem)
+  pointer-events: none
+  background: radial-gradient(circle at 50% 50%, var(--hy-color-bottom-nav-pending-glow, rgba(100, 116, 139, 0.1)), var(--hy-color-bottom-nav-pending-glow-inner, rgba(148, 163, 184, 0.05)) 72%)
+  @include bottomNavMotion.bottomNavPendingShimmer
+
+.activeBubble
+  @include bottomNavMotion.bottomNavGooeyFallback
+
+  display: block
+  box-sizing: border-box
+  border-radius: var(--hy-radius-bottom-nav, 999rem)
+  border: 1px solid var(--hy-color-bottom-nav-active-border, rgba(147, 197, 253, 0.52))
+  overflow: hidden
+  pointer-events: none
+  will-change: transform, width, height
+  background: radial-gradient(circle at 22% 6%, var(--hy-color-bottom-nav-active-highlight, rgba(219, 234, 254, 0.78)), transparent 36%), radial-gradient(circle at 78% 92%, var(--hy-color-bottom-nav-active-rim-end, rgba(96, 165, 250, 0.22)), transparent 44%), linear-gradient(168deg, var(--hy-color-bottom-nav-active-surface-start, rgba(239, 246, 255, 0.82)), var(--hy-color-bottom-nav-active-surface-end, rgba(191, 219, 254, 0.46)))
+  -webkit-backdrop-filter: var(--hy-blur-bottom-nav-active-pill, blur(1.75rem) saturate(1.58))
+  backdrop-filter: var(--hy-blur-bottom-nav-active-pill, blur(1.75rem) saturate(1.58))
+  box-shadow: var(--hy-shadow-bottom-nav-active-pill), var(--hy-shadow-bottom-nav-active-pill-inner)
+
+  &[data-bottom-nav-bubble-pressing='true']
+    border-color: var(--hy-color-bottom-nav-active-border-pressed, rgba(96, 165, 250, 0.68))
+    box-shadow: var(--hy-shadow-bottom-nav-active-pill-pressed), var(--hy-shadow-bottom-nav-active-pill-inner)
+
+.activeLiquidLayer
+  position: absolute
+  inset: -22% -18%
+  border-radius: inherit
+  pointer-events: none
+  z-index: 0
+  background: radial-gradient(circle at 78% 48%, var(--hy-color-bottom-nav-active-liquid-glow, rgba(59, 130, 246, 0.48)), transparent 44%), radial-gradient(circle at 20% 50%, var(--hy-color-bottom-nav-active-liquid, rgba(147, 197, 253, 0.42)), transparent 48%), radial-gradient(circle at 50% 90%, var(--hy-color-bottom-nav-active-liquid-tail, rgba(147, 197, 254, 0.28)), transparent 54%), radial-gradient(circle at 50% 12%, var(--hy-color-bottom-nav-active-liquid-head, rgba(219, 234, 254, 0.32)), transparent 42%)
+
+  [data-hy-bottom-nav-reduced-motion='true'] &
+    filter: none
+
+.activeIcon
+  display: grid
+  place-items: center
+  width: var(--hy-size-bottom-nav-icon-hit, 1.75rem)
+  height: var(--hy-size-bottom-nav-icon-hit, 1.75rem)
+  border: 0
+  color: var(--hy-color-bottom-nav-active-icon, #1d4ed8)
+  position: relative
+  z-index: 2
+
+  svg
+    width: var(--hy-size-bottom-nav-icon-active, 1.4375rem)
+    height: var(--hy-size-bottom-nav-icon-active, 1.4375rem)
+    fill: none
+    stroke: currentColor
+    stroke-width: 2.15
+    stroke-linecap: round
+    stroke-linejoin: round
+    filter: none
+
+.activeLabel
+  display: block
+  max-width: 100%
+  color: var(--hy-color-bottom-nav-active-label, #1e3a8a)
+  font-size: var(--hy-font-size-bottom-nav-label-active, 0.8125rem)
+  font-weight: var(--hy-font-weight-heavy, 800)
+  letter-spacing: 0.012em
+  line-height: 1
+  text-shadow: none
+  position: relative
+  z-index: 2
+
+[data-hy-bottom-nav-reduced-motion='true']
+  .pendingGlow
+    animation: none
+
+  .activeBubble,
+  .activeLiquidLayer
+    filter: none
+
+// Gooey track marker: data-bottom-nav-gooey-track (layout in BottomNav.module.sass)
+
+[data-hy-bottom-nav-gooey='false']
+  .activeLiquidLayer
+    filter: none

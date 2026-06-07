@@ -5,6 +5,7 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type KeyboardEvent,
   type MouseEvent,
   type PointerEvent,
@@ -13,15 +14,29 @@ import {
 
 import { useLinkStatus } from 'next/link';
 
-import { Link } from '@/core/i18n/navigation';
-
 import {
   isBottomNavItemPending,
   PENDING_ACTIVE_TIMEOUT_MS,
   resolveVisualActiveId,
 } from './bottom-nav-state';
-import { BOTTOM_NAV_PRESS_DELAY_MS, shouldBypassPressFeedback } from './with-press-feedback';
-import styles from './BottomNav.module.scss';
+import {
+  bottomNavActiveIconPressScale,
+  bottomNavBubblePressInSpring,
+  bottomNavBubblePressOutSpring,
+  bottomNavContentSpring,
+  bottomNavItemTapProps,
+  BottomNavMotionProvider,
+  MotionButton,
+  MotionLink,
+  MotionSpan,
+  useBottomNavReducedMotion,
+} from './bottom-nav-motion';
+import {
+  BottomNavGooeyPillLayer,
+  useBottomNavGooeyPillTransition,
+} from './bottom-nav-gooey-pill';
+import { shouldBypassPressFeedback } from './with-press-feedback';
+import styles from './BottomNav.module.sass';
 
 export type BottomNavItem = {
   id: string;
@@ -41,8 +56,10 @@ export type BottomNavClassNames = {
   icon: string;
   label: string;
   activeBubble: string;
+  activeLiquidLayer?: string;
   activeIcon: string;
   activeLabel: string;
+  pendingGlow?: string;
 };
 
 export type BottomNavProps = {
@@ -80,6 +97,9 @@ type BottomNavItemControlProps = {
   classNames: BottomNavClassNames;
   onItemSelect?: (id: string) => void | boolean;
   onPendingSelect?: (id: string) => void;
+  onBubblePressStart?: (id: string) => void;
+  onBubblePressEnd?: () => void;
+  reducedMotion: boolean;
 };
 
 function BottomNavItemControl({
@@ -89,10 +109,12 @@ function BottomNavItemControl({
   classNames,
   onItemSelect,
   onPendingSelect,
+  onBubblePressStart,
+  onBubblePressEnd,
+  reducedMotion,
 }: BottomNavItemControlProps) {
   const [pressing, setPressing] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
-  const pressReleaseTimerRef = useRef<number | null>(null);
 
   const isRouteActive = item.id === routeActiveId;
   const visualActiveId = resolveVisualActiveId(routeActiveId, pendingItemId);
@@ -101,6 +123,10 @@ function BottomNavItemControl({
     ? linkPending
     : isBottomNavItemPending(item.id, routeActiveId, pendingItemId);
   const icon = resolveItemIcon(item);
+  const tapMotionProps = bottomNavItemTapProps(reducedMotion, isVisualActive);
+  const iconPressScale = bottomNavActiveIconPressScale(pressing && isVisualActive, reducedMotion);
+  const iconPressTransition =
+    pressing && isVisualActive ? bottomNavBubblePressInSpring : bottomNavBubblePressOutSpring;
 
   const itemClassName = [
     styles.item,
@@ -119,21 +145,43 @@ function BottomNavItemControl({
     'data-pressing': pressing ? 'true' : undefined,
   } as const;
 
-  const content = isVisualActive ? (
-    <span className={classNames.activeBubble} data-bottom-nav-active-bubble="true">
-      <span
+  const activeContent = (
+    <>
+      <MotionSpan
         className={classNames.activeIcon}
         data-bottom-nav-icon-variant="outlined"
         data-bottom-nav-icon-state="active"
         data-bottom-nav-icon-active="true"
+        data-bottom-nav-icon-pressing={pressing ? 'true' : undefined}
+        initial={reducedMotion ? false : { opacity: 0.58, scale: 0.94, y: 0.125 }}
+        animate={
+          reducedMotion
+            ? undefined
+            : { opacity: 1, scale: iconPressScale, y: 0 }
+        }
+        transition={
+          reducedMotion
+            ? undefined
+            : pressing
+              ? iconPressTransition
+              : bottomNavContentSpring
+        }
       >
         {icon}
-      </span>
-      <span className={classNames.activeLabel} data-bottom-nav-label-active="true">
+      </MotionSpan>
+      <MotionSpan
+        className={classNames.activeLabel}
+        data-bottom-nav-label-active="true"
+        initial={reducedMotion ? false : { opacity: 0.58, scale: 0.96, y: 0.125 }}
+        animate={reducedMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
+        transition={{ ...bottomNavContentSpring, delay: 0.03 }}
+      >
         {item.label}
-      </span>
-    </span>
-  ) : (
+      </MotionSpan>
+    </>
+  );
+
+  const inactiveContent = (
     <>
       <span
         className={classNames.icon}
@@ -146,32 +194,31 @@ function BottomNavItemControl({
     </>
   );
 
+  const pendingGlow =
+    isPending && !isVisualActive && classNames.pendingGlow ? (
+      <span className={classNames.pendingGlow} aria-hidden="true" data-bottom-nav-pending-glow="true" />
+    ) : null;
+
+  const content = (
+    <>
+      {pendingGlow}
+      {isVisualActive ? activeContent : inactiveContent}
+    </>
+  );
+
   const handleLinkPendingChange = useCallback((pending: boolean) => {
     setLinkPending(pending);
   }, []);
 
-  function clearPressReleaseTimer() {
-    if (pressReleaseTimerRef.current != null) {
-      window.clearTimeout(pressReleaseTimerRef.current);
-      pressReleaseTimerRef.current = null;
-    }
-  }
-
   function beginPressFeedback() {
-    clearPressReleaseTimer();
     setPressing(true);
-    pressReleaseTimerRef.current = window.setTimeout(() => {
-      setPressing(false);
-      pressReleaseTimerRef.current = null;
-    }, BOTTOM_NAV_PRESS_DELAY_MS);
+    onBubblePressStart?.(item.id);
   }
 
-  useEffect(
-    () => () => {
-      clearPressReleaseTimer();
-    },
-    [],
-  );
+  function endPressFeedback() {
+    setPressing(false);
+    onBubblePressEnd?.();
+  }
 
   function handlePointerDown(event: PointerEvent) {
     if (item.disabled || event.button !== 0) {
@@ -187,6 +234,18 @@ function BottomNavItemControl({
     }
 
     beginPressFeedback();
+  }
+
+  function handlePointerUp(event: PointerEvent) {
+    if (item.disabled || event.button !== 0) {
+      return;
+    }
+
+    endPressFeedback();
+  }
+
+  function handlePointerCancel() {
+    endPressFeedback();
   }
 
   function handleKeyDown(event: KeyboardEvent) {
@@ -206,6 +265,7 @@ function BottomNavItemControl({
 
     beginPressFeedback();
     onItemSelect?.(item.id);
+    endPressFeedback();
   }
 
   function handleClick(event: MouseEvent) {
@@ -230,7 +290,7 @@ function BottomNavItemControl({
 
   if (item.href) {
     return (
-      <Link
+      <MotionLink
         href={item.href as never}
         prefetch
         className={itemClassName}
@@ -238,26 +298,32 @@ function BottomNavItemControl({
         aria-current={isRouteActive ? 'page' : undefined}
         aria-disabled={item.disabled ? true : undefined}
         onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
         onClick={handleClick}
+        {...tapMotionProps}
       >
         <BottomNavLinkPendingBridge onPendingChange={handleLinkPendingChange} />
         {content}
-      </Link>
+      </MotionLink>
     );
   }
 
   return (
-    <button
+    <MotionButton
       type="button"
       className={itemClassName}
       {...itemDataAttributes}
       disabled={item.disabled}
       onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerCancel}
       onKeyDown={handleKeyDown}
       onClick={handleClick}
+      {...tapMotionProps}
     >
       {content}
-    </button>
+    </MotionButton>
   );
 }
 
@@ -269,7 +335,9 @@ export function BottomNav({
   ariaLabel,
   classNames,
 }: BottomNavProps) {
+  const reducedMotion = useBottomNavReducedMotion();
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
+  const [bubblePressItemId, setBubblePressItemId] = useState<string | null>(null);
   const effectivePendingId =
     pendingItemId != null && pendingItemId !== activeId ? pendingItemId : null;
 
@@ -282,24 +350,107 @@ export function BottomNav({
     return () => window.clearTimeout(timer);
   }, [activeId, effectivePendingId]);
 
+  const gooeyEnabled = !reducedMotion;
+  const visualActiveId = resolveVisualActiveId(activeId, effectivePendingId);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const cellRefs = useRef(new Map<string, HTMLDivElement>());
+  const { metrics: pillMetrics, tailMetrics } = useBottomNavGooeyPillTransition(
+    visualActiveId,
+    trackRef,
+    cellRefs,
+    reducedMotion,
+  );
+  const bubblePressing =
+    bubblePressItemId != null && bubblePressItemId === visualActiveId;
+
+  const handleBubblePressStart = useCallback((id: string) => {
+    setBubblePressItemId(id);
+  }, []);
+
+  const handleBubblePressEnd = useCallback(() => {
+    setBubblePressItemId(null);
+  }, []);
+
   return (
-    <nav
-      className={[styles.nav, className].filter(Boolean).join(' ')}
-      aria-label={ariaLabel}
-      data-bottom-nav-global="true"
-      data-bottom-nav-glass="true"
-    >
-      {items.map((item) => (
-        <BottomNavItemControl
-          key={item.id}
-          item={item}
-          routeActiveId={activeId}
-          pendingItemId={effectivePendingId}
-          classNames={classNames}
-          onItemSelect={onItemSelect}
-          onPendingSelect={setPendingItemId}
-        />
-      ))}
-    </nav>
+    <BottomNavMotionProvider>
+      <nav
+        className={[styles.nav, className].filter(Boolean).join(' ')}
+        aria-label={ariaLabel}
+        data-bottom-nav-global="true"
+        data-bottom-nav-glass="true"
+        data-hy-bottom-nav-gooey={gooeyEnabled ? 'true' : 'false'}
+        data-hy-bottom-nav-reduced-motion={reducedMotion ? 'true' : 'false'}
+        style={{ '--hy-bottom-nav-item-count': items.length } as CSSProperties}
+      >
+        {gooeyEnabled ? (
+          <svg className={styles.gooeyDefs} aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="hy-bottom-nav-goo" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="9" result="blur" />
+                <feColorMatrix
+                  in="blur"
+                  type="matrix"
+                  values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8"
+                  result="goo"
+                />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+              </filter>
+            </defs>
+          </svg>
+        ) : null}
+        <div
+          ref={trackRef}
+          className={styles.gooeyTrack}
+          data-bottom-nav-gooey-track={gooeyEnabled ? 'true' : 'static'}
+          aria-hidden="true"
+        >
+          {items.map((item) => (
+            <div
+              key={`track-${item.id}`}
+              ref={(node) => {
+                if (node) {
+                  cellRefs.current.set(item.id, node);
+                } else {
+                  cellRefs.current.delete(item.id);
+                }
+              }}
+              className={styles.gooeyCell}
+              data-bottom-nav-gooey-cell={item.id}
+            />
+          ))}
+          {pillMetrics ? (
+            <BottomNavGooeyPillLayer
+              metrics={pillMetrics}
+              tailMetrics={tailMetrics}
+              bubblePressing={bubblePressing}
+              reducedMotion={reducedMotion}
+              bubbleClassName={classNames.activeBubble}
+              liquidClassName={classNames.activeLiquidLayer}
+            />
+          ) : (
+            <span
+              className={classNames.activeBubble}
+              data-bottom-nav-active-bubble="true"
+              data-bottom-nav-active-bubble-measuring="true"
+              aria-hidden="true"
+            />
+          )}
+        </div>
+        {items.map((item) => (
+          <BottomNavItemControl
+            key={item.id}
+            item={item}
+            routeActiveId={activeId}
+            pendingItemId={effectivePendingId}
+            classNames={classNames}
+            onItemSelect={onItemSelect}
+            onPendingSelect={setPendingItemId}
+            onBubblePressStart={handleBubblePressStart}
+            onBubblePressEnd={handleBubblePressEnd}
+            reducedMotion={reducedMotion}
+          />
+        ))}
+      </nav>
+    </BottomNavMotionProvider>
   );
 }

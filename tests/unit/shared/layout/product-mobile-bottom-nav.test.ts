@@ -14,7 +14,7 @@ describe('ProductMobileBottomNav', () => {
 
   it('usa BottomNav shared homologado com rotas reais do produto', () => {
     expect(source).toContain("from '@/shared/components/bottom-nav'");
-    expect(source).toContain('bottomNavV2LightClassNames');
+    expect(source).toContain('bottomNavHyLightClassNames');
     expect(source).toContain('createPortal');
     expect(source).toContain('data-mobile-product-bottom-nav="true"');
     expect(source).toContain(`href: intlAppPaths.home`);
@@ -34,6 +34,18 @@ describe('ProductMobileBottomNav', () => {
     expect(source).not.toContain('mobile-product-shell.module.scss');
     expect(source).not.toContain('styles.bottomNav');
     expect(source).not.toContain('styles.navItem');
+  });
+
+  it('ProductMobileBottomNav conecta classNames HY do módulo sass', () => {
+    expect(source).toContain('bottomNavHyLightClassNames');
+    expect(source).toContain('activeLiquidLayer: bottomNavHyLightClassNames.activeLiquidLayer');
+    expect(source).toContain('pendingGlow: bottomNavHyLightClassNames.pendingGlow');
+
+    const classNamesSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-light-class-names.ts'),
+      'utf8',
+    );
+    expect(classNamesSource).toContain('bottom-nav-hy-light-shell.module.sass');
   });
 
   it('rotas de bottom nav batem com intlAppPaths', () => {
