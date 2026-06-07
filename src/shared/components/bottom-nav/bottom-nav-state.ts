@@ -1,8 +1,9 @@
-/** Clears optimistic active if route navigation stalls (800–1200ms window). */
+/** Clears optimistic pending if route navigation stalls (800–1200ms window). */
 export const PENDING_ACTIVE_TIMEOUT_MS = 1_000;
 
-export function resolveVisualActiveId(activeId: string, pendingItemId: string | null): string {
-  return pendingItemId != null && pendingItemId !== activeId ? pendingItemId : activeId;
+/** Active pill follows confirmed route only — pending never moves the bubble. */
+export function resolveVisualActiveId(activeId: string, _pendingItemId?: string | null): string {
+  return activeId;
 }
 
 export function isBottomNavItemPending(

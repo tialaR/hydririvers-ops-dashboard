@@ -1202,6 +1202,20 @@ Proposta: gerar a partir de `hy-*` em `cargo-sheet-theme.scss` da feature para n
 | HY-DEBT-014 | Média | Portal sheets | `usePublicCargoLightSheetPortal`, `body:has` SCSS | Tema light imperativo + cascade global feature | Fragilidade em novas rotas | Theme layer shared para portaled BottomSheet | Não |
 | HY-DEBT-015 | Baixa | Lab | `mobile-list-lab-v2/` | Duplicata completa da experiência mobile | Manutenção dobrada | Congelar lab; não expandir | Não |
 
+### BottomNav — correção bounce de navegação (2026-06-07)
+
+**Causa:** `resolveVisualActiveId` promovia `pendingItemId` ao active visual (bolha azul), enquanto `<a>` nativo bloqueava o click default e disparava `router.push` com delay — gerando ida/volta do pill antes do `pathname` confirmar.
+
+**Contrato atual:**
+
+| Estado | Fonte | Efeito visual |
+| --- | --- | --- |
+| **Active** | `usePathname` → `activeId` → `resolveVisualActiveId` (rota only) | Bolha azul + `aria-current="page"` |
+| **Pending** | `useLinkStatus` (itens com `href`) ou `pendingItemId` local (botões) | Bubble press `::after` via `data-bottom-nav-pending`, sem mover pill |
+| **Navegação** | `<Link prefetch>` do App Router (next-intl) | Prefetch + transição nativa; `onItemSelect` só intercepta casos especiais (ex.: retorno lista de cargas) |
+
+**Loading boundaries:** `/cargas`, `/negociacoes` e `/rastreio` já possuem `loading.tsx` — nenhum arquivo novo nesta rodada.
+
 ### Validação Phase 6 (2026-06-07)
 
 ```bash

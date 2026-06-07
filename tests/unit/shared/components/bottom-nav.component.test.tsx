@@ -1,4 +1,4 @@
-import { createElement, type MouseEvent } from 'react';
+import { createElement, type MouseEvent, type ReactNode } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
@@ -17,7 +17,25 @@ vi.mock('next-intl', () => ({
   useLocale: () => 'pt-BR',
 }));
 
+vi.mock('next/link', () => ({
+  useLinkStatus: () => ({ pending: false }),
+}));
+
 vi.mock('@/core/i18n/navigation', () => ({
+  Link: ({
+    href,
+    children,
+    className,
+    ...rest
+  }: {
+    href: string;
+    children: ReactNode;
+    className?: string;
+  }) => (
+    <a href={href} className={className} {...rest}>
+      {children}
+    </a>
+  ),
   getPathname: ({ href }: { href: string }) => href,
   useRouter: () => ({ push: vi.fn() }),
 }));
@@ -180,20 +198,23 @@ describe('BottomNav', () => {
     expect(html).toContain(bottomNavV2LightClassNames.activeBubble);
   });
 
-  it('implementa pending active otimista com pointerdown e markers nativos', () => {
+  it('implementa pending separado com Link, useLinkStatus e markers nativos', () => {
     const source = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
       'utf8',
     );
 
     expect(source).toContain('pendingItemId');
-    expect(source).toContain('onPendingSelect?.(item.id)');
+    expect(source).toContain('useLinkStatus');
+    expect(source).toContain('BottomNavLinkPendingBridge');
     expect(source).toContain('setPendingItemId(null)');
     expect(source).toContain('onPointerDown={handlePointerDown}');
     expect(source).toContain('data-bottom-nav-pending');
     expect(source).toContain('data-bottom-nav-glass="true"');
-    expect(source).toContain('scheduleNavigation');
-    expect(source).toContain('navigationTimerRef');
+    expect(source).toContain('prefetch');
+    expect(source).not.toContain('router.push');
+    expect(source).not.toContain('scheduleNavigation');
+    expect(source).not.toContain('navigationTimerRef');
     expect(source).not.toContain('data-bottom-nav-icon-variant="filled"');
   });
 
@@ -209,8 +230,27 @@ describe('BottomNav', () => {
   });
 
   it('visualActiveId e pending derivam de helpers compartilhados', () => {
-    expect(resolveVisualActiveId('cargos', 'negotiations')).toBe('negotiations');
+    expect(resolveVisualActiveId('cargos', 'negotiations')).toBe('cargos');
     expect(isBottomNavItemPending('negotiations', 'cargos', 'negotiations')).toBe(true);
+  });
+
+  it('active visual permanece na rota confirmada enquanto pending aponta destino', () => {
+    const html = renderToStaticMarkup(
+      <BottomNav
+        activeId="cargos"
+        classNames={classNames}
+        items={[
+          { id: 'cargos', label: 'Cargas', icon: <span>C</span>, href: '/cargas' },
+          { id: 'negotiations', label: 'Negociações', icon: <span>N</span>, href: '/negociacoes' },
+        ]}
+      />,
+    );
+
+    expect(html).toContain('data-bottom-nav-item="cargos"');
+    expect(html).toContain('data-active="true"');
+    expect(html).toContain('data-bottom-nav-active-bubble="true"');
+    expect(html).toContain('data-bottom-nav-item="negotiations"');
+    expect(html).toContain('data-active="false"');
   });
 
   it('casca shared expõe blur/transparência via classNames homologados', () => {
@@ -221,5 +261,6 @@ describe('BottomNav', () => {
 
     expect(shellSource).toContain('backdrop-filter');
     expect(shellSource).toContain('bottomNavActiveBubbleIn');
+    expect(shellSource).toContain('data-bottom-nav-pending');
   });
 });

@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -10,9 +11,9 @@ import {
   type ReactNode,
 } from 'react';
 
-import { useLocale } from 'next-intl';
+import { useLinkStatus } from 'next/link';
 
-import { getPathname, useRouter } from '@/core/i18n/navigation';
+import { Link } from '@/core/i18n/navigation';
 
 import {
   isBottomNavItemPending,
@@ -58,6 +59,20 @@ function resolveItemIcon(item: BottomNavItem): ReactNode {
   return item.iconOutlined ?? item.icon ?? item.iconFilled;
 }
 
+type BottomNavLinkPendingBridgeProps = {
+  onPendingChange: (pending: boolean) => void;
+};
+
+function BottomNavLinkPendingBridge({ onPendingChange }: BottomNavLinkPendingBridgeProps) {
+  const { pending } = useLinkStatus();
+
+  useEffect(() => {
+    onPendingChange(pending);
+  }, [onPendingChange, pending]);
+
+  return null;
+}
+
 type BottomNavItemControlProps = {
   item: BottomNavItem;
   routeActiveId: string;
@@ -75,16 +90,16 @@ function BottomNavItemControl({
   onItemSelect,
   onPendingSelect,
 }: BottomNavItemControlProps) {
-  const router = useRouter();
-  const locale = useLocale();
   const [pressing, setPressing] = useState(false);
+  const [linkPending, setLinkPending] = useState(false);
   const pressReleaseTimerRef = useRef<number | null>(null);
-  const navigationTimerRef = useRef<number | null>(null);
 
   const isRouteActive = item.id === routeActiveId;
   const visualActiveId = resolveVisualActiveId(routeActiveId, pendingItemId);
   const isVisualActive = item.id === visualActiveId;
-  const isPending = isBottomNavItemPending(item.id, routeActiveId, pendingItemId);
+  const isPending = item.href
+    ? linkPending
+    : isBottomNavItemPending(item.id, routeActiveId, pendingItemId);
   const icon = resolveItemIcon(item);
 
   const itemClassName = [
@@ -131,6 +146,10 @@ function BottomNavItemControl({
     </>
   );
 
+  const handleLinkPendingChange = useCallback((pending: boolean) => {
+    setLinkPending(pending);
+  }, []);
+
   function clearPressReleaseTimer() {
     if (pressReleaseTimerRef.current != null) {
       window.clearTimeout(pressReleaseTimerRef.current);
@@ -147,40 +166,12 @@ function BottomNavItemControl({
     }, BOTTOM_NAV_PRESS_DELAY_MS);
   }
 
-  function clearNavigationTimer() {
-    if (navigationTimerRef.current != null) {
-      window.clearTimeout(navigationTimerRef.current);
-      navigationTimerRef.current = null;
-    }
-  }
-
-  function scheduleNavigation() {
-    clearNavigationTimer();
-    navigationTimerRef.current = window.setTimeout(() => {
-      navigationTimerRef.current = null;
-      performNavigation();
-    }, BOTTOM_NAV_PRESS_DELAY_MS);
-  }
-
   useEffect(
     () => () => {
       clearPressReleaseTimer();
-      clearNavigationTimer();
     },
     [],
   );
-
-  function applyOptimisticActive(
-    event: Pick<MouseEvent, 'metaKey' | 'ctrlKey' | 'shiftKey' | 'altKey' | 'button'>,
-  ) {
-    if (item.disabled || shouldBypassPressFeedback(event)) {
-      return;
-    }
-
-    if (!isRouteActive) {
-      onPendingSelect?.(item.id);
-    }
-  }
 
   function handlePointerDown(event: PointerEvent) {
     if (item.disabled || event.button !== 0) {
@@ -191,13 +182,15 @@ function BottomNavItemControl({
       return;
     }
 
-    applyOptimisticActive(event);
+    if (!item.href && !isRouteActive) {
+      onPendingSelect?.(item.id);
+    }
+
     beginPressFeedback();
-    scheduleNavigation();
   }
 
   function handleKeyDown(event: KeyboardEvent) {
-    if (item.disabled) {
+    if (item.disabled || item.href) {
       return;
     }
 
@@ -212,17 +205,7 @@ function BottomNavItemControl({
     }
 
     beginPressFeedback();
-    scheduleNavigation();
-  }
-
-  function performNavigation() {
-    if (onItemSelect?.(item.id) === true) {
-      return;
-    }
-
-    if (item.href) {
-      router.push(item.href as never);
-    }
+    onItemSelect?.(item.id);
   }
 
   function handleClick(event: MouseEvent) {
@@ -234,25 +217,32 @@ function BottomNavItemControl({
       return;
     }
 
+    if (item.href) {
+      if (onItemSelect?.(item.id) === true) {
+        event.preventDefault();
+      }
+      return;
+    }
+
     event.preventDefault();
+    onItemSelect?.(item.id);
   }
 
   if (item.href) {
-    const localizedHref = getPathname({ href: item.href, locale });
-
     return (
-      <a
-        href={localizedHref}
+      <Link
+        href={item.href as never}
+        prefetch
         className={itemClassName}
         {...itemDataAttributes}
         aria-current={isRouteActive ? 'page' : undefined}
         aria-disabled={item.disabled ? true : undefined}
         onPointerDown={handlePointerDown}
-        onKeyDown={handleKeyDown}
         onClick={handleClick}
       >
+        <BottomNavLinkPendingBridge onPendingChange={handleLinkPendingChange} />
         {content}
-      </a>
+      </Link>
     );
   }
 
