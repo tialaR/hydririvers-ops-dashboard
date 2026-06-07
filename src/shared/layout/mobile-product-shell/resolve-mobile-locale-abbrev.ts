@@ -1,6 +1,6 @@
 import type { StoredLocale } from '@/shared/preferences/client-preferences';
 
-/** Sigla curta exibida no botão de idioma do header mobile (DS v2). */
+/** Sigla curta exibida no botão de idioma do header mobile global. */
 export function resolveMobileLocaleAbbrev(locale: StoredLocale): 'PT' | 'EN' | 'ES' {
   if (locale === 'pt-BR') {
     return 'PT';

@@ -10,15 +10,24 @@
       rgba(226, 234, 246, 0.55) 100%
     );
   background-size: 200% 100%;
-  animation: public-cargas-mobile-skeleton-shimmer 1.4s ease-in-out infinite;
+  animation: public-cargas-mobile-skeleton-shimmer var(--public-cargas-skeleton-shimmer-duration, 1.4s) ease-in-out infinite;
 }
 
 .root {
   @include hyV2Light.hy-v2-light-tokens;
 
+  --public-cargas-skeleton-shimmer-duration: var(--hy-motion-duration-skeleton, 1.4s);
+
+  display: grid;
+  min-height: 100%;
+  background: transparent;
+}
+
+.shell {
   display: grid;
   gap: 0.875rem;
-  padding: 0 0
+  width: 100%;
+  padding: 1.25rem 0
     calc(
       1.5rem + var(--hy-size-bottom-nav-height, 4.375rem) + 0.875rem +
         env(safe-area-inset-bottom, 0px)
@@ -42,6 +51,21 @@
   @include skeleton-block;
 
   width: 8.5rem;
+  height: 1.125rem;
+  border-radius: 0.5rem;
+}
+
+.resultsMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.clearAction {
+  @include skeleton-block;
+
+  width: 5.75rem;
   height: 1.125rem;
   border-radius: 0.5rem;
 }

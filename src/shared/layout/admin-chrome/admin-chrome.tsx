@@ -691,7 +691,7 @@ export function AdminChrome({ children }: AdminChromeProps) {
             {...(isMobileViewport && !suppressMobileShellChrome
               ? {
                   'data-mobile-shell-background': 'true',
-                  'data-ds-v2-mobile-canvas': 'true',
+                  'data-hy-mobile-canvas': 'true',
                 }
               : {})}
           >

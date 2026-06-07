@@ -10,6 +10,7 @@ import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
 import { mapMarketplaceCargoToLabV2 } from '@/features/cargo/utils/map-marketplace-cargo-to-lab-v2';
 import { parseCargoEtaMeta } from '@/features/cargo/utils/parse-cargo-eta-meta';
 import { IconButton } from '@/shared/components/icon-button';
+import { InformationalCard } from '@/shared/components/informational-card';
 import { SearchField } from '@/shared/components/search-field';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
@@ -326,24 +327,27 @@ export function PublicCargasMobileList({
               );
             })
           ) : (
-            <div
+            <InformationalCard
               className={styles.emptyState}
-              role="status"
-              data-public-cargas-empty-state="true"
-              data-public-cargas-empty-variant={hasAppliedFilters ? 'filtered' : 'default'}
-            >
-              <span className={styles.emptyStateIcon} data-public-cargas-empty-icon="true" aria-hidden="true">
-                <Info size={48} strokeWidth={1.75} />
-              </span>
-              <h3 className={styles.emptyStateTitle} data-public-cargas-empty-title="true">
-                {hasAppliedFilters ? tBoard('list.emptyFilteredTitle') : tBoard('list.emptyTitle')}
-              </h3>
-              <p className={styles.emptyStateDescription} data-public-cargas-empty-description="true">
-                {hasAppliedFilters
+              tone="info"
+              align="center"
+              title={hasAppliedFilters ? tBoard('list.emptyFilteredTitle') : tBoard('list.emptyTitle')}
+              description={
+                hasAppliedFilters
                   ? tBoard('list.emptyFilteredDescription')
-                  : tBoard('list.emptyDescription')}
-              </p>
-            </div>
+                  : tBoard('list.emptyDescription')
+              }
+              dataAttributes={{
+                'data-public-cargas-empty-state': 'true',
+                'data-public-cargas-empty-variant': hasAppliedFilters ? 'filtered' : 'default',
+              }}
+              iconDataAttributes={{ 'data-public-cargas-empty-icon': 'true' }}
+              titleDataAttributes={{ 'data-public-cargas-empty-title': 'true' }}
+              descriptionDataAttributes={{ 'data-public-cargas-empty-description': 'true' }}
+              icon={
+                <Info size={48} strokeWidth={1.75} />
+              }
+            />
           )}
 
           {hasMoreCargoes ? (

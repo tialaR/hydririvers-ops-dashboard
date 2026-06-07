@@ -6,15 +6,15 @@ export const MOBILE_HEADER_COMPACT_SCROLL_Y = 24;
 export const MOBILE_PRODUCT_SCROLL_SELECTOR = '.hr-dashboard-scroll';
 
 export function resolveMobileHeaderScrollOffset(scrollEl: Element | null) {
+  if (scrollEl instanceof HTMLElement) {
+    return scrollEl.scrollTop;
+  }
+
   const offsets = [
     window.scrollY,
     document.documentElement.scrollTop,
     document.body.scrollTop,
   ];
-
-  if (scrollEl instanceof HTMLElement) {
-    offsets.push(scrollEl.scrollTop);
-  }
 
   return Math.max(...offsets.filter((value) => Number.isFinite(value)));
 }

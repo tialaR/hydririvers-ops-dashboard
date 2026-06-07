@@ -162,21 +162,23 @@ describe('PublicCargasMobileList', () => {
     expect(html).toContain('data-public-cargas-empty-state="true"');
     expect(html).toContain('data-public-cargas-empty-variant="filtered"');
     expect(html).toContain('data-public-cargas-empty-icon="true"');
+    expect(html).toContain('data-informational-card="true"');
     expect(html).not.toContain('variant="secondary"');
   });
 
-  it('empty state usa ícone centralizado com marker', () => {
+  it('empty state usa InformationalCard shared centralizado com respiro próprio', () => {
     const stylesPath = resolve(
       process.cwd(),
       'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 
-    expect(stylesSource).toContain('.emptyStateIcon');
-    expect(stylesSource).toContain('justify-items: center');
-    expect(stylesSource).toContain('text-align: center');
-    expect(stylesSource).toContain('--hy-color-empty-state-icon');
-    expect(stylesSource).toContain('width: 3.5rem');
+    expect(readFileSync(listSourcePath, 'utf8')).toContain('InformationalCard');
+    expect(stylesSource).toContain('.emptyState');
+    expect(stylesSource).toContain('margin-top: var(--hy-space-empty-state-offset');
+    expect(stylesSource).not.toContain('.emptyStateIcon');
+    expect(stylesSource).not.toContain('.emptyStateTitle');
+    expect(stylesSource).not.toContain('.emptyStateDescription');
   });
 
   it('renderiza CTA Ver detalhes no card', () => {

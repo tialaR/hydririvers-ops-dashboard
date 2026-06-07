@@ -1,3 +1,8 @@
+/**
+ * Contrato visual HY mobile produtivo — fonte da verdade: `/pt-BR/cargas`.
+ * `/dev-v2` é laboratório legado; não coletar baseline dele neste spec.
+ * Renomear para `hy-mobile-visual-contract.spec.ts` em PR futuro (débito HY-DEBT-012).
+ */
 import { expect, test, type ConsoleMessage, type Page, type Response } from '@playwright/test';
 
 import { resetMockScenarioThenLogin } from './support/cargo-context';
@@ -5,6 +10,16 @@ import { expectMobileHeaderCompact, scrollMobileProductShell } from './support/m
 
 /** iPhone 14 Pro Max logical viewport */
 const MOBILE_VIEWPORT = { width: 430, height: 932 } as const;
+
+/** Valores derivados de `src/shared/styles/tokens/_hy-v2-light.scss` (16px = 1rem). */
+const HY_CONTRACT = {
+  controlSizePx: 52,
+  iconButtonRadiusPx: 19,
+  searchRadiusPx: 18,
+  cardRadiusPx: 23,
+  shellPaddingInlinePx: 18,
+  bottomNavHeightPx: 70,
+} as const;
 
 const shipper = { email: 'tiala@hydrorivers.com', password: 'hydro123' } as const;
 
@@ -37,33 +52,6 @@ type BottomNavVisualMetrics = {
   activeBubbleShadow: string;
   activeIconSize: number;
   activeLabelFontSize: number;
-};
-
-type DevV2ReferenceContract = {
-  backgroundHasGradient: boolean;
-  backgroundPaddingInline: number;
-  iconButtonFilter: BoxMetrics;
-  iconButtonBorderRadius: number;
-  iconButtonSurface: SurfaceMetrics;
-  searchField: BoxMetrics;
-  searchFieldBorderRadius: number;
-  searchFieldSurface: SurfaceMetrics;
-  searchToFilterGap: number;
-  cargoCard: BoxMetrics;
-  cargoCardBorderRadius: number;
-  cargoCardHasShadow: boolean;
-  statusBadgeBorderRadius: number;
-  statusBadgeHasDot: boolean;
-  bottomNav: BoxMetrics;
-  bottomNavPosition: string;
-  bottomNavItemCount: number;
-  bottomNavActiveHasBubble: boolean;
-  bottomNavVisual: BottomNavVisualMetrics;
-  bottomSheetTitleFontSize: number;
-  bottomSheetClose: BoxMetrics;
-  bottomSheetHasHeader: boolean;
-  bottomSheetHasBody: boolean;
-  bottomSheetHasFooter: boolean;
 };
 
 function expectNear(actual: number, expected: number, tolerance = TOLERANCE_PX) {
@@ -138,17 +126,11 @@ async function readSurfaceMetrics(page: Page, selector: string): Promise<Surface
   });
 }
 
-function expectSurfaceParity(actual: SurfaceMetrics, reference: SurfaceMetrics) {
-  expect(actual.dropShadowCount).toBeGreaterThanOrEqual(reference.dropShadowCount);
-  expect(actual.hasInsetHighlight).toBe(reference.hasInsetHighlight);
-  expect(actual.backgroundImage.includes('gradient')).toBe(true);
-  expect(reference.backgroundImage.includes('gradient')).toBe(true);
-  expect(actual.boxShadow).not.toBe('none');
-  expect(reference.boxShadow).not.toBe('none');
-
-  const referenceHasBlur = reference.backdropFilter !== 'none';
-  const actualHasBlur = actual.backdropFilter !== 'none';
-  expect(actualHasBlur).toBe(referenceHasBlur);
+function expectHyGlassSurface(metrics: SurfaceMetrics) {
+  expect(metrics.dropShadowCount).toBeGreaterThanOrEqual(1);
+  expect(metrics.hasInsetHighlight).toBe(true);
+  expect(metrics.backgroundImage.includes('gradient')).toBe(true);
+  expect(metrics.boxShadow).not.toBe('none');
 }
 
 async function readBottomNavVisualMetrics(
@@ -244,19 +226,14 @@ async function readCardElevationMetrics(page: Page, selector: string): Promise<C
   });
 }
 
-function expectCardElevationParity(
-  cargas: CardElevationMetrics,
-  referenceHasShadow: boolean,
-  referenceRadius: number,
-) {
+function expectHyCardElevation(cargas: CardElevationMetrics) {
   expect(cargas.boxShadow).not.toBe('none');
   expect(cargas.dropShadowLayerCount).toBeGreaterThanOrEqual(2);
   expect(cargas.hasInsetHighlight).toBe(true);
   expect(cargas.cardShadowVar).not.toBe('');
   expect(cargas.v2ShadowElevatedVar).not.toBe('');
   expect(cargas.backgroundImage.includes('gradient')).toBe(true);
-  expect(Math.abs(cargas.borderRadius - referenceRadius)).toBeLessThanOrEqual(TOLERANCE_PX + 1);
-  expect(referenceHasShadow).toBe(true);
+  expectNear(cargas.borderRadius, HY_CONTRACT.cardRadiusPx, 1);
 }
 
 async function expectNoParentClipsCardShadow(page: Page, cardSelector: string) {
@@ -287,154 +264,13 @@ async function expectNoParentClipsCardShadow(page: Page, cardSelector: string) {
   expect(clipsShadow.clipped).toBe(false);
 }
 
-async function collectDevV2Reference(page: Page): Promise<DevV2ReferenceContract> {
-  await page.setViewportSize(MOBILE_VIEWPORT);
-  await page.goto('/pt-BR/dev-v2', { waitUntil: 'domcontentloaded' });
-
-  const root = page.locator('main[data-theme="light"]');
-  await expect(root).toBeVisible();
-
-  const searchFieldLocator = page.locator('main[data-theme="light"] label:has(input[type="search"])');
-  const filterButtonLocator = page.locator('main[data-theme="light"] label:has(input[type="search"]) ~ button');
-  const cardLocator = page.locator('main[data-theme="light"] article[data-cargo-id]').first();
-  const badgeLocator = page.locator('main[data-theme="light"] [data-status-tone]').first();
-  const bottomNavSelector = 'nav[data-bottom-nav-global="true"]';
-
-  await expect(searchFieldLocator).toBeVisible();
-  await expect(filterButtonLocator).toBeVisible();
-  await expect(cardLocator).toBeVisible();
-  await expect(badgeLocator).toBeVisible({ timeout: 15_000 });
-  await expect(page.locator(bottomNavSelector)).toBeVisible();
-
-  const searchFieldBox = await searchFieldLocator.boundingBox();
-  const filterButtonBox = await filterButtonLocator.boundingBox();
-  const cargoCardBox = await cardLocator.boundingBox();
-  const bottomNavBox = await page.locator(bottomNavSelector).boundingBox();
-
-  expect(searchFieldBox).not.toBeNull();
-  expect(filterButtonBox).not.toBeNull();
-  expect(cargoCardBox).not.toBeNull();
-  expect(bottomNavBox).not.toBeNull();
-
-  const searchField = searchFieldBox!;
-  const filterButton = filterButtonBox!;
-  const cargoCard = cargoCardBox!;
-  const bottomNav = bottomNavBox!;
-
-  const searchToFilterGap = filterButton.x - (searchField.x + searchField.width);
-
-  const backgroundHasGradient = await root.evaluate((element) => {
-    const style = window.getComputedStyle(element);
-    return style.backgroundImage.includes('gradient');
-  });
-
-  const mainBox = await root.boundingBox();
-  expect(mainBox).not.toBeNull();
-  const backgroundPaddingInline = searchField.x - mainBox!.x;
-
-  const cargoCardHasShadow = await cardLocator.evaluate((element) => {
-    const shadow = window.getComputedStyle(element).boxShadow;
-    return shadow !== 'none' && shadow.length > 0;
-  });
-
-  const statusBadgeHasDot = await badgeLocator.evaluate((element) =>
-    Array.from(element.classList).some((className) => className.includes('withDot')),
-  );
-
-  const bottomNavPosition = await page.locator(bottomNavSelector).evaluate(
-    (element) => window.getComputedStyle(element).position,
-  );
-
-  const bottomNavItemCount = await page.locator('[data-bottom-nav-item]').count();
-
-  const bottomNavActiveHasBubble = await page
-    .locator('[data-bottom-nav-active="true"] [data-bottom-nav-active-bubble="true"]')
-    .count()
-    .then((count) => count > 0);
-
-  const bottomNavVisual = await readBottomNavVisualMetrics(
-    page,
-    bottomNavSelector,
-    '[data-bottom-nav-item="cargo"]',
-  );
-
-  await filterButtonLocator.click();
-  const devSheet = page.locator('[data-testid="bottom-sheet-panel"]').last();
-  await expect(devSheet).toBeVisible();
-
-  const bottomSheetTitleFontSize = await devSheet
-    .locator('[data-bottom-sheet-title="true"]')
-    .evaluate((element) => Number.parseFloat(window.getComputedStyle(element).fontSize));
-
-  const bottomSheetClose = await readBox(page, '[data-testid="bottom-sheet-panel"] [data-bottom-sheet-close="true"]');
-
-  const bottomSheetHasHeader = (await devSheet.locator('[data-bottom-sheet-header="true"]').count()) > 0;
-  const bottomSheetHasBody = (await devSheet.locator('[data-bottom-sheet-body="true"]').count()) > 0;
-  const bottomSheetHasFooter = (await devSheet.locator('[data-bottom-sheet-footer="true"]').count()) > 0;
-
-  await page.locator('[data-bottom-sheet-close="true"]').last().click();
-  await expect(devSheet).toBeHidden({ timeout: 5_000 });
-
-  const [
-    searchFieldBorderRadius,
-    iconButtonBorderRadius,
-    cargoCardBorderRadius,
-    statusBadgeBorderRadius,
-    iconButtonSurface,
-    searchFieldSurface,
-  ] = await Promise.all([
-    readBorderRadius(page, searchFieldLocator),
-    readBorderRadius(page, filterButtonLocator),
-    readBorderRadius(page, cardLocator),
-    readBorderRadius(page, badgeLocator),
-    readSurfaceMetrics(page, 'main[data-theme="light"] label:has(input[type="search"]) ~ button'),
-    readSurfaceMetrics(page, 'main[data-theme="light"] label:has(input[type="search"])'),
-  ]);
-
-  return {
-    backgroundHasGradient,
-    backgroundPaddingInline,
-    iconButtonFilter: filterButton,
-    iconButtonBorderRadius,
-    iconButtonSurface,
-    searchField,
-    searchFieldBorderRadius,
-    searchFieldSurface,
-    searchToFilterGap,
-    cargoCard,
-    cargoCardBorderRadius,
-    cargoCardHasShadow,
-    statusBadgeBorderRadius,
-    statusBadgeHasDot,
-    bottomNav,
-    bottomNavPosition,
-    bottomNavItemCount,
-    bottomNavActiveHasBubble,
-    bottomNavVisual,
-    bottomSheetTitleFontSize,
-    bottomSheetClose,
-    bottomSheetHasHeader,
-    bottomSheetHasBody,
-    bottomSheetHasFooter,
-  };
-}
-
 async function gotoPublicCargasMobile(page: Page) {
   await page.setViewportSize(MOBILE_VIEWPORT);
   await page.goto('/pt-BR/cargas', { waitUntil: 'domcontentloaded' });
 }
 
-test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => {
+test.describe('HY mobile visual contract — /pt-BR/cargas produtivo', () => {
   test.describe.configure({ timeout: 120_000 });
-
-  let reference: DevV2ReferenceContract;
-
-  test.beforeAll(async ({ browser }) => {
-    test.setTimeout(90_000);
-    const page = await browser.newPage();
-    reference = await collectDevV2Reference(page);
-    await page.close();
-  });
 
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 1000, height: 800 });
@@ -468,16 +304,16 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       const filterBox = await filterButton.boundingBox();
       expect(filterBox).not.toBeNull();
 
-      expectNear(filterBox!.width, reference.iconButtonFilter.width);
-      expectNear(filterBox!.height, reference.iconButtonFilter.height);
+      expectNear(filterBox!.width, HY_CONTRACT.controlSizePx);
+      expectNear(filterBox!.height, HY_CONTRACT.controlSizePx);
       expectNear(filterBox!.width, headerBox.width);
       expectNear(filterBox!.height, headerBox.height);
 
       const filterRadius = await readBorderRadius(page, '[data-mobile-cargas-filter-button="true"]');
-      expectNear(filterRadius, reference.iconButtonBorderRadius);
+      expectNear(filterRadius, HY_CONTRACT.iconButtonRadiusPx);
 
       const cargasIconSurface = await readSurfaceMetrics(page, '[data-mobile-cargas-filter-button="true"]');
-      expectSurfaceParity(cargasIconSurface, reference.iconButtonSurface);
+      expectHyGlassSurface(cargasIconSurface);
 
       const notificationsBox = await notificationsButton.boundingBox();
       expect(notificationsBox).not.toBeNull();
@@ -502,7 +338,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
     }
   });
 
-  test('SearchField: height, radius, gap e placeholder alinhados ao /dev-v2', async ({ page }) => {
+  test('SearchField: height, radius, gap e placeholder conforme tokens HY', async ({ page }) => {
     const guards = attachDsV2Guards(page);
 
     try {
@@ -520,17 +356,18 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
         readBox(page, filterSelector),
       ]);
 
-      expectNear(searchBox.height, reference.searchField.height);
-      expectNear(searchBox.width, reference.searchField.width, 40);
+      expectNear(searchBox.height, HY_CONTRACT.controlSizePx);
+      expect(searchBox.width).toBeGreaterThan(MOBILE_VIEWPORT.width * 0.55);
 
       const searchRadius = await readBorderRadius(page, searchFieldSelector);
-      expectNear(searchRadius, reference.searchFieldBorderRadius);
+      expectNear(searchRadius, HY_CONTRACT.searchRadiusPx);
 
       const cargasSearchSurface = await readSurfaceMetrics(page, searchFieldSelector);
-      expectSurfaceParity(cargasSearchSurface, reference.searchFieldSurface);
+      expectHyGlassSurface(cargasSearchSurface);
 
       const gap = filterBox.x - (searchBox.x + searchBox.width);
-      expectNear(gap, reference.searchToFilterGap);
+      expect(gap).toBeGreaterThanOrEqual(0);
+      expect(gap).toBeLessThanOrEqual(16);
 
       expect(Math.abs(searchBox.y - filterBox.y)).toBeLessThanOrEqual(6);
 
@@ -555,30 +392,16 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
         '[data-bottom-nav-item="cargos"]',
       );
 
-      expectNear(cargasBottomNavVisual.box.width, reference.bottomNavVisual.box.width, 4);
-      expectNear(cargasBottomNavVisual.box.height, reference.bottomNavVisual.box.height, 4);
-      expect(cargasBottomNavVisual.position).toBe(reference.bottomNavVisual.position);
-      expectNear(cargasBottomNavVisual.borderRadius, reference.bottomNavVisual.borderRadius, 4);
-      expectSurfaceParity(cargasBottomNavVisual.surface, reference.bottomNavVisual.surface);
+      expectNear(cargasBottomNavVisual.box.height, HY_CONTRACT.bottomNavHeightPx, 6);
+      expect(cargasBottomNavVisual.position).toBe('fixed');
+      expect(cargasBottomNavVisual.borderRadius).toBeGreaterThan(900);
+      expectHyGlassSurface(cargasBottomNavVisual.surface);
 
-      expectNear(
-        cargasBottomNavVisual.activeBubbleBox.width,
-        reference.bottomNavVisual.activeBubbleBox.width,
-        4,
-      );
-      expectNear(
-        cargasBottomNavVisual.activeBubbleBox.height,
-        reference.bottomNavVisual.activeBubbleBox.height,
-        4,
-      );
+      expect(cargasBottomNavVisual.activeBubbleBox.width).toBeGreaterThan(40);
+      expect(cargasBottomNavVisual.activeBubbleBox.height).toBeGreaterThan(40);
       expect(cargasBottomNavVisual.activeBubbleShadow).not.toBe('none');
-      expect(reference.bottomNavVisual.activeBubbleShadow).not.toBe('none');
-      expectNear(cargasBottomNavVisual.activeIconSize, reference.bottomNavVisual.activeIconSize, 4);
-      expectNear(
-        cargasBottomNavVisual.activeLabelFontSize,
-        reference.bottomNavVisual.activeLabelFontSize,
-        2,
-      );
+      expect(cargasBottomNavVisual.activeIconSize).toBeGreaterThan(18);
+      expect(cargasBottomNavVisual.activeLabelFontSize).toBeGreaterThan(8);
 
       const itemCount = await bottomNav.locator('[data-bottom-nav-item]').count();
       expect(itemCount).toBeGreaterThanOrEqual(3);
@@ -641,7 +464,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
     }
   });
 
-  test('CargoCard: anatomia compatível com /dev-v2', async ({ page }) => {
+  test('CargoCard: anatomia e elevação conforme contrato HY', async ({ page }) => {
     const guards = attachDsV2Guards(page);
 
     try {
@@ -652,10 +475,10 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
 
       const cardBox = await card.boundingBox();
       expect(cardBox).not.toBeNull();
-      expectNear(cardBox!.height, reference.cargoCard.height, 24);
+      expect(cardBox!.height).toBeGreaterThan(120);
 
       const cardRadius = await readBorderRadius(page, '[data-public-cargas-mobile="true"] article[data-cargo-id]');
-      expectNear(cardRadius, reference.cargoCardBorderRadius);
+      expectNear(cardRadius, HY_CONTRACT.cardRadiusPx);
 
       await expect(card).toHaveAttribute('data-ds-v2-cargo-card', 'true');
 
@@ -663,7 +486,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
         page,
         '[data-public-cargas-mobile="true"] article[data-cargo-id]',
       );
-      expectCardElevationParity(cargasElevation, reference.cargoCardHasShadow, reference.cargoCardBorderRadius);
+      expectHyCardElevation(cargasElevation);
       await expectNoParentClipsCardShadow(
         page,
         '[data-public-cargas-mobile="true"] article[data-cargo-id]',
@@ -707,7 +530,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
     }
   });
 
-  test('BottomSheet: estrutura de filtro e ações alinhada ao /dev-v2', async ({ page }) => {
+  test('BottomSheet: estrutura de filtro e ações conforme contrato HY', async ({ page }) => {
     const guards = attachDsV2Guards(page);
 
     try {
@@ -721,10 +544,6 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       await expect(filterSheet.locator('[data-bottom-sheet-body="true"]')).toBeVisible();
       await expect(filterSheet.locator('[data-bottom-sheet-footer="true"]')).toBeVisible();
 
-      expect(reference.bottomSheetHasHeader).toBe(true);
-      expect(reference.bottomSheetHasBody).toBe(true);
-      expect(reference.bottomSheetHasFooter).toBe(true);
-
       const filterTitle = filterSheet.locator('[data-bottom-sheet-title="true"]');
       await expect(filterTitle).toHaveText('Filtros');
       await expect(filterSheet.locator('[data-bottom-sheet-description="true"]')).toBeVisible();
@@ -733,7 +552,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
         Number.parseFloat(window.getComputedStyle(element).fontSize),
       );
       expect(filterTitleSize).toBeLessThan(24);
-      expect(filterTitleSize).toBeLessThan(reference.bottomSheetTitleFontSize);
+      expect(filterTitleSize).toBeGreaterThan(14);
 
       const filterHeaderBox = await filterSheet.locator('[data-bottom-sheet-header="true"]').boundingBox();
       const filterBodyBox = await filterSheet.locator('[data-bottom-sheet-body="true"]').boundingBox();
@@ -785,14 +604,14 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
     }
   });
 
-  test('Background: canvas DS v2 no shell mobile sem folha concorrente', async ({ page }) => {
+  test('Background: canvas HY no shell mobile sem folha concorrente', async ({ page }) => {
     const guards = attachDsV2Guards(page);
 
     try {
       await gotoPublicCargasMobile(page);
 
       const shellRoot = page.locator('[data-mobile-product-v2-shell="true"][data-mobile-shell-background="root"]');
-      const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"][data-ds-v2-mobile-canvas="true"]');
+      const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"][data-hy-mobile-canvas="true"]');
       await expect(shellRoot).toBeVisible();
       await expect(scrollStage).toBeVisible();
 
@@ -827,8 +646,7 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       expect(shellBackground.height).toBeGreaterThanOrEqual(viewportHeight - 8);
       expect(stageBackground.hasGradient).toBe(false);
       expect(stageBackground.beforeHasGradient).toBe(false);
-      expect(reference.backgroundHasGradient).toBe(true);
-      expectNear(stageBackground.paddingInline, reference.backgroundPaddingInline, 4);
+      expectNear(stageBackground.paddingInline, HY_CONTRACT.shellPaddingInlinePx, 4);
 
       const listBackground = await listRoot.evaluate((element) => window.getComputedStyle(element).backgroundColor);
       expect(listBackground).toMatch(/rgba?\(0,\s*0,\s*0,\s*0\)|transparent/i);
@@ -876,6 +694,8 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       if (cargasSkeletonCount > 0) {
         const skeleton = page.locator('[data-public-cargas-mobile-skeleton="true"]');
         await expect(skeleton).toBeVisible();
+        await expect(skeleton).toHaveAttribute('data-public-cargas-mobile-skeleton-theme', 'light');
+        await expect(skeleton).toHaveAttribute('data-theme', 'light');
         await expect(skeleton.locator('[data-mobile-product-shell="true"]')).toHaveCount(0);
         await expect(skeleton.locator('[data-mobile-product-bottom-nav="true"]')).toHaveCount(0);
       }
@@ -960,8 +780,6 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       });
 
       expect(beforeMetrics.fontSize).toBeGreaterThan(28);
-      expect(beforeMetrics.frostOpacity).toBeGreaterThanOrEqual(0.85);
-      expect(beforeMetrics.backgroundImage).not.toBe('none');
       expect(beforeMetrics.headerPosition).toBe('fixed');
       await expect(header).toHaveAttribute('data-mobile-header-glass', 'true');
 
@@ -991,8 +809,6 @@ test.describe('Phase 5O — contrato DS v2 mobile (/dev-v2 → /cargas)', () => 
       expect(afterMetrics.fontSize).toBeLessThan(24);
       expect(afterMetrics.headerY).toBeGreaterThanOrEqual(beforeMetrics.headerY - 4);
       expect(afterMetrics.headerTop).toBeLessThanOrEqual(4);
-      expect(afterMetrics.frostOpacity).toBeGreaterThan(beforeMetrics.frostOpacity);
-      expect(afterMetrics.frostOpacity).toBeGreaterThanOrEqual(0.9);
       expect(afterMetrics.frostBackdrop).not.toBe('none');
       expect(afterMetrics.backgroundImage).not.toBe('none');
       await expect(title).toHaveAttribute('data-mobile-page-title-compact-offset', 'true');

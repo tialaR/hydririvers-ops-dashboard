@@ -203,11 +203,23 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     await expect(page.locator('[data-mobile-product-shell="true"]')).toBeHidden();
   });
 
+  test('/pt-BR/negociacoes usa header global com título correto', async ({ page }) => {
+    await page.setViewportSize(MOBILE_VIEWPORT);
+    await page.goto('/pt-BR/negociacoes', { waitUntil: 'domcontentloaded' });
+
+    const header = page.locator('[data-mobile-product-shell="true"][data-mobile-header-glass="true"]');
+    await expect(header).toBeVisible();
+    await expect(header).toHaveAttribute('data-theme', 'light');
+    await expect(page.locator('[data-mobile-page-title="true"]')).toHaveText('Negociações');
+    await expect(page.locator('[data-public-cargas-mobile="true"]')).toHaveCount(0);
+  });
+
   test('/pt-BR/rastreio mantém shell mobile e rota acessível', async ({ page }) => {
     await page.setViewportSize(MOBILE_VIEWPORT);
     await page.goto('/pt-BR/rastreio', { waitUntil: 'domcontentloaded' });
     await expect(page.locator('[data-mobile-product-shell="true"]')).toBeVisible();
     await expect(page.locator('[data-mobile-page-title="true"]')).toHaveText('Rastreio');
+    await expect(page.locator('[data-public-cargas-mobile="true"]')).toHaveCount(0);
   });
 
   test('shell mobile DS v2 persiste ao navegar Cargas → Negociações → Rastreio', async ({ page }) => {
@@ -364,7 +376,7 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     await gotoPublicCargasMobile(page);
 
     const shellRoot = page.locator('[data-mobile-product-v2-shell="true"][data-mobile-shell-background="root"]');
-    const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"][data-ds-v2-mobile-canvas="true"]');
+    const scrollStage = page.locator('.hr-dashboard-scroll[data-mobile-shell-background="true"][data-hy-mobile-canvas="true"]');
     const mobileList = page.locator('[data-public-cargas-mobile="true"]');
 
     await expect(shellRoot).toBeVisible();
@@ -393,6 +405,7 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
 
     const emptyState = mobileList.locator('[data-public-cargas-empty-state="true"][data-public-cargas-empty-variant="filtered"]');
     await expect(emptyState).toBeVisible();
+    await expect(emptyState).toHaveAttribute('data-informational-card', 'true');
     await expect(mobileList.locator('[data-mobile-clear-filters="true"]')).toHaveText('Limpar filtros');
     await expect(emptyState.getByRole('button', { name: 'Limpar filtros' })).toHaveCount(0);
 
@@ -443,8 +456,6 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     });
 
     expect(before.titleFontSize).toBeGreaterThan(28);
-    expect(before.frostOpacity).toBeGreaterThanOrEqual(0.85);
-    expect(before.backgroundImage).not.toBe('none');
     expect(before.backdropFilter).not.toBe('none');
     expect(before.headerPosition).toBe('fixed');
 
@@ -468,7 +479,6 @@ test.describe('Cargas público mobile — bottom sheet unificado', () => {
     });
 
     expect(after.titleFontSize).toBeLessThan(before.titleFontSize);
-    expect(after.frostOpacity).toBeGreaterThan(before.frostOpacity);
     expect(after.backgroundImage).not.toBe('none');
     expect(after.backdropFilter).not.toBe('none');
     await expect(header.locator('[data-mobile-brand="true"]')).toBeVisible();

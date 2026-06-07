@@ -118,44 +118,51 @@
   --hy-mobile-header-glass-height: 100%;
   --hy-mobile-header-compact-height: auto;
   --hy-mobile-header-frost-opacity-rest: 0;
-  --hy-mobile-header-frost-opacity-compact: 1;
+  --hy-mobile-header-frost-opacity-compact: 0.98;
   --hy-mobile-header-glass-bleed: 0;
-  --hy-mobile-header-compact-title-offset: -0.1875rem;
+  --hy-mobile-header-compact-title-offset: -0.25rem;
   --hy-mobile-header-compact-padding-bottom: 0.55rem;
   --hy-blur-mobile-header: blur(1.25rem) saturate(1.08);
-  --hy-mobile-header-glass-blur: blur(1.25rem) saturate(1.08);
+  --hy-mobile-header-glass-blur: blur(1.125rem) saturate(1.24);
+  --hy-mobile-header-glass-blur-rest: blur(0.625rem) saturate(1.5);
+  --hy-mobile-header-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  --hy-mobile-header-glass-surface: none;
+  --hy-mobile-header-glass-surface-compact:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 255, 255, 0.16) 58%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+  --hy-mobile-header-glass-bg: none;
+  --hy-mobile-header-glass-bg-compact: none;
+  --hy-mobile-header-glass-mask:
+    linear-gradient(
+      180deg,
+      #000 0%,
+      #000 72%,
+      rgba(0, 0, 0, 0.72) 84%,
+      rgba(0, 0, 0, 0.38) 94%,
+      transparent 100%
+    );
+  --hy-mobile-header-glass-mask-rest: linear-gradient(to bottom, #000 70%, transparent 100%);
+  --hy-color-mobile-header-glass-rest-surface: rgba(255, 255, 255, 0.02);
+  --hy-color-mobile-header-glass-compact-surface: rgba(255, 255, 255, 0.2);
+  --hy-color-mobile-header-glass-compact-title: rgba(15, 23, 42, 0.78);
   --hy-blur-overlay: blur(0.625rem) saturate(1.02);
-  --hy-color-mobile-header-glass-top: rgba(255, 255, 255, 0.52);
-  --hy-color-mobile-header-glass-mid: rgba(255, 255, 255, 0.16);
-  --hy-color-mobile-header-glass-bottom: transparent;
-  --hy-mobile-header-glass-bg:
-    linear-gradient(
-      180deg,
-      var(--hy-color-mobile-header-glass-top) 0%,
-      var(--hy-color-mobile-header-glass-mid) 52%,
-      rgba(255, 255, 255, 0.03) 78%,
-      var(--hy-color-mobile-header-glass-bottom) 100%
-    ),
-    radial-gradient(circle at 70% 0%, rgba(147, 197, 253, 0.1), transparent 52%);
-  --hy-mobile-header-glass-bg-compact:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.84) 0%,
-      rgba(241, 245, 249, 0.62) 72%,
-      rgba(241, 245, 249, 0.18) 100%
-    ),
-    radial-gradient(circle at 70% 0%, rgba(147, 197, 253, 0.14), transparent 55%);
   --hy-shadow-mobile-header-glass: none;
   --hy-shadow-mobile-header-glass-compact: 0 0.0625rem 0 rgba(148, 163, 184, 0.1);
+  --hy-motion-duration-header: 220ms;
+  --hy-motion-duration-header-frost: 180ms;
 
   /* Typography — mobile header navigation title */
   --hy-font-size-page-title-expanded: 2.75rem;
   --hy-font-size-nav-title-compact: 0.875rem;
 
   /* Action subtle — links/contextual secondary actions */
-  --hy-color-action-subtle-text: rgba(37, 99, 235, 0.78);
-  --hy-color-action-subtle-hover: rgba(29, 78, 216, 0.92);
-  --hy-color-action-subtle-focus-ring: rgba(96, 165, 250, 0.36);
+  --hy-color-action-subtle-text: rgba(29, 78, 216, 0.9);
+  --hy-color-action-subtle-hover: rgba(29, 78, 216, 1);
+  --hy-color-action-subtle-focus-ring: rgba(37, 99, 235, 0.42);
   --hy-color-action-subtle-underline: rgba(37, 99, 235, 0.28);
 
   /* Empty state — breathing room above informational cards in feature lists */
@@ -219,6 +226,7 @@
   --hy-motion-press-scale-icon: 1.06;
   --hy-motion-press-scale-focus: 1.025;
   --hy-motion-duration-enter: 560ms;
+  --hy-motion-duration-skeleton: 1.4s;
   --hy-motion-stagger-card: 82ms;
   --hy-motion-ease-standard: cubic-bezier(0.2, 1, 0.2, 1);
   --hy-motion-ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);

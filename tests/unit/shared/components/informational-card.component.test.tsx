@@ -37,6 +37,30 @@ describe('InformationalCard', () => {
     expect(html).toContain('data-testid="info-icon"');
   });
 
+  it('permite markers de feature sem perder markers shared', () => {
+    const html = renderToStaticMarkup(
+      <InformationalCard
+        title="Nenhuma carga encontrada"
+        description="Ajuste os filtros."
+        dataAttributes={{
+          'data-public-cargas-empty-state': 'true',
+          'data-public-cargas-empty-variant': 'filtered',
+        }}
+        icon={<span>i</span>}
+        iconDataAttributes={{ 'data-public-cargas-empty-icon': 'true' }}
+        titleDataAttributes={{ 'data-public-cargas-empty-title': 'true' }}
+        descriptionDataAttributes={{ 'data-public-cargas-empty-description': 'true' }}
+      />,
+    );
+
+    expect(html).toContain('data-informational-card="true"');
+    expect(html).toContain('data-public-cargas-empty-state="true"');
+    expect(html).toContain('data-public-cargas-empty-variant="filtered"');
+    expect(html).toContain('data-public-cargas-empty-icon="true"');
+    expect(html).toContain('data-public-cargas-empty-title="true"');
+    expect(html).toContain('data-public-cargas-empty-description="true"');
+  });
+
   it('não é clicável por padrão', () => {
     const html = renderToStaticMarkup(
       <InformationalCard title="Estado informativo" description="Somente leitura." />,

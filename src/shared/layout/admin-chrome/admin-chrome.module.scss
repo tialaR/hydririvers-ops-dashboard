@@ -721,6 +721,13 @@
 }
 
 @media (max-width: 860px) {
+  :global(.hr-shell.hx-shell) {
+    @include mobileProductShell.mobile-product-v2-light-shell;
+    @include mobileProductShell.mobile-product-v2-light-page-background;
+
+    color: var(--hy-color-text-primary, #0f172a);
+  }
+
   :global(.hr-shell.hx-shell[data-mobile-product-v2-shell='true']) {
     @include mobileProductShell.mobile-product-v2-light-page-background;
 
