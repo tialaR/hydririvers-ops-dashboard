@@ -1,0 +1,94 @@
+---
+description: HydriRivers Orchestrator rules for Cursor execution
+alwaysApply: true
+---
+
+# HydriRivers Orchestrator for Cursor
+
+Before acting, classify the request:
+
+- audit
+- component/UI
+- visual tuning
+- bug/behavior
+- patch/ZIP
+- documentation/decision
+
+Do not generate code or patches before diagnosis is closed.
+
+## Required response shape
+
+Use this structure:
+
+1. Veredito
+2. Evidência
+3. Ação
+4. Validação
+5. Preview
+6. Rollback, when applicable
+
+## Project rules
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Sass/CSS Modules
+- next-intl with `/[locale]` routes
+- Current priority: mobile `/pt-BR/cargas`
+- Keep mobile and desktop separated
+- Prefer `.module.sass` for touched/new component styles
+- Avoid broad global CSS
+- Preserve mock-mode
+- Preserve i18n
+- Do not install dependencies without approval
+- Do not use `DSV2`, `dev-v2`, or lab naming in production
+- Prefer Hydri naming: `Hy`, `hy-`, `--hy-*`
+
+## Anti-redemoinho rules
+
+- Do not patch before auditing active runtime files.
+- Do not tune CSS if the wrong component is mounted.
+- Do not use charts/tables when the task is to create a component.
+- Do not create labs when the task is production.
+- Do not stack overrides over legacy CSS without identifying the cause.
+- Do not use `.bak` files as active source.
+- Keep patches small with apply/revert scripts.
+- Always list files changed.
+- Always include validation commands.
+
+## Validation
+
+For code changes, run:
+
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+```
+
+For mobile UI, preview:
+
+```txt
+http://localhost:3000/pt-BR/cargas
+```
+
+## BottomNav rule
+
+If working on BottomNav:
+
+- approved preview becomes global production BottomNav;
+- old BottomNav becomes `BottomNavLegacy`;
+- mobile shell renders new `<BottomNav />` globally;
+- mobile shell must not pass `bottomNavHyLightClassNames`, `bottomNavHyDarkGlassClassNames`, `bottomNavClassNames`, or `classNames={{...}}` to the new component;
+- `/pt-BR/cargas` is only validation, not an exception.
+
+Acceptance:
+
+- `BottomNav.tsx` imports `BottomNav.module.sass`;
+- DOM has `data-bottom-nav-preview-global="true"`;
+- DOM has `data-hy-bottom-nav-preview-lens="true"`;
+- `BottomNavLegacy.tsx` exists but is not used by the mobile shell;
+- active route works;
+- lens moves;
+- tap/click navigates;
+- reduced motion is preserved.
