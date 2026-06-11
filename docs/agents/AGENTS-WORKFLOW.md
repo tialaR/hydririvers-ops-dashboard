@@ -32,6 +32,19 @@ npm run typecheck
 npm run check:i18n
 ```
 
+Or use the bundled shortcut (stops on first failure):
+```bash
+npm run hydri:verify
+```
+
+## Hydri tooling shortcuts
+
+| Command | Purpose |
+|---------|---------|
+| `npm run hydri:verify` | Lint → typecheck → i18n in sequence; stops on first error |
+| `npm run hydri:audit` | Read-only scan for unwanted repo artifacts (never deletes) |
+| `npm run hydri:agent:check` | Verifies required agent docs and Cursor rules exist |
+
 Run tests when touching business logic, mocks, permissions, critical shared UI, routing or integration behavior.
 
 ## Implementation proof (mandatory)
