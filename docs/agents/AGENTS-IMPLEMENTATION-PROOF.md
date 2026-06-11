@@ -1,8 +1,50 @@
 # Hydri Implementation Proof
 
-Every implemented task must end with a `HYDRI_IMPLEMENTATION_PROOF` block. Agents and executors must prove the change worked, explain how it was validated, and declare limits and risk — not just say "done".
+Every implemented task must close with a **Human closeout** (short, visual, plain-language decision) and, when implementation happened, a `HYDRI_IMPLEMENTATION_PROOF` block (technical audit trail). Agents must prove the change worked, explain how it was validated, and declare limits — not just say "done".
+
+**Do not lead the closing section with technical proof.** Human closeout comes first; the user should not need to parse proof levels or router categories to understand the outcome.
 
 The proof must include the **HYDRI_TASK_ROUTER task classification** used for the work (same categories declared in the initial router block). See `docs/agents/AGENTS-TASK-ROUTER.md`.
+
+## Human closeout (mandatory)
+
+Emit **Human closeout** at the start of every closing section. It is the user's decision summary in at most **6 lines**.
+
+**Closing order:**
+
+1. Work body (prose, code, diffs — avoid textão before closeout)
+2. **Human closeout** ← user-facing decision (**always first in closing section**)
+3. `HYDRI_TASK_ROUTER — close` (technical)
+4. `HYDRI_IMPLEMENTATION_PROOF` (technical — only when implementation happened)
+
+**When to omit full HYDRI_IMPLEMENTATION_PROOF:**
+
+- Plan or audit only (no code/config/test changes): Human closeout with **🟡 Amarelo** is enough.
+- Blocked before any delivery: Human closeout with **🔴 Vermelho**; omit proof unless partial work exists.
+
+### Template (max 6 lines)
+
+```md
+## Human closeout
+
+🟢 Status: Verde
+Mensagem: [frase curta em linguagem humana — o que aconteceu e o resultado]
+Prova: [comando, preview ou teste principal que sustenta a afirmação]
+Não provado: [principal limite, ou "Nada relevante"]
+Próxima ação: [ação objetiva]
+```
+
+### Status emojis
+
+| Emoji | Status | When to use | Maps to **Result** |
+|-------|--------|-------------|-------------------|
+| 🟢 | **Verde** | Validated with sufficient evidence; docs/rules created and checks passed | Worked |
+| 🟡 | **Amarelo** | Partial, incomplete validation, relevant risk, plan/audit without execution | Partial |
+| 🔴 | **Vermelho** | Did not work, validation failed, scope blocked | Did not work |
+
+Write in plain language. Avoid internal doc paths, category names, and proof-level jargon unless the user explicitly asked for them.
+
+**Human closeout** and **HYDRI_IMPLEMENTATION_PROOF** must agree on outcome (🟢 Verde ↔ Worked, 🟡 Amarelo ↔ Partial, 🔴 Vermelho ↔ Did not work).
 
 ## When to use
 
@@ -148,47 +190,56 @@ Preserve mobile/desktop style separation; a mobile-only task must not break desk
 - **AGENTS-UI-MOBILE-STANDARDS.md:** mobile chrome and BottomNav expectations.
 - **hydririvers-visual-workflow:** visual iteration rounds; implementation proof closes each implementation round.
 
-## Example (abbreviated)
+## Examples: Human closeout
+
+### 🟢 Verde — implementation validated
 
 ```md
+## Human closeout
+
+🟢 Status: Verde
+Mensagem: Corrigido o padding de safe-area no sheet de filtros; o conteúdo não fica mais atrás da BottomNav.
+Prova: Lint, typecheck e i18n OK; preview mobile em `/pt-BR/cargas` (abrir, filtrar, fechar, rolar).
+Não provado: Locales en-US/es, dark mode, iPhone físico.
+Próxima ação: Smoke test em dispositivo real se for para produção esta semana.
+```
+
+Technical blocks follow (abbreviated):
+
+```md
+## HYDRI_TASK_ROUTER — close
+…
+
 ## HYDRI_IMPLEMENTATION_PROOF
 
 **Result:** Worked
-
-**HYDRI_TASK_ROUTER classification:**
-- mobile-ui, bottom-sheet, styling
-
-**Change implemented:**
-- Fixed mobile filter sheet safe-area padding on `/pt-BR/cargas`.
-
-**Objective evidence:**
-- `npm run lint` / `typecheck` / `check:i18n` exit 0.
-- Manual: sheet opens, primary filter applies, dismiss clears overlay; content clears BottomNav on iPhone 14 viewport.
-
-**Commands run:**
-- `npm run lint` (0)
-- `npm run typecheck` (0)
-- `npm run check:i18n` (0)
-
-**Tests affected:**
-- None (style-only); visual QA at P2.
-
-**Preview / manual QA:**
-- `http://localhost:3000/pt-BR/cargas` — mobile viewport, light mode, open/apply/close/scroll.
-
-**Files changed:**
-- `src/features/cargas/mobile/FilterSheet.module.sass`
-
-**Not validated:**
-- `en-US` / `es` routes (no copy change).
-- Dark mode.
-
-**Remaining risks:**
-- Very small viewports (<320px) not tested.
-
-**Why the implementation may still be wrong:**
-- Safe-area env() behavior differs on real iOS vs DevTools emulation.
-
-**Recommended next action:**
-- Physical device smoke test if shipping this week.
+…
 ```
+
+### 🟡 Amarelo — partial or plan/audit only
+
+```md
+## Human closeout
+
+🟡 Status: Amarelo
+Mensagem: Copy do filtro de status ajustada só em pt-BR; en-US e es ainda pendentes.
+Prova: `npm run check:i18n` passou; rota pt-BR revisada manualmente.
+Não provado: Traduções en-US/es; desktop não aberto.
+Próxima ação: Completar en-US/es e rodar preview nos três locales.
+```
+
+For plan/audit without code changes, stop after Human closeout — no full `HYDRI_IMPLEMENTATION_PROOF` required.
+
+### 🔴 Vermelho — blocked or failed
+
+```md
+## Human closeout
+
+🔴 Status: Vermelho
+Mensagem: Nada entregue — doc obrigatório ausente no repositório; implementação bloqueada.
+Prova: Verificação de path no disco; arquivo não existe.
+Não provado: Qualquer mudança de estilo.
+Próxima ação: Restaurar o doc ou autorizar escopo sem ele.
+```
+
+When partial work exists, add `HYDRI_IMPLEMENTATION_PROOF` with **Result:** Did not work below Human closeout.

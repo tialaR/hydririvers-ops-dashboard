@@ -7,11 +7,33 @@ alwaysApply: true
 
 # Hydri Implementation Proof
 
-After any task that implements or fixes behavior, end the response with a `HYDRI_IMPLEMENTATION_PROOF` block. Do not claim "done" or "it works" without it.
+After any task that implements or fixes behavior, close with **Human closeout** (user-facing, visual, short) then `HYDRI_IMPLEMENTATION_PROOF` (technical). Do not claim "done" or "it works" without both. **Do not lead the close with technical proof.**
+
+Plan/audit-only: Human closeout with 🟡 Amarelo is enough — omit full proof block.
 
 Full spec: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
 
-## Required block fields
+## Human closeout (required first in closing section)
+
+Max 6 lines. Plain language for the user.
+
+```md
+## Human closeout
+
+🟢 Status: Verde
+Mensagem: [frase curta em linguagem humana]
+Prova: [comando/preview/teste principal]
+Não provado: [principal limite, ou "Nada relevante"]
+Próxima ação: [ação objetiva]
+```
+
+| Emoji | Status | Maps to **Result** |
+|-------|--------|-------------------|
+| 🟢 | Verde | Worked |
+| 🟡 | Amarelo | Partial |
+| 🔴 | Vermelho | Did not work |
+
+## HYDRI_IMPLEMENTATION_PROOF fields (technical)
 
 1. **Result:** Worked | Partial | Did not work
 2. Change implemented
