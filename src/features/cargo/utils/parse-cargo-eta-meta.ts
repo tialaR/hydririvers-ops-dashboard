@@ -1,3 +1,5 @@
+import { normalizeEtaValue } from '@/features/cargo/utils/normalize-eta-value';
+
 type BoardTranslator = (key: string, values?: Record<string, string | number | Date>) => string;
 type CommonTranslator = (key: string) => string;
 
@@ -31,6 +33,7 @@ export function parseCargoEtaMeta(
   if (!value) {
     return {
       etaLabel: formatEtaLabel(undefined, tBoard),
+      etaValue: '',
       confidenceLabel: '',
     };
   }
@@ -38,9 +41,11 @@ export function parseCargoEtaMeta(
   const [etaPartRaw, ...rest] = value.split('•');
   const etaPart = etaPartRaw?.trim() ?? '';
   const confidencePart = rest.join('•').trim();
+  const normalizedValue = normalizeEtaValue(etaPart || value);
 
   return {
     etaLabel: formatEtaLabel(etaPart || value, tBoard),
+    etaValue: normalizedValue,
     confidenceLabel: confidencePart ? translateEtaConfidence(confidencePart, tCommon) : '',
   };
 }

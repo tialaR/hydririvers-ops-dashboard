@@ -27,4 +27,15 @@ describe('shared/providers/theme-provider', () => {
 
     expect(html).toContain('data-hydro-theme="light"');
   });
+
+  it('usa light como tema inicial padrao do produto no SSR estatico', () => {
+    const html = renderToStaticMarkup(
+      <ThemeProvider initialTheme="light">
+        <span />
+      </ThemeProvider>
+    );
+
+    expect(html).toContain('data-hydro-theme="light"');
+    expect(html).not.toContain('data-hydro-theme="dark"');
+  });
 });

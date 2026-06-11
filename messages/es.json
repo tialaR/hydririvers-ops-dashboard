@@ -1445,6 +1445,17 @@
     },
     "mobile": {
       "headerAria": "Encabezado móvil de HydroRivers",
+      "localeToggleAria": "Cambiar idioma",
+      "localeSheetTitle": "Idioma",
+      "localeSheetClose": "Cerrar selección de idioma",
+      "pageTitles": {
+        "cargoDetail": "Detalles de la carga",
+        "cargoMap": "Ruta de la carga",
+        "cargoPublish": "Nueva carga",
+        "negotiationDetail": "Detalles de la negociación",
+        "vesselDetail": "Detalles de la embarcación",
+        "impactDetail": "Detalles de impacto"
+      },
       "bottomNav": {
         "overview": "Visión",
         "dashboard": "Dashboard",
@@ -1521,6 +1532,25 @@
       "cost": "Costos",
       "priority": "Prioridad"
     },
+    "publicActionSheet": {
+      "title": "Acciones de la carga",
+      "description": "Elige cómo continuar con esta carga",
+      "ariaLabel": "Acciones de la carga",
+      "navigationAria": "Navegación de la carga",
+      "close": "Cerrar",
+      "detailTitle": "Detalles de la carga",
+      "detailDescription": "Ver la página completa de la carga",
+      "routeTitle": "Ver ruta",
+      "routeDescription": "Mapa inmersivo y progreso hidroviario",
+      "documentsTitle": "Documentos de la carga",
+      "documentsDescription": "Paquete documental, pendientes y validaciones",
+      "costsTitle": "Costos y valores",
+      "costsDescription": "Resumen financiero, ahorro y composición",
+      "priorityTitle": "Prioridad y riesgos",
+      "priorityDescription": "SLA operacional, urgencia y criticidad",
+      "negotiationsTitle": "Abrir negociaciones",
+      "negotiationsDescription": "Ver propuestas y negociar cargas"
+    },
     "actionSheet": {
       "ariaLabel": "Elegir vista de la carga",
       "navigationAria": "Vistas de la carga",
@@ -1536,6 +1566,7 @@
       "trackingTitle": "Operaciones rastreadas",
       "newCargo": "Nueva carga",
       "searchPlaceholder": "Buscar por carga, origen, destino...",
+      "publicMobileSearchPlaceholder": "Buscar cargas...",
       "searchAria": "Buscar cargas",
       "filterAria": "Filtrar cargas",
       "showing": "Mostrando {pageCount} de {totalCount} cargas",
@@ -1543,10 +1574,11 @@
       "emptyTitle": "No se encontró ninguna carga",
       "emptyDescription": "Todavía no hay cargas disponibles en esta vista. En cuanto entren nuevas operaciones, aparecerán aquí.",
       "emptyFilteredTitle": "No se encontró ninguna carga",
-      "emptyFilteredDescription": "No encontramos cargas con los filtros actuales. Puedes limpiar los filtros e intentarlo de nuevo.",
+      "emptyFilteredDescription": "No encontramos cargas con los filtros actuales. Limpia los filtros e inténtalo de nuevo.",
       "clearFiltersAction": "Limpiar filtros",
       "cardActionView": "Ver detalles",
-      "cardActionTrack": "Seguir"
+      "cardActionTrack": "Seguir",
+      "cardActionRoute": "Ver ruta"
     },
     "filters": {
       "eyebrow": "FILTROS",
@@ -1568,7 +1600,8 @@
       "closeAction": "Cerrar",
       "mobileApplyAction": "Visualizar cargas",
       "mobileApplyActionCount": "Visualizar {count} cargas",
-      "mobileClearAction": "Limpiar todo"
+      "mobileClearAction": "Limpiar filtros",
+      "clearAction": "Limpiar filtros"
     },
     "statusFilters": {
       "all": "Todas",

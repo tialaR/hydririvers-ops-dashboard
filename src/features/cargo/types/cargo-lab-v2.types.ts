@@ -1,4 +1,14 @@
-export type CargoLabV2Status = 'transito' | 'agendado' | 'cotacao' | 'atencao';
+export type CargoLabV2Status =
+  | 'aberta'
+  | 'cotacao'
+  | 'contratando'
+  | 'operacao'
+  | 'transito'
+  | 'concluida'
+  | 'atrasada'
+  | 'bloqueada'
+  | 'agendado'
+  | 'atencao';
 
 export type CargoLabV2 = {
   id: string;

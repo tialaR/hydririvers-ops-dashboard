@@ -25,14 +25,22 @@ function buildCargo(overrides: Partial<Cargo> = {}): Cargo {
 }
 
 describe('mapMarketplaceCargoToLabV2', () => {
-  it('maps open status to cotacao lab status', () => {
+  it('maps open status to aberta lab status', () => {
     const mapped = mapMarketplaceCargoToLabV2(buildCargo({ status: 'open' }), {
       statusLabel: 'Aberta',
     });
 
-    expect(mapped.status).toBe('cotacao');
+    expect(mapped.status).toBe('aberta');
     expect(mapped.id).toBe('cargo-001');
     expect(mapped.origin).toBe('Santarém');
+  });
+
+  it('maps bidding status to cotacao lab status', () => {
+    const mapped = mapMarketplaceCargoToLabV2(buildCargo({ status: 'bidding' }), {
+      statusLabel: 'Em cotação',
+    });
+
+    expect(mapped.status).toBe('cotacao');
   });
 
   it('maps boarded status to transito lab status', () => {

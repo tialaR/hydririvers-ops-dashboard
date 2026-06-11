@@ -12,8 +12,9 @@ export default defineConfig({
   webServer: {
     command:
       'HYDRORIVERS_EXPOSE_OTP_CODE=true HYDRORIVERS_ALLOW_MOCK_MODE_RESET=true HYDRORIVERS_FORCE_MOCK_QA_UI=true HYDRORIVERS_FORCE_QA_DIRECT_LOGIN=true npm run build && HYDRORIVERS_EXPOSE_OTP_CODE=true HYDRORIVERS_ALLOW_MOCK_MODE_RESET=true HYDRORIVERS_FORCE_MOCK_QA_UI=true HYDRORIVERS_FORCE_QA_DIRECT_LOGIN=true npm run start -- --hostname 127.0.0.1 --port 3100',
-    url: 'http://127.0.0.1:3100',
-    reuseExistingServer: false,
+    /** Raiz `/` responde 404; usar rota localizada para health-check e reuseExistingServer. */
+    url: 'http://127.0.0.1:3100/pt-BR/login',
+    reuseExistingServer: !process.env.CI,
     timeout: 240000
   },
   projects: [

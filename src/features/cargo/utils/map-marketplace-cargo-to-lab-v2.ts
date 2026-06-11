@@ -1,5 +1,6 @@
 import type { Cargo, CargoStatus } from '@/features/marketplace/domain/marketplace.types';
-import type { CargoLabV2, CargoLabV2Status } from '@/features/cargo/types/cargo-lab-v2.types';
+import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
+import { mapCargoStatusToLabV2Status } from '@/features/cargo/utils/cargo-status-semantic';
 
 export type MapMarketplaceCargoToLabV2Options = {
   statusLabel: string;
@@ -7,13 +8,6 @@ export type MapMarketplaceCargoToLabV2Options = {
   etaLabel?: string;
   deliveryLabel?: string;
 };
-
-function mapCargoStatusToLabV2(status: CargoStatus): CargoLabV2Status {
-  if (status === 'open' || status === 'bidding') return 'cotacao';
-  if (status === 'contracting' || status === 'reserved') return 'agendado';
-  if (status === 'delivered') return 'atencao';
-  return 'transito';
-}
 
 function buildSubtitle(cargo: Cargo): string {
   const parts = [cargo.cargoType, cargo.producer, cargo.serviceType].filter(Boolean);
@@ -38,7 +32,7 @@ export function mapMarketplaceCargoToLabV2(
     id: cargo.id,
     title: cargo.title,
     subtitle: buildSubtitle(cargo),
-    status: mapCargoStatusToLabV2(cargo.status),
+    status: mapCargoStatusToLabV2Status(cargo.status),
     statusLabel,
     origin: cargo.origin,
     originTerminal: buildTerminal(cargo, 'origin'),

@@ -16,17 +16,26 @@ const rastreioPagePath = resolve(
 );
 
 describe('OperationsBoard mobileExperience scope', () => {
-  it('renderiza PublicCargasMobileList somente com mobileExperience public-cargas em viewport mobile', () => {
+  it('renderiza PublicCargasMobileList em camada mobile-first sem depender de isMobileViewport', () => {
     const source = readFileSync(operationsBoardPath, 'utf8');
+    const stylesSource = readFileSync(
+      resolve(
+        process.cwd(),
+        'src/features/dashboard/components/operations-board/operations-board.module.scss',
+      ),
+      'utf8',
+    );
 
     expect(source).toContain("export type OperationsBoardMobileExperience = 'public-cargas' | 'default'");
     expect(source).toContain('mobileExperience?: OperationsBoardMobileExperience');
     expect(source).toContain("mobileExperience = 'default'");
-    expect(source).toContain(
-      "const usePublicCargasMobileList =\n    isMobileViewport && mobileExperience === 'public-cargas'",
-    );
-    expect(source).toContain('if (usePublicCargasMobileList) {');
-    expect(source).not.toMatch(/if \(isMobileViewport\) \{\s*\n\s*return \(\s*\n\s*<section className=\{`hx-dashboard \$\{styles\.mobileBoard\}`\}/);
+    expect(source).toContain("const isPublicCargasExperience = mobileExperience === 'public-cargas'");
+    expect(source).toContain('publicCargasMobileLayer');
+    expect(source).toContain('publicCargasDesktopLayer');
+    expect(source).toContain('data-legacy-cargo-list');
+    expect(source).not.toContain('usePublicCargasMobileList');
+    expect(stylesSource).toContain('.publicCargasMobileLayer');
+    expect(stylesSource).toContain('@media (max-width: 860px)');
   });
 
   it('passa mobileExperience public-cargas apenas na rota /cargas', () => {

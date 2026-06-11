@@ -21,7 +21,7 @@ import {
 } from '@/features/cargo/mocks/cargo-filter-options.mock';
 import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
 import { BottomSheet } from '@/shared/components/bottom-sheet';
-import { BottomNav } from '@/shared/components/bottom-nav';
+import { BottomNav, bottomNavV2LightClassNames } from '@/shared/components/bottom-nav';
 import { IconButton } from '@/shared/components/icon-button';
 import { SearchField } from '@/shared/components/search-field';
 
@@ -326,19 +326,31 @@ export function MobileCargoListLabV2() {
 
         {!isSheetOpen ? (
           <BottomNav
-            className={styles.bottomNav}
+            className={theme === 'light' ? bottomNavV2LightClassNames.shell : styles.bottomNav}
             ariaLabel="Navegacao principal dev v2"
             items={[...DEV_V2_BOTTOM_NAV_ITEMS]}
             activeId="cargo"
-            classNames={{
-              item: styles.navItem,
-              itemActive: styles.navItemActive,
-              icon: styles.navIcon,
-              label: styles.navLabel,
-              activeBubble: styles.activeNavBubble,
-              activeIcon: styles.activeNavIcon,
-              activeLabel: styles.activeNavLabel,
-            }}
+            classNames={
+              theme === 'light'
+                ? {
+                    item: bottomNavV2LightClassNames.item,
+                    itemActive: bottomNavV2LightClassNames.itemActive,
+                    icon: bottomNavV2LightClassNames.icon,
+                    label: bottomNavV2LightClassNames.label,
+                    activeBubble: bottomNavV2LightClassNames.activeBubble,
+                    activeIcon: bottomNavV2LightClassNames.activeIcon,
+                    activeLabel: bottomNavV2LightClassNames.activeLabel,
+                  }
+                : {
+                    item: styles.navItem,
+                    itemActive: styles.navItemActive,
+                    icon: styles.navIcon,
+                    label: styles.navLabel,
+                    activeBubble: styles.activeNavBubble,
+                    activeIcon: styles.activeNavIcon,
+                    activeLabel: styles.activeNavLabel,
+                  }
+            }
           />
         ) : null}
 

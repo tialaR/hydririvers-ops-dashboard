@@ -1742,6 +1742,27 @@
   width: 100%;
 }
 
+/** Marketplace público: DS v2 mobile no primeiro paint (sem depender de `isMobileViewport`). */
+.publicCargasMobileLayer {
+  display: none;
+  width: 100%;
+}
+
+.publicCargasDesktopLayer {
+  display: block;
+  width: 100%;
+}
+
+@media (max-width: 860px) {
+  .publicCargasMobileLayer {
+    display: block;
+  }
+
+  .publicCargasDesktopLayer {
+    display: none;
+  }
+}
+
 .mobileListShell {
   display: grid;
   gap: 1rem;

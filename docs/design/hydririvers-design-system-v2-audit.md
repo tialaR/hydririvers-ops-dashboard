@@ -1,8 +1,9 @@
 # HydriRivers Design System v2 — Auditoria técnica
 
-**Rodada:** auditoria (sem redesign, sem refatoração de componentes, sem alteração de `/dev-v2` real).  
-**Referência visual:** `/pt-BR/dev-v2` em **light mode** (`data-theme="light"` no lab).  
-**Fonte de verdade:** implementação real, não Figma nem catálogo isolado.
+**Rodada:** auditoria + consolidação HY produtivo (sem redesign de header/BottomSheet, sem login).  
+**Referência visual produtiva:** `/pt-BR/cargas` mobile em **light mode** (`data-theme="light"`, `data-public-cargas-mobile="true"`).  
+**Laboratório legado:** `/pt-BR/dev-v2` — não é mais fonte da verdade para testes/docs produtivos.  
+**Fonte de verdade:** implementação real em `/cargas` + componentes shared homologados, não Figma nem catálogo isolado.
 
 | Artefato | Caminho |
 | --- | --- |
@@ -21,6 +22,8 @@ A identidade visual de `/dev-v2` está **implementada de forma implícita**: ~2.
 O shell de bottom sheet já é **shared** (`BottomSheet` + tokens `--hx-*` sobrescritos por `.filterBottomSheet` / `.cargoBottomSheet`). Primitives de UI (botão, chip, busca, badge, bottom nav) existem apenas como **classes CSS acopladas ao lab**, com lógica de press duplicada (mixin `pressable` + `data-pressing` + `setTimeout(160)` no TSX).
 
 **Decisão desta rodada:** documentar inventário, hardcodes, proposta `hy-*`, ownership e plano de PRs pequenos. **Não** alterar a UI visível de `/dev-v2`, mocks, i18n ou rotas de produto.
+
+**Phase 5 addendum (produto mobile):** casca mobile do `(product-shell)` passou a `src/shared/layout/mobile-product-shell/` — header light (`data-mobile-product-shell`, `data-theme="light"`), título por rota (`resolveMobilePageTitleKey`), ações `IconButton` (idioma → notificações → perfil), bottom nav DS v2 portaled (`ProductMobileBottomNav`). Tokens em `src/shared/styles/shells/_mobile-product-v2-light-shell.scss`.
 
 **Divergência global:** `layout` do app usa **Geist** (`--font-sans`); o lab v2 usa **system stack** (`--v2-font-family`). O catálogo DS v2 replica a stack do lab via import do SCSS real.
 
@@ -865,13 +868,13 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 - `/[locale]/rastreio` não passa a prop → timeline/fluxo mobile anterior preservado.
 - Testes: `tests/unit/features/dashboard/operations-board-mobile-experience.test.ts`, `cargoes-page.test.tsx`.
 
-### Light-first (mobile DS v2)
+### Light-first (global + mobile DS v2)
 
-- `/cargas` mobile e `/dev-v2` não dependem do tema global (`html[data-theme]`) para a primeira pintura dos cards.
-- `PublicCargasMobileList` fixa `data-theme="light"` no SSR e aplica `cargo-v2-light-shell` no root do módulo.
+- **Tema global (SSR):** `resolveServerTheme` em `src/shared/preferences/resolve-server-theme.ts` — cookie ausente ou inválido => `light` (não usa `prefers-color-scheme`). `src/app/[locale]/layout.tsx` aplica `data-theme`, `colorScheme` e classe `dark` no `<html>` já no primeiro HTML.
+- **Persistência:** toggle grava cookie `hydrorivers.theme` + `localStorage`; cookie `dark`/`light` continua prevalecendo no SSR; ausência de cookie nunca gera dark.
+- `/cargas` mobile e `/dev-v2` alinham com light global; shells DS v2 (`data-mobile-product-v2-shell`, `PublicCargasMobileList`) mantêm `data-theme="light"` local para tokens `--v2-*` / `:global(.root[data-theme='light'])`.
 - `MobileCargoListLabV2` inicia em `light` (`useState('light')`).
-- Cards e satélites DS v2 usam `:global(.root[data-theme='light'])`; o root expõe a classe global `root` via `cargoDsV2ThemeRootClassName` (`src/features/cargo/constants/cargo-ds-v2-theme-scope.ts`).
-- `ThemeToggle` deriva o ícone diretamente de `useTheme()` no SSR (sem `useSyncExternalStore`), evitando hydration mismatch; dark mode global permanece no `ThemeProvider` / cookie.
+- `ThemeToggle` deriva o ícone de `useTheme()` no SSR (sem `useSyncExternalStore`); `ThemeProvider` não altera dark→light após hidratação quando o servidor já enviou `light`.
 
 ### Patch light-first — filter sheet e icon buttons (PR-9 visual)
 
@@ -887,22 +890,38 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `public-cargas-mobile-list.module.scss` | Overrides light para `.headerButton`, `.filterSquare`, `.filterBottomSheet`, chips; `body:has([data-theme='light'])` com tokens completos |
 | `public-cargas-mobile-filter-sheet.tsx` | Classe global `root` no painel + `data-theme="light"` no sheet portaled (client) |
 
-**Pendências intencionais (próxima rodada):**
+**Phase 5B — shell mobile produto (global):**
 
-- Bottom nav: refinamento visual light-first pendente.
-- Cargo detail sheet: bridge antigo (`CargoActionSheetBridge`) ainda abre no card; substituição/refino DS v2 depois.
-- Filtros horizontais (status scroller) e botão “Limpar todos”: avaliar remoção/ajuste em rodada própria.
-- Chrome externo do dashboard (shell/layout fora da lista): rodada dedicada.
+| Área | Mudança |
+| --- | --- |
+| `mobile-product-shell/` | `MobileProductHeader` (light, título por rota i18n), `ProductMobileBottomNav` (portal fixo, DS v2), `resolve-mobile-page-title.ts`, `MobileShellChromeProvider` |
+| `admin-chrome.tsx` | Header/bottom nav legado removidos do JSX; shell light `data-mobile-product-v2-shell` + `data-theme="light"` em viewport ≤860px |
+| `public-cargas-mobile-list` | Sem bottom nav local; `setBottomNavSuppressed` em sheets; `padding-bottom` reserva altura do nav global |
+| `adminChrome.mobile.pageTitles.*` + `nav.*` | Títulos por rota em pt-BR / en-US / es |
+| Testes | `admin-chrome-mobile-product-shell`, `resolve-mobile-page-title`, `product-mobile-bottom-nav`, E2E navegação Cargas → Negociações → Rastreio |
+
+**Entregue (rodada public mobile `/cargas`):**
+
+- Filtros horizontais de status removidos da lista; status permanece no filter sheet.
+- Search placeholder público: `operationsBoard.list.publicMobileSearchPlaceholder` (`Buscar cargas...`).
+- CTA do card: `operationsBoard.list.cardActionRoute` (`Ver rota`).
+- Sheet: `PublicCargoActionSheet` (light, `BottomSheet` shared com portal, ações com href via `intlAppPaths`); bridge ignora cards e links em `[data-public-cargas-mobile]` / `data-public-cargo-action`.
+- Ações do sheet público: Detalhes da carga, Ver rota, Documentos da carga, Custos e valores, Prioridade e riscos, Abrir negociações — hrefs sem prefixo de locale (next-intl `Link`).
+- CTA `Ver rota` no card: `primaryActionHref` → `/cargas/[id]/mapa` (navegação direta, sem abrir sheet).
+
+**Pendências intencionais:**
+
+- Conteúdo escuro por rota (ex.: boards desktop-first) pode coexistir; casca mobile (header + bottom nav + fundo scroll) permanece light-first.
 
 ### Fluxo preservado
 
-- Filtros e busca: mesma lógica do `OperationsBoard` (não mocks do lab).
-- Detalhe: `CargoActionSheetBridge` (não `CargoDetailSheetContent`).
-- Dados sensíveis: sem telefone/valor no card público; CTA apenas visual.
+- Filtros e busca: mesma lógica do `OperationsBoard` (filter sheet + query).
+- Desktop e `/rastreio`: inalterados (`mobileExperience` default).
+- Dados sensíveis: sem telefone/valor no card público.
 
 ### i18n novo
 
-`operationsBoard.list.cardActionView`, `operationsBoard.list.cardActionTrack` (pt-BR, en-US, es).
+`operationsBoard.list.publicMobileSearchPlaceholder`, `operationsBoard.list.cardActionRoute`, `operationsBoard.publicActionSheet.*` (pt-BR, en-US, es).
 
 ---
 
@@ -985,6 +1004,26 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `npm run build` | OK |
 | `npm test` (button, search-field, bottom-nav) | OK — 15 testes |
 
+### Phase 4 — Public cargo mobile stabilization (2026-06-03)
+
+**Decisão arquitetural final:**
+
+- **Single shared `BottomSheet`** (`src/shared/components/bottom-sheet/BottomSheet.tsx`) para filter sheet e action sheet públicos; props light compartilhadas via `publicCargoLightSheetDefaults` em `public-cargas-mobile/public-cargo-light-sheet-defaults.ts`.
+- **Feature-owned light token layer** via `_cargo-v2-light-shell.scss` + `usePublicCargoLightSheetPortal` (aplica `data-theme="light"` no painel portaled).
+- **`/[locale]/cargas` mobile público light-first** (`data-public-cargas-mobile="true"`, cards/sheets/nav light).
+- **Preservados sem alteração:** desktop `/cargas`, `/rastreio`, `/minhas-cargas`, `/dev-v2`, auth, mock mode.
+
+| Comando | Resultado |
+| --- | --- |
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 1990 keys |
+| `npm run test:unit -- tests/unit/features/cargo/` | OK — 629 testes (115 arquivos) |
+| `npm run build` | OK |
+| `npm run test:e2e -- tests/e2e/public-cargas-mobile.spec.ts` | OK — 3/3 (console guard, overlay fixed, z-index, hrefs, negociações) |
+
+**Consolidação Phase 4:** `publicCargoLightSheetDefaults` + `usePublicCargoLightSheetPortal` em `public-cargo-light-sheet-defaults.ts`; action sheet abre em `initialSnap="expanded"` para expor as 6 ações; CSS morto `.statusScroller`/`.statusChip` removido.
+
 ---
 
 ## Apêndice A — Mapeamento `--v2-*` → `--hy-*` (light)
@@ -1020,3 +1059,181 @@ Aplicação do visual e componentes extraídos do `/dev-v2` na lista pública mo
 | `--hx-cyan` | `#2563eb` (accent; nome legado) |
 
 Proposta: gerar a partir de `hy-*` em `cargo-sheet-theme.scss` da feature para não duplicar hex.
+
+---
+
+## Phase 5U — Background global, header glass e empty state de filtros (/cargas)
+
+**Ownership do background (mobile product shell)**
+
+| Camada | Responsabilidade |
+| --- | --- |
+| `.hr-shell[data-mobile-product-v2-shell]` | Canvas DS v2 light em toda a viewport (`min-height: 100dvh`); marker `data-mobile-shell-background="root"` |
+| `.mobileScrollStage` (`.hr-dashboard-scroll`) | Scroll transparente; marker `data-mobile-shell-background="true"` + `data-hy-mobile-canvas` |
+| Rotas / features | Transparentes; surfaces internas apenas em cards/sheets |
+| `PublicCargasMobileList` | `data-public-cargas-mobile-page-background="none"` + `background: transparent` |
+
+**Header global — glassmorphism**
+
+- Marker `data-mobile-header-glass="true"` em `MobileProductHeader`
+- Camada `header::before` com tokens `--hy-mobile-header-glass-*` e `backdrop-filter`
+- Compact global via `useMobileHeaderScroll` + `data-mobile-header-compact`
+
+**Empty state de filtros (/cargas)**
+
+- Ação única: `operationsBoard.filters.clearAction` = **"Limpar filtros"** (metadado abaixo da search)
+- Sem botão grande `list.clearFiltersAction` dentro do empty state
+- Layout centralizado com ícone `Info` ≥48px e tokens `--hy-color-empty-state-*`
+- Markers: `data-public-cargas-empty-state`, `-icon`, `-title`, `-description`
+
+**Testes:** `tests/e2e/public-cargas-mobile.spec.ts`, `tests/e2e/ds-v2-visual-contract.spec.ts`, `tests/unit/features/cargo/public-cargas-mobile-list.test.tsx`, `tests/unit/shared/layout/*`.
+
+---
+
+## Phase 5W.2 — Header mobile global hardened (2026-06-07)
+
+**Confirmado:** `MobileProductHeader` em `src/shared/layout/mobile-product-shell/mobile-product-header.tsx`, renderizado uma vez em `AdminChrome` dentro de `.hr-dashboard-scroll`.
+
+**Rotas verificadas:** `/pt-BR/cargas`, `/pt-BR/negociacoes`, `/pt-BR/rastreio` — mesmo header global; título via `resolveMobilePageTitleKey`.
+
+**Comportamento:** scroll/compact centralizado em `use-mobile-header-scroll.ts` (`.hr-dashboard-scroll` + window); animações e `prefers-reduced-motion` em `mobile-product-shell.module.scss`.
+
+**Tokens HY (header):** `--hy-mobile-header-frost-opacity-*`, `--hy-mobile-header-glass-*`, `--hy-color-mobile-header-glass-*`, `--hy-motion-duration-header*`. Sem redefinição local duplicada em `.header`.
+
+**Não é header global:** `public-cargas-mobile-list` `.header` = toolbar de busca/filtro da feature.
+
+**Nomenclatura:** marker produtivo `data-ds-v2-mobile-canvas` → `data-hy-mobile-canvas`. Rota `/dev-v2` mantida como lab. Débito: `data-mobile-product-v2-shell`, mixins `mobile-product-v2-*`, `cargoDsV2ThemeRootClassName` em features.
+
+**Regra:** nomes produtivos novos = `Hy` / `hy-` / `--hy-*` (sem DSV2/dsV2/dev-v2).
+
+---
+
+## Phase 5W.1B — Fechamento mobile light de `/cargas` (2026-06-06)
+
+**Decisões aplicadas**
+
+- First paint mobile light: `admin-chrome.module.scss` aplica o canvas DS v2 light ao `.hr-shell.hx-shell` em `max-width: 860px` antes da detecção JS de viewport, evitando flash dark → light.
+- Header glass global suavizado: opacidades de frost reduzidas, gradientes brancos menos fortes, blur mantido e compact state translúcido em vez de opaco.
+- Empty state de `/cargas`: migrado para `InformationalCard` shared, preservando markers da feature e `data-informational-card="true"`; card segue não clicável e sem CTA grande.
+- Loading state de `/cargas`: skeleton light explícito (`data-theme="light"`), anatomia alinhada ao header/search/meta/lista e padding compatível com BottomNav.
+- "Limpar filtros": ação textual contextual reforçada com tokens `--hy-color-action-subtle-*`, hover/focus/active acessíveis e sem virar CTA primário.
+- Testes atualizados para proteger blur, translucidez, ausência de barra sólida, markers shared e skeleton light; removida a expectativa de frost opacity alta como critério de qualidade.
+
+**Regra de estilos da rodada**
+
+- `.scss` comum em componente/feature tocada deve migrar para `.module.sass` quando encontrado.
+- Nesta rodada não houve `.scss` comum tocado; os arquivos alterados já eram CSS Modules (`.module.scss`) ou parciais globais/tokens/shells permitidos, então foram mantidos sem migração ampla.
+
+---
+
+## Phase 6 — `/cargas` mobile como fonte da verdade HY (2026-06-07)
+
+**Decisão de direção:** `/dev-v2` permanece laboratório legado. Contratos produtivos, testes E2E de regressão visual e novas telas mobile devem mirar `/pt-BR/cargas` e componentes shared homologados abaixo.
+
+### Fonte da verdade HY (produtivo)
+
+| Área | Caminho / marker |
+| --- | --- |
+| Rota produtiva | `/[locale]/cargas` mobile (`≤860px`, `mobileExperience="public-cargas"`) |
+| Lista mobile | `src/features/cargo/components/public-cargas-mobile/` |
+| Shell global | `src/shared/layout/mobile-product-shell/`, `admin-chrome` |
+| Header mobile global homologado | `MobileProductHeader` (`data-mobile-header-glass="true"`) |
+| BottomNav homologado | `ProductMobileBottomNav` → `BottomNav` |
+| BottomSheet homologado | `src/shared/components/bottom-sheet/` |
+| IconButton / SearchField / InformationalCard / StatusBadge | `src/shared/components/*` |
+| Tokens | `src/shared/styles/tokens/_hy-v2-light.scss` (`--hy-*`) |
+| Interações press | `src/shared/styles/interactions/_pressable.scss` |
+| Canvas mobile | `data-hy-mobile-canvas`, `data-mobile-product-v2-shell` |
+
+### Legado / lab (não contrato produtivo)
+
+| Item | Notas |
+| --- | --- |
+| `/pt-BR/dev-v2` | Lab visual; mocks locais; toggle tema |
+| `mobile-list-lab-v2/` | Duplicata de lista; não importar em produto |
+| `design-system-v2-catalog/` | Documentação; não runtime produtivo |
+| `shared/design-system/` | Catálogo paralelo; não usar em rotas produtivas |
+| `data-ds-v2-cargo-card` | Marker legado no `CargoCard`; renomear para HY |
+| `cargoDsV2ThemeRootClassName` | Helper de escopo de tema; renomear para HY |
+| `--v2-*` bridge | API local cargo/lab; migrar progressivamente para `--hy-*` |
+| `tests/e2e/ds-v2-visual-contract.spec.ts` | Renomear para `hy-mobile-visual-contract.spec.ts` (HY-DEBT-012) |
+
+### Componentes shared confirmados (homologados via `/cargas`)
+
+- `MobileProductHeader`, `ProductMobileBottomNav`, `MobileShellChromeProvider`
+- `BottomSheet` (filter + action sheets light)
+- `IconButton`, `SearchField`, `InformationalCard`, `StatusBadge`, `FilterChip`, `Button`, `BottomNav`
+
+### Componentes feature-local (permanecem em cargo)
+
+- `PublicCargasMobileList`, filter/action sheets content, skeleton, publish link
+- `CargoCard`, `CargoRouteLine`, `CargoEtaBlock`, `CargoLabV2StatusBadge`, `CargoFilterSheetFooter`
+- `_cargo-v2-light-shell.scss` (bridge light + portal tokens para sheets portaled)
+
+### Testes produtivos atualizados
+
+| Spec | Papel |
+| --- | --- |
+| `tests/e2e/public-cargas-mobile.spec.ts` | Contrato funcional/estrutural `/cargas` |
+| `tests/e2e/ds-v2-visual-contract.spec.ts` | Contrato visual HY em `/cargas` (tokens HY, sem baseline `/dev-v2`) |
+| `tests/e2e/theme.initial-light.spec.ts` | Light-first SSR (inclui `/cargas`) |
+| `tests/unit/shared/layout/mobile-product-shell-layout.test.ts` | Ownership shell/header |
+| `tests/unit/features/cargo/public-cargas-mobile-list.test.tsx` | Markers lista/empty state |
+
+**Fora de escopo desta rodada:** login/auth, mock mode auth, redesign header/BottomSheet.
+
+### Débitos técnicos HY
+
+| ID | Severidade | Área | Arquivo | Débito | Impacto | Correção recomendada | Corrigir agora? |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| HY-DEBT-001 | Média | Tokens | `_cargo-v2-light-shell.scss`, feature SCSS | Dual namespace `--hy-*` + `--v2-*` | Drift visual/tokens entre lab e produto | Alias progressivo `--v2-*` → `--hy-*`; remover bridge quando paridade | Não |
+| HY-DEBT-002 | Média | FilterChip | `FilterChip.module.scss` + `body:has` cargo | Light mode depende de overrides globais da feature | Chips escuros se portal hook falhar | Variante light nativa no shared `FilterChip` | Não |
+| HY-DEBT-003 | Baixa | CargoCard | `CargoCard.module.scss` | Literais px/rgba no card light | Dificulta auditoria token | Tokenizar superfícies restantes via `--hy-*` | Não |
+| HY-DEBT-004 | Baixa | Publish CTA | `public-cargas-mobile-list.module.scss` | `.publishLink` sem tokens HY nem bubble press | Inconsistência microinteração | Extrair token glass pill ou componente shared | Não |
+| HY-DEBT-005 | Média | Empty state | `InformationalCard` + feature overrides | Tokens `--hy-color-empty-state-*` não wired no shared | Cores default info-card vs empty-state HY | Prop `tone="empty"` ou variant no shared | Não |
+| HY-DEBT-006 | Baixa | Motion | `_pressable.scss` | Scales/durations hardcoded, não lê `--hy-motion-press-*` | Drift se tokens mudarem | Mixin ler custom properties HY | Não |
+| HY-DEBT-007 | Alta | Duplicação | `admin-chrome.module.scss`, `_cargo-v2-light-shell.scss` | Bottom nav CSS legado paralelo ao module homologado | CSS morto/confusão | Remover legado após grep de uso | Não |
+| HY-DEBT-008 | Média | Duplicação | `shared/design-system/`, `shared/ui/` | Primitives paralelos (IconButton, StatusBadge, sheets) | Import errado em feature nova | Documentar proibição; deprecar catálogo duplicado | Não |
+| HY-DEBT-009 | Média | Nomenclatura | `cargo-ds-v2-theme-scope.ts`, `CargoCard` | `cargoDsV2*`, `data-ds-v2-cargo-card` | Viola regra HY produtiva | Renomear para `cargoHyThemeRootClassName`, `data-hy-cargo-card` | Não |
+| HY-DEBT-010 | Baixa | Nomenclatura | `admin-chrome`, shells | `data-mobile-product-v2-shell`, mixins `mobile-product-v2-*` | Nome legado DSV2 em produto | Renomear markers/mixins para `hy-*` | Não |
+| HY-DEBT-011 | Média | Arquitetura | `operations-board.tsx` | Mobile+desktop na mesma page; CSS toggle 860px | DOM duplicado em desktop | Avaliar route split ou lazy layer | Não |
+| HY-DEBT-012 | Baixa | Testes | `ds-v2-visual-contract.spec.ts` | Nome de arquivo ainda referencia DS v2 | Confusão em CI/docs | Renomear para `hy-mobile-visual-contract.spec.ts` | Não |
+| HY-DEBT-013 | Baixa | Tokens | `_hy-v2-light.scss` | `--hy-motion-duration-skeleton` adicionado nesta rodada | — | Consumir no skeleton (já referenciado) | Sim |
+| HY-DEBT-014 | Média | Portal sheets | `usePublicCargoLightSheetPortal`, `body:has` SCSS | Tema light imperativo + cascade global feature | Fragilidade em novas rotas | Theme layer shared para portaled BottomSheet | Não |
+| HY-DEBT-015 | Baixa | Lab | `mobile-list-lab-v2/` | Duplicata completa da experiência mobile | Manutenção dobrada | Congelar lab; não expandir | Não |
+
+### BottomNav — correção bounce de navegação (2026-06-07)
+
+**Causa:** `resolveVisualActiveId` promovia `pendingItemId` ao active visual (bolha azul), enquanto `<a>` nativo bloqueava o click default e disparava `router.push` com delay — gerando ida/volta do pill antes do `pathname` confirmar.
+
+**Contrato atual:**
+
+| Estado | Fonte | Efeito visual |
+| --- | --- | --- |
+| **Active** | `usePathname` → `activeId` → `resolveVisualActiveId` (rota only) | Bolha azul + `aria-current="page"` |
+| **Pending** | `useLinkStatus` (itens com `href`) ou `pendingItemId` local (botões) | Bubble press `::after` via `data-bottom-nav-pending`, sem mover pill |
+| **Navegação** | `<Link prefetch>` do App Router (next-intl) | Prefetch + transição nativa; `onItemSelect` só intercepta casos especiais (ex.: retorno lista de cargas) |
+
+**Loading boundaries:** `/cargas`, `/negociacoes` e `/rastreio` já possuem `loading.tsx` — nenhum arquivo novo nesta rodada.
+
+### BottomNav HY Liquid Glass v2 — refinamento (2026-06-07)
+
+**Status:** refinamento em andamento — contrato funcional estável; visual premium recalibrado nesta rodada.
+
+**Arquitetura:** shell glass light (`bottom-nav-hy-light-shell.module.sass`); active liquid gooey (`bottom-nav-gooey-pill.tsx` + track em `BottomNav.tsx`); conteúdo icon/label nítido acima; estados via data attrs + Sass Module.
+
+**Motion:** encapsulada em `bottom-nav-motion.tsx` (`LazyMotion` + `domMax` + `motion/react`); active pathname-only; pending separado; sem bounce.
+
+**Tokens:** `--hy-color-bottom-nav-*`, `--hy-shadow-bottom-nav*`, `--hy-blur-bottom-nav*`, `--hy-motion-bottom-nav-*` em `_hy-v2-light.scss`.
+
+**Débitos:** HY-DEBT-017 (perf gooey low-end); HY-DEBT-019 (alias `bottomNavV2LightClassNames` no lab); calibrar gooey em device real.
+
+### Validação Phase 6 (2026-06-07)
+
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+npm test -- tests/unit/shared/layout/mobile-product-shell-layout.test.ts tests/unit/features/cargo/public-cargas-mobile-list.test.tsx tests/unit/shared/components/informational-card.component.test.tsx
+npx playwright test tests/e2e/public-cargas-mobile.spec.ts tests/e2e/theme.initial-light.spec.ts tests/e2e/ds-v2-visual-contract.spec.ts --project=chromium
+```

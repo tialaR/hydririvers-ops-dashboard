@@ -1,0 +1,54 @@
+.row {
+  display: flex;
+  gap: 0.45rem;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  padding-top: 0.15rem;
+}
+
+.cell {
+  width: 2.55rem;
+  height: 3rem;
+  text-align: center;
+  font-size: 1.28rem;
+  font-weight: var(--hy-font-weight-heavy, 780);
+  border: 1px solid var(--auth-line, var(--hy-color-line-subtle));
+  border-radius: var(--auth-radius-md, var(--hy-radius-button));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(241, 245, 249, 0.52)),
+    var(--auth-surface-soft, var(--hy-color-glass-soft));
+  color: var(--auth-text, var(--hy-color-text-title));
+  font-family: var(--auth-font-mono, var(--hy-font-family-mono));
+  font-variant-numeric: tabular-nums;
+  transition:
+    border-color var(--hy-motion-press-duration, 160ms) ease,
+    box-shadow var(--hy-motion-press-duration, 160ms) ease;
+}
+
+.cell:focus-visible {
+  outline: none;
+  border-color: var(--auth-brand, var(--hy-color-brand));
+  box-shadow: var(--hy-shadow-focus, 0 0 0 0.1875rem rgba(37, 99, 235, 0.28));
+}
+
+.cell:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.rowInvalid .cell {
+  border-color: var(--auth-danger, var(--hy-color-danger-text));
+}
+
+@media (max-width: 640px) {
+  .cell {
+    width: calc((100% - 2.25rem) / 6);
+    min-width: 2.55rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cell {
+    transition-duration: 1ms;
+  }
+}

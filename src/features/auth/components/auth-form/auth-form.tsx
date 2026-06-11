@@ -20,7 +20,9 @@ import {
 import { useLocale, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { Link, useRouter } from '@/core/i18n/navigation';
-import { Button } from '@/shared/ui/button/button';
+import { Button } from '@/shared/components/button';
+import { InlineAlert } from '@/shared/components/inline-alert';
+import { OtpInput } from '@/shared/components/otp-input';
 import { QA_LOGIN_PREFILL_STORAGE_KEY } from '@/shared/qa/login-prefill';
 import { routeSearchParams } from '@/shared/routing/route-search-params';
 import { intlAppPaths } from '@/shared/routing/app-routes';
@@ -180,16 +182,6 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
       slots: Array.from({ length: 6 }, (): HTMLInputElement | null => null)
     }),
     []
-  );
-
-  const otpInputRefCallbacks = useMemo(
-    () =>
-      [0, 1, 2, 3, 4, 5].map(
-        (index) => (el: HTMLInputElement | null) => {
-          otpSlotsBox.slots[index] = el;
-        }
-      ),
-    [otpSlotsBox]
   );
 
   const phoneNormalized = useMemo(() => normalizePhoneDigits(phone), [phone]);
@@ -934,40 +926,17 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                 </div>
                 <p className={styles.fieldHint}>{t('otpHint')}</p>
 
-                <div
-                  className={styles.otpRow}
-                  role="group"
-                  aria-label={t('otpInputLabel')}
-                  aria-describedby={error ? 'auth-form-error' : undefined}
-                >
-                  {Array.from({ length: 6 }, (_, index) => (
-                    <input
-                      key={`otp-slot-${index}`}
-                      ref={otpInputRefCallbacks[index]}
-                      className={styles.otpCell}
-                      inputMode="numeric"
-                      autoComplete={index === 0 ? 'one-time-code' : 'off'}
-                      maxLength={1}
-                      pattern="\d*"
-                      aria-label={`${t('otpDigitAria')} ${index + 1}`}
-                      value={otp[index] ?? ''}
-                      onPaste={onOtpPaste}
-                      onChange={(event) => {
-                        const digit = event.target.value.replace(/\D/g, '').slice(-1);
-                        const chars = otp.padEnd(6, ' ').split('');
-                        chars[index] = digit || '';
-                        const merged = chars.join('').trimEnd();
-                        setOtp(merged);
-                        if (digit && index < 5) otpSlotsBox.slots[index + 1]?.focus();
-                      }}
-                      onKeyDown={(event) => {
-                        if (event.key === 'Backspace' && !otp[index] && index > 0) {
-                          otpSlotsBox.slots[index - 1]?.focus();
-                        }
-                      }}
-                    />
-                  ))}
-                </div>
+                <OtpInput
+                  value={otp}
+                  onChange={setOtp}
+                  onPaste={onOtpPaste}
+                  disabled={pending}
+                  invalid={Boolean(error)}
+                  groupLabel={t('otpInputLabel')}
+                  digitAriaLabel={(index) => `${t('otpDigitAria')} ${index}`}
+                  describedBy={error ? 'auth-form-error' : undefined}
+                  slotsBox={otpSlotsBox}
+                />
 
                 <div className={styles.otpFooter}>
                   <p>{t('otpResendHint')}</p>
@@ -980,20 +949,33 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
           ) : null}
 
           {error ? (
-            <p className={styles.error} id="auth-form-error" role="alert">
+            <InlineAlert tone="error" id="auth-form-error">
               {error}
-            </p>
+            </InlineAlert>
           ) : null}
-          {success ? <p className={styles.success}>{success}</p> : null}
+          {success ? <InlineAlert tone="success">{success}</InlineAlert> : null}
 
-          <Button className={styles.submit} disabled={primaryDisabled} loading={pending} loadingLabel={t('loading')}>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            className={styles.submit}
+            disabled={primaryDisabled}
+            isLoading={pending}
+          >
             {completedMode
               ? t('successContinue')
               : otpStage
-                ? t('otpSubmit')
+                ? pending
+                  ? t('loading')
+                  : t('otpSubmit')
                 : mode === 'login'
-                  ? t('continueToOtp')
-                  : t('signup')}
+                  ? pending
+                    ? t('loading')
+                    : t('continueToOtp')
+                  : pending
+                    ? t('loading')
+                    : t('signup')}
           </Button>
         </form>
 

@@ -55,6 +55,8 @@
     radial-gradient(ellipse 110% 72% at 48% -38%, rgba(255, 255, 255, 0.58), transparent 60%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.42), rgba(226, 234, 246, 0.2)),
     var(--card-glass-base);
+  /* Re-declare: `.hr-dashboard-content-root [class*='card']` in globals wins on specificity otherwise. */
+  box-shadow: var(--card-shadow), var(--card-highlight);
 }
 
 :global(.root[data-theme='light']) .card h2 {
@@ -200,12 +202,14 @@
 }
 
 :global(.root[data-theme='light']) .card .cardAction {
-  border-color: var(--v2-line-faint);
-  color: var(--v2-text-body);
+  border-color: var(--hy-color-interactive-border, rgba(71, 85, 105, 0.14));
+  color: var(--hy-color-interactive-icon-strong, rgba(30, 41, 59, 0.82));
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(226, 234, 246, 0.28)),
-    var(--v2-surface-frosted-58);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(226, 234, 246, 0.32)),
+    var(--hy-color-interactive-surface, rgba(241, 245, 249, 0.82));
+  box-shadow: var(--hy-shadow-interactive, 0 0.875rem 1.875rem rgba(15, 23, 42, 0.08)),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  font-weight: 650;
 }
 
 .card:active .cardAction {

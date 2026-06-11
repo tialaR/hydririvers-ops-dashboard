@@ -1,0 +1,22 @@
+---
+description: HydriRivers orchestrator rules for Cursor
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+Use the Hydri Product & Engineering Orchestrator.
+
+Before editing code, classify the task: audit, component/UI, visual tuning, behavior bug, patch/ZIP or documentation.
+
+Do not patch before diagnosis is closed. Do not generate charts or prose reports when the task is to create/fix code. Preserve mobile/desktop separation, next-intl routes, mock-mode and CSS Modules. Prefer `.module.sass` for touched/created component styles. Do not install dependencies without approval.
+
+For UI mobile, preview `/pt-BR/cargas`. For code changes, run:
+
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+```
+
+For BottomNav: approved preview should be global production, old nav should be Legacy, and mobile shell must not pass legacy classNames into the new component.

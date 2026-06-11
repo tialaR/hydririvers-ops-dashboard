@@ -1,0 +1,103 @@
+@use '../../../../shared/styles/tokens/hy-v2-light' as hyV2Light;
+
+@mixin skeleton-block {
+  border-radius: 1rem;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(226, 234, 246, 0.55) 0%,
+      rgba(241, 245, 249, 0.88) 48%,
+      rgba(226, 234, 246, 0.55) 100%
+    );
+  background-size: 200% 100%;
+  animation: tracking-mobile-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.root {
+  @include hyV2Light.hy-v2-light-tokens;
+
+  display: grid;
+  gap: 0.875rem;
+  padding-bottom: calc(var(--hy-size-bottom-nav-height, 4.375rem) + 1.5rem);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.tab {
+  @include skeleton-block;
+
+  height: 2.5rem;
+  border-radius: 999rem;
+}
+
+.mapPanel {
+  @include skeleton-block;
+
+  min-height: 12rem;
+  border-radius: 1.25rem;
+}
+
+.timeline {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.timelineItem {
+  @include skeleton-block;
+
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  min-height: 4rem;
+  padding: 0.85rem 1rem;
+  border-radius: 1rem;
+}
+
+.timelineDot {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 999rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+.timelineCopy {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.timelineTitle {
+  width: 58%;
+  height: 0.875rem;
+  border-radius: 0.375rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+.timelineMeta {
+  width: 42%;
+  height: 0.75rem;
+  border-radius: 0.375rem;
+  background: rgba(226, 234, 246, 0.72);
+}
+
+@keyframes tracking-mobile-skeleton-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab,
+  .mapPanel,
+  .timelineItem {
+    animation: none;
+  }
+}

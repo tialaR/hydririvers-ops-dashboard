@@ -1,0 +1,113 @@
+@use '../tokens/hy-v2-light' as hyV2Light;
+
+// Auth/profile DS v2 light shell — scoped tokens for login, register, OTP and profile.
+// Mirrors cargo-v2-light-shell bridge; does not emit global CSS by itself.
+
+@mixin auth-v2-light-shell {
+  @include hyV2Light.hy-v2-light-tokens;
+
+  /* Bridge --v2-* for shared DS v2 components (Button, TextField, etc.) */
+  --v2-bg-top: var(--hy-color-background-app);
+  --v2-bg-mid: var(--hy-color-background-mid);
+  --v2-bg-bottom: var(--hy-color-background-bottom);
+  --v2-text: var(--hy-color-text-primary);
+  --v2-title: var(--hy-color-text-title);
+  --v2-muted: var(--hy-color-text-secondary);
+  --v2-soft: var(--hy-color-text-muted);
+  --v2-blue: var(--hy-color-brand);
+  --v2-blue-strong: var(--hy-color-brand-strong);
+  --v2-green: var(--hy-color-success);
+  --v2-border: var(--hy-color-border-subtle);
+  --v2-border-strong: var(--hy-color-border-strong);
+  --v2-line: var(--hy-color-line-subtle);
+  --v2-text-accent: var(--hy-color-text-accent);
+  --v2-surface-card: var(--hy-color-surface-card);
+  --v2-surface-search: var(--hy-color-surface-search);
+  --v2-surface-frosted-68: rgba(241, 245, 249, 0.68);
+  --v2-surface-frosted-64: rgba(241, 245, 249, 0.64);
+  --v2-shadow-card-elevated: var(--hy-shadow-card-elevated);
+  --v2-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+  --v2-font-family: var(--hy-font-family-base);
+  --v2-action-primary-start: var(--hy-color-action-primary-start);
+  --v2-action-primary-end: var(--hy-color-action-primary-end);
+  --v2-radius-button: var(--hy-radius-button);
+  --v2-radius-search: var(--hy-radius-search);
+  --v2-focus-ring: var(--hy-color-focus-ring);
+
+  /* Auth semantic aliases (prefer these in auth/profile modules) */
+  --auth-text: var(--hy-color-text-title);
+  --auth-text-body: var(--hy-color-text-primary);
+  --auth-muted: var(--hy-color-text-secondary);
+  --auth-muted-soft: var(--hy-color-text-muted);
+  --auth-brand: var(--hy-color-brand);
+  --auth-brand-strong: var(--hy-color-brand-strong);
+  --auth-accent: var(--hy-color-cyan);
+  --auth-danger: var(--hy-color-danger-text);
+  --auth-success: var(--hy-color-success);
+  --auth-line: var(--hy-color-line-subtle);
+  --auth-line-strong: var(--hy-color-border-strong);
+  --auth-surface: var(--hy-color-glass-strong);
+  --auth-surface-soft: var(--hy-color-glass-soft);
+  --auth-surface-card: var(--hy-color-surface-card);
+  --auth-surface-elevated: var(--hy-color-background-elevated);
+  --auth-shadow: var(--hy-shadow-card-soft);
+  --auth-shadow-elevated: var(--hy-shadow-card-elevated);
+  --auth-radius-xl: var(--hy-radius-sheet);
+  --auth-radius-lg: var(--hy-radius-card);
+  --auth-radius-md: var(--hy-radius-button);
+  --auth-radius-sm: var(--hy-radius-cargo-icon);
+  --auth-radius-pill: var(--hy-radius-chip);
+  --auth-blur: var(--hy-blur-surface-soft);
+  --auth-font: var(--hy-font-family-base);
+  --auth-font-mono: var(--hy-font-family-mono);
+  --auth-brand-glow: rgba(37, 99, 235, 0.12);
+  --auth-brand-soft-line: rgba(37, 99, 235, 0.22);
+
+  color: var(--auth-text-body);
+  font-family: var(--auth-font);
+}
+
+@mixin auth-v2-light-page-background {
+  background:
+    radial-gradient(circle at 82% 8%, rgba(37, 99, 235, 0.14), transparent 16rem),
+    radial-gradient(circle at 8% 32%, rgba(8, 145, 178, 0.08), transparent 18rem),
+    linear-gradient(
+      180deg,
+      var(--hy-color-background-app),
+      var(--hy-color-background-mid) 46%,
+      var(--hy-color-background-bottom)
+    );
+}
+
+@mixin auth-v2-light-glass-card {
+  border: 1px solid var(--auth-line);
+  border-radius: var(--auth-radius-lg);
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--auth-brand) 8%, transparent), transparent 11rem),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--auth-surface-card) 88%, white),
+      color-mix(in srgb, var(--auth-surface) 96%, transparent)
+    );
+  box-shadow: var(--auth-shadow);
+  backdrop-filter: var(--auth-blur);
+  -webkit-backdrop-filter: var(--auth-blur);
+}
+
+@mixin auth-v2-light-primary-button {
+  min-height: var(--hy-size-control-height, 3.25rem);
+  border-radius: var(--auth-radius-pill);
+  border: 1px solid color-mix(in srgb, var(--auth-brand) 24%, transparent);
+  color: rgba(255, 255, 255, 0.96);
+  background:
+    radial-gradient(circle at 24% 12%, rgba(255, 255, 255, 0.16), transparent 31%),
+    linear-gradient(
+      135deg,
+      var(--hy-color-action-primary-start) 0%,
+      var(--hy-color-action-primary-end) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16),
+    0 9px 20px var(--auth-brand-glow);
+  font-weight: var(--hy-font-weight-bold, 720);
+}

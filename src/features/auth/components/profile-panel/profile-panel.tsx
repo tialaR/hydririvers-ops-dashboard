@@ -16,9 +16,10 @@ import {
 import type { LucideIcon } from 'lucide-react';
 import NextImage from 'next/image';
 import { useTranslations } from 'next-intl';
-import { Card } from '@/shared/ui/card/card';
+import { Button } from '@/shared/components/button';
+import { InlineAlert } from '@/shared/components/inline-alert';
+import { Surface } from '@/shared/components/surface';
 import { Badge } from '@/shared/ui/badge/badge';
-import { Button } from '@/shared/ui/button/button';
 import { useAuthSession } from '../../hooks/use-auth-session';
 import { updateProfile } from '../../services/auth.client';
 import type { HydroUser } from '../../domain/auth.types';
@@ -282,7 +283,7 @@ export function ProfilePanel() {
   return (
     <main className={styles.shell} aria-label={perfil('mainAriaLabel')}>
       <section className={styles.grid}>
-        <Card className={styles.identity}>
+        <Surface tone="glass" className={styles.identity}>
           <button
             type="button"
             className={`${styles.avatar} ${avatarPreviewAvailable ? styles.avatarButton : ''}`}
@@ -323,7 +324,11 @@ export function ProfilePanel() {
               </button>
             ) : null}
           </div>
-          {avatarError ? <small className={styles.error}>{avatarError}</small> : null}
+          {avatarError ? (
+            <InlineAlert tone="error" className={styles.error}>
+              {avatarError}
+            </InlineAlert>
+          ) : null}
           <h2 className={styles.identityName} title={profile.name}>
             {displayName}
           </h2>
@@ -335,8 +340,8 @@ export function ProfilePanel() {
             <p className={styles.identityStatusTitle}>{user.approved ? t('identityReleasedTitle') : t('identityPendingTitle')}</p>
             <p className={styles.identityStatusBody}>{user.approved ? t('identityReleasedBody') : t('identityPendingBody')}</p>
           </div>
-        </Card>
-        <Card className={styles.details}>
+        </Surface>
+        <Surface tone="glass" className={styles.details}>
           <DetailRow icon={Mail} label={t('detailEmailLabel')} hint={t('detailEmailHint')} value={profile.email} />
           <DetailRow
             icon={Building2}
@@ -351,8 +356,8 @@ export function ProfilePanel() {
             hint={t('detailAreasHint')}
             value={user.approved ? t('accessAreasApproved') : t('accessAreasPending')}
           />
-        </Card>
-        <Card className={styles.formCard}>
+        </Surface>
+        <Surface tone="glass" className={styles.formCard}>
           <h2 className={styles.formHeading}>{t('formSectionTitle')}</h2>
           <p className={styles.formLead}>{t('formSectionLead')}</p>
           <form className={styles.form} onSubmit={onSubmit} noValidate>
@@ -404,16 +409,23 @@ export function ProfilePanel() {
               />
             </label>
             {profileError ? (
-              <p className={styles.error} role="alert" id={`${formIds}-form-error`}>
+              <InlineAlert tone="error" id={`${formIds}-form-error`}>
                 {profileError}
-              </p>
+              </InlineAlert>
             ) : null}
-            <Button className={styles.full} loading={pending} loadingLabel={auth('loading')} aria-describedby={profileError ? `${formIds}-form-error` : undefined}>
-              {saved ? auth('saved') : auth('saveProfile')}
+            <Button
+              type="submit"
+              variant="primary"
+              fullWidth
+              className={styles.full}
+              isLoading={pending}
+              aria-describedby={profileError ? `${formIds}-form-error` : undefined}
+            >
+              {pending ? auth('loading') : saved ? auth('saved') : auth('saveProfile')}
             </Button>
           </form>
-        </Card>
-        <Card className={`${styles.guidanceCard} ${guidanceOpen ? styles.guidanceCardOpen : ''}`}>
+        </Surface>
+        <Surface tone="glass" className={`${styles.guidanceCard} ${guidanceOpen ? styles.guidanceCardOpen : ''}`}>
           <button
             type="button"
             className={styles.guidanceTrigger}
@@ -446,7 +458,7 @@ export function ProfilePanel() {
               </div>
             </div>
           </div>
-        </Card>
+        </Surface>
       </section>
       {isAvatarViewerOpen && avatarPreviewAvailable ? (
         <div className={styles.viewerOverlay} role="presentation" onClick={() => setIsAvatarViewerOpen(false)}>

@@ -48,16 +48,25 @@
   /* Overlay */
   --hy-color-overlay-sheet: rgba(3, 8, 14, 0.3);
 
-  /* Status — lab card variants + reserved completed/blocked (catalog parity) */
+  /* Status — semantic tones (card + sheet badges) */
+  --hy-color-status-open-bg: rgba(204, 251, 241, 0.78);
+  --hy-color-status-open-text: #0f766e;
+  --hy-color-status-open-border: rgba(13, 148, 136, 0.22);
+  --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.78);
+  --hy-color-status-quotation-text: #1d4ed8;
+  --hy-color-status-quotation-border: rgba(37, 99, 235, 0.18);
+  --hy-color-status-contracting-bg: rgba(237, 233, 254, 0.82);
+  --hy-color-status-contracting-text: #6d28d9;
+  --hy-color-status-contracting-border: rgba(109, 40, 217, 0.22);
+  --hy-color-status-operating-bg: rgba(224, 231, 255, 0.8);
+  --hy-color-status-operating-text: #4338ca;
+  --hy-color-status-operating-border: rgba(67, 56, 202, 0.22);
   --hy-color-status-in-transit-bg: rgba(220, 252, 231, 0.72);
   --hy-color-status-in-transit-text: #15803d;
   --hy-color-status-in-transit-border: rgba(22, 163, 74, 0.16);
-  --hy-color-status-scheduled-bg: rgba(219, 234, 254, 0.72);
-  --hy-color-status-scheduled-text: #1d4ed8;
-  --hy-color-status-scheduled-border: rgba(37, 99, 235, 0.16);
-  --hy-color-status-quotation-bg: rgba(219, 234, 254, 0.72);
-  --hy-color-status-quotation-text: #1d4ed8;
-  --hy-color-status-quotation-border: rgba(37, 99, 235, 0.16);
+  --hy-color-status-scheduled-bg: var(--hy-color-status-operating-bg);
+  --hy-color-status-scheduled-text: var(--hy-color-status-operating-text);
+  --hy-color-status-scheduled-border: var(--hy-color-status-operating-border);
   --hy-color-status-delayed-bg: rgba(254, 243, 199, 0.74);
   --hy-color-status-delayed-text: #a16207;
   --hy-color-status-delayed-border: rgba(202, 138, 4, 0.24);
@@ -71,8 +80,18 @@
   /* Layout / control sizes (rem, from lab measurements) */
   --hy-size-shell-max-width: 26.875rem;
   --hy-size-control-height: 3.25rem;
-  --hy-size-bottom-nav-height: 4.375rem;
-  --hy-size-bottom-nav-active-bubble-height: 3.625rem;
+  --hy-size-bottom-nav-height: 4.5rem;
+  --hy-size-bottom-nav-item-height: 3.5rem;
+  --hy-size-bottom-nav-active-pill-height: 3.375rem;
+  --hy-size-bottom-nav-active-bubble-height: var(--hy-size-bottom-nav-active-pill-height);
+  --hy-size-bottom-nav-icon: 1.4375rem;
+  --hy-size-bottom-nav-icon-active: 1.4375rem;
+  --hy-size-bottom-nav-icon-hit: 1.75rem;
+  --hy-spacing-bottom-nav-inset: 0.375rem;
+  --hy-spacing-bottom-nav-margin-inline: 0.75rem;
+  --hy-spacing-bottom-nav-pill-gap: 0.125rem;
+  --hy-spacing-bottom-nav-pill-padding-block: 0.4375rem;
+  --hy-spacing-bottom-nav-pill-padding-inline: 0.625rem;
   --hy-size-icon-button: 3.25rem;
   --hy-size-cargo-icon: 2.625rem;
   --hy-spacing-shell-padding-inline: 1.125rem;
@@ -97,20 +116,112 @@
   --hy-shadow-card-soft: 0 1.625rem 4.5rem rgba(15, 23, 42, 0.14);
   --hy-shadow-card-elevated: 0 1.125rem 2.625rem rgba(15, 23, 42, 0.12), 0 0.25rem 0.75rem rgba(15, 23, 42, 0.08);
   --hy-shadow-sheet: 0 1.75rem 5.375rem rgba(15, 23, 42, 0.18);
-  --hy-shadow-bottom-nav: 0 0.625rem 1.5rem rgba(15, 23, 42, 0.14);
+  --hy-shadow-bottom-nav:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.9),
+    0 0.3125rem 0.875rem rgba(15, 23, 42, 0.06),
+    0 0.875rem 2rem rgba(15, 23, 42, 0.1),
+    0 1.375rem 3.25rem rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --hy-shadow-bottom-nav-active-pill:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.78),
+    0 0.1875rem 0.5625rem rgba(15, 23, 42, 0.09),
+    0 0.5rem 1.125rem rgba(15, 23, 42, 0.11),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  --hy-shadow-bottom-nav-active-pill-pressed:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.84),
+    0 0.25rem 0.6875rem rgba(15, 23, 42, 0.11),
+    0 0.5625rem 1.25rem rgba(15, 23, 42, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.76);
+  --hy-shadow-bottom-nav-active-pill-inner:
+    inset 0 0.375rem 0.625rem rgba(255, 255, 255, 0.34),
+    inset 0 -0.1875rem 0.4375rem rgba(15, 23, 42, 0.1),
+    inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.24);
+  --hy-shadow-bottom-nav-active-pill-commit:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.86),
+    0 0.3125rem 0.75rem rgba(15, 23, 42, 0.12),
+    0 0.625rem 1.375rem rgba(15, 23, 42, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.74);
+  --hy-shadow-bottom-nav-active-pill-commit-peak:
+    0 0.0625rem 0 rgba(255, 255, 255, 0.92),
+    0 0.375rem 0.875rem rgba(15, 23, 42, 0.13),
+    0 0.6875rem 1.5rem rgba(15, 23, 42, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   --hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12);
   --hy-shadow-focus: 0 0 0 0.1875rem rgba(37, 99, 235, 0.28);
 
   /* Blur / glass */
   --hy-blur-surface-soft: blur(1.125rem) saturate(1.05);
   --hy-blur-sheet-backdrop: blur(1.75rem) saturate(1.14);
-  --hy-blur-bottom-nav: blur(1.5rem) saturate(1.08);
+  --hy-blur-bottom-nav: blur(2.375rem) saturate(1.52) brightness(1.01);
+  --hy-blur-bottom-nav-active-pill: blur(1.625rem) saturate(1.88) brightness(1.05);
+  --hy-blur-bottom-nav-active-pill-commit: blur(1.75rem) saturate(1.92) brightness(1.04);
+  --hy-blur-bottom-nav-active-pill-commit-peak: blur(1.875rem) saturate(1.96) brightness(1.05);
+  --hy-mobile-header-z-index: 160;
+  --hy-mobile-header-glass-height: 100%;
+  --hy-mobile-header-compact-height: auto;
+  --hy-mobile-header-frost-opacity-rest: 0;
+  --hy-mobile-header-frost-opacity-compact: 0.98;
+  --hy-mobile-header-glass-bleed: 0;
+  --hy-mobile-header-compact-title-offset: -0.25rem;
+  --hy-mobile-header-compact-padding-bottom: 0.55rem;
+  --hy-blur-mobile-header: blur(1.25rem) saturate(1.08);
+  --hy-mobile-header-glass-blur: blur(1.125rem) saturate(1.24);
+  --hy-mobile-header-glass-blur-rest: blur(0.625rem) saturate(1.5);
+  --hy-mobile-header-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  --hy-mobile-header-glass-surface: none;
+  --hy-mobile-header-glass-surface-compact:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.24) 0%,
+      rgba(255, 255, 255, 0.16) 58%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+  --hy-mobile-header-glass-bg: none;
+  --hy-mobile-header-glass-bg-compact: none;
+  --hy-mobile-header-glass-mask:
+    linear-gradient(
+      180deg,
+      #000 0%,
+      #000 72%,
+      rgba(0, 0, 0, 0.72) 84%,
+      rgba(0, 0, 0, 0.38) 94%,
+      transparent 100%
+    );
+  --hy-mobile-header-glass-mask-rest: linear-gradient(to bottom, #000 70%, transparent 100%);
+  --hy-color-mobile-header-glass-rest-surface: rgba(255, 255, 255, 0.02);
+  --hy-color-mobile-header-glass-compact-surface: rgba(255, 255, 255, 0.2);
+  --hy-color-mobile-header-glass-compact-title: rgba(15, 23, 42, 0.78);
   --hy-blur-overlay: blur(0.625rem) saturate(1.02);
+  --hy-shadow-mobile-header-glass: none;
+  --hy-shadow-mobile-header-glass-compact: 0 0.0625rem 0 rgba(148, 163, 184, 0.1);
+  --hy-motion-duration-header: 220ms;
+  --hy-motion-duration-header-frost: 180ms;
+
+  /* Typography — mobile header navigation title */
+  --hy-font-size-page-title-expanded: 2.75rem;
+  --hy-font-size-nav-title-compact: 0.875rem;
+
+  /* Action subtle — links/contextual secondary actions */
+  --hy-color-action-subtle-text: rgba(29, 78, 216, 0.9);
+  --hy-color-action-subtle-hover: rgba(29, 78, 216, 1);
+  --hy-color-action-subtle-focus-ring: rgba(37, 99, 235, 0.42);
+  --hy-color-action-subtle-underline: rgba(37, 99, 235, 0.28);
+
+  /* Empty state — breathing room above informational cards in feature lists */
+  --hy-space-empty-state-offset: 1.25rem;
+  --hy-color-empty-state-icon: rgba(37, 99, 235, 0.62);
+  --hy-color-empty-state-title: rgba(37, 99, 235, 0.78);
+  --hy-color-empty-state-description: rgba(71, 85, 105, 0.74);
+  --hy-color-empty-state-surface: rgba(241, 245, 249, 0.64);
+  --hy-shadow-empty-state: 0 1.125rem 2.625rem rgba(15, 23, 42, 0.08);
 
   /* Typography */
   --hy-font-family-base: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
   --hy-font-family-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
   --hy-font-size-display: 2.75rem;
+  --hy-font-size-nav-title: 1.0625rem;
+  --hy-font-size-sheet-header-title: 1.0625rem;
+  --hy-font-size-sheet-description: 0.8125rem;
   --hy-font-size-sheet-title: 2.6875rem;
   --hy-font-size-sheet-cargo-title: 1.4375rem;
   --hy-font-size-title: 1.125rem;
@@ -120,7 +231,9 @@
   --hy-font-size-label: 0.75rem;
   --hy-font-size-caption: 0.6875rem;
   --hy-font-size-micro: 0.625rem;
-  --hy-font-size-nav: 0.578125rem;
+  --hy-font-size-nav: 0.6875rem;
+  --hy-font-size-bottom-nav-label: 0.625rem;
+  --hy-font-size-bottom-nav-label-active: 0.625rem;
   --hy-font-weight-regular: 400;
   --hy-font-weight-medium: 500;
   --hy-font-weight-semibold: 620;
@@ -129,6 +242,7 @@
   --hy-font-weight-display: 690;
   --hy-font-weight-black: 900;
   --hy-line-height-display: 0.98;
+  --hy-line-height-sheet-header-title: 1.15;
   --hy-line-height-sheet-title: 1.12;
   --hy-line-height-sheet-cargo-title: 1.08;
   --hy-line-height-title: 1.2;
@@ -137,8 +251,12 @@
   --hy-line-height-label: 1.2;
   --hy-line-height-caption: 1.1;
   --hy-letter-spacing-display: -0.075em;
+  --hy-letter-spacing-sheet-header-title: -0.025em;
   --hy-letter-spacing-sheet-title: -0.04em;
   --hy-letter-spacing-sheet-cargo-title: -0.055em;
+  --hy-font-weight-nav-title: 760;
+  --hy-space-sheet-header-gap: 0.25rem;
+  --hy-color-sheet-description: rgba(100, 116, 139, 0.82);
   --hy-letter-spacing-title: -0.018em;
   --hy-letter-spacing-label: 0.065em;
   --hy-letter-spacing-caption: 0;
@@ -152,7 +270,57 @@
   --hy-motion-press-scale-icon: 1.06;
   --hy-motion-press-scale-focus: 1.025;
   --hy-motion-duration-enter: 560ms;
+  --hy-motion-duration-skeleton: 1.4s;
   --hy-motion-stagger-card: 82ms;
   --hy-motion-ease-standard: cubic-bezier(0.2, 1, 0.2, 1);
   --hy-motion-ease-press: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Bottom nav — HY liquid glass light (prod /cargas mobile) */
+  --hy-color-bottom-nav-border: rgba(255, 255, 255, 0.52);
+  --hy-color-bottom-nav-shell-surface: rgba(203, 213, 225, 0.38);
+  --hy-color-bottom-nav-shell-surface-strong: rgba(226, 232, 240, 0.24);
+  --hy-color-bottom-nav-shell-surface-end: rgba(186, 198, 214, 0.32);
+  --hy-color-bottom-nav-shell-border: rgba(255, 255, 255, 0.42);
+  --hy-color-bottom-nav-shell-highlight: rgba(255, 255, 255, 0.14);
+  --hy-color-bottom-nav-shell-accent: rgba(100, 116, 139, 0.1);
+  --hy-color-bottom-nav-shell-top-highlight: rgba(255, 255, 255, 0.12);
+  --hy-color-bottom-nav-shell-rim-light: rgba(255, 255, 255, 0.16);
+  --hy-color-bottom-nav-highlight: rgba(255, 255, 255, 0.18);
+  --hy-color-bottom-nav-highlight-accent: rgba(100, 116, 139, 0.08);
+  --hy-color-bottom-nav-inactive-icon: rgba(113, 113, 122, 0.72);
+  --hy-color-bottom-nav-inactive-label: rgba(113, 113, 122, 0.88);
+  --hy-color-bottom-nav-disabled-icon: rgba(148, 163, 184, 0.46);
+  --hy-color-bottom-nav-disabled-label: rgba(148, 163, 184, 0.42);
+  --hy-opacity-bottom-nav-inactive-icon: 0.82;
+  --hy-opacity-bottom-nav-inactive-label: 0.8;
+  --hy-opacity-bottom-nav-disabled: 0.46;
+  --hy-color-bottom-nav-active-icon: #0f172a;
+  --hy-color-bottom-nav-active-label: #0f172a;
+  --hy-color-bottom-nav-active-border: rgba(255, 255, 255, 0.68);
+  --hy-color-bottom-nav-active-border-pressed: rgba(255, 255, 255, 0.76);
+  --hy-color-bottom-nav-active-border-commit: rgba(255, 255, 255, 0.82);
+  --hy-color-bottom-nav-active-border-commit-peak: rgba(255, 255, 255, 0.88);
+  --hy-color-bottom-nav-active-highlight: rgba(255, 255, 255, 0.62);
+  --hy-color-bottom-nav-active-rim-start: rgba(255, 255, 255, 0.94);
+  --hy-color-bottom-nav-active-rim-commit-start: rgba(255, 255, 255, 0.98);
+  --hy-color-bottom-nav-active-rim-mid: rgba(203, 213, 225, 0.42);
+  --hy-color-bottom-nav-active-rim-end: rgba(15, 23, 42, 0.08);
+  --hy-color-bottom-nav-active-surface-start: rgba(255, 255, 255, 0.52);
+  --hy-color-bottom-nav-active-surface-end: rgba(248, 250, 252, 0.38);
+  --hy-color-bottom-nav-pending-glow: rgba(100, 116, 139, 0.1);
+  --hy-color-bottom-nav-pending-glow-inner: rgba(148, 163, 184, 0.05);
+  --hy-color-bottom-nav-pending-label: rgba(71, 85, 105, 0.76);
+  --hy-color-bottom-nav-press-glow: rgba(100, 116, 139, 0.12);
+  --hy-color-bottom-nav-press-ring: rgba(100, 116, 139, 0.06);
+  --hy-motion-bottom-nav-press-scale: 0.98;
+  --hy-motion-bottom-nav-color-duration: 240ms;
+  --hy-motion-bottom-nav-press-duration: 200ms;
+  --hy-motion-bottom-nav-route-commit-duration: 520ms;
+  --hy-motion-bottom-nav-pending-duration: 1.2s;
+  --hy-motion-bottom-nav-spring-stiffness: 350;
+  --hy-motion-bottom-nav-spring-damping: 30;
+  --hy-motion-bottom-nav-spring-mass: 0.85;
+  --hy-motion-bottom-nav-press-spring-stiffness: 360;
+  --hy-motion-bottom-nav-press-spring-damping: 28;
+  --hy-motion-bottom-nav-press-spring-mass: 0.78;
 }

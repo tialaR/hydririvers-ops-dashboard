@@ -1,23 +1,22 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AlertCircle, Plus, SlidersHorizontal } from 'lucide-react';
+import { Info, Plus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/core/i18n/navigation';
 import type { Cargo, CargoStatus, Negotiation, Vessel } from '@/features/marketplace/domain/marketplace.types';
 import { CargoCard } from '@/features/cargo/components/cargo-card';
-import {
-  getPublicCargoCardActionLabel,
-  mapMarketplaceCargoToLabV2,
-} from '@/features/cargo/utils/map-marketplace-cargo-to-lab-v2';
+import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
+import { mapMarketplaceCargoToLabV2 } from '@/features/cargo/utils/map-marketplace-cargo-to-lab-v2';
 import { parseCargoEtaMeta } from '@/features/cargo/utils/parse-cargo-eta-meta';
-import { Button } from '@/shared/components/button';
-import { FilterChip } from '@/shared/components/filter-chip';
 import { IconButton } from '@/shared/components/icon-button';
+import { InformationalCard } from '@/shared/components/informational-card';
 import { SearchField } from '@/shared/components/search-field';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
 import { cargoDsV2ThemeRootClassName } from '@/features/cargo/constants/cargo-ds-v2-theme-scope';
+import { PublicCargoActionSheet } from './public-cargo-action-sheet';
+import { useMobileShellChrome } from '@/shared/layout/mobile-product-shell';
 import { PublicCargasMobileFilterSheet, type PublicCargasFilterOption } from './public-cargas-mobile-filter-sheet';
 import styles from './public-cargas-mobile-list.module.scss';
 
@@ -34,6 +33,7 @@ type AdvancedFilters = {
 };
 
 export type PublicCargasMobileListProps = {
+  locale: string;
   filteredCargoes: Cargo[];
   query: string;
   onQueryChange: (value: string) => void;
@@ -69,17 +69,6 @@ function SearchIcon() {
   );
 }
 
-function FilterIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M4 7h16M7 12h10M10 17h4" />
-      <circle cx="16" cy="7" r="1.7" />
-      <circle cx="9" cy="12" r="1.7" />
-      <circle cx="13" cy="17" r="1.7" />
-    </svg>
-  );
-}
-
 function vesselName(cargo: Cargo, negotiations: Negotiation[], vessels: Vessel[]) {
   const negotiation = negotiations.find(
     (item) => item.cargoId === cargo.id || item.cargoTitle === cargo.title,
@@ -95,6 +84,7 @@ function toFilterOptions(values: string[]): PublicCargasFilterOption[] {
 }
 
 export function PublicCargasMobileList({
+  locale,
   filteredCargoes,
   query,
   onQueryChange,
@@ -114,9 +104,11 @@ export function PublicCargasMobileList({
   const tCommon = useTranslations('common');
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilterClosing, setIsFilterClosing] = useState(false);
+  const [selectedCargo, setSelectedCargo] = useState<CargoLabV2 | null>(null);
   const [mobileVisibleCount, setMobileVisibleCount] = useState(MOBILE_INITIAL_VISIBLE_COUNT);
   const mobileListSentinelRef = useRef<HTMLDivElement | null>(null);
   const filterCloseTimerRef = useRef<number | null>(null);
+  const { setBottomNavSuppressed } = useMobileShellChrome();
 
   const visibleCargoes = filteredCargoes.slice(0, mobileVisibleCount);
   const hasMoreCargoes = mobileVisibleCount < filteredCargoes.length;
@@ -140,6 +132,11 @@ export function PublicCargasMobileList({
       }
     };
   }, []);
+
+  useEffect(() => {
+    setBottomNavSuppressed(drawerOpen || isFilterClosing || Boolean(selectedCargo));
+    return () => setBottomNavSuppressed(false);
+  }, [drawerOpen, isFilterClosing, selectedCargo, setBottomNavSuppressed]);
 
   useEffect(() => {
     if (!hasMoreCargoes || !mobileListSentinelRef.current) {
@@ -228,55 +225,25 @@ export function PublicCargasMobileList({
   }
 
   return (
+    <>
     <section
       className={cargoDsV2ThemeRootClassName(styles.root)}
       data-theme="light"
-      aria-label={tBoard('list.title')}
+      data-public-cargas-mobile="true"
+      data-public-cargas-mobile-page-background="none"
+      aria-label={tBoard('filters.results', { count: filteredCargoes.length })}
     >
       <div className={styles.shell}>
         <header className={styles.header}>
-          <div className={styles.headerTop}>
-            <div className={styles.headerCopy}>
-              <h1>{tBoard('list.title')}</h1>
-              <p>{tBoard('filters.results', { count: filteredCargoes.length })}</p>
-              {hasAppliedFilters ? (
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    resetVisibleCount();
-                    onResetFilters();
-                  }}
-                >
-                  {tBoard('filters.mobileClearAction')}
-                </Button>
-              ) : null}
-            </div>
-
-            <div className={styles.headerActions}>
-              <IconButton
-                className={styles.headerButton}
-                variant="default"
-                ariaLabel={
-                  activeFilters > 0
-                    ? tBoard('filters.activeCount', { count: activeFilters })
-                    : tBoard('list.filterAria')
-                }
-                icon={<FilterIcon />}
-                badgeCount={activeFilters > 0 ? activeFilters : undefined}
-                onClick={() => {
-                  if (drawerOpen) {
-                    closeFilterSheet();
-                    return;
-                  }
-
-                  openFilterSheet();
-                }}
-              />
-              <Link href={intlAppPaths.cargos.publishCargo} className={styles.publishLink}>
-                <Plus size={15} aria-hidden />
-                <span>{tBoard('list.newCargo')}</span>
-              </Link>
-            </div>
+          <div className={styles.actionsRow}>
+            <Link
+              href={intlAppPaths.cargos.publishCargo}
+              className={styles.publishLink}
+              data-mobile-cargas-new-cargo="true"
+            >
+              <Plus size={15} aria-hidden />
+              <span>{tBoard('list.newCargo')}</span>
+            </Link>
           </div>
 
           <div className={styles.searchRow}>
@@ -284,15 +251,21 @@ export function PublicCargasMobileList({
               className={styles.searchField}
               value={query}
               onChange={handleQueryChange}
-              placeholder={tBoard('list.searchPlaceholder')}
+              placeholder={tBoard('list.publicMobileSearchPlaceholder')}
               ariaLabel={tBoard('list.searchAria')}
               icon={<SearchIcon />}
             />
             <IconButton
               className={styles.filterSquare}
-              variant="filter"
-              ariaLabel={tBoard('list.filterAria')}
-              icon={<SlidersHorizontal size={18} />}
+              iconButtonRole="field"
+              data-mobile-cargas-filter-button="true"
+              ariaLabel={
+                activeFilters > 0
+                  ? tBoard('filters.activeCount', { count: activeFilters })
+                  : tBoard('list.filterAria')
+              }
+              iconName="filter"
+              badgeContent={activeFilters > 0 ? activeFilters : undefined}
               onClick={() => {
                 if (drawerOpen) {
                   closeFilterSheet();
@@ -304,34 +277,38 @@ export function PublicCargasMobileList({
             />
           </div>
 
-          <div className={styles.statusScroller} aria-label={tBoard('tabs.aria')}>
-            {statusOptions.map((item) => (
-              <FilterChip
-                key={item.value}
-                className={styles.statusChip}
-                isSelected={statusFilter === item.value}
-                onClick={() => handleStatusToggle(item.value as 'all' | CargoStatus)}
-                ariaPressed={statusFilter === item.value}
+          <div className={styles.resultsMeta}>
+            <p className={styles.resultsLead} data-mobile-content-results="true">
+              {tBoard('filters.results', { count: filteredCargoes.length })}
+            </p>
+            {hasAppliedFilters ? (
+              <button
+                type="button"
+                className={styles.clearFiltersAction}
+                data-mobile-clear-filters="true"
+                onClick={() => {
+                  resetVisibleCount();
+                  onResetFilters();
+                }}
               >
-                {item.label}
-              </FilterChip>
-            ))}
+                {tBoard('filters.clearAction')}
+              </button>
+            ) : null}
           </div>
         </header>
 
         <div className={styles.cargoList}>
           {visibleCargoes.length ? (
             visibleCargoes.map((cargo, index) => {
-              const { etaLabel, confidenceLabel } = parseCargoEtaMeta(
+              const { etaValue, confidenceLabel } = parseCargoEtaMeta(
                 cargo.etaConfidence,
                 tBoard,
                 tCommon,
               );
-              const actionKind = getPublicCargoCardActionLabel(cargo.status);
               const labCargo = mapMarketplaceCargoToLabV2(cargo, {
                 statusLabel: tCommon(`cargoStatus.${cargo.status}`),
                 vesselLabel: vesselName(cargo, negotiations, vessels),
-                etaLabel,
+                etaLabel: etaValue,
                 deliveryLabel:
                   confidenceLabel ||
                   (cargo.window ? tBoard('misc.arrivalLabel', { value: cargo.window }) : ''),
@@ -343,37 +320,34 @@ export function PublicCargasMobileList({
                   cargo={labCargo}
                   index={index}
                   className={styles.cargoCard}
-                  actionLabel={
-                    actionKind === 'view'
-                      ? tBoard('list.cardActionView')
-                      : tBoard('list.cardActionTrack')
-                  }
+                  actionLabel={tBoard('list.cardActionView')}
+                  primaryActionHref={intlAppPaths.cargos.cargoMap(labCargo.id)}
+                  onClick={() => setSelectedCargo(labCargo)}
                 />
               );
             })
           ) : (
-            <div className={styles.emptyState} role="status">
-              <AlertCircle size={22} aria-hidden="true" />
-              <h3>
-                {hasAppliedFilters ? tBoard('list.emptyFilteredTitle') : tBoard('list.emptyTitle')}
-              </h3>
-              <p>
-                {hasAppliedFilters
+            <InformationalCard
+              className={styles.emptyState}
+              tone="info"
+              align="center"
+              title={hasAppliedFilters ? tBoard('list.emptyFilteredTitle') : tBoard('list.emptyTitle')}
+              description={
+                hasAppliedFilters
                   ? tBoard('list.emptyFilteredDescription')
-                  : tBoard('list.emptyDescription')}
-              </p>
-              {hasAppliedFilters ? (
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    resetVisibleCount();
-                    onResetFilters();
-                  }}
-                >
-                  {tBoard('list.clearFiltersAction')}
-                </Button>
-              ) : null}
-            </div>
+                  : tBoard('list.emptyDescription')
+              }
+              dataAttributes={{
+                'data-public-cargas-empty-state': 'true',
+                'data-public-cargas-empty-variant': hasAppliedFilters ? 'filtered' : 'default',
+              }}
+              iconDataAttributes={{ 'data-public-cargas-empty-icon': 'true' }}
+              titleDataAttributes={{ 'data-public-cargas-empty-title': 'true' }}
+              descriptionDataAttributes={{ 'data-public-cargas-empty-description': 'true' }}
+              icon={
+                <Info size={48} strokeWidth={1.75} />
+              }
+            />
           )}
 
           {hasMoreCargoes ? (
@@ -381,6 +355,18 @@ export function PublicCargasMobileList({
           ) : null}
         </div>
       </div>
+
+      {selectedCargo ? (
+        <PublicCargoActionSheet
+          cargo={selectedCargo}
+          open
+          onOpenChange={(open) => {
+            if (!open) {
+              setSelectedCargo(null);
+            }
+          }}
+        />
+      ) : null}
 
       <PublicCargasMobileFilterSheet
         open={drawerOpen}
@@ -409,5 +395,6 @@ export function PublicCargasMobileList({
         onApplyFilters={closeFilterSheet}
       />
     </section>
+    </>
   );
 }

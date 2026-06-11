@@ -50,3 +50,6 @@ tsconfig.tsbuildinfo
 hydririvers-vessel-hero-kit/
 hydririvers-vessel-hero-kit.zip
 .audit-screenshots/
+
+# Hydri local backups
+.hydri-local-backups/

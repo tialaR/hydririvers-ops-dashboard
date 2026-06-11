@@ -70,3 +70,38 @@
   opacity: 0.65;
   cursor: not-allowed;
 }
+
+/* DS v2 light — densidade alinhada a /dev-v2 quando o tema light está ativo no ancestral */
+:global([data-theme='light']) .field {
+  height: var(--hy-size-control-height, 3.25rem);
+  gap: 0.75rem;
+  padding: 0 1.0625rem;
+  border-color: rgba(71, 85, 105, 0.13);
+  border-radius: var(--hy-radius-search, 1.125rem);
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 255, 255, 0.82), transparent 48%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.64), rgba(226, 234, 246, 0.44)),
+    var(--hy-color-surface-search, var(--v2-surface-search, rgba(226, 234, 246, 0.66)));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.78),
+    0 0.875rem 1.875rem rgba(15, 23, 42, 0.1);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+
+  .leading :global(svg) {
+    width: 1.375rem;
+    height: 1.375rem;
+    stroke: rgba(51, 65, 85, 0.62);
+    stroke-width: 2;
+  }
+
+  .input {
+    color: var(--hy-color-text-title, var(--v2-title, #0f172a));
+    font-size: 0.875rem;
+    font-weight: 620;
+  }
+
+  .input::placeholder {
+    color: rgba(71, 85, 105, 0.58);
+  }
+}
