@@ -30,6 +30,12 @@ npm run check:i18n
 
 Run tests when touching business logic, mocks, permissions, critical shared UI, routing or integration behavior.
 
+## Implementation proof (mandatory)
+
+Before marking work complete, append a `HYDRI_IMPLEMENTATION_PROOF` block. Declare **Worked**, **Partial**, or **Did not work** with objective evidence — not just "done".
+
+See `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` for the template, proof levels (P0–P4), failure criteria, and checklists for mobile UI, i18n, and CSS.
+
 ## PR description terminal-friendly template
 
 ```md

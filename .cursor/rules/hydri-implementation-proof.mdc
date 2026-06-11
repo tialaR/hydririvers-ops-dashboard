@@ -1,0 +1,53 @@
+---
+description: Mandatory HYDRI_IMPLEMENTATION_PROOF block after any implementation task
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Hydri Implementation Proof
+
+After any task that implements or fixes behavior, end the response with a `HYDRI_IMPLEMENTATION_PROOF` block. Do not claim "done" or "it works" without it.
+
+Full spec: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+
+## Required block fields
+
+1. **Result:** Worked | Partial | Did not work
+2. Change implemented
+3. Objective evidence
+4. Commands run
+5. Tests affected
+6. Preview / manual QA (when applicable)
+7. Files changed
+8. Not validated
+9. Remaining risks
+10. Why the implementation may still be wrong
+11. Recommended next action
+
+## Cannot claim success when
+
+- Mandatory validation was not run (`npm run lint`, `npm run typecheck`, `npm run check:i18n`)
+- Affected route or component was not inspected
+- Tests only assert fragile text/class contracts
+- UI changed without visual/runtime preview
+- Behavior changed without test or manual QA
+- Errors were waved off as "out of scope" without evidence
+
+## Proof levels (report highest achieved)
+
+- **P0:** lint, typecheck, i18n check
+- **P1:** affected unit/integration tests
+- **P2:** local preview / manual QA
+- **P3:** CI / PR green
+- **P4:** user sign-off or screenshot/video
+
+## Quick checklists
+
+**Mobile UI:** mobile viewport, light mode, initial state, primary interaction, close/cancel, scroll, safe-area/BottomNav, no desktop regression when mobile-only.
+
+**i18n / routes:** `/[locale]`, locales when copy changes, no new hardcoded strings, `npm run check:i18n`.
+
+**CSS:** CSS/Sass Modules only, no `globals.scss` for features, no `!important`; prefer `.module.sass` for new/touched component styles.
+
+Default mobile preview: `/pt-BR/cargas`.
