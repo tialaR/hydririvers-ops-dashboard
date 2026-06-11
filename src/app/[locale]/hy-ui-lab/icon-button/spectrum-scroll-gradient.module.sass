@@ -1,0 +1,103 @@
+.root
+  display: grid
+  gap: 0
+  min-height: calc(200dvh * 7)
+
+.band
+  position: relative
+  display: grid
+  place-items: center
+  min-height: 100dvh
+  overflow: hidden
+  scroll-snap-align: start
+
+  &[data-spectrum-band='amarelo']
+    background: radial-gradient(circle at 20% 24%, rgba(255, 255, 255, 0.52), transparent 46%), radial-gradient(circle at 78% 72%, rgba(234, 179, 8, 0.62), transparent 52%), linear-gradient(162deg, #fef08a 0%, #facc15 36%, #eab308 68%, #ca8a04 100%)
+
+  &[data-spectrum-band='verde']
+    background: radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.4), transparent 46%), radial-gradient(circle at 80% 74%, rgba(22, 163, 74, 0.55), transparent 52%), linear-gradient(158deg, #bbf7d0 0%, #22c55e 40%, #16a34a 74%, #15803d 100%)
+
+  &[data-spectrum-band='azul']
+    background: radial-gradient(circle at 24% 30%, rgba(255, 255, 255, 0.42), transparent 46%), radial-gradient(circle at 76% 68%, rgba(37, 99, 235, 0.58), transparent 52%), linear-gradient(155deg, #93c5fd 0%, #3b82f6 40%, #2563eb 74%, #1d4ed8 100%)
+
+  &[data-spectrum-band='branco']
+    background: radial-gradient(circle at 28% 22%, rgba(255, 255, 255, 0.98), transparent 48%), radial-gradient(circle at 72% 78%, rgba(226, 232, 240, 0.88), transparent 52%), linear-gradient(160deg, #ffffff 0%, #f8fafc 38%, #f1f5f9 72%, #e2e8f0 100%)
+
+  &[data-spectrum-band='preto']
+    background: radial-gradient(circle at 18% 22%, rgba(255, 255, 255, 0.1), transparent 44%), radial-gradient(circle at 82% 78%, rgba(100, 116, 139, 0.36), transparent 50%), linear-gradient(160deg, #334155 0%, #1e293b 42%, #0f172a 78%, #020617 100%)
+
+  &[data-spectrum-band='vermelho']
+    background: radial-gradient(circle at 22% 30%, rgba(255, 255, 255, 0.38), transparent 46%), radial-gradient(circle at 78% 70%, rgba(239, 68, 68, 0.58), transparent 52%), linear-gradient(150deg, #fecaca 0%, #ef4444 42%, #dc2626 76%, #b91c1c 100%)
+
+  &[data-spectrum-band='rosa']
+    background: radial-gradient(circle at 22% 28%, rgba(255, 255, 255, 0.48), transparent 48%), radial-gradient(circle at 78% 72%, rgba(236, 72, 153, 0.62), transparent 52%), linear-gradient(165deg, #fbcfe8 0%, #f472b6 38%, #ec4899 72%, #db2777 100%)
+
+.bandLabel
+  position: relative
+  z-index: 1
+  margin: 0
+  padding: 0.5rem 1rem
+  border-radius: 999px
+  border: 1px solid rgba(255, 255, 255, 0.42)
+  background: rgba(15, 23, 42, 0.18)
+  font-size: 0.75rem
+  font-weight: 800
+  letter-spacing: 0.1em
+  text-transform: uppercase
+  color: rgba(255, 255, 255, 0.94)
+  text-shadow: 0 1px 0 rgba(15, 23, 42, 0.32)
+
+  [data-spectrum-band='branco'] &
+    border-color: rgba(15, 23, 42, 0.14)
+    background: rgba(15, 23, 42, 0.08)
+    color: rgba(15, 23, 42, 0.82)
+    text-shadow: none
+
+  [data-spectrum-band='amarelo'] &
+    border-color: rgba(161, 98, 7, 0.28)
+    background: rgba(161, 98, 7, 0.12)
+    color: rgba(113, 63, 18, 0.92)
+    text-shadow: none
+
+  [data-spectrum-band='preto'] &
+    color: rgba(248, 250, 252, 0.9)
+
+.bandOrb
+  position: absolute
+  border-radius: 999px
+  pointer-events: none
+  filter: blur(0.25rem)
+
+  &[data-orb='a']
+    top: 18%
+    left: 10%
+    width: 8rem
+    height: 8rem
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55), transparent 70%)
+
+  &[data-orb='b']
+    bottom: 14%
+    right: 8%
+    width: 10rem
+    height: 10rem
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.28), transparent 72%)
+
+  [data-spectrum-band='branco'] &
+    &[data-orb='a']
+      background: radial-gradient(circle, rgba(148, 163, 184, 0.28), transparent 72%)
+
+    &[data-orb='b']
+      background: radial-gradient(circle, rgba(203, 213, 225, 0.42), transparent 74%)
+
+.bandHydroLine
+  position: absolute
+  top: 50%
+  inset-inline: 8%
+  height: 0.1875rem
+  border-radius: 999px
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55) 24%, rgba(255, 255, 255, 0.28) 72%, transparent)
+  opacity: 0.72
+  transform: translateY(-50%)
+
+  [data-spectrum-band='branco'] &
+    background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.34) 24%, rgba(22, 163, 74, 0.28) 72%, transparent)

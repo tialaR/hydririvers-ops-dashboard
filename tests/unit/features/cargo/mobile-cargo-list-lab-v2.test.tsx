@@ -175,6 +175,10 @@ describe('MobileCargoListLabV2 source contracts', () => {
     expect(source).toContain('open={sheetMode === \'filters\'}');
     expect(source).toContain('ariaLabel="Abrir filtros"');
     expect(source).toContain('ariaLabel="Visualizar filtros"');
+    expect(source).toContain('iconButtonRole="page"');
+    expect(source).toContain('iconButtonRole="field"');
+    expect(source).not.toContain('variant="filter"');
+    expect(source).not.toContain('variant="default"');
   });
 
   it('usa mocks de filtros compartilhados para todos os grupos', () => {

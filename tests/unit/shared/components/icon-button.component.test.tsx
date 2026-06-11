@@ -4,7 +4,10 @@ import { createElement, type MouseEvent } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { IconButton } from '@/shared/components/icon-button';
+import {
+  ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT,
+  IconButton,
+} from '@/shared/components/icon-button';
 import { renderIconButtonIcon } from '@/shared/components/icon-button/icon-button-icons';
 
 describe('IconButton', () => {
@@ -16,8 +19,37 @@ describe('IconButton', () => {
     expect(html).toContain('aria-label="Abrir filtros"');
     expect(html).toContain('type="button"');
     expect(html).toContain('data-icon-button-global="true"');
+    expect(html).toContain(`data-icon-button-variant="${ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT}"`);
     expect(html).toContain('variant_v2');
+    expect(html).toContain('glassCompactProduction');
     expect(html).toContain('data-testid="icon"');
+  });
+
+  it('v2 shell expõe data-press idle, glow decorativo e ícone aria-hidden', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="field" />,
+    );
+
+    expect(html).toContain('data-press="idle"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toMatch(/bubbleGlow/);
+    expect(html).toMatch(/glassControl/);
+  });
+
+  it('className externo no v2 fica no layout host, não no botão glass', () => {
+    const html = renderToStaticMarkup(
+      <IconButton
+        ariaLabel="Filtros"
+        iconName="filter"
+        iconButtonRole="field"
+        className="filterSquare"
+      />,
+    );
+
+    expect(html).toContain('filterSquare');
+    expect(html).toMatch(/layoutHost/);
+    expect(html).not.toMatch(/filterSquare[^<]*glassControl/);
+    expect(html).toContain('data-icon-button-global="true"');
   });
 
   it('dispara onClick quando habilitado', () => {
@@ -43,6 +75,15 @@ describe('IconButton', () => {
 
     expect(element.props.disabled).toBe(true);
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('disabled mantém data-press idle no markup estático', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" disabled />,
+    );
+
+    expect(html).toContain('disabled');
+    expect(html).toContain('data-press="idle"');
   });
 
   it('renderiza badgeContent sem alterar shell global', () => {
@@ -136,18 +177,30 @@ describe('IconButton', () => {
     expect(html).toContain('variant_v2');
   });
 
-  it('shell v2 usa densidade DS v2 light alinhada ao /dev-v2', () => {
-    const stylesPath = resolve(process.cwd(), 'src/shared/components/icon-button/IconButton.module.scss');
+  it('shell v2 glass usa tokens --hy-icon-button-* e backdrop-filter', () => {
+    const stylesPath = resolve(process.cwd(), 'src/shared/components/icon-button/icon-button.module.sass');
     const tokensPath = resolve(process.cwd(), 'src/shared/styles/tokens/_hy-v2-light.scss');
     const stylesSource = readFileSync(stylesPath, 'utf8');
     const tokensSource = readFileSync(tokensPath, 'utf8');
 
     expect(stylesSource).toContain('backdrop-filter');
-    expect(stylesSource).toContain('--hy-size-icon-button-svg');
-    expect(stylesSource).toContain('--hy-shadow-icon-button');
+    expect(stylesSource).toContain('--hy-icon-button-size');
+    expect(stylesSource).toContain('--hy-icon-button-press-scale');
+    expect(stylesSource).toContain('--hy-icon-button-icon-press-y');
+    expect(stylesSource).toContain('--hy-icon-button-glow-opacity');
+    expect(stylesSource).toContain('rgba(255, 255, 255, 0.3)');
+    expect(stylesSource).toContain('rgba(255, 255, 255, 0.2)');
+    expect(stylesSource).toContain('blur(10px)');
+    expect(stylesSource).toContain('#ffffff7a');
+    expect(stylesSource).toContain('glass-compact-production');
+    expect(stylesSource).toContain('data-press');
+    expect(stylesSource).toContain('bubbleGlow');
+    expect(stylesSource).toContain('.glassControl');
+    expect(stylesSource).toContain('.glassCompactProduction');
+    expect(stylesSource).toContain('layoutHost');
+    expect(stylesSource).not.toMatch(/\.glassControl[\s\S]*rgba\(76,\s*130,\s*255/);
     expect(tokensSource).toContain('--hy-size-icon-button: 3.25rem');
     expect(tokensSource).toContain('--hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12)');
-    expect(stylesSource).toContain('backdrop-filter');
   });
 
   it('iconName="filter" renderiza sliders horizontais, não funil', () => {

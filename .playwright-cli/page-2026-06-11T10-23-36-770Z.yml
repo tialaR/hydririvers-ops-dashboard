@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - main [ref=e5]:
+      - generic [ref=e6]:
+        - generic "Cabeçalho mobile do HydroRivers" [ref=e7]:
+          - generic [ref=e8]:
+            - link "Dashboard HydroRivers" [ref=e9] [cursor=pointer]:
+              - /url: /pt-BR/dashboard
+              - img [ref=e11]
+              - strong [ref=e15]: HydroRivers
+            - generic [ref=e16]:
+              - button "Trocar idioma" [ref=e18] [cursor=pointer]:
+                - generic [ref=e20]: PT
+              - button "Abrir notificações, 5 não lidas" [ref=e22] [cursor=pointer]:
+                - img [ref=e24]
+                - generic: "5"
+              - button "Entrar" [ref=e28] [cursor=pointer]:
+                - img [ref=e30]
+          - heading "Cargas" [level=1] [ref=e33]
+        - status [ref=e35]
+    - complementary "Modo mock · QA Assistant"
+    - status
+  - button "Open Next.js Dev Tools" [ref=e69] [cursor=pointer]:
+    - img [ref=e70]
+  - alert [ref=e73]
+  - navigation "Menu de navegação" [ref=e74]:
+    - link [ref=e75] [cursor=pointer]:
+      - /url: /pt-BR
+      - img [ref=e77]
+      - generic [ref=e83]: Visão
+    - link [ref=e84] [cursor=pointer]:
+      - /url: /pt-BR/dashboard
+      - img [ref=e86]
+      - generic [ref=e90]: Dashbo…
+    - link [ref=e91] [cursor=pointer]:
+      - /url: /pt-BR/cargas
+      - img [ref=e93]
+      - generic [ref=e98]: Cargas
+    - link [ref=e99] [cursor=pointer]:
+      - /url: /pt-BR/negociacoes
+      - img [ref=e101]
+      - generic [ref=e107]: Negoci…
+    - link [ref=e108] [cursor=pointer]:
+      - /url: /pt-BR/rastreio
+      - img [ref=e110]
+      - generic [ref=e115]: Rastre…

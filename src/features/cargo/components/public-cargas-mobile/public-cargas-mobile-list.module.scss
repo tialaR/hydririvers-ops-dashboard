@@ -1,5 +1,4 @@
 @use '../../styles/cargo-v2-light-shell' as cargoV2Shell;
-@use '../../styles/cargas-mobile-glass-icon-button.module' as cargasGlassIconButton;
 
 .root {
   @include cargoV2Shell.cargo-v2-light-shell;
@@ -117,13 +116,9 @@
   min-width: 0;
 }
 
+// Layout only — glass/press physics live in global IconButton v2 (no cargo mixin override).
 .filterSquare {
   flex-shrink: 0;
-  overflow: visible;
-}
-
-.root[data-theme='light'] .filterSquare {
-  @include cargasGlassIconButton.cargas-mobile-glass-icon-button-sparkle-outline;
   overflow: visible;
 }
 
@@ -357,24 +352,6 @@
     0 0.7rem 1.35rem rgba(35, 51, 80, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.95),
     inset 0 -1px 0 rgba(76, 130, 255, 0.14);
-}
-
-.filterBottomSheet :global(button[aria-label*='Fechar']),
-.filterBottomSheet :global(button[aria-label*='Close']),
-.filterBottomSheet :global(button[data-bottom-sheet-close='true']) {
-  overflow: visible;
-  -webkit-tap-highlight-color: transparent;
-  border-color: rgba(255, 255, 255, 0.68);
-  background:
-    radial-gradient(circle at 30% 10%, rgba(255, 255, 255, 0.96), transparent 42%),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(219, 232, 249, 0.46)),
-    rgba(240, 246, 255, 0.52);
-  box-shadow:
-    0 1rem 2rem rgba(35, 51, 80, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92),
-    inset 0 -1px 0 rgba(111, 133, 162, 0.12);
-  -webkit-backdrop-filter: blur(1.6rem) saturate(1.14);
-  backdrop-filter: blur(1.6rem) saturate(1.14);
 }
 
 @media (prefers-reduced-motion: reduce) {

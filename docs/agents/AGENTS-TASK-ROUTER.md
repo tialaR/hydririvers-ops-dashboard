@@ -215,11 +215,13 @@ Full checklist and evidence rules: `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` �
 
 **Captain closeout rules:**
 
-- All three tiers tested → 🟢 allowed (if other proof is sufficient); **Prova simples:** "Testado em celular pequeno, médio e grande."
+- All three tiers tested → 🟢 allowed **only if** [Visual Acceptance Gate](AGENTS-IMPLEMENTATION-PROOF.md#visual-acceptance-gate-for-ui-tasks) also passes; **Prova simples:** "Testado em celular pequeno, médio e grande." plus perceptual match on real consumer route.
 - Only one width tested → **🟡 Segue com cuidado** (never 🟢 for mobile UI); **Prova simples:** "Só testado em um tamanho, precisa revisar responsividade."
 - Two widths → 🟡 until the third is covered.
+- User reports visual still wrong → **🔴 Para agora**; reopen audit; include consumer in scope — never 🟢.
+- DOM/computed-style-only proof → never 🟢 for UI; use 🟡 minimum.
 
-Record per-viewport results in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**. Save or cite screenshots per width when using Playwright or visual QA.
+Record per-viewport results in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**. Save or cite screenshots per width when using Playwright or visual QA. UI tasks must also include **Visual comparison matrix** per Visual Acceptance Gate.
 
 ### UI architecture (summary)
 
@@ -404,8 +406,11 @@ Bundle, runtime perf, CI perf gates.
 Visual QA, screenshot comparison, design parity checks.
 
 - `docs/QA-TEST-MATRIX.md`
-- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
-- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+- `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **UI Visual Lab (official policy)** and **Menu de decisão**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **UI Visual Lab closeout**
+
+**UI Visual Lab:** `/[locale]/hy-ui-lab` is the fixed internal visual QA route (not product, not in nav). Tasks with `visual-regression`, `mobile-ui`, `styling`, or component/UI with a visual reference use the lab when applicable. **Automated flow:** lab (no production) → visual gate → **Menu de decisão** → short authorization → implement one variant → revalidate lab + consumer. Agent auto-opens lab (and consumer after authorized implement); delivers `open` / `start` / `xdg-open` if browser unavailable. Evidence: `output/ui-lab/<component>/`. Official labs persist; `tmp-*` removed before PR. Full policy: `AGENTS-WORKFLOW.md` and `AGENTS-UI-MOBILE-STANDARDS.md` → **Menu de decisão**.
 
 ## Classification rules
 
@@ -427,6 +432,9 @@ Visual QA, screenshot comparison, design parity checks.
 | New translation keys | `i18n` |
 | BottomNav redesign | `mobile-ui`, `bottom-nav` |
 | Bottom menu glass effect / active lens | `mobile-ui`, `bottom-menu`, `styling`, `visual-regression` |
+| UI Visual Lab policy or new lab subroute | `docs-only`, `visual-regression`, `styling` |
+| UI Visual Lab automated workflow / decision menu | `docs-only`, `visual-regression`, `styling` — see `AGENTS-WORKFLOW.md` |
+| IconButton / glass before production | `mobile-ui`, `styling`, `visual-regression` — lab at `/hy-ui-lab/icon-button` first; menu de decisão before production |
 | Add mock persona | `mock-mode`, `auth` |
 | CI failing on PR | `ci-pr`, `testing` |
 | Agent docs / rules only | `docs-only` |

@@ -1,0 +1,116 @@
+@use './icon-button-unified-glass.mixin' as unifiedGlass
+
+// Lab-only — espelha glass unificado da produção para comparação lado a lado.
+.button
+  --dp-size: var(--hy-size-icon-button, 3.25rem)
+  --dp-icon: var(--hy-size-icon-button-svg, 1.3125rem)
+  --dp-radius: 1.375rem
+  --dp-press-scale: 0.945
+  --dp-icon-press-y: -0.1875rem
+  --dp-icon-press-scale: 1.02
+  --dp-motion-press: 200ms
+  --dp-motion-release: 240ms
+  --dp-easing: cubic-bezier(0.2, 1, 0.2, 1)
+
+  position: relative
+  isolation: isolate
+  display: grid
+  place-items: center
+  width: var(--dp-size)
+  min-width: var(--dp-size)
+  height: var(--dp-size)
+  min-height: var(--dp-size)
+  margin: 0
+  padding: 0
+  overflow: visible
+  border-radius: var(--dp-radius)
+  color: var(--hy-color-icon-button-icon, rgba(51, 65, 85, 0.84))
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+  -webkit-appearance: none
+  appearance: none
+  touch-action: manipulation
+  box-sizing: border-box
+  transform: scale(1)
+  transform-origin: center center
+  transition: transform var(--dp-motion-press) var(--dp-easing), box-shadow var(--dp-motion-press) var(--dp-easing), background var(--dp-motion-press) var(--dp-easing), border-color var(--dp-motion-press) var(--dp-easing)
+  @include unifiedGlass.icon-button-unified-glass-surface
+
+  &:focus:not(:focus-visible)
+    outline: none
+
+  &:focus-visible,
+  &.labFocusVisible
+    outline: none
+    border-color: rgba(255, 255, 255, 0.32)
+    box-shadow: inset 0 1px #ffffff7a, inset 0 -1px #ffffff1a, 0 0.5625rem 1.5rem #0000003d, 0 0 0 0.14rem rgba(255, 255, 255, 0.14)
+
+  &[data-press='pressed']
+    transform: scale(var(--dp-press-scale))
+
+    .icon
+      transform: translate3d(0, var(--dp-icon-press-y), 0) scale(var(--dp-icon-press-scale))
+
+    .bubbleGlow
+      opacity: 0.62
+      transform: scale(1)
+
+  &[data-press='release']
+    transform: scale(0.98)
+    transition-duration: var(--dp-motion-release)
+
+    .icon
+      transform: translate3d(0, -0.0625rem, 0) scale(1.01)
+      transition-duration: var(--dp-motion-release)
+
+    .bubbleGlow
+      opacity: 0.22
+      transform: scale(1.04)
+      transition-duration: var(--dp-motion-release)
+
+  &[data-press='idle']
+    transform: scale(1)
+    transition-duration: var(--dp-motion-release)
+
+.icon
+  display: grid
+  place-items: center
+  line-height: 0
+  position: relative
+  z-index: 2
+  transform-origin: center center
+  transform: translate3d(0, 0, 0) scale(1)
+  transition: transform var(--dp-motion-press) var(--dp-easing)
+  will-change: transform
+
+  :global(svg)
+    display: block
+    width: var(--dp-icon)
+    height: var(--dp-icon)
+
+.bubbleGlow
+  position: absolute
+  inset: -0.625rem
+  z-index: 1
+  border-radius: inherit
+  pointer-events: none
+  opacity: 0
+  transform: scale(0.88)
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.24) 42%, transparent 68%)
+  transition: opacity var(--dp-motion-press) var(--dp-easing), transform var(--dp-motion-press) var(--dp-easing)
+
+@media (prefers-reduced-motion: reduce)
+  .button
+    transition: none
+
+    &[data-press='pressed'],
+    &[data-press='release'],
+    &[data-press='idle']
+      transform: none
+
+      .icon
+        transform: none
+
+      .bubbleGlow
+        opacity: 0
+        transform: none
