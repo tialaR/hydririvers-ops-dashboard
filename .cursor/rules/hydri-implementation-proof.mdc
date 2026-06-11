@@ -7,31 +7,41 @@ alwaysApply: true
 
 # Hydri Implementation Proof
 
-After any task that implements or fixes behavior, close with **Human closeout** (user-facing, visual, short) then `HYDRI_IMPLEMENTATION_PROOF` (technical). Do not claim "done" or "it works" without both. **Do not lead the close with technical proof.**
+After any task that implements or fixes behavior, close with **Captain closeout** (user-facing, short, decisive) then `HYDRI_IMPLEMENTATION_PROOF` (technical). Do not claim "done" or "it works" without both. **Do not lead the close with technical proof.**
 
-Plan/audit-only: Human closeout with 🟡 Amarelo is enough — omit full proof block.
+Plan/audit-only: Captain closeout with 🟡 Segue com cuidado is enough — omit full proof block.
 
 Full spec: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
 
-## Human closeout (required first in closing section)
+## Captain closeout (required first in closing section)
 
-Max 6 lines. Plain language for the user.
+Written for the user, not another agent. No jargon when a human phrase works.
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: [frase curta em linguagem humana]
-Prova: [comando/preview/teste principal]
-Não provado: [principal limite, ou "Nada relevante"]
-Próxima ação: [ação objetiva]
+🟢/🟡/🔴 [Decisão curta]
+
+Em humano:
+[1 a 3 frases curtas sem jargão]
+
+Prova simples:
+[1 linha em linguagem simples]
+
+Falta provar:
+[1 linha objetiva]
+
+Próxima ação:
+[1 ação clara]
 ```
 
-| Emoji | Status | Maps to **Result** |
-|-------|--------|-------------------|
-| 🟢 | Verde | Worked |
-| 🟡 | Amarelo | Partial |
-| 🔴 | Vermelho | Did not work |
+| Emoji | Decisão | Maps to **Result** |
+|-------|---------|-------------------|
+| 🟢 | Pode seguir | Worked |
+| 🟡 | Segue com cuidado | Partial |
+| 🔴 | Para agora | Did not work |
+
+Optional **Detalhes técnicos** after Captain closeout for paths, commands, components, proof levels.
 
 ## HYDRI_IMPLEMENTATION_PROOF fields (technical)
 

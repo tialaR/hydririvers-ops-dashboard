@@ -11,7 +11,7 @@ Automatic rule router for Cursor, Codex, ChatGPT, and other Hydri agents. **Clas
 5. Read every required doc. If any is **missing on disk**, **stop**, report it, and set `Can proceed: no`.
 6. Plan or implement only after `Can proceed: yes`.
 7. **Proceed autonomously** when the task is clear and within scope — do not ask for intermediate approval.
-8. End every response with **Human closeout** first, then the technical closing blocks (see [Human closeout](#human-closeout) and [Closing response](#closing-response)).
+8. End every response with **Captain closeout** first, then the technical closing blocks (see [Captain closeout](#captain-closeout) and [Closing response](#closing-response)).
 
 ## Initial response template (required)
 
@@ -29,7 +29,7 @@ Emit this block at the start of planning or implementation work:
 - **Can proceed:** yes | no
 ```
 
-Do not skip this block internally. If `Can proceed: no`, explain why in **Human closeout** (Status: Vermelho) and stop — do not ask the user to confirm categories or doc lists.
+Do not skip this block internally. If `Can proceed: no`, explain why in **Captain closeout** (🔴 Para agora) and stop — do not ask the user to confirm categories or doc lists.
 
 ## Autonomous execution
 
@@ -48,65 +48,95 @@ The agent must **take the lead** when the task is clear and within allowed scope
 | Validation failed | Report failure with evidence; propose fix or narrowed scope |
 | High risk cannot be mitigated in scope | Explain risk and options; wait for product/scope decision |
 
-## Human closeout
+## Captain closeout
 
-Every agent response must close with a **Human closeout** — a short, visual, plain-language decision for the user. The user should **not** need to read router categories, doc unions, proof levels, or validation lists to understand the outcome.
+Every agent response must close with a **Captain closeout** — a short, decisive message written **for the user**, not for another agent. The user should understand the outcome without reading router categories, doc unions, proof levels, or validation lists.
 
-**Do not end with a technical wall first.** The closing section must **start** with Human closeout; technical blocks follow only when needed.
+**Do not end with a technical wall first.** The closing section must **start** with Captain closeout; technical blocks follow only when needed.
 
 **Response order (mandatory):**
 
 1. Work body — prose, code, diffs as needed (keep proportional; avoid textão before the closeout)
-2. **Human closeout** — user-facing decision; **always starts the closing section**
-3. `HYDRI_TASK_ROUTER — close` — technical (optional for trivial Q&A; required for implementation and docs work)
-4. `HYDRI_IMPLEMENTATION_PROOF` — technical (only when implementation happened; omit for plan/audit-only)
+2. **Captain closeout** — user-facing decision; **always starts the closing section**
+3. **Detalhes técnicos** — optional; use when technical terms add value (see below)
+4. `HYDRI_TASK_ROUTER — close` — technical (optional for trivial Q&A; required for implementation and docs work)
+5. `HYDRI_IMPLEMENTATION_PROOF` — technical (only when implementation happened; omit for plan/audit-only)
 
-The user's final read must begin with **Human closeout**, not router categories or proof fields.
+The user's final read must begin with **Captain closeout**, not router categories or proof fields.
 
-### Human closeout template (required)
+### Captain closeout template (required)
 
-At most **6 lines** (5 fields + status line). Use plain language; no internal doc paths unless the user asked for them.
+Write for the user in plain language. **Prohibit technical jargon** when a human equivalent exists.
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: [frase curta em linguagem humana — o que aconteceu e o resultado]
-Prova: [comando, preview ou teste principal que sustenta a afirmação]
-Não provado: [principal limite, ou "Nada relevante"]
-Próxima ação: [ação objetiva]
+🟢/🟡/🔴 [Decisão curta]
+
+Em humano:
+[1 a 3 frases curtas explicando o que aconteceu sem jargão]
+
+Prova simples:
+[1 linha com validação em linguagem simples]
+
+Falta provar:
+[1 linha objetiva]
+
+Próxima ação:
+[1 ação clara]
 ```
 
-Use the status emoji on the **Status** line:
+Status meanings (use on the decision line, not separate "Status:" labels):
 
-| Emoji | Status | When to use |
-|-------|--------|-------------|
-| 🟢 | **Verde** | Worked and proved with sufficient evidence |
-| 🟡 | **Amarelo** | Partial delivery, incomplete validation, relevant risk, plan/audit without execution, or needs human review |
-| 🔴 | **Vermelho** | Did not work, validation failed, scope blocked, or cannot claim success |
+| Emoji | Decisão | When to use |
+|-------|---------|-------------|
+| 🟢 | **Pode seguir** | Worked and proved with sufficient evidence |
+| 🟡 | **Segue com cuidado** | Partial delivery, incomplete validation, relevant risk, plan/audit without execution, or needs human review |
+| 🔴 | **Para agora** | Did not work, validation failed, scope blocked, or cannot claim success |
+
+### Avoid in Captain closeout
+
+Do **not** use these in the user-facing block when a plain-language alternative exists:
+
+- Internal component names (unless essential for the user's next step)
+- "canônico", "light/flush", "runtime", "E2E", "flicker", "viewport", "supressão"
+- "PR #…", file paths, long lists
+- Router category names, proof levels (P0–P4), or raw command strings when a human phrase works
+
+When those terms are useful for audit or handoff, put them in **Detalhes técnicos** or in `HYDRI_IMPLEMENTATION_PROOF` below.
+
+### Detalhes técnicos (optional)
+
+Add this section **after** Captain closeout when technical precision helps reviewers or follow-up agents — never as a substitute for the human block.
+
+```md
+### Detalhes técnicos
+
+- [componentes, rotas, comandos exatos, níveis de prova, PR, paths — só o necessário]
+```
 
 ### Status mapping
 
-| Status | Typical mapping |
-|--------|-------------------|
-| 🟢 **Verde** | `HYDRI_IMPLEMENTATION_PROOF` **Result:** Worked; docs/rules created and validations passed |
-| 🟡 **Amarelo** | **Result:** Partial; plan or audit only (no implementation); gaps remain |
-| 🔴 **Vermelho** | **Result:** Did not work; or `Can proceed: no` |
+| Captain closeout | Typical mapping |
+|------------------|-----------------|
+| 🟢 **Pode seguir** | `HYDRI_IMPLEMENTATION_PROOF` **Result:** Worked; docs/rules created and validations passed |
+| 🟡 **Segue com cuidado** | **Result:** Partial; plan or audit only (no implementation); gaps remain |
+| 🔴 **Para agora** | **Result:** Did not work; or `Can proceed: no` |
 
 **Task type rules:**
 
-| Task type | Human closeout | HYDRI_IMPLEMENTATION_PROOF |
-|-----------|----------------|----------------------------|
+| Task type | Captain closeout | HYDRI_IMPLEMENTATION_PROOF |
+|-----------|------------------|----------------------------|
 | Implementation (code/config/tests) | Required; 🟢/🟡/🔴 per evidence | Full block required |
 | Docs/rules only (validated) | Required; 🟢 when lint/typecheck/i18n pass | Full block when behavior of docs changed |
-| Plan or audit only (no execution) | Required; **🟡 Amarelo** | Omit full block; Human closeout is enough |
-| Blocked (`Can proceed: no`) | Required; **🔴 Vermelho** | Omit unless partial work was delivered |
+| Plan or audit only (no execution) | Required; **🟡 Segue com cuidado** | Omit full block; Captain closeout is enough |
+| Blocked (`Can proceed: no`) | Required; **🔴 Para agora** | Omit unless partial work was delivered |
 
 For audit-only or question-only responses with no changes: 🟢 when the answer is complete; 🟡 when gaps remain; 🔴 when blocked (e.g. missing doc).
 
 ## Closing response (required)
 
-After **Human closeout**, end with the technical router close block:
+After **Captain closeout** (and optional **Detalhes técnicos**), end with the technical router close block:
 
 ```md
 ## HYDRI_TASK_ROUTER — close
@@ -335,47 +365,87 @@ npm run check:i18n
 
 See `docs/agents/AGENTS-WORKFLOW.md` and `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
 
-## Examples: Human closeout (required closing format)
+## Examples: Captain closeout (required closing format)
 
-### 🟢 Verde — implementation or docs validated
+### 🟢 Pode seguir — implementation or docs validated
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: Regras do router e do proof agora exigem fechamento humano e visual antes dos blocos técnicos.
-Prova: `npm run lint`, `npm run typecheck` e `npm run check:i18n` passaram.
-Não provado: Comportamento de agentes em sessões reais (só a spec foi atualizada).
-Próxima ação: Testar com uma tarefa de implementação real e confirmar o formato no fim da resposta.
+🟢 Pode seguir
+
+Em humano:
+As regras de fechamento agora pedem uma mensagem curta para você antes dos detalhes técnicos. A documentação foi atualizada e as checagens principais passaram.
+
+Prova simples:
+As validações automáticas do projeto passaram sem erro.
+
+Falta provar:
+Se agentes reais vão seguir o novo formato em tarefas do dia a dia.
+
+Próxima ação:
+Rodar uma tarefa real e confirmar que o fechamento ficou legível.
+
+### Detalhes técnicos
+
+- Arquivos: `AGENTS-TASK-ROUTER.md`, regras Cursor em `.cursor/rules/`
+- Comandos: `npm run lint`, `npm run typecheck`, `npm run check:i18n` — exit 0
 ```
 
-### 🟡 Amarelo — plan or audit without execution
+### 🟡 Segue com cuidado — plan or audit without execution
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟡 Status: Amarelo
-Mensagem: Auditei o sheet de filtros mobile; a causa provável é padding de safe-area, mas nada foi alterado.
-Prova: Leitura de `FilterSheet` e reprodução mental do fluxo em `/pt-BR/cargas`.
-Não provado: Preview runtime, testes automatizados e fix no código.
-Próxima ação: Aplicar o patch de padding e validar no mobile.
+🟡 Segue com cuidado
+
+Em humano:
+A tela mobile de cargas está usando o BottomSheet certo. O antigo ainda existe no projeto, mas não está atrapalhando essa tela. Falta confirmar no navegador se o fechamento está suave.
+
+Prova simples:
+Validações principais passaram e os testes unitários da área passaram.
+
+Falta provar:
+Teste visual no navegador e teste de abrir/fechar automatizado.
+
+Próxima ação:
+Fazer um ajuste pequeno no BottomSheet e rodar validação visual.
+
+### Detalhes técnicos
+
+- Rota de preview: `/pt-BR/cargas`
+- Componente legado ainda presente; não bloqueia a tela atual
+- E2E de open/close não executado nesta rodada
 ```
 
-### 🔴 Vermelho — blocked or failed
+### 🔴 Para agora — blocked or failed
 
 ```md
-## Human closeout
+## Captain closeout
 
-🔴 Status: Vermelho
-Mensagem: Não foi possível implementar — doc obrigatório `docs/theme.md` ausente no repositório.
-Prova: Verificação de path no disco; arquivo não existe.
-Não provado: Qualquer mudança de estilo.
-Próxima ação: Restaurar `docs/theme.md` ou autorizar escopo sem ele.
+🔴 Para agora
+
+Em humano:
+Não dá para implementar ainda — falta um documento obrigatório no repositório. Nada de código foi alterado.
+
+Prova simples:
+Confirmei que o arquivo esperado não existe no disco.
+
+Falta provar:
+Qualquer mudança de estilo ou comportamento.
+
+Próxima ação:
+Restaurar o documento ausente ou autorizar trabalho sem ele.
+
+### Detalhes técnicos
+
+- Doc ausente: `docs/theme.md`
+- `Can proceed: no` no router inicial
 ```
 
 ### Full response ending (docs-only with implementation proof)
 
-After Human closeout, add technical blocks when implementation or validated docs work happened:
+After Captain closeout (and optional Detalhes técnicos), add technical blocks when implementation or validated docs work happened:
 
 ```md
 ## HYDRI_TASK_ROUTER — close
