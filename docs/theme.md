@@ -18,6 +18,7 @@
 Alguns componentes mobile mantêm tokens próprios até convergência com DS v2:
 
 - **BottomNav light (preview global):** `--bn-*` em `src/shared/components/bottom-nav/bottom-nav-light-tokens.sass` — ver [bottom-nav-light.md](./design/bottom-nav-light.md).
+- **IconButton / glass controls (padrão oficial):** `--hy-icon-button-*` — ver `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **IconButton and glass controls**. Tokens sugeridos: `size`, `icon-size`, `radius`, `glass-background`, `glass-border`, `glass-blur`, `glass-saturate`, `shadow`, `press-scale`, `icon-press-y`, `icon-press-scale`, `glow-size`, `glow-opacity`, `motion-press-duration`, `motion-release-duration`.
 
 ## Regras
 

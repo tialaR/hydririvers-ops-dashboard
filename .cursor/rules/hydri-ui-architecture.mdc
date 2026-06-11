@@ -18,8 +18,24 @@ If the task is classified as a **UI task** (see `docs/agents/AGENTS-TASK-ROUTER.
 
 ## Design tokens (`--hy-*`)
 
-- New UI tokens: **`--hy-*`** prefix; component shape **`--hy-<component>-<property>`** (e.g. `--hy-bottom-nav-height`).
+- New UI tokens: **`--hy-*`** prefix; component shape **`--hy-<component>-<property>`** (e.g. `--hy-bottom-nav-height`, `--hy-icon-button-size`).
 - Legacy non-`--hy-*` tokens (e.g. `--bn-*`): migrate progressively when touched and safe — no mass rename in unrelated tasks.
+
+## IconButton and glass controls
+
+Applies to IconButton, circular buttons, glass controls, filter/search/map icon-only actions.
+
+- **Dumb component** — structure, ARIA, `data-press`; press/timer/pointer/keyboard logic in a **hook in the same scope** (e.g. `use-icon-button-press.ts`).
+- **No** `querySelector`, **no** global DOM listeners when refs/handlers suffice, **no** `document.documentElement` for local CSS variables.
+- **Styles:** `.module.sass`; tokens **`--hy-icon-button-<property>`** (size, glass-*, press-scale, icon-press-*, glow-*, motion-*).
+- **Press feedback:** button scale + icon lift/scale + inner glow on pressed; optional `release` then **idle** with timers cleared; use `data-press="idle|pressed|release"` when useful.
+- **`overflow: visible`** allowed for icon/glow overflow — comment why in the component.
+- **`prefers-reduced-motion`:** hook + styles must degrade motion; keep focus/contrast feedback.
+- **A11y:** real `button` or `a`; `aria-label` on icon-only; `aria-hidden` on decorative icon; `:focus-visible`; correct `disabled`.
+- Validate on **three mobile widths** before 🟢 (see Mobile viewport coverage).
+- **UI Visual Lab:** `/[locale]/hy-ui-lab` is fixed internal visual QA — not product, not in nav, must not touch mocks/auth/real routes/data. Official subroutes persist (`icon-button`, `bottom-nav`, `search-field`, `chips`, `bottom-sheet`); `tmp-*` removed before PR. Literal DevTools references live in lab only; production uses `--hy-*` tokens. **Automated workflow:** lab (no production) → visual gate → **Menu de decisão** → short auth (`Autorizo opção A.`, `Abortar.`, etc.) → one authorized variant → revalidate. Evidence: `output/ui-lab/<component>/`. Agent declares recommended option; must not implement production without authorization. **Transparent/glass/light-mode labs:** Hydri DS v2 light colored backdrop (not flat white/gray); dedicated `transparency-scroll` section with elements scrolling behind fixed buttons; gate must validate backdrop + scroll — no PASS without scroll evidence. Auto-open lab (+ consumer after auth) or `open`/`start`/`xdg-open`. 🟢: lab PASS + consumer PASS (when prod touched) + evidence + preview/commands + no user visual dispute.
+
+Full spec: `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**; `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Menu de decisão**; `docs/design/icon-button-glass.md` → **Visual Lab Gate** (IconButton example).
 
 ## Component shape
 
@@ -51,6 +67,16 @@ Check nav, sheets, cards, chips, search, and controls for wrap, overlap, misalig
 Only one width tested → 🟡 **Segue com cuidado**, never 🟢. Record **Mobile viewport coverage** in `HYDRI_IMPLEMENTATION_PROOF`; cite or save screenshot per width.
 
 Full rules: `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Mobile viewport coverage**.
+
+## Visual Acceptance Gate for UI tasks
+
+Before 🟢 on any UI task, pass the gate in `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Visual Acceptance Gate for UI tasks**.
+
+**🟢 forbidden when:** user reports visual mismatch; proof is DOM/computed-style only; **may still be wrong** / **not validated** on essential states (idle, pressed, release, scroll, focus-visible, disabled); legacy mixin/variant may interfere; forbidden scope blocked the consumer; mobile missing 360×740 + 390×844 + 430×932; reference not compared; screenshots contradict claim.
+
+**Required:** visual comparison matrix (reference vs actual, pass/fail, evidence, file/consumer) on the **real route**. IconButton/glass: idle transparency, pressed scale/jump/glow, release, scroll, focus-visible, no native tap highlight.
+
+**User dispute** ("continua errado", etc.) → 🔴 visual regression; reopen audit with consumer in scope.
 
 ## Related docs
 

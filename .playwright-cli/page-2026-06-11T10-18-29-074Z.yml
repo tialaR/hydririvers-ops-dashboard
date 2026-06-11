@@ -1,0 +1,84 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - complementary "Navegação principal" [ref=e4]:
+        - generic [ref=e5]:
+          - link "Dashboard HydroRivers" [ref=e6] [cursor=pointer]:
+            - /url: /pt-BR/dashboard
+            - img [ref=e8]
+            - strong [ref=e12]: HydroRivers
+          - button "Fechar menu" [ref=e14] [cursor=pointer]:
+            - img [ref=e15]
+          - navigation [ref=e17]:
+            - link "Visão Geral" [ref=e18] [cursor=pointer]:
+              - /url: /pt-BR
+              - img [ref=e19]
+              - generic [ref=e24]: Visão Geral
+            - link "Cargas" [ref=e25] [cursor=pointer]:
+              - /url: /pt-BR/cargas
+              - img [ref=e26]
+              - generic [ref=e30]: Cargas
+          - generic [ref=e32]:
+            - group "Alternar entre tema claro e escuro" [ref=e33]:
+              - button "Alternar entre tema claro e escuro" [ref=e34] [cursor=pointer]:
+                - img [ref=e36]
+                - img [ref=e43]
+            - generic [ref=e45]:
+              - 'button "Selecionar idioma atual: Português" [ref=e46] [cursor=pointer]':
+                - generic [ref=e47]: 🇧🇷
+                - strong [ref=e49]: Português
+                - img [ref=e50]
+              - region "Selecionar idioma":
+                - generic [ref=e52]:
+                  - button "Português (pt-BR)" [ref=e53] [cursor=pointer]:
+                    - generic [ref=e54]: 🇧🇷
+                    - generic [ref=e55]:
+                      - strong [ref=e56]: Português
+                      - generic [ref=e57]: pt-BR
+                    - img [ref=e58]
+                  - button "English (en-US)" [ref=e60] [cursor=pointer]:
+                    - generic [ref=e61]: 🇺🇸
+                    - generic [ref=e62]:
+                      - strong [ref=e63]: English
+                      - generic [ref=e64]: en-US
+                  - button "Español (es)" [ref=e66] [cursor=pointer]:
+                    - generic [ref=e67]: 🇪🇸
+                    - generic [ref=e68]:
+                      - strong [ref=e69]: Español
+                      - generic [ref=e70]: es
+            - link "Entrar" [ref=e72] [cursor=pointer]:
+              - /url: /pt-BR/login
+              - img [ref=e74]
+              - generic [ref=e77]:
+                - generic [ref=e78]: Sessão
+                - strong [ref=e79]: Entrar
+      - main [ref=e81]:
+        - generic [ref=e82]:
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - heading "Cargas • Operações Fluviais" [level=1] [ref=e86]:
+                - generic [ref=e87]:
+                  - generic [ref=e89]: Cargas
+                  - generic [ref=e91]: Operações Fluviais
+              - paragraph [ref=e92]: Monitoramento inteligente das cargas, embarcações e rotas na Amazônia.
+            - generic [ref=e93]:
+              - img [ref=e94]
+              - searchbox "Buscar" [ref=e97]
+              - generic [ref=e98]: ⌘K
+            - generic [ref=e99]:
+              - button "Abrir notificações, nenhuma não lida" [ref=e101] [cursor=pointer]:
+                - img [ref=e102]
+              - link "Entrar" [ref=e105] [cursor=pointer]:
+                - /url: /pt-BR/login
+                - generic [ref=e106]: HR
+                - generic [ref=e107]:
+                  - strong [ref=e108]: Carlos Almeida
+                  - generic [ref=e109]: Operações
+          - status [ref=e111]
+    - complementary "Modo mock · QA Assistant" [ref=e140]:
+      - button "Modo mock" [ref=e141] [cursor=pointer]:
+        - generic [ref=e142]: M
+        - generic [ref=e143]: Assistente QA
+    - status
+  - button "Open Next.js Dev Tools" [ref=e149] [cursor=pointer]:
+    - img [ref=e150]

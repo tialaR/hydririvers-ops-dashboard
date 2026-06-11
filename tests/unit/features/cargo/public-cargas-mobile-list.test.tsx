@@ -139,6 +139,32 @@ describe('PublicCargasMobileList', () => {
     expect((html.match(/data-mobile-cargas-filter-button="true"/g) ?? []).length).toBe(1);
   });
 
+  it('nao aplica mixin cargo sparkle-outline no botao de filtro', () => {
+    const stylesPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+    );
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+
+    expect(stylesSource).not.toContain('cargas-mobile-glass-icon-button-sparkle-outline');
+    expect(stylesSource).not.toContain('cargasGlassIconButton');
+  });
+
+  it('nao sobrescreve glass do IconButton global no fechar do filter sheet', () => {
+    const stylesPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+    );
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+
+    expect(stylesSource).not.toMatch(
+      /:global\(button\[data-bottom-sheet-close='true'\]\)[\s\S]*?\{[\s\S]*?background:/,
+    );
+    expect(stylesSource).not.toMatch(
+      /:global\(button\[data-bottom-sheet-close='true'\]\)[\s\S]*?\{[\s\S]*?backdrop-filter:/,
+    );
+  });
+
   it('mostra Limpar filtros discreto ao lado do contador quando filtros estão ativos', () => {
     const htmlWithFilters = renderToStaticMarkup(
       <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} hasAppliedFilters />,
