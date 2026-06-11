@@ -14,10 +14,11 @@ Before planning or implementing, run the task router in `docs/agents/AGENTS-TASK
 1. Read `AGENTS.md` and `docs/agents/AGENTS-TASK-ROUTER.md`.
 2. Classify the task (one or more categories). If ambiguous, **declare the assumed classification**.
 3. Build required docs: **base** + **implementation** (if changing code/config/tests/docs behavior) + **union of category docs**.
-4. If any required doc is missing on disk, **stop** and report — do not proceed.
-5. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
-6. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
-7. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Captain closeout** then technical blocks.
+4. **UI tasks:** if any UI category applies (`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` on visible UI), also read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc`. If implementing UI without having read them, **stop** and fix routing first.
+5. If any required doc is missing on disk, **stop** and report — do not proceed.
+6. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
+7. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
+8. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Captain closeout** then technical blocks.
 
 ## When to stop and ask
 
@@ -41,9 +42,11 @@ Ask the user **only** when: scope is ambiguous; a required doc is missing; forbi
 
 See `docs/agents/AGENTS-TASK-ROUTER.md`. Minimum set:
 
-`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-sheet`, `cargo-domain`, `hydroway-domain`, `i18n`, `styling`, `testing`, `ci-pr`, `repo-hygiene`, `architecture`, `docs-only`, `mock-mode`, `auth`, `data/API`, `accessibility`, `performance`, `visual-regression`
+`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu` (alias of bottom-nav), `bottom-sheet`, `filter-sheet` (alias), `action-sheet` (alias), `cargo-domain`, `hydroway-domain`, `i18n`, `styling`, `testing`, `ci-pr`, `repo-hygiene`, `architecture`, `docs-only`, `mock-mode`, `auth`, `data/API`, `accessibility`, `performance`, `visual-regression`
 
 Multiple categories → union all docs. Implementation always includes `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
+
+**UI auto-routing:** any UI category → also read `AGENTS-UI-MOBILE-STANDARDS.md`, `AGENTS-WORKFLOW.md`, `AGENTS-IMPLEMENTATION-PROOF.md`, `.cursor/rules/hydri-ui-architecture.mdc`. New/touched paths: kebab-case; no mass rename without approval.
 
 ## Close every response (order)
 

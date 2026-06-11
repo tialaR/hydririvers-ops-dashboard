@@ -80,6 +80,8 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 
 **i18n / routes:** `/[locale]`, locales when copy changes, no new hardcoded strings, `npm run check:i18n`.
 
-**CSS:** CSS/Sass Modules only, no `globals.scss` for features, no `!important`; prefer `.module.sass` for new/touched component styles.
+**CSS:** CSS/Sass Modules only, no `globals.scss` for features, no `!important`; prefer `.module.sass` for new/touched component styles; kebab-case for new/touched paths.
+
+**UI architecture:** dumb components, logic in hooks, data separated in scope; read `.cursor/rules/hydri-ui-architecture.mdc` before UI work.
 
 Default mobile preview: `/pt-BR/cargas`.

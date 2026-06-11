@@ -189,8 +189,19 @@ When the task touches styles:
 - [ ] `src/app/globals.scss` not used for feature UI
 - [ ] No `!important`
 - [ ] If component-level `.scss` was touched: justify in proof, or migrate to `.module.sass` when safe and in scope
+- [ ] New/touched paths use **kebab-case** unless rename is unsafe or out of scope
 
 Preserve mobile/desktop style separation; a mobile-only task must not break desktop layout and vice versa.
+
+## Checklist: UI architecture
+
+When the task touches interface (any UI category per `AGENTS-TASK-ROUTER.md`):
+
+- [ ] `AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc` were read before implementation
+- [ ] Presentational component stays dumb where possible; logic in hook/helper in same scope
+- [ ] Items, labels, icons, metadata extracted when non-trivial
+- [ ] No `querySelector` / `document.documentElement` when refs and CSS variables suffice
+- [ ] Accessibility and semantics preserved
 
 ## Relation to other Hydri workflows
 

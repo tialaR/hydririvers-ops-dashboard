@@ -166,9 +166,55 @@ Any task that changes code, config, tests, or agent docs to deliver behavior:
 
 Implementation tasks must also close with a full `HYDRI_IMPLEMENTATION_PROOF` block (see that doc).
 
+## UI tasks (mandatory auto-routing)
+
+Any task that touches interface must be classified with **at least one UI category** from the list below. When any UI category applies, the agent must **union** these docs in addition to base and implementation docs:
+
+| Doc | Purpose |
+|-----|---------|
+| `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` | Mobile chrome, interaction, styling baseline |
+| `docs/agents/AGENTS-WORKFLOW.md` | Branching, validation baseline (also in base docs) |
+| `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` | Proof block and UI checklists (also in implementation docs) |
+| `.cursor/rules/hydri-ui-architecture.mdc` | Dumb components, hooks, data separation, kebab-case |
+
+### UI categories
+
+| Category | Scope |
+|----------|--------|
+| `mobile-ui` | Mobile screens, shells, layouts, touch interactions |
+| `desktop-ui` | Desktop layouts, expanded map, admin chrome |
+| `bottom-nav` | Bottom navigation, tab bar, mobile shell nav chrome |
+| `bottom-menu` | **Alias of `bottom-nav`** — same required docs; use when the user says "bottom menu" |
+| `bottom-sheet` | Bottom sheets and mobile overlays that slide from bottom |
+| `filter-sheet` | **Alias of `bottom-sheet`** — filter UI in a bottom sheet |
+| `action-sheet` | **Alias of `bottom-sheet`** — action menus in a bottom sheet |
+| `styling` | CSS/Sass Modules, tokens, theme, visual polish |
+| `visual-regression` | Visual QA, screenshot comparison, design parity |
+| `accessibility` | a11y on UI — union UI auto-routing docs **when the work touches visible interface** |
+
+### UI routing gate (stop before implement)
+
+Before planning or patching UI code, verify:
+
+1. At least one UI category is declared in the initial `HYDRI_TASK_ROUTER` block.
+2. `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc` are in **Docs read**.
+
+If either is missing: **stop**, add the correct categories, read the missing docs, update the router block, then proceed. Do not implement UI with incomplete routing.
+
+### UI architecture (summary)
+
+Full rules: `.cursor/rules/hydri-ui-architecture.mdc` and `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`.
+
+- Dumb/semantic presentational components when possible.
+- Movement, measurement, timers, resize, derived state, effects → hook/helper in component/feature scope.
+- Items, labels, icons, metadata → separate file in scope when non-trivial.
+- Styles → `.module.sass` for new/touched files when safe; no global CSS for components.
+- Prefer React refs and local CSS variables over `querySelector` / `document.documentElement`.
+- **kebab-case** for new folders/files; small safe renames on touch; no mass rename without approval; PascalCase React exports OK.
+
 ## Task categories and required docs
 
-When multiple categories apply, **union** all doc paths and deduplicate.
+When multiple categories apply, **union** all doc paths and deduplicate. **UI categories** also trigger [UI tasks auto-routing](#ui-tasks-mandatory-auto-routing) docs above.
 
 ### `mobile-ui`
 
@@ -181,6 +227,7 @@ Mobile screens, shells, layouts, touch interactions, mobile-only components.
 
 Desktop layouts, expanded map, admin chrome, desktop-only surfaces.
 
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` (architecture and styling baseline for all UI surfaces)
 - `docs/agents/AGENTS-CODEBASE-MAP.md`
 - `docs/agents/AGENTS-CURRENT-STATE.md`
 
@@ -192,9 +239,33 @@ Bottom navigation, tab bar, mobile shell nav chrome.
 - `docs/agents/AGENTS-CURRENT-STATE.md`
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
 
+### `bottom-menu`
+
+**Alias of `bottom-nav`.** Use when the user or ticket says "bottom menu". Same required docs as `bottom-nav`.
+
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
+- `docs/agents/AGENTS-CURRENT-STATE.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+
 ### `bottom-sheet`
 
 Bottom sheets, filter sheets, mobile overlays that slide from bottom.
+
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
+- `docs/agents/AGENTS-CURRENT-STATE.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+
+### `filter-sheet`
+
+**Alias of `bottom-sheet`.** Filter UI presented in a bottom sheet. Same required docs as `bottom-sheet`.
+
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
+- `docs/agents/AGENTS-CURRENT-STATE.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+
+### `action-sheet`
+
+**Alias of `bottom-sheet`.** Action menu presented in a bottom sheet. Same required docs as `bottom-sheet`.
 
 - `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
 - `docs/agents/AGENTS-CURRENT-STATE.md`
@@ -299,6 +370,8 @@ a11y audits, keyboard, screen readers, WCAG-related work.
 - `docs/accessibility.md`
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
 
+When the task **touches visible UI** (components, layout, chrome, sheets, nav), also apply [UI tasks auto-routing](#ui-tasks-mandatory-auto-routing) — union `AGENTS-UI-MOBILE-STANDARDS.md` and `hydri-ui-architecture.mdc`.
+
 ### `performance`
 
 Bundle, runtime perf, CI perf gates.
@@ -333,6 +406,7 @@ Visual QA, screenshot comparison, design parity checks.
 | Desktop expanded map | `desktop-ui`, `hydroway-domain`, `architecture` |
 | New translation keys | `i18n` |
 | BottomNav redesign | `mobile-ui`, `bottom-nav` |
+| Bottom menu glass effect / active lens | `mobile-ui`, `bottom-menu`, `styling`, `visual-regression` |
 | Add mock persona | `mock-mode`, `auth` |
 | CI failing on PR | `ci-pr`, `testing` |
 | Agent docs / rules only | `docs-only` |
@@ -442,6 +516,24 @@ Restaurar o documento ausente ou autorizar trabalho sem ele.
 - Doc ausente: `docs/theme.md`
 - `Can proceed: no` no router inicial
 ```
+
+### Example: Bottom menu task (classification + required docs)
+
+User request: *"Ajustar o efeito glass do menu inferior e o indicador ativo no mobile."*
+
+```md
+## HYDRI_TASK_ROUTER
+
+- **Task classification:** mobile-ui, bottom-menu, styling, visual-regression
+- **Required docs:** AGENTS.md, AGENTS-TASK-ROUTER.md, AGENTS-WORKFLOW.md, AGENTS-IMPLEMENTATION-PROOF.md, AGENTS-UI-MOBILE-STANDARDS.md, AGENTS-CURRENT-STATE.md, docs/theme.md, QA-TEST-MATRIX.md, .cursor/rules/hydri-ui-architecture.mdc
+- **Docs read:** (list paths actually read this session)
+- **Missing docs:** none
+- **Assumed scope:** bottom navigation chrome on mobile; styles and indicator behavior only
+- **Forbidden scope:** desktop layout, globals.scss, mass file renames
+- **Can proceed:** yes
+```
+
+`bottom-menu` resolves to the same doc union as `bottom-nav`, plus UI auto-routing and category-specific docs (`styling` → `docs/theme.md`; `visual-regression` → `docs/QA-TEST-MATRIX.md`).
 
 ### Full response ending (docs-only with implementation proof)
 

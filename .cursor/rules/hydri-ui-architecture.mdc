@@ -1,0 +1,40 @@
+---
+description: Hydri UI architecture — dumb components, hooks, data separation, Sass Modules, kebab-case
+globs:
+  - "src/**/*.tsx"
+  - "src/**/*.ts"
+  - "src/**/*.sass"
+  - "src/**/*.scss"
+alwaysApply: false
+---
+
+# Hydri UI architecture
+
+Apply when a task touches interface (mobile, desktop, nav, sheets, styling, visual QA, or a11y on UI).
+
+## Router gate (mandatory)
+
+If the task is classified as a **UI task** (see `docs/agents/AGENTS-TASK-ROUTER.md` → UI tasks) and you have **not** read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and this rule, **stop** — fix routing and read required docs before planning or implementing.
+
+## Component shape
+
+- **Dumb / semantic UI** — presentational components render markup and styles; avoid business logic, side effects, and DOM measurement in the component body when a hook can own it.
+- **Logic in hooks/helpers** — movement, measurement, timers, resize listeners, derived state, and effects belong in a hook or helper **in the same component/feature scope** (e.g. `use-bottom-nav-indicator.ts` next to `bottom-nav.tsx`).
+- **Data separated** — items, labels, descriptions, icons, and metadata go in a dedicated file in the same scope when they grow beyond trivial inline literals (e.g. `bottom-nav-items.tsx`).
+- **Styles in modules** — use `.module.sass` for new or touched component styles when migration is safe; never use global CSS for feature/component UI; do not edit `src/app/globals.scss` for feature work.
+- **Prefer React refs and local CSS variables** — do not use `querySelector` / `document.documentElement` when refs and scoped CSS variables solve the problem.
+- **Preserve accessibility and semantics** — landmarks, labels, focus, keyboard, and ARIA stay correct after refactors.
+
+## File and folder naming (kebab-case)
+
+- **New** files and folders: **kebab-case** (e.g. `bottom-nav/`, `use-bottom-nav-indicator.ts`, `bottom-nav-items.tsx`).
+- **Touched** files: may be renamed to kebab-case when the change is **small and safe** (few imports, no route/i18n breakage).
+- **Do not** run mass renames without explicit user approval.
+- **Do not** break imports, tests, i18n keys, or localized routes.
+- **React exports** may stay **PascalCase** (`export function BottomNav`) even when the file is `bottom-nav.tsx`.
+
+## Related docs
+
+- `docs/agents/AGENTS-TASK-ROUTER.md` — UI task categories and required docs
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` — mobile chrome, interaction, BottomNav
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` — proof and UI checklists
