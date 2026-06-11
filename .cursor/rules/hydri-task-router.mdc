@@ -1,0 +1,49 @@
+---
+description: HYDRI_TASK_ROUTER — classify task and read required docs before planning or implementing
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# HYDRI_TASK_ROUTER
+
+Before planning or implementing, run the task router in `docs/agents/AGENTS-TASK-ROUTER.md`.
+
+## Required steps
+
+1. Read `AGENTS.md` and `docs/agents/AGENTS-TASK-ROUTER.md`.
+2. Classify the task (one or more categories). If ambiguous, **declare the assumed classification**.
+3. Build required docs: **base** + **implementation** (if changing code/config/tests/docs behavior) + **union of category docs**.
+4. If any required doc is missing on disk, **stop** and report — do not proceed.
+5. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
+6. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with `HYDRI_IMPLEMENTATION_PROOF`.
+
+## Initial block (mandatory)
+
+```md
+## HYDRI_TASK_ROUTER
+
+- **Task classification:**
+- **Required docs:**
+- **Docs read:**
+- **Missing docs:**
+- **Assumed scope:**
+- **Forbidden scope:**
+- **Can proceed:** yes | no
+```
+
+## Categories (full mapping)
+
+See `docs/agents/AGENTS-TASK-ROUTER.md`. Minimum set:
+
+`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-sheet`, `cargo-domain`, `hydroway-domain`, `i18n`, `styling`, `testing`, `ci-pr`, `repo-hygiene`, `architecture`, `docs-only`, `mock-mode`, `auth`, `data/API`, `accessibility`, `performance`, `visual-regression`
+
+Multiple categories → union all docs. Implementation always includes `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
+
+## Close every response
+
+- Task classification
+- Required docs read
+- Missing docs (if any)
+- Scope boundaries
+- `HYDRI_IMPLEMENTATION_PROOF` when implementation happened

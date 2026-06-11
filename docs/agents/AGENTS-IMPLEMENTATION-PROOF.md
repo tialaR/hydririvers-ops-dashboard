@@ -2,6 +2,8 @@
 
 Every implemented task must end with a `HYDRI_IMPLEMENTATION_PROOF` block. Agents and executors must prove the change worked, explain how it was validated, and declare limits and risk — not just say "done".
 
+The proof must include the **HYDRI_TASK_ROUTER task classification** used for the work (same categories declared in the initial router block). See `docs/agents/AGENTS-TASK-ROUTER.md`.
+
 ## When to use
 
 - After any code, config, test, or docs change that claims to fix or deliver behavior.
@@ -16,6 +18,9 @@ Copy this template and fill every field. Omit a field only when truly not applic
 ## HYDRI_IMPLEMENTATION_PROOF
 
 **Result:** Worked | Partial | Did not work
+
+**HYDRI_TASK_ROUTER classification:**
+- (categories used for this task)
 
 **Change implemented:**
 - 
@@ -53,6 +58,7 @@ Copy this template and fill every field. Omit a field only when truly not applic
 | Field | Requirement |
 |-------|-------------|
 | **Result** | One of: `Worked`, `Partial`, `Did not work`. No vague "should work". |
+| **HYDRI_TASK_ROUTER classification** | Categories from the router (see `docs/agents/AGENTS-TASK-ROUTER.md`). |
 | **Change implemented** | What was actually built or fixed, in plain language. |
 | **Objective evidence** | Logs, command output, DOM markers, screenshots, test names — not opinion. |
 | **Commands run** | Exact commands and exit status when relevant. |
@@ -135,8 +141,10 @@ Preserve mobile/desktop style separation; a mobile-only task must not break desk
 
 ## Relation to other Hydri workflows
 
+- **HYDRI_TASK_ROUTER:** classify before work; proof repeats the classification used.
 - **Audit before patch:** diagnosis closes before implementation proof is attempted.
 - **AGENTS-WORKFLOW.md:** branching, commits, and baseline commands.
+- **AGENTS-TASK-ROUTER.md:** category → required docs mapping.
 - **AGENTS-UI-MOBILE-STANDARDS.md:** mobile chrome and BottomNav expectations.
 - **hydririvers-visual-workflow:** visual iteration rounds; implementation proof closes each implementation round.
 
@@ -146,6 +154,9 @@ Preserve mobile/desktop style separation; a mobile-only task must not break desk
 ## HYDRI_IMPLEMENTATION_PROOF
 
 **Result:** Worked
+
+**HYDRI_TASK_ROUTER classification:**
+- mobile-ui, bottom-sheet, styling
 
 **Change implemented:**
 - Fixed mobile filter sheet safe-area padding on `/pt-BR/cargas`.
