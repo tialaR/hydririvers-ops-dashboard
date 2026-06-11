@@ -9,6 +9,7 @@ Read these files before acting on this repository:
 5. `docs/agents/AGENTS-CURRENT-STATE.md`
 6. `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
 7. `docs/agents/AGENTS-PATCH-PROTOCOL.md`
+8. `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` — close every implementation with a `HYDRI_IMPLEMENTATION_PROOF` block
 
 Non-negotiables:
 - Audit before patching.
@@ -19,3 +20,4 @@ Non-negotiables:
 - Prefer `.module.sass` for touched/created component styles.
 - Do not install dependencies without explicit approval.
 - Validate with lint, typecheck and i18n before claiming success.
+- End implementation tasks with `HYDRI_IMPLEMENTATION_PROOF` (see `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`).
