@@ -15,6 +15,9 @@ describe('ProductMobileBottomNav', () => {
   it('usa BottomNav shared homologado com rotas reais do produto', () => {
     expect(source).toContain("from '@/shared/components/bottom-nav'");
     expect(source).toContain('bottomNavHyLightClassNames');
+    expect(source).toContain('bottomNavHyDarkGlassClassNames');
+    expect(source).toContain('isCargasMobileRoute');
+    expect(source).toContain("data-bottom-nav-skin={useDarkGlassBottomNav ? 'dark-glass' : 'light'}");
     expect(source).toContain('createPortal');
     expect(source).toContain('data-mobile-product-bottom-nav="true"');
     expect(source).toContain('data-bottom-nav-viewport-anchor="true"');
@@ -38,17 +41,22 @@ describe('ProductMobileBottomNav', () => {
   });
 
   it('ProductMobileBottomNav conecta classNames HY do módulo sass', () => {
-    expect(source).toContain('bottomNavHyLightClassNames');
-    expect(source).toContain('activeBubbleSurface: bottomNavHyLightClassNames.activeBubbleSurface');
-    expect(source).toContain('activeBubbleRim: bottomNavHyLightClassNames.activeBubbleRim');
-    expect(source).toContain('activeLiquidLayer: bottomNavHyLightClassNames.activeLiquidLayer');
-    expect(source).toContain('pendingGlow: bottomNavHyLightClassNames.pendingGlow');
+    expect(source).toContain('bottomNavClassNames');
+    expect(source).toContain('activeBubbleSurface: bottomNavClassNames.activeBubbleSurface');
+    expect(source).toContain('activeBubbleRim: bottomNavClassNames.activeBubbleRim');
+    expect(source).toContain('activeLiquidLayer: bottomNavClassNames.activeLiquidLayer');
+    expect(source).toContain('pendingGlow: bottomNavClassNames.pendingGlow');
 
-    const classNamesSource = readFileSync(
+    const lightClassNamesSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-light-class-names.ts'),
       'utf8',
     );
-    expect(classNamesSource).toContain('bottom-nav-hy-light-shell.module.sass');
+    const darkClassNamesSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-dark-glass-class-names.ts'),
+      'utf8',
+    );
+    expect(lightClassNamesSource).toContain('bottom-nav-hy-light-shell.module.sass');
+    expect(darkClassNamesSource).toContain('bottom-nav-hy-dark-glass-shell.module.sass');
   });
 
   it('rotas de bottom nav batem com intlAppPaths', () => {

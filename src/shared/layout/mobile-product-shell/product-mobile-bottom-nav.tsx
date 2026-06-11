@@ -4,7 +4,7 @@ import { useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { useTranslations } from 'next-intl';
 
-import { BottomNav, bottomNavHyLightClassNames } from '@/shared/components/bottom-nav';
+import { BottomNav } from '@/shared/components/bottom-nav';
 import { renderBottomNavIcon, type BottomNavIconId } from '@/shared/components/bottom-nav/bottom-nav-icons';
 import { usePathname, useRouter } from '@/core/i18n/navigation';
 import { intlAppPaths } from '@/shared/routing/app-routes';
@@ -23,6 +23,7 @@ const PRODUCT_MOBILE_BOTTOM_NAV_ITEMS = [
   },
   { id: 'tracking', labelKey: 'tracking', href: intlAppPaths.tracking.home, iconId: 'tracking' as BottomNavIconId },
 ] as const;
+
 
 export type ProductMobileBottomNavProps = {
   hidden?: boolean;
@@ -55,9 +56,12 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
   }));
 
   return createPortal(
-    <div data-mobile-product-bottom-nav="true" data-bottom-nav-viewport-anchor="true">
+    <div
+      data-mobile-product-bottom-nav="true"
+      data-bottom-nav-viewport-anchor="true"
+      data-bottom-nav-skin="preview-global"
+    >
       <BottomNav
-        className={bottomNavHyLightClassNames.shell}
         ariaLabel={tNav('mobileMenu')}
         items={items}
         activeId={activeId}
@@ -79,19 +83,6 @@ export function ProductMobileBottomNav({ hidden = false }: ProductMobileBottomNa
           }
 
           return false;
-        }}
-        classNames={{
-          item: bottomNavHyLightClassNames.item,
-          itemActive: bottomNavHyLightClassNames.itemActive,
-          icon: bottomNavHyLightClassNames.icon,
-          label: bottomNavHyLightClassNames.label,
-          activeBubble: bottomNavHyLightClassNames.activeBubble,
-          activeBubbleSurface: bottomNavHyLightClassNames.activeBubbleSurface,
-          activeBubbleRim: bottomNavHyLightClassNames.activeBubbleRim,
-          activeLiquidLayer: bottomNavHyLightClassNames.activeLiquidLayer,
-          activeIcon: bottomNavHyLightClassNames.activeIcon,
-          activeLabel: bottomNavHyLightClassNames.activeLabel,
-          pendingGlow: bottomNavHyLightClassNames.pendingGlow,
         }}
       />
     </div>,

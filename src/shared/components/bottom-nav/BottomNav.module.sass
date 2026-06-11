@@ -1,84 +1,263 @@
-@use '../../styles/interactions/pressable' as pressable
-
 .nav
-  position: relative
-  z-index: 1
+  --hy-bottom-nav-track-height: 4.25rem
+  --hy-bottom-nav-track-width: min(22rem, calc(100vw - 1.75rem))
+  --hy-bottom-nav-track-inline: max(0.875rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.875rem))
+  --hy-bottom-nav-item-width: calc(100% / var(--hy-bottom-nav-item-count, 5))
+  --hy-bottom-nav-lens-gap: 0.18rem
+  --hy-bottom-nav-lens-left: calc((var(--hy-bottom-nav-item-width) * var(--hy-bottom-nav-active-index, 0)) + var(--hy-bottom-nav-lens-gap))
+  --hy-bottom-nav-lens-width: calc(var(--hy-bottom-nav-item-width) - calc(var(--hy-bottom-nav-lens-gap) * 2))
+
+  position: fixed
+  z-index: 240
+  left: var(--hy-bottom-nav-track-inline)
+  right: var(--hy-bottom-nav-track-inline)
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem)
+  height: var(--hy-bottom-nav-track-height)
+  min-height: var(--hy-bottom-nav-track-height)
   display: grid
   grid-template-columns: repeat(var(--hy-bottom-nav-item-count, 5), minmax(0, 1fr))
   align-items: center
-  width: 100%
-  box-sizing: border-box
-
-  > *
-    display: contents
-
-.pillSlot
-  position: absolute
-  inset: -0.25rem 0
-  z-index: 0
-  overflow: visible
-  border-radius: var(--hy-radius-bottom-nav, 999rem)
-  pointer-events: none
-
-.contentLayer
-  position: relative
-  z-index: 2
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
-  gap: 0.125rem
-  width: 100%
-  min-width: 0
-  max-width: 100%
-  overflow: visible
-  pointer-events: none
-
-  > *
-    pointer-events: auto
-
-.item
-  @include pressable.pressableBubble
-
-  position: relative
-  z-index: 1
-  display: flex
-  flex-direction: column
-  align-items: center
-  justify-content: center
-  gap: 0
-  min-width: 0
   padding: 0
   border: 0
-  background: transparent
-  cursor: pointer
-  touch-action: manipulation
-  -webkit-tap-highlight-color: transparent
-  transform-origin: center
-  text-decoration: none
+  border-radius: 999rem
+  isolation: isolate
   overflow: visible
-  transition: color var(--hy-motion-bottom-nav-color-duration, 240ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1))
+  background: linear-gradient(180deg, rgba(222, 222, 225, 0.9) 0%, rgba(214, 214, 218, 0.86) 100%)
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.18), inset 0 -0.0625rem 0 rgba(122, 126, 136, 0.04), 0 0.875rem 1.625rem rgba(15, 23, 42, 0.17)
+  -webkit-backdrop-filter: blur(1.35rem) saturate(1.12)
+  backdrop-filter: blur(1.35rem) saturate(1.12)
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', Inter, system-ui, sans-serif
 
-.item.isPressing:not([data-active='true']),
-.item[data-pressing='true']:not([data-active='true'])
-  transform: scale(var(--hy-motion-bottom-nav-press-scale, 0.98))
+  &::before
+    content: ''
+    position: absolute
+    inset: 0
+    z-index: -2
+    border-radius: inherit
+    pointer-events: none
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.03))
+    box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.44), inset 0 -0.2rem 0.7rem rgba(84, 91, 108, 0.11)
 
-.item:disabled
-  cursor: not-allowed
-  opacity: var(--hy-opacity-bottom-nav-disabled, 0.46)
+  &::after
+    content: ''
+    position: absolute
+    inset: 0.0625rem 0.6rem auto
+    z-index: -1
+    height: 42%
+    border-radius: inherit
+    pointer-events: none
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 78%)
 
-.item:focus:not(:focus-visible)
-  outline: none
+.lens
+  position: absolute
+  top: var(--hy-bottom-nav-lens-gap)
+  left: var(--hy-bottom-nav-lens-left)
+  width: var(--hy-bottom-nav-lens-width)
+  height: calc(var(--hy-bottom-nav-track-height) - calc(var(--hy-bottom-nav-lens-gap) * 2))
+  border-radius: 999rem
+  z-index: 1
+  pointer-events: none
+  overflow: visible
+  transform-origin: center center
+  transition-property: top, left, width, height, transform, filter
+  transition-duration: 430ms
+  transition-timing-function: cubic-bezier(0.2, 0.95, 0.18, 1)
+  filter: drop-shadow(0 0.0625rem 0.125rem rgba(0, 0, 0, 0.018))
 
-.item:focus-visible
-  outline: 0.125rem solid var(--hy-color-focus-ring, #2563eb)
-  outline-offset: 0.125rem
-  border-radius: var(--hy-radius-bottom-nav, 999rem)
+  .nav[data-hy-bottom-nav-moving='true'] &
+    top: -0.42rem
+    left: calc(var(--hy-bottom-nav-lens-left) - 0.42rem)
+    width: calc(var(--hy-bottom-nav-lens-width) + 0.84rem)
+    height: calc(var(--hy-bottom-nav-track-height) + 0.84rem)
+    transform: scaleX(1.075) scaleY(1.12)
+    filter: drop-shadow(0 0.22rem 0.5rem rgba(0, 0, 0, 0.04))
+
+.waterGlow,
+.waterSurface,
+.waterDepth,
+.waterDistortion,
+.waterEdge,
+.waterSpecular
+  position: absolute
+  inset: 0
+  border-radius: inherit
+  pointer-events: none
+
+.waterGlow
+  inset: -0.08rem -0.18rem
+  background: radial-gradient(ellipse at 50% 54%, rgba(255, 255, 255, 0.14) 0%, rgba(223, 231, 241, 0.08) 36%, rgba(255, 255, 255, 0) 76%)
+  filter: blur(0.38rem)
+  opacity: 0.72
+
+.waterSurface
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(245, 247, 250, 0.045) 38%, rgba(214, 219, 228, 0.06) 100%)
+  -webkit-backdrop-filter: blur(1.55rem) saturate(1.14) brightness(1.02)
+  backdrop-filter: blur(1.55rem) saturate(1.14) brightness(1.02)
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.42), inset 0 0.75rem 0.95rem rgba(255, 255, 255, 0.045), inset 0 -0.72rem 1.05rem rgba(88, 94, 108, 0.17)
+
+.waterDepth
+  background: radial-gradient(ellipse at 50% 58%, rgba(148, 165, 188, 0.24) 0%, rgba(206, 220, 236, 0.1) 32%, rgba(255, 255, 255, 0.015) 56%, rgba(255, 255, 255, 0) 78%), radial-gradient(ellipse at 50% 88%, rgba(85, 96, 116, 0.12) 0%, rgba(255, 255, 255, 0) 42%)
+  opacity: 0.96
+
+.waterDistortion
+  background: radial-gradient(ellipse at 14% 50%, rgba(156, 171, 190, 0.18) 0%, rgba(255, 255, 255, 0) 30%), radial-gradient(ellipse at 86% 52%, rgba(156, 171, 190, 0.16) 0%, rgba(255, 255, 255, 0) 32%), radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 36%), linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(194, 204, 218, 0.11) 50%, rgba(255, 255, 255, 0) 100%)
+  opacity: 0.88
+  mix-blend-mode: screen
+
+.waterEdge
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 24%, rgba(255, 255, 255, 0) 78%, rgba(126, 134, 148, 0.08) 100%)
+  box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.46), inset 0 0.075rem 0.16rem rgba(255, 255, 255, 0.1), inset 0 -0.1rem 0.3rem rgba(92, 99, 112, 0.09)
+
+.waterSpecular
+  background: radial-gradient(ellipse at 50% 13%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 24%, rgba(255, 255, 255, 0) 58%), radial-gradient(ellipse at 50% 82%, rgba(102, 111, 126, 0.12) 0%, rgba(255, 255, 255, 0) 44%)
+  opacity: 0.88
+  mix-blend-mode: screen
+
+.nav[data-hy-bottom-nav-moving='true']
+  .waterGlow
+    inset: -0.25rem -0.75rem
+    background: radial-gradient(ellipse at 50% 54%, rgba(255, 255, 255, 0.16) 0%, rgba(211, 224, 238, 0.13) 34%, rgba(255, 255, 255, 0.04) 58%, rgba(255, 255, 255, 0) 80%)
+    filter: blur(0.62rem)
+    opacity: 0.96
+
+  .waterSurface
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.075) 0%, rgba(244, 247, 250, 0.035) 38%, rgba(208, 216, 228, 0.055) 100%)
+    -webkit-backdrop-filter: blur(2rem) saturate(1.2) brightness(1.02)
+    backdrop-filter: blur(2rem) saturate(1.2) brightness(1.02)
+    box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.36), inset 0 1rem 1.1rem rgba(255, 255, 255, 0.03), inset 0 -1rem 1.2rem rgba(85, 94, 110, 0.2)
+
+  .waterDepth
+    background: radial-gradient(ellipse at 50% 56%, rgba(124, 148, 178, 0.28) 0%, rgba(203, 220, 238, 0.12) 30%, rgba(255, 255, 255, 0.018) 56%, rgba(255, 255, 255, 0) 78%), radial-gradient(ellipse at 50% 92%, rgba(72, 86, 108, 0.16) 0%, rgba(255, 255, 255, 0) 44%), linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0%, rgba(108, 122, 140, 0.055) 100%)
+    opacity: 1
+
+  .waterDistortion
+    background: radial-gradient(ellipse at 10% 48%, rgba(145, 164, 188, 0.24) 0%, rgba(255, 255, 255, 0) 31%), radial-gradient(ellipse at 90% 52%, rgba(145, 164, 188, 0.22) 0%, rgba(255, 255, 255, 0) 32%), radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0) 36%), radial-gradient(ellipse at 50% 74%, rgba(95, 108, 127, 0.14) 0%, rgba(255, 255, 255, 0) 38%), linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 205, 222, 0.14) 50%, rgba(255, 255, 255, 0) 100%)
+    opacity: 1
+    mix-blend-mode: multiply
+
+  .waterEdge
+    box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.52), inset 0 0.1rem 0.2rem rgba(255, 255, 255, 0.11), inset 0 -0.14rem 0.34rem rgba(88, 98, 114, 0.12)
+
+  .waterSpecular
+    opacity: 0.98
+
+.item
+  position: relative
+  z-index: 2
+  min-width: 0
+  height: 100%
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 0.12rem
+  padding: 0
+  margin: 0
+  border: 0
+  border-radius: 999rem
+  background: transparent
+  color: rgba(118, 118, 123, 0.82)
+  text-decoration: none
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+  touch-action: manipulation
+  transition: color 220ms ease, transform 220ms ease, opacity 220ms ease
+
+  svg
+    width: 1.45rem
+    height: 1.45rem
+    fill: none
+    stroke: currentColor
+    stroke-width: 1.85
+    stroke-linecap: round
+    stroke-linejoin: round
+
+  &:focus:not(:focus-visible)
+    outline: none
+
+  &:focus-visible
+    outline: 0.125rem solid rgba(20, 116, 255, 0.42)
+    outline-offset: 0.125rem
+
+  &:not([data-active='true']):active
+    transform: scale(0.965)
+
+  &[aria-disabled='true'],
+  &:disabled
+    cursor: not-allowed
+    opacity: 0.5
+
+.item[data-active='true']
+  color: #050507
+
+.icon
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  color: currentColor
+  opacity: 0.82
+  transition: opacity 220ms ease, transform 430ms cubic-bezier(0.2, 0.92, 0.18, 1)
+
+.item[data-active='true'] .icon
+  opacity: 1
+
+.label
+  display: block
+  max-width: 100%
+  color: currentColor
+  font-size: 0.6875rem
+  line-height: 1
+  font-weight: 680
+  letter-spacing: -0.01em
+  white-space: nowrap
+  overflow: hidden
+  text-overflow: ellipsis
+  opacity: 0.78
+  transition: color 220ms ease, font-weight 220ms ease, opacity 220ms ease, transform 430ms cubic-bezier(0.2, 0.92, 0.18, 1)
+
+.item[data-active='true'] .label
+  color: #050507
+  font-weight: 740
+  opacity: 1
+
+.pendingGlow
+  position: absolute
+  inset: 0.45rem 0.55rem
+  z-index: -1
+  border-radius: inherit
+  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.22), transparent 62%)
+  opacity: 0.72
+  pointer-events: none
+
+@media (max-width: 420px)
+  .nav
+    --hy-bottom-nav-track-height: 4rem
+    left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
+    right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
+
+  .item svg
+    width: 1.36rem
+    height: 1.36rem
+
+  .label
+    font-size: 0.64rem
 
 @media (prefers-reduced-motion: reduce)
-  .item.isPressing:not([data-active='true']),
-  .item[data-pressing='true']:not([data-active='true'])
-    transform: none
+  .lens,
+  .icon,
+  .label,
+  .item,
+  .waterGlow,
+  .waterSurface,
+  .waterDepth,
+  .waterDistortion,
+  .waterEdge,
+  .waterSpecular
+    transition: none
 
-  .item:not([data-active='true']):active
+  .nav[data-hy-bottom-nav-moving='true'] .lens
+    top: var(--hy-bottom-nav-lens-gap)
+    left: var(--hy-bottom-nav-lens-left)
+    width: var(--hy-bottom-nav-lens-width)
+    height: calc(var(--hy-bottom-nav-track-height) - calc(var(--hy-bottom-nav-lens-gap) * 2))
     transform: none

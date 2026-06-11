@@ -3,6 +3,8 @@
 import {
   useCallback,
   useEffect,
+  useMemo,
+  useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
@@ -13,31 +15,12 @@ import {
 
 import { useLinkStatus } from 'next/link';
 
+import { MotionLink, MotionButton, BottomNavMotionProvider } from './bottom-nav-motion';
 import {
   isBottomNavItemPending,
   PENDING_ACTIVE_TIMEOUT_MS,
   resolveVisualActiveId,
 } from './bottom-nav-state';
-import {
-  BOTTOM_NAV_ROUTE_COMMIT_ICON_LIFT_REM,
-  BOTTOM_NAV_ROUTE_COMMIT_ICON_SCALE,
-  bottomNavActiveIconPressScale,
-  bottomNavBubblePressInSpring,
-  bottomNavBubblePressOutSpring,
-  bottomNavContentSpring,
-  bottomNavItemTapProps,
-  bottomNavRouteCommitSpring,
-  BottomNavMotionProvider,
-  LayoutGroup,
-  MotionButton,
-  MotionLink,
-  MotionSpan,
-  useBottomNavReducedMotion,
-  useBottomNavRouteCommitNonce,
-  useBottomNavRouteCommitAnimating,
-  useBottomNavRouteCommitCycle,
-} from './bottom-nav-motion';
-import { BottomNavActivePill } from './bottom-nav-gooey-pill';
 import { shouldBypassPressFeedback } from './with-press-feedback';
 import styles from './BottomNav.module.sass';
 
@@ -74,16 +57,31 @@ export type BottomNavProps = {
   onItemSelect?: (id: string) => void | boolean;
   className?: string;
   ariaLabel?: string;
-  classNames: BottomNavClassNames;
+  /**
+   * Legacy skin hook. Kept for backwards compatibility while the preview-based
+   * BottomNav owns its production styling internally.
+   */
+  classNames?: BottomNavClassNames;
+};
+
+type BottomNavLinkPendingBridgeProps = {
+  onPendingChange: (pending: boolean) => void;
+};
+
+type BottomNavItemControlProps = {
+  item: BottomNavItem;
+  index: number;
+  routeActiveId: string;
+  visualActiveId: string;
+  pendingItemId: string | null;
+  onItemSelect?: (id: string) => void | boolean;
+  onPendingSelect: (id: string) => void;
+  onPressingChange: (id: string | null) => void;
 };
 
 function resolveItemIcon(item: BottomNavItem): ReactNode {
   return item.iconOutlined ?? item.icon ?? item.iconFilled;
 }
-
-type BottomNavLinkPendingBridgeProps = {
-  onPendingChange: (pending: boolean) => void;
-};
 
 function BottomNavLinkPendingBridge({ onPendingChange }: BottomNavLinkPendingBridgeProps) {
   const { pending } = useLinkStatus();
@@ -95,157 +93,47 @@ function BottomNavLinkPendingBridge({ onPendingChange }: BottomNavLinkPendingBri
   return null;
 }
 
-type BottomNavItemControlProps = {
-  item: BottomNavItem;
-  routeActiveId: string;
-  pendingItemId: string | null;
-  classNames: BottomNavClassNames;
-  onItemSelect?: (id: string) => void | boolean;
-  onPendingSelect?: (id: string) => void;
-  reducedMotion: boolean;
-  routeCommitNonce: number;
-};
+function clampActiveIndex(items: BottomNavItem[], activeId: string): number {
+  const index = items.findIndex((item) => item.id === activeId);
+  return index >= 0 ? index : 0;
+}
 
 function BottomNavItemControl({
   item,
+  index,
   routeActiveId,
+  visualActiveId,
   pendingItemId,
-  classNames,
   onItemSelect,
   onPendingSelect,
-  reducedMotion,
-  routeCommitNonce,
+  onPressingChange,
 }: BottomNavItemControlProps) {
-  const [pressing, setPressing] = useState(false);
   const [linkPending, setLinkPending] = useState(false);
-
+  const icon = resolveItemIcon(item);
   const isRouteActive = item.id === routeActiveId;
-  const routeCommitNonceForItem = isRouteActive ? routeCommitNonce : 0;
-  const isRouteCommitAnimating = useBottomNavRouteCommitAnimating(routeCommitNonceForItem);
-  const isRouteCommitCycle = useBottomNavRouteCommitCycle(routeCommitNonceForItem);
-  const visualActiveId = resolveVisualActiveId(routeActiveId, pendingItemId);
   const isVisualActive = item.id === visualActiveId;
   const isPending = item.href
     ? linkPending
     : isBottomNavItemPending(item.id, routeActiveId, pendingItemId);
-  const icon = resolveItemIcon(item);
-  const tapMotionProps = bottomNavItemTapProps(reducedMotion, isVisualActive);
-  const iconPressScale = bottomNavActiveIconPressScale(pressing && isVisualActive, reducedMotion);
-  const iconPressTransition =
-    pressing && isVisualActive ? bottomNavBubblePressInSpring : bottomNavBubblePressOutSpring;
-
-  const itemClassName = [
-    styles.item,
-    classNames.item,
-    isVisualActive ? classNames.itemActive ?? '' : '',
-    pressing ? styles.isPressing : '',
-  ]
-    .filter(Boolean)
-    .join(' ');
 
   const itemDataAttributes = {
+    'data-hy-bottom-nav-item': item.id,
     'data-bottom-nav-item': item.id,
+    'data-index': index,
     'data-active': isVisualActive ? 'true' : 'false',
     'data-bottom-nav-active': isVisualActive ? 'true' : undefined,
     'data-bottom-nav-pending': isPending ? 'true' : undefined,
-    'data-pressing': pressing ? 'true' : undefined,
   } as const;
-
-  const activePill = isRouteActive ? (
-    <BottomNavActivePill
-      pressing={pressing}
-      isRouteCommitAnimating={isRouteCommitAnimating}
-      isRouteCommitCycle={isRouteCommitCycle}
-      reducedMotion={reducedMotion}
-      bubbleClassName={classNames.activeBubble}
-      surfaceClassName={classNames.activeBubbleSurface}
-      rimClassName={classNames.activeBubbleRim}
-    />
-  ) : null;
-
-  const activeContent = (
-    <>
-      <MotionSpan
-        className={classNames.activeIcon}
-        data-bottom-nav-icon-variant="outlined"
-        data-bottom-nav-icon-state="active"
-        data-bottom-nav-icon-active="true"
-        data-bottom-nav-icon-pressing={pressing ? 'true' : undefined}
-        initial={reducedMotion ? false : { opacity: 0.58, scale: 0.94, y: 0.125 }}
-        animate={
-          reducedMotion
-            ? undefined
-            : isRouteCommitAnimating
-              ? {
-                  opacity: 1,
-                  scale: BOTTOM_NAV_ROUTE_COMMIT_ICON_SCALE,
-                  y: -BOTTOM_NAV_ROUTE_COMMIT_ICON_LIFT_REM,
-                }
-              : pressing
-                ? {
-                    opacity: 1,
-                    scale: iconPressScale,
-                    y: -0.0625,
-                  }
-                : {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                  }
-        }
-        transition={
-          reducedMotion
-            ? undefined
-            : isRouteCommitAnimating || isRouteCommitCycle
-              ? bottomNavRouteCommitSpring
-              : pressing
-                ? iconPressTransition
-                : bottomNavContentSpring
-        }
-      >
-        {icon}
-      </MotionSpan>
-      <MotionSpan
-        className={classNames.activeLabel}
-        data-bottom-nav-label-active="true"
-        initial={reducedMotion ? false : { opacity: 0.58, scale: 0.96, y: 0.125 }}
-        animate={reducedMotion ? undefined : { opacity: 1, scale: 1, y: 0 }}
-        transition={{ ...bottomNavContentSpring, delay: 0.03 }}
-      >
-        {item.label}
-      </MotionSpan>
-    </>
-  );
-
-  const inactiveContent = (
-    <>
-      <span
-        className={classNames.icon}
-        data-bottom-nav-icon-variant="outlined"
-        data-bottom-nav-icon-state="inactive"
-      >
-        {icon}
-      </span>
-      <span className={classNames.label}>{item.label}</span>
-    </>
-  );
-
-  const pendingGlow =
-    isPending && !isVisualActive && classNames.pendingGlow ? (
-      <span className={classNames.pendingGlow} aria-hidden="true" data-bottom-nav-pending-glow="true" />
-    ) : null;
 
   const content = (
     <>
-      {activePill ? (
-        <span className={styles.pillSlot} aria-hidden="true" data-bottom-nav-pill-slot="true">
-          {activePill}
-        </span>
+      {isPending && !isVisualActive ? (
+        <span className={styles.pendingGlow} aria-hidden="true" data-bottom-nav-pending-glow="true" />
       ) : null}
-      {pendingGlow}
-      <span className={styles.contentLayer} data-bottom-nav-content-layer="true">
-        {isVisualActive ? activeContent : inactiveContent}
+      <span className={styles.icon} data-bottom-nav-icon-variant="outlined">
+        {icon}
       </span>
+      <span className={styles.label}>{item.label}</span>
     </>
   );
 
@@ -253,40 +141,28 @@ function BottomNavItemControl({
     setLinkPending(pending);
   }, []);
 
-  function beginPressFeedback() {
-    setPressing(true);
-  }
-
-  function endPressFeedback() {
-    setPressing(false);
-  }
-
   function handlePointerDown(event: PointerEvent) {
-    if (item.disabled || event.button !== 0) {
+    if (item.disabled || event.button !== 0 || shouldBypassPressFeedback(event)) {
       return;
     }
 
-    if (shouldBypassPressFeedback(event)) {
-      return;
+    if (!isRouteActive) {
+      onPendingSelect(item.id);
     }
 
-    if (!item.href && !isRouteActive) {
-      onPendingSelect?.(item.id);
-    }
-
-    beginPressFeedback();
+    onPressingChange(item.id);
   }
 
   function handlePointerUp(event: PointerEvent) {
-    if (item.disabled || event.button !== 0) {
+    if (event.button !== 0) {
       return;
     }
 
-    endPressFeedback();
+    onPressingChange(null);
   }
 
   function handlePointerCancel() {
-    endPressFeedback();
+    onPressingChange(null);
   }
 
   function handleKeyDown(event: KeyboardEvent) {
@@ -301,12 +177,12 @@ function BottomNavItemControl({
     event.preventDefault();
 
     if (!isRouteActive) {
-      onPendingSelect?.(item.id);
+      onPendingSelect(item.id);
     }
 
-    beginPressFeedback();
+    onPressingChange(item.id);
     onItemSelect?.(item.id);
-    endPressFeedback();
+    window.setTimeout(() => onPressingChange(null), 120);
   }
 
   function handleClick(event: MouseEvent) {
@@ -334,7 +210,7 @@ function BottomNavItemControl({
       <MotionLink
         href={item.href as never}
         prefetch
-        className={itemClassName}
+        className={styles.item}
         {...itemDataAttributes}
         aria-current={isRouteActive ? 'page' : undefined}
         aria-disabled={item.disabled ? true : undefined}
@@ -342,7 +218,6 @@ function BottomNavItemControl({
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerCancel}
         onClick={handleClick}
-        {...tapMotionProps}
       >
         <BottomNavLinkPendingBridge onPendingChange={handleLinkPendingChange} />
         {content}
@@ -353,7 +228,7 @@ function BottomNavItemControl({
   return (
     <MotionButton
       type="button"
-      className={itemClassName}
+      className={styles.item}
       {...itemDataAttributes}
       disabled={item.disabled}
       onPointerDown={handlePointerDown}
@@ -361,7 +236,6 @@ function BottomNavItemControl({
       onPointerCancel={handlePointerCancel}
       onKeyDown={handleKeyDown}
       onClick={handleClick}
-      {...tapMotionProps}
     >
       {content}
     </MotionButton>
@@ -372,15 +246,15 @@ export function BottomNav({
   items,
   activeId,
   onItemSelect,
-  className = '',
   ariaLabel,
-  classNames,
 }: BottomNavProps) {
-  const reducedMotion = useBottomNavReducedMotion();
-  const routeCommitNonce = useBottomNavRouteCommitNonce(activeId);
   const [pendingItemId, setPendingItemId] = useState<string | null>(null);
-  const effectivePendingId =
-    pendingItemId != null && pendingItemId !== activeId ? pendingItemId : null;
+  const [pressingItemId, setPressingItemId] = useState<string | null>(null);
+  const [isMoving, setIsMoving] = useState(false);
+  const previousVisualIdRef = useRef<string | null>(null);
+  const effectivePendingId = pendingItemId != null && pendingItemId !== activeId ? pendingItemId : null;
+  const visualActiveId = resolveVisualActiveId(activeId, effectivePendingId);
+  const activeIndex = clampActiveIndex(items, visualActiveId);
 
   useEffect(() => {
     if (!effectivePendingId) {
@@ -391,31 +265,61 @@ export function BottomNav({
     return () => window.clearTimeout(timer);
   }, [activeId, effectivePendingId]);
 
+  useEffect(() => {
+    const previousVisualId = previousVisualIdRef.current;
+    previousVisualIdRef.current = visualActiveId;
+
+    if (!previousVisualId || previousVisualId === visualActiveId) {
+      return undefined;
+    }
+
+    setIsMoving(true);
+    const timer = window.setTimeout(() => setIsMoving(false), 360);
+    return () => window.clearTimeout(timer);
+  }, [visualActiveId]);
+
+  const itemCount = Math.max(items.length, 1);
+  const navStyle = useMemo(
+    () => ({
+      '--hy-bottom-nav-item-count': itemCount,
+      '--hy-bottom-nav-active-index': activeIndex,
+    }) as CSSProperties,
+    [activeIndex, itemCount],
+  );
+
   return (
     <BottomNavMotionProvider>
       <nav
-        className={[styles.nav, className].filter(Boolean).join(' ')}
+        className={styles.nav}
         aria-label={ariaLabel}
         data-bottom-nav-global="true"
-        data-bottom-nav-glass="true"
-        data-hy-bottom-nav-reduced-motion={reducedMotion ? 'true' : 'false'}
-        style={{ '--hy-bottom-nav-item-count': items.length } as CSSProperties}
+        data-bottom-nav-preview-global="true"
+        data-hy-bottom-nav-pressing={pressingItemId ?? undefined}
+        data-hy-bottom-nav-moving={isMoving ? 'true' : 'false'}
+        style={navStyle}
       >
-        <LayoutGroup id="hy-bottom-nav-layout">
-          {items.map((item) => (
-            <BottomNavItemControl
-              key={item.id}
-              item={item}
-              routeActiveId={activeId}
-              pendingItemId={effectivePendingId}
-              classNames={classNames}
-              onItemSelect={onItemSelect}
-              onPendingSelect={setPendingItemId}
-              reducedMotion={reducedMotion}
-              routeCommitNonce={routeCommitNonce}
-            />
-          ))}
-        </LayoutGroup>
+        <span className={styles.lens} aria-hidden="true" data-hy-bottom-nav-preview-lens="true">
+          <span className={styles.waterGlow} />
+          <span className={styles.waterSurface} />
+          <span className={styles.waterDepth} />
+          <span className={styles.waterDistortion} />
+          <span className={styles.waterEdge} />
+          <span className={styles.waterSpecular} />
+        </span>
+
+        {items.map((item, index) => (
+          <BottomNavItemControl
+            key={item.id}
+            item={item}
+            index={index}
+            routeActiveId={activeId}
+            visualActiveId={visualActiveId}
+            pendingItemId={effectivePendingId}
+            onItemSelect={onItemSelect}
+            onPendingSelect={setPendingItemId}
+            onPressingChange={setPressingItemId}
+          />
+        ))}
       </nav>
     </BottomNavMotionProvider>
   );

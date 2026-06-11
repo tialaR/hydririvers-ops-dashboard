@@ -5,6 +5,7 @@ export {
   type BottomNavProps,
 } from './BottomNav';
 export { bottomNavHyLightClassNames } from './bottom-nav-hy-light-class-names';
+export { bottomNavHyDarkGlassClassNames } from './bottom-nav-hy-dark-glass-class-names';
 /** @deprecated Use `bottomNavHyLightClassNames`. */
 export { bottomNavV2LightClassNames } from './bottom-nav-v2-light-class-names';
 export {
@@ -30,3 +31,5 @@ export {
   bottomNavPillSpring,
   bottomNavPressSpring,
 } from './bottom-nav-motion';
+
+export { BottomNavLegacy } from './BottomNavLegacy';
