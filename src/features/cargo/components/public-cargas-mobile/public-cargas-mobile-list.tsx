@@ -11,6 +11,7 @@ import { mapMarketplaceCargoToLabV2 } from '@/features/cargo/utils/map-marketpla
 import { parseCargoEtaMeta } from '@/features/cargo/utils/parse-cargo-eta-meta';
 import { IconButton } from '@/shared/components/icon-button';
 import { InformationalCard } from '@/shared/components/informational-card';
+import { BOTTOM_SHEET_TRANSITION_MS } from '@/shared/components/bottom-sheet';
 import { SearchField } from '@/shared/components/search-field';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 
@@ -22,7 +23,7 @@ import styles from './public-cargas-mobile-list.module.scss';
 
 const MOBILE_INITIAL_VISIBLE_COUNT = 8;
 const MOBILE_VISIBLE_INCREMENT = 6;
-const FILTER_SHEET_EXIT_MS = 220;
+const BOTTOM_SHEET_EXIT_SUPPRESSION_MS = BOTTOM_SHEET_TRANSITION_MS + 48;
 
 type AdvancedFilters = {
   corridor: string[];
@@ -105,13 +106,19 @@ export function PublicCargasMobileList({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isFilterClosing, setIsFilterClosing] = useState(false);
   const [selectedCargo, setSelectedCargo] = useState<CargoLabV2 | null>(null);
+  const [actionSheetOpen, setActionSheetOpen] = useState(false);
+  const [isActionSheetClosing, setIsActionSheetClosing] = useState(false);
   const [mobileVisibleCount, setMobileVisibleCount] = useState(MOBILE_INITIAL_VISIBLE_COUNT);
   const mobileListSentinelRef = useRef<HTMLDivElement | null>(null);
   const filterCloseTimerRef = useRef<number | null>(null);
+  const actionSheetCloseTimerRef = useRef<number | null>(null);
   const { setBottomNavSuppressed } = useMobileShellChrome();
 
   const visibleCargoes = filteredCargoes.slice(0, mobileVisibleCount);
   const hasMoreCargoes = mobileVisibleCount < filteredCargoes.length;
+  const isFilterSheetActive = drawerOpen || isFilterClosing;
+  const isActionSheetActive = actionSheetOpen || isActionSheetClosing || Boolean(selectedCargo);
+  const shouldSuppressBottomNav = isFilterSheetActive || isActionSheetActive;
 
   const statusOptions = useMemo<PublicCargasFilterOption[]>(
     () => [
@@ -130,13 +137,19 @@ export function PublicCargasMobileList({
       if (filterCloseTimerRef.current !== null) {
         window.clearTimeout(filterCloseTimerRef.current);
       }
+      if (actionSheetCloseTimerRef.current !== null) {
+        window.clearTimeout(actionSheetCloseTimerRef.current);
+      }
     };
   }, []);
 
   useEffect(() => {
-    setBottomNavSuppressed(drawerOpen || isFilterClosing || Boolean(selectedCargo));
+    setBottomNavSuppressed(shouldSuppressBottomNav);
+  }, [setBottomNavSuppressed, shouldSuppressBottomNav]);
+
+  useEffect(() => {
     return () => setBottomNavSuppressed(false);
-  }, [drawerOpen, isFilterClosing, selectedCargo, setBottomNavSuppressed]);
+  }, [setBottomNavSuppressed]);
 
   useEffect(() => {
     if (!hasMoreCargoes || !mobileListSentinelRef.current) {
@@ -179,12 +192,13 @@ export function PublicCargasMobileList({
       return;
     }
 
+    setDrawerOpen(false);
     setIsFilterClosing(true);
+    // Mirrors BottomSheet's portal exit so the global BottomNav does not reappear under a closing sheet.
     filterCloseTimerRef.current = window.setTimeout(() => {
-      setDrawerOpen(false);
       setIsFilterClosing(false);
       filterCloseTimerRef.current = null;
-    }, FILTER_SHEET_EXIT_MS);
+    }, BOTTOM_SHEET_EXIT_SUPPRESSION_MS);
   }
 
   function handleFilterSheetOpenChange(open: boolean) {
@@ -222,6 +236,32 @@ export function PublicCargasMobileList({
     resetVisibleCount();
     onToggleAdvancedFilter(key, value, selection);
     onSyncListViewport();
+  }
+
+  function openActionSheet(cargo: CargoLabV2) {
+    if (actionSheetCloseTimerRef.current !== null) {
+      window.clearTimeout(actionSheetCloseTimerRef.current);
+      actionSheetCloseTimerRef.current = null;
+    }
+
+    setSelectedCargo(cargo);
+    setIsActionSheetClosing(false);
+    setActionSheetOpen(true);
+  }
+
+  function closeActionSheet() {
+    if (!selectedCargo || isActionSheetClosing) {
+      return;
+    }
+
+    setActionSheetOpen(false);
+    setIsActionSheetClosing(true);
+    // Mirrors BottomSheet's portal exit so the global BottomNav does not reappear under a closing sheet.
+    actionSheetCloseTimerRef.current = window.setTimeout(() => {
+      setSelectedCargo(null);
+      setIsActionSheetClosing(false);
+      actionSheetCloseTimerRef.current = null;
+    }, BOTTOM_SHEET_EXIT_SUPPRESSION_MS);
   }
 
   return (
@@ -322,7 +362,7 @@ export function PublicCargasMobileList({
                   className={styles.cargoCard}
                   actionLabel={tBoard('list.cardActionView')}
                   primaryActionHref={intlAppPaths.cargos.cargoMap(labCargo.id)}
-                  onClick={() => setSelectedCargo(labCargo)}
+                  onClick={() => openActionSheet(labCargo)}
                 />
               );
             })
@@ -359,11 +399,14 @@ export function PublicCargasMobileList({
       {selectedCargo ? (
         <PublicCargoActionSheet
           cargo={selectedCargo}
-          open
+          open={actionSheetOpen}
           onOpenChange={(open) => {
-            if (!open) {
-              setSelectedCargo(null);
+            if (open) {
+              setActionSheetOpen(true);
+              return;
             }
+
+            closeActionSheet();
           }}
         />
       ) : null}

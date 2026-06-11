@@ -190,4 +190,26 @@ describe('PublicCargasMobileList', () => {
     expect(source).toContain("tBoard('list.cardActionView')");
     expect(html).toContain('operationsBoard.list.cardActionView');
   });
+
+  it('centraliza a supressão do BottomNav global em estado derivado de sheets ativos', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+
+    expect(source).toContain('const isFilterSheetActive = drawerOpen || isFilterClosing;');
+    expect(source).toContain(
+      'const isActionSheetActive = actionSheetOpen || isActionSheetClosing || Boolean(selectedCargo);',
+    );
+    expect(source).toContain('const shouldSuppressBottomNav = isFilterSheetActive || isActionSheetActive;');
+    expect(source).toContain('setBottomNavSuppressed(shouldSuppressBottomNav);');
+    expect(source).not.toContain('setBottomNavSuppressed(drawerOpen || isFilterClosing || Boolean(selectedCargo));');
+  });
+
+  it('mantém os sheets montados durante o fechamento para evitar flicker do BottomNav global', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+
+    expect(source).toContain('BOTTOM_SHEET_EXIT_SUPPRESSION_MS = BOTTOM_SHEET_TRANSITION_MS + 48');
+    expect(source).toContain('setDrawerOpen(false);');
+    expect(source).toContain('setActionSheetOpen(false);');
+    expect(source).toContain('setSelectedCargo(null);');
+    expect(source).toContain('window.clearTimeout(actionSheetCloseTimerRef.current);');
+  });
 });
