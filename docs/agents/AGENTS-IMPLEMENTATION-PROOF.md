@@ -1,50 +1,61 @@
 # Hydri Implementation Proof
 
-Every implemented task must close with a **Human closeout** (short, visual, plain-language decision) and, when implementation happened, a `HYDRI_IMPLEMENTATION_PROOF` block (technical audit trail). Agents must prove the change worked, explain how it was validated, and declare limits — not just say "done".
+Every implemented task must close with a **Captain closeout** (short, decisive message for the user) and, when implementation happened, a `HYDRI_IMPLEMENTATION_PROOF` block (technical audit trail). Agents must prove the change worked, explain how it was validated, and declare limits — not just say "done".
 
-**Do not lead the closing section with technical proof.** Human closeout comes first; the user should not need to parse proof levels or router categories to understand the outcome.
+**Do not lead the closing section with technical proof.** Captain closeout comes first; the user should not need to parse proof levels or router categories to understand the outcome.
 
 The proof must include the **HYDRI_TASK_ROUTER task classification** used for the work (same categories declared in the initial router block). See `docs/agents/AGENTS-TASK-ROUTER.md`.
 
-## Human closeout (mandatory)
+## Captain closeout (mandatory)
 
-Emit **Human closeout** at the start of every closing section. It is the user's decision summary in at most **6 lines**.
+Emit **Captain closeout** at the start of every closing section. It is written **for the user**, not for another agent — a short, decisive summary without technical jargon when a human equivalent exists.
 
 **Closing order:**
 
 1. Work body (prose, code, diffs — avoid textão before closeout)
-2. **Human closeout** ← user-facing decision (**always first in closing section**)
-3. `HYDRI_TASK_ROUTER — close` (technical)
-4. `HYDRI_IMPLEMENTATION_PROOF` (technical — only when implementation happened)
+2. **Captain closeout** ← user-facing decision (**always first in closing section**)
+3. **Detalhes técnicos** (optional — component names, paths, commands, proof levels)
+4. `HYDRI_TASK_ROUTER — close` (technical)
+5. `HYDRI_IMPLEMENTATION_PROOF` (technical — only when implementation happened)
 
 **When to omit full HYDRI_IMPLEMENTATION_PROOF:**
 
-- Plan or audit only (no code/config/test changes): Human closeout with **🟡 Amarelo** is enough.
-- Blocked before any delivery: Human closeout with **🔴 Vermelho**; omit proof unless partial work exists.
+- Plan or audit only (no code/config/test changes): Captain closeout with **🟡 Segue com cuidado** is enough.
+- Blocked before any delivery: Captain closeout with **🔴 Para agora**; omit proof unless partial work exists.
 
-### Template (max 6 lines)
+### Template (required)
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: [frase curta em linguagem humana — o que aconteceu e o resultado]
-Prova: [comando, preview ou teste principal que sustenta a afirmação]
-Não provado: [principal limite, ou "Nada relevante"]
-Próxima ação: [ação objetiva]
+🟢/🟡/🔴 [Decisão curta]
+
+Em humano:
+[1 a 3 frases curtas explicando o que aconteceu sem jargão]
+
+Prova simples:
+[1 linha com validação em linguagem simples]
+
+Falta provar:
+[1 linha objetiva]
+
+Próxima ação:
+[1 ação clara]
 ```
 
-### Status emojis
+### Status meanings
 
-| Emoji | Status | When to use | Maps to **Result** |
-|-------|--------|-------------|-------------------|
-| 🟢 | **Verde** | Validated with sufficient evidence; docs/rules created and checks passed | Worked |
-| 🟡 | **Amarelo** | Partial, incomplete validation, relevant risk, plan/audit without execution | Partial |
-| 🔴 | **Vermelho** | Did not work, validation failed, scope blocked | Did not work |
+| Emoji | Decisão | When to use | Maps to **Result** |
+|-------|---------|-------------|-------------------|
+| 🟢 | **Pode seguir** | Validated with sufficient evidence; docs/rules created and checks passed | Worked |
+| 🟡 | **Segue com cuidado** | Partial, incomplete validation, relevant risk, plan/audit without execution | Partial |
+| 🔴 | **Para agora** | Did not work, validation failed, scope blocked | Did not work |
 
-Write in plain language. Avoid internal doc paths, category names, and proof-level jargon unless the user explicitly asked for them.
+### Avoid in Captain closeout
 
-**Human closeout** and **HYDRI_IMPLEMENTATION_PROOF** must agree on outcome (🟢 Verde ↔ Worked, 🟡 Amarelo ↔ Partial, 🔴 Vermelho ↔ Did not work).
+Do not use internal component names (unless essential), "canônico", "light/flush", "runtime", "E2E", "flicker", "viewport", "supressão", "PR #…", file paths, or long lists. Move those to **Detalhes técnicos** or `HYDRI_IMPLEMENTATION_PROOF`.
+
+**Captain closeout** and **HYDRI_IMPLEMENTATION_PROOF** must agree on outcome (🟢 Pode seguir ↔ Worked, 🟡 Segue com cuidado ↔ Partial, 🔴 Para agora ↔ Did not work).
 
 ## When to use
 
@@ -190,18 +201,32 @@ Preserve mobile/desktop style separation; a mobile-only task must not break desk
 - **AGENTS-UI-MOBILE-STANDARDS.md:** mobile chrome and BottomNav expectations.
 - **hydririvers-visual-workflow:** visual iteration rounds; implementation proof closes each implementation round.
 
-## Examples: Human closeout
+## Examples: Captain closeout
 
-### 🟢 Verde — implementation validated
+### 🟢 Pode seguir — implementation validated
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: Corrigido o padding de safe-area no sheet de filtros; o conteúdo não fica mais atrás da BottomNav.
-Prova: Lint, typecheck e i18n OK; preview mobile em `/pt-BR/cargas` (abrir, filtrar, fechar, rolar).
-Não provado: Locales en-US/es, dark mode, iPhone físico.
-Próxima ação: Smoke test em dispositivo real se for para produção esta semana.
+🟢 Pode seguir
+
+Em humano:
+O painel de filtros no celular não esconde mais o conteúdo atrás da barra de navegação. Abrir, filtrar, fechar e rolar funcionaram no teste manual.
+
+Prova simples:
+Checagens automáticas passaram e o fluxo principal foi testado na tela de cargas em português.
+
+Falta provar:
+Inglês e espanhol, modo escuro e teste em aparelho físico.
+
+Próxima ação:
+Completar traduções e fazer um teste rápido no celular real antes de publicar.
+
+### Detalhes técnicos
+
+- Preview: `/pt-BR/cargas` — safe-area padding no filter sheet
+- `npm run lint`, `npm run typecheck`, `npm run check:i18n` — exit 0
+- Locales en-US/es não revisados nesta rodada
 ```
 
 Technical blocks follow (abbreviated):
@@ -216,30 +241,50 @@ Technical blocks follow (abbreviated):
 …
 ```
 
-### 🟡 Amarelo — partial or plan/audit only
+### 🟡 Segue com cuidado — partial or plan/audit only
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟡 Status: Amarelo
-Mensagem: Copy do filtro de status ajustada só em pt-BR; en-US e es ainda pendentes.
-Prova: `npm run check:i18n` passou; rota pt-BR revisada manualmente.
-Não provado: Traduções en-US/es; desktop não aberto.
-Próxima ação: Completar en-US/es e rodar preview nos três locales.
+🟡 Segue com cuidado
+
+Em humano:
+O texto do filtro de status foi ajustado só em português. Inglês e espanhol ainda não foram atualizados.
+
+Prova simples:
+A checagem de traduções passou e a tela em português foi revisada manualmente.
+
+Falta provar:
+Traduções em inglês e espanhol; versão desktop não foi aberta.
+
+Próxima ação:
+Completar os dois idiomas e conferir as três versões de idioma no navegador.
 ```
 
-For plan/audit without code changes, stop after Human closeout — no full `HYDRI_IMPLEMENTATION_PROOF` required.
+For plan/audit without code changes, stop after Captain closeout — no full `HYDRI_IMPLEMENTATION_PROOF` required.
 
-### 🔴 Vermelho — blocked or failed
+### 🔴 Para agora — blocked or failed
 
 ```md
-## Human closeout
+## Captain closeout
 
-🔴 Status: Vermelho
-Mensagem: Nada entregue — doc obrigatório ausente no repositório; implementação bloqueada.
-Prova: Verificação de path no disco; arquivo não existe.
-Não provado: Qualquer mudança de estilo.
-Próxima ação: Restaurar o doc ou autorizar escopo sem ele.
+🔴 Para agora
+
+Em humano:
+Nada foi entregue — falta um documento obrigatório no repositório e o trabalho ficou bloqueado.
+
+Prova simples:
+Confirmei que o arquivo esperado não existe no disco.
+
+Falta provar:
+Qualquer mudança de estilo ou comportamento.
+
+Próxima ação:
+Restaurar o documento ou autorizar o escopo sem ele.
+
+### Detalhes técnicos
+
+- Doc ausente: `docs/theme.md`
 ```
 
-When partial work exists, add `HYDRI_IMPLEMENTATION_PROOF` with **Result:** Did not work below Human closeout.
+When partial work exists, add `HYDRI_IMPLEMENTATION_PROOF` with **Result:** Did not work below Captain closeout.

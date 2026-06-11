@@ -17,7 +17,7 @@ Before planning or implementing, run the task router in `docs/agents/AGENTS-TASK
 4. If any required doc is missing on disk, **stop** and report — do not proceed.
 5. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
 6. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
-7. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Human closeout** then technical blocks.
+7. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Captain closeout** then technical blocks.
 
 ## When to stop and ask
 
@@ -47,28 +47,39 @@ Multiple categories → union all docs. Implementation always includes `docs/age
 
 ## Close every response (order)
 
-**Do not end with a technical wall first.** The closing section starts with Human closeout.
+**Do not end with a technical wall first.** The closing section starts with Captain closeout.
 
-1. **Human closeout** (user-facing; max 6 lines) — **always first in closing section**
-2. `HYDRI_TASK_ROUTER — close` (technical)
-3. `HYDRI_IMPLEMENTATION_PROOF` when implementation happened (technical; omit for plan/audit-only)
+1. **Captain closeout** (user-facing; written for the user, not another agent) — **always first in closing section**
+2. **Detalhes técnicos** (optional — paths, commands, components when useful)
+3. `HYDRI_TASK_ROUTER — close` (technical)
+4. `HYDRI_IMPLEMENTATION_PROOF` when implementation happened (technical; omit for plan/audit-only)
 
-### Human closeout (required)
+### Captain closeout (required)
+
+No technical jargon when a human equivalent exists. Avoid component names, file paths, "runtime", "E2E", "viewport", "PR #…", long lists.
 
 ```md
-## Human closeout
+## Captain closeout
 
-🟢 Status: Verde
-Mensagem: [frase curta em linguagem humana]
-Prova: [comando/preview/teste principal]
-Não provado: [principal limite, ou "Nada relevante"]
-Próxima ação: [ação objetiva]
+🟢/🟡/🔴 [Decisão curta]
+
+Em humano:
+[1 a 3 frases curtas sem jargão]
+
+Prova simples:
+[1 linha em linguagem simples]
+
+Falta provar:
+[1 linha objetiva]
+
+Próxima ação:
+[1 ação clara]
 ```
 
-| Emoji | Status | When |
-|-------|--------|------|
-| 🟢 | **Verde** | Worked and proved; docs/rules validated |
-| 🟡 | **Amarelo** | Partial, incomplete validation, plan/audit without execution |
-| 🔴 | **Vermelho** | Failed, blocked, or cannot claim success |
+| Emoji | Decisão | When |
+|-------|---------|------|
+| 🟢 | **Pode seguir** | Worked and proved; docs/rules validated |
+| 🟡 | **Segue com cuidado** | Partial, incomplete validation, plan/audit without execution |
+| 🔴 | **Para agora** | Failed, blocked, or cannot claim success |
 
-Plain language for the user — no doc paths or category jargon unless requested. Plan/audit-only → 🟡 Amarelo, no full proof block.
+Plan/audit-only → 🟡 Segue com cuidado, no full proof block.
