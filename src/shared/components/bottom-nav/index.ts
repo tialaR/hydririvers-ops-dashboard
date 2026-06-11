@@ -31,5 +31,3 @@ export {
   bottomNavPillSpring,
   bottomNavPressSpring,
 } from './bottom-nav-motion';
-
-export { BottomNavLegacy } from './BottomNavLegacy';

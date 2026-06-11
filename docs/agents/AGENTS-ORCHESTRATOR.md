@@ -55,17 +55,17 @@ For patches always include the revert command.
 
 ## BottomNav current objective
 
-- Approved preview becomes the global real BottomNav.
-- Old BottomNav becomes `BottomNavLegacy` only.
-- Mobile shell renders the new `<BottomNav />` globally.
-- Mobile shell must not pass `bottomNavHyLightClassNames`, `bottomNavHyDarkGlassClassNames`, `bottomNavClassNames` or `classNames={{...}}` to the new component.
+- `BottomNav` is the only official global mobile bottom navigation component.
+- `BottomNavLegacy`, gooey pill, and related legacy files were removed — do not reintroduce them.
+- Mobile shell renders `<BottomNav />` globally.
+- Mobile shell must not pass `bottomNavHyLightClassNames`, `bottomNavHyDarkGlassClassNames`, `bottomNavClassNames` or `classNames={{...}}` to BottomNav.
 - `/pt-BR/cargas` is validation route, not an exception.
 
 Acceptance:
 - `BottomNav.tsx` imports `BottomNav.module.sass`.
 - DOM contains `data-bottom-nav-preview-global="true"`.
 - DOM contains `data-hy-bottom-nav-preview-lens="true"`.
-- `BottomNavLegacy.tsx` exists and is not used by shell.
+- Barrel (`index.ts`) exports only `BottomNav` and supporting modules — no legacy exports.
 - Active item follows route.
 - Lens moves between items.
 - Tap/click navigates.

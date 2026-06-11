@@ -692,4 +692,15 @@ describe('BottomNav', () => {
     expect(itemsSource).toContain('data-bottom-nav-label-measure="true"');
     expect(navSource).toContain('items.length');
   });
+
+  it('barrel não exporta BottomNavLegacy nem gooey pill', () => {
+    const indexSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/index.ts'),
+      'utf8',
+    );
+
+    expect(indexSource).not.toContain('BottomNavLegacy');
+    expect(indexSource).not.toContain('bottom-nav-gooey-pill');
+    expect(indexSource).not.toContain('BottomNavActivePill');
+  });
 });

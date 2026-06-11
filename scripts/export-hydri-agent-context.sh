@@ -36,8 +36,6 @@ cp src/shared/layout/mobile-product-shell/resolve-mobile-page-title.ts "$OUT_DIR
 
 cp src/shared/components/bottom-nav/BottomNav.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/BottomNav.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/bottom-nav/BottomNavLegacy.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/bottom-nav/BottomNavLegacy.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/index.ts "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/bottom-nav-icons.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/bottom-nav-motion.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true

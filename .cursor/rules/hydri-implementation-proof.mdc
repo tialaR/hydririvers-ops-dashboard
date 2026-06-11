@@ -51,11 +51,12 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 4. Commands run
 5. Tests affected
 6. Preview / manual QA (when applicable)
-7. Files changed
-8. Not validated
-9. Remaining risks
-10. Why the implementation may still be wrong
-11. Recommended next action
+7. **Mobile viewport coverage** (required for UI categories): small (320×568 or 360×740), standard (390×844), large (430×932) — pass/fail/not tested; width-dependent behavior; screenshot path per width
+8. Files changed
+9. Not validated
+10. Remaining risks
+11. Why the implementation may still be wrong
+12. Recommended next action
 
 ## Cannot claim success when
 
@@ -63,6 +64,7 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 - Affected route or component was not inspected
 - Tests only assert fragile text/class contracts
 - UI changed without visual/runtime preview
+- Mobile UI closed with 🟢 after testing only one width (must be 🟡 Partial)
 - Behavior changed without test or manual QA
 - Errors were waved off as "out of scope" without evidence
 
@@ -76,7 +78,7 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 
 ## Quick checklists
 
-**Mobile UI:** mobile viewport, light mode, initial state, primary interaction, close/cancel, scroll, safe-area/BottomNav, no desktop regression when mobile-only.
+**Mobile UI:** three widths (small 320×568 or 360×740, standard 390×844, large 430×932); nav/sheets/cards/chips/search/controls checks; width-dependent behavior when layout mutates; screenshot per width when used; light mode; initial state; primary interaction; close/cancel; scroll; safe-area/BottomNav; no desktop regression when mobile-only. Captain closeout: "Testado em celular pequeno, médio e grande." or "Só testado em um tamanho, precisa revisar responsividade."
 
 **i18n / routes:** `/[locale]`, locales when copy changes, no new hardcoded strings, `npm run check:i18n`.
 

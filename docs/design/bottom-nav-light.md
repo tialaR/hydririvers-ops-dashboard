@@ -1,6 +1,6 @@
 # BottomNav — light mode (preview global)
 
-Componente de navegação inferior mobile em produção (`src/shared/components/bottom-nav/`). Light mode apenas; dark mode fica para PR futuro.
+Componente **oficial** de navegação inferior mobile (`src/shared/components/bottom-nav/`). `ProductMobileBottomNav` usa apenas este componente; `BottomNavLegacy` e gooey pill foram removidos. Light mode apenas; dark mode fica para PR futuro.
 
 ## Arquitetura
 

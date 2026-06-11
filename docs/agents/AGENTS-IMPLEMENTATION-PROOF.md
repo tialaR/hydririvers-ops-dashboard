@@ -34,7 +34,7 @@ Em humano:
 [1 a 3 frases curtas explicando o que aconteceu sem jargão]
 
 Prova simples:
-[1 linha com validação em linguagem simples]
+[1 linha com validação em linguagem simples — UI mobile: "Testado em celular pequeno, médio e grande." ou "Só testado em um tamanho, precisa revisar responsividade."]
 
 Falta provar:
 [1 linha objetiva]
@@ -42,6 +42,14 @@ Falta provar:
 Próxima ação:
 [1 ação clara]
 ```
+
+**Mobile UI closeout mapping:**
+
+| Mobile viewport coverage | Captain closeout | **Result** |
+|--------------------------|------------------|------------|
+| All three tiers tested | 🟢 **Pode seguir** (if other proof sufficient) | Worked |
+| One width only | 🟡 **Segue com cuidado** — never 🟢 | Partial |
+| Two widths | 🟡 **Segue com cuidado** | Partial |
 
 ### Status meanings
 
@@ -90,6 +98,13 @@ Copy this template and fill every field. Omit a field only when truly not applic
 **Preview / manual QA (when applicable):**
 - 
 
+**Mobile viewport coverage (required for UI categories):**
+- Small mobile (320×568 or 360×740): pass | fail | not tested — notes
+- Standard mobile (390×844): pass | fail | not tested — notes
+- Large mobile (430×932): pass | fail | not tested — notes
+- Width-dependent behavior (if component mutates by width): small / standard / large — one line each
+- Screenshot or evidence per viewport (path or citation): 
+
 **Files changed:**
 - 
 
@@ -117,6 +132,7 @@ Copy this template and fill every field. Omit a field only when truly not applic
 | **Commands run** | Exact commands and exit status when relevant. |
 | **Tests affected** | Added, updated, or run tests; or explicit "none" with reason. |
 | **Preview / manual QA** | Route, viewport, steps, outcome. Required for UI/behavior changes. |
+| **Mobile viewport coverage** | Required when any UI category applies (`mobile-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, `accessibility` on visible UI). List pass/fail/not tested for small (320×568 or 360×740), standard (390×844), and large (430×932) mobile. Declare width-dependent behavior when layout mutates. Cite or save screenshot per width when applicable. |
 | **Files changed** | Paths that matter for review and rollback. |
 | **Not validated** | Scopes, locales, devices, edge cases skipped. |
 | **Remaining risks** | Regressions, flaky tests, mock-only proof, incomplete i18n. |
@@ -133,6 +149,7 @@ Do **not** state success if any of the following apply:
 | Affected route/component not inspected | Code compiles but the user-facing surface was not opened or exercised. |
 | Test passed but only fragile contract | Asserts text/class names without behavior; snapshot-only; mocks hide integration. |
 | UI changed without visual preview | Layout, spacing, states, or chrome changed without runtime or screenshot proof. |
+| Mobile UI validated at only one width | UI category task closed with 🟢 but **Mobile viewport coverage** missing one or more of small / standard / large mobile — must be 🟡 **Segue com cuidado** and **Result:** Partial. |
 | Behavior changed without test or QA | Logic, routing, filters, or permissions changed with no automated or manual check. |
 | Error dismissed as "out of scope" | Failure attributed to environment or unrelated code without evidence (logs, repro, diff). |
 
@@ -154,14 +171,19 @@ Use the highest level actually achieved. Minimum level depends on change type (s
 
 - Docs-only: P0 if tooling still applies; otherwise state what was checked.
 - Logic / mocks / routing: P0 + P1 when tests exist; P2 when behavior is user-visible.
-- Mobile or desktop UI: P0 + P2 at minimum; P4 for significant visual chrome changes.
+- Mobile or desktop UI: P0 + P2 at minimum; **mobile UI also requires three mobile widths** (see **Mobile viewport coverage**); P4 for significant visual chrome changes.
 - Copy / i18n: P0 including `check:i18n`; P2 on at least one locale route when strings changed.
 
 ## Checklist: mobile UI
 
-When the task touches mobile UI, confirm in **Preview / manual QA** or **Not validated**:
+When the task touches mobile UI, confirm in **Mobile viewport coverage**, **Preview / manual QA**, or **Not validated**:
 
-- [ ] Mobile viewport (not desktop-only preview)
+- [ ] **Small mobile** — 320×568 or 360×740
+- [ ] **Standard mobile** — 390×844
+- [ ] **Large mobile** — 430×932
+- [ ] Width-dependent behavior documented (small / standard / large) when layout mutates by width
+- [ ] Nav, sheets, cards, chips, search, controls: no ugly wrap, label overlap, icon misalignment, indicator overflow, hidden last item, broken safe-area, missing primary animation
+- [ ] Screenshot or evidence cited per viewport when Playwright or visual QA is used
 - [ ] Light mode (unless task is explicitly dark-only)
 - [ ] Initial state on load (no flash of wrong layout)
 - [ ] Primary interaction (tap, open, submit, navigate)
@@ -225,7 +247,7 @@ Em humano:
 O painel de filtros no celular não esconde mais o conteúdo atrás da barra de navegação. Abrir, filtrar, fechar e rolar funcionaram no teste manual.
 
 Prova simples:
-Checagens automáticas passaram e o fluxo principal foi testado na tela de cargas em português.
+Testado em celular pequeno, médio e grande; checagens automáticas passaram.
 
 Falta provar:
 Inglês e espanhol, modo escuro e teste em aparelho físico.

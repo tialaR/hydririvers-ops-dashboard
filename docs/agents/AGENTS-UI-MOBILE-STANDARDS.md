@@ -61,7 +61,7 @@ Apply to:
 
 ## BottomNav
 
-- Global mobile component (`src/shared/components/bottom-nav/`).
+- **Official** global mobile component (`src/shared/components/bottom-nav/`); `BottomNavLegacy` removed — shell uses `BottomNav` only.
 - Active item follows **confirmed route** only; pending never moves the lens.
 - Lens movement is behavior (`useBottomNavIndicator`), not static styling.
 - Light mode tokens: `--bn-*` mixin in `bottom-nav-light-tokens.sass` — see `docs/design/bottom-nav-light.md`.

@@ -28,7 +28,10 @@
     "visual:hero-check": "node scripts/phase-visual-check.mjs",
     "tokens:design": "node tools/design-token-import/generate-design-tokens.mjs",
     "tokens:ios": "npm run tokens:design",
-    "ds:check": "node tools/design-system/validate-hydro-design-system.mjs"
+    "ds:check": "node tools/design-system/validate-hydro-design-system.mjs",
+    "hydri:verify": "node scripts/hydri-verify.mjs",
+    "hydri:audit": "node scripts/hydri-audit.mjs",
+    "hydri:agent:check": "node scripts/hydri-agent-check.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
