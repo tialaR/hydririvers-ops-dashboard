@@ -1,174 +1,115 @@
+@use './bottom-nav-light-tokens' as bn
+
 .nav
-  --hy-bottom-nav-track-height: 4.25rem
-  --hy-bottom-nav-track-width: min(22rem, calc(100vw - 1.75rem))
-  --hy-bottom-nav-track-inline: max(0.875rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.875rem))
-  --hy-bottom-nav-item-width: calc(100% / var(--hy-bottom-nav-item-count, 5))
-  --hy-bottom-nav-lens-gap: 0.18rem
-  --hy-bottom-nav-lens-left: calc((var(--hy-bottom-nav-item-width) * var(--hy-bottom-nav-active-index, 0)) + var(--hy-bottom-nav-lens-gap))
-  --hy-bottom-nav-lens-width: calc(var(--hy-bottom-nav-item-width) - calc(var(--hy-bottom-nav-lens-gap) * 2))
+  @include bn.bottom-nav-light-tokens
+
+  --active-x: 0px
+  --menu-measured-min-width: 0px
+  --stretch-direction: 1
 
   position: fixed
-  z-index: 240
-  left: var(--hy-bottom-nav-track-inline)
-  right: var(--hy-bottom-nav-track-inline)
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem)
-  height: var(--hy-bottom-nav-track-height)
-  min-height: var(--hy-bottom-nav-track-height)
+  z-index: var(--bn-z-index)
+  right: 0
+  bottom: max(var(--bn-menu-bottom-offset), env(safe-area-inset-bottom, 0px))
+  left: 0
+  width: min(calc(100vw - calc(var(--menu-margin-inline) * 2)), max(var(--menu-measured-min-width), var(--menu-max-width)))
+  max-width: min(calc(100vw - calc(var(--menu-margin-inline) * 2)), max(var(--menu-measured-min-width), var(--menu-max-width)))
+  height: var(--menu-height)
+  min-height: var(--menu-height)
+  margin: 0 auto
   display: grid
-  grid-template-columns: repeat(var(--hy-bottom-nav-item-count, 5), minmax(0, 1fr))
-  align-items: center
-  padding: 0
-  border: 0
-  border-radius: 999rem
+  grid-template-columns: repeat(5, minmax(0, 1fr))
+  align-items: stretch
+  gap: var(--bn-menu-gap)
+  padding: var(--menu-padding-block) var(--menu-padding-inline)
+  box-sizing: border-box
+  overflow: hidden
+  border: 1px solid bn.$bn-shell-border-color
+  border-radius: bn.$bn-shell-radius
   isolation: isolate
-  overflow: visible
-  background: linear-gradient(180deg, rgba(222, 222, 225, 0.9) 0%, rgba(214, 214, 218, 0.86) 100%)
-  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.18), inset 0 -0.0625rem 0 rgba(122, 126, 136, 0.04), 0 0.875rem 1.625rem rgba(15, 23, 42, 0.17)
-  -webkit-backdrop-filter: blur(1.35rem) saturate(1.12)
-  backdrop-filter: blur(1.35rem) saturate(1.12)
+  background: radial-gradient(circle at 14% 8%, bn.$bn-shell-bg-radial-start, transparent bn.$bn-shell-bg-radial-stop), linear-gradient(180deg, bn.$bn-shell-bg-gradient-top, bn.$bn-shell-bg-gradient-bottom), bn.$bn-shell-bg-tint
+  box-shadow: inset 0 1px 0 bn.$bn-shell-shadow-inset-top, inset 0 -1px 0 bn.$bn-shell-shadow-inset-bottom, 0 0.5625rem 1.5rem bn.$bn-shell-shadow-outer
+  -webkit-backdrop-filter: blur(var(--bn-shell-blur)) saturate(var(--bn-shell-saturate))
+  backdrop-filter: blur(var(--bn-shell-blur)) saturate(var(--bn-shell-saturate))
   font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', Inter, system-ui, sans-serif
 
-  &::before
-    content: ''
-    position: absolute
-    inset: 0
-    z-index: -2
-    border-radius: inherit
-    pointer-events: none
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.03))
-    box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.44), inset 0 -0.2rem 0.7rem rgba(84, 91, 108, 0.11)
+  &[data-hy-bottom-nav-moving='true'] .activeGlass
+    animation: activeGlassStretch var(--bn-motion-stretch-duration) var(--bn-motion-stretch-ease)
+    transform-origin: calc(50% - (var(--stretch-direction) * var(--bn-active-glass-stretch-origin-offset))) 50%
+
+
+.activeCutout
+  position: absolute
+  z-index: 0
+  top: var(--menu-padding-block)
+  bottom: var(--menu-padding-block)
+  left: 0
+  width: var(--active-width)
+  overflow: hidden
+  border-radius: bn.$bn-shell-radius
+  transform: translate3d(var(--active-x), 0, 0)
+  transition: transform var(--bn-motion-cutout-duration) var(--bn-motion-cutout-ease)
+  will-change: transform
+  pointer-events: none
+
+.activeGlass
+  position: absolute
+  inset: 0
+  overflow: hidden
+  border: 1px solid bn.$bn-active-glass-border
+  background: radial-gradient(ellipse at 32% 8%, bn.$bn-active-glass-radial-start, bn.$bn-active-glass-radial-mid 34%, transparent 62%), linear-gradient(180deg, bn.$bn-active-glass-gradient-top, bn.$bn-active-glass-gradient-bottom), bn.$bn-active-glass-tint
+  box-shadow: inset 0 0.5rem 0.875rem rgba(0, 0, 0, 0.22), inset 0 -0.375rem 0.6875rem rgba(255, 255, 255, 0.26), inset 0.0625rem 0.0625rem 0 rgba(255, 255, 255, 0.7), inset -0.0625rem -0.0625rem 0 rgba(255, 255, 255, 0.1), 0 0.25rem 0.625rem rgba(0, 0, 0, 0.14), 0 0 0 0.0625rem rgba(255, 255, 255, 0.06)
+  border-radius: inherit
+  will-change: transform, filter
 
   &::after
     content: ''
     position: absolute
-    inset: 0.0625rem 0.6rem auto
-    z-index: -1
-    height: 42%
-    border-radius: inherit
+    top: bn.$bn-active-glass-highlight-top
+    right: bn.$bn-active-glass-highlight-inset-x
+    left: bn.$bn-active-glass-highlight-inset-x
+    height: bn.$bn-active-glass-highlight-height
+    border-radius: bn.$bn-shell-radius
+    background: linear-gradient(180deg, bn.$bn-active-glass-highlight-fade, transparent)
+    filter: blur(bn.$bn-active-glass-highlight-blur)
     pointer-events: none
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 78%)
-
-.lens
-  position: absolute
-  top: var(--hy-bottom-nav-lens-gap)
-  left: var(--hy-bottom-nav-lens-left)
-  width: var(--hy-bottom-nav-lens-width)
-  height: calc(var(--hy-bottom-nav-track-height) - calc(var(--hy-bottom-nav-lens-gap) * 2))
-  border-radius: 999rem
-  z-index: 1
-  pointer-events: none
-  overflow: visible
-  transform-origin: center center
-  transition-property: top, left, width, height, transform, filter
-  transition-duration: 430ms
-  transition-timing-function: cubic-bezier(0.2, 0.95, 0.18, 1)
-  filter: drop-shadow(0 0.0625rem 0.125rem rgba(0, 0, 0, 0.018))
-
-  .nav[data-hy-bottom-nav-moving='true'] &
-    top: -0.42rem
-    left: calc(var(--hy-bottom-nav-lens-left) - 0.42rem)
-    width: calc(var(--hy-bottom-nav-lens-width) + 0.84rem)
-    height: calc(var(--hy-bottom-nav-track-height) + 0.84rem)
-    transform: scaleX(1.075) scaleY(1.12)
-    filter: drop-shadow(0 0.22rem 0.5rem rgba(0, 0, 0, 0.04))
-
-.waterGlow,
-.waterSurface,
-.waterDepth,
-.waterDistortion,
-.waterEdge,
-.waterSpecular
-  position: absolute
-  inset: 0
-  border-radius: inherit
-  pointer-events: none
-
-.waterGlow
-  inset: -0.08rem -0.18rem
-  background: radial-gradient(ellipse at 50% 54%, rgba(255, 255, 255, 0.14) 0%, rgba(223, 231, 241, 0.08) 36%, rgba(255, 255, 255, 0) 76%)
-  filter: blur(0.38rem)
-  opacity: 0.72
-
-.waterSurface
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.11) 0%, rgba(245, 247, 250, 0.045) 38%, rgba(214, 219, 228, 0.06) 100%)
-  -webkit-backdrop-filter: blur(1.55rem) saturate(1.14) brightness(1.02)
-  backdrop-filter: blur(1.55rem) saturate(1.14) brightness(1.02)
-  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.42), inset 0 0.75rem 0.95rem rgba(255, 255, 255, 0.045), inset 0 -0.72rem 1.05rem rgba(88, 94, 108, 0.17)
-
-.waterDepth
-  background: radial-gradient(ellipse at 50% 58%, rgba(148, 165, 188, 0.24) 0%, rgba(206, 220, 236, 0.1) 32%, rgba(255, 255, 255, 0.015) 56%, rgba(255, 255, 255, 0) 78%), radial-gradient(ellipse at 50% 88%, rgba(85, 96, 116, 0.12) 0%, rgba(255, 255, 255, 0) 42%)
-  opacity: 0.96
-
-.waterDistortion
-  background: radial-gradient(ellipse at 14% 50%, rgba(156, 171, 190, 0.18) 0%, rgba(255, 255, 255, 0) 30%), radial-gradient(ellipse at 86% 52%, rgba(156, 171, 190, 0.16) 0%, rgba(255, 255, 255, 0) 32%), radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 36%), linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(194, 204, 218, 0.11) 50%, rgba(255, 255, 255, 0) 100%)
-  opacity: 0.88
-  mix-blend-mode: screen
-
-.waterEdge
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 24%, rgba(255, 255, 255, 0) 78%, rgba(126, 134, 148, 0.08) 100%)
-  box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.46), inset 0 0.075rem 0.16rem rgba(255, 255, 255, 0.1), inset 0 -0.1rem 0.3rem rgba(92, 99, 112, 0.09)
-
-.waterSpecular
-  background: radial-gradient(ellipse at 50% 13%, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.08) 24%, rgba(255, 255, 255, 0) 58%), radial-gradient(ellipse at 50% 82%, rgba(102, 111, 126, 0.12) 0%, rgba(255, 255, 255, 0) 44%)
-  opacity: 0.88
-  mix-blend-mode: screen
-
-.nav[data-hy-bottom-nav-moving='true']
-  .waterGlow
-    inset: -0.25rem -0.75rem
-    background: radial-gradient(ellipse at 50% 54%, rgba(255, 255, 255, 0.16) 0%, rgba(211, 224, 238, 0.13) 34%, rgba(255, 255, 255, 0.04) 58%, rgba(255, 255, 255, 0) 80%)
-    filter: blur(0.62rem)
-    opacity: 0.96
-
-  .waterSurface
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.075) 0%, rgba(244, 247, 250, 0.035) 38%, rgba(208, 216, 228, 0.055) 100%)
-    -webkit-backdrop-filter: blur(2rem) saturate(1.2) brightness(1.02)
-    backdrop-filter: blur(2rem) saturate(1.2) brightness(1.02)
-    box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.36), inset 0 1rem 1.1rem rgba(255, 255, 255, 0.03), inset 0 -1rem 1.2rem rgba(85, 94, 110, 0.2)
-
-  .waterDepth
-    background: radial-gradient(ellipse at 50% 56%, rgba(124, 148, 178, 0.28) 0%, rgba(203, 220, 238, 0.12) 30%, rgba(255, 255, 255, 0.018) 56%, rgba(255, 255, 255, 0) 78%), radial-gradient(ellipse at 50% 92%, rgba(72, 86, 108, 0.16) 0%, rgba(255, 255, 255, 0) 44%), linear-gradient(180deg, rgba(255, 255, 255, 0.016) 0%, rgba(108, 122, 140, 0.055) 100%)
-    opacity: 1
-
-  .waterDistortion
-    background: radial-gradient(ellipse at 10% 48%, rgba(145, 164, 188, 0.24) 0%, rgba(255, 255, 255, 0) 31%), radial-gradient(ellipse at 90% 52%, rgba(145, 164, 188, 0.22) 0%, rgba(255, 255, 255, 0) 32%), radial-gradient(ellipse at 50% 28%, rgba(255, 255, 255, 0.13) 0%, rgba(255, 255, 255, 0) 36%), radial-gradient(ellipse at 50% 74%, rgba(95, 108, 127, 0.14) 0%, rgba(255, 255, 255, 0) 38%), linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(191, 205, 222, 0.14) 50%, rgba(255, 255, 255, 0) 100%)
-    opacity: 1
-    mix-blend-mode: multiply
-
-  .waterEdge
-    box-shadow: inset 0 0 0 0.03125rem rgba(255, 255, 255, 0.52), inset 0 0.1rem 0.2rem rgba(255, 255, 255, 0.11), inset 0 -0.14rem 0.34rem rgba(88, 98, 114, 0.12)
-
-  .waterSpecular
-    opacity: 0.98
 
 .item
   position: relative
-  z-index: 2
+  z-index: 1
   min-width: 0
-  height: 100%
-  display: flex
+  width: 100%
+  max-width: none
+  height: calc(var(--menu-height) - calc(var(--menu-padding-block) * 2))
+  margin: 0
+  padding: 0 bn.$bn-item-padding-inline
+  overflow: hidden
+  appearance: none
+  -webkit-appearance: none
+  -webkit-tap-highlight-color: transparent
+  border: 0
+  border-radius: bn.$bn-shell-radius
+  display: inline-flex
   flex-direction: column
   align-items: center
   justify-content: center
-  gap: 0.12rem
-  padding: 0
-  margin: 0
-  border: 0
-  border-radius: 999rem
+  gap: bn.$bn-item-gap
+  color: var(--menu-text)
   background: transparent
-  color: rgba(118, 118, 123, 0.82)
-  text-decoration: none
+  box-shadow: none
+  outline: none
   cursor: pointer
-  -webkit-tap-highlight-color: transparent
+  font: inherit
+  text-decoration: none
   touch-action: manipulation
-  transition: color 220ms ease, transform 220ms ease, opacity 220ms ease
+  transition: color var(--bn-motion-color-duration) bn.$bn-motion-color-ease, transform var(--bn-motion-color-duration) bn.$bn-motion-color-ease, opacity var(--bn-motion-color-duration) bn.$bn-motion-color-ease
 
   svg
-    width: 1.45rem
-    height: 1.45rem
+    width: var(--bn-icon-size)
+    height: var(--bn-icon-size)
     fill: none
     stroke: currentColor
-    stroke-width: 1.85
+    stroke-width: bn.$bn-icon-stroke-width
     stroke-linecap: round
     stroke-linejoin: round
 
@@ -176,11 +117,11 @@
     outline: none
 
   &:focus-visible
-    outline: 0.125rem solid rgba(20, 116, 255, 0.42)
+    outline: 0.125rem solid bn.$bn-focus-ring
     outline-offset: 0.125rem
 
   &:not([data-active='true']):active
-    transform: scale(0.965)
+    transform: scale(var(--bn-icon-press-scale))
 
   &[aria-disabled='true'],
   &:disabled
@@ -188,76 +129,152 @@
     opacity: 0.5
 
 .item[data-active='true']
-  color: #050507
+  color: var(--menu-text-active)
+  text-shadow: var(--menu-active-shadow)
+  transform: none
+
+  .icon:not(.iconJumpActive)
+    opacity: 1
+    transform: translateY(var(--bn-icon-active-offset-y)) scale(var(--bn-icon-active-scale))
+    filter: drop-shadow(bn.$bn-active-icon-shadow-a) drop-shadow(bn.$bn-active-icon-shadow-b) drop-shadow(bn.$bn-active-icon-shadow-c)
+
+  .label
+    color: var(--menu-text-active)
+    font-weight: bn.$bn-label-font-weight-active
+    opacity: 1
+    transform: translateY(bn.$bn-label-active-offset-y)
 
 .icon
   display: inline-flex
   align-items: center
   justify-content: center
+  flex-shrink: 0
   color: currentColor
-  opacity: 0.82
-  transition: opacity 220ms ease, transform 430ms cubic-bezier(0.2, 0.92, 0.18, 1)
+  opacity: bn.$bn-icon-opacity-inactive
+  transform-origin: center bottom
+  will-change: transform
+  transition: opacity var(--bn-motion-color-duration) bn.$bn-motion-color-ease, transform var(--bn-motion-color-duration) bn.$bn-motion-color-ease, filter var(--bn-motion-color-duration) bn.$bn-motion-color-ease
 
-.item[data-active='true'] .icon
-  opacity: 1
+.iconJumpActive
+  animation: simpleIconJump var(--bn-motion-icon-jump-duration) var(--bn-motion-icon-jump-ease)
+  transition: none
 
 .label
   display: block
+  width: 100%
   max-width: 100%
+  min-width: 0
   color: currentColor
-  font-size: 0.6875rem
-  line-height: 1
-  font-weight: 680
-  letter-spacing: -0.01em
+  font-size: var(--bn-label-font-size)
+  line-height: bn.$bn-label-line-height
+  font-weight: bn.$bn-label-font-weight
+  letter-spacing: bn.$bn-label-letter-spacing
+  text-align: center
   white-space: nowrap
   overflow: hidden
   text-overflow: ellipsis
-  opacity: 0.78
-  transition: color 220ms ease, font-weight 220ms ease, opacity 220ms ease, transform 430ms cubic-bezier(0.2, 0.92, 0.18, 1)
+  opacity: bn.$bn-label-opacity-inactive
+  transition: color var(--bn-motion-color-duration) bn.$bn-motion-color-ease, font-weight var(--bn-motion-color-duration) bn.$bn-motion-color-ease, opacity var(--bn-motion-color-duration) bn.$bn-motion-color-ease, transform var(--bn-motion-color-duration) bn.$bn-motion-color-ease
 
-.item[data-active='true'] .label
-  color: #050507
-  font-weight: 740
-  opacity: 1
+.labelFull
+  display: block
+
+.labelCompact
+  display: none
 
 .pendingGlow
   position: absolute
-  inset: 0.45rem 0.55rem
+  inset: bn.$bn-pending-glow-inset-y bn.$bn-pending-glow-inset-x
   z-index: -1
   border-radius: inherit
-  background: radial-gradient(circle at 50% 50%, rgba(37, 99, 235, 0.22), transparent 62%)
-  opacity: 0.72
+  background: radial-gradient(circle at 50% 50%, bn.$bn-pending-glow, transparent 62%)
+  opacity: bn.$bn-pending-glow-opacity
   pointer-events: none
 
-@media (max-width: 420px)
+@keyframes activeGlassStretch
+  0%
+    transform: scale(1, 1)
+    filter: brightness(1)
+
+  25%
+    transform: scale(1.08, 0.76)
+    filter: brightness(1.06)
+
+  55%
+    transform: scale(1.04, 0.68)
+    filter: brightness(1.08)
+
+  78%
+    transform: scale(0.97, 1.04)
+    filter: brightness(1.03)
+
+  100%
+    transform: scale(1, 1)
+    filter: brightness(1)
+
+@keyframes simpleIconJump
+  0%
+    transform: translateY(0) scale(1)
+    filter: none
+
+  32%
+    transform: translateY(var(--bn-icon-jump-distance)) scale(var(--bn-icon-jump-scale-peak))
+    filter: drop-shadow(0 0.125rem 0.25rem rgba(0, 0, 0, 0.2))
+
+  62%
+    transform: translateY(var(--bn-icon-jump-rest-offset-y)) scale(var(--bn-icon-jump-scale-mid))
+    filter: drop-shadow(0 0.0625rem 0.125rem rgba(0, 0, 0, 0.16))
+
+  100%
+    transform: translateY(var(--bn-icon-active-offset-y)) scale(var(--bn-icon-jump-scale-rest))
+    filter: drop-shadow(bn.$bn-active-icon-shadow-a) drop-shadow(bn.$bn-active-icon-shadow-b) drop-shadow(bn.$bn-active-icon-shadow-c)
+
+@media (max-width: bn.$bn-breakpoint-label-compact-max)
   .nav
-    --hy-bottom-nav-track-height: 4rem
-    left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
-    right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem))
+    --menu-padding-inline: #{bn.$bn-menu-padding-inline-compact}
+    gap: 0
+
+  .labelFull
+    display: none
+
+  .labelCompact
+    display: block
+
+@media (max-width: bn.$bn-breakpoint-compact-max)
+  .nav
+    --menu-height: #{bn.$bn-menu-height-compact}
+    --menu-padding-inline: #{bn.$bn-menu-padding-inline-tight}
+    --menu-margin-inline: #{bn.$bn-menu-margin-inline-compact}
+
+  .item
+    padding: 0
 
   .item svg
-    width: 1.36rem
-    height: 1.36rem
+    --bn-icon-size: #{bn.$bn-icon-size-compact}
 
   .label
-    font-size: 0.64rem
+    font-size: #{bn.$bn-label-font-size-compact}
+    letter-spacing: #{bn.$bn-label-letter-spacing-compact}
+
+@media (min-width: bn.$bn-breakpoint-padding-medium-min) and (max-width: bn.$bn-breakpoint-padding-medium-max)
+  .nav
+    --menu-padding-inline: #{bn.$bn-menu-padding-inline-medium}
+
+  .label
+    font-size: #{bn.$bn-label-font-size}
+    letter-spacing: #{bn.$bn-label-letter-spacing-medium}
 
 @media (prefers-reduced-motion: reduce)
-  .lens,
+  .activeCutout,
+  .activeGlass,
   .icon,
   .label,
-  .item,
-  .waterGlow,
-  .waterSurface,
-  .waterDepth,
-  .waterDistortion,
-  .waterEdge,
-  .waterSpecular
+  .item
     transition: none
+    animation: none
 
-  .nav[data-hy-bottom-nav-moving='true'] .lens
-    top: var(--hy-bottom-nav-lens-gap)
-    left: var(--hy-bottom-nav-lens-left)
-    width: var(--hy-bottom-nav-lens-width)
-    height: calc(var(--hy-bottom-nav-track-height) - calc(var(--hy-bottom-nav-lens-gap) * 2))
-    transform: none
+  .nav[data-hy-bottom-nav-moving='true'] .activeGlass
+    animation: none
+
+  .iconJumpActive
+    animation: none

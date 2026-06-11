@@ -1,0 +1,157 @@
+// BottomNav light mode — component-scoped tokens (preview global production shell).
+// Applied via @include bottom-nav-light-tokens on .nav; not promoted to global :root yet.
+
+// Layout
+$bn-z-index: 240
+// Tighter than DS shell cap (26.875rem) so five items fill the track without right-side ghost space.
+$bn-menu-max-width: 22rem
+$bn-menu-margin-inline: 1rem
+$bn-menu-margin-inline-compact: 0.75rem
+$bn-menu-bottom-offset: 0.875rem
+$bn-menu-height: 4.375rem
+$bn-menu-height-compact: 4.125rem
+$bn-menu-padding-block: 0.1875rem
+$bn-menu-padding-inline: 0.25rem
+$bn-menu-padding-inline-medium: 0.1875rem
+$bn-menu-padding-inline-compact: 0.125rem
+$bn-menu-padding-inline-tight: 0.0625rem
+$bn-menu-gap: 0.0625rem
+$bn-item-min-width: 3.125rem
+$bn-item-padding-inline: 0.03125rem
+$bn-item-gap: 0.125rem
+$bn-active-pill-width-fallback: 3.5rem
+$bn-active-pill-inner-padding: 0.25rem
+
+// Typography
+$bn-label-font-size: 0.5625rem
+$bn-label-font-size-compact: 0.5rem
+$bn-label-font-weight: 680
+$bn-label-font-weight-active: 740
+$bn-label-line-height: 1.05
+$bn-label-letter-spacing: -0.008em
+$bn-label-letter-spacing-medium: -0.01em
+$bn-label-letter-spacing-compact: -0.02em
+$bn-label-active-offset-y: -0.03125rem
+
+// Icon
+$bn-icon-size: 1.45rem
+$bn-icon-size-compact: 1.3125rem
+$bn-icon-stroke-width: 1.85
+$bn-icon-opacity-inactive: 0.82
+$bn-icon-active-offset-y: -0.0625rem
+$bn-icon-active-scale: 1.05
+$bn-icon-jump-distance: -0.3125rem
+$bn-icon-jump-scale-peak: 1.12
+$bn-icon-jump-scale-mid: 1.06
+$bn-icon-jump-scale-rest: 1.05
+$bn-icon-jump-rest-offset-y: -0.09375rem
+$bn-icon-press-scale: 0.965
+
+// Glass shell
+$bn-shell-radius: 999rem
+$bn-shell-blur: 4px
+$bn-shell-saturate: 150%
+$bn-shell-border-color: rgba(255, 255, 255, 0.4)
+$bn-shell-bg-radial-start: rgba(255, 255, 255, 0.18)
+$bn-shell-bg-radial-stop: 4.2rem
+$bn-shell-bg-gradient-top: rgba(255, 255, 255, 0.18)
+$bn-shell-bg-gradient-bottom: rgba(255, 255, 255, 0.08)
+$bn-shell-bg-tint: rgba(255, 255, 255, 0.3)
+$bn-shell-shadow-inset-top: rgba(255, 255, 255, 0.48)
+$bn-shell-shadow-inset-bottom: rgba(255, 255, 255, 0.1)
+$bn-shell-shadow-outer: rgba(0, 0, 0, 0.24)
+
+// Active glass (lens pill)
+$bn-active-glass-border: rgba(255, 255, 255, 0.58)
+$bn-active-glass-radial-start: rgba(255, 255, 255, 0.52)
+$bn-active-glass-radial-mid: rgba(255, 255, 255, 0.23)
+$bn-active-glass-gradient-top: rgba(255, 255, 255, 0.25)
+$bn-active-glass-gradient-bottom: rgba(255, 255, 255, 0.1)
+$bn-active-glass-tint: rgba(255, 255, 255, 0.2)
+$bn-active-glass-highlight-top: 0.1875rem
+$bn-active-glass-highlight-inset-x: 0.5rem
+$bn-active-glass-highlight-height: 0.875rem
+$bn-active-glass-highlight-fade: rgba(0, 0, 0, 0.14)
+$bn-active-glass-highlight-blur: 0.3125rem
+$bn-active-glass-stretch-origin-offset: 34%
+
+// Text colors
+$bn-text-inactive: rgba(118, 118, 123, 0.82)
+$bn-text-active: #050507
+$bn-label-opacity-inactive: 0.78
+$bn-focus-ring: rgba(20, 116, 255, 0.42)
+$bn-pending-glow: rgba(37, 99, 235, 0.22)
+$bn-pending-glow-opacity: 0.72
+$bn-pending-glow-inset-y: 0.45rem
+$bn-pending-glow-inset-x: 0.55rem
+
+// Active text shadow
+$bn-active-text-shadow: 0 0.0625rem 0 rgba(255, 255, 255, 0.36), 0 0.4375rem 0.6875rem rgba(15, 18, 22, 0.16)
+
+// Active icon drop shadows
+$bn-active-icon-shadow-a: 0 0.0625rem 0 rgba(255, 255, 255, 0.1)
+$bn-active-icon-shadow-b: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.24)
+$bn-active-icon-shadow-c: 0 0.4375rem 0.6875rem rgba(0, 0, 0, 0.18)
+
+// Motion
+$bn-motion-cutout-duration: 280ms
+$bn-motion-cutout-ease: cubic-bezier(0.2, 0.92, 0.25, 1)
+$bn-motion-stretch-duration: 340ms
+$bn-motion-stretch-ease: cubic-bezier(0.18, 0.9, 0.26, 1)
+$bn-motion-icon-jump-duration: 360ms
+$bn-motion-icon-jump-ease: cubic-bezier(0.2, 0.92, 0.18, 1)
+$bn-motion-color-duration: 220ms
+$bn-motion-color-ease: ease
+
+// Breakpoints (component-local)
+$bn-breakpoint-compact-max: 20rem
+$bn-breakpoint-label-compact-max: 22.5rem
+$bn-breakpoint-padding-medium-max: 26.875rem
+$bn-breakpoint-padding-medium-min: 22.5625rem
+
+@mixin bottom-nav-light-tokens
+  --bn-z-index: #{$bn-z-index}
+  --bn-menu-max-width: #{$bn-menu-max-width}
+  --bn-menu-margin-inline: #{$bn-menu-margin-inline}
+  --bn-menu-bottom-offset: #{$bn-menu-bottom-offset}
+  --bn-menu-height: #{$bn-menu-height}
+  --bn-menu-padding-block: #{$bn-menu-padding-block}
+  --bn-menu-padding-inline: #{$bn-menu-padding-inline}
+  --bn-menu-gap: #{$bn-menu-gap}
+  --bn-item-min-width: #{$bn-item-min-width}
+  --bn-active-pill-width-fallback: #{$bn-active-pill-width-fallback}
+  --bn-active-pill-inner-padding: #{$bn-active-pill-inner-padding}
+  --bn-icon-size: #{$bn-icon-size}
+  --bn-label-font-size: #{$bn-label-font-size}
+  --bn-shell-blur: #{$bn-shell-blur}
+  --bn-shell-saturate: #{$bn-shell-saturate}
+  --bn-text-inactive: #{$bn-text-inactive}
+  --bn-text-active: #{$bn-text-active}
+  --bn-motion-cutout-duration: #{$bn-motion-cutout-duration}
+  --bn-motion-cutout-ease: #{$bn-motion-cutout-ease}
+  --bn-motion-stretch-duration: #{$bn-motion-stretch-duration}
+  --bn-motion-stretch-ease: #{$bn-motion-stretch-ease}
+  --bn-motion-icon-jump-duration: #{$bn-motion-icon-jump-duration}
+  --bn-motion-icon-jump-ease: #{$bn-motion-icon-jump-ease}
+  --bn-motion-color-duration: #{$bn-motion-color-duration}
+  --bn-icon-jump-distance: #{$bn-icon-jump-distance}
+  --bn-icon-jump-scale-peak: #{$bn-icon-jump-scale-peak}
+  --bn-icon-jump-scale-mid: #{$bn-icon-jump-scale-mid}
+  --bn-icon-jump-scale-rest: #{$bn-icon-jump-scale-rest}
+  --bn-icon-jump-rest-offset-y: #{$bn-icon-jump-rest-offset-y}
+  --bn-icon-active-scale: #{$bn-icon-active-scale}
+  --bn-icon-active-offset-y: #{$bn-icon-active-offset-y}
+  --bn-icon-press-scale: #{$bn-icon-press-scale}
+  --bn-active-glass-stretch-origin-offset: #{$bn-active-glass-stretch-origin-offset}
+
+  // Legacy aliases consumed by layout measurement (JS sets --active-width / --active-x)
+  --menu-height: var(--bn-menu-height)
+  --menu-padding-block: var(--bn-menu-padding-block)
+  --menu-padding-inline: var(--bn-menu-padding-inline)
+  --menu-margin-inline: var(--bn-menu-margin-inline)
+  --menu-max-width: var(--bn-menu-max-width)
+  --item-min-width: var(--bn-item-min-width)
+  --active-width: var(--bn-active-pill-width-fallback)
+  --menu-text: var(--bn-text-inactive)
+  --menu-text-active: var(--bn-text-active)
+  --menu-active-shadow: #{$bn-active-text-shadow}

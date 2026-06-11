@@ -44,6 +44,13 @@ Apply to:
 - bottom-sheet close icons;
 - clickable cards.
 
+## Design tokens (`--hy-*`)
+
+- **New UI tokens** must use the `--hy-*` prefix.
+- **Component tokens** follow `--hy-<component>-<property>` (examples: `--hy-bottom-nav-height`, `--hy-bottom-nav-glass-background`, `--hy-bottom-nav-motion-icon-jump-duration`).
+- **Legacy tokens** outside this pattern (e.g. BottomNav `--bn-*`) stay until a **separate, safe migration** — rename progressively when touching related code, not in bulk drive-by refactors.
+- **BottomNav target namespace:** `--hy-bottom-nav-*` when those tokens are migrated.
+
 ## Styling
 
 - Prefer component-level CSS Modules.
@@ -54,7 +61,60 @@ Apply to:
 
 ## BottomNav
 
-- Global mobile component.
-- Active item follows route.
-- Lens movement is behavior, not static styling.
-- Do not let old skins control new component.
+- Global mobile component (`src/shared/components/bottom-nav/`).
+- Active item follows **confirmed route** only; pending never moves the lens.
+- Lens movement is behavior (`useBottomNavIndicator`), not static styling.
+- Light mode tokens: `--bn-*` mixin in `bottom-nav-light-tokens.sass` — see `docs/design/bottom-nav-light.md`.
+- Icon jump fires when route becomes active (not on pointer down); press uses separate scale feedback.
+- Do not let old skins / `classNames` legados control the preview global component.
+
+## Mobile viewport coverage (mandatory for UI work)
+
+Any task classified with a UI category (`mobile-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` when it touches visible interface) **must** validate layout on **at least three mobile widths** before claiming success.
+
+### Required viewports
+
+| Tier | Size | Typical device |
+|------|------|----------------|
+| **Small mobile** | 320×568 or 360×740 | iPhone SE, compact Android |
+| **Standard mobile** | 390×844 | iPhone 14 / 15 |
+| **Large mobile** | 430×932 | iPhone 14 Pro Max, large Android |
+
+Use one size per tier. Record which size was used in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**.
+
+### What to check (nav, sheets, cards, chips, search, controls)
+
+On **each** viewport, confirm:
+
+- text does not break awkwardly or overflow without intent;
+- labels do not overlap or invade adjacent items;
+- icons stay aligned with labels and hit targets;
+- pills, indicators, and active lenses stay inside their container;
+- content behind or beside overlays remains visible when expected;
+- the last item or card is not covered by BottomNav, sheets, or safe-area insets;
+- safe-area padding still works (`env(safe-area-inset-*)`);
+- the primary animation or transition is perceptible (e.g. lens slide, sheet open).
+
+### Width-dependent behavior
+
+When a component **changes layout or density by width**, declare in proof and Captain closeout:
+
+- **Small mobile** — what shrinks, truncates, stacks, or hides;
+- **Standard mobile** — baseline behavior;
+- **Large mobile** — what expands, gains spacing, or shows more content.
+
+### Evidence
+
+- Prefer Playwright or browser devtools at each width.
+- When screenshots are taken, save or cite one per viewport (e.g. `output/playwright/<feature>-390x844.png`).
+- Do **not** claim 🟢 **Pode seguir** on mobile UI if only one width was tested — use 🟡 **Segue com cuidado** and document missing widths in **Falta provar**.
+
+### Captain closeout phrasing (human)
+
+| Coverage | Prova simples |
+|----------|---------------|
+| All three tiers tested | "Testado em celular pequeno, médio e grande." |
+| One width only | "Só testado em um tamanho, precisa revisar responsividade." |
+| Two widths | "Testado em dois tamanhos; falta conferir o terceiro." |
+
+Default preview route: `http://localhost:3000/pt-BR/cargas` (adjust per task).

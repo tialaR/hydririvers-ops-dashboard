@@ -16,6 +16,11 @@ Apply when a task touches interface (mobile, desktop, nav, sheets, styling, visu
 
 If the task is classified as a **UI task** (see `docs/agents/AGENTS-TASK-ROUTER.md` → UI tasks) and you have **not** read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and this rule, **stop** — fix routing and read required docs before planning or implementing.
 
+## Design tokens (`--hy-*`)
+
+- New UI tokens: **`--hy-*`** prefix; component shape **`--hy-<component>-<property>`** (e.g. `--hy-bottom-nav-height`).
+- Legacy non-`--hy-*` tokens (e.g. `--bn-*`): migrate progressively when touched and safe — no mass rename in unrelated tasks.
+
 ## Component shape
 
 - **Dumb / semantic UI** — presentational components render markup and styles; avoid business logic, side effects, and DOM measurement in the component body when a hook can own it.
@@ -33,8 +38,22 @@ If the task is classified as a **UI task** (see `docs/agents/AGENTS-TASK-ROUTER.
 - **Do not** break imports, tests, i18n keys, or localized routes.
 - **React exports** may stay **PascalCase** (`export function BottomNav`) even when the file is `bottom-nav.tsx`.
 
+## Mobile viewport coverage (mandatory)
+
+UI tasks must validate **at least three mobile widths** before 🟢 **Pode seguir**:
+
+- **Small:** 320×568 or 360×740
+- **Standard:** 390×844
+- **Large:** 430×932
+
+Check nav, sheets, cards, chips, search, and controls for wrap, overlap, misalignment, indicator overflow, covered last items, safe-area, and primary animation on **each** width. If layout mutates by width, declare behavior for small / standard / large in proof.
+
+Only one width tested → 🟡 **Segue com cuidado**, never 🟢. Record **Mobile viewport coverage** in `HYDRI_IMPLEMENTATION_PROOF`; cite or save screenshot per width.
+
+Full rules: `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Mobile viewport coverage**.
+
 ## Related docs
 
 - `docs/agents/AGENTS-TASK-ROUTER.md` — UI task categories and required docs
-- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` — mobile chrome, interaction, BottomNav
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` — mobile chrome, interaction, BottomNav, viewport coverage
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` — proof and UI checklists
