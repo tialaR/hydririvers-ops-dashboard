@@ -1,5 +1,9 @@
 # Hydri Workflow
 
+## Task routing (mandatory)
+
+Before planning or implementing, run **HYDRI_TASK_ROUTER**: classify the task, read the required docs for all matching categories, and emit the initial router block. See `docs/agents/AGENTS-TASK-ROUTER.md`.
+
 ## Branching
 
 - Work from `dev`.
