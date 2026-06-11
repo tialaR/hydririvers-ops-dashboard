@@ -48,6 +48,8 @@ Multiple categories → union all docs. Implementation always includes `docs/age
 
 **UI auto-routing:** any UI category → also read `AGENTS-UI-MOBILE-STANDARDS.md`, `AGENTS-WORKFLOW.md`, `AGENTS-IMPLEMENTATION-PROOF.md`, `.cursor/rules/hydri-ui-architecture.mdc`. New/touched paths: kebab-case; no mass rename without approval.
 
+**Mobile viewport coverage (automatic):** when `mobile-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` on visible UI applies — validate **three mobile widths** (small 320×568 or 360×740, standard 390×844, large 430×932) before 🟢. One width only → 🟡 "Só testado em um tamanho, precisa revisar responsividade." All three → "Testado em celular pequeno, médio e grande." Record **Mobile viewport coverage** in proof; cite screenshot per width when used.
+
 ## Close every response (order)
 
 **Do not end with a technical wall first.** The closing section starts with Captain closeout.
@@ -70,7 +72,7 @@ Em humano:
 [1 a 3 frases curtas sem jargão]
 
 Prova simples:
-[1 linha em linguagem simples]
+[1 linha em linguagem simples — UI mobile: três tamanhos testados ou aviso de responsividade pendente]
 
 Falta provar:
 [1 linha objetiva]

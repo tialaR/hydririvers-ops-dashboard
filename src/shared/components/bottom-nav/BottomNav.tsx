@@ -35,8 +35,8 @@ export type BottomNavProps = {
   className?: string;
   ariaLabel?: string;
   /**
-   * Legacy skin hook. Kept for backwards compatibility while the preview-based
-   * BottomNav owns its production styling internally.
+   * @deprecated Ignored by preview-global BottomNav. Kept only for mobile-list-lab
+   * until that route migrates off external classNames skins.
    */
   classNames?: BottomNavClassNames;
 };

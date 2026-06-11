@@ -1,0 +1,242 @@
+- generic [ref=e2]:
+  - main [ref=e5]:
+    - generic [ref=e6]:
+      - generic "Cabeçalho mobile do HydroRivers" [ref=e7]:
+        - generic [ref=e8]:
+          - link "Dashboard HydroRivers" [ref=e9] [cursor=pointer]:
+            - /url: /pt-BR/dashboard
+            - img [ref=e11]
+            - strong [ref=e15]: HydroRivers
+          - generic [ref=e16]:
+            - button "Trocar idioma" [ref=e17] [cursor=pointer]:
+              - generic [ref=e19]: PT
+            - button "Abrir notificações, nenhuma não lida" [ref=e20] [cursor=pointer]:
+              - img [ref=e22]
+            - button "Entrar" [ref=e25] [cursor=pointer]:
+              - img [ref=e27]
+        - heading "Negociações" [level=1] [ref=e30]
+      - generic [ref=e34]:
+        - article [ref=e35]:
+          - generic [ref=e36]:
+            - heading "Entenda onde agir primeiro" [level=2] [ref=e37]
+            - generic [ref=e39]: 1 precisa de resposta
+          - paragraph [ref=e40]: Use esta tela para acompanhar valores, revisar contrapropostas e identificar quais acordos estão prontos para avançar.
+          - 'region "Resumo comercial: prioridades e totais" [ref=e41]':
+            - generic [ref=e42]:
+              - img [ref=e45]
+              - generic [ref=e50]: Negociações ativas
+              - strong [ref=e51]: "6"
+              - paragraph [ref=e52]: Conversas em andamento
+            - generic [ref=e53]:
+              - img [ref=e56]
+              - generic [ref=e59]: Cotações abertas
+              - strong [ref=e60]: "3"
+              - paragraph [ref=e61]: Aguardando propostas
+            - generic [ref=e62]:
+              - generic [ref=e63]:
+                - img [ref=e65]
+                - generic [ref=e71]: Responder
+              - generic [ref=e72]: Contrapropostas
+              - strong [ref=e73]: "1"
+              - paragraph [ref=e74]: Precisam de análise
+            - generic [ref=e75]:
+              - img [ref=e78]
+              - generic [ref=e82]: Contratos em andamento
+              - strong [ref=e83]: "2"
+              - paragraph [ref=e84]: Prontos para avançar
+            - generic [ref=e85]:
+              - img [ref=e88]
+              - generic [ref=e91]: Valor em negociação
+              - strong [ref=e92]: R$ 86.610
+              - paragraph [ref=e93]: Valor em discussão
+        - region "Negociações com status, valores e próximos passos" [ref=e94]:
+          - link "Abrir negociação Polpa de açaí congelada — cooperativa ribeirinha" [ref=e95] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-001
+            - article [ref=e96]:
+              - generic [ref=e97]:
+                - img [ref=e99]
+                - generic [ref=e102]:
+                  - generic [ref=e104]: Cotação
+                  - generic [ref=e105]: Aguardando análise de preço
+              - heading "Polpa de açaí congelada — cooperativa ribeirinha" [level=2] [ref=e106]
+              - generic [ref=e107]:
+                - generic [ref=e108]:
+                  - term [ref=e109]: Embarcação sugerida
+                  - definition [ref=e110]:
+                    - img [ref=e111]
+                    - text: Frio Tapajós
+                - generic [ref=e114]:
+                  - term [ref=e115]: Rota
+                  - definition [ref=e116]:
+                    - img [ref=e117]
+                    - text: Belém–Santarém
+                - generic [ref=e121]:
+                  - term [ref=e122]: Contrapartes
+                  - definition [ref=e123]: Coop. Açaí Pará · FrioRios
+                - generic [ref=e124]:
+                  - term [ref=e125]: Valor estimado
+                  - definition [ref=e126]: R$ 6.080
+              - 'generic "Progresso da negociação: 24%" [ref=e127]'
+              - generic [ref=e129]:
+                - generic [ref=e130]: Próximo passo
+                - paragraph [ref=e131]: Anexar laudo sanitário e confirmar lacre
+                - paragraph [ref=e132]: Atualizado • Hoje, 10:40
+          - link "Abrir negociação Madeira de manejo com DOF" [ref=e133] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-002
+            - article [ref=e134]:
+              - generic [ref=e135]:
+                - img [ref=e137]
+                - generic [ref=e140]:
+                  - generic [ref=e142]: Cotação
+                  - generic [ref=e143]: Aguardando análise de preço
+              - heading "Madeira de manejo com DOF" [level=2] [ref=e144]
+              - generic [ref=e145]:
+                - generic [ref=e146]:
+                  - term [ref=e147]: Embarcação sugerida
+                  - definition [ref=e148]:
+                    - img [ref=e149]
+                    - text: Madeira Forte
+                - generic [ref=e152]:
+                  - term [ref=e153]: Rota
+                  - definition [ref=e154]:
+                    - img [ref=e155]
+                    - text: Manaus–Porto Velho
+                - generic [ref=e159]:
+                  - term [ref=e160]: Contrapartes
+                  - definition [ref=e161]: Floresta Legal · Hidrovia Madeira
+                - generic [ref=e162]:
+                  - term [ref=e163]: Valor estimado
+                  - definition [ref=e164]: R$ 11.900
+              - 'generic "Progresso da negociação: 24%" [ref=e165]'
+              - generic [ref=e167]:
+                - generic [ref=e168]: Próximo passo
+                - paragraph [ref=e169]: Compliance revisar autorização e janela de vazante
+                - paragraph [ref=e170]: Atualizado • Ontem, 17:25
+          - link "Abrir negociação Equipamentos solares para comunidades ribeirinhas" [ref=e171] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-003
+            - article [ref=e172]:
+              - generic [ref=e173]:
+                - img [ref=e175]
+                - generic [ref=e177]:
+                  - generic [ref=e179]: Contrato
+                  - generic [ref=e180]: Acordo avançado
+              - heading "Equipamentos solares para comunidades ribeirinhas" [level=2] [ref=e181]
+              - generic [ref=e182]:
+                - generic [ref=e183]:
+                  - term [ref=e184]: Embarcação sugerida
+                  - definition [ref=e185]:
+                    - img [ref=e186]
+                    - text: Comboio Rio Negro
+                - generic [ref=e189]:
+                  - term [ref=e190]: Rota
+                  - definition [ref=e191]:
+                    - img [ref=e192]
+                    - text: Belém–Tefé
+                - generic [ref=e196]:
+                  - term [ref=e197]: Contrapartes
+                  - definition [ref=e198]: Programa Energia Ribeirinha · Navega Norte
+                - generic [ref=e199]:
+                  - term [ref=e200]: Valor estimado
+                  - definition [ref=e201]: R$ 19.450
+              - 'generic "Progresso da negociação: 62%" [ref=e202]'
+              - generic [ref=e204]:
+                - generic [ref=e205]: Próximo passo
+                - paragraph [ref=e206]: Gerar reserva e checklist de embarque
+                - paragraph [ref=e207]: Atualizado • Hoje, 08:10
+          - link "Abrir negociação Medicamentos refrigerados para abastecimento territorial" [ref=e208] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-004
+            - article [ref=e209]:
+              - generic [ref=e210]:
+                - img [ref=e212]
+                - generic [ref=e215]:
+                  - generic [ref=e217]: Cotação
+                  - generic [ref=e218]: Aguardando análise de preço
+              - heading "Medicamentos refrigerados para abastecimento territorial" [level=2] [ref=e219]
+              - generic [ref=e220]:
+                - generic [ref=e221]:
+                  - term [ref=e222]: Embarcação sugerida
+                  - definition [ref=e223]:
+                    - img [ref=e224]
+                    - text: Solimões Care
+                - generic [ref=e227]:
+                  - term [ref=e228]: Rota
+                  - definition [ref=e229]:
+                    - img [ref=e230]
+                    - text: Manaus–Tabatinga
+                - generic [ref=e234]:
+                  - term [ref=e235]: Contrapartes
+                  - definition [ref=e236]: Saúde Ribeirinha · Saúde Ribeirinha
+                - generic [ref=e237]:
+                  - term [ref=e238]: Valor estimado
+                  - definition [ref=e239]: R$ 15.820
+              - 'generic "Progresso da negociação: 24%" [ref=e240]'
+              - generic [ref=e242]:
+                - generic [ref=e243]: Próximo passo
+                - paragraph [ref=e244]: Validar janela de atracação sanitária
+                - paragraph [ref=e245]: Atualizado • Hoje, 11:15
+          - link "Abrir negociação Castanha beneficiada com rastreabilidade socioambiental" [ref=e246] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-005
+            - article [ref=e247]:
+              - generic [ref=e248]:
+                - img [ref=e250]
+                - generic [ref=e253]:
+                  - generic [ref=e254]:
+                    - generic [ref=e256]: Precisa de resposta
+                    - generic [ref=e257]: Contraproposta
+                  - generic [ref=e258]: Precisa de resposta
+              - heading "Castanha beneficiada com rastreabilidade socioambiental" [level=2] [ref=e259]
+              - generic [ref=e260]:
+                - generic [ref=e261]:
+                  - term [ref=e262]: Embarcação sugerida
+                  - definition [ref=e263]:
+                    - img [ref=e264]
+                    - text: Tapajós Express
+                - generic [ref=e267]:
+                  - term [ref=e268]: Rota
+                  - definition [ref=e269]:
+                    - img [ref=e270]
+                    - text: Santarém–Macapá
+                - generic [ref=e274]:
+                  - term [ref=e275]: Contrapartes
+                  - definition [ref=e276]: Rede Castanha Viva · Tapajós Cargo
+                - generic [ref=e277]:
+                  - term [ref=e278]: Valor estimado
+                  - definition [ref=e279]: R$ 9.120
+              - 'generic "Progresso da negociação: 42%" [ref=e280]'
+              - generic [ref=e282]:
+                - generic [ref=e283]: Próximo passo
+                - paragraph [ref=e284]: Responder contraproposta e validar cronograma
+                - paragraph [ref=e285]: Atualizado • Hoje, 09:05
+          - link "Abrir negociação Contêineres de cabotagem conectada Norte–Nordeste" [ref=e286] [cursor=pointer]:
+            - /url: /pt-BR/negociacoes/neg-006
+            - article [ref=e287]:
+              - generic [ref=e288]:
+                - img [ref=e290]
+                - generic [ref=e293]:
+                  - generic [ref=e295]: Contrato
+                  - generic [ref=e296]: Acordo avançado
+              - heading "Contêineres de cabotagem conectada Norte–Nordeste" [level=2] [ref=e297]
+              - generic [ref=e298]:
+                - generic [ref=e299]:
+                  - term [ref=e300]: Embarcação sugerida
+                  - definition [ref=e301]:
+                    - img [ref=e302]
+                    - text: Cabotagem Norte 01
+                - generic [ref=e305]:
+                  - term [ref=e306]: Rota
+                  - definition [ref=e307]:
+                    - img [ref=e308]
+                    - text: Vila do Conde–Suape
+                - generic [ref=e312]:
+                  - term [ref=e313]: Contrapartes
+                  - definition [ref=e314]: BR do Mar Log · BR do Mar Log
+                - generic [ref=e315]:
+                  - term [ref=e316]: Valor estimado
+                  - definition [ref=e317]: R$ 24.240
+              - 'generic "Progresso da negociação: 62%" [ref=e318]'
+              - generic [ref=e320]:
+                - generic [ref=e321]: Próximo passo
+                - paragraph [ref=e322]: Emitir booking final e anexar manifesto
+                - paragraph [ref=e323]: Atualizado • Ontem, 18:22
+  - complementary "Modo mock · QA Assistant"
+  - status

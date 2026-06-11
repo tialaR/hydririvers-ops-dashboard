@@ -77,7 +77,7 @@ Em humano:
 [1 a 3 frases curtas explicando o que aconteceu sem jargão]
 
 Prova simples:
-[1 linha com validação em linguagem simples]
+[1 linha com validação em linguagem simples — para UI mobile: "Testado em celular pequeno, médio e grande." ou "Só testado em um tamanho, precisa revisar responsividade."]
 
 Falta provar:
 [1 linha objetiva]
@@ -200,6 +200,26 @@ Before planning or patching UI code, verify:
 2. `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc` are in **Docs read**.
 
 If either is missing: **stop**, add the correct categories, read the missing docs, update the router block, then proceed. Do not implement UI with incomplete routing.
+
+### Mobile viewport coverage (automatic for UI categories)
+
+When **any** of these categories apply — `mobile-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` on visible UI — the agent must validate **at least three mobile widths** before 🟢 **Pode seguir**:
+
+| Tier | Size |
+|------|------|
+| Small mobile | 320×568 or 360×740 |
+| Standard mobile | 390×844 |
+| Large mobile | 430×932 |
+
+Full checklist and evidence rules: `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Mobile viewport coverage**.
+
+**Captain closeout rules:**
+
+- All three tiers tested → 🟢 allowed (if other proof is sufficient); **Prova simples:** "Testado em celular pequeno, médio e grande."
+- Only one width tested → **🟡 Segue com cuidado** (never 🟢 for mobile UI); **Prova simples:** "Só testado em um tamanho, precisa revisar responsividade."
+- Two widths → 🟡 until the third is covered.
+
+Record per-viewport results in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**. Save or cite screenshots per width when using Playwright or visual QA.
 
 ### UI architecture (summary)
 
