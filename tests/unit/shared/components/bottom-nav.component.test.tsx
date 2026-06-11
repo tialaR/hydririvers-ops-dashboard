@@ -191,7 +191,7 @@ describe('BottomNav', () => {
     expect(onItemSelect).toBeDefined();
   });
 
-  it('item ativo usa ícone outlined, lente preview global e label no item', () => {
+  it('item ativo usa ícone outlined, activeCutout glass e label no item', () => {
     const html = renderToStaticMarkup(
       <BottomNav
         activeId="cargo"
@@ -217,11 +217,8 @@ describe('BottomNav', () => {
     expect(html).toContain('data-bottom-nav-global="true"');
     expect(html).toContain('data-bottom-nav-preview-global="true"');
     expect(html).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(html).toContain(navStyles.lens);
-    expect(html).toContain(navStyles.waterGlow);
-    expect(html).toContain(navStyles.waterSurface);
-    expect(html).toContain(navStyles.waterDepth);
-    expect(html).toContain(navStyles.waterDistortion);
+    expect(html).toContain(navStyles.activeCutout);
+    expect(html).toContain(navStyles.activeGlass);
     expect(html).not.toContain('data-bottom-nav-active-bubble="true"');
     expect(html).not.toContain('data-bottom-nav-pill-slot="true"');
   });
@@ -256,38 +253,51 @@ describe('BottomNav', () => {
 
     expect(html).toContain('data-bottom-nav-preview-global="true"');
     expect(html).toContain(navStyles.nav);
-    expect(html).toContain(navStyles.lens);
+    expect(html).toContain(navStyles.activeCutout);
     expect(html).not.toContain(bottomNavHyLightClassNames.activeBubble);
   });
 
   it('implementa pending separado com Link, useLinkStatus e markers nativos', () => {
-    const source = readFileSync(
+    const navSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
       'utf8',
     );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      'utf8',
+    );
 
-    expect(source).toContain('pendingItemId');
-    expect(source).toContain('useLinkStatus');
-    expect(source).toContain('BottomNavLinkPendingBridge');
-    expect(source).toContain('setPendingItemId(null)');
-    expect(source).toContain('onPointerDown={handlePointerDown}');
-    expect(source).toContain('data-bottom-nav-pending');
-    expect(source).toContain('data-bottom-nav-pending-glow');
-    expect(source).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(source).toContain('prefetch');
-    expect(source).not.toContain('router.push');
-    expect(source).not.toContain('scheduleNavigation');
-    expect(source).not.toContain('navigationTimerRef');
-    expect(source).not.toContain('data-bottom-nav-icon-variant="filled"');
+    expect(navSource).toContain('pendingItemId');
+    expect(navSource).toContain('setPendingItemId(null)');
+    expect(navSource).toContain('data-hy-bottom-nav-preview-lens="true"');
+    expect(itemsSource).toContain('useLinkStatus');
+    expect(itemsSource).toContain('BottomNavLinkPendingBridge');
+    expect(itemsSource).toContain('onPointerDown={handlePointerDown}');
+    expect(itemsSource).not.toContain('triggerIconJump');
+    expect(itemsSource).toContain('data-bottom-nav-pending');
+    expect(itemsSource).toContain('data-bottom-nav-pending-glow');
+    expect(itemsSource).toContain('prefetch');
+    expect(navSource).not.toContain('router.push');
+    expect(navSource).not.toContain('scheduleNavigation');
+    expect(navSource).not.toContain('navigationTimerRef');
+    expect(itemsSource).not.toContain('data-bottom-nav-icon-variant="filled"');
   });
 
-  it('usa Motion provider, lente global e moving state no preview', () => {
+  it('usa Motion provider, activeCutout glass e stretching state no preview', () => {
     const motionSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-motion.tsx'),
       'utf8',
     );
     const navSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      'utf8',
+    );
+    const indicatorSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
       'utf8',
     );
     const navModuleSource = readFileSync(
@@ -302,19 +312,28 @@ describe('BottomNav', () => {
     expect(motionSource).toContain('useReducedMotion');
     expect(motionSource).not.toContain('framer-motion');
     expect(navSource).toContain('BottomNavMotionProvider');
-    expect(navSource).toContain('MotionLink');
-    expect(navSource).toContain('MotionButton');
+    expect(navSource).toContain('useBottomNavIndicator');
     expect(navSource).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(navSource).toContain('previousVisualIdRef');
-    expect(navSource).toContain('setIsMoving(true)');
     expect(navSource).toContain('data-hy-bottom-nav-moving');
-    expect(navSource).toContain('isRouteActive');
+    expect(navSource).toContain('isStretching');
+    expect(itemsSource).toContain('MotionLink');
+    expect(itemsSource).toContain('MotionButton');
+    expect(itemsSource).toContain('isRouteActive');
+    expect(indicatorSource).toContain('stretchPreviousIndexRef');
+    expect(indicatorSource).toContain('jumpPreviousIndexRef');
+    expect(indicatorSource).toContain('skipInitialJumpRef');
+    expect(indicatorSource).toContain('triggerIconJump');
+    expect(indicatorSource).toContain('setIsStretching(true)');
+    expect(indicatorSource).toContain('measureBottomNavSelectionWidth');
+    expect(indicatorSource).toContain('selectionWidth');
+    expect(indicatorSource).not.toContain('setActiveWidth');
     expect(navSource).not.toContain('BottomNavActivePill');
     expect(navSource).not.toContain('routeCommitNonceForItem');
     expect(navSource).not.toContain('data-bottom-nav-pill-slot');
     expect(navSource).not.toContain('data-bottom-nav-active-bubble');
-    expect(navModuleSource).toContain('.lens');
-    expect(navModuleSource).toContain('transition-property: top, left, width, height, transform, filter');
+    expect(navModuleSource).toContain('.activeCutout');
+    expect(navModuleSource).toContain('.activeGlass');
+    expect(navModuleSource).toContain('translate3d(var(--active-x)');
     expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true']");
   });
 
@@ -322,11 +341,11 @@ describe('BottomNav', () => {
     expect(shouldBypassPressFeedback({ metaKey: true, ctrlKey: false, shiftKey: false, altKey: false, button: 0 } as MouseEvent)).toBe(true);
     expect(shouldBypassPressFeedback({ metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, button: 0 } as MouseEvent)).toBe(false);
 
-    const source = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
       'utf8',
     );
-    expect(source).toContain('shouldBypassPressFeedback(event)');
+    expect(itemsSource).toContain('shouldBypassPressFeedback(event)');
   });
 
   it('visualActiveId e pending derivam de helpers compartilhados', () => {
@@ -373,10 +392,10 @@ describe('BottomNav', () => {
     expect(html).not.toContain('data-hy-bottom-nav-gooey');
     expect(html).not.toContain('id="hy-bottom-nav-goo"');
     expect(navModuleSource).toContain('@media (prefers-reduced-motion: reduce)');
-    expect(navModuleSource).toContain('.lens');
+    expect(navModuleSource).toContain('.activeCutout');
   });
 
-  it('preview global usa lente decorativa, camadas water e pending glow no módulo novo', () => {
+  it('preview global usa activeCutout glass, icon jump e pending glow no módulo novo', () => {
     const navModuleSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
       'utf8',
@@ -385,42 +404,44 @@ describe('BottomNav', () => {
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
       'utf8',
     );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      'utf8',
+    );
 
     expect(navModuleSource).toContain('backdrop-filter');
-    expect(navModuleSource).toContain('.lens');
-    expect(navModuleSource).toContain('.waterGlow');
-    expect(navModuleSource).toContain('.waterSurface');
-    expect(navModuleSource).toContain('.waterDepth');
-    expect(navModuleSource).toContain('.waterDistortion');
-    expect(navModuleSource).toContain('.waterEdge');
-    expect(navModuleSource).toContain('.waterSpecular');
+    expect(navModuleSource).toContain('.activeCutout');
+    expect(navModuleSource).toContain('.activeGlass');
+    expect(navModuleSource).toContain('.iconJumpActive');
+    expect(navModuleSource).toContain('@keyframes simpleIconJump');
+    expect(navModuleSource).toContain('@keyframes activeGlassStretch');
     expect(navModuleSource).toContain('.pendingGlow');
-    expect(navModuleSource).toContain('minmax(0, 1fr)');
-    expect(navModuleSource).toContain('overflow: visible');
+    expect(navModuleSource).toContain('bottom-nav-light-tokens');
+    expect(navModuleSource).toContain('var(--bn-shell-blur)');
     expect(navModuleSource).not.toContain('.pillSlot');
     expect(navModuleSource).not.toContain('.activeBubble');
-    expect(navSource).toContain('data-bottom-nav-pending-glow');
+    expect(itemsSource).toContain('data-bottom-nav-pending-glow');
     expect(navSource).toContain('data-hy-bottom-nav-preview-lens="true"');
     expect(navSource).not.toContain('BottomNavActivePill');
     expect(navSource).not.toContain('feComposite');
     expect(navSource).not.toContain('data-bottom-nav-gooey-track');
   });
 
-  it('reduced motion desliga transição da lente preview global', () => {
+  it('reduced motion desliga transição do activeCutout preview global', () => {
     const navModuleSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
       'utf8',
     );
 
     expect(navModuleSource).toContain('@media (prefers-reduced-motion: reduce)');
-    expect(navModuleSource).toContain('.lens');
-    expect(navModuleSource).toContain('.waterGlow');
+    expect(navModuleSource).toContain('.activeCutout');
+    expect(navModuleSource).toContain('.activeGlass');
     expect(navModuleSource).toContain('transition: none');
-    expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true'] .lens");
-    expect(navModuleSource).toContain('transform: none');
+    expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true'] .activeGlass");
+    expect(navModuleSource).toContain('animation: none');
   });
 
-  it('lente preview global renderiza camadas water no DOM', () => {
+  it('activeCutout glass renderiza no DOM', () => {
     const html = renderToStaticMarkup(
       <BottomNav
         className={bottomNavHyLightClassNames.shell}
@@ -443,13 +464,8 @@ describe('BottomNav', () => {
     );
 
     expect(html).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(html).toContain(navStyles.lens);
-    expect(html).toContain(navStyles.waterGlow);
-    expect(html).toContain(navStyles.waterSurface);
-    expect(html).toContain(navStyles.waterDepth);
-    expect(html).toContain(navStyles.waterDistortion);
-    expect(html).toContain(navStyles.waterEdge);
-    expect(html).toContain(navStyles.waterSpecular);
+    expect(html).toContain(navStyles.activeCutout);
+    expect(html).toContain(navStyles.activeGlass);
     expect(html).not.toContain('data-hy-liquid-glass-surface="true"');
     expect(html).not.toContain('data-hy-liquid-glass-rim="true"');
     expect(html).not.toContain(bottomNavHyLightClassNames.activeBubbleSurface);
@@ -490,9 +506,13 @@ describe('BottomNav', () => {
     expect(tokensSource).toContain('--hy-spacing-bottom-nav-margin-inline: 0.75rem');
   });
 
-  it('moving state dispara somente quando visualActiveId muda', () => {
+  it('stretching state dispara somente quando activeIndex muda', () => {
     const navSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+    const indicatorSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
       'utf8',
     );
     const navModuleSource = readFileSync(
@@ -500,21 +520,23 @@ describe('BottomNav', () => {
       'utf8',
     );
 
-    expect(navSource).toContain('previousVisualIdRef');
-    expect(navSource).toContain('setIsMoving(true)');
-    expect(navSource).toContain('setIsMoving(false)');
+    expect(indicatorSource).toContain('stretchPreviousIndexRef');
+    expect(indicatorSource).toContain('skipInitialJumpRef');
+    expect(indicatorSource).toContain('setIsStretching(true)');
+    expect(indicatorSource).toContain('setIsStretching(false)');
     expect(navSource).toContain('data-hy-bottom-nav-moving');
+    expect(navSource).toContain('isStretching');
     expect(navSource).not.toContain('useBottomNavRouteCommitNonce');
     expect(navSource).not.toContain('routeCommitNonceForItem');
     expect(navSource).not.toContain('isRouteCommitCycle');
-    expect(navModuleSource).toContain('.lens');
-    expect(navModuleSource).toContain('transition-duration: 430ms');
+    expect(navModuleSource).toContain('.activeCutout');
+    expect(navModuleSource).toContain('var(--bn-motion-cutout-duration)');
     expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true']");
-    expect(navModuleSource).toContain('scaleX(1.075) scaleY(1.12)');
+    expect(navModuleSource).toContain('@keyframes activeGlassStretch');
     expect(resolveVisualActiveId('cargos', 'negotiations')).toBe('cargos');
   });
 
-  it('nav e grid permanecem estáveis — morph só na lente preview global', () => {
+  it('nav grid permanece estável — morph só no activeGlass', () => {
     const navModuleSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
       'utf8',
@@ -524,15 +546,19 @@ describe('BottomNav', () => {
       'utf8',
     );
 
-    const navBlock = navModuleSource.match(/^\.nav[\s\S]*?(?=^\.lens)/m)?.[0] ?? '';
+    const navBlock = navModuleSource.match(/^\.nav[\s\S]*?(?=^\.activeCutout)/m)?.[0] ?? '';
 
-    expect(navBlock).toContain('grid-template-columns: repeat(var(--hy-bottom-nav-item-count, 5), minmax(0, 1fr))');
-    expect(navBlock).toContain('overflow: visible');
+    expect(navBlock).toContain('display: grid');
+    expect(navBlock).toContain('grid-template-columns: repeat(5, minmax(0, 1fr))');
+    expect(navBlock).toContain('bottom-nav-light-tokens');
+    expect(navBlock).toContain('width: min(calc(100vw - calc(var(--menu-margin-inline) * 2))');
+    expect(navBlock).toContain('--menu-measured-min-width');
+    expect(navBlock).toContain('--menu-max-width');
     expect(navBlock).not.toContain('data-bottom-nav-route-commit');
-    expect(navModuleSource).toContain('.lens');
+    expect(navModuleSource).toContain('.activeCutout');
     expect(navModuleSource).not.toContain('.pillSlot');
-    expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true'] &");
-    expect(navModuleSource).toContain('scaleX(1.075) scaleY(1.12)');
+    expect(navModuleSource).toContain("[data-hy-bottom-nav-moving='true'] .activeGlass");
+    expect(navModuleSource).toContain('@keyframes activeGlassStretch');
     expect(navSource).not.toContain('BottomNavActivePill');
     expect(navSource).not.toContain('data-bottom-nav-pill-slot');
   });
@@ -560,7 +586,7 @@ describe('BottomNav', () => {
     expect(html).not.toContain('Negociaç...');
   });
 
-  it('lente preview global fica fora dos itens e permanece aria-hidden', () => {
+  it('activeCutout fica fora dos itens e permanece aria-hidden', () => {
     const html = renderToStaticMarkup(
       <BottomNav
         activeId="cargos"
@@ -582,24 +608,32 @@ describe('BottomNav', () => {
     expect(html).toContain(navStyles.label);
   });
 
-  it('preview global não renderiza pill local — lente é sempre decorativa', () => {
-    const source = readFileSync(
+  it('preview global não renderiza pill local — activeCutout é sempre decorativo', () => {
+    const navSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
       'utf8',
     );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      'utf8',
+    );
 
-    expect(source).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(source).toContain('isRouteActive');
-    expect(source).not.toContain('activePill');
-    expect(source).not.toContain('BottomNavActivePill');
-    expect(source).not.toContain('data-bottom-nav-pill-slot');
-    expect(source).not.toContain('gooeyTrack');
-    expect(source).not.toContain('useBottomNavGooeyPillTransition');
+    expect(navSource).toContain('data-hy-bottom-nav-preview-lens="true"');
+    expect(itemsSource).toContain('isRouteActive');
+    expect(navSource).not.toContain('activePill');
+    expect(navSource).not.toContain('BottomNavActivePill');
+    expect(navSource).not.toContain('data-bottom-nav-pill-slot');
+    expect(navSource).not.toContain('gooeyTrack');
+    expect(navSource).not.toContain('useBottomNavGooeyPillTransition');
   });
 
-  it('arquitetura antiga da pill local não existe — lente global e icon/label no item', () => {
-    const source = readFileSync(
+  it('arquitetura antiga da pill local não existe — activeCutout global e icon/label no item', () => {
+    const navSource = readFileSync(
       resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
       'utf8',
     );
     const navModuleSource = readFileSync(
@@ -607,21 +641,55 @@ describe('BottomNav', () => {
       'utf8',
     );
 
-    expect(source).not.toContain('BottomNavActivePill');
-    expect(source).not.toContain('data-bottom-nav-pill-slot');
-    expect(source).not.toContain('data-bottom-nav-content-layer');
-    expect(source).not.toContain('data-bottom-nav-active-bubble');
-    expect(source).toContain('data-hy-bottom-nav-preview-lens="true"');
-    expect(source).toContain('className={styles.lens}');
-    expect(source).toContain('className={styles.icon}');
-    expect(source).toContain('className={styles.label}');
-    expect(navModuleSource).toContain('.lens');
+    expect(navSource).not.toContain('BottomNavActivePill');
+    expect(navSource).not.toContain('data-bottom-nav-pill-slot');
+    expect(navSource).not.toContain('data-bottom-nav-content-layer');
+    expect(navSource).not.toContain('data-bottom-nav-active-bubble');
+    expect(navSource).toContain('data-hy-bottom-nav-preview-lens="true"');
+    expect(navSource).toContain('className={styles.activeCutout}');
+    expect(itemsSource).toContain('styles.icon');
+    expect(itemsSource).toContain('styles.label');
+    expect(itemsSource).toContain('styles.iconJumpActive');
+    expect(navModuleSource).toContain('.activeCutout');
     expect(navModuleSource).not.toContain('.pillSlot');
-    const contentBlock = source.match(/const content = \([\s\S]*?\n  \);/)?.[0] ?? '';
+    const contentBlock = itemsSource.match(/const content = \([\s\S]*?\n  \);/)?.[0] ?? '';
     expect(contentBlock).toContain('styles.icon');
     expect(contentBlock).toContain('styles.label');
     expect(contentBlock).not.toContain('pillSlot');
     expect(contentBlock).not.toContain('contentLayer');
     expect(contentBlock).not.toContain('activeContent');
+  });
+
+  it('pill único mede todos os itens e centraliza no ativo', () => {
+    const measurementSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-measurement.ts'),
+      'utf8',
+    );
+    const indicatorSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
+      'utf8',
+    );
+    const itemsSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      'utf8',
+    );
+    const navSource = readFileSync(
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      'utf8',
+    );
+
+    expect(measurementSource).toContain('measureBottomNavSelectionWidth');
+    expect(measurementSource).toContain('measureBottomNavItemContentWidth');
+    expect(measurementSource).toContain('computeBottomNavActiveX');
+    expect(measurementSource).toContain('computeBottomNavContainerMinWidth');
+    expect(measurementSource).not.toMatch(/\.querySelector\(/);
+    expect(indicatorSource).toContain('itemRefs.current.values()');
+    expect(indicatorSource).toContain('measureLayout');
+    expect(indicatorSource).toContain('measureContainerMinWidth');
+    expect(indicatorSource).toContain('--active-width');
+    expect(indicatorSource).toContain('--menu-measured-min-width');
+    expect(indicatorSource).not.toContain('itemRect.width');
+    expect(itemsSource).toContain('data-bottom-nav-label-measure="true"');
+    expect(navSource).toContain('items.length');
   });
 });

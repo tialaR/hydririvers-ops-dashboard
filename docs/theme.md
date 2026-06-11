@@ -13,6 +13,12 @@
 - `--hx-yellow`
 - `--hx-red`
 
+## Component tokens (escopo local)
+
+Alguns componentes mobile mantêm tokens próprios até convergência com DS v2:
+
+- **BottomNav light (preview global):** `--bn-*` em `src/shared/components/bottom-nav/bottom-nav-light-tokens.sass` — ver [bottom-nav-light.md](./design/bottom-nav-light.md).
+
 ## Regras
 
 - **Padrão inicial (sem cookie):** light — ver `resolveServerTheme` e layout `[locale]`.
