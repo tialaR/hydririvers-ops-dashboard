@@ -2,85 +2,45 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-import { intlAppPaths } from '@/shared/routing/app-routes';
-
-const bottomNavPath = resolve(
-  process.cwd(),
-  'src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx',
+const source = readFileSync(
+  resolve(process.cwd(), 'src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx'),
+  'utf8',
 );
 
 describe('ProductMobileBottomNav', () => {
-  const source = readFileSync(bottomNavPath, 'utf8');
-
-  it('usa BottomNav shared homologado com rotas reais do produto', () => {
+  it('usa BottomNav shared global com rotas reais do produto', () => {
     expect(source).toContain("from '@/shared/components/bottom-nav'");
-    expect(source).toContain('bottomNavHyLightClassNames');
-    expect(source).toContain('bottomNavHyDarkGlassClassNames');
-    expect(source).toContain('isCargasMobileRoute');
-    expect(source).toContain("data-bottom-nav-skin={useDarkGlassBottomNav ? 'dark-glass' : 'light'}");
-    expect(source).toContain('createPortal');
+    expect(source).toContain('PRODUCT_MOBILE_BOTTOM_NAV_ITEMS');
+    expect(source).toContain('intlAppPaths.home');
+    expect(source).toContain('intlAppPaths.dashboard.home');
+    expect(source).toContain('intlAppPaths.cargos.marketplace');
+    expect(source).toContain('intlAppPaths.negotiations.home');
+    expect(source).toContain('intlAppPaths.tracking.home');
+  });
+
+  it('não usa skin antiga nem classNames legadas no shell mobile', () => {
+    expect(source).not.toContain('bottomNavHyLightClassNames');
+    expect(source).not.toContain('bottomNavHyDarkGlassClassNames');
+    expect(source).not.toContain('bottomNavClassNames');
+    expect(source).not.toContain('classNames={{');
+    expect(source).not.toContain('isCargasMobileRoute');
+  });
+
+  it('marca o runtime como preview global', () => {
     expect(source).toContain('data-mobile-product-bottom-nav="true"');
     expect(source).toContain('data-bottom-nav-viewport-anchor="true"');
-    expect(source).toContain(`href: intlAppPaths.home`);
-    expect(source).toContain(`href: intlAppPaths.dashboard.home`);
-    expect(source).toContain(`href: intlAppPaths.cargos.marketplace`);
-    expect(source).toContain(`href: intlAppPaths.negotiations.home`);
-    expect(source).toContain(`href: intlAppPaths.tracking.home`);
-    expect(source).toContain('resolveMobileBottomNavActiveId');
+    expect(source).toContain('data-bottom-nav-skin="preview-global"');
   });
 
-  it('não referencia nav legado hx-mobile-bottom-nav', () => {
-    expect(source).not.toContain('hx-mobile-bottom-nav');
-    expect(source).not.toContain('mobileBottomNav');
-  });
-
-  it('não duplica estilos locais de bottom nav no product shell', () => {
-    expect(source).not.toContain('mobile-product-shell.module.scss');
-    expect(source).not.toContain('styles.bottomNav');
-    expect(source).not.toContain('styles.navItem');
-  });
-
-  it('ProductMobileBottomNav conecta classNames HY do módulo sass', () => {
-    expect(source).toContain('bottomNavClassNames');
-    expect(source).toContain('activeBubbleSurface: bottomNavClassNames.activeBubbleSurface');
-    expect(source).toContain('activeBubbleRim: bottomNavClassNames.activeBubbleRim');
-    expect(source).toContain('activeLiquidLayer: bottomNavClassNames.activeLiquidLayer');
-    expect(source).toContain('pendingGlow: bottomNavClassNames.pendingGlow');
-
-    const lightClassNamesSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-light-class-names.ts'),
-      'utf8',
-    );
-    const darkClassNamesSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-dark-glass-class-names.ts'),
-      'utf8',
-    );
-    expect(lightClassNamesSource).toContain('bottom-nav-hy-light-shell.module.sass');
-    expect(darkClassNamesSource).toContain('bottom-nav-hy-dark-glass-shell.module.sass');
-  });
-
-  it('rotas de bottom nav batem com intlAppPaths', () => {
-    expect(intlAppPaths.cargos.marketplace).toBe('/cargas');
-    expect(intlAppPaths.negotiations.home).toBe('/negociacoes');
-    expect(intlAppPaths.tracking.home).toBe('/rastreio');
-  });
-
-  it('portal expõe marker de ancoragem na viewport para centralização do shell', () => {
-    const shellSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass'),
-      'utf8',
-    );
-
-    expect(source).toContain('createPortal');
-    expect(source).toContain('document.body');
-    expect(shellSource).toContain('left: 50%');
-    expect(shellSource).toContain('transform: translateX(-50%)');
-    expect(shellSource).toContain('--hy-spacing-bottom-nav-margin-inline');
+  it('mantém retorno especial para detalhe de carga', () => {
+    expect(source).toContain('isCargoDetailPath');
+    expect(source).toContain('shouldForceCargoListReturn');
+    expect(source).toContain('router.replace(slot.href as never)');
   });
 
   it('usa BottomNav shared único sem duplicar componente local', () => {
     expect(source).toContain('<BottomNav');
-    expect(source).not.toContain('function ProductMobileBottomNavItem');
-    expect(source).not.toContain('mobileBottomNav');
+    expect(source).not.toContain('function MobileBottomNav');
+    expect(source).not.toContain('hx-mobile-bottom-nav');
   });
 });

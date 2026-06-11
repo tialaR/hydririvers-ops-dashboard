@@ -145,9 +145,9 @@ describe('IconButton', () => {
     expect(stylesSource).toContain('backdrop-filter');
     expect(stylesSource).toContain('--hy-size-icon-button-svg');
     expect(stylesSource).toContain('--hy-shadow-icon-button');
-    expect(tokensSource).toContain('--hy-color-icon-button-surface: rgba(226, 234, 246, 0.68)');
-    expect(tokensSource).toContain('--hy-shadow-icon-button: 0 0.875rem 1.875rem');
-    expect(tokensSource).toContain('--hy-blur-icon-button');
+    expect(tokensSource).toContain('--hy-size-icon-button: 3.25rem');
+    expect(tokensSource).toContain('--hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12)');
+    expect(stylesSource).toContain('backdrop-filter');
   });
 
   it('iconName="filter" renderiza sliders horizontais, não funil', () => {
