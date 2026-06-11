@@ -16,7 +16,12 @@ Before planning or implementing, run the task router in `docs/agents/AGENTS-TASK
 3. Build required docs: **base** + **implementation** (if changing code/config/tests/docs behavior) + **union of category docs**.
 4. If any required doc is missing on disk, **stop** and report — do not proceed.
 5. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
-6. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with `HYDRI_IMPLEMENTATION_PROOF`.
+6. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
+7. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Human closeout** then technical blocks.
+
+## When to stop and ask
+
+Ask the user **only** when: scope is ambiguous; a required doc is missing; forbidden scope must be touched; validation failed; or high risk cannot be mitigated in scope.
 
 ## Initial block (mandatory)
 
@@ -40,10 +45,30 @@ See `docs/agents/AGENTS-TASK-ROUTER.md`. Minimum set:
 
 Multiple categories → union all docs. Implementation always includes `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
 
-## Close every response
+## Close every response (order)
 
-- Task classification
-- Required docs read
-- Missing docs (if any)
-- Scope boundaries
-- `HYDRI_IMPLEMENTATION_PROOF` when implementation happened
+**Do not end with a technical wall first.** The closing section starts with Human closeout.
+
+1. **Human closeout** (user-facing; max 6 lines) — **always first in closing section**
+2. `HYDRI_TASK_ROUTER — close` (technical)
+3. `HYDRI_IMPLEMENTATION_PROOF` when implementation happened (technical; omit for plan/audit-only)
+
+### Human closeout (required)
+
+```md
+## Human closeout
+
+🟢 Status: Verde
+Mensagem: [frase curta em linguagem humana]
+Prova: [comando/preview/teste principal]
+Não provado: [principal limite, ou "Nada relevante"]
+Próxima ação: [ação objetiva]
+```
+
+| Emoji | Status | When |
+|-------|--------|------|
+| 🟢 | **Verde** | Worked and proved; docs/rules validated |
+| 🟡 | **Amarelo** | Partial, incomplete validation, plan/audit without execution |
+| 🔴 | **Vermelho** | Failed, blocked, or cannot claim success |
+
+Plain language for the user — no doc paths or category jargon unless requested. Plan/audit-only → 🟡 Amarelo, no full proof block.

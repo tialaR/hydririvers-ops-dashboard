@@ -10,9 +10,20 @@
 
 Full router spec: `docs/agents/AGENTS-TASK-ROUTER.md`
 
-## Implementation proof (mandatory for implementation)
+## Closing response (mandatory)
 
-For any implementation task (code, config, tests, or agent docs that deliver behavior), **`HYDRI_IMPLEMENTATION_PROOF` is mandatory** at the end of the response. See `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
+**Do not end with a technical wall first.** Every response must close with **Human closeout** — a short, visual, plain-language decision (🟢 Verde / 🟡 Amarelo / 🔴 Vermelho) — before any technical blocks.
+
+**Closing order:**
+
+1. Work body
+2. **Human closeout** — always starts the closing section
+3. `HYDRI_TASK_ROUTER — close` — technical (required for implementation and docs work)
+4. `HYDRI_IMPLEMENTATION_PROOF` — technical (only when implementation happened)
+
+For implementation tasks (code, config, tests, or agent docs that deliver behavior), **Human closeout** and **`HYDRI_IMPLEMENTATION_PROOF`** are both mandatory. Plan or audit only: Human closeout with 🟡 Amarelo is enough — omit the full proof block.
+
+See `docs/agents/AGENTS-TASK-ROUTER.md` (Human closeout template) and `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` (proof block).
 
 ## Reference docs (read on demand via router)
 
@@ -36,4 +47,4 @@ Non-negotiables:
 - Prefer `.module.sass` for touched/created component styles.
 - Do not install dependencies without explicit approval.
 - Validate with lint, typecheck and i18n before claiming success.
-- End implementation tasks with `HYDRI_IMPLEMENTATION_PROOF` (see `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`).
+- Close every response with **Human closeout** first, then technical blocks (`HYDRI_TASK_ROUTER — close`, `HYDRI_IMPLEMENTATION_PROOF` when implementation happened). See `docs/agents/AGENTS-TASK-ROUTER.md` and `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
