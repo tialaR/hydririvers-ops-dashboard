@@ -3,13 +3,6 @@ import { intlAppPaths } from '@/shared/routing/app-routes';
 
 export type MockQaPersonaId = 'tiala' | 'joao' | 'carlos' | 'ana' | 'admin';
 
-export type MockQaActionKey =
-  | 'openDashboard'
-  | 'openCargas'
-  | 'tryCargoAssistant'
-  | 'tryAccessBlock'
-  | 'openAdminMockMode';
-
 export type MockQaPersona = {
   id: MockQaPersonaId;
   mockUserId: string;
@@ -19,7 +12,6 @@ export type MockQaPersona = {
   approved: boolean;
   companyDisplay: string;
   directLoginRedirectPath: string;
-  suggestedActions: readonly MockQaActionKey[];
 };
 
 export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
@@ -31,8 +23,7 @@ export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
     role: 'shipper',
     approved: true,
     companyDisplay: 'Cooperativa Açaí Norte',
-    directLoginRedirectPath: intlAppPaths.cargos.marketplace,
-    suggestedActions: ['openDashboard', 'openCargas', 'tryCargoAssistant']
+    directLoginRedirectPath: intlAppPaths.cargos.marketplace
   },
   {
     id: 'joao',
@@ -42,8 +33,7 @@ export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
     role: 'carrier',
     approved: true,
     companyDisplay: 'Navega Norte',
-    directLoginRedirectPath: intlAppPaths.cargos.marketplace,
-    suggestedActions: ['openDashboard', 'openCargas', 'tryCargoAssistant', 'tryAccessBlock']
+    directLoginRedirectPath: intlAppPaths.cargos.marketplace
   },
   {
     id: 'carlos',
@@ -53,8 +43,7 @@ export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
     role: 'carrier',
     approved: true,
     companyDisplay: 'Hidrovias Madeira',
-    directLoginRedirectPath: intlAppPaths.cargos.marketplace,
-    suggestedActions: ['openDashboard', 'openCargas', 'tryCargoAssistant', 'tryAccessBlock']
+    directLoginRedirectPath: intlAppPaths.cargos.marketplace
   },
   {
     id: 'ana',
@@ -64,8 +53,7 @@ export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
     role: 'carrier',
     approved: false,
     companyDisplay: 'RiosLog Amazônia',
-    directLoginRedirectPath: intlAppPaths.auth.profile,
-    suggestedActions: ['openDashboard', 'openCargas', 'tryAccessBlock']
+    directLoginRedirectPath: intlAppPaths.auth.profile
   },
   {
     id: 'admin',
@@ -75,7 +63,6 @@ export const MOCK_QA_PERSONAS: readonly MockQaPersona[] = [
     role: 'admin',
     approved: true,
     companyDisplay: 'HydroRivers',
-    directLoginRedirectPath: intlAppPaths.admin.home,
-    suggestedActions: ['openDashboard', 'openCargas', 'openAdminMockMode']
+    directLoginRedirectPath: intlAppPaths.admin.home
   }
 ] as const;

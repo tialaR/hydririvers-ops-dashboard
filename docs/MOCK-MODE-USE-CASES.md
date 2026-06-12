@@ -95,6 +95,36 @@ Negotiation
 - `src/app/api/negociacoes/route.ts`
 - `src/features/marketplace/domain/marketplace.types.ts`
 
+## Mock Mode QA — documentação e fases
+
+Hub visual, personas e catálogo de cenários guiados:
+
+- [`docs/MOCK-MODE-QA-HUB.md`](MOCK-MODE-QA-HUB.md) — objetivo do menu **M**, botões do hub, OTP, rotas públicas/privadas
+- [`docs/audits/mock-mode-current-state.md`](audits/mock-mode-current-state.md) — arquivos, regras OTP/telefone, catálogo partial/duplicado
+- [`docs/audits/mock-users-and-permissions.md`](audits/mock-users-and-permissions.md) — matriz de personas e telefones
+
+### Plano em fases (auth / QA)
+
+| Fase | Escopo |
+|------|--------|
+| 1 | Docs confiáveis + higiene óbvia (`suggestedActions` removido; inventário de cenários) |
+| 2 | **Fonte única** mock users/personas (`auth.mock.ts`, `users.json`, `MOCK_QA_PERSONAS`, hub, prefill) |
+| 3 | Simplificar login UI/copy |
+| 4 | Returning user / register por telefone |
+| 5 | OTP mock dev colapsável no menu QA |
+| 6 | Menu QA compacto por abas + i18n do catálogo (`mock-qa-scenarios.ts`) |
+| 7 | Testes unit/e2e ampliados |
+
+### Fonte única futura (Fase 2)
+
+Evitar divergência manual entre:
+
+- `src/features/auth/data/auth.mock.ts`
+- `.mock-data/users.json`
+- `src/shared/qa/mock-qa-personas.ts`
+- hub QA + i18n `mockMode.qaHub`
+- prefill `QA_LOGIN_PREFILL_STORAGE_KEY`
+
 ## Observação
 
 O projeto anexado usa Next `16.2.4` e React `19.0.0`.
