@@ -6,12 +6,12 @@ Componente **oficial** de navegação inferior mobile (`src/shared/components/bo
 
 | Arquivo | Responsabilidade |
 | --- | --- |
-| `BottomNav.tsx` | Shell semântico; compõe lens + itens |
-| `bottomNavItems.tsx` | Itens, ícones, labels, pending/press |
-| `useBottomNavIndicator.ts` | Medição, slide da lens, stretch, icon jump |
+| `bottom-nav.tsx` | Shell semântico; compõe lens + itens |
+| `bottom-nav-items.tsx` | Itens, ícones, labels, pending/press |
+| `use-bottom-nav-indicator.ts` | Medição, slide da lens, stretch, icon jump |
 | `bottom-nav-light-tokens.sass` | Tokens locais do componente (`--bn-*`) |
 | `bottom-nav-motion-tokens.ts` | Durações compartilhadas Sass ↔ hook |
-| `BottomNav.module.sass` | Estilos glass + animações |
+| `bottom-nav.module.sass` | Estilos glass + animações |
 
 Regras: componente burro; lógica no hook; dados de itens no arquivo próprio; sem `querySelector`; sem `!important`.
 
@@ -44,7 +44,7 @@ Regras: componente burro; lógica no hook; dados de itens no arquivo próprio; s
 
 ### Icon jump
 
-- Dispara **apenas** quando `activeIndex` muda (rota confirmada) — hook `useBottomNavIndicator`.
+- Dispara **apenas** quando `activeIndex` muda (rota confirmada) — hook `use-bottom-nav-indicator`.
 - Classe `.iconJumpActive` no `span.icon` do item ativo; duração `360ms`.
 - Distância pico: `-0.3125rem`; scale pico `1.12`; repouso `scale(1.05)`.
 - `prefers-reduced-motion`: animações desligadas.

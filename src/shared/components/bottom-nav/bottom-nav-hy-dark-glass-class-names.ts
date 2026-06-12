@@ -1,4 +1,4 @@
-import type { BottomNavClassNames } from './BottomNav';
+import type { BottomNavClassNames } from './bottom-nav';
 import shellStyles from './bottom-nav-hy-dark-glass-shell.module.sass';
 
 /** Dark glass skin — mobile /cargas only (light page background). */

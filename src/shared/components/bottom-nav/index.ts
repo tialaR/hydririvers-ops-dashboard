@@ -3,7 +3,7 @@ export {
   type BottomNavClassNames,
   type BottomNavItem,
   type BottomNavProps,
-} from './BottomNav';
+} from './bottom-nav';
 export { bottomNavHyLightClassNames } from './bottom-nav-hy-light-class-names';
 export { bottomNavHyDarkGlassClassNames } from './bottom-nav-hy-dark-glass-class-names';
 /** @deprecated Use `bottomNavHyLightClassNames`. */

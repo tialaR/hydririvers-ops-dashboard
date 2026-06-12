@@ -45,6 +45,8 @@ tsconfig.tsbuildinfo
 
 # capturas temporárias de revisão visual (não versionar)
 .phase-visual-check/
+output/ui-lab/
+.playwright-qa/
 
 # Vessel hero kit (material temporário — não versionar)
 hydririvers-vessel-hero-kit/

@@ -16,7 +16,7 @@ import { useLinkStatus } from 'next/link';
 import { MotionButton, MotionLink } from './bottom-nav-motion';
 import { isBottomNavItemPending } from './bottom-nav-state';
 import { shouldBypassPressFeedback } from './with-press-feedback';
-import styles from './BottomNav.module.sass';
+import styles from './bottom-nav.module.sass';
 
 export function resolveBottomNavCompactLabel(label: string, maxChars = 7): string {
   const trimmed = label.trim();

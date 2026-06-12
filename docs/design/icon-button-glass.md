@@ -2,36 +2,7 @@
 
 Global icon-only button for mobile light chrome. Lives in `src/shared/components/icon-button/`.
 
-**Policy:** this lab implements the project-wide **UI Visual Lab** rules (`docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **UI Visual Lab**). Official labs are not deleted after validation; lab-only tasks do not change production; component tasks do not alter the literal reference.
-
-## Visual Lab Gate (mandatory before production tuning)
-
-**Route:** `/[locale]/hy-ui-lab/icon-button` (e.g. `/pt-BR/hy-ui-lab/icon-button`)
-
-DevTools literal reference values (**76px** shell, **blur(14px)**, **34px** icon) live **only** in the lab (`reference-icon-button.*`). Production `IconButton` must not receive these literals globally without size/context adaptation.
-
-| Column | Source | Purpose |
-|--------|--------|---------|
-| **Reference** | `reference-icon-button.tsx` | DevTools literal physics + tokens |
-| **Actual (Produção)** | `@/shared/components/icon-button` | **Approved** `glass-compact-production` (~52px md) |
-| **Depth proposal** | `depth-proposal-icon-button.tsx` | Lab-only comparison column (unified glass tokens) |
-
-Deterministic states on the lab page: **idle**, **pressed**, **release**, **focus**, **scroll background**.
-
-**Transparency Scroll Test** (`data-ui-section="transparency-scroll"`): in-flow **panorama** (`TransparencyScrollPanorama`) — azul, aqua, verde, lilás, faixas de contraste, cards de carga, hidrovias e alvo pós-scroll (`data-ui-after-scroll-target`) rolam dentro de `data-ui-scroll-viewport` / `data-ui-scroll-content` (container interno rolável). Botões fixos no centro (`data-ui-reference-scroll-button`, `data-ui-actual-scroll-button`, `data-ui-depth-proposal-button`). Produção sem override lab; referência com `holeGlassHost`; depth-proposal com tokens candidatos BottomMenu glass. Gate states: idle (glass-probe card), after-scroll (alvo verde+lilás), pressed, release, focus; screenshots `before-scroll` / `after-scroll` + wide section por viewport; relatório com `scrollTop` before/after e scroll mode.
-
-**Policy (transparent/light-mode labs):** flat white or gray backdrop alone is insufficient; labs must use identity-aligned colored backdrop + scroll scenario; visual gate must validate backdrop and scroll, not layout-only. See `AGENTS-UI-MOBILE-STANDARDS.md` → **Transparent / glass / light-mode validation**.
-
-### Playwright gate
-
-```bash
-npx playwright test tests/visual/icon-button-glass.visual.spec.ts --config=playwright.visual.config.ts
-```
-
-- Screenshots: `output/ui-lab/icon-button/` (`{viewport}-{state}-{reference|actual|depth-proposal}.png`, `{viewport}-transparency-scroll-{reference|actual|depth-proposal}-{state}.png`, `{viewport}-transparency-scroll-before-scroll.png`, `{viewport}-transparency-scroll-after-scroll.png`, `{viewport}-transparency-scroll-wide.png`)
-- Report: `output/ui-lab/icon-button/report.md` + `report.json` — sections: **infrastructure mode**, **transparency scroll mode**, **depth proposal mode**, **production equivalence** (`PASS` / `FAIL` / `NOT APPLICABLE`)
-- Compares **physics** (blur, press scale, glow, release, focus) — **not** production size = 76px
-- Scale delta (reference − actual) is logged separately; mismatch in px size alone is not a production failure
+**Validation status (2026-06-11):** IconButton glass was validated via UI Visual Lab; the temporary lab route (`/hy-ui-lab/icon-button`), Playwright gate, and versioned screenshots were **removed** after production approval. Future visual QA recreates a disposable lab per `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**.
 
 ## Usage
 
