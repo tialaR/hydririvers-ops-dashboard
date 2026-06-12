@@ -12,17 +12,55 @@ O terminal **não** é a interface principal de QA. Prefira este hub, a UI e o D
 
 O painel **não aparece** em rotas públicas de auth (`/login`, `/register`) — ver [Visibilidade do painel](#visibilidade-do-painel).
 
-## Contas demo no hub (5 personas)
+## Fonte canônica (Fase 2)
 
-O hub lista **cinco** personas de `MOCK_QA_PERSONAS` (`src/shared/qa/mock-qa-personas.ts`). A semente mock tem **seis** usuários em `.mock-data/users.json`; **Mariana Tapajós** existe no seed mas **não** está no hub nesta fase (Fase 2).
+**`src/shared/mock-data/mock-user-registry.ts`** é a fonte única de usuários/personas mockadas. Consumidores derivados:
 
-| Persona | Telefone (E.164) | E-mail | Senha mock | Papel | Aprovado |
-|---------|------------------|--------|------------|-------|----------|
-| Tiala Rocha | +5591999990001 | tiala@hydrorivers.com | hydro123 | Embarcador | sim |
-| João Navegante | +5592999990002 | joao@naveganorte.com | hydro123 | Transportador | sim |
-| Carlos Madeira | +5569999990005 | carlos@hidroviasmadeira.com | hydro123 | Transportador | sim |
-| Ana Solimões | +5597999990006 | ana@rioslog.com | hydro123 | Transportador | não |
-| Operação HydroRivers | +5591999990003 | admin@hydrorivers.com | hydro123 | Admin | sim |
+| Consumidor | Derivação |
+|------------|-----------|
+| `defaultUsers` (`auth.mock.ts`) | `toHydroUsers()` |
+| `.mock-data/users.json` | runtime via `mock-db.ts` a partir de `defaultUsers` |
+| `MOCK_QA_PERSONAS` | `toQaPersonas()` — somente `qaHubVisible` |
+| Hub QA (cartões) | `MOCK_QA_PERSONAS` + i18n `mockMode.qaHub.personas.*` |
+| Prefill de telefone no login | `findSeedPhoneByEmail()` |
+| Whitelist `qa-direct-login` | `getQaDirectLoginEmails()` |
+
+**Visitante** (`MOCK_PUBLIC_VISITOR`) é caso separado — sem telefone, rota principal `/cargas`, bloqueado em `/minhas-cargas`.
+
+Personas **BR** são operacionais principais (hidrovias amazônicas). Personas **US/en-US** e **ES/es** nesta fase servem para QA de locale, dial internacional e auth — **sem cargas internacionais** no mock.
+
+## Contas demo no hub (12 personas)
+
+O hub lista personas com `qaHubVisible: true` derivadas do registry via `MOCK_QA_PERSONAS`.
+
+### Brasil (pt-BR) — operacionais
+
+| Persona | Telefone (E.164) | E-mail | Papel | Aprovado |
+|---------|------------------|--------|-------|----------|
+| Tiala Rocha | +5591999990001 | tiala@hydrorivers.com | Embarcador | sim |
+| Mariana Tapajós | +5593999990004 | mariana@bioamazonia.coop | Embarcador | sim |
+| João Navegante | +5592999990002 | joao@naveganorte.com | Transportador | sim |
+| Carlos Madeira | +5569999990005 | carlos@hidroviasmadeira.com | Transportador | sim |
+| Ana Solimões | +5597999990006 | ana@rioslog.com | Transportador | não |
+| Operação HydroRivers | +5591999990003 | admin@hydrorivers.com | Admin | sim |
+
+### EUA (en-US) — international-demo
+
+| Persona | Telefone (E.164) | E-mail | Papel | Aprovado |
+|---------|------------------|--------|-------|----------|
+| Emily Hartwell | +15550100001 | emily.hartwell@mississippi-logistics.com | Embarcador | sim |
+| Marcus Whitfield | +15550100002 | marcus.whitfield@ohioriverfreight.com | Transportador | sim |
+| Priya Nair | +15550100003 | priya.nair@greatlakesnav.com | Transportador | não |
+
+### Espanha (es) — international-demo
+
+| Persona | Telefone (E.164) | E-mail | Papel | Aprovado |
+|---------|------------------|--------|-------|----------|
+| Lucía Morales | +34600999001 | lucia.morales@hidrovia-iberica.es | Embarcador | sim |
+| Pablo Ribera | +34600999002 | pablo.ribera@riberaebro.es | Transportador | sim |
+| Elena Castillo | +34600999003 | elena.castillo@canal-logistica.es | Transportador | não |
+
+Senha demo comum para todos: `hydro123`.
 
 Senha demo comum: `hydro123` (`demoPassword` em `src/features/auth/domain/auth-constants.ts`).
 
@@ -77,16 +115,14 @@ Ver também [`docs/business-rules.md`](business-rules.md).
 - **Ana:** Conta não aprovada — esperar bloqueio do assistente por moderação antes do escopo da carga.
 - **Admin:** Pode usar qualquer carga existente no mock para smoke do assistente.
 
-## Limitações atuais (Fase 1)
+## Limitações atuais (pós-Fase 2)
 
 | Limitação | Fase prevista |
 |-----------|---------------|
 | Catálogo QA Assistant grande (~40 cenários), difícil de escanear | Fase 6 — menu compacto por abas |
 | Sem modo compacto / filtros avançados no hub | Fase 6 |
 | OTP mock não aparece no menu QA (só via API/UI de auth) | Fase 5 |
-| Mariana Tapajós ausente do hub QA | Fase 2 |
-| Personas US/ES (PhoneInput suporta +1/+34, seed só BR) | Fase 2 |
-| Divergência entre fontes de usuários mock | Fase 2 — registry único |
+| Personas US/ES sem cargas próprias no mock | Fase futura |
 | Strings do catálogo QA em pt-BR hardcoded | Fase 6 — i18n |
 | `suggestedActions` removido de personas (nunca renderizado) | — concluído Fase 1 |
 
@@ -94,25 +130,17 @@ Ver também [`docs/business-rules.md`](business-rules.md).
 
 | Fase | Escopo |
 |------|--------|
-| **1** (esta) | Docs confiáveis + neutralizar ruído óbvio no catálogo/personas |
-| **2** | Registry único mock users/personas (`auth.mock.ts`, `users.json`, `MOCK_QA_PERSONAS`, hub, prefill) |
+| **1** | Docs confiáveis + neutralizar ruído óbvio no catálogo/personas |
+| **2** (concluída) | Registry único `mock-user-registry.ts` → auth, hub, prefill, whitelist |
 | **3** | Simplificar login UI/copy |
 | **4** | Returning user / register por telefone |
 | **5** | OTP mock dev colapsável no menu QA |
 | **6** | Menu QA compacto por abas + i18n do catálogo |
 | **7** | Testes unit/e2e ampliados |
 
-## Fonte única futura (Fase 2)
+## Registry — não duplicar manualmente
 
-Hoje os usuários demo podem divergir entre:
-
-- `src/features/auth/data/auth.mock.ts` (`defaultUsers`)
-- `.mock-data/users.json` (runtime após seed/reset de cenário)
-- `MOCK_QA_PERSONAS` (`src/shared/qa/mock-qa-personas.ts`)
-- cartões do hub QA + i18n `mockMode.qaHub.personas.*`
-- prefill de login (`QA_LOGIN_PREFILL_STORAGE_KEY`)
-
-A **Fase 2** deve introduzir uma fonte única (registry) consumida por seed, hub, whitelist QA e testes — sem duplicar e-mail/telefone/role manualmente.
+Ao adicionar ou alterar persona demo, editar **somente** `src/shared/mock-data/mock-user-registry.ts` e as chaves i18n `mockMode.qaHub.personas.<qaPersonaId>.*` quando o hub exibir o cartão. Não redeclarar e-mail/telefone/role em `auth.mock.ts`, `mock-qa-personas.ts` ou na rota `qa-direct-login`.
 
 ## Logs no terminal
 
@@ -140,7 +168,7 @@ Ver também `.env.example` e [`docs/ENVIRONMENT.md`](ENVIRONMENT.md).
 ## Garantias de segurança
 
 - Login direto por **`/api/mock-mode/login-as`** não existe em `NODE_ENV=production` salvo `HYDRORIVERS_FORCE_QA_DIRECT_LOGIN=true` (uso restrito a CI).
-- Lista branca de e-mails limitada a `MOCK_QA_PERSONAS` (`qa-direct-login`).
+- Lista branca de e-mails derivada de `getQaDirectLoginEmails()` (`qa-direct-login`).
 - Fluxo real com OTP permanece em `POST /api/auth/login`; contrato de API **não** alterado nesta fase.
 
 ## Documentação relacionada

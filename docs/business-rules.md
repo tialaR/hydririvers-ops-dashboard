@@ -2,7 +2,7 @@
 
 **Personas e valor:** fluxos novos devem declarar qual persona beneficia (embarcador, transportador/operador, operador portuário, admin) e que valor operacional entregam. Ver `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Mocks e domínio**.
 
-**Mock-mode:** preservar auth mock; **`phoneE164` como identificador único** em dev (lookup e anti-duplicata no cadastro). Login ainda exige e-mail coerente com o usuário do telefone — ver [`docs/MOCK-MODE-QA-HUB.md`](MOCK-MODE-QA-HUB.md). Rotas: `/cargas` público; `/minhas-cargas` privado; menu Mock mode oculto em `/login` e `/register`.
+**Mock-mode:** preservar auth mock; **`phoneE164` como identificador único** em dev (lookup e anti-duplicata no cadastro). **Fonte canônica de usuários demo:** `src/shared/mock-data/mock-user-registry.ts` — `defaultUsers`, hub QA e whitelist derivam dela; `.mock-data/users.json` é runtime. Personas BR são operacionais principais; US/en-US e ES/es nesta fase validam locale e telefone internacional sem cargas internacionais. Login ainda exige e-mail coerente com o usuário do telefone — ver [`docs/MOCK-MODE-QA-HUB.md`](MOCK-MODE-QA-HUB.md). Rotas: `/cargas` público; `/minhas-cargas` privado; visitante (`MOCK_PUBLIC_VISITOR`) sem sessão; menu Mock mode oculto em `/login` e `/register`.
 
 ## Cargas por navegação
 

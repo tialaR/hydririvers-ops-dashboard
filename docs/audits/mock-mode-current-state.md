@@ -1,6 +1,6 @@
 # Auditoria de estado atual — Mock Mode / Auth / QA
 
-Última revisão: **Fase 1** (docs + higiene de catálogo). Contrato de API auth **inalterado**.
+Última revisão: **Fase 2** (registry único de usuários/personas). Contrato de API auth **inalterado**.
 
 ## Onde vive hoje
 
@@ -19,7 +19,8 @@ O Mock Mode vive principalmente em `src/shared/ui/mock-mode/` e usa camada de da
 | `src/shared/server/mock-db.ts` | Leitura/escrita `.mock-data` |
 | `src/app/api/mock-mode/route.ts` | Listar/ativar cenário global |
 | `src/app/api/mock-mode/login-as/route.ts` | Login direto QA por `userId` |
-| `src/shared/qa/mock-qa-personas.ts` | `MOCK_QA_PERSONAS` (hub + whitelist parcial) |
+| `src/shared/mock-data/mock-user-registry.ts` | **Fonte canônica** `MOCK_USER_REGISTRY` + helpers |
+| `src/shared/qa/mock-qa-personas.ts` | `MOCK_QA_PERSONAS` derivado (`toQaPersonas`) |
 | `src/shared/qa/mock-qa-ui-env.ts` | Flags de exibição do painel |
 | `src/shared/qa/login-prefill.ts` | Chave `sessionStorage` para prefill |
 
@@ -57,17 +58,18 @@ O Mock Mode vive principalmente em `src/shared/ui/mock-mode/` e usa camada de da
 | `src/shared/server/auth.ts` | `hashPassword`, `verifyPassword`, `toPublicUser` |
 | `src/features/auth/domain/access-control.ts` | Capabilities e `requiresAuth` por rota |
 | `src/features/auth/hooks/use-auth-session.ts` | Hook de sessão no cliente |
-| `src/features/auth/data/auth.mock.ts` | `defaultUsers` (seed TypeScript) |
-| `.mock-data/users.json` | Massa runtime (pode ser sobrescrita por cenário) |
+| `src/features/auth/data/auth.mock.ts` | `defaultUsers` derivado de `toHydroUsers()` |
+| `.mock-data/users.json` | Massa runtime derivada de `defaultUsers` (gitignored) |
 
 ### Mock users / personas
 
 | Fonte | Conteúdo |
 |-------|----------|
-| `.mock-data/users.json` | 6 usuários BR com `phoneE164` |
-| `src/features/auth/data/auth.mock.ts` | Espelho TypeScript dos seed users |
-| `src/shared/qa/mock-qa-personas.ts` | 5 personas no hub (sem Mariana) |
-| i18n `mockMode.qaHub.personas.*` | Copy dos cartões no hub |
+| `src/shared/mock-data/mock-user-registry.ts` | 12 usuários autenticados (6 BR + 3 US + 3 ES) + visitante separado |
+| `src/features/auth/data/auth.mock.ts` | `defaultUsers` = `toHydroUsers(registry)` |
+| `.mock-data/users.json` | Runtime derivado; merge com novos ids do registry |
+| `src/shared/qa/mock-qa-personas.ts` | 12 personas hub (`qaHubVisible`) incl. Mariana e US/ES |
+| i18n `mockMode.qaHub.personas.*` | Copy dos cartões no hub (pt-BR, en-US, es) |
 
 ## Regras atuais
 
@@ -102,7 +104,7 @@ Fase 4 endereça login/register orientado a telefone para usuário recorrente.
 
 ### Seed users
 
-Todos os usuários em `users.json` / `defaultUsers` são **BR-only** (`countryCode: +55`). Não há personas demo US/ES no seed (gap Fase 2).
+`defaultUsers` deriva de `MOCK_USER_REGISTRY` (12 autenticados: 6 BR + 3 US + 3 ES). Personas BR são operacionais; US/ES validam locale e dial internacional **sem cargas internacionais** nesta fase. Visitante em `MOCK_PUBLIC_VISITOR` (fora do array).
 
 ### Rotas públicas / privadas
 
@@ -153,10 +155,10 @@ Títulos, descrições e passos do catálogo estão em **pt-BR hardcoded** no TS
 | Risco | Mitigação |
 |-------|-----------|
 | Catálogo grande desatualizado vs. produto | Fases 6–7; manter auditoria junto a PRs de fluxo |
-| Divergência entre `auth.mock.ts`, `users.json`, `MOCK_QA_PERSONAS` | Fase 2 registry único |
+| Hub com 12 cartões pode alongar scroll | Fase 6 menu compacto |
 | Login exige e-mail + telefone confunde QA | Fase 3–4 copy e fluxo |
 | OTP só na API/UI auth, não no menu | Fase 5 |
-| Seed só BR com PhoneInput multi-país | Fase 2 personas US/ES |
+| Personas US/ES sem cargas próprias | Fase futura |
 | Strings hardcoded no catálogo QA | Fase 6 i18n |
 
 ## Próximos passos por fase
@@ -164,7 +166,7 @@ Títulos, descrições e passos do catálogo estão em **pt-BR hardcoded** no TS
 | Fase | Entrega |
 |------|---------|
 | 1 | ✅ Docs + remoção `suggestedActions` + inventário partial/duplicados |
-| 2 | Registry único; Mariana no hub; alinhar seed |
+| 2 | ✅ Registry único; Mariana + US/ES no hub; consumidores derivados |
 | 3 | Simplificar UI/copy login |
 | 4 | Returning user por telefone |
 | 5 | OTP colapsável no menu QA |

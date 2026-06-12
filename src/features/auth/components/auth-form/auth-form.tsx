@@ -26,7 +26,7 @@ import { OtpInput } from '@/shared/components/otp-input';
 import { QA_LOGIN_PREFILL_STORAGE_KEY } from '@/shared/qa/login-prefill';
 import { routeSearchParams } from '@/shared/routing/route-search-params';
 import { intlAppPaths } from '@/shared/routing/app-routes';
-import { defaultUsers } from '../../data/auth.mock';
+import { findSeedPhoneByEmail } from '@/shared/mock-data/mock-user-registry';
 import { login, register } from '../../services/auth.client';
 import type { OtpChallengeResponse, PublicUserRole, RegisterOtpChallengeResponse } from '../../domain/auth.types';
 import { getAuthPhoneCountry } from '../../domain/auth-phone-countries';
@@ -119,16 +119,6 @@ function translateZodIssue(message: string, t: ReturnType<typeof useTranslations
   };
   const key = map[message];
   return key ? t(key) : t('errorValidation');
-}
-
-function findSeedPhoneByEmail(email: string) {
-  const normalized = email.trim().toLowerCase();
-  const found = defaultUsers.find((user) => user.email.toLowerCase() === normalized);
-  if (!found?.phone) return null;
-  return {
-    countryCode: (found.countryCode as AuthDialCode | undefined) ?? '+55',
-    phone: found.phone
-  };
 }
 
 function formatPhoneLabel(countryCode: string, phone: string) {
@@ -234,7 +224,13 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
         const parsed = JSON.parse(raw) as { email?: string; identifier?: string; password?: string };
         const emailOrIdentifier = parsed.email ?? parsed.identifier ?? '';
         if (looksLikeEmail(emailOrIdentifier)) {
-          const seedPhone = findSeedPhoneByEmail(emailOrIdentifier);
+          const seedPhoneRaw = findSeedPhoneByEmail(emailOrIdentifier);
+          const seedPhone = seedPhoneRaw
+            ? {
+                countryCode: (seedPhoneRaw.countryCode as AuthDialCode | undefined) ?? '+55',
+                phone: seedPhoneRaw.phone
+              }
+            : null;
           if (seedPhone) {
             setEmail(emailOrIdentifier.trim().toLowerCase());
             setCountryCode(seedPhone.countryCode);

@@ -2450,6 +2450,15 @@
           "assistantNote": "Cargo Status Assistant: use a cargo where you are the owner (e.g. marketplace scenario). Expected: card with summary, next steps, risks, and mock-ai source when applicable.",
           "feedbackSuccess": "You signed in as Tiala Rocha, approved shipper. Now test your own cargoes and the Cargo Status Assistant."
         },
+        "mariana": {
+          "cardName": "Mariana Tapajós",
+          "represents": "Approved shipper from BioAmazônia Cooperativa (Santarém).",
+          "testsWhat": "Second BR shipper — validate multiple shippers and Tapajós region data.",
+          "validateLine": "Validate login, pt-BR locale, and private shipper routes.",
+          "expectedLine": "Expected: approved shipper with +55 phone and no moderation block.",
+          "assistantNote": "Compare with Tiala: two distinct shippers in the same BR mock.",
+          "feedbackSuccess": "You signed in as Mariana Tapajós, approved shipper. Test shipper flows in the Tapajós region."
+        },
         "joao": {
           "cardName": "João Navegante",
           "represents": "Approved carrier from Navega Norte.",
@@ -2485,6 +2494,60 @@
           "expectedLine": "Expected: full control over demo datasets.",
           "assistantNote": "Admin bypasses assistant scope — useful for quick smoke on any cargo.",
           "feedbackSuccess": "You signed in as administrator. Use mock mode and broad validations."
+        },
+        "emily-hartwell": {
+          "cardName": "Emily Hartwell",
+          "represents": "Approved en-US shipper — Mississippi Logistics Co.",
+          "testsWhat": "en-US locale, +1 dial, and international auth (no US cargoes in this phase).",
+          "validateLine": "Validate +1 PhoneInput, English copy, and US E.164 login.",
+          "expectedLine": "Expected: en-US shipper session on the BR marketplace.",
+          "assistantNote": "International demo persona — operational data remains BR.",
+          "feedbackSuccess": "You signed in as Emily Hartwell (en-US). Validate locale and +1 phone."
+        },
+        "marcus-whitfield": {
+          "cardName": "Marcus Whitfield",
+          "represents": "Approved en-US carrier — Ohio River Freight.",
+          "testsWhat": "en-US carrier with +1 phone and carrier permissions.",
+          "validateLine": "Validate login, en-US locale, and carrier routes.",
+          "expectedLine": "Expected: active carrier without pending moderation.",
+          "assistantNote": "Compare with BR carriers: same cargo mock, different locale.",
+          "feedbackSuccess": "You signed in as Marcus Whitfield (en-US). Test auth and carrier permissions."
+        },
+        "priya-nair": {
+          "cardName": "Priya Nair",
+          "represents": "en-US carrier under moderation — Great Lakes Navigation.",
+          "testsWhat": "Pending carrier with en-US locale and +1 dial.",
+          "validateLine": "Validate unapproved-account blocks in en-US UI.",
+          "expectedLine": "Expected: moderation restrictions like Ana, in en-US locale.",
+          "assistantNote": "US pair of Ana — pending carrier for international QA.",
+          "feedbackSuccess": "You signed in as Priya Nair (en-US moderation). Validate pending restrictions."
+        },
+        "lucia-morales": {
+          "cardName": "Lucía Morales",
+          "represents": "Approved es shipper — Hidrovía Ibérica.",
+          "testsWhat": "es locale, +34 dial, and international auth (no ES cargoes in this phase).",
+          "validateLine": "Validate +34 PhoneInput, Spanish copy, and ES E.164 login.",
+          "expectedLine": "Expected: es shipper session on the BR marketplace.",
+          "assistantNote": "Iberian demo persona — cargo dataset remains BR.",
+          "feedbackSuccess": "You signed in as Lucía Morales (es). Validate locale and +34 phone."
+        },
+        "pablo-ribera": {
+          "cardName": "Pablo Ribera",
+          "represents": "Approved es carrier — Ribera del Ebro Logística.",
+          "testsWhat": "es carrier with +34 phone and carrier permissions.",
+          "validateLine": "Validate login, es locale, and carrier routes.",
+          "expectedLine": "Expected: active carrier without pending moderation.",
+          "assistantNote": "Compare with BR carriers: same mock, es locale.",
+          "feedbackSuccess": "You signed in as Pablo Ribera (es). Test auth and carrier permissions."
+        },
+        "elena-castillo": {
+          "cardName": "Elena Castillo",
+          "represents": "es carrier under moderation — Canal Logística.",
+          "testsWhat": "Pending carrier with es locale and +34 dial.",
+          "validateLine": "Validate unapproved-account blocks in es UI.",
+          "expectedLine": "Expected: moderation restrictions like Ana, in es locale.",
+          "assistantNote": "ES pair of Ana — pending carrier for international QA.",
+          "feedbackSuccess": "You signed in as Elena Castillo (es moderation). Validate pending restrictions."
         }
       }
     },

@@ -2450,6 +2450,15 @@
           "assistantNote": "Cargo Status Assistant: use uma carga em que você é owner (ex.: cenário marketplace). Esperado: card com resumo, próximos passos, riscos e origem mock-ai quando aplicável.",
           "feedbackSuccess": "Você entrou como Tiala Rocha, embarcadora aprovada. Agora teste cargas próprias e o Assistente de Status da Carga."
         },
+        "mariana": {
+          "cardName": "Mariana Tapajós",
+          "represents": "Embarcadora aprovada da BioAmazônia Cooperativa (Santarém).",
+          "testsWhat": "Segunda embarcadora BR — validar múltiplos shippers e dados da região Tapajós.",
+          "validateLine": "Validar login, locale pt-BR e acesso às rotas privadas de embarcador.",
+          "expectedLine": "Esperado: shipper aprovado com telefone +55 e sem bloqueio de moderação.",
+          "assistantNote": "Use para comparar com Tiala: duas embarcadoras distintas no mesmo mock BR.",
+          "feedbackSuccess": "Você entrou como Mariana Tapajós, embarcadora aprovada. Teste fluxos de shipper na região Tapajós."
+        },
         "joao": {
           "cardName": "João Navegante",
           "represents": "Transportador aprovado da Navega Norte.",
@@ -2485,6 +2494,60 @@
           "expectedLine": "Esperado: controle total sobre datasets demo.",
           "assistantNote": "Admin ignora escopo no assistant — útil para smoke rápido em qualquer cargo.",
           "feedbackSuccess": "Você entrou como administrador. Use mock-mode e validações amplas."
+        },
+        "emily-hartwell": {
+          "cardName": "Emily Hartwell",
+          "represents": "Embarcadora aprovada en-US — Mississippi Logistics Co.",
+          "testsWhat": "Locale en-US, dial +1 e auth internacional (sem cargas US nesta fase).",
+          "validateLine": "Validar PhoneInput +1, copy em inglês e login com telefone E.164 US.",
+          "expectedLine": "Esperado: sessão shipper en-US no marketplace BR.",
+          "assistantNote": "Persona de demonstração internacional — dados operacionais continuam BR.",
+          "feedbackSuccess": "Você entrou como Emily Hartwell (en-US). Valide locale e telefone +1."
+        },
+        "marcus-whitfield": {
+          "cardName": "Marcus Whitfield",
+          "represents": "Transportador aprovado en-US — Ohio River Freight.",
+          "testsWhat": "Carrier en-US com telefone +1 e permissões de transportador.",
+          "validateLine": "Validar login, locale en-US e rotas de carrier.",
+          "expectedLine": "Esperado: transportador ativo sem moderação pendente.",
+          "assistantNote": "Comparar com carriers BR: mesmo mock de cargas, locale diferente.",
+          "feedbackSuccess": "Você entrou como Marcus Whitfield (en-US). Teste auth e permissões de carrier."
+        },
+        "priya-nair": {
+          "cardName": "Priya Nair",
+          "represents": "Transportadora en-US em moderação — Great Lakes Navigation.",
+          "testsWhat": "Carrier pendente com locale en-US e dial +1.",
+          "validateLine": "Validar bloqueios por conta não aprovada em UI en-US.",
+          "expectedLine": "Esperado: restrições de moderação como Ana, em locale en-US.",
+          "assistantNote": "Par US de Ana — pending carrier para QA internacional.",
+          "feedbackSuccess": "Você entrou como Priya Nair (moderação en-US). Valide restrições de pending."
+        },
+        "lucia-morales": {
+          "cardName": "Lucía Morales",
+          "represents": "Embarcadora aprovada es — Hidrovía Ibérica.",
+          "testsWhat": "Locale es, dial +34 e auth internacional (sem cargas ES nesta fase).",
+          "validateLine": "Validar PhoneInput +34, copy em espanhol e login E.164 ES.",
+          "expectedLine": "Esperado: sessão shipper es no marketplace BR.",
+          "assistantNote": "Persona de demonstração ibérica — massa de cargas permanece BR.",
+          "feedbackSuccess": "Você entrou como Lucía Morales (es). Valide locale e telefone +34."
+        },
+        "pablo-ribera": {
+          "cardName": "Pablo Ribera",
+          "represents": "Transportista aprobado es — Ribera del Ebro Logística.",
+          "testsWhat": "Carrier es con teléfono +34 y permisos de transportista.",
+          "validateLine": "Validar login, locale es y rutas de carrier.",
+          "expectedLine": "Esperado: transportista activo sin moderación pendiente.",
+          "assistantNote": "Comparar con carriers BR: mismo mock, locale es.",
+          "feedbackSuccess": "Você entrou como Pablo Ribera (es). Teste auth e permissões de carrier."
+        },
+        "elena-castillo": {
+          "cardName": "Elena Castillo",
+          "represents": "Transportista es en moderación — Canal Logística.",
+          "testsWhat": "Carrier pendiente con locale es y dial +34.",
+          "validateLine": "Validar bloqueos por cuenta no aprobada en UI es.",
+          "expectedLine": "Esperado: restricciones de moderación como Ana, en locale es.",
+          "assistantNote": "Par ES de Ana — pending carrier para QA internacional.",
+          "feedbackSuccess": "Você entrou como Elena Castillo (moderación es). Valide restrições de pending."
         }
       }
     },
