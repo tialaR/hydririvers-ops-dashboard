@@ -13,7 +13,7 @@ import {
   shouldBypassPressFeedback,
   type BottomNavProps,
 } from '@/shared/components/bottom-nav';
-import navStyles from '@/shared/components/bottom-nav/BottomNav.module.sass';
+import navStyles from '@/shared/components/bottom-nav/bottom-nav.module.sass';
 
 vi.mock('next-intl', () => ({
   useLocale: () => 'pt-BR',
@@ -259,11 +259,11 @@ describe('BottomNav', () => {
 
   it('implementa pending separado com Link, useLinkStatus e markers nativos', () => {
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
 
@@ -289,19 +289,19 @@ describe('BottomNav', () => {
       'utf8',
     );
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
     const indicatorSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/use-bottom-nav-indicator.ts'),
       'utf8',
     );
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
 
@@ -342,7 +342,7 @@ describe('BottomNav', () => {
     expect(shouldBypassPressFeedback({ metaKey: false, ctrlKey: false, shiftKey: false, altKey: false, button: 0 } as MouseEvent)).toBe(false);
 
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
     expect(itemsSource).toContain('shouldBypassPressFeedback(event)');
@@ -383,7 +383,7 @@ describe('BottomNav', () => {
       />,
     );
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
 
@@ -397,15 +397,15 @@ describe('BottomNav', () => {
 
   it('preview global usa activeCutout glass, icon jump e pending glow no módulo novo', () => {
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
 
@@ -429,7 +429,7 @@ describe('BottomNav', () => {
 
   it('reduced motion desliga transição do activeCutout preview global', () => {
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
 
@@ -508,15 +508,15 @@ describe('BottomNav', () => {
 
   it('stretching state dispara somente quando activeIndex muda', () => {
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const indicatorSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/use-bottom-nav-indicator.ts'),
       'utf8',
     );
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
 
@@ -538,11 +538,11 @@ describe('BottomNav', () => {
 
   it('nav grid permanece estável — morph só no activeGlass', () => {
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
 
@@ -610,11 +610,11 @@ describe('BottomNav', () => {
 
   it('preview global não renderiza pill local — activeCutout é sempre decorativo', () => {
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
 
@@ -629,15 +629,15 @@ describe('BottomNav', () => {
 
   it('arquitetura antiga da pill local não existe — activeCutout global e icon/label no item', () => {
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
     const navModuleSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.module.sass'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.module.sass'),
       'utf8',
     );
 
@@ -666,15 +666,15 @@ describe('BottomNav', () => {
       'utf8',
     );
     const indicatorSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/useBottomNavIndicator.ts'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/use-bottom-nav-indicator.ts'),
       'utf8',
     );
     const itemsSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottomNavItems.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav-items.tsx'),
       'utf8',
     );
     const navSource = readFileSync(
-      resolve(process.cwd(), 'src/shared/components/bottom-nav/BottomNav.tsx'),
+      resolve(process.cwd(), 'src/shared/components/bottom-nav/bottom-nav.tsx'),
       'utf8',
     );
 

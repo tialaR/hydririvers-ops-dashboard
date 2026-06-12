@@ -7,11 +7,11 @@ import {
   useBottomNavReducedMotion,
 } from './bottom-nav-motion';
 import { PENDING_ACTIVE_TIMEOUT_MS } from './bottom-nav-state';
-import { BottomNavItemControl, type BottomNavItem } from './bottomNavItems';
-import { useBottomNavIndicator } from './useBottomNavIndicator';
-import styles from './BottomNav.module.sass';
+import { BottomNavItemControl, type BottomNavItem } from './bottom-nav-items';
+import { useBottomNavIndicator } from './use-bottom-nav-indicator';
+import styles from './bottom-nav.module.sass';
 
-export type { BottomNavItem } from './bottomNavItems';
+export type { BottomNavItem } from './bottom-nav-items';
 
 export type BottomNavClassNames = {
   item: string;

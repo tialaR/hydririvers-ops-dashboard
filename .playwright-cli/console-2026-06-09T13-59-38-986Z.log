@@ -4739,3 +4739,2569 @@ Import traces:
 [194820876ms] [LOG] [Fast Refresh] done in 220ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
 [194823034ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
 [194823162ms] [LOG] [Fast Refresh] done in 231ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[198472224ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[206983061ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[206983276ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[206983281ms] [LOG] [Fast Refresh] done in 106ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208782604ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208786768ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/pt-BR/hy-glass-controls-lab?_rsc=1nkcf:0
+[208789717ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/pt-BR/hy-glass-controls-lab?_rsc=1nkcf:0
+[208789841ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208789842ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208789842ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208789990ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208789990ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208789990ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208790092ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208795446ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795448ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795449ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795540ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795541ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795541ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208795609ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208796144ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796144ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796145ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796265ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208796733ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796733ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796734ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796752ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796753ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796754ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208796848ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208797602ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208797603ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208797603ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208797680ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208797903ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208797993ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208797994ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208797994ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208798014ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208798015ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208798016ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:3272
+[208798103ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208798243ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/pt-BR/hy-glass-controls-lab:0
+[208802966ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_react-dom_0bruynb._.js:13920
+[208803417ms] Error: ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at Object.getCompilationErrors (file:///Users/tialarocha/Desktop/hydririvers-ops-dashboard/node_modules/next/dist/server/dev/hot-reloader-turbopack.js:1186:59)
+    at DevBundlerService.getCompilationError (file:///Users/tialarocha/Desktop/hydririvers-ops-dashboard/node_modules/next/dist/server/lib/dev-bundler-service.js:44:55)
+    at DevServer.getCompilationError (file:///Users/tialarocha/Desktop/hydririvers-ops-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:719:42)
+    at DevServer.findPageComponents (file:///Users/tialarocha/Desktop/hydririvers-ops-dashboard/node_modules/next/dist/server/dev/next-dev-server.js:689:43)
+    at async DevServer.renderErrorToResponseImpl (file:///Users/tialarocha/Desktop/hydririvers-ops-dashboard/node_modules/next/dist/server/base-server.js:1686:30)
+[208803488ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208803984ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208803987ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208803988ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804050ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208804372ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804373ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804373ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804476ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208804749ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804751ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804751ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804867ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804869ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804869ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804869ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804869ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804869ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804870ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804870ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804870ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804990ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208804994ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804995ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208804995ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805006ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805006ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805007ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805113ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208805178ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805179ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805179ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805281ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208805371ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805371ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805375ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805377ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805377ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805378ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805478ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208805735ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805737ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805737ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805740ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805740ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805740ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805893ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805894ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805894ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805899ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805900ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805900ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805973ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805974ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208805974ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208806076ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208807291ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208807292ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208807293ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208807405ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208807494ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208807494ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208807494ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208808542ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:12:1
+Module not found: Can't resolve './BottomNav.module.sass'
+  10 | ... BottomNavItemControl, type B...
+  11 | ... useBottomNavIndicator } from...
+> 12 | ...tyles from './BottomNav.modul...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  13 | ...
+  14 | ...ype { BottomNavItem } from '....
+  15 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208808542ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:10:1
+Module not found: Can't resolve './bottomNavItems'
+   8 | ...ion';
+   9 | ...TIMEOUT_MS } from './bottom-n...
+> 10 | ...ntrol, type BottomNavItem } f...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  11 | ...icator } from './useBottomNav...
+  12 | ...ttomNav.module.sass';
+  13 | ...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208808548ms] [ERROR] ./src/shared/components/bottom-nav/bottom-nav.tsx:11:1
+Module not found: Can't resolve './useBottomNavIndicator'
+   9 | ...CTIVE_TIMEOUT_MS } from './bo...
+  10 | ...ItemControl, type BottomNavIt...
+> 11 | ...NavIndicator } from './useBot...
+     |    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  12 | ... './BottomNav.module.sass';
+  13 | ...
+  14 | ...omNavItem } from './bottomNav...
+
+Import traces:
+  Client Component Browser:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component Browser]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component Browser]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/shared/components/bottom-nav/bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx [Client Component SSR]
+    ./src/shared/layout/admin-chrome/admin-chrome.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Client Component SSR]
+    ./src/shared/layout/locale-shell/locale-shell.tsx [Server Component]
+    ./src/app/[locale]/(product-shell)/layout.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1945
+[208808652ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208814348ms] [LOG] [Fast Refresh] done in 3097ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208820409ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208821781ms] [WARNING] [Fast Refresh] performing full reload because your application had an unrecoverable error @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208824829ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208825949ms] [LOG] [Fast Refresh] done in 1222ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_0u_w_5s._.js:1226
+[208827125ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/pt-BR/hy-glass-controls-lab:0
+[208827913ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208828316ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208828767ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208829113ms] [LOG] [Fast Refresh] done in 447ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208829998ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208832538ms] [LOG] [Fast Refresh] done in 2640ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208833190ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208833446ms] [LOG] [Fast Refresh] done in 358ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208833550ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208833599ms] [LOG] [Fast Refresh] done in 151ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208834920ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208841099ms] [LOG] [Fast Refresh] done in 6276ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208844546ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208845529ms] [LOG] [Fast Refresh] done in 1090ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208845635ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208847181ms] [LOG] [Fast Refresh] done in 1647ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208940676ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[208940745ms] [LOG] [Fast Refresh] done in 173ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209538753ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tXXIbWzaiGJOhC9AjfbTp' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[209539757ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tXXIbWzaiGJOhC9AjfbTp' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[209540761ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tXXIbWzaiGJOhC9AjfbTp' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[209541799ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tXXIbWzaiGJOhC9AjfbTp' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[209542803ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=tXXIbWzaiGJOhC9AjfbTp' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[209548352ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209549425ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/pt-BR/hy-glass-controls-lab:0
+[209550915ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209550979ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209561114ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209562833ms] [LOG] [Fast Refresh] done in 1821ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209563194ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209563433ms] [LOG] [Fast Refresh] done in 341ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209577979ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[209590759ms] [LOG] [Fast Refresh] done in 12888ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210032679ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210033687ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210034707ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210035715ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210036722ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210041735ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=2X5G7raNxsiCAGHy1P_zI' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210047054ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210048014ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:3000/pt-BR/hy-glass-controls-lab:0
+[210048249ms] [INFO] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210048392ms] [LOG] [HMR] connected @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210048605ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210048697ms] [LOG] [Fast Refresh] done in 193ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210050193ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210050231ms] [LOG] [Fast Refresh] done in 140ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210051357ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210051590ms] [LOG] [Fast Refresh] done in 334ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210054298ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210054338ms] [LOG] [Fast Refresh] done in 142ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210061508ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210062919ms] [LOG] [Fast Refresh] done in 1514ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210068275ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210068469ms] [LOG] [Fast Refresh] done in 300ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210075562ms] [LOG] [Fast Refresh] rebuilding @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210075679ms] [LOG] [Fast Refresh] done in 219ms @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_115brz8._.js:2431
+[210263512ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=Mm2bpD8Hq45x_4MEzACvi' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
+[210264514ms] [ERROR] WebSocket connection to 'ws://localhost:3000/_next/webpack-hmr?id=Mm2bpD8Hq45x_4MEzACvi' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://localhost:3000/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13299
