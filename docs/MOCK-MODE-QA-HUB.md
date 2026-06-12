@@ -106,7 +106,11 @@ Ver também [`docs/business-rules.md`](business-rules.md).
 
 ## Visibilidade do painel
 
-`MockMode` (`src/shared/ui/mock-mode/mock-mode.tsx`) retorna `null` quando `isAuthPublicShellPathname(pathname)` — ou seja, em `/login` e `/register`. Em demais rotas do app (com shell), o botão **M** aparece conforme regras de ambiente.
+Montagem: `src/app/[locale]/layout.tsx` renderiza `<MockMode />` quando `isMockQaUiEnabled()` (`NODE_ENV !== 'production'` ou `HYDRORIVERS_FORCE_MOCK_QA_UI=true`).
+
+`MockMode` (`src/shared/ui/mock-mode/mock-mode.tsx`) retorna `null` quando `isAuthPublicShellPathname(pathname)` — ou seja, em `/login` e `/register`. Em demais rotas do app (com shell), o botão **M** aparece conforme regras de ambiente — **incluindo `/cargas`**, sem exigir sessão.
+
+No mobile (≤860px), o FAB fica acima da bottom nav (`mock-mode.module.scss`). Alternativa: sheet de conta no header mobile → **Abrir painel mock / QA** (`admin-chrome.tsx`, evento `hydrorivers:open-mock-panel`).
 
 ## Cargo Status Assistant — como testar por persona
 

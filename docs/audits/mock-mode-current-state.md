@@ -111,6 +111,7 @@ Fase 4 endereça login/register orientado a telefone para usuário recorrente.
 - `/cargas` — `requiresAuth: false` (`access-control.ts`, `cargo-visibility-policy` tier `public`).
 - `/minhas-cargas` — `requiresAuth: true`, capability `view-my-cargoes`.
 - Mock mode oculto em `/login` e `/register` via `isAuthPublicShellPathname`.
+- FAB **M** montado em `src/app/[locale]/layout.tsx` quando `isMockQaUiEnabled()`; visível em `/cargas` sem auth. Mobile: posicionado acima da bottom nav; fallback no sheet de conta (`openMockPanel`).
 
 ## Catálogo QA Assistant — higiene Fase 1
 
