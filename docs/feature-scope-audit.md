@@ -12,10 +12,21 @@ Governança: **Operation Zero Redemoinho** — `docs/agents/AGENTS-ZERO-REDEMOIN
 
 ## Áreas
 
-- `Dashboard` exibe cargas públicas.
-- `Minhas cargas` exibe cargas do usuário logado.
+- **`/cargas`:** vitrine pública (marketplace/aquisição) — `src/features/cargo/mocks/publicCargos.mock.ts`, `getPublicCargos()`.
+- **`/minhas-cargas`:** operação privada do usuário logado — `src/features/cargo/mocks/owned-cargos.mock.ts`, `getMyCargoesForUser()`. Fluxos aprovados: [`docs/product/flows/minhas-cargas-fluxo-embarcador.md`](product/flows/minhas-cargas-fluxo-embarcador.md), [`docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md`](product/flows/minhas-cargas-fluxo-tecnico-embarcador.md).
+- `Dashboard` exibe cargas públicas (resumo), não a carteira privada.
 - `Negociações` não deve duplicar o detalhe de carga.
 - `Perfil` não deve misturar regras de auth.
 - `Notificações` vivem fora do header.
 - `Agente de Cargas` ajuda, mas não decide sozinho.
+
+## Mocks cargo (feature boundary)
+
+| Dataset | Arquivo | Rota |
+|---------|---------|------|
+| Cargas públicas | `cargo/mocks/publicCargos.mock.ts` | `/cargas` |
+| Cargas owned | `cargo/mocks/owned-cargos.mock.ts` | `/minhas-cargas` |
+| Policy visibilidade | `cargo/domain/cargo-visibility-policy.ts` | gates mock public/authenticated/owner |
+
+Shim legado: `my-cargos/mocks/myCargos.mock.ts` reexporta `owned-cargos.mock.ts` — não duplicar massa de dados.
 

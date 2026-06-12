@@ -6,9 +6,9 @@
 
 ## Cargas por navegação
 
-- `Dashboard` mostra apenas cargas públicas.
-- `Minhas cargas` mostra apenas cargas do usuário logado.
-- `Cargas` mostra a lista operacional acessível ao perfil atual.
+- **`/cargas` (Cargas Públicas):** vitrine/marketplace — lista `publicCargosMock` + seed público via `getPublicCargos()`. Qualquer visitante vê oferta; dados sensíveis serão travados em fase posterior.
+- **`/minhas-cargas` (Minhas Cargas):** área operacional privada do embarcador/transportador logado — lista `owned-cargos.mock` via `getMyCargoesForUser()`. Copy e CTAs operacionais (acompanhar, documentos, timeline). **Fluxos aprovados (consultar antes de alterar):** [`docs/product/flows/minhas-cargas-fluxo-embarcador.md`](product/flows/minhas-cargas-fluxo-embarcador.md) (persona) e [`docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md`](product/flows/minhas-cargas-fluxo-tecnico-embarcador.md) (técnico); padrão visual em [`docs/design/hydri-persona-flow-diagram.md`](design/hydri-persona-flow-diagram.md).
+- `Dashboard` mostra apenas cargas públicas (resumo operacional, não carteira privada).
 
 ## Campos usados no mock
 
@@ -18,13 +18,22 @@
 - `visibility`: `public` ou `private`.
 - `publishedAt`: data de publicação quando a carga é pública.
 
-## Regras de visibilidade
+## Regras de visibilidade (policy mock)
 
-- `isPublicCargo(cargo)`: considera públicas as cargas com `visibility === "public"`.
-- `isCargoOwnedByUser(cargo, user)`: considera ownership por `ownerId`, `shipperId`, `carrierId` e vínculos mock de negociação.
-- `getDashboardCargos(cargoes, user)`: retorna apenas cargas públicas.
-- `getMyCargos(cargoes, user, negotiations)`: retorna apenas cargas do usuário atual.
-- `getOperationalCargoes(cargoes, user, negotiations)`: retorna a lista acessível ao perfil.
+Tiers em `src/features/cargo/domain/cargo-visibility-policy.ts`:
+
+| Tier | Uso | Requer auth | Requer ownership |
+|------|-----|-------------|------------------|
+| `public` | `/cargas` vitrine | não | não |
+| `authenticated` | sessão mock ativa | sim | não (privadas ainda bloqueadas) |
+| `owner` | `/minhas-cargas` | sim | sim |
+
+Funções:
+
+- `resolveCargoVisibilityTier(cargo)`: tier mínimo da carga.
+- `canAccessCargoAtTier(cargo, viewer, tier)`: gate mock por rota/intenção.
+- `isPublicCargo(cargo)` (marketplace): cargas na vitrine pública.
+- `getMyCargos(cargoes, user)`: carteira privada do usuário.
 
 ## Perfis
 

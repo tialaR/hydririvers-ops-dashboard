@@ -27,7 +27,11 @@ Emit this block at the start of planning or implementation work:
 - **Assumed scope:** (what you will touch)
 - **Forbidden scope:** (what you will not touch)
 - **Can proceed:** yes | no
+- **Product flow docs read:** yes | no | n/a
+- **Flow image reference used:** yes | no | n/a — if no, explain why not applicable
 ```
+
+When the task touches any item in [Product flow documentation gate](#product-flow-documentation-gate), **Product flow docs read** and **Flow image reference used** are mandatory (not `n/a` without justification).
 
 Do not skip this block internally. If `Can proceed: no`, explain why in **Captain closeout** (🔴 Para agora) and stop — do not ask the user to confirm categories or doc lists.
 
@@ -317,6 +321,7 @@ Cargas list, filters, minhas cargas, cargo mocks and business rules.
 
 - `docs/agents/AGENTS-HYDRI-CONTEXT.md`
 - `docs/agents/AGENTS-CODEBASE-MAP.md`
+- When touching `/minhas-cargas` or related flow: [Product flow documentation gate](#product-flow-documentation-gate)
 
 ### `hydroway-domain`
 
@@ -528,8 +533,52 @@ Business flows, mocks, or UX that must declare value for embarcador, transportad
 - `docs/agents/AGENTS-HYDRI-CONTEXT.md`
 - `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Mocks e domínio**
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Persona/value impact**
+- `docs/design/hydri-persona-flow-diagram.md` — when approved flow images exist for the route
+- When touching Embarcador / Minhas Cargas flow: [Product flow documentation gate](#product-flow-documentation-gate)
 
 **Auto-detect:** classify when the task adds/changes user-facing flows, mocks, roles, or cargo/hydroway domain behavior.
+
+## Product flow documentation gate
+
+**Approved flow images** in `docs/product/flows/` are product/architecture documentation — not lab, not disposable screenshots. Agents must consult them before changing the represented route, flow, or related components.
+
+### When this gate applies
+
+Classify and read product flow docs when the task touches **any** of:
+
+- `/[locale]/minhas-cargas` or `/minhas-cargas`
+- `MyCargoesList`, `MyCargoesListSkeleton`, `CargoDetailLoader`
+- `owned-cargos.mock.ts`, `cargo-visibility-policy.ts`
+- fluxo do Embarcador, minhas cargas, ações operacionais de carga
+- mapa / timeline / documentos / riscos de carga no detalhe privado
+
+### Required reads (Minhas Cargas — Embarcador)
+
+| Document | Purpose |
+|----------|---------|
+| `docs/product/flows/minhas-cargas-fluxo-embarcador.md` | Jornada persona aprovada |
+| `docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md` | Fluxo técnico — auth, loading, mocks, estados, erros |
+| `docs/design/hydri-persona-flow-diagram.md` | Padrão visual e regras de imagens aprovadas |
+
+Reference the paired PNG when planning UI, states, or behavior changes (`./minhas-cargas-fluxo-embarcador.png`, `./minhas-cargas-fluxo-tecnico-embarcador.png`).
+
+### Router declaration (mandatory when gate applies)
+
+In the initial `HYDRI_TASK_ROUTER` block:
+
+- **Product flow docs read:** `yes` after reading the three docs above; `no` only if gate does not apply
+- **Flow image reference used:** `yes` when the image informed the plan/implementation; `no` with reason if docs read but image not applicable (e.g. docs-only path fix with no flow change)
+
+### Captain closeout — 🟢 forbidden when
+
+| Condition | Closeout |
+|-----------|----------|
+| Task alters `/minhas-cargas` or its flow without consulting approved flow docs/images | **🔴 Para agora** |
+| Behavior represented in an approved image changes without updating documentation | **🟡** minimum; **🔴** if user-facing regression |
+| Approved flow image saved under `output/`, `lab/`, or `public/` without authorization | **🔴 Para agora** |
+| Approved flow image treated as disposable screenshot | **🔴 Para agora** |
+
+If the task changes the represented flow, update the `.md` sibling and assess whether the PNG needs a new product approval round.
 
 ## Classification rules
 
@@ -565,6 +614,8 @@ Business flows, mocks, or UX that must declare value for embarcador, transportad
 | Magic number cleanup in component | `magic-number-hygiene`, `styling` or relevant UI category |
 | Move component to shared | `feature-boundary`, `architecture`, `zero-redemoinho-gate` |
 | New business flow / mock persona | `mock-mode`, `persona-value`, `cargo-domain` or `auth` |
+| Minhas Cargas / Embarcador flow or components | `cargo-domain`, `persona-value` — **Product flow documentation gate** |
+| Version approved flow image to repo | `docs-only`, `doc-hygiene`, `persona-value` |
 
 ## Missing doc protocol
 

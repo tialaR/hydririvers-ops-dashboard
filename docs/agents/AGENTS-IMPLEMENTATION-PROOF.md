@@ -187,6 +187,13 @@ Copy this template and fill every field. Omit a field only when truly not applic
 - Personas affected: embarcador | transportador | operador portuário | admin | none
 - Value delivered (1–2 lines in plain language):
 
+**Product flow docs audit (required when task touches route/flow/persona covered by approved images — see `AGENTS-TASK-ROUTER.md` → Product flow documentation gate):**
+- Docs consulted: (list paths) | none — n/a
+- Images referenced: (list PNG paths) | none
+- Flow impact: none | aligned | changed — summary
+- Image update needed: yes | no | n/a
+- Reason: (why image update is or is not needed)
+
 **Core Web Vitals / cognitive cost impact:**
 - Touch targets, scroll, safe-area considered: yes | n/a
 - Motion added/changed: yes | no — respects `prefers-reduced-motion`: yes | n/a

@@ -83,6 +83,16 @@ Before 🟢 on any UI task, pass the gate in `docs/agents/AGENTS-IMPLEMENTATION-
 
 **User dispute** ("continua errado", etc.) → 🔴 visual regression; reopen audit with consumer in scope.
 
+## Product flow documentation (before UI changes)
+
+When UI work touches `/minhas-cargas`, `MyCargoesList`, `CargoDetailLoader`, cargo detail sections (map, timeline, documents, risks), or operational cargo actions — consult approved flow docs **before** implementing:
+
+- `docs/product/flows/minhas-cargas-fluxo-embarcador.md` + `./minhas-cargas-fluxo-embarcador.png`
+- `docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md` + `./minhas-cargas-fluxo-tecnico-embarcador.png`
+- `docs/design/hydri-persona-flow-diagram.md`
+
+Declare in `HYDRI_TASK_ROUTER`: **Product flow docs read** and **Flow image reference used**. Fill **Product flow docs audit** in `HYDRI_IMPLEMENTATION_PROOF` when the gate applies.
+
 ## Related docs
 
 - `docs/agents/AGENTS-ZERO-REDEMOINHO.md` — Operation Zero Redemoinho governance

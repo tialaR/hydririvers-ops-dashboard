@@ -32,6 +32,7 @@ Record **Pattern reuse audit** in `HYDRI_IMPLEMENTATION_PROOF`.
 | Labs | Temporary by default; remove before PR; lab tests on demand only |
 | Glass UI | Auto-detect transparency signals → colored scrollable backdrop required; max 🟡 without it |
 | Docs | Update docs when removing routes/files; no dead references |
+| Approved flow images | Save in `docs/product/flows/` with sibling `.md`; consult before changing represented route/flow; not lab/output/screenshot |
 
 ## Router categories (auto-detect)
 

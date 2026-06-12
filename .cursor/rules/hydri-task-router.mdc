@@ -37,7 +37,11 @@ Ask the user **only** when: scope is ambiguous; a required doc is missing; forbi
 - **Assumed scope:**
 - **Forbidden scope:**
 - **Can proceed:** yes | no
+- **Product flow docs read:** yes | no | n/a
+- **Flow image reference used:** yes | no | n/a — if no, explain why not applicable
 ```
+
+**Product flow documentation gate:** when the task touches `/minhas-cargas`, `MyCargoesList`, `CargoDetailLoader`, `owned-cargos.mock.ts`, `cargo-visibility-policy.ts`, Embarcador flow, minhas cargas, operational cargo actions, or cargo map/timeline/documents/risks — read `docs/product/flows/minhas-cargas-fluxo-embarcador.md`, `docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md`, and `docs/design/hydri-persona-flow-diagram.md`; declare **Product flow docs read** and **Flow image reference used** in the router block. 🟢 forbidden if flow changes without consulting approved docs/images or saving approved images outside `docs/product/flows/`.
 
 ## Categories (full mapping)
 

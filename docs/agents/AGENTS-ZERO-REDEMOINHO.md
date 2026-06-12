@@ -169,6 +169,16 @@ Classificação router: `ui-lab`, `temporary-lab`, `visual-regression`.
 - Remover componente/rota/script → atualizar docs relacionadas no mesmo PR/rodada quando possível.
 - Decisão técnica nova → criar/atualizar **ADR** em `docs/adr/` quando aplicável.
 
+### Imagens aprovadas de fluxo (`Hydri Persona Flow Diagram`)
+
+- Imagens aprovadas de fluxo (persona ou técnico) ficam em **`docs/product/flows/`** com `.md` irmão no mesmo diretório.
+- São **documentação de produto/design** — não lab, não `output/`, não screenshot descartável.
+- Agentes devem **consultar** docs e imagens antes de alterar rota, fluxo ou componentes representados (ver `docs/agents/AGENTS-TASK-ROUTER.md` → **Product flow documentation gate**).
+- Não substituem i18n, testes ou mocks — orientam intenção, hierarquia, estados e valor.
+- Alteração de comportamento representado na imagem → atualizar `.md` e avaliar nova PNG aprovada.
+
+Padrão visual: `docs/design/hydri-persona-flow-diagram.md` → **Imagens aprovadas como fonte documental**.
+
 Classificação router: `doc-hygiene`.
 
 ---
@@ -192,6 +202,10 @@ Toda tarefa de **implementação** deve preencher os campos em `docs/agents/AGEN
 | Docs/scripts apontando para arquivo removido | 🔴 |
 | Invasão de fronteira feature/shared | 🔴 |
 | Fluxo de negócio sem valor para persona | 🟡 mínimo |
+| Tarefa altera `/minhas-cargas` ou fluxo representado sem consultar docs/imagens aprovados | 🔴 |
+| Comportamento da imagem aprovada muda sem atualizar documentação | 🟡 mínimo; 🔴 se regressão visível |
+| Imagem aprovada salva em `output/`, `lab/` ou `public/` sem autorização | 🔴 |
+| Imagem aprovada tratada como screenshot descartável | 🔴 |
 | `lint` / `typecheck` / `check:i18n` não rodados quando aplicável | 🔴 |
 
 ---
