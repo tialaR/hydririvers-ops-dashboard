@@ -2643,6 +2643,19 @@
       "applyingDataset": "Applying dataset…",
       "datasetApplyError": "Could not apply the dataset. Admin role and an environment that allows mock reset are required.",
       "datasetApplyAdminOnly": "Direct dataset apply: admins only. Other roles can copy steps and ask an admin to switch the scenario.",
+      "recommendedJourneyTitle": "Recommended journey",
+      "recommendedJourneyLead": "Follow these scenarios to validate the main flow.",
+      "personaFilterLabel": "Filter by persona",
+      "personaGroups": {
+        "shipper": "Shippers",
+        "carrier": "Carriers",
+        "admin": "Admin",
+        "government": "Government",
+        "visitor": "Visitor",
+        "qa": "QA",
+        "operations": "Operations"
+      },
+      "resetFilters": "Clear filters",
       "journeyFilterLabel": "Filter by journey",
       "filterAll": "All",
       "journeyGroups": {

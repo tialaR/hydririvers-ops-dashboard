@@ -2643,6 +2643,19 @@
       "applyingDataset": "Aplicando dataset…",
       "datasetApplyError": "No se pudo aplicar el dataset. Se requiere rol administrador y un entorno que permita el reinicio del mock.",
       "datasetApplyAdminOnly": "Aplicación directa del dataset: solo administradores. Otros perfiles pueden copiar los pasos y pedir a un admin que cambie el escenario.",
+      "recommendedJourneyTitle": "Jornada recomendada",
+      "recommendedJourneyLead": "Sigue estos escenarios para validar el flujo principal.",
+      "personaFilterLabel": "Filtrar por persona",
+      "personaGroups": {
+        "shipper": "Embarcadores",
+        "carrier": "Transportistas",
+        "admin": "Admin",
+        "government": "Gobierno",
+        "visitor": "Visitante",
+        "qa": "QA",
+        "operations": "Operación"
+      },
+      "resetFilters": "Limpiar filtros",
       "journeyFilterLabel": "Filtrar por jornada",
       "filterAll": "Todas",
       "journeyGroups": {
