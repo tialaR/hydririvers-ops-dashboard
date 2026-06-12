@@ -1,28 +1,30 @@
-# HydroRivers overview reference patch
+# HydroRivers Ops Dashboard
 
-Este pacote substitui os arquivos abaixo para deixar o card de overview de `/[locale]/cargas` no layout idêntico ao mock de referência:
+Dashboard operacional HydroRivers — Next.js 16, React 19, feature-based architecture, mobile-first.
 
-- `src/features/dashboard/components/operations-board/operations-board.tsx`
-- `src/app/globals.scss`
+## Agentes e governança
 
-## Como aplicar
+- **Entrada de agentes:** [`AGENTS.md`](./AGENTS.md)
+- **Task router:** [`docs/agents/AGENTS-TASK-ROUTER.md`](./docs/agents/AGENTS-TASK-ROUTER.md)
+- **Operation Zero Redemoinho** (anti-duplicação, tokens, i18n, naming, labs): [`docs/agents/AGENTS-ZERO-REDEMOINHO.md`](./docs/agents/AGENTS-ZERO-REDEMOINHO.md)
 
-No projeto local:
+## Desenvolvimento local
 
 ```bash
-cd ~/Desktop/hydririvers-ops-dashboard
-unzip -o ~/Downloads/hydririvers-overview-identical-reference-fix.zip -d .
-rm -rf .next
-npm run typecheck
+npm install
 npm run dev
 ```
 
-Abra:
+Preview mobile padrão: `http://localhost:3000/pt-BR/cargas`
 
-- `http://localhost:3000/pt-BR/cargas`
-- `http://localhost:3000/en-US/cargas`
-- `http://localhost:3000/es/cargas`
+## Validação baseline
 
-## Observação
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+```
 
-O zip já está no formato "opção 1": extração direta no root do projeto com sobrescrita dos arquivos.
+## Arquitetura
+
+Ver [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) e ADRs em [`docs/adr/`](./docs/adr/).

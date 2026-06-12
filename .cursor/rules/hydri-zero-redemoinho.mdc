@@ -1,0 +1,50 @@
+---
+description: Operation Zero Redemoinho — architecture gate, tokens, i18n, naming, labs, proof audits
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Operation Zero Redemoinho
+
+Full policy: `docs/agents/AGENTS-ZERO-REDEMOINHO.md`. ADR: `docs/adr/0034-operation-zero-redemoinho-governance.md`.
+
+## Architecture Gate (before implement)
+
+1. Search for existing pattern, component, token, mock, doc, flow, or helper.
+2. **Reuse** if found — do not create parallel local duplicate.
+3. If none exists — create **documented** pattern; ADR when applicable.
+4. No *temporary permanent code*; no unjustified local forks.
+
+Record **Pattern reuse audit** in `HYDRI_IMPLEMENTATION_PROOF`.
+
+## Hard rules (🟢 blocked on violation)
+
+| Area | Rule |
+|------|------|
+| Tokens | New component tokens: **`--hy-<component>-<property>`** only; migrate legacy on touch |
+| Magic numbers | Name recurring durations, offsets, z-index, breakpoints, spacing |
+| i18n | No new hardcoded UI strings; pt-BR + en-US + es; run `check:i18n` |
+| Naming | New paths: **kebab-case**; no new `IconButton.tsx`-style files |
+| Sass | New component styles: **`.module.sass`**; no `globals.scss` / `!important` for features |
+| Components | Dumb UI; logic in hooks; no `querySelector` / `document.documentElement` for local vars |
+| Feature/shared | Feature components stay in feature; shared only with reuse proof |
+| Labs | Temporary by default; remove before PR; lab tests on demand only |
+| Glass UI | Auto-detect transparency signals → colored scrollable backdrop required; max 🟡 without it |
+| Docs | Update docs when removing routes/files; no dead references |
+
+## Router categories (auto-detect)
+
+Add when applicable: `zero-redemoinho-gate`, `magic-number-hygiene`, `doc-hygiene`, `feature-boundary`, `glass-ui`, plus existing `naming-hygiene`, `token-hygiene`, `i18n`, `ui-lab`, `temporary-lab`, `mock-mode`.
+
+## Proof (implementation tasks)
+
+Fill **Operation Zero Redemoinho proof fields** in `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` — pattern reuse, token, magic number, i18n, kebab-case, sass module, dead code/docs, feature/shared, mock/domain, persona/value, CWV/cognitive cost, tests/lab cost.
+
+## Validation
+
+```bash
+npm run lint
+npm run typecheck
+npm run check:i18n
+```

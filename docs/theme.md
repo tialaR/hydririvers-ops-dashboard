@@ -22,6 +22,10 @@ Alguns componentes mobile mantêm tokens próprios até convergência com DS v2:
 
 ## Regras
 
+- **Tokens de componente (novos ou tocados):** prefixo obrigatório **`--hy-*`**, formato **`--hy-<componente>-<propriedade>`** (ex.: `--hy-icon-button-size`, `--hy-bottom-nav-height`). Migrar legado (ex. `--bn-*`) quando seguro ao tocar o componente.
+- **Proibido:** valor visual recorrente solto (hex, px, ms, blur, opacity) quando existe ou deveria existir token `--hy-*`.
+- **Paleta global:** `--hx-*` em `globals` / theme — distinto de tokens de componente; novos tokens **de componente** sempre `--hy-*`.
+- **Operation Zero Redemoinho:** ver `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Tokens obrigatórios**.
 - **Padrão inicial (sem cookie):** light — ver `resolveServerTheme` e layout `[locale]`.
 - Dark mode permanece disponível via toggle; preferência salva em cookie/localStorage.
 - Light mode precisa continuar legível.

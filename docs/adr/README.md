@@ -45,6 +45,7 @@ Esta pasta reúne decisões arquiteturais reais do projeto, priorizando o que j�
 - [0014 - Form Validation with Zod and React Hook Form](./0014-form-validation-zod-react-hook-form.md)
 - [0015 - Estratégia de validação e testes para mudanças críticas](./0015-validation-and-test-strategy.md)
 - [0029 - Dados mock fictícios e determinísticos](./0029-mock-data-fictional-deterministic.md)
+- [0034 - Operation Zero Redemoinho — governança contra padrões paralelos](./0034-operation-zero-redemoinho-governance.md)
 
 ## Mapa hidroviário (desktop expanded V2)
 

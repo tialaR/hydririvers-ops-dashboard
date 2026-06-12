@@ -9,6 +9,8 @@ Use the Hydri Product & Engineering Orchestrator.
 
 Before editing code, classify the task: audit, component/UI, visual tuning, behavior bug, patch/ZIP or documentation.
 
+**Operation Zero Redemoinho:** before creating anything, run Architecture Gate — search existing pattern/component/token/mock/doc; reuse or document. Read `docs/agents/AGENTS-ZERO-REDEMOINHO.md`. No parallel UI/token/mock/doc patterns.
+
 Do not patch before diagnosis is closed. Do not generate charts or prose reports when the task is to create/fix code. Preserve mobile/desktop separation, next-intl routes, mock-mode and CSS Modules. Prefer `.module.sass` for touched/created component styles. Do not install dependencies without approval.
 
 For UI mobile, preview `/pt-BR/cargas`. For code changes, run:

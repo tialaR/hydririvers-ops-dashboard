@@ -22,12 +22,37 @@ Mobile-first chrome and interaction standards. **Architecture rules below apply 
 - **Refs and CSS variables first** — prefer React refs and scoped CSS variables over `querySelector` or `document.documentElement` tweaks.
 - **Accessibility** — preserve landmarks, labels, focus order, keyboard support, and meaningful semantics after refactors.
 
-## File and folder naming
+## File and folder naming (kebab-case — mandatory)
 
-- **New** paths: **kebab-case** (`bottom-nav/`, `filter-sheet.tsx`, `use-filter-sheet.ts`).
-- **Touched** paths: rename to kebab-case only when **small and safe** (few imports, no route or i18n breakage).
-- **No mass renames** without explicit user approval.
-- **React component names** may remain **PascalCase** in code (`export function BottomNav`) even when the file is `bottom-nav.tsx`.
+**Scope:** components, hooks, helpers, services, styles, tests, new technical docs, and folders under `src/features/` and `src/shared/`.
+
+| Rule | Policy |
+|------|--------|
+| **New paths** | **Mandatory kebab-case** — `bottom-nav/`, `filter-sheet.tsx`, `use-filter-sheet.ts`, `icon-button.module.sass`. |
+| **Touched paths** | If a file or folder is **not** kebab-case, **migrate to kebab-case when safe** (update imports, barrels, tests, docs that cite paths; run typecheck). |
+| **Unsafe migration** | Explain why not migrated; open a clear follow-up; **do not** create new files outside the pattern. |
+| **Mass renames** | Forbidden without explicit user approval. |
+| **React exports** | May remain **PascalCase** in code (`export function BottomNav`) even when the file is `bottom-nav.tsx`. |
+| **Generated files** | Tool-generated paths may be documented exceptions. |
+
+**Examples:**
+
+| Before | After |
+|--------|-------|
+| `IconButton.tsx` | `icon-button.tsx` |
+| `IconButton.module.sass` | `icon-button.module.sass` |
+| `BottomGlassMenuLight.tsx` | `bottom-glass-menu-light.tsx` |
+
+### Prohibition of new legacy naming
+
+Do **not** create new production paths named `legacy`, `v2`, `dev-v2`, `new`, `old`, or `tmp` (except disposable lab — see **UI Visual Lab**).
+
+| Pattern | Allowed when |
+|---------|--------------|
+| `tmp-*` subroute or file | Disposable **temporary lab** only — **must be removed before commit/PR** |
+| `legacy`, `v2`, `old`, `new` | **Never** for new production code |
+
+Production naming must follow Hydri patterns: **`hy-*`**, **`--hy-*`**, **kebab-case** file paths.
 
 ## Interaction
 
@@ -132,31 +157,46 @@ Full gate rules: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Visual Accep
 
 ## UI Visual Lab (official policy)
 
-**Purpose:** avoid false-positive visual validation on complex components. Any UI with an external visual reference or sensitive micro-interaction must be validated in the lab **before** landing on real product routes (e.g. `/cargas`).
+**Purpose:** temporary visual validation for components with external references or sensitive micro-interactions. The lab is a **disposable validation tool by default**, not a permanent area of the application.
 
-### Route and scope
+### Default: temporary lab
 
 | Rule | Policy |
 |------|--------|
-| **Base route** | `/[locale]/hy-ui-lab` — fixed internal visual QA and living component documentation. **Not product.** |
+| **Default lifecycle** | Lab exists **only for validation** — remove after the component is validated and production implementation is **approved**. |
+| **No dead code** | Labs must **not** remain in the app as unused routes, reference components, or styles after the round closes. |
+| **Permanent showcase** | Allowed **only** with **explicit user authorization**. Document reason and scope in proof or a permanent policy doc. |
+| **Naming** | Temporary labs use clear disposable naming (`tmp-*` subroute prefix or equivalent) or are removed before commit/PR. |
+| **Base route** | `/[locale]/hy-ui-lab` — internal visual QA only. **Not product.** |
 | **Product navigation** | Lab routes **must not** appear in BottomNav, menus, or any real product chrome. |
 | **Product isolation** | Lab must **not** alter mocks, auth, real routes, or product data. |
-| **Persistence** | Official labs are **not** deleted after validation — they remain regression fixtures and reference docs. |
-| **Temporary labs** | Use subroute prefix `tmp-*` (e.g. `/hy-ui-lab/tmp-glass-experiment`). Remove on the **same branch** before PR. |
 
-### Official component subroutes
+### Lab cleanup (mandatory after approved implementation)
 
-Each complex visual component may have a dedicated lab page:
+When the component is validated and the authorized production variant is applied:
 
-| Subroute | Component |
-|----------|-----------|
-| `/[locale]/hy-ui-lab/icon-button` | IconButton / glass controls |
-| `/[locale]/hy-ui-lab/bottom-nav` | Bottom navigation |
-| `/[locale]/hy-ui-lab/search-field` | Search field |
-| `/[locale]/hy-ui-lab/chips` | Chips |
-| `/[locale]/hy-ui-lab/bottom-sheet` | Bottom sheet |
+1. **Remove** temporary lab subroute(s).
+2. **Remove** temporary reference/proposal components.
+3. **Remove** lab-only style files.
+4. **Remove** unversioned screenshots/output from the working tree under `output/ui-lab/`, `output/playwright/`, `.playwright-qa/` when they are lab artifacts (these paths are not committed).
+5. **Remove or archive** temporary docs that are not permanent policy.
+6. **Keep** only useful documentation for the approved component (e.g. `docs/design/<component>.md`) when it adds lasting value.
 
-Add new official subroutes only when a component needs a persistent visual gate; prefer extending an existing lab over one-off pages.
+If the user explicitly authorizes a **permanent internal showcase**, document authorization, scope, and maintenance owner in proof — do not treat it as default.
+
+### Lab tests (on demand — not by default)
+
+| Rule | Policy |
+|------|--------|
+| **Default** | Do **not** create versioned lab/visual tests automatically on every UI task. |
+| **Create a lab test only when** | User explicitly requests it; full visual validation flow requires it; integration test is necessary; high visual regression risk; component is global/reusable **and** user approves CI cost. |
+| **Before suggesting a test** | Explain cost/benefit; ask for authorization if not clearly requested. |
+| **Simple lab rounds** | May use manual QA or **ad hoc Playwright** (screenshots under `output/ui-lab/`) without adding a permanent test file. |
+| **CI cost** | Main pipeline must not slow down because of disposable lab tests. |
+
+Existing versioned visual specs (e.g. for components already in CI) may remain until explicitly retired — new specs follow the rules above.
+
+### Route and scope (during validation)
 
 ### Literal references vs production
 
@@ -167,7 +207,7 @@ Add new official subroutes only when a component needs a persistent visual gate;
 ### Mandatory workflow (components with visual reference)
 
 ```
-lab automático → gate visual → menu de decisão → autorização curta → implementar variante autorizada → revalidar lab + rota real
+lab automático → gate visual → menu de decisão → autorização curta → implementar variante autorizada → limpar lab → revalidar rota real
 ```
 
 **Applies when:** task is `visual-regression`, `mobile-ui`, `styling`, or component/UI with an external visual reference — use UI Visual Lab when applicable (see `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**).
@@ -198,7 +238,7 @@ Ao terminar a fase de lab, o agente **deve** entregar o bloco **Menu de decisão
 
 #### Phase 3 — Após autorização
 
-Somente depois de autorização curta ou completa: implementar **uma** variante, não alterar referência literal, re-rodar lab gate, validar rota real, abrir lab + rota real, parar antes de commit.
+Somente depois de autorização curta ou completa: implementar **uma** variante, não alterar referência literal, re-rodar gate se lab ainda existir, validar rota real, **limpar lab temporário** (ver **Lab cleanup**), abrir rota real, parar antes de commit.
 
 ### Explicit authorization for production implementation (mandatory)
 
@@ -217,7 +257,7 @@ Somente depois de autorização curta ou completa: implementar **uma** variante,
 | 9 | When a **lab-only** task finishes, the agent **must** open the lab route in the browser automatically when the environment allows. |
 | 10 | When an **authorized implementation** task finishes, the agent **must** open automatically: the component **lab route** and the **real affected route** (e.g. `/pt-BR/cargas`). |
 | 11 | If the environment cannot open a browser, the agent **must** deliver the **exact commands** (URL + viewport when relevant) for the user to run. |
-| 12 | Captain closeout **🟢 Pode seguir** on **authorized visual implementation** is allowed **only** when: the **approved variant** was implemented; **lab gate PASS**; **real consumer route PASS**; browser/preview opened **or** exact command delivered; **evidence saved** under `output/ui-lab/<component>/` (or cited equivalent). |
+| 12 | Captain closeout **🟢 Pode seguir** on **authorized visual implementation** is allowed **only** when: the **approved variant** was implemented; visual gate **PASS**; **real consumer route PASS**; **temporary lab removed** (or permanent lab explicitly authorized); browser/preview opened **or** exact command delivered; **evidence saved** under `output/ui-lab/<component>/` when used (or cited equivalent). |
 
 ### Transparent / glass / light-mode validation (mandatory)
 
@@ -332,14 +372,15 @@ After **authorized** production work, also open the real consumer route (e.g. `o
 | Explore / lab | Create lab, references, variants, Playwright gate, evidence | Touch production component or consumers |
 | Present options | Show PASS/FAIL matrix, screenshots, variant names | Pick a winner or merge variants into production |
 | Await authorization | Summarize options; cite lab URL and evidence paths | Assume silence or "looks good" is approval |
-| Authorized implement | Apply **one** approved variant to authorized scope only | Change literal reference; apply other variants; expand scope beyond authorization |
+| Authorized implement | Apply **one** approved variant to authorized scope only; **clean up temporary lab** | Change literal reference; apply other variants; expand scope; leave validated tmp lab in tree |
 | Close | Open lab + real route (or deliver commands); save evidence; run full validation | Close 🟢 without lab + consumer + evidence + preview |
 
 ### Playwright evidence
 
-- Save screenshots and reports under `output/ui-lab/<component>/` (or equivalent path cited in the spec).
-- Reports must include PASS/FAIL per viewport and essential state.
+- Save ad hoc screenshots and reports under `output/ui-lab/<component>/` (not versioned; remove from working tree when lab is cleaned up).
+- Reports should include PASS/FAIL per viewport and essential state when a gate is run.
 - Three mobile widths required when the component ships on mobile: 360×740, 390×844, 430×932.
+- Prefer ad hoc Playwright over new versioned test files unless [Lab tests (on demand)](#lab-tests-on-demand--not-by-default) criteria apply.
 
 ### Closeout coupling
 
@@ -353,7 +394,7 @@ Captain closeout **🟢 Pode seguir** on visual UI work requires **all** of:
 
 **Lab-only delivery** → 🟢 only if scope was lab-only, gate + evidence are complete, and lab route was opened or command delivered. **No authorization required** for lab-only.
 
-**Authorized production implementation** → 🟢 only when rules 1–5 above are satisfied. Skipping lab when an official lab exists → **🟡** minimum. Production change without authorization → **🔴 Para agora**.
+**Authorized production implementation** → 🟢 only when rules 1–5 above are satisfied **and** temporary lab is removed (or permanent lab explicitly authorized). Skipping lab when validation requires it → **🟡** minimum. Production change without authorization → **🔴 Para agora**. Validated temporary lab left in code → **🔴 Para agora**.
 
 Full gate rules: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Visual Acceptance Gate** and **UI Visual Lab closeout**.
 
@@ -361,10 +402,11 @@ Full gate rules: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Visual Accep
 
 Do **not** land DevTools literal sizing (e.g. global **76px** shell) on production routes first.
 
-1. **Lab route:** `/[locale]/hy-ui-lab/icon-button` — `ReferenceIconButton` (literal) beside production `IconButton`.
+1. **Lab route (temporary):** e.g. `/[locale]/hy-ui-lab/tmp-icon-button` or `/hy-ui-lab/icon-button` during validation — `ReferenceIconButton` (literal) beside production `IconButton`.
 2. **States:** idle, pressed, release, focus, scroll background — deterministic rows for screenshots.
-3. **Playwright:** `tests/visual/icon-button-glass.visual.spec.ts` → `output/ui-lab/icon-button/` + `report.md` (PASS/FAIL).
+3. **Evidence:** ad hoc Playwright or manual capture → `output/ui-lab/icon-button/` + optional `report.md` (PASS/FAIL). Versioned spec only if user approves CI cost.
 4. **Compare physics** (blur, glow, press/release, focus) — **not** production width = reference width; log scale delta separately.
+5. **After approved implement:** remove temporary lab artifacts per **Lab cleanup**.
 
 See `docs/design/icon-button-glass.md` → **Visual Lab Gate**.
 
@@ -388,8 +430,9 @@ Captain closeout **🟢 is forbidden** when:
 8. User gave a visual reference but no comparison was done.
 9. Screenshots/video contradict the claim.
 10. Any anti-false-green phrase appears without visual disproof (see proof doc).
-11. Official **UI Visual Lab** exists for the component but lab gate was skipped, failed, or has no evidence in `output/ui-lab/<component>/`.
+11. Official **UI Visual Lab** was required but skipped, failed, or has no evidence — or validated **temporary lab** was left in code without permanent authorization.
 12. Lab passed but real consumer route was not validated perceptually.
+13. Lab test added without explicit request/justification when not meeting [Lab tests](#lab-tests-on-demand--not-by-default) criteria.
 
 Use **🟡** or **🔴** and name the exact blocker.
 
@@ -416,12 +459,19 @@ Use **🟡** or **🔴** and name the exact blocker.
 
 Treat as **🔴 visual regression**: reopen audit, include real consumer in scope, require visual root cause — do not defend prior technical-only proof.
 
-## Design tokens (`--hy-*`)
+## Design tokens (`--hy-*` — mandatory)
 
-- **New UI tokens** must use the `--hy-*` prefix.
-- **Component tokens** follow `--hy-<component>-<property>` (examples: `--hy-bottom-nav-height`, `--hy-bottom-nav-glass-background`, `--hy-bottom-nav-motion-icon-jump-duration`).
-- **Legacy tokens** outside this pattern (e.g. BottomNav `--bn-*`) stay until a **separate, safe migration** — rename progressively when touching related code, not in bulk drive-by refactors.
-- **BottomNav target namespace:** `--hy-bottom-nav-*` when those tokens are migrated.
+| Rule | Policy |
+|------|--------|
+| **New tokens** | **Mandatory** `--hy-*` prefix. |
+| **Component shape** | `--hy-<component>-<property>` (e.g. `--hy-icon-button-size`, `--hy-bottom-nav-height`, `--hy-search-field-surface`). |
+| **Touched legacy tokens** | Migrate to `--hy-*` when safe (update definition + all usages; avoid unnecessary duplicate aliases; validate visually when UI-affecting). |
+| **Unsafe migration** | Document as follow-up; **do not** create new tokens outside the pattern. |
+| **Bulk rename** | Forbidden in unrelated drive-by refactors. |
+
+**Examples:** `--hy-icon-button-glass-background`, `--hy-bottom-nav-glass-background`, `--hy-bottom-nav-motion-icon-jump-duration`.
+
+**Legacy tokens** outside this pattern (e.g. BottomNav `--bn-*`, theme `--hx-*` for global palette) remain until touched — then migrate progressively to `--hy-<component>-*` for component-scoped tokens.
 
 ## Styling
 

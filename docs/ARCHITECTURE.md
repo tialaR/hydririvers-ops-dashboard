@@ -1,5 +1,9 @@
 # HydroRivers — arquitetura e contexto de produto
 
+## Governança arquitetural
+
+**Operation Zero Redemoinho** — antes de criar padrão paralelo, buscar e reutilizar o existente; tokens `--hy-*`; kebab-case; componentes burros; fronteiras feature/shared rígidas. Documento canônico: `docs/agents/AGENTS-ZERO-REDEMOINHO.md`. ADR: `docs/adr/0034-operation-zero-redemoinho-governance.md`.
+
 ## Nível atual da aplicação
 
 A aplicação está no nível de **MVP transacional demonstrável**. Ela simula cadastro, login, publicação de cargas, filtros, propostas, negociação, rastreio e valor governamental com mock server-side. Ainda não é produção real porque não tem banco transacional, autorização profunda, auditoria, integrações oficiais ou rastreio em tempo real.
