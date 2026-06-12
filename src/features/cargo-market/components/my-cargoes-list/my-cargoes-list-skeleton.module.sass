@@ -13,49 +13,75 @@
 .summaryGrid
   display: grid
   grid-template-columns: repeat(2, minmax(0, 1fr))
-  gap: var(--hy-my-cargoes-skeleton-grid-gap, 0.75rem)
+  gap: var(--hy-my-cargoes-skeleton-grid-gap, 0.625rem)
 
-  @media (min-width: 640px)
+  @media (min-width: 1024px)
     grid-template-columns: repeat(4, minmax(0, 1fr))
 
-.summaryCard
-  height: var(--hy-my-cargoes-skeleton-summary-card-height, 5.5rem)
-  border-radius: var(--hy-my-cargoes-skeleton-card-radius, 1rem)
+.summaryMetric
+  height: var(--hy-my-cargoes-skeleton-summary-metric-height, 4.25rem)
+  border-radius: var(--hy-my-cargoes-skeleton-card-radius, 0.875rem)
   background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
   animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
 
 .cardList
   display: grid
-  gap: var(--hy-my-cargoes-skeleton-card-gap, 0.85rem)
+  gap: var(--hy-my-cargoes-skeleton-card-gap, 0.75rem)
 
 .card
   display: grid
-  gap: var(--hy-my-cargoes-skeleton-card-inner-gap, 0.65rem)
-  padding: var(--hy-my-cargoes-skeleton-card-padding, 1rem)
+  gap: var(--hy-my-cargoes-skeleton-card-inner-gap, 0.55rem)
+  min-height: var(--hy-owned-cargo-card-height-compact, 9.5rem)
+  padding: var(--hy-my-cargoes-skeleton-card-padding, 0.85rem 0.9rem)
   border-radius: var(--hy-my-cargoes-skeleton-card-radius, 1rem)
   background: var(--hy-my-cargoes-skeleton-card-surface, rgba(7, 17, 14, 0.06))
   animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
 
-.cardTitle
-  height: var(--hy-my-cargoes-skeleton-title-height, 1.1rem)
-  width: min(100%, var(--hy-my-cargoes-skeleton-title-width, 70%))
-  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
-
-.cardMetaRow
+.cardHeader
   display: flex
   gap: var(--hy-my-cargoes-skeleton-meta-gap, 0.5rem)
 
-.cardMeta
+.chip
+  width: var(--hy-my-cargoes-skeleton-chip-width, 4.5rem)
+  height: var(--hy-my-cargoes-skeleton-chip-height, 1.375rem)
+  border-radius: 999px
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
+
+.chipWide
   flex: 1
-  height: var(--hy-my-cargoes-skeleton-meta-height, 0.85rem)
+  max-width: var(--hy-my-cargoes-skeleton-chip-wide-max, 7rem)
+  height: var(--hy-my-cargoes-skeleton-chip-height, 1.375rem)
+  border-radius: 999px
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+
+.cardCode
+  height: var(--hy-my-cargoes-skeleton-code-height, 0.75rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-code-width, 6rem))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
   background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
 
-.cardPanel
-  height: var(--hy-my-cargoes-skeleton-panel-height, 2.75rem)
-  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.75rem)
+.cardTitle
+  height: var(--hy-my-cargoes-skeleton-title-height, 1rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-title-width, 72%))
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
+
+.cardRoute
+  height: var(--hy-my-cargoes-skeleton-route-height, 0.85rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-route-width, 88%))
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
   background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.07))
+
+.cardProgress
+  height: var(--hy-my-cargoes-skeleton-progress-height, 1.5rem)
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.07))
+
+.cardFooter
+  height: var(--hy-my-cargoes-skeleton-footer-height, 0.85rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-footer-width, 40%))
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
 
 @keyframes my-cargoes-skeleton-pulse
   0%, 100%
@@ -65,6 +91,6 @@
 
 @media (prefers-reduced-motion: reduce)
   .summaryRow,
-  .summaryCard,
+  .summaryMetric,
   .card
     animation: none
