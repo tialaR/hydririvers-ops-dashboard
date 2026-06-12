@@ -37,7 +37,10 @@ export function resolveMobilePageTitleKey(normalizedPathname: string): MobilePag
     return 'nav.cargoes';
   }
 
-  if (normalizedPathname === intlAppPaths.cargos.myCargos) {
+  if (
+    normalizedPathname === intlAppPaths.cargos.myCargos
+    || normalizedPathname.startsWith(`${intlAppPaths.cargos.myCargos}/`)
+  ) {
     return 'nav.myCargoes';
   }
 
@@ -128,6 +131,13 @@ export function resolveMobileBottomNavActiveId(normalizedPathname: string): stri
     || normalizedPathname.startsWith(`${intlAppPaths.cargos.marketplace}/`)
   ) {
     return 'cargos';
+  }
+
+  if (
+    normalizedPathname === intlAppPaths.cargos.myCargos
+    || normalizedPathname.startsWith(`${intlAppPaths.cargos.myCargos}/`)
+  ) {
+    return 'dashboard';
   }
 
   if (

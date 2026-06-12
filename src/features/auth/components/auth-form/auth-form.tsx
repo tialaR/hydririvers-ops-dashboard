@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ClipboardEvent } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import {
@@ -12,7 +12,6 @@ import {
   EyeOff,
   LockKeyhole,
   Mail,
-  ShieldCheck,
   ShipWheel,
   UserRound,
   Waves
@@ -29,12 +28,11 @@ import { intlAppPaths } from '@/shared/routing/app-routes';
 import { findSeedPhoneByEmail } from '@/shared/mock-data/mock-user-registry';
 import { login, register } from '../../services/auth.client';
 import type { OtpChallengeResponse, PublicUserRole, RegisterOtpChallengeResponse } from '../../domain/auth.types';
-import { getAuthPhoneCountry } from '../../domain/auth-phone-countries';
 import type { AuthDialCode } from './auth-dial-options';
 import { loginCredentialsSchema, otpCodeSchema, registerSchema } from '../../domain/auth-schemas';
 import { buildPhoneE164, looksLikeEmail, normalizePhoneDigits } from '../../domain/auth-normalization';
 import { PhoneInput } from './phone-input';
-import styles from './auth-form.module.scss';
+import styles from './auth-form.module.sass';
 
 function resolvePostLoginHref(nextParam: string | null, locale: string): string {
   const fallback = intlAppPaths.dashboard.home;
@@ -126,6 +124,35 @@ function formatPhoneLabel(countryCode: string, phone: string) {
   return `${countryCode} ${national}`.trim();
 }
 
+function fieldHintId(field: string) {
+  return `auth-field-hint-${field}`;
+}
+
+function FieldFeedback({
+  field,
+  error,
+  hint
+}: {
+  field: string;
+  error?: string;
+  hint: string;
+}) {
+  const hintId = fieldHintId(field);
+  if (error) {
+    return (
+      <p className={styles.fieldIssue} id={hintId} role="alert">
+        {error}
+      </p>
+    );
+  }
+
+  return (
+    <p className={styles.srOnly} id={hintId}>
+      {hint}
+    </p>
+  );
+}
+
 export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps) {
   const t = useTranslations('auth');
   const locale = useLocale();
@@ -162,6 +189,7 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
 
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const roleMenuRef = useRef<HTMLDivElement>(null);
+  const roleListboxId = useId();
   const registerRedirectRef = useRef(false);
   const loginFromRegisterPhoneRef = useRef(false);
   const completionTimeoutRef = useRef<number | null>(null);
@@ -202,16 +230,6 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
     [email, countryCode, phoneNormalized, phoneE164, password]
   );
 
-  const selectedCountry = useMemo(() => getAuthPhoneCountry(countryCode), [countryCode]);
-  const isEmailValid = useMemo(() => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()), [email]);
-  const isPasswordValid = useMemo(() => password.length >= 8, [password]);
-  const isFullNameValid = useMemo(() => fullName.trim().split(/\s+/).filter(Boolean).length >= 2, [fullName]);
-  const isPhoneValid = useMemo(() => {
-    if (!selectedCountry) return false;
-    return phoneNormalized.length === selectedCountry.mobileDigits;
-  }, [selectedCountry, phoneNormalized]);
-  const isLoginReady = isEmailValid && isPasswordValid && isPhoneValid;
-  const isRegisterReady = isFullNameValid && Boolean(role) && isEmailValid && isPasswordValid && isPhoneValid;
   const isOtpReady = useMemo(() => otpCodeSchema.safeParse(otp.replace(/\D/g, '')).success, [otp]);
   const phoneLabel = formatPhoneLabel(countryCode, phone);
   useEffect(() => {
@@ -494,12 +512,18 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
 
   async function submitOtp() {
     if (!isOtpReady) {
+      setFieldErrors({ otp: t('otpInvalid') });
       setError(t('otpInvalid'));
       return;
     }
 
     setPending(true);
     clearInlineMessages();
+    setFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next.otp;
+      return next;
+    });
     try {
       if (mode === 'login') {
         const result = await login({
@@ -599,13 +623,7 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
     }
   }
 
-  const primaryDisabled = completedMode !== null
-    ? false
-    : otpStage
-      ? pending || !isOtpReady
-      : mode === 'login'
-        ? pending || !isLoginReady
-        : pending || !isRegisterReady;
+  const primaryDisabled = completedMode !== null ? false : pending;
 
   return (
     <section className={styles.shell}>
@@ -624,9 +642,17 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
             <span className={styles.brandTagline}>{t('authShellTagline')}</span>
           </div>
         </div>
-        <p className={styles.eyebrow}>{eyebrow}</p>
+        {!completedMode ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
         <h1>{title}</h1>
-        <span>{description}</span>
+        {!completedMode ? <p className={styles.lead}>{description}</p> : null}
+
+        {!otpStage && !completedMode ? (
+          <details className={styles.mockHelp}>
+            <summary className={styles.mockHelpSummary}>{t('mockHelpSummary')}</summary>
+            <p className={styles.mockHelpBody}>{t('mockHelpBody')}</p>
+            <p className={styles.mockHelpNote}>{t('mockMenuHint')}</p>
+          </details>
+        ) : null}
 
         <form className={styles.form} onSubmit={onSubmit} noValidate>
           {completedMode ? (
@@ -642,169 +668,154 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
           ) : null}
 
           {!otpStage && !completedMode && mode === 'register' ? (
-            <>
-              <label className={styles.field}>
-                <span>{t('name')}</span>
-                <div>
-                  <UserRound size={18} aria-hidden />
-                  <input
-                    name="fullName"
-                    autoComplete="name"
-                    placeholder={t('namePlaceholder')}
-                    value={fullName}
-                    onChange={(event) => {
-                      setFullName(event.target.value);
-                      clearFieldError('fullName');
-                    }}
-                  />
-                </div>
-                {fieldErrors.fullName ? <p className={styles.fieldIssue}>{fieldErrors.fullName}</p> : <p className={styles.fieldHint}>{t('nameHint')}</p>}
-              </label>
-
-              <label className={styles.field}>
-                <span>{t('email')}</span>
-                <div>
-                  <Mail size={18} aria-hidden />
-                  <input
-                    name="email"
-                    type="email"
-                    autoComplete="email"
-                    placeholder={t('emailPlaceholder')}
-                    value={email}
-                    onChange={(event) => {
-                      setEmail(event.target.value);
-                      clearFieldError('email');
-                    }}
-                  />
-                </div>
-                {fieldErrors.email ? <p className={styles.fieldIssue}>{fieldErrors.email}</p> : <p className={styles.fieldHint}>{t('emailHint')}</p>}
-              </label>
-
-              <label className={styles.field}>
-                <span>{t('password')}</span>
-                <div>
-                  <LockKeyhole size={18} aria-hidden />
-                  <input
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    autoComplete="new-password"
-                    placeholder={t('passwordPlaceholder')}
-                    value={password}
-                    onChange={(event) => {
-                      setPassword(event.target.value);
-                      clearFieldError('password');
-                    }}
-                  />
-                  <button
-                    type="button"
-                    className={styles.togglePassword}
-                    aria-pressed={showPassword}
-                    onClick={() => setShowPassword((value) => !value)}
-                  >
-                    {showPassword ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
-                    <span className={styles.srOnly}>{showPassword ? t('hidePassword') : t('showPassword')}</span>
-                  </button>
-                </div>
-                {fieldErrors.password ? <p className={styles.fieldIssue}>{fieldErrors.password}</p> : <p className={styles.fieldHint}>{t('passwordHint')}</p>}
-              </label>
-
-              <label className={styles.field}>
-                <span>{t('company')}</span>
-                <div>
-                  <Anchor size={18} aria-hidden />
-                  <input
-                    name="company"
-                    autoComplete="organization"
-                    placeholder={t('companyPlaceholder')}
-                    value={company}
-                    onChange={(event) => setCompany(event.target.value)}
-                  />
-                </div>
-                <p className={styles.fieldHint}>{t('companyOptionalHint')}</p>
-              </label>
-
-              <div className={styles.field}>
-                <span id="role-label">{t('role')}</span>
-                <div className={styles.menuWrap} ref={roleMenuRef}>
-                  <button
-                    type="button"
-                    className={styles.menuTrigger}
-                    aria-expanded={roleMenuOpen}
-                    aria-haspopup="listbox"
-                    aria-labelledby="role-label"
-                    onClick={() => setRoleMenuOpen((open) => !open)}
-                  >
-                    <ShipWheel size={18} aria-hidden />
-                    <span className={styles.menuTriggerText}>
-                      {role ? (role === 'shipper' ? t('shipperChoice') : t('carrierChoice')) : t('rolePlaceholder')}
-                    </span>
-                  </button>
-                  {roleMenuOpen ? (
-                    <div className={styles.menuPanel} role="listbox" aria-labelledby="role-label">
-                      <button
-                        type="button"
-                        role="option"
-                        aria-selected={role === 'shipper'}
-                        className={role === 'shipper' ? styles.menuOptionActive : styles.menuOption}
-                        onClick={() => {
-                          setRole('shipper');
-                          setRoleMenuOpen(false);
-                          clearFieldError('role');
-                        }}
-                      >
-                        <strong>{t('shipperChoice')}</strong>
-                        <span className={styles.menuHint}>{t('shipperHint')}</span>
-                      </button>
-                      <button
-                        type="button"
-                        role="option"
-                        aria-selected={role === 'carrier'}
-                        className={role === 'carrier' ? styles.menuOptionActive : styles.menuOption}
-                        onClick={() => {
-                          setRole('carrier');
-                          setRoleMenuOpen(false);
-                          clearFieldError('role');
-                        }}
-                      >
-                        <strong>{t('carrierChoice')}</strong>
-                        <span className={styles.menuHint}>{t('carrierHint')}</span>
-                      </button>
-                    </div>
-                  ) : null}
-                </div>
-                {fieldErrors.role ? <p className={styles.fieldIssue}>{fieldErrors.role}</p> : <p className={styles.fieldHint}>{t('roleHint')}</p>}
-              </div>
-            </>
-          ) : null}
-
-          {!otpStage && !completedMode ? (
-            <>
-              {mode === 'login' ? (
-                <p className={styles.phoneLead}>{t('loginPhoneLead')}</p>
-              ) : null}
-
-              {mode === 'login' ? (
+            <fieldset className={styles.formSection}>
+              <legend className={styles.formSectionLegend}>{t('profileSectionTitle')}</legend>
+              <div className={styles.formSectionFields}>
                 <label className={styles.field}>
-                  <span>{t('email')}</span>
+                  <span>{t('name')}</span>
                   <div>
-                    <Mail size={18} aria-hidden />
+                    <UserRound size={18} aria-hidden />
                     <input
-                      name="email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder={t('emailPlaceholder')}
-                      value={email}
+                      name="fullName"
+                      autoComplete="name"
+                      placeholder={t('namePlaceholder')}
+                      value={fullName}
+                      aria-describedby={fieldHintId('fullName')}
+                      aria-invalid={Boolean(fieldErrors.fullName)}
                       onChange={(event) => {
-                        setEmail(event.target.value);
-                        clearFieldError('email');
+                        setFullName(event.target.value);
+                        clearFieldError('fullName');
                       }}
                     />
                   </div>
-                  {fieldErrors.email ? <p className={styles.fieldIssue}>{fieldErrors.email}</p> : <p className={styles.fieldHint}>{t('emailHint')}</p>}
+                  <FieldFeedback field="fullName" error={fieldErrors.fullName} hint={t('nameHint')} />
                 </label>
-              ) : null}
 
-              {mode === 'login' ? (
+                <label className={styles.field}>
+                  <span>{t('company')}</span>
+                  <div>
+                    <Anchor size={18} aria-hidden />
+                    <input
+                      name="company"
+                      autoComplete="organization"
+                      placeholder={t('companyPlaceholder')}
+                      value={company}
+                      aria-describedby={fieldHintId('company')}
+                      onChange={(event) => setCompany(event.target.value)}
+                    />
+                  </div>
+                  <FieldFeedback field="company" hint={t('companyOptionalHint')} />
+                </label>
+
+                <div className={styles.field}>
+                  <span id="role-label">{t('role')}</span>
+                  <div className={styles.menuWrap} ref={roleMenuRef}>
+                    <button
+                      type="button"
+                      role="combobox"
+                      className={styles.menuTrigger}
+                      aria-expanded={roleMenuOpen}
+                      aria-haspopup="listbox"
+                      aria-controls={roleMenuOpen ? roleListboxId : undefined}
+                      aria-labelledby="role-label"
+                      aria-describedby={fieldHintId('role')}
+                      aria-invalid={Boolean(fieldErrors.role)}
+                      onClick={() => setRoleMenuOpen((open) => !open)}
+                    >
+                      <ShipWheel size={18} aria-hidden />
+                      <span className={styles.menuTriggerText}>
+                        {role ? (role === 'shipper' ? t('shipperChoice') : t('carrierChoice')) : t('rolePlaceholder')}
+                      </span>
+                    </button>
+                    {roleMenuOpen ? (
+                      <div className={styles.menuPanel} id={roleListboxId} role="listbox" aria-labelledby="role-label">
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={role === 'shipper'}
+                          className={role === 'shipper' ? styles.menuOptionActive : styles.menuOption}
+                          onClick={() => {
+                            setRole('shipper');
+                            setRoleMenuOpen(false);
+                            clearFieldError('role');
+                          }}
+                        >
+                          <strong>{t('shipperChoice')}</strong>
+                          <span className={styles.menuHint}>{t('shipperHint')}</span>
+                        </button>
+                        <button
+                          type="button"
+                          role="option"
+                          aria-selected={role === 'carrier'}
+                          className={role === 'carrier' ? styles.menuOptionActive : styles.menuOption}
+                          onClick={() => {
+                            setRole('carrier');
+                            setRoleMenuOpen(false);
+                            clearFieldError('role');
+                          }}
+                        >
+                          <strong>{t('carrierChoice')}</strong>
+                          <span className={styles.menuHint}>{t('carrierHint')}</span>
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
+                  <FieldFeedback field="role" error={fieldErrors.role} hint={t('roleHint')} />
+                </div>
+              </div>
+            </fieldset>
+          ) : null}
+
+          {!otpStage && !completedMode ? (
+            <fieldset className={styles.formSection}>
+              <legend className={styles.formSectionLegend}>{t('accessSectionTitle')}</legend>
+              <div className={styles.formSectionFields}>
+                {mode === 'register' ? (
+                  <label className={styles.field}>
+                    <span>{t('email')}</span>
+                    <div>
+                      <Mail size={18} aria-hidden />
+                      <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder={t('emailPlaceholder')}
+                        value={email}
+                        aria-describedby={fieldHintId('email')}
+                        aria-invalid={Boolean(fieldErrors.email)}
+                        onChange={(event) => {
+                          setEmail(event.target.value);
+                          clearFieldError('email');
+                        }}
+                      />
+                    </div>
+                    <FieldFeedback field="email" error={fieldErrors.email} hint={t('emailHint')} />
+                  </label>
+                ) : null}
+
+                {mode === 'login' ? (
+                  <label className={styles.field}>
+                    <span>{t('email')}</span>
+                    <div>
+                      <Mail size={18} aria-hidden />
+                      <input
+                        name="email"
+                        type="email"
+                        autoComplete="email"
+                        placeholder={t('emailPlaceholder')}
+                        value={email}
+                        aria-describedby={fieldHintId('email')}
+                        aria-invalid={Boolean(fieldErrors.email)}
+                        onChange={(event) => {
+                          setEmail(event.target.value);
+                          clearFieldError('email');
+                        }}
+                      />
+                    </div>
+                    <FieldFeedback field="email" error={fieldErrors.email} hint={t('emailHint')} />
+                  </label>
+                ) : null}
+
                 <label className={styles.field}>
                   <span>{t('password')}</span>
                   <div>
@@ -812,9 +823,11 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                     <input
                       name="password"
                       type={showPassword ? 'text' : 'password'}
-                      autoComplete="current-password"
+                      autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
                       placeholder={t('passwordPlaceholder')}
                       value={password}
+                      aria-describedby={fieldHintId('password')}
+                      aria-invalid={Boolean(fieldErrors.password)}
                       onChange={(event) => {
                         setPassword(event.target.value);
                         clearFieldError('password');
@@ -830,40 +843,46 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                       <span className={styles.srOnly}>{showPassword ? t('hidePassword') : t('showPassword')}</span>
                     </button>
                   </div>
-                  {fieldErrors.password ? <p className={styles.fieldIssue}>{fieldErrors.password}</p> : <p className={styles.fieldHint}>{t('passwordHint')}</p>}
+                  <FieldFeedback field="password" error={fieldErrors.password} hint={t('passwordHint')} />
                 </label>
-              ) : null}
-
-              <div className={`${styles.field} ${styles.phoneFieldContainer}`}>
-                <span id="phone-label">{mode === 'login' ? t('loginPhoneLabel') : t('phoneWithPrefix')}</span>
-                <PhoneInput
-                  countryCode={countryCode}
-                  phone={phone}
-                  mode={mode}
-                  invalid={Boolean(fieldErrors.phone || fieldErrors.phoneE164 || fieldErrors.countryCode)}
-                  onCountryChange={(nextCountryCode) => {
-                    setCountryCode(nextCountryCode);
-                    setPhone('');
-                    clearFieldError('countryCode');
-                    clearFieldError('phone');
-                    clearFieldError('phoneE164');
-                  }}
-                  onPhoneChange={(nextPhone) => {
-                    setPhone(nextPhone);
-                    clearFieldError('phone');
-                    clearFieldError('phoneE164');
-                  }}
-                />
-                {(fieldErrors.phone || fieldErrors.phoneE164 || fieldErrors.countryCode) ? (
-                  <p className={styles.fieldIssue}>{fieldErrors.phone ?? fieldErrors.phoneE164 ?? fieldErrors.countryCode}</p>
-                ) : (
-                  <div className={styles.fieldHintStack}>
-                    <p className={styles.fieldHint}>{t('phoneHint')}</p>
-                    {mode === 'register' ? <p className={styles.fieldHintMuted}>{t('registerPhoneOtpHint')}</p> : null}
-                  </div>
-                )}
               </div>
-            </>
+            </fieldset>
+          ) : null}
+
+          {!otpStage && !completedMode ? (
+            <fieldset className={styles.formSection}>
+              <legend className={styles.formSectionLegend}>{t('phoneSectionTitle')}</legend>
+              <div className={styles.formSectionFields}>
+                <div className={`${styles.field} ${styles.phoneFieldContainer}`}>
+                  <span id="phone-label">{mode === 'login' ? t('loginPhoneLabel') : t('phoneWithPrefix')}</span>
+                  <PhoneInput
+                    countryCode={countryCode}
+                    phone={phone}
+                    mode={mode}
+                    invalid={Boolean(fieldErrors.phone || fieldErrors.phoneE164 || fieldErrors.countryCode)}
+                    describedBy={fieldHintId('phone')}
+                    onCountryChange={(nextCountryCode) => {
+                      setCountryCode(nextCountryCode);
+                      setPhone('');
+                      clearFieldError('countryCode');
+                      clearFieldError('phone');
+                      clearFieldError('phoneE164');
+                    }}
+                    onPhoneChange={(nextPhone) => {
+                      setPhone(nextPhone);
+                      clearFieldError('phone');
+                      clearFieldError('phoneE164');
+                    }}
+                  />
+                  <FieldFeedback
+                    field="phone"
+                    error={fieldErrors.phone ?? fieldErrors.phoneE164 ?? fieldErrors.countryCode}
+                    hint={mode === 'register' ? `${t('phoneHint')} ${t('registerPhoneOtpHint')}` : t('phoneHint')}
+                  />
+                </div>
+                {mode === 'login' ? <p className={styles.returningHelper}>{t('returningUserHelper')}</p> : null}
+              </div>
+            </fieldset>
           ) : null}
 
           {otpStage && !completedMode ? (
@@ -878,21 +897,12 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                 </button>
               </div>
 
-              <div className={styles.otpHero}>
-                <div className={styles.otpHeroIcon}>
-                  <ShieldCheck size={22} aria-hidden />
-                </div>
-                <div className={styles.otpHeroCopy}>
-                  <strong>{mode === 'login' ? t('otpSentLoginTitle') : t('otpSentRegisterTitle')}</strong>
-                  <p>{mode === 'login' ? t('otpSentLoginBody') : t('otpSentRegisterBody')}</p>
-                </div>
-              </div>
-
               <div className={styles.otpBox}>
-                <p className={styles.otpMockEyebrow}>{t('otpMockBlockEyebrow')}</p>
-                <p className={styles.otpMockLead}>{t('otpMockBlockLead')}</p>
                 <div className={styles.otpHeader}>
-                  <strong>{t('otpMockBlockTitle')}</strong>
+                  <div>
+                    <span className={styles.otpDevBadge}>{t('otpDevBadge')}</span>
+                    <p className={styles.otpMockLead}>{mode === 'login' ? t('otpSentLoginBody') : t('otpSentRegisterBody')}</p>
+                  </div>
                   <motion.button
                     type="button"
                     className={styles.copyButton}
@@ -905,14 +915,10 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                     {copied ? t('otpCodeCopied') : t('copyOtp')} <Copy size={15} aria-hidden />
                   </motion.button>
                 </div>
-                <div className={styles.otpCode} aria-live="polite">
+                <div className={styles.otpCode} aria-live="polite" aria-label={t('otpMockBlockTitle')}>
                   {otpCodeHint || t('otpCodeUnavailable')}
                 </div>
                 <p className={styles.otpCodeHelp}>{t('otpCodeHelp')}</p>
-                <div className={styles.otpMockNotes}>
-                  <p>{t('otpProductionHint')}</p>
-                  <p>{t('otpMockDevNote')}</p>
-                </div>
               </div>
 
               <div className={styles.otpStageCard}>
@@ -920,19 +926,34 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
                   <strong>{t('otpInputLabel')}</strong>
                   <span>{secondsLeft > 0 ? t('otpExpiresIn', { seconds: secondsLeft }) : t('otpTimerExpired')}</span>
                 </div>
-                <p className={styles.fieldHint}>{t('otpHint')}</p>
+                <p className={styles.srOnly} id="auth-otp-hint">
+                  {t('otpHint')}
+                </p>
 
                 <OtpInput
                   value={otp}
-                  onChange={setOtp}
+                  onChange={(nextOtp) => {
+                    setOtp(nextOtp);
+                    clearFieldError('otp');
+                  }}
                   onPaste={onOtpPaste}
                   disabled={pending}
-                  invalid={Boolean(error)}
+                  invalid={Boolean(fieldErrors.otp || error)}
                   groupLabel={t('otpInputLabel')}
                   digitAriaLabel={(index) => `${t('otpDigitAria')} ${index}`}
-                  describedBy={error ? 'auth-form-error' : undefined}
+                  describedBy={
+                    fieldErrors.otp || error
+                      ? 'auth-form-error auth-otp-hint auth-otp-field-error'
+                      : 'auth-otp-hint'
+                  }
                   slotsBox={otpSlotsBox}
                 />
+
+                {fieldErrors.otp ? (
+                  <p className={styles.fieldIssue} id="auth-otp-field-error" role="alert">
+                    {fieldErrors.otp}
+                  </p>
+                ) : null}
 
                 <div className={styles.otpFooter}>
                   <p>{t('otpResendHint')}</p>
@@ -989,16 +1010,6 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
           </nav>
         ) : null}
       </motion.div>
-
-      <aside className={styles.story}>
-        <p>{t('sideEyebrow')}</p>
-        <h2>{t('sideTitle')}</h2>
-        <ul>
-          <li>{t('sideOne')}</li>
-          <li>{t('sideTwo')}</li>
-          <li>{t('sideThree')}</li>
-        </ul>
-      </aside>
     </section>
   );
 }

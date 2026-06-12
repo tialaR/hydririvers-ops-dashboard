@@ -2,7 +2,7 @@
 
 | Metadado | Valor |
 |----------|-------|
-| **Status** | Auditoria / plano — sem implementação |
+| **Status** | Fase A implementada (P0 navegação, auth, contraste, padding) — 2026-06-12; **Fase B implementada** (owned-cargo-summary + owned-cargo-card + integração MyCargoesList) — 2026-06-12 |
 | **Data** | 2026-06-12 |
 | **Rota** | `/[locale]/minhas-cargas`, `/[locale]/minhas-cargas/[id]` |
 | **Fluxos aprovados** | [`minhas-cargas-fluxo-embarcador.md`](../product/flows/minhas-cargas-fluxo-embarcador.md), [`minhas-cargas-fluxo-tecnico-embarcador.md`](../product/flows/minhas-cargas-fluxo-tecnico-embarcador.md) |
@@ -182,7 +182,7 @@ loading (lista + detalhe), empty carteira, error serviço, not found, no documen
 | Fase | Escopo | Prioridade |
 |------|--------|------------|
 | **A** | P0: title resolver minhas-cargas, bottom-nav mapping, contraste glass, auth login contrast, padding bottom-nav lista, reduzir ghost (loading/suspense) | P0 |
-| **B** | `owned-cargo-summary` + `owned-cargo-card` + integrar em `MyCargoesList` mobile | P1 |
+| **B** | `owned-cargo-summary` + `owned-cargo-card` + integrar em `MyCargoesList` mobile | P1 | **Concluída 2026-06-12** |
 | **C** | `owned-cargo-detail` + preview grid 2×2 (previews estáticos) | P1 |
 | **D** | Sheets map/timeline/documents/risks | P1 |
 | **E** | `?panel=` URL sync + replace/back | P1 |
