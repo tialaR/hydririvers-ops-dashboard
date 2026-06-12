@@ -37,8 +37,11 @@ The router selects which of these to read per task category:
 6. `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
 7. `docs/agents/AGENTS-PATCH-PROTOCOL.md`
 8. `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+9. `docs/agents/AGENTS-ZERO-REDEMOINHO.md` — **Operation Zero Redemoinho** (architecture gate, tokens, i18n, naming, labs, proof audits)
 
 **UI tasks:** when a task touches interface, classify with a UI category and read the UI auto-routing union in `docs/agents/AGENTS-TASK-ROUTER.md` plus `.cursor/rules/hydri-ui-architecture.mdc`. Stop before implementing if those were not read.
+
+**Every implementation task:** read `docs/agents/AGENTS-ZERO-REDEMOINHO.md` and `.cursor/rules/hydri-zero-redemoinho.mdc`; run the **Zero Redemoinho Architecture Gate** (search existing pattern before creating); fill **Operation Zero Redemoinho proof fields** at closeout.
 
 Non-negotiables:
 - Audit before patching.
@@ -51,4 +54,5 @@ Non-negotiables:
 - UI: dumb components, logic in hooks, data separated in scope — see `.cursor/rules/hydri-ui-architecture.mdc`.
 - Do not install dependencies without explicit approval.
 - Validate with lint, typecheck and i18n before claiming success.
+- **Operation Zero Redemoinho:** no parallel UI/token/mock/doc patterns; reuse or document; no hardcoded UI strings; no new paths outside kebab-case; component tokens `--hy-*`; magic numbers named; labs temporary by default; glass UI validated on colored scrollable backdrop.
 - Close every response with **Captain closeout** first, then technical blocks (`HYDRI_TASK_ROUTER — close`, `HYDRI_IMPLEMENTATION_PROOF` when implementation happened). See `docs/agents/AGENTS-TASK-ROUTER.md` and `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.

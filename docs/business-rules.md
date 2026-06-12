@@ -1,5 +1,9 @@
 # HydroRivers business rules
 
+**Personas e valor:** fluxos novos devem declarar qual persona beneficia (embarcador, transportador/operador, operador portuário, admin) e que valor operacional entregam. Ver `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Mocks e domínio**.
+
+**Mock-mode:** preservar auth mock; phone number como identificador único em dev.
+
 ## Cargas por navegação
 
 - `Dashboard` mostra apenas cargas públicas.

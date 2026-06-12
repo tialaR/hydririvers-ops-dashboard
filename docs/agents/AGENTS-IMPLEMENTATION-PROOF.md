@@ -122,6 +122,80 @@ Copy this template and fill every field. Omit a field only when truly not applic
 
 **Recommended next action:**
 - 
+
+**UI Visual Lab (when lab work occurred):**
+- Lab created: yes | no
+- Lab type: temporary | permanent
+- Permanent authorization: yes | no | n/a
+- Temporary lab removal status: removed | pending | n/a
+- Lab tests created: yes | no
+- Lab test rationale (if yes):
+- Lab test cost/benefit (if applicable):
+- Evidence generated:
+- Temporary files removed:
+
+**Kebab-case audit (when files/folders touched):**
+- Audit: pass | fail
+- Files renamed:
+- Remaining non-kebab paths + reason:
+
+**`--hy-*` token audit (when tokens touched):**
+- Audit: pass | fail
+- Tokens migrated:
+- Remaining non-`--hy-*` tokens + reason:
+
+**Operation Zero Redemoinho proof fields (mandatory for implementation tasks):**
+
+**Pattern reuse audit:**
+- Searched for existing pattern: yes | no
+- Reused existing: (list paths/patterns) | none — created new: (list) | n/a docs-only
+- Duplicate avoided: yes | no — justification if local fork:
+
+**Magic number audit:**
+- Audit: pass | fail | n/a
+- Numbers named/migrated: (list) | none
+- Remaining magic numbers + reason:
+
+**i18n audit:**
+- Audit: pass | fail | n/a
+- New keys added (locales): pt-BR | en-US | es — list or none
+- Hardcoded UI strings found: none | list + fix status
+- `npm run check:i18n`: pass | fail | not run
+
+**Sass Module audit:**
+- Audit: pass | fail | n/a
+- New/touched styles use `.module.sass`: yes | partial | no
+- `globals.scss` / global CSS / `!important` used: no | yes + reason
+
+**Dead code/docs/scripts audit:**
+- Audit: pass | fail | n/a
+- Removed dead routes/files: (list) | none
+- Docs/scripts updated for removals: yes | pending | n/a
+- Stale references remaining: none | list
+
+**Feature/shared boundary audit:**
+- Audit: pass | fail | n/a
+- Components in correct scope: yes | no — details:
+- Shared depends on feature-specific rule: no | yes + reason:
+
+**Mock/domain impact:**
+- Mocks/services touched: yes | no — summary
+- mock-mode auth preserved: yes | n/a
+- Business rules aligned: yes | n/a — notes
+
+**Persona/value impact:**
+- Personas affected: embarcador | transportador | operador portuário | admin | none
+- Value delivered (1–2 lines in plain language):
+
+**Core Web Vitals / cognitive cost impact:**
+- Touch targets, scroll, safe-area considered: yes | n/a
+- Motion added/changed: yes | no — respects `prefers-reduced-motion`: yes | n/a
+- Cognitive load note (density, hierarchy, animation cost):
+
+**Tests/lab cost decision:**
+- Lab used: yes | no — temporary removed: yes | pending | n/a
+- Versioned lab test added: yes | no — rationale:
+- Unit/integration tests: added | updated | none — reason
 ```
 
 ### Field requirements
@@ -175,7 +249,94 @@ When a component has an **official lab subroute** under `/[locale]/hy-ui-lab` (s
 
 **Authorized component tuning tasks:** user authorization on record; lab must pass; production consumer must pass; literal reference in lab stays frozen; agent did not apply unauthorized variants.
 
-**Temporary labs** (`tmp-*`): must be removed before PR; evidence may be cited but route must not ship.
+**Temporary labs** (`tmp-*`): must be removed before commit/PR; evidence may be cited but route must not ship.
+
+**Lab cleanup status:** after authorized implement, record in proof whether temporary routes, reference components, lab styles, and working-tree screenshots were removed.
+
+## Operation Zero Redemoinho proof fields
+
+**Mandatory for every implementation task** (code, config, tests, or agent docs that change behavior). Full policy: `docs/agents/AGENTS-ZERO-REDEMOINHO.md`.
+
+When any of `zero-redemoinho-gate`, `magic-number-hygiene`, `doc-hygiene`, `feature-boundary`, `glass-ui`, or `persona-value` applies — or when implementation touches patterns, numbers, copy, styles, boundaries, mocks, or labs — fill the fields in the mandatory closing block above.
+
+| Field | Values / requirement |
+|-------|---------------------|
+| **Pattern reuse audit** | What was searched; what was reused vs newly created; duplicate justification |
+| **Magic number audit** | pass \| fail \| n/a — named/migrated vs remaining + reason |
+| **i18n audit** | pass \| fail \| n/a — keys in three locales; no hardcoded UI; `check:i18n` result |
+| **Sass Module audit** | `.module.sass` preference; no globals/`!important` for feature UI |
+| **Dead code/docs/scripts audit** | Removals synced to docs; no stale references |
+| **Feature/shared boundary audit** | Components in correct scope; shared not feature-coupled |
+| **Mock/domain impact** | Mocks/business rules; mock-mode auth preserved |
+| **Persona/value impact** | Which persona benefits; plain-language value |
+| **Core Web Vitals / cognitive cost** | Touch, scroll, safe-area, motion, density |
+| **Tests/lab cost decision** | Lab temp/permanent; versioned lab test only with justification |
+
+Kebab-case and `--hy-*` token audits remain in [Lab / naming / token proof fields](#lab--naming--token-proof-fields) when files or tokens are touched.
+
+### Captain closeout — Operation Zero Redemoinho 🟢 blocks
+
+Captain closeout **🟢 is forbidden** when:
+
+| Condition | Closeout |
+|-----------|----------|
+| Created token outside `--hy-*` | **🔴 Para agora** |
+| Left new hardcoded UI string | **🔴 Para agora** |
+| Created file/folder outside kebab-case | **🔴 Para agora** |
+| Component holds press/timer/measurement logic that belongs in hook | **🔴 Para agora** |
+| Lab/test without authorization/justification | **🟡** minimum; **🔴** if versioned in CI without approval |
+| Dead code, temporary lab, or stale doc reference remains | **🔴 Para agora** |
+| Feature/shared boundary violated | **🔴 Para agora** |
+| Business flow without persona value explained | **🟡** minimum |
+| Mandatory lint/typecheck/check:i18n not run when applicable | **🔴 Para agora** |
+| Glass UI without colored scrollable backdrop validation | **🟡** maximum |
+
+## Lab / naming / token proof fields
+
+When any of `ui-lab`, `temporary-lab`, `naming-hygiene`, or `token-hygiene` applies — or when the task creates/touches labs, files, or tokens — add these fields to `HYDRI_IMPLEMENTATION_PROOF` (or **Detalhes técnicos** when the task is docs-only):
+
+### UI Visual Lab (when lab work occurred)
+
+| Field | Values |
+|-------|--------|
+| Lab created | yes \| no |
+| Lab type | temporary \| permanent |
+| Permanent authorization | yes \| no \| n/a — cite user message if permanent |
+| Temporary lab removal status | removed \| pending \| n/a |
+| Lab tests created | yes \| no |
+| Lab test rationale | reason if yes; "none — ad hoc evidence only" if no |
+| Lab test cost/benefit | brief note when test created or suggested |
+| Evidence generated | paths under `output/ui-lab/` or manual QA description |
+| Temporary files removed | list removed routes/files/screenshots or "pending" with reason |
+
+### Kebab-case audit (when files/folders touched)
+
+| Field | Values |
+|-------|--------|
+| Kebab-case audit | pass \| fail |
+| Files renamed | list paths or "none" |
+| Remaining non-kebab paths | list + reason if not migrated |
+
+### `--hy-*` token audit (when tokens touched)
+
+| Field | Values |
+|-------|--------|
+| `--hy-*` audit | pass \| fail |
+| Tokens migrated | list old → new or "none" |
+| Remaining non-`--hy-*` tokens | list + reason if not migrated |
+
+### Captain closeout — additional 🟢 blocks
+
+Captain closeout **🟢 is forbidden** when:
+
+| Condition | Closeout |
+|-----------|----------|
+| Validated temporary lab remains in code without permanent authorization | **🔴 Para agora** |
+| Lab test created without request/justification | **🟡** minimum |
+| New file/folder outside kebab-case | **🔴 Para agora** |
+| Touched non-kebab path not migrated nor justified | **🟡** minimum |
+| New token outside `--hy-*` | **🔴 Para agora** |
+| Touched legacy token not migrated nor justified | **🟡** minimum |
 
 #### Authorization (record in proof when production changes)
 
@@ -220,7 +381,13 @@ Captain closeout **🟢 is forbidden** when any of the following is true:
 | 13 | Lab-only task changed production, or component task altered literal reference in lab | **🔴 Para agora** |
 | 14 | Production changed without **explicit user authorization** (variant name + scope + prohibitions) | **🔴 Para agora** |
 | 15 | Agent applied multiple variants or chose a variant without user authorization | **🔴 Para agora** |
-| 16 | Authorized visual implementation closed 🟢 without lab PASS + consumer PASS + evidence + browser/commands | **🟡** minimum |
+| 16 | Authorized visual implementation closed 🟢 without visual gate PASS + consumer PASS + evidence + browser/commands | **🟡** minimum |
+| 17 | Validated **temporary lab** left in code without permanent authorization | **🔴 Para agora** |
+| 18 | Lab test added without explicit request/justification | **🟡** minimum |
+| 19 | New file/folder created outside **kebab-case** | **🔴 Para agora** |
+| 20 | Touched non-kebab path not migrated nor justified in proof | **🟡** minimum |
+| 21 | New CSS token created outside **`--hy-*`** | **🔴 Para agora** |
+| 22 | Touched legacy token not migrated nor justified in proof | **🟡** minimum |
 
 When any blocker applies: state it plainly in **Falta provar** and **Recommended next action**; do not use 🟢.
 
@@ -412,7 +579,9 @@ When the task touches styles:
 - [ ] `src/app/globals.scss` not used for feature UI
 - [ ] No `!important`
 - [ ] If component-level `.scss` was touched: justify in proof, or migrate to `.module.sass` when safe and in scope
-- [ ] New/touched paths use **kebab-case** unless rename is unsafe or out of scope
+- [ ] New/touched paths use **kebab-case**; non-kebab paths migrated when safe or justified in proof
+- [ ] New/touched component tokens use **`--hy-*`**; legacy tokens migrated when safe or justified in proof
+- [ ] No new `legacy`, `v2`, `dev-v2`, `new`, `old`, or production `tmp-*` paths
 
 Preserve mobile/desktop style separation; a mobile-only task must not break desktop layout and vice versa.
 

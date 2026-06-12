@@ -16,10 +16,12 @@ Apply when a task touches interface (mobile, desktop, nav, sheets, styling, visu
 
 If the task is classified as a **UI task** (see `docs/agents/AGENTS-TASK-ROUTER.md` → UI tasks) and you have **not** read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and this rule, **stop** — fix routing and read required docs before planning or implementing.
 
-## Design tokens (`--hy-*`)
+## Design tokens (`--hy-*` — mandatory)
 
-- New UI tokens: **`--hy-*`** prefix; component shape **`--hy-<component>-<property>`** (e.g. `--hy-bottom-nav-height`, `--hy-icon-button-size`).
-- Legacy non-`--hy-*` tokens (e.g. `--bn-*`): migrate progressively when touched and safe — no mass rename in unrelated tasks.
+- **New** UI tokens: **mandatory** `--hy-*` prefix; shape **`--hy-<component>-<property>`** (e.g. `--hy-bottom-nav-height`, `--hy-icon-button-size`, `--hy-search-field-surface`).
+- **Touched** legacy tokens (e.g. `--bn-*`): **migrate to `--hy-*` when safe** — update definition and all usages; validate visually when UI-affecting; no mass rename in unrelated tasks.
+- **Unsafe migration:** document follow-up; do not create new tokens outside the pattern.
+- Global palette tokens (e.g. `--hx-*` in `docs/theme.md`) are separate from component tokens — new **component-scoped** tokens always use `--hy-*`.
 
 ## IconButton and glass controls
 
@@ -31,9 +33,10 @@ Applies to IconButton, circular buttons, glass controls, filter/search/map icon-
 - **Press feedback:** button scale + icon lift/scale + inner glow on pressed; optional `release` then **idle** with timers cleared; use `data-press="idle|pressed|release"` when useful.
 - **`overflow: visible`** allowed for icon/glow overflow — comment why in the component.
 - **`prefers-reduced-motion`:** hook + styles must degrade motion; keep focus/contrast feedback.
+- **Glass/transparency (`glass-ui`):** auto-detect when touching backdrop-filter, rgba alpha, blur, glass/frosted/bubble/rim/glow tokens. Validate on **colored scrollable backdrop** with content passing behind — white/flat gray alone is insufficient; max 🟡 without it.
 - **A11y:** real `button` or `a`; `aria-label` on icon-only; `aria-hidden` on decorative icon; `:focus-visible`; correct `disabled`.
 - Validate on **three mobile widths** before 🟢 (see Mobile viewport coverage).
-- **UI Visual Lab:** `/[locale]/hy-ui-lab` is fixed internal visual QA — not product, not in nav, must not touch mocks/auth/real routes/data. Official subroutes persist (`icon-button`, `bottom-nav`, `search-field`, `chips`, `bottom-sheet`); `tmp-*` removed before PR. Literal DevTools references live in lab only; production uses `--hy-*` tokens. **Automated workflow:** lab (no production) → visual gate → **Menu de decisão** → short auth (`Autorizo opção A.`, `Abortar.`, etc.) → one authorized variant → revalidate. Evidence: `output/ui-lab/<component>/`. Agent declares recommended option; must not implement production without authorization. **Transparent/glass/light-mode labs:** Hydri DS v2 light colored backdrop (not flat white/gray); dedicated `transparency-scroll` section with elements scrolling behind fixed buttons; gate must validate backdrop + scroll — no PASS without scroll evidence. Auto-open lab (+ consumer after auth) or `open`/`start`/`xdg-open`. 🟢: lab PASS + consumer PASS (when prod touched) + evidence + preview/commands + no user visual dispute.
+- **UI Visual Lab:** `/[locale]/hy-ui-lab` — internal visual QA only; **temporary by default**; remove after validated implement unless user explicitly authorizes permanent showcase. Not product, not in nav. Use `tmp-*` for disposable rounds; clean up before commit/PR. Literal references live in lab only; production uses `--hy-*` tokens. **Workflow:** lab (no production) → visual gate → **Menu de decisão** → short auth → one authorized variant → **cleanup** → revalidate consumer. Evidence: `output/ui-lab/<component>/` (ad hoc, not versioned). **Lab tests on demand only** — no automatic versioned test per task. Auto-open lab (+ consumer after auth) or `open`/`start`/`xdg-open`. 🟢: consumer PASS + evidence + preview/commands + lab cleanup (when temporary) + no user visual dispute.
 
 Full spec: `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**; `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Menu de decisão**; `docs/design/icon-button-glass.md` → **Visual Lab Gate** (IconButton example).
 
@@ -46,12 +49,14 @@ Full spec: `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated wo
 - **Prefer React refs and local CSS variables** — do not use `querySelector` / `document.documentElement` when refs and scoped CSS variables solve the problem.
 - **Preserve accessibility and semantics** — landmarks, labels, focus, keyboard, and ARIA stay correct after refactors.
 
-## File and folder naming (kebab-case)
+## File and folder naming (kebab-case — mandatory)
 
-- **New** files and folders: **kebab-case** (e.g. `bottom-nav/`, `use-bottom-nav-indicator.ts`, `bottom-nav-items.tsx`).
-- **Touched** files: may be renamed to kebab-case when the change is **small and safe** (few imports, no route/i18n breakage).
+- **New** files and folders: **mandatory kebab-case** (e.g. `bottom-nav/`, `use-bottom-nav-indicator.ts`, `icon-button.module.sass`).
+- **Touched** files: **migrate to kebab-case when safe** — update imports, barrels, tests, docs; run typecheck.
+- **Unsafe migration:** explain in proof; open follow-up; **do not** create new files outside kebab-case.
 - **Do not** run mass renames without explicit user approval.
 - **Do not** break imports, tests, i18n keys, or localized routes.
+- **Do not** create new production paths named `legacy`, `v2`, `dev-v2`, `new`, `old`, or `tmp` (except disposable lab `tmp-*`, removed before commit/PR).
 - **React exports** may stay **PascalCase** (`export function BottomNav`) even when the file is `bottom-nav.tsx`.
 
 ## Mobile viewport coverage (mandatory)
@@ -80,6 +85,7 @@ Before 🟢 on any UI task, pass the gate in `docs/agents/AGENTS-IMPLEMENTATION-
 
 ## Related docs
 
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` — Operation Zero Redemoinho governance
 - `docs/agents/AGENTS-TASK-ROUTER.md` — UI task categories and required docs
 - `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` — mobile chrome, interaction, BottomNav, viewport coverage
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` — proof and UI checklists

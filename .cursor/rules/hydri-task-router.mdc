@@ -14,11 +14,12 @@ Before planning or implementing, run the task router in `docs/agents/AGENTS-TASK
 1. Read `AGENTS.md` and `docs/agents/AGENTS-TASK-ROUTER.md`.
 2. Classify the task (one or more categories). If ambiguous, **declare the assumed classification**.
 3. Build required docs: **base** + **implementation** (if changing code/config/tests/docs behavior) + **union of category docs**.
-4. **UI tasks:** if any UI category applies (`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` on visible UI), also read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc`. If implementing UI without having read them, **stop** and fix routing first.
-5. If any required doc is missing on disk, **stop** and report — do not proceed.
-6. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
-7. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
-8. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Captain closeout** then technical blocks.
+4. **Every implementation task:** read `docs/agents/AGENTS-ZERO-REDEMOINHO.md` and `.cursor/rules/hydri-zero-redemoinho.mdc`; union category **`zero-redemoinho-gate`**; run Architecture Gate before creating files/patterns.
+5. **UI tasks:** if any UI category applies (`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, `glass-ui`, or `accessibility` on visible UI), also read `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` and `.cursor/rules/hydri-ui-architecture.mdc`. If implementing UI without having read them, **stop** and fix routing first.
+6. If any required doc is missing on disk, **stop** and report — do not proceed.
+7. Emit the initial `HYDRI_TASK_ROUTER` block (classification, docs, scope, `Can proceed`).
+8. **Proceed autonomously** when the task is clear and in scope — do not ask the user to confirm categories, docs, or "yes, proceed".
+9. For implementation tasks: read `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` and close with **Captain closeout** then technical blocks; fill **Operation Zero Redemoinho proof fields**.
 
 ## When to stop and ask
 
@@ -42,11 +43,13 @@ Ask the user **only** when: scope is ambiguous; a required doc is missing; forbi
 
 See `docs/agents/AGENTS-TASK-ROUTER.md`. Minimum set:
 
-`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu` (alias of bottom-nav), `bottom-sheet`, `filter-sheet` (alias), `action-sheet` (alias), `cargo-domain`, `hydroway-domain`, `i18n`, `styling`, `testing`, `ci-pr`, `repo-hygiene`, `architecture`, `docs-only`, `mock-mode`, `auth`, `data/API`, `accessibility`, `performance`, `visual-regression`
+`mobile-ui`, `desktop-ui`, `bottom-nav`, `bottom-menu` (alias of bottom-nav), `bottom-sheet`, `filter-sheet` (alias), `action-sheet` (alias), `cargo-domain`, `hydroway-domain`, `i18n`, `styling`, `testing`, `ci-pr`, `repo-hygiene`, `architecture`, `docs-only`, `mock-mode`, `auth`, `data/API`, `accessibility`, `performance`, `visual-regression`, `ui-lab`, `temporary-lab`, `naming-hygiene`, `token-hygiene`, `zero-redemoinho-gate`, `magic-number-hygiene`, `doc-hygiene`, `feature-boundary`, `glass-ui`, `persona-value`
 
 Multiple categories → union all docs. Implementation always includes `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`.
 
-**UI auto-routing:** any UI category → also read `AGENTS-UI-MOBILE-STANDARDS.md`, `AGENTS-WORKFLOW.md`, `AGENTS-IMPLEMENTATION-PROOF.md`, `.cursor/rules/hydri-ui-architecture.mdc`. New/touched paths: kebab-case; no mass rename without approval.
+**UI auto-routing:** any UI category → also read `AGENTS-UI-MOBILE-STANDARDS.md`, `AGENTS-WORKFLOW.md`, `AGENTS-IMPLEMENTATION-PROOF.md`, `.cursor/rules/hydri-ui-architecture.mdc`. **`glass-ui`** → colored scrollable backdrop required for 🟢. New/touched paths: kebab-case; no mass rename without approval.
+
+**Zero Redemoinho:** every implementation → read `AGENTS-ZERO-REDEMOINHO.md`, union `zero-redemoinho-gate`, fill Operation Zero Redemoinho proof fields; no parallel patterns, hardcoded UI strings, or tokens outside `--hy-*`.
 
 **Mobile viewport coverage (automatic):** when `mobile-ui`, `bottom-nav`, `bottom-menu`, `bottom-sheet`, `filter-sheet`, `action-sheet`, `styling`, `visual-regression`, or `accessibility` on visible UI applies — validate **three mobile widths** (small 320×568 or 360×740, standard 390×844, large 430×932) before 🟢. One width only → 🟡 "Só testado em um tamanho, precisa revisar responsividade." All three → "Testado em celular pequeno, médio e grande." Record **Mobile viewport coverage** in proof; cite screenshot per width when used.
 

@@ -155,6 +155,8 @@ After **Captain closeout** (and optional **Detalhes técnicos**), end with the t
 | `AGENTS.md` | Entry point and non-negotiables |
 | `docs/agents/AGENTS-TASK-ROUTER.md` | This router |
 | `docs/agents/AGENTS-WORKFLOW.md` | Branching, commits, validation baseline |
+| `docs/agents/AGENTS-ZERO-REDEMOINHO.md` | Operation Zero Redemoinho — architecture gate and hard rules |
+| `.cursor/rules/hydri-zero-redemoinho.mdc` | Cursor enforcement for Zero Redemoinho |
 
 ## Implementation docs (every implementation task)
 
@@ -220,8 +222,21 @@ Full checklist and evidence rules: `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` �
 - Two widths → 🟡 until the third is covered.
 - User reports visual still wrong → **🔴 Para agora**; reopen audit; include consumer in scope — never 🟢.
 - DOM/computed-style-only proof → never 🟢 for UI; use 🟡 minimum.
+- Validated **temporary lab** still in code without explicit permanent authorization → **🔴 Para agora** (or **🟡** if cleanup is the stated next step).
+- **Lab test** created without explicit request/justification → **🟡** minimum; **🔴** if it slows CI without approval.
+- New file/folder outside **kebab-case** → **🔴 Para agora**.
+- Touched file outside kebab-case not migrated nor justified → **🟡** minimum.
+- New token outside **`--hy-*`** → **🔴 Para agora**.
+- Touched legacy token not migrated nor justified → **🟡** minimum.
+- New hardcoded UI string → **🔴 Para agora**.
+- Unnamed magic number in touched code → **🟡** minimum.
+- Glass/transparency without colored scrollable backdrop → **🟡** maximum.
+- Docs/scripts cite removed file → **🔴 Para agora**.
+- Feature/shared boundary violated → **🔴 Para agora**.
+- Business flow without persona value → **🟡** minimum.
+- Operation Zero Redemoinho proof fields empty on implementation → **🟡** minimum.
 
-Record per-viewport results in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**. Save or cite screenshots per width when using Playwright or visual QA. UI tasks must also include **Visual comparison matrix** per Visual Acceptance Gate.
+Record per-viewport results in `HYDRI_IMPLEMENTATION_PROOF` → **Mobile viewport coverage**. Save or cite screenshots per width when using Playwright or visual QA. UI tasks must also include **Visual comparison matrix** per Visual Acceptance Gate. Lab, naming, and token tasks must fill the proof fields in `AGENTS-IMPLEMENTATION-PROOF.md` → **Lab / naming / token proof fields**. **Every implementation task** must fill **Operation Zero Redemoinho proof fields**.
 
 ### UI architecture (summary)
 
@@ -232,7 +247,10 @@ Full rules: `.cursor/rules/hydri-ui-architecture.mdc` and `docs/agents/AGENTS-UI
 - Items, labels, icons, metadata → separate file in scope when non-trivial.
 - Styles → `.module.sass` for new/touched files when safe; no global CSS for components.
 - Prefer React refs and local CSS variables over `querySelector` / `document.documentElement`.
-- **kebab-case** for new folders/files; small safe renames on touch; no mass rename without approval; PascalCase React exports OK.
+- **kebab-case** mandatory for new/touched files and folders when migration is safe; no mass rename without approval; PascalCase React exports OK.
+- **UI Visual Lab** is **temporary by default** — remove after validation + approved implementation unless the user explicitly authorizes a permanent showcase.
+- **`--hy-*`** mandatory for new/touched CSS tokens; migrate legacy tokens when safe.
+- **No new legacy naming** (`legacy`, `v2`, `dev-v2`, `new`, `old`, `tmp-*` in production); `tmp-*` only for disposable lab work, removed before commit/PR.
 
 ## Task categories and required docs
 
@@ -410,7 +428,108 @@ Visual QA, screenshot comparison, design parity checks.
 - `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **UI Visual Lab (official policy)** and **Menu de decisão**
 - `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **UI Visual Lab closeout**
 
-**UI Visual Lab:** `/[locale]/hy-ui-lab` is the fixed internal visual QA route (not product, not in nav). Tasks with `visual-regression`, `mobile-ui`, `styling`, or component/UI with a visual reference use the lab when applicable. **Automated flow:** lab (no production) → visual gate → **Menu de decisão** → short authorization → implement one variant → revalidate lab + consumer. Agent auto-opens lab (and consumer after authorized implement); delivers `open` / `start` / `xdg-open` if browser unavailable. Evidence: `output/ui-lab/<component>/`. Official labs persist; `tmp-*` removed before PR. Full policy: `AGENTS-WORKFLOW.md` and `AGENTS-UI-MOBILE-STANDARDS.md` → **Menu de decisão**.
+**UI Visual Lab:** `/[locale]/hy-ui-lab` is the fixed internal visual QA route (not product, not in nav). Tasks with `visual-regression`, `mobile-ui`, `styling`, or component/UI with a visual reference use the lab when applicable. **Automated flow:** lab (no production) → visual gate → **Menu de decisão** → short authorization → implement one variant → **clean up lab** → revalidate consumer. Agent auto-opens lab (and consumer after authorized implement); delivers `open` / `start` / `xdg-open` if browser unavailable. Evidence: `output/ui-lab/<component>/` (not versioned). **Labs are temporary by default** — remove after validation + approved implementation; permanent showcase only with explicit user authorization. Full policy: `AGENTS-WORKFLOW.md` and `AGENTS-UI-MOBILE-STANDARDS.md` → **Menu de decisão**.
+
+### `ui-lab`
+
+Create, extend, or run UI Visual Lab pages for component validation — lab routes, reference/proposal variants, Playwright ad hoc evidence, decision menu. Does **not** imply production changes.
+
+- `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **UI Visual Lab (official policy)**, **Lab cleanup**, **Lab tests (on demand)**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **UI Visual Lab closeout**, **Lab / naming / token proof fields**
+
+Also union [UI tasks auto-routing](#ui-tasks-mandatory-auto-routing) when the lab touches visible UI.
+
+### `temporary-lab`
+
+Disposable lab work that **must** be removed before commit/PR — `tmp-*` subroutes, reference/proposal components, lab-only styles, ad hoc screenshots in the working tree.
+
+- `docs/agents/AGENTS-WORKFLOW.md` → **UI Visual Lab — automated workflow**, **Lab cleanup**
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **UI Visual Lab (official policy)**, **Lab cleanup**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **UI Visual Lab closeout**, **Lab / naming / token proof fields**
+
+**Auto-detect:** classify `temporary-lab` when the task creates or uses `tmp-*` routes, one-off lab subroutes for a single validation round, or disposable reference/proposal files intended for removal after approval.
+
+### `naming-hygiene`
+
+File/folder naming, kebab-case migration on touch, prohibition of new legacy naming (`legacy`, `v2`, `dev-v2`, `new`, `old`, `tmp-*` in production).
+
+- `docs/agents/AGENTS-WORKFLOW.md`
+- `.cursor/rules/hydri-ui-architecture.mdc`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Kebab-case audit**
+
+**Auto-detect:** classify `naming-hygiene` when the task creates, renames, or touches files/folders under `src/`, `docs/` (new technical files), or agent rules.
+
+### `token-hygiene`
+
+CSS custom property naming, `--hy-*` migration on touch, component token shape `--hy-<component>-<property>`.
+
+- `docs/theme.md`
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md` → **Design tokens (`--hy-*`)**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **`--hy-*` token audit**
+
+**Auto-detect:** classify `token-hygiene` when the task creates, renames, or touches CSS/Sass tokens, theme docs, or component-level CSS variables.
+
+### `zero-redemoinho-gate`
+
+Mandatory pre-implement audit — search for existing pattern before creating anything new. Applies to **every implementation task** (code, config, tests, agent docs that change behavior).
+
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Operation Zero Redemoinho proof fields**
+- `.cursor/rules/hydri-zero-redemoinho.mdc`
+
+**Auto-detect:** always union this category when the task implements or fixes behavior (not pure Q&A with no changes).
+
+### `magic-number-hygiene`
+
+Numeric literals in TS/TSX/Sass that represent durations, delays, thresholds, offsets, z-index, breakpoints, heights, or recurring spacing.
+
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Magic numbers**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Magic number audit**
+
+**Auto-detect:** classify when the task adds or touches unexplained numeric literals in source or styles.
+
+### `doc-hygiene`
+
+Documentation, workflows, agent rules, README, ADRs, or export scripts that must stay aligned with the codebase.
+
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Documentation hygiene**
+- `docs/agents/AGENTS-WORKFLOW.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Dead code/docs/scripts audit**
+
+**Auto-detect:** classify when removing routes/components/scripts, adding ADRs, or updating agent docs/rules.
+
+### `feature-boundary`
+
+Moving or creating components across `src/features/` vs `src/shared/`; shared depending on feature-specific rules.
+
+- `docs/ARCHITECTURE.md`
+- `docs/feature-scope-audit.md`
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Feature ownership**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Feature/shared boundary audit**
+
+**Auto-detect:** classify when creating/moving shared components or when shared imports feature domain types/rules.
+
+### `glass-ui`
+
+Transparent, frosted, glass, bubble, rim, glow, or backdrop-filter UI — requires colored scrollable validation backdrop.
+
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Transparent/glass auto-detection**
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Visual Acceptance Gate** (L6 glass backdrop)
+
+**Auto-detect:** classify when styles or tokens match transparency signals: `backdrop-filter`, `rgba` alpha, `transparent`, `blur`, `glass`, `frosted`, `bubble`, `--hy-*-glass-*`, `--hy-*-surface`, `--hy-*-rim`, `--hy-*-glow`, etc.
+
+### `persona-value`
+
+Business flows, mocks, or UX that must declare value for embarcador, transportador, operador portuário, admin, etc.
+
+- `docs/business-rules.md`
+- `docs/agents/AGENTS-HYDRI-CONTEXT.md`
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md` → **Mocks e domínio**
+- `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md` → **Persona/value impact**
+
+**Auto-detect:** classify when the task adds/changes user-facing flows, mocks, roles, or cargo/hydroway domain behavior.
 
 ## Classification rules
 
@@ -432,12 +551,20 @@ Visual QA, screenshot comparison, design parity checks.
 | New translation keys | `i18n` |
 | BottomNav redesign | `mobile-ui`, `bottom-nav` |
 | Bottom menu glass effect / active lens | `mobile-ui`, `bottom-menu`, `styling`, `visual-regression` |
-| UI Visual Lab policy or new lab subroute | `docs-only`, `visual-regression`, `styling` |
-| UI Visual Lab automated workflow / decision menu | `docs-only`, `visual-regression`, `styling` — see `AGENTS-WORKFLOW.md` |
-| IconButton / glass before production | `mobile-ui`, `styling`, `visual-regression` — lab at `/hy-ui-lab/icon-button` first; menu de decisão before production |
+| UI Visual Lab policy or new lab subroute | `docs-only`, `ui-lab`, `visual-regression`, `styling` |
+| UI Visual Lab automated workflow / decision menu | `docs-only`, `ui-lab`, `visual-regression`, `styling` — see `AGENTS-WORKFLOW.md` |
+| Disposable lab / tmp-* experiment | `ui-lab`, `temporary-lab`, `visual-regression` — remove before commit/PR |
+| IconButton / glass before production | `mobile-ui`, `styling`, `visual-regression`, `ui-lab` — lab first; menu de decisão; cleanup after approved implement |
+| Rename file to kebab-case / naming audit | `naming-hygiene`, `architecture` (when structural) |
+| Migrate CSS token to `--hy-*` | `token-hygiene`, `styling` |
 | Add mock persona | `mock-mode`, `auth` |
 | CI failing on PR | `ci-pr`, `testing` |
-| Agent docs / rules only | `docs-only` |
+| Agent docs / rules only | `docs-only`, `doc-hygiene`, `zero-redemoinho-gate` |
+| Governance / anti-duplication rules | `docs-only`, `doc-hygiene`, `architecture`, `zero-redemoinho-gate` |
+| Glass / transparency tuning | `mobile-ui`, `styling`, `glass-ui`, `visual-regression`, `ui-lab` |
+| Magic number cleanup in component | `magic-number-hygiene`, `styling` or relevant UI category |
+| Move component to shared | `feature-boundary`, `architecture`, `zero-redemoinho-gate` |
+| New business flow / mock persona | `mock-mode`, `persona-value`, `cargo-domain` or `auth` |
 
 ## Missing doc protocol
 

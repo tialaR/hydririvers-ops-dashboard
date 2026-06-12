@@ -51,16 +51,19 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 4. Commands run
 5. Tests affected
 6. Preview / manual QA (when applicable)
-7. **Mobile viewport coverage** (required for UI categories): small (320×568 or 360×740), standard (390×844), large (430×932) — pass/fail/not tested; width-dependent behavior; screenshot path per width
-8. Files changed
-9. Not validated
-10. Remaining risks
-11. Why the implementation may still be wrong
-12. Recommended next action
+7. **Mobile viewport coverage** (required for UI categories)
+8. **Operation Zero Redemoinho proof fields** (required for implementation): pattern reuse, token, magic number, i18n, kebab-case, sass module, dead code/docs, feature/shared, mock/domain, persona/value, CWV/cognitive cost, tests/lab cost — see `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+9. Files changed
+10. Not validated
+11. Remaining risks
+12. Why the implementation may still be wrong
+13. Recommended next action
 
 ## Cannot claim success when
 
 - Mandatory validation was not run (`npm run lint`, `npm run typecheck`, `npm run check:i18n`)
+- Operation Zero Redemoinho proof fields skipped on implementation
+- New hardcoded UI string, token outside `--hy-*`, or path outside kebab-case
 - Affected route or component was not inspected
 - Tests only assert fragile text/class contracts
 - UI changed without visual/runtime preview
