@@ -1,0 +1,70 @@
+.root
+  display: grid
+  gap: var(--hy-my-cargoes-skeleton-gap, 1rem)
+  padding-block: var(--hy-my-cargoes-skeleton-padding-block, 0.5rem)
+
+.summaryRow
+  height: var(--hy-my-cargoes-skeleton-summary-row-height, 1.25rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-summary-row-width, 14rem))
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
+
+.summaryGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--hy-my-cargoes-skeleton-grid-gap, 0.75rem)
+
+  @media (min-width: 640px)
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+
+.summaryCard
+  height: var(--hy-my-cargoes-skeleton-summary-card-height, 5.5rem)
+  border-radius: var(--hy-my-cargoes-skeleton-card-radius, 1rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
+
+.cardList
+  display: grid
+  gap: var(--hy-my-cargoes-skeleton-card-gap, 0.85rem)
+
+.card
+  display: grid
+  gap: var(--hy-my-cargoes-skeleton-card-inner-gap, 0.65rem)
+  padding: var(--hy-my-cargoes-skeleton-card-padding, 1rem)
+  border-radius: var(--hy-my-cargoes-skeleton-card-radius, 1rem)
+  background: var(--hy-my-cargoes-skeleton-card-surface, rgba(7, 17, 14, 0.06))
+  animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
+
+.cardTitle
+  height: var(--hy-my-cargoes-skeleton-title-height, 1.1rem)
+  width: min(100%, var(--hy-my-cargoes-skeleton-title-width, 70%))
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
+
+.cardMetaRow
+  display: flex
+  gap: var(--hy-my-cargoes-skeleton-meta-gap, 0.5rem)
+
+.cardMeta
+  flex: 1
+  height: var(--hy-my-cargoes-skeleton-meta-height, 0.85rem)
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+
+.cardPanel
+  height: var(--hy-my-cargoes-skeleton-panel-height, 2.75rem)
+  border-radius: var(--hy-my-cargoes-skeleton-radius, 0.75rem)
+  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.07))
+
+@keyframes my-cargoes-skeleton-pulse
+  0%, 100%
+    opacity: 1
+  50%
+    opacity: 0.55
+
+@media (prefers-reduced-motion: reduce)
+  .summaryRow,
+  .summaryCard,
+  .card
+    animation: none

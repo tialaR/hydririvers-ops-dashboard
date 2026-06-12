@@ -541,3 +541,10 @@ When a component **changes layout or density by width**, declare in proof and Ca
 | Two widths | "Testado em dois tamanhos; falta conferir o terceiro." |
 
 Default preview route: `http://localhost:3000/pt-BR/cargas` (adjust per task).
+
+## Product persona flow diagrams
+
+Jornadas aprovadas por persona usam o padrão **`Hydri Persona Flow Diagram`** — diagramas claros em light mode, persona à esquerda, fluxo horizontal e branches inferiores. Especificação em [`docs/design/hydri-persona-flow-diagram.md`](../design/hydri-persona-flow-diagram.md); imagens futuras em `docs/product/flows/`.
+
+- Primeiro fluxo documentado: [`docs/product/flows/minhas-cargas-fluxo-embarcador.md`](../product/flows/minhas-cargas-fluxo-embarcador.md) (imagem PNG pendente de versionamento)
+- Diagramas de persona são **documento de produto** — não substituem UI Visual Lab nem telas de referência em Figma; Mermaid é apoio técnico, não entrega visual final.

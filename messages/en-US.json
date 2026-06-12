@@ -615,13 +615,16 @@
       "unauthorizedDescription": "This area is reserved for profiles that can create cargoes or operate the publishing flow."
     },
     "minhasCargas": {
-      "eyebrow": "Account",
+      "eyebrow": "Operations",
       "title": "My cargoes",
-      "description": "Track your cargoes, received proposals, pending items, and next steps in one place.",
+      "description": "Track status, documents, risks, and next steps for cargoes in your operation.",
       "titleCarrier": "My assigned cargoes",
-      "descriptionCarrier": "Track the cargoes accepted by your operation and see the next step for each route.",
+      "descriptionCarrier": "Track accepted cargoes with timeline, documents, and quick operational actions.",
       "breadcrumbCurrent": "My cargoes",
-      "listSectionAriaLabel": "Your account-linked cargoes, with a recent publish notice when applicable",
+      "listSectionAriaLabel": "Operational list of your cargoes with summary and per-item actions",
+      "loadingAriaLabel": "Loading your operational cargoes",
+      "errorTitle": "Could not load your cargoes",
+      "errorDescription": "Try again in a moment. If it persists, return to the dashboard and reopen this area.",
       "resultCount": "{count, plural, =0 {No cargoes found} one {1 cargo found} other {# cargoes found}}",
       "showingCount": "Showing {visible} of {total} {total, plural, one {cargo} other {cargoes}}",
       "summaryTitle": "Your operation at a glance",
@@ -644,13 +647,13 @@
         "ctaDocuments": "Review documents",
         "ctaTrack": "Track operation"
       },
-      "createdBanner": "Cargo published and saved in the mock. It appears here and in the marketplace.",
-      "emptyTitle": "You don’t have any cargoes linked to your profile yet.",
-      "emptyDescription": "Create your first cargo to start receiving proposals and tracking the operation here.",
+      "createdBanner": "Cargo saved to your operation. Track status, documents, and next steps here.",
+      "emptyTitle": "No cargoes in your operation yet.",
+      "emptyDescription": "When you create or receive a cargo, it appears here with map, timeline, and operational actions.",
       "newCargoCta": "Create my first cargo",
       "emptyTitleCarrier": "No assigned cargoes yet.",
-      "emptyDescriptionCarrier": "When you accept an operation, it will appear here with status, next steps, and tracking.",
-      "marketplaceCta": "View public opportunities"
+      "emptyDescriptionCarrier": "When you accept an operation, it appears here with status, timeline, documents, and tracking.",
+      "marketplaceCta": "Browse public cargoes"
     },
     "vessels": {
       "eyebrow": "Fleet",

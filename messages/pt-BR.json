@@ -615,13 +615,16 @@
       "unauthorizedDescription": "Esta área é reservada para perfis que podem criar cargas ou operar o fluxo de publicação."
     },
     "minhasCargas": {
-      "eyebrow": "Conta",
+      "eyebrow": "Operação",
       "title": "Minhas cargas",
-      "description": "Acompanhe suas cargas, propostas recebidas, pendências e próximos passos em um só lugar.",
+      "description": "Acompanhe status, documentos, riscos e próximos passos das cargas da sua operação.",
       "titleCarrier": "Minhas cargas atribuídas",
-      "descriptionCarrier": "Acompanhe as cargas aceitas pela sua operação e veja o próximo passo de cada rota.",
+      "descriptionCarrier": "Acompanhe as cargas aceitas pela sua operação, com timeline, documentos e ações rápidas.",
       "breadcrumbCurrent": "Minhas cargas",
-      "listSectionAriaLabel": "Suas cargas vinculadas à conta, com aviso de publicação recente quando aplicável",
+      "listSectionAriaLabel": "Lista operacional das suas cargas, com resumo e ações por item",
+      "loadingAriaLabel": "Carregando suas cargas operacionais",
+      "errorTitle": "Não foi possível carregar suas cargas",
+      "errorDescription": "Tente novamente em instantes. Se persistir, volte ao painel e reabra esta área.",
       "resultCount": "{count, plural, =0 {Nenhuma carga encontrada} one {1 carga encontrada} other {# cargas encontradas}}",
       "showingCount": "Exibindo {visible} de {total} {total, plural, one {carga} other {cargas}}",
       "summaryTitle": "Resumo da sua operação",
@@ -644,13 +647,13 @@
         "ctaDocuments": "Revisar documentos",
         "ctaTrack": "Acompanhar operação"
       },
-      "createdBanner": "Carga publicada e salva no mock. Ela aparece aqui e no marketplace.",
-      "emptyTitle": "Você ainda não tem cargas vinculadas ao seu perfil.",
-      "emptyDescription": "Cadastre sua primeira carga para começar a receber propostas e acompanhar a operação por aqui.",
+      "createdBanner": "Carga registrada na sua operação. Acompanhe status, documentos e próximos passos aqui.",
+      "emptyTitle": "Nenhuma carga na sua operação ainda.",
+      "emptyDescription": "Quando você cadastrar ou receber uma carga, ela aparece aqui com mapa, timeline e ações operacionais.",
       "newCargoCta": "Cadastrar minha primeira carga",
       "emptyTitleCarrier": "Nenhuma carga atribuída por enquanto.",
-      "emptyDescriptionCarrier": "Quando você aceitar uma operação, ela vai aparecer aqui com status, próximos passos e rastreio.",
-      "marketplaceCta": "Ver oportunidades públicas"
+      "emptyDescriptionCarrier": "Quando você aceitar uma operação, ela aparece aqui com status, timeline, documentos e rastreio.",
+      "marketplaceCta": "Explorar cargas públicas"
     },
     "vessels": {
       "eyebrow": "Frota",

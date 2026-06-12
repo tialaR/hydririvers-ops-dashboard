@@ -1,6 +1,6 @@
 import { readMock } from '@/shared/server/mock-db';
 import { normalizeCargoIdForLookup } from '@/shared/routing/normalize-cargo-id';
-import type { UserRole } from '@/features/auth/domain/auth.types';
+import type { HydroUser, UserRole } from '@/features/auth/domain/auth.types';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import { mergeCanonicalPublicCargo } from '@/features/cargo/constants/merge-canonical-public-cargo';
 import { PUBLIC_MARKETPLACE_CARGO_IDS } from '@/features/cargo/constants/public-marketplace-cargos';
@@ -10,7 +10,8 @@ import {
   resolvePublicMarketplaceCargoList,
 } from '@/features/cargo/data/resolve-public-marketplace-cargo-list';
 import { publicCargosMock } from '@/features/cargo/mocks/publicCargos.mock';
-import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/my-cargos/mocks/myCargos.mock';
+import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
+import { canAccessCargoAtTier } from '@/features/cargo/domain/cargo-visibility-policy';
 
 function cloneAsShipper(cargoes: Cargo[], userId: string) {
   return cargoes.map((cargo) => ({ ...cargo, ownerId: userId, shipperId: userId, visibility: 'private' as const }));
@@ -71,8 +72,7 @@ export async function getCurrentUserCargoById(userId: string, cargoId: string, r
 }
 
 export function canUserViewPrivateCargo(user: { id: string; role?: UserRole }, cargo: Cargo): boolean {
-  if (user.role === 'admin') return true;
-  return cargo.ownerId === user.id || cargo.shipperId === user.id || cargo.carrierId === user.id;
+  return canAccessCargoAtTier(cargo, user as HydroUser, 'owner');
 }
 
 export const getMyCargos = getCurrentUserCargos;

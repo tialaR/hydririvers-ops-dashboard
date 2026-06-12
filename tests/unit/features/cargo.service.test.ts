@@ -12,7 +12,7 @@ import {
   getCurrentUserCargos,
   getMyCargoesForUser
 } from '@/features/cargo/services/cargo.service';
-import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/my-cargos/mocks/myCargos.mock';
+import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
 
 describe('cargo.service', () => {
   beforeEach(() => {
