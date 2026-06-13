@@ -61,14 +61,19 @@ export async function getMyCargoesForUser(userId: string, role?: UserRole): Prom
   return getCurrentUserCargos(userId, role);
 }
 
+function findOwnedCargoById(cargoes: Cargo[], cargoId: string): Cargo | undefined {
+  const normalizedId = normalizeCargoIdForLookup(cargoId);
+  return cargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
+}
+
 export async function getMyCargoByIdForUser(cargoId: string, userId: string, role?: UserRole): Promise<Cargo | undefined> {
   const cargoes = await getCurrentUserCargos(userId, role);
-  return cargoes.find((cargo) => cargo.id === cargoId);
+  return findOwnedCargoById(cargoes, cargoId);
 }
 
 export async function getCurrentUserCargoById(userId: string, cargoId: string, role?: UserRole): Promise<Cargo | undefined> {
   const cargoes = await getCurrentUserCargos(userId, role);
-  return cargoes.find((cargo) => cargo.id === cargoId);
+  return findOwnedCargoById(cargoes, cargoId);
 }
 
 export function canUserViewPrivateCargo(user: { id: string; role?: UserRole }, cargo: Cargo): boolean {

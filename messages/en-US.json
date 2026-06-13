@@ -675,7 +675,129 @@
       "newCargoCta": "Create my first cargo",
       "emptyTitleCarrier": "No assigned cargoes yet.",
       "emptyDescriptionCarrier": "When you accept an operation, it appears here with status, timeline, documents, and tracking.",
-      "marketplaceCta": "Browse public cargoes"
+      "marketplaceCta": "Browse public cargoes",
+      "detail": {
+        "pageAria": "Private cargo operational detail",
+        "backLabel": "My cargoes",
+        "backAria": "Back to My cargoes",
+        "nextStepLabel": "Next step",
+        "summaryTitle": "Operational summary",
+        "summaryAria": "Operational summary with window, progress, cargo type, and main pending item",
+        "metricWindow": "Window / ETA",
+        "metricProgress": "Progress",
+        "metricCargoType": "Cargo type",
+        "metricPending": "Main pending item",
+        "actionsTitle": "Operational actions",
+        "actionsAria": "Cargo operational actions",
+        "actionTrack": "Track",
+        "actionNegotiate": "Negotiate",
+        "actionUpdateStatus": "Update status",
+        "actionObservation": "Log observation",
+        "actionOpenDocuments": "Open documents",
+        "actionAria": "Action {action} — available in the next phase",
+        "actionEnabledAria": "Action {action}",
+        "supportTitle": "Supporting data",
+        "supportAria": "Volume, window, corridor, operation, and environmental impact",
+        "supportVolume": "Volume",
+        "supportWindow": "Window",
+        "supportCorridor": "Corridor",
+        "supportOperation": "Operation",
+        "supportCo2": "CO₂ impact",
+        "statusCard": {
+          "aria": "Current operational condition of the cargo",
+          "progressLabel": "{progress}% complete",
+          "progressAria": "Operational progress {progress} percent",
+          "currentStepLabel": "Current step",
+          "alertLabel": "Main pending item",
+          "noAlert": "No critical alerts right now",
+          "windowLabel": "Window / ETA",
+          "etaLabel": "ETA confidence"
+        },
+        "sheets": {
+          "map": {
+            "title": "Operation map",
+            "description": "Route, checkpoints, and inland operation status",
+            "close": "Close map",
+            "dragHandle": "Drag map panel",
+            "unavailable": "Map unavailable for this cargo right now.",
+            "routeSection": "Route",
+            "originLabel": "Origin",
+            "destinationLabel": "Destination",
+            "routeStatusLabel": "Route status",
+            "routeStatus": "{progress}% traveled",
+            "checkpointLabel": "Checkpoint: {checkpoint} · {route}"
+          },
+          "timeline": {
+            "title": "Timeline",
+            "description": "Operational events and next step",
+            "close": "Close timeline",
+            "dragHandle": "Drag timeline panel",
+            "empty": "No events recorded yet.",
+            "nextEventSection": "Next event",
+            "eventsSection": "History",
+            "phase": {
+              "done": "Completed",
+              "current": "In progress",
+              "upcoming": "Planned"
+            }
+          },
+          "documents": {
+            "title": "Documents",
+            "description": "Operational document status",
+            "close": "Close documents",
+            "dragHandle": "Drag documents panel",
+            "empty": "No documents on file.",
+            "summary": "{total, plural, one {1 document} other {# documents}} · {pending, plural, =0 {no pending items} one {1 pending} other {# pending}} · {readiness}% ready",
+            "actionPlaceholder": "Upload document",
+            "actionAria": "Upload document — available in the next phase",
+            "status": {
+              "required": "Required",
+              "conditional": "Conditional",
+              "nextPhase": "Next phase",
+              "ok": "Submitted"
+            }
+          },
+          "risks": {
+            "title": "Risks",
+            "description": "Operational alerts for this cargo",
+            "close": "Close risks",
+            "dragHandle": "Drag risks panel",
+            "clear": "No critical risks right now.",
+            "severity": {
+              "low": "Low",
+              "medium": "Medium",
+              "high": "High"
+            }
+          }
+        },
+        "preview": {
+          "gridTitle": "Operational panels",
+          "gridAria": "Map, timeline, documents, and risks for this cargo",
+          "mapTitle": "Map",
+          "timelineTitle": "Timeline",
+          "documentsTitle": "Documents",
+          "risksTitle": "Risks",
+          "ctaView": "View",
+          "openAria": "Open {panel} panel",
+          "mapSummary": "{route} · {progress}% · {checkpoint}",
+          "mapUnavailable": "Route unavailable right now",
+          "timelineSummary": "{count, plural, one {1 recorded event} other {# recorded events}}",
+          "timelineSummaryEmpty": "No events recorded yet",
+          "documentsSummary": "{total, plural, one {1 document} other {# documents}} · {pending, plural, =0 {no pending items} one {1 pending} other {# pending}} · {readiness}% ready",
+          "documentsSummaryEmpty": "No documents on file",
+          "risksSummary": "{count, plural, one {1 operational alert} other {# operational alerts}}",
+          "risksSummaryClear": "No critical risks right now",
+          "statusRoute": "{progress}% of route",
+          "statusUnavailable": "Unavailable",
+          "statusEvents": "{count, plural, one {1 event} other {# events}}",
+          "statusNoTimeline": "No timeline",
+          "statusPendingDocs": "{count, plural, one {1 pending} other {# pending}}",
+          "statusDocsReady": "{readiness}% ready",
+          "statusNoDocuments": "No documents",
+          "statusNoCriticalRisks": "No critical risks",
+          "statusRiskCount": "{count, plural, one {1 alert} other {# alerts}}"
+        }
+      }
     },
     "vessels": {
       "eyebrow": "Fleet",

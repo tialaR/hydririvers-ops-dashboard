@@ -675,7 +675,129 @@
       "newCargoCta": "Cadastrar minha primeira carga",
       "emptyTitleCarrier": "Nenhuma carga atribuída por enquanto.",
       "emptyDescriptionCarrier": "Quando você aceitar uma operação, ela aparece aqui com status, timeline, documentos e rastreio.",
-      "marketplaceCta": "Explorar cargas públicas"
+      "marketplaceCta": "Explorar cargas públicas",
+      "detail": {
+        "pageAria": "Detalhe operacional da carga privada",
+        "backLabel": "Minhas cargas",
+        "backAria": "Voltar para Minhas cargas",
+        "nextStepLabel": "Próximo passo",
+        "summaryTitle": "Resumo operacional",
+        "summaryAria": "Resumo operacional com janela, progresso, tipo e pendência principal",
+        "metricWindow": "Janela / ETA",
+        "metricProgress": "Progresso",
+        "metricCargoType": "Tipo de carga",
+        "metricPending": "Pendência principal",
+        "actionsTitle": "Ações operacionais",
+        "actionsAria": "Ações operacionais da carga",
+        "actionTrack": "Acompanhar",
+        "actionNegotiate": "Negociar",
+        "actionUpdateStatus": "Atualizar status",
+        "actionObservation": "Registrar observação",
+        "actionOpenDocuments": "Abrir documentos",
+        "actionAria": "Ação {action} — disponível na próxima fase",
+        "actionEnabledAria": "Ação {action}",
+        "supportTitle": "Dados de apoio",
+        "supportAria": "Volume, janela, corredor, operação e impacto ambiental",
+        "supportVolume": "Volume",
+        "supportWindow": "Janela",
+        "supportCorridor": "Corredor",
+        "supportOperation": "Operação",
+        "supportCo2": "Impacto CO₂",
+        "statusCard": {
+          "aria": "Condição operacional atual da carga",
+          "progressLabel": "{progress}% concluído",
+          "progressAria": "Progresso operacional {progress} por cento",
+          "currentStepLabel": "Etapa atual",
+          "alertLabel": "Principal pendência",
+          "noAlert": "Sem alertas críticos no momento",
+          "windowLabel": "Janela / ETA",
+          "etaLabel": "Confiança de ETA"
+        },
+        "sheets": {
+          "map": {
+            "title": "Mapa da operação",
+            "description": "Rota, checkpoints e status da operação fluvial",
+            "close": "Fechar mapa",
+            "dragHandle": "Arrastar painel do mapa",
+            "unavailable": "Mapa indisponível para esta carga no momento.",
+            "routeSection": "Rota",
+            "originLabel": "Origem",
+            "destinationLabel": "Destino",
+            "routeStatusLabel": "Status da rota",
+            "routeStatus": "{progress}% percorrido",
+            "checkpointLabel": "Checkpoint: {checkpoint} · {route}"
+          },
+          "timeline": {
+            "title": "Timeline",
+            "description": "Eventos operacionais e próximo passo",
+            "close": "Fechar timeline",
+            "dragHandle": "Arrastar painel da timeline",
+            "empty": "Nenhum evento registrado ainda.",
+            "nextEventSection": "Próximo evento",
+            "eventsSection": "Histórico",
+            "phase": {
+              "done": "Concluído",
+              "current": "Em andamento",
+              "upcoming": "Previsto"
+            }
+          },
+          "documents": {
+            "title": "Documentos",
+            "description": "Status documental da operação",
+            "close": "Fechar documentos",
+            "dragHandle": "Arrastar painel de documentos",
+            "empty": "Nenhum documento cadastrado.",
+            "summary": "{total, plural, one {1 documento} other {# documentos}} · {pending, plural, =0 {sem pendências} one {1 pendente} other {# pendentes}} · {readiness}% prontos",
+            "actionPlaceholder": "Enviar documento",
+            "actionAria": "Enviar documento — disponível na próxima fase",
+            "status": {
+              "required": "Obrigatório",
+              "conditional": "Condicional",
+              "nextPhase": "Próxima fase",
+              "ok": "Enviado"
+            }
+          },
+          "risks": {
+            "title": "Riscos",
+            "description": "Alertas operacionais da carga",
+            "close": "Fechar riscos",
+            "dragHandle": "Arrastar painel de riscos",
+            "clear": "Sem riscos críticos no momento.",
+            "severity": {
+              "low": "Baixo",
+              "medium": "Médio",
+              "high": "Alto"
+            }
+          }
+        },
+        "preview": {
+          "gridTitle": "Painéis operacionais",
+          "gridAria": "Mapa, timeline, documentos e riscos da carga",
+          "mapTitle": "Mapa",
+          "timelineTitle": "Timeline",
+          "documentsTitle": "Documentos",
+          "risksTitle": "Riscos",
+          "ctaView": "Ver",
+          "openAria": "Abrir painel {panel}",
+          "mapSummary": "{route} · {progress}% · {checkpoint}",
+          "mapUnavailable": "Rota indisponível no momento",
+          "timelineSummary": "{count, plural, one {1 evento registrado} other {# eventos registrados}}",
+          "timelineSummaryEmpty": "Nenhum evento registrado ainda",
+          "documentsSummary": "{total, plural, one {1 documento} other {# documentos}} · {pending, plural, =0 {sem pendências} one {1 pendente} other {# pendentes}} · {readiness}% prontos",
+          "documentsSummaryEmpty": "Nenhum documento cadastrado",
+          "risksSummary": "{count, plural, one {1 alerta operacional} other {# alertas operacionais}}",
+          "risksSummaryClear": "Sem riscos críticos no momento",
+          "statusRoute": "{progress}% da rota",
+          "statusUnavailable": "Indisponível",
+          "statusEvents": "{count, plural, one {1 evento} other {# eventos}}",
+          "statusNoTimeline": "Sem timeline",
+          "statusPendingDocs": "{count, plural, one {1 pendente} other {# pendentes}}",
+          "statusDocsReady": "{readiness}% prontos",
+          "statusNoDocuments": "Sem documentos",
+          "statusNoCriticalRisks": "Sem riscos críticos",
+          "statusRiskCount": "{count, plural, one {1 alerta} other {# alertas}}"
+        }
+      }
     },
     "vessels": {
       "eyebrow": "Frota",

@@ -1,0 +1,45 @@
+.root
+  --hy-owned-cargo-gap: 0.5rem
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  --hy-owned-cargo-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 90%, transparent)
+  --hy-owned-cargo-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+  --hy-owned-cargo-radius: 0.875rem
+  display: grid
+  gap: var(--hy-owned-cargo-gap)
+
+.title
+  margin: 0
+  font-size: 0.875rem
+  font-weight: 820
+  color: var(--hy-owned-cargo-label-color)
+
+.list
+  display: grid
+  gap: 0.45rem
+
+.card
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.75rem
+  min-height: 2.75rem
+  padding: 0.55rem 0.75rem
+  border-radius: var(--hy-owned-cargo-radius)
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: var(--hy-owned-cargo-surface)
+
+.label
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.value
+  font-size: 0.75rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+  text-align: right
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  max-width: 62%

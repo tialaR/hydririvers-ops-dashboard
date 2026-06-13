@@ -1,0 +1,78 @@
+.root
+  --hy-owned-cargo-summary-grid-gap: 0.625rem
+  --hy-owned-cargo-summary-metric-size: 1.75rem
+  --hy-owned-cargo-summary-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 92%, var(--hx-text, var(--text)) 8%)
+  --hy-owned-cargo-summary-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent)
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  margin-bottom: var(--hy-owned-cargo-summary-section-gap, 1rem)
+
+.title
+  margin: 0 0 0.625rem
+  font-size: 0.875rem
+  font-weight: 820
+  letter-spacing: -0.02em
+  color: var(--hy-owned-cargo-label-color)
+
+.grid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--hy-owned-cargo-summary-grid-gap)
+
+.metric
+  position: relative
+  display: grid
+  grid-template-columns: var(--hy-owned-cargo-summary-metric-size) minmax(0, 1fr)
+  grid-template-rows: auto auto
+  column-gap: 0.5rem
+  row-gap: 0.125rem
+  align-items: center
+  min-height: var(--hy-owned-cargo-summary-metric-min-height, 4.25rem)
+  padding: 0.625rem 0.7rem
+  border-radius: var(--hy-owned-cargo-summary-radius, 0.875rem)
+  border: 1px solid var(--hy-owned-cargo-summary-border)
+  background: var(--hy-owned-cargo-summary-surface)
+  box-shadow: 0 1px 0 color-mix(in srgb, var(--hx-text, var(--text)) 4%, transparent)
+
+.iconWrap
+  grid-row: 1 / span 2
+  display: grid
+  place-items: center
+  width: var(--hy-owned-cargo-summary-metric-size)
+  height: var(--hy-owned-cargo-summary-metric-size)
+  border-radius: 0.625rem
+  color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 88%, var(--hx-text, var(--text)))
+  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 12%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 22%, transparent)
+
+.value
+  font-size: 1.125rem
+  font-weight: 900
+  line-height: 1
+  letter-spacing: -0.03em
+  color: var(--hy-owned-cargo-label-color)
+
+.label
+  grid-column: 2
+  font-size: 0.75rem
+  font-weight: 760
+  line-height: 1.2
+  color: var(--hy-owned-cargo-label-color)
+
+.hint
+  position: absolute
+  width: 1px
+  height: 1px
+  padding: 0
+  margin: -1px
+  overflow: hidden
+  clip: rect(0, 0, 0, 0)
+  white-space: nowrap
+  border: 0
+
+@media (min-width: 1024px)
+  .grid
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+
+  .metric
+    min-height: var(--hy-owned-cargo-summary-metric-min-height-desktop, 4.5rem)
