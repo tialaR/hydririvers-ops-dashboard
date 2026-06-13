@@ -437,3 +437,142 @@ Ver corpo terminal-friendly abaixo (§15.1).
 ```
 docs(minhas-cargas): close phase G audit and PR checklist
 ```
+
+---
+
+## 16. Triagem CI pós-push (2026-06-12)
+
+**PR:** [#23](https://github.com/tialaR/hydririvers-ops-dashboard/pull/23) — `feat/minhas-cargas-operational-flow` → `dev`
+
+### Resumo da triagem
+
+| Métrica | Resultado |
+|---------|-----------|
+| Workflows falhos | `CI` (job `quality`), `PR Quality` (job `validate`) |
+| Comando CI que falhou | `npm run test` (vitest run — 154 arquivos, 907 testes) |
+| Falhas | **2** (mesmo arquivo) |
+| Arquivos minhas-cargas tocados pela falha | **Nenhum** |
+| Reproduz localmente | **Sim** |
+| Reproduz em dev (CI) | **Sim** — runs `27453749569`, `27453749572` |
+| Entrega `/minhas-cargas` bloqueada | **Não** (fluxo + harness F OK) |
+| CI verde sem correção | **Não** — merge bloqueado por job `Test` |
+
+### Falhas capturadas
+
+| # | Teste exato | Comando | Mensagem principal | Classificação |
+|---|-------------|---------|-------------------|---------------|
+| 1 | `MobileCargoListLabV2 > renderiza a tela dev-v2 sem erro` | `npm run test` | `ReferenceError: window is not defined` em `use-bottom-nav-indicator.ts:246` (`window.addEventListener('resize', ...)`) | **TECH DEBT** |
+| 2 | `MobileCargoListLabV2 > renderiza cards de carga e abre detalhe ao acionar o card` | `npm run test` | Mesma stack — `useEffect` síncrono do mock em `mobile-cargo-list-lab-v2.test.tsx:29` dispara hook do BottomNav durante `renderToStaticMarkup` | **TECH DEBT** |
+
+**Arquivo de teste:** `tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx`  
+**Cadeia:** `MobileCargoListLabV2` → `BottomNav` → `useBottomNavIndicator` → `window` (indisponível em SSR Node)
+
+### Causa provável
+
+1. O lab dev-v2 (`mobile-cargo-list-lab-v2.tsx`) renderiza `BottomNav` de produção (commit `d2464941` — evolução shell mobile `/cargas`).
+2. O teste mocka `useEffect` para executar **sincronamente** (padrão legado do lab) — ver linhas 24–31 do teste.
+3. `use-bottom-nav-indicator.ts` registra listener de `resize` em `window` no mount — válido no browser, inválido em `renderToStaticMarkup` + `useEffect` síncrono.
+4. `bottom-nav.component.test.tsx` **não** mocka `useEffect` assim e passa (27/27) — regressão isolada ao contrato do lab-v2.
+
+**Não é:** flaky/infra (reproduzível 100%), out-of-scope aleatório, nem blocker de `/minhas-cargas`.
+
+### Validação pós-triagem (local, 2026-06-12)
+
+| Comando | Resultado |
+|---------|-----------|
+| `npm run lint` | OK |
+| `npm run typecheck` | OK |
+| `npm run check:i18n` | OK — 2183 keys |
+| `npm run build` | OK |
+| `npm run test` (suite completa, pré-fix) | **FAIL** — 2 falhas lab-v2 (mesmas do CI) |
+| `npm run test` (escopo minhas-cargas, 6 arquivos) | OK — 33/33 |
+| `npm run test` (suite completa, pós-fix TD-01) | OK — 907/907 (mock BottomNav no lab-v2 SSR) |
+| `BASE_URL=http://localhost:3000 node scripts/minhas-cargas-phase-f-qa.mjs` | OK — 0 falhas, 0 avisos (2026-06-13; dev :3000) |
+
+### Falha local-only (não reproduz no CI)
+
+| Teste | Comando | Erro | Classificação | Decisão |
+|-------|---------|------|---------------|---------|
+| `public-cargo-list-map-legacy.test.ts` (2 casos) | `npm run test` após harness Phase F | `mock-1781228323768` polui `getPublicCargos()` | **FLAKY-INFRA** | Não corrigir — artefato de sessão dev/harness; CI não inclui este mock |
+
+### §16.1 Dívidas técnicas registradas
+
+#### TD-01 — Lab-v2 SSR test × BottomNav resize listener
+
+| Campo | Valor |
+|-------|-------|
+| **Título** | Lab-v2 unit test quebra com BottomNav em SSR |
+| **Contexto** | CI `quality`/`validate` falham após integração BottomNav no lab dev-v2; mock `useEffect` síncrono + `renderToStaticMarkup` expõe `window` ausente |
+| **Impacto** | CI vermelho; **não** afeta runtime de `/minhas-cargas`, `/cargas` prod, auth, sheets ou build |
+| **Por que não bloqueia este PR** | Falha em teste de **lab temporário** (`mobile-list-lab-v2`), fora do fluxo entregue e validado (Fase F 0 falhas); todos os testes `owned-cargo-*` e `minhas-cargas-*` passam |
+| **Rota afetada** | Nenhuma rota prod — lab interno `/cargas` dev-v2 reference |
+| **Teste afetado** | `tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx` (2 casos) |
+| **Correção aplicada (2026-06-13)** | Mock `@/shared/components/bottom-nav` em `mobile-cargo-list-lab-v2.test.tsx` — isola SSR do lab sem tocar `use-bottom-nav-indicator` |
+| **Prioridade** | **P1** — resolvido (test-only) |
+| **Dono sugerido** | QA / cargo flow (test harness) |
+
+#### TD-02 — BottomNav tab ativa em `/minhas-cargas` (pré-existente)
+
+| Campo | Valor |
+|-------|-------|
+| **Título** | Tab ativa mostra Dashboard em Minhas cargas |
+| **Contexto** | `resolveMobileBottomNavActiveId` retorna `dashboard` para `/minhas-cargas` |
+| **Impacto** | UX — usuário vê tab errada destacada |
+| **Por que não bloqueia este PR** | Comportamento pré-existente; escopo F proibiu alterar BottomNav |
+| **Rota afetada** | `/pt-BR/minhas-cargas`, `/pt-BR/minhas-cargas/[id]` |
+| **Teste afetado** | `resolve-mobile-page-title.test.ts` (asserta fallback conhecido) |
+| **Correção futura** | Mapear `myCargos` → tab dedicada ou `cargos` no resolver global |
+| **Prioridade** | **P2** |
+| **Dono sugerido** | mobile shell |
+
+#### TD-03 — Header ghosting no scroll (chrome compartilhado)
+
+| Campo | Valor |
+|-------|-------|
+| **Título** | Ghosting leve no header glass mobile |
+| **Contexto** | Header semi-transparente + conteúdo scrollando por baixo |
+| **Impacto** | Visual — sensação de bug; não impede operação |
+| **Por que não bloqueia este PR** | Bug visual conhecido; Fase F validou fluxo funcional |
+| **Rota afetada** | `/minhas-cargas` lista e detalhe |
+| **Teste afetado** | Nenhum automatizado — evidência visual Fase F |
+| **Correção futura** | Ajuste opacidade/solid fill no chrome mobile compartilhado |
+| **Prioridade** | **P2** |
+| **Dono sugerido** | mobile shell |
+
+### Known follow-ups — texto para PR #23
+
+Adicionar ou substituir seção **Known follow-ups** no corpo do PR:
+
+```markdown
+## Known follow-ups / technical debt
+
+- BottomNav active state still maps `/minhas-cargas` to dashboard while the route header is correct. This is a shared mobile shell mapping follow-up and does not block the owned cargo flow (TD-02).
+- Light header ghosting on scroll remains in shared mobile chrome. The cockpit and panel flows are functional and covered by QA harness (TD-03).
+- Mock QA Hub button may overlap content in development QA contexts. This is dev-only and not part of production UI.
+- `public-cargo-list-map-legacy.test.ts`: classified as FLAKY-INFRA when dev server + Phase F harness pollute in-memory public cargo list (`mock-*` IDs). Does not block `/minhas-cargas` list/detail/panel flow. Follow-up: isolate mock state between tests or run harness against dedicated port with clean process.
+
+## CI status note
+
+Lint, typecheck, i18n, build and `npm run test` pass after TD-01 test-only fix (mock BottomNav in lab-v2 SSR tests). Entrega minhas-cargas: 33/33 testes de escopo + Phase F harness 0 falhas.
+```
+
+### Decisão de merge
+
+| Critério | Status |
+|----------|--------|
+| `/minhas-cargas` fluxo principal | OK |
+| Build / lint / typecheck / i18n | OK |
+| CI `npm run test` | OK após fix test-only TD-01 |
+| **PR pode seguir?** | **🟢 Sim** — produto + CI; follow-ups TD-02/TD-03 documentados |
+
+### Commit sugerido (após aprovação)
+
+```
+docs(minhas-cargas): triage CI lab-v2 test debt post-push
+```
+
+Fix test-only aplicado (commit separado recomendado):
+
+```
+test(cargo-lab): mock BottomNav in lab-v2 SSR tests
+```
