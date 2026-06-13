@@ -4,8 +4,9 @@ import { useEffect, type ReactNode } from 'react';
 import { useLocale } from 'next-intl';
 import { usePathname, useRouter } from '@/core/i18n/navigation';
 import { useAuthSession } from '@/features/auth/hooks/use-auth-session';
-import { appRoutes, localizedAppPath } from '@/shared/routing/app-routes';
+import { intlAppPaths, localizedAppPath } from '@/shared/routing/app-routes';
 import type { AppLocale } from '@/shared/routing/route-types';
+import { appendRouteSearchParams, routeSearchParams } from '@/shared/routing/route-search-params';
 import { MyCargoesListSkeleton } from '../my-cargoes-list/my-cargoes-list-skeleton';
 
 type MinhasCargasAuthGateProps = {
@@ -25,7 +26,11 @@ export function MinhasCargasAuthGate({ children }: MinhasCargasAuthGateProps) {
   useEffect(() => {
     if (!ready || user) return;
     const nextPath = localizedAppPath(locale, pathname);
-    router.replace(appRoutes.auth.login(locale, nextPath));
+    router.replace(
+      appendRouteSearchParams(intlAppPaths.auth.login, {
+        [routeSearchParams.next]: nextPath,
+      }) as never,
+    );
   }, [ready, user, router, locale, pathname]);
 
   if (!ready || !user) {
