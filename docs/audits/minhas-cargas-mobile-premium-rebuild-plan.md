@@ -2,7 +2,7 @@
 
 | Metadado | Valor |
 |----------|-------|
-| **Status** | Fase A implementada (P0 navegação, auth, contraste, padding) — 2026-06-12; **Fase B implementada** (owned-cargo-summary + owned-cargo-card + integração MyCargoesList) — 2026-06-12; **Fase C implementada** (owned-cargo-detail cockpit + preview grid 2×2) — 2026-06-12; **Fase D implementada** (status card 1×1, support cards, sheets map/timeline/documents/risks + panel state local) — 2026-06-12 |
+| **Status** | Fase A implementada (P0 navegação, auth, contraste, padding) — 2026-06-12; **Fase B implementada** (owned-cargo-summary + owned-cargo-card + integração MyCargoesList) — 2026-06-12; **Fase C implementada** (owned-cargo-detail cockpit + preview grid 2×2) — 2026-06-12; **Fase D implementada** (status card 1×1, support cards, sheets map/timeline/documents/risks + panel state local) — 2026-06-12; **Fase E implementada** (`?panel=` URL sync + replace/back) — 2026-06-12; **Fase F concluída** (QA visual 3 device presets + hardening check, sem redesign) — 2026-06-12 |
 | **Data** | 2026-06-12 |
 | **Rota** | `/[locale]/minhas-cargas`, `/[locale]/minhas-cargas/[id]` |
 | **Fluxos aprovados** | [`minhas-cargas-fluxo-embarcador.md`](../product/flows/minhas-cargas-fluxo-embarcador.md), [`minhas-cargas-fluxo-tecnico-embarcador.md`](../product/flows/minhas-cargas-fluxo-tecnico-embarcador.md) |
@@ -186,10 +186,63 @@ loading (lista + detalhe), empty carteira, error serviço, not found, no documen
 | **C** | `owned-cargo-detail` + preview grid 2×2 (previews estáticos) | P1 | **Concluída 2026-06-12** |
 | **D** | Sheets map/timeline/documents/risks + status card + support cards + panel state local | P1 | **Concluída 2026-06-12** |
 | **E** | `?panel=` URL sync + replace/back | P1 | **Concluída 2026-06-12** |
-| **F** | QA 3 devices nomeados + screenshots | P1 |
+| **F** | QA 3 devices nomeados + screenshots | P1 | **Concluída 2026-06-12** |
 | **G** | Atualizar fluxo doc §11 gaps, ADR se necessário | P2 |
 
 **Primeira implementação recomendada:** Fase A (bugs visíveis/navegação que invalidam QA de tudo mais).
+
+---
+
+## 14. Fase F — QA visual oficial (2026-06-12)
+
+### Devices (presets Playwright nomeados)
+
+| Tier | Preset | Viewport real do preset | Screenshot `output/` |
+|------|--------|-------------------------|----------------------|
+| compact | **iPhone SE** | 320×568 | `minhas-cargas-phase-f-360x740.png` |
+| standard | **iPhone 14** | 390×664 | `minhas-cargas-phase-f-390x844.png` |
+| large | **iPhone 14 Pro Max** | 430×740 | `minhas-cargas-phase-f-430x932.png` |
+
+Nomes de arquivo seguem tier do plano (360/390/430); **validação oficial usou device preset nomeado**, não viewport manual. Altura do preset Playwright difere dos rótulos históricos (740/844/932).
+
+**Base URL QA:** `http://localhost:3000` (obrigatório em dev — `127.0.0.1` bloqueia HMR/chunks Next).
+
+**Auth QA:** `POST /api/mock-mode/login-as` (`u-shipper-1` / Tiala embarcador).
+
+**ID real testado (clique no 1º card):** `mock-1781228323768` (mock dinâmico e2e; lookup detalhe OK, sem 404).
+
+### Resultado por rota
+
+| Rota / fluxo | Resultado |
+|--------------|-----------|
+| `/pt-BR/cargas` | OK — sem cards privados; layout público preservado; BottomNav visível após hydrate |
+| `/pt-BR/minhas-cargas` | OK — header **Minhas cargas**; resumo 2×2; cards privados; scroll; último card acima do BottomNav |
+| `/pt-BR/minhas-cargas/[id]` cockpit | OK — status card, grid 2×2, support cards, ações; padding-bottom ~48px acima do nav no fim do scroll |
+| Panels por click (map/timeline/documents/risks) | OK — URL `?panel=`, sheet abre, close limpa param |
+| Panels por URL direta (4) | OK — abre direto; close limpa; base íntegra |
+| Back button com panel aberto | OK — fecha panel, permanece no detalhe |
+| `?panel=banana&scope=active` | OK — remove `banana`, preserva `scope=active`, sem sheet |
+
+### Script QA
+
+`scripts/minhas-cargas-phase-f-qa.mjs` — relatório JSON em `output/minhas-cargas-phase-f-report.json`.
+
+### Riscos restantes (sem redesign nesta fase)
+
+1. **Ghosting leve** no header glass ao rolar lista/detalhe (texto de cards sob título compacto) — mitigação completa exige ajuste no chrome mobile compartilhado, fora do escopo F.
+2. **BottomNav tab ativa** em `/minhas-cargas` continua `dashboard` (mapeamento global pré-existente; escopo F proibiu alterar BottomNav).
+3. **Botão M** (QA mock) pode sobrepor cards — esperado em mock-mode; não quebra layout funcional.
+4. **Presets vs rótulos** — filenames 360×740 / 390×844 / 430×932 são convenção do plano; evidência capturada com alturas reais dos presets acima.
+
+### Screenshots Fase F
+
+Gerados/atualizados em `output/`:
+
+- `minhas-cargas-phase-f-360x740.png`
+- `minhas-cargas-phase-f-390x844.png`
+- `minhas-cargas-phase-f-430x932.png`
+
+Evidência adicional ad hoc (não obrigatória): `minhas-cargas-phase-f-list-top-390.png`, `minhas-cargas-detail-phase-f-390.png`.
 
 ---
 
