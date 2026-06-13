@@ -3,7 +3,7 @@
 | Metadado | Valor |
 |----------|-------|
 | **Padrão visual** | [Hydri Persona Flow Diagram](../../design/hydri-persona-flow-diagram.md) |
-| **Status** | Fluxo aprovado em produto — documentação e imagem versionadas |
+| **Status** | Fluxo aprovado — implementação mobile premium Fases A–G concluída (2026-06-12) |
 | **Persona** | Embarcador / dono da carga (`shipper`) |
 | **Rota** | `/[locale]/minhas-cargas` |
 | **Imagem** | [`./minhas-cargas-fluxo-embarcador.png`](./minhas-cargas-fluxo-embarcador.png) |
@@ -101,20 +101,24 @@ Não recriar a arte — alterações visuais exigem nova rodada de aprovação d
 
 ## 8. Componentes envolvidos
 
-Implementação atual (referência para fechar gaps com o fluxo aprovado):
+Implementação atual (Fases A–F entregues — 2026-06-12):
 
 | Camada | Componente / módulo | Papel no fluxo |
 |--------|---------------------|----------------|
-| Página | `src/app/[locale]/(product-shell)/minhas-cargas/page.tsx` | Entrada, auth gate, fetch de carteira |
-| Página | `src/app/[locale]/(product-shell)/minhas-cargas/[id]/page.tsx` | Detalhe privado com ownership |
-| Loading | `src/app/[locale]/(product-shell)/minhas-cargas/loading.tsx` | Skeleton da lista |
-| Lista | `MyCargoesList` (`my-cargoes-list.tsx`) | Resumo operacional, grid, empty state, banner pós-criação |
-| Skeleton | `my-cargoes-list-skeleton` | Loading da lista |
-| Card | `CargoCard` (`variant="myCargos"`) | Seleção de carga na lista |
-| Detalhe | `CargoDetailLoader` | Detalhe com seções (mapa, timeline, docs, ações conforme implementação) |
+| Layout | `minhas-cargas/layout.tsx` → `MinhasCargasAuthGate` | Gate client: skeleton neutro até sessão; redirect login com `next` |
+| Página | `minhas-cargas/page.tsx` | Entrada RSC, auth redirect HTTP, fetch de carteira |
+| Página | `minhas-cargas/[id]/page.tsx` | Detalhe privado com ownership + `OwnedCargoDetail` |
+| Loading | `minhas-cargas/loading.tsx`, `owned-cargo-detail-skeleton` | Skeleton lista e detalhe |
+| Lista | `MyCargoesList` | Resumo operacional 2×2, seção de cards, empty state |
+| Resumo | `owned-cargo-summary` | KPIs compactos da carteira |
+| Card | `owned-cargo-card` | Card privado premium (~40–50% altura do marketplace) |
+| Detalhe | `owned-cargo-detail` | Cockpit: header, status 1×1, resumo, grid 2×2, support cards, ações |
+| Preview | `owned-cargo-preview-grid` + `owned-cargo-preview-card` | Portas Mapa/Timeline/Documentos/Riscos |
+| Sheets | `owned-cargo-*-sheet` (map, timeline, documents, risks) | Profundidade via BottomSheet global |
+| Panel URL | `owned-cargo-panel-search-params`, `use-owned-cargo-panel` | `?panel=map\|timeline\|documents\|risks` |
 | Shell | `PageShell`, `Breadcrumb` | Estrutura e navegação |
-| Serviço | `getMyCargoesForUser`, `getMyCargoByIdForUser` | Dados da carteira privada |
-| Domínio | `cargo-visibility-policy.ts` | Tier `owner` para acesso |
+| Serviço | `getMyCargoesForUser`, `getMyCargoByIdForUser` | Dados da carteira privada (ID normalizado) |
+| Domínio | `cargo-visibility-policy.ts`, `derive-owned-cargo-detail` | Tier `owner`; previews operacionais |
 
 ---
 
@@ -139,7 +143,9 @@ Regra de negócio: ver [`docs/business-rules.md`](../../business-rules.md) — s
 | **Público** | Visitante e autenticado (vitrine) | Usuário logado (carteira privada) |
 | **Dados** | `getPublicCargos()` / `publicCargosMock` | `getMyCargoesForUser()` / `owned-cargos.mock` |
 | **Visibilidade** | Tier `public` | Tier `owner` (ownership obrigatório) |
-| **Detalhe** | `/cargas/[id]` — oferta pública, dados sensíveis limitados | `/minhas-cargas/[id]` — operação completa do dono |
+| **Detalhe** | `/cargas/[id]` — oferta pública, dados sensíveis limitados | `/minhas-cargas/[id]` — cockpit operacional (`owned-cargo-detail`) |
+| **Mapa/Timeline/Docs/Riscos** | Inline ou rotas públicas | Preview 2×2 no cockpit + BottomSheet (`?panel=`) |
+| **Card lista** | `CargoCard` marketplace | `owned-cargo-card` compacto premium |
 | **Ações** | Buscar oferta, abrir, negociar entrada | Acompanhar, documentos, timeline, status, negociação vinculada |
 | **O que evitar** | Listar carteira privada como se fosse marketplace | Misturar cargas públicas na lista principal |
 
@@ -149,14 +155,21 @@ Decisão de produto: [`docs/product/dashboard-cargas-minhas-cargas-decision.md`]
 
 ## 11. Próximos passos
 
-Priorizar fechamento de gap entre **fluxo aprovado** e **estado atual do repo**:
+**Entregue (Fases A–G — 2026-06-12):**
 
-1. **Buscar / filtrar na lista privada** — o diagrama inclui etapa 3; validar se filtros de `MyCargoesList` cobrem busca, status e pendências como no fluxo.
-2. **Resumo operacional** — alinhar cards do resumo (`summarizeCargoes`) com métricas do diagrama (ativas, propostas, pendências, em trânsito).
-3. **Detalhe — branches** — garantir presença e hierarquia de Mapa, Timeline, Documentos, Riscos/alertas e bloco de Ações no detalhe privado.
-4. **Ações do detalhe** — implementar ou destacar **Acompanhar**, **Negociar** e **Atualizar status** conforme permissões do embarcador (`access-control`).
-5. **Mocks por persona** — massa rica para `u-shipper-*` em `owned-cargos.mock` para QA do fluxo completo sem empty state falso.
-6. **Mobile** — validar jornada em três larguras após mudanças de UI; rota de preview: `/pt-BR/minhas-cargas`.
+- ✅ Lista premium com `owned-cargo-card` e resumo 2×2
+- ✅ Detalhe cockpit com grid 2×2 (Mapa, Timeline, Documentos, Riscos)
+- ✅ Sheets via BottomSheet global + `?panel=` na URL
+- ✅ Auth gate client (`MinhasCargasAuthGate`) + redirect com `next`
+- ✅ QA visual 3 devices (360×740, 390×844, 430×932)
+
+**Pós-PR (backlog):**
+
+1. **Buscar / filtrar avançado** — validar se filtros de `MyCargoesList` cobrem busca, status e pendências como no diagrama completo.
+2. **BottomNav active tab** — mapear `/minhas-cargas` para tab correta (issue separada).
+3. **Ghosting header** — mitigar texto fantasma no chrome mobile compartilhado.
+4. **Mocks por persona** — massa rica para `u-shipper-*` em cenários empty/error raros.
+5. **Ações do detalhe** — evoluir **Negociar** e **Atualizar status** conforme `access-control` quando API real existir.
 
 Critérios de aceite ampliados: [`docs/product/mobile-shipper-use-cases.md`](../mobile-shipper-use-cases.md).
 

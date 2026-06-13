@@ -4,7 +4,7 @@
 |----------|-------|
 | **Tipo** | Hydri Persona Flow Diagram — fluxo técnico |
 | **Padrão visual** | [Hydri Persona Flow Diagram](../../design/hydri-persona-flow-diagram.md) |
-| **Status** | Fluxo técnico aprovado — documentação e imagem versionadas |
+| **Status** | Fluxo técnico aprovado — alinhado à implementação Fases A–G (2026-06-12) |
 | **Persona** | Embarcador / dono da carga |
 | **Rota** | `/[locale]/minhas-cargas` |
 | **Imagem** | [`./minhas-cargas-fluxo-tecnico-embarcador.png`](./minhas-cargas-fluxo-tecnico-embarcador.png) |
@@ -54,6 +54,8 @@ Ambas são **fonte documental aprovada** para futuras tarefas que toquem `/minha
 ### 2. Auth e visibilidade
 
 - Gate por sessão mock e tier de visibilidade.
+- **Layout client:** `MinhasCargasAuthGate` em `minhas-cargas/layout.tsx` — skeleton neutro até `useAuthSession` resolver; redirect client para login com `next` quando não autenticado (evita flash de conteúdo privado).
+- **Gate RSC:** páginas redirecionam via `getSessionUser()` + `redirect(appRoutes.auth.login(..., nextPath))`.
 - **Policy:** `public | authenticated | owner | negotiation participant` (`cargo-visibility-policy.ts`).
 - Branches de acesso documentados na seção [Branches IF/ELSE](#branches-ifelse).
 
@@ -66,20 +68,23 @@ Ambas são **fonte documental aprovada** para futuras tarefas que toquem `/minha
 
 ### 4. Lista operacional
 
-- **Componentes:** `PageShell`, `Breadcrumb`, `MyCargoesList`, `CargoCard` (variant `myCargos`).
-- **Features:** busca e filtros, resumo operacional, status da carga, CTAs contextuais.
+- **Componentes:** `PageShell`, `Breadcrumb`, `MyCargoesList`, `owned-cargo-summary`, `owned-cargo-card`.
+- **Features:** busca e filtros, resumo operacional 2×2, status da carga, tap no card → detalhe.
 
-### 5. Detalhe da carga
+### 5. Detalhe da carga (cockpit)
 
-- **Loader:** `CargoDetailLoader`.
+- **Componente:** `owned-cargo-detail` (substitui `CargoDetailLoader` nesta rota).
 - **Rota:** `/[locale]/minhas-cargas/[id]`.
-- **Blocos:** mapa, timeline, documentos, riscos/alertas, rastreio.
+- **Lookup:** `getMyCargoByIdForUser(id, userId, role)` com `normalizeCargoIdForLookup` — card e detalhe usam o mesmo ID canônico.
+- **Blocos:** status card 1×1, resumo operacional, preview grid 2×2 (mapa, timeline, documentos, riscos), support cards, ações primárias.
 
-### 6. BottomSheet e ações
+### 6. BottomSheet, panel URL e ações
 
-- **Componente:** BottomSheet global.
-- **Estados:** `idle` → `loading` → `success` / `error` → `closed`.
-- **Ações:** acompanhar, negociar, atualizar status, registrar observação, abrir documentos.
+- **Componente:** BottomSheet global (`src/shared/components/bottom-sheet`).
+- **Panel param:** `?panel=map|timeline|documents|risks` — `owned-cargo-panel-search-params.ts`, hook `use-owned-cargo-panel`.
+- **Comportamento:** click no preview → `router.replace` com `panel`; close/back remove param; param inválido é descartado preservando demais query params.
+- **Sheets:** `owned-cargo-map-sheet`, `owned-cargo-timeline-sheet`, `owned-cargo-documents-sheet`, `owned-cargo-risks-sheet`.
+- **Ações:** acompanhar, negociar, atualizar status (CTAs no cockpit; sheets para profundidade).
 
 ### 7. Erros e empty states
 
@@ -114,15 +119,16 @@ Ver seção [Caminho feliz](#caminho-feliz) abaixo.
 ## Caminho feliz
 
 1. Entrar em `/minhas-cargas`.
-2. Verificar auth.
-3. Buscar owned cargos (`getMyCargoesForUser()`).
+2. `MinhasCargasAuthGate` aguarda sessão (skeleton) ou redirect login com `next`.
+3. RSC verifica auth; buscar owned cargos (`getMyCargoesForUser()`).
 4. Renderizar skeleton (`loading.tsx` / `MyCargoesListSkeleton`).
-5. Renderizar lista (`MyCargoesList`).
-6. Selecionar carga (`CargoCard` variant `myCargos`).
-7. Abrir detalhe (`CargoDetailLoader` em `/minhas-cargas/[id]`).
-8. Ver mapa, timeline, documentos e riscos/alertas.
-9. Executar ação via BottomSheet global.
-10. Feedback de sucesso.
+5. Renderizar lista (`MyCargoesList` + `owned-cargo-card`).
+6. Selecionar carga (tap no card).
+7. Abrir detalhe (`owned-cargo-detail` em `/minhas-cargas/[id]`).
+8. Ver previews Mapa, Timeline, Documentos, Riscos no grid 2×2.
+9. Tap preview → BottomSheet abre; URL ganha `?panel=`.
+10. Fechar sheet (close/back) → remove `panel`; permanece no detalhe.
+11. Executar ação operacional no cockpit quando aplicável.
 
 ---
 
@@ -157,15 +163,18 @@ Ver seção [Caminho feliz](#caminho-feliz) abaixo.
 
 | Camada | Componente / módulo | Papel |
 |--------|---------------------|-------|
+| Auth gate | `MinhasCargasAuthGate` | Skeleton + redirect client com `next` |
 | Shell | `PageShell`, `Breadcrumb` | Estrutura e navegação |
-| Lista | `MyCargoesList` | Resumo, grid, empty state |
-| Loading | `MyCargoesListSkeleton` | Skeleton da lista |
-| Card | `CargoCard` (variant `myCargos`) | Seleção na lista |
-| Detalhe | `CargoDetailLoader` | Mapa, timeline, docs, riscos |
-| Ações | BottomSheet global | CTAs operacionais com estados |
-| Controles | `Button`, `IconButton` | Ações e ícones |
-| Status | Status chips | Estado operacional da carga |
-| Detalhe — seções | Timeline, Map, Documents panel, Risk/alert panel | Branches do detalhe |
+| Lista | `MyCargoesList`, `owned-cargo-summary` | Resumo, grid, empty state |
+| Loading | `MyCargoesListSkeleton`, `OwnedCargoDetailSkeleton` | Skeleton lista e detalhe |
+| Card | `owned-cargo-card` | Seleção na lista |
+| Detalhe | `owned-cargo-detail`, `owned-cargo-detail-header`, `owned-cargo-detail-summary` | Cockpit operacional |
+| Preview | `owned-cargo-preview-grid`, `owned-cargo-preview-card` | Portas para sheets |
+| Sheets | `owned-cargo-*-sheet` | Mapa, timeline, documentos, riscos |
+| Panel | `owned-cargo-panel-search-params`, `use-owned-cargo-panel` | Estado URL `?panel=` |
+| BottomSheet | BottomSheet global (shared) | Container de sheets |
+| Serviço | `cargo.service.ts` | `getMyCargoesForUser`, `getMyCargoByIdForUser` + normalização ID |
+| Domínio | `derive-owned-cargo-detail`, `cargo-visibility-policy` | Previews e tiers |
 
 ---
 

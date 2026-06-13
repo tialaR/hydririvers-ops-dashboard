@@ -2,7 +2,7 @@
 
 | Metadado | Valor |
 |----------|-------|
-| **Status** | Fase A implementada (P0 navegação, auth, contraste, padding) — 2026-06-12; **Fase B implementada** (owned-cargo-summary + owned-cargo-card + integração MyCargoesList) — 2026-06-12; **Fase C implementada** (owned-cargo-detail cockpit + preview grid 2×2) — 2026-06-12; **Fase D implementada** (status card 1×1, support cards, sheets map/timeline/documents/risks + panel state local) — 2026-06-12; **Fase E implementada** (`?panel=` URL sync + replace/back) — 2026-06-12; **Fase F concluída** (QA visual 3 device presets + hardening check, sem redesign) — 2026-06-12 |
+| **Status** | Fase A ✅ — 2026-06-12; Fase B ✅ — 2026-06-12; Fase C ✅ — 2026-06-12; Fase D ✅ — 2026-06-12; Fase E ✅ — 2026-06-12; Fase F ✅ — 2026-06-12; **Fase G ✅** (fechamento docs, auditoria commits, checklist PR) — 2026-06-12 |
 | **Data** | 2026-06-12 |
 | **Rota** | `/[locale]/minhas-cargas`, `/[locale]/minhas-cargas/[id]` |
 | **Fluxos aprovados** | [`minhas-cargas-fluxo-embarcador.md`](../product/flows/minhas-cargas-fluxo-embarcador.md), [`minhas-cargas-fluxo-tecnico-embarcador.md`](../product/flows/minhas-cargas-fluxo-tecnico-embarcador.md) |
@@ -187,9 +187,9 @@ loading (lista + detalhe), empty carteira, error serviço, not found, no documen
 | **D** | Sheets map/timeline/documents/risks + status card + support cards + panel state local | P1 | **Concluída 2026-06-12** |
 | **E** | `?panel=` URL sync + replace/back | P1 | **Concluída 2026-06-12** |
 | **F** | QA 3 devices nomeados + screenshots | P1 | **Concluída 2026-06-12** |
-| **G** | Atualizar fluxo doc §11 gaps, ADR se necessário | P2 |
+| **G** | Fechamento docs, auditoria commits, checklist PR, pacote para abrir PR contra `dev` | P2 | **Concluída 2026-06-12** |
 
-**Primeira implementação recomendada:** Fase A (bugs visíveis/navegação que invalidam QA de tudo mais).
+**Entrega mobile premium concluída (Fases A–G).** Próximo passo: abrir PR contra `dev` (ver §15).
 
 ---
 
@@ -256,14 +256,184 @@ Evidência adicional ad hoc (não obrigatória): `minhas-cargas-phase-f-list-top
 
 ---
 
-## 13. Validação futura
+## 13. Validação (Fase G — 2026-06-12)
 
 ```bash
-npm run lint
-npm run typecheck
-npm run check:i18n
+npm run lint          # OK
+npm run typecheck     # OK
+npm run check:i18n    # OK — 2183 keys aligned pt-BR/en-US/es
+npm run build         # OK
 ```
 
-- Unit: title resolver, panel param, summarize owned
-- Visual: iPhone SE, iPhone 14, iPhone 14 Pro Max
-- Regressão: `/pt-BR/cargas` inalterado
+**Unit tests (33 passed):**
+
+- `tests/unit/features/cargo.service.test.ts` — lookup + normalização de ID
+- `tests/unit/features/cargo/owned-cargo-card.component.test.tsx`
+- `tests/unit/features/cargo/owned-cargo-detail.component.test.tsx`
+- `tests/unit/features/cargo/owned-cargo-panel-search-params.test.ts`
+- `tests/unit/shared/layout/resolve-mobile-page-title.test.ts`
+- `tests/unit/app/minhas-cargas-detail-page.test.tsx`
+
+**Harness Fase F (re-executado 2026-06-12):**
+
+```bash
+BASE_URL=http://localhost:3000 node scripts/minhas-cargas-phase-f-qa.mjs
+```
+
+Resultado: **0 falhas, 0 avisos** — relatório em `output/minhas-cargas-phase-f-report.json`.
+
+Regressão `/pt-BR/cargas`: OK no harness (sem cards privados; layout público preservado).
+
+---
+
+## 15. Fase G — Fechamento e pacote PR (2026-06-12)
+
+### Status por fase
+
+| Fase | Escopo | Commit principal | Status |
+|------|--------|------------------|--------|
+| **A** | Title resolver, auth contrast, padding bottom-nav, ghost mitigation | `ef827514` | ✅ |
+| **B** | `owned-cargo-summary` + `owned-cargo-card` + `MyCargoesList` | `92b75db1` | ✅ |
+| **C** | `owned-cargo-detail` cockpit + preview grid 2×2 | `368cfb51` | ✅ |
+| **D** | Status card 1×1, support cards, sheets + panel state local | `368cfb51` | ✅ |
+| **E** | `?panel=` URL sync + replace/back | `7093b38c`, `bb57b8c1` | ✅ |
+| **Fix** | Normalização ID card ↔ detalhe | `9b350268` | ✅ |
+| **F** | QA visual 3 devices + harness | `b7ec606d`, `5563a69c` | ✅ |
+| **G** | Docs finais + auditoria + checklist PR | (docs only) | ✅ |
+
+### Working tree e ruído
+
+| Item | Resultado |
+|------|-----------|
+| `git status --short` | Limpo (sem alterações pendentes antes dos edits Fase G) |
+| `next-env.d.ts` local | Existe (gerado Next); **rastreado na branch** — revisar antes do merge |
+| `proxy.ts` | **Rastreado na branch** (commit anterior à entrega minhas-cargas) — confirmar intencional |
+| `.playwright-cli/*.log` | **Rastreados na branch** — ruído de QA; considerar remover do PR ou adicionar ao `.gitignore` |
+| `output/playwright/*` | **Rastreados na branch** — screenshots de auditorias anteriores; não fazem parte da entrega minhas-cargas |
+| `output/minhas-cargas-phase-f-*.png` | Gerados pelo harness; **não versionados** (OK) |
+| `output/minhas-cargas-phase-f-report.json` | Gerado pelo harness; **não versionado** (OK) |
+
+**Fase G não altera código de produto** — apenas documentação.
+
+### Escopo preservado (auditoria branch)
+
+| Área | Alterada pelos commits minhas-cargas (A–F)? | Nota |
+|------|-----------------------------------------------|------|
+| `/cargas` vitrine | Não nos commits A–F | Branch contém tweak em `public-cargas-mobile-list` (`1a04306e` — suppress bottom nav on sheet close); validar regressão no PR |
+| BottomNav / IconButton | Não nos commits A–F | Outros commits na branch (`7b383671`, `062f92f0`) — fora do escopo minhas-cargas |
+| auth/register/OTP registry | Parcial Fase A | `ef827514` — contraste auth-form apenas; sem alteração de registry/mock users |
+| login/register/OTP fluxo | Não | Gate client `MinhasCargasAuthGate` + redirect RSC com `next` |
+
+### Comportamento sheets (referência PR)
+
+| Fluxo | Comportamento |
+|-------|---------------|
+| Click preview Mapa/Timeline/Documentos/Riscos | Abre BottomSheet global; URL ganha `?panel=map\|timeline\|documents\|risks` via `router.replace` |
+| URL direta com `?panel=` válido | Sheet abre no hydrate; demais params preservados |
+| Close sheet / botão fechar | Remove `panel`; preserva `scope` e demais query params |
+| Back button (browser) | Fecha sheet; permanece no detalhe |
+| `?panel=banana` (inválido) | Remove param inválido; sem sheet; rota íntegra |
+
+### Riscos restantes pós-PR
+
+1. **Ghosting leve** no header glass ao rolar (chrome mobile compartilhado).
+2. **BottomNav tab ativa** em `/minhas-cargas` continua `dashboard` (mapeamento global pré-existente).
+3. **Botão M** (QA mock) sobrepõe conteúdo em dev — esperado.
+4. **Ruído no branch** — `.playwright-cli/`, `output/playwright/`, `next-env.d.ts`, `proxy.ts` rastreados; limpar ou justificar no PR.
+5. **Busca/filtro avançado** na lista privada — fluxo aprovado inclui; validar cobertura pós-merge.
+
+### Próximos passos pós-PR
+
+1. Merge em `dev` e smoke manual em staging mock.
+2. Mapear BottomNav para `/minhas-cargas` (issue separada — escopo proibido nesta entrega).
+3. Mitigar ghosting no header mobile compartilhado.
+4. Enriquecer mocks `u-shipper-*` para QA de empty states raros.
+5. Limpar artefatos QA versionados acidentalmente (`.playwright-cli/`, `output/playwright/`).
+
+### Pacote PR sugerido
+
+**Branch:** `feat/minhas-cargas-operational-flow`  
+**Base:** `dev`
+
+**Title sugerido:**
+
+```
+feat(minhas-cargas): premium mobile cockpit with URL panel sheets
+```
+
+**Comandos git (antes de abrir PR):**
+
+```bash
+git fetch origin dev
+git checkout dev && git pull origin dev
+git checkout feat/minhas-cargas-operational-flow
+git rebase origin/dev   # ou merge, conforme política do time
+```
+
+**Preview browser:**
+
+```bash
+npm run dev
+# Login QA: POST /api/mock-mode/login-as { "userId": "u-shipper-1" }
+# ou QA Hub em /pt-BR/cargas → perfil Tiala embarcador
+open http://localhost:3000/pt-BR/minhas-cargas
+open http://localhost:3000/pt-BR/minhas-cargas/mock-1781228323768?panel=map
+```
+
+**Abrir PR (após commit docs Fase G e push):**
+
+```bash
+git push -u origin feat/minhas-cargas-operational-flow
+gh pr create --base dev --title "feat(minhas-cargas): premium mobile cockpit with URL panel sheets" --body-file /tmp/minhas-cargas-pr-body.md
+```
+
+Ver corpo terminal-friendly abaixo (§15.1).
+
+#### §15.1 PR description (terminal-friendly)
+
+```
+## Summary
+
+- Premium mobile rebuild of /minhas-cargas: owned-cargo-card list, owned-cargo-detail cockpit, 2x2 preview grid
+- BottomSheet panels (map, timeline, documents, risks) synced with ?panel= URL param
+- Auth gate layout (MinhasCargasAuthGate), ID normalization for card-to-detail lookup
+- Phase F QA harness: scripts/minhas-cargas-phase-f-qa.mjs (3 device presets, 0 failures)
+
+## Scope
+
+- IN: /minhas-cargas list + detail, owned cargo components, panel URL state, docs
+- OUT: /cargas marketplace UI redesign, BottomNav mapping, auth registry changes
+
+## Test plan
+
+- [ ] npm run lint && npm run typecheck && npm run check:i18n && npm run build
+- [ ] vitest: cargo.service, owned-cargo-*, minhas-cargas-detail-page, resolve-mobile-page-title
+- [ ] BASE_URL=http://localhost:3000 node scripts/minhas-cargas-phase-f-qa.mjs
+- [ ] Login as u-shipper-1; /pt-BR/minhas-cargas loads premium list
+- [ ] Tap card -> cockpit detail (no 404)
+- [ ] Click each preview -> sheet opens, URL has ?panel=
+- [ ] Direct URL ?panel=map|timeline|documents|risks -> sheet opens
+- [ ] Back button closes sheet, stays on detail
+- [ ] ?panel=banana -> param stripped, no crash
+- [ ] /pt-BR/cargas unchanged (no private cards)
+- [ ] Mobile: 360x740, 390x844, 430x932
+- [ ] i18n pt-BR / en-US / es spot check
+
+## Docs
+
+- docs/audits/minhas-cargas-mobile-premium-rebuild-plan.md (Fases A-G)
+- docs/product/flows/minhas-cargas-fluxo-embarcador.md
+- docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md
+
+## Known risks
+
+- BottomNav active tab still "dashboard" on /minhas-cargas (pre-existing)
+- Light header ghosting on scroll (shared mobile chrome)
+- Branch may include tracked QA artifacts (.playwright-cli/, output/playwright/) — review before merge
+```
+
+**Commit docs sugerido (após aprovação):**
+
+```
+docs(minhas-cargas): close phase G audit and PR checklist
+```

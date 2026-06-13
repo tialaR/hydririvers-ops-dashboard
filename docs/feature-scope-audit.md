@@ -13,7 +13,7 @@ Governança: **Operation Zero Redemoinho** — `docs/agents/AGENTS-ZERO-REDEMOIN
 ## Áreas
 
 - **`/cargas`:** vitrine pública (marketplace/aquisição) — `src/features/cargo/mocks/publicCargos.mock.ts`, `getPublicCargos()`.
-- **`/minhas-cargas`:** operação privada do usuário logado — `src/features/cargo/mocks/owned-cargos.mock.ts`, `getMyCargoesForUser()`. Fluxos aprovados: [`docs/product/flows/minhas-cargas-fluxo-embarcador.md`](product/flows/minhas-cargas-fluxo-embarcador.md), [`docs/product/flows/minhas-cargas-fluxo-tecnico-embarcador.md`](product/flows/minhas-cargas-fluxo-tecnico-embarcador.md).
+- **`/minhas-cargas`:** operação privada premium do usuário logado — `owned-cargos.mock.ts`, `getMyCargoesForUser()`, UI `owned-cargo-*` (lista + cockpit). Rebuild mobile Fases A–G concluído 2026-06-12. Fluxos: [`minhas-cargas-fluxo-embarcador.md`](product/flows/minhas-cargas-fluxo-embarcador.md), [`minhas-cargas-fluxo-tecnico-embarcador.md`](product/flows/minhas-cargas-fluxo-tecnico-embarcador.md). Auditoria: [`minhas-cargas-mobile-premium-rebuild-plan.md`](audits/minhas-cargas-mobile-premium-rebuild-plan.md).
 - `Dashboard` exibe cargas públicas (resumo), não a carteira privada.
 - `Negociações` não deve duplicar o detalhe de carga.
 - `Perfil` não deve misturar regras de auth.
