@@ -47,6 +47,12 @@ vi.mock('@/features/cargo-market/components/cargo-detail/cargo-detail-loader', (
   CargoDetailLoader: ({ id }: { id: string }) => <div data-testid="cargo-detail-loader" data-id={id} />
 }));
 
+vi.mock('@/features/cargo/components/owned-cargo-detail/owned-cargo-detail', () => ({
+  OwnedCargoDetail: ({ cargo }: { cargo: { id: string } }) => (
+    <div data-testid="owned-cargo-detail" data-id={cargo.id} />
+  ),
+}));
+
 vi.mock('@/shared/i18n/mock-content', () => ({
   translateMock: (_locale: string, value: string) => value
 }));
@@ -76,6 +82,9 @@ describe('minhas-cargas/[id] page', () => {
           description: 'Descrição'
         });
       }
+      if (namespace === 'pages.minhasCargas.detail') {
+        return Promise.resolve((key: string) => key);
+      }
       if (namespace === 'nav') {
         return Promise.resolve({
           dashboard: 'Dashboard',
@@ -102,8 +111,8 @@ describe('minhas-cargas/[id] page', () => {
     const tree = await MyCargoDetailPage({ params: Promise.resolve({ locale: 'pt-BR', id: cargo.id }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
 
-    expect(html).toContain('data-testid="cargo-detail-loader"');
-    expect(html).toContain('Minhas cargas');
+    expect(html).toContain('data-testid="owned-cargo-detail"');
+    expect(html).not.toContain('data-testid="cargo-detail-loader"');
     expect(mockNotFound).not.toHaveBeenCalled();
     expect(mockRedirect).not.toHaveBeenCalled();
   });
