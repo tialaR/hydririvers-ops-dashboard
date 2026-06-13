@@ -517,25 +517,24 @@ docs(minhas-cargas): close phase G audit and PR checklist
 |-------|-------|
 | **Título** | Tab ativa mostra Dashboard em Minhas cargas |
 | **Contexto** | `resolveMobileBottomNavActiveId` retornava `dashboard` para `/minhas-cargas` |
-| **Correção aplicada** | `myCargos` → `cargos` em `resolve-mobile-page-title.ts` (sem item novo no BottomNav; tab Cargas representa melhor o contexto operacional) |
+| **Correção aplicada** | `myCargos` → `cargos` em `resolve-mobile-page-title.ts` (sem item novo no BottomNav; tab Cargas representa melhor o contexto operacional). **Nota regressão 2026-06-13:** o 404 reportado no QA manual não vinha deste resolver — era `MinhasCargasAuthGate` passando path já localizado ao `router.replace` do next-intl (`/pt-BR/pt-BR/login`). Corrigido com `intlAppPaths.auth.login` + `appendRouteSearchParams`. |
 | **Rota afetada** | `/pt-BR/minhas-cargas`, `/pt-BR/minhas-cargas/[id]` |
 | **Teste** | `resolve-mobile-page-title.test.ts` — asserta `cargos` em lista e detalhe |
 | **Prioridade** | ~~P2~~ Fechado |
 | **Dono** | mobile shell |
 
-#### TD-03 — Header ghosting no scroll (chrome compartilhado)
+#### TD-03 — Header ghosting no scroll (chrome compartilhado) — **Resolvido (2026-06-13)**
 
 | Campo | Valor |
 |-------|-------|
 | **Título** | Ghosting leve no header glass mobile |
 | **Contexto** | Header semi-transparente + conteúdo scrollando por baixo |
 | **Impacto** | Visual — sensação de bug; não impede operação |
-| **Por que não bloqueia este PR** | Bug visual conhecido; Fase F validou fluxo funcional |
-| **Rota afetada** | `/minhas-cargas` lista e detalhe |
-| **Teste afetado** | Nenhum automatizado — evidência visual Fase F |
-| **Correção futura** | Ajuste opacidade/solid fill no chrome mobile compartilhado |
-| **Prioridade** | **P2** |
-| **Dono sugerido** | mobile shell |
+| **Correção aplicada** | Removida animação de `backdrop-filter`; camada `::before` promovida com `contain: paint` + `translate3d`; blur rest/unificado; fill compact mais sólido; histerese 24px/8px no hook de scroll |
+| **Rota afetada** | Chrome compartilhado — `/cargas`, `/minhas-cargas`, `/dashboard` |
+| **Teste** | `mobile-product-shell-layout.test.ts`, `use-mobile-header-scroll.test.ts` |
+| **Prioridade** | ~~P2~~ Fechado |
+| **Dono** | mobile shell |
 
 ### Known follow-ups — texto para PR #23
 
@@ -545,7 +544,7 @@ Adicionar ou substituir seção **Known follow-ups** no corpo do PR:
 ## Known follow-ups / technical debt
 
 - BottomNav active state still maps `/minhas-cargas` to dashboard while the route header is correct. This is a shared mobile shell mapping follow-up and does not block the owned cargo flow (TD-02).
-- Light header ghosting on scroll remains in shared mobile chrome. The cockpit and panel flows are functional and covered by QA harness (TD-03).
+- Light header ghosting on scroll: **mitigated** in shared mobile chrome (TD-03 closed). Revalidate on real iOS if polish needed.
 - Mock QA Hub button may overlap content in development QA contexts. This is dev-only and not part of production UI.
 - `public-cargo-list-map-legacy.test.ts`: classified as FLAKY-INFRA when dev server + Phase F harness pollute in-memory public cargo list (`mock-*` IDs). Does not block `/minhas-cargas` list/detail/panel flow. Follow-up: isolate mock state between tests or run harness against dedicated port with clean process.
 
