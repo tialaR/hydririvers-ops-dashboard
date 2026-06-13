@@ -1,20 +1,49 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-
+import { useCallback, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { usePathname, useRouter } from '@/core/i18n/navigation';
 import type { OwnedCargoPreviewPanel } from '@/features/cargo/domain/derive-owned-cargo-detail';
+import {
+  OWNED_CARGO_PANEL_SEARCH_PARAM,
+  createOwnedCargoPanelHref,
+  hasInvalidOwnedCargoPanelParam,
+  removeOwnedCargoPanelParam,
+  resolveOwnedCargoPanelFromSearchParams,
+} from '@/features/cargo/domain/owned-cargo-panel-search-params';
 
-/** Estado local — compatível com `?panel=map|timeline|documents|risks` na fase E. */
+/** URL (`?panel=`) como fonte única; push ao abrir, replace ao fechar/trocar panel. */
 export function useOwnedCargoPanel() {
-  const [panelTarget, setPanelTarget] = useState<OwnedCargoPreviewPanel | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const openPanel = useCallback((panel: OwnedCargoPreviewPanel) => {
-    setPanelTarget(panel);
-  }, []);
+  const panelTarget = resolveOwnedCargoPanelFromSearchParams(searchParams);
+
+  useEffect(() => {
+    if (!hasInvalidOwnedCargoPanelParam(searchParams)) return;
+    router.replace(removeOwnedCargoPanelParam(pathname, searchParams) as never);
+  }, [pathname, router, searchParams]);
+
+  const openPanel = useCallback(
+    (panel: OwnedCargoPreviewPanel) => {
+      if (panelTarget === panel) return;
+
+      const href = createOwnedCargoPanelHref(pathname, searchParams, panel);
+      if (panelTarget) {
+        router.replace(href as never);
+        return;
+      }
+
+      router.push(href as never);
+    },
+    [panelTarget, pathname, router, searchParams],
+  );
 
   const closePanel = useCallback(() => {
-    setPanelTarget(null);
-  }, []);
+    if (!searchParams.get(OWNED_CARGO_PANEL_SEARCH_PARAM)) return;
+    router.replace(removeOwnedCargoPanelParam(pathname, searchParams) as never);
+  }, [pathname, router, searchParams]);
 
   const isPanelOpen = useCallback(
     (panel: OwnedCargoPreviewPanel) => panelTarget === panel,

@@ -185,7 +185,7 @@ loading (lista + detalhe), empty carteira, error serviço, not found, no documen
 | **B** | `owned-cargo-summary` + `owned-cargo-card` + integrar em `MyCargoesList` mobile | P1 | **Concluída 2026-06-12** |
 | **C** | `owned-cargo-detail` + preview grid 2×2 (previews estáticos) | P1 | **Concluída 2026-06-12** |
 | **D** | Sheets map/timeline/documents/risks + status card + support cards + panel state local | P1 | **Concluída 2026-06-12** |
-| **E** | `?panel=` URL sync + replace/back | P1 |
+| **E** | `?panel=` URL sync + replace/back | P1 | **Concluída 2026-06-12** |
 | **F** | QA 3 devices nomeados + screenshots | P1 |
 | **G** | Atualizar fluxo doc §11 gaps, ADR se necessário | P2 |
 
