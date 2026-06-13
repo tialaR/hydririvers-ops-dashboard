@@ -1,6 +1,8 @@
+import { Suspense } from 'react';
 import { redirect, notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { OwnedCargoDetail } from '@/features/cargo/components/owned-cargo-detail/owned-cargo-detail';
+import { OwnedCargoDetailSkeleton } from '@/features/cargo/components/owned-cargo-detail-skeleton/owned-cargo-detail-skeleton';
 import { getSessionUser } from '@/shared/server/auth';
 import { appRoutes } from '@/shared/routing/app-routes';
 import type { AppLocale } from '@/shared/routing/route-types';
@@ -25,7 +27,9 @@ export default async function MyCargoDetailPage({ params }: { params: Promise<{ 
 
   return (
     <section aria-label={t('pageAria')}>
-      <OwnedCargoDetail cargo={cargo} />
+      <Suspense fallback={<OwnedCargoDetailSkeleton />}>
+        <OwnedCargoDetail cargo={cargo} />
+      </Suspense>
     </section>
   );
 }
