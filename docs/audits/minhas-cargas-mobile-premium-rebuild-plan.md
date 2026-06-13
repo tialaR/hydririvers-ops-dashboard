@@ -511,19 +511,17 @@ docs(minhas-cargas): close phase G audit and PR checklist
 | **Prioridade** | **P1** — resolvido (test-only) |
 | **Dono sugerido** | QA / cargo flow (test harness) |
 
-#### TD-02 — BottomNav tab ativa em `/minhas-cargas` (pré-existente)
+#### TD-02 — BottomNav tab ativa em `/minhas-cargas` — **Resolvido 2026-06-13**
 
 | Campo | Valor |
 |-------|-------|
 | **Título** | Tab ativa mostra Dashboard em Minhas cargas |
-| **Contexto** | `resolveMobileBottomNavActiveId` retorna `dashboard` para `/minhas-cargas` |
-| **Impacto** | UX — usuário vê tab errada destacada |
-| **Por que não bloqueia este PR** | Comportamento pré-existente; escopo F proibiu alterar BottomNav |
+| **Contexto** | `resolveMobileBottomNavActiveId` retornava `dashboard` para `/minhas-cargas` |
+| **Correção aplicada** | `myCargos` → `cargos` em `resolve-mobile-page-title.ts` (sem item novo no BottomNav; tab Cargas representa melhor o contexto operacional) |
 | **Rota afetada** | `/pt-BR/minhas-cargas`, `/pt-BR/minhas-cargas/[id]` |
-| **Teste afetado** | `resolve-mobile-page-title.test.ts` (asserta fallback conhecido) |
-| **Correção futura** | Mapear `myCargos` → tab dedicada ou `cargos` no resolver global |
-| **Prioridade** | **P2** |
-| **Dono sugerido** | mobile shell |
+| **Teste** | `resolve-mobile-page-title.test.ts` — asserta `cargos` em lista e detalhe |
+| **Prioridade** | ~~P2~~ Fechado |
+| **Dono** | mobile shell |
 
 #### TD-03 — Header ghosting no scroll (chrome compartilhado)
 
