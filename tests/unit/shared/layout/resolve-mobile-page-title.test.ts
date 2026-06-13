@@ -52,10 +52,18 @@ describe('resolveMobileBottomNavActiveId', () => {
     expect(resolveMobileBottomNavActiveId(intlAppPaths.dashboard.home)).toBe('dashboard');
   });
 
-  it('marca dashboard ativo em minhas cargas e subrotas', () => {
-    expect(resolveMobileBottomNavActiveId(intlAppPaths.cargos.myCargos)).toBe('dashboard');
+  it('marca cargas ativo em minhas cargas e subrotas', () => {
+    expect(resolveMobileBottomNavActiveId(intlAppPaths.cargos.myCargos)).toBe('cargos');
     expect(resolveMobileBottomNavActiveId(`${intlAppPaths.cargos.myCargos}/MY-CARGO-001`)).toBe(
-      'dashboard',
+      'cargos',
+    );
+  });
+
+  it('preserva active state de dashboard e cargas marketplace', () => {
+    expect(resolveMobileBottomNavActiveId(intlAppPaths.dashboard.home)).toBe('dashboard');
+    expect(resolveMobileBottomNavActiveId(intlAppPaths.cargos.marketplace)).toBe('cargos');
+    expect(resolveMobileBottomNavActiveId(`${intlAppPaths.cargos.marketplace}/CRG-001`)).toBe(
+      'cargos',
     );
   });
 });

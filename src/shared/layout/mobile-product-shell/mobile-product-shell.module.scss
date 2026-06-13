@@ -65,6 +65,10 @@
     inset: calc(-1 * var(--hy-mobile-header-glass-bleed, 0));
     z-index: 0;
     pointer-events: none;
+    contain: paint;
+    transform: var(--hy-mobile-header-glass-paint-layer, translate3d(0, 0, 0));
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     opacity: var(--hy-mobile-header-frost-opacity-rest, 0);
     background-color: transparent;
     background-image: var(--hy-mobile-header-glass-surface);
@@ -77,10 +81,8 @@
     mask-image: var(--hy-mobile-header-glass-mask);
     transition:
       opacity var(--hy-motion-duration-header-frost, 180ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)),
-      background var(--hy-motion-duration-header, 220ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)),
-      box-shadow var(--hy-motion-duration-header, 220ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)),
-      -webkit-backdrop-filter var(--hy-motion-duration-header, 220ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)),
-      backdrop-filter var(--hy-motion-duration-header, 220ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1));
+      background-color var(--hy-motion-duration-header-frost, 180ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1)),
+      box-shadow var(--hy-motion-duration-header, 220ms) var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1));
   }
 
   &[data-mobile-header-compact='true'],
@@ -284,8 +286,8 @@
       opacity: var(--hy-mobile-header-frost-opacity-rest, 0);
       background-color: var(--hy-color-mobile-header-glass-rest-surface);
       background-image: none;
-      -webkit-backdrop-filter: var(--hy-mobile-header-glass-blur-rest);
-      backdrop-filter: var(--hy-mobile-header-glass-blur-rest);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
       -webkit-mask-image: var(--hy-mobile-header-glass-mask-rest);
       mask-image: var(--hy-mobile-header-glass-mask-rest);
       box-shadow: var(--hy-mobile-header-glass-highlight);

@@ -1,16 +1,30 @@
 .shell {
+  --hy-mock-mode-z-index: 620;
+  --hy-mock-mode-trigger-size: 3.2rem;
+  --hy-mock-mode-shell-gap: 0.55rem;
+  --hy-mock-mode-shell-inset-inline-start: max(0.85rem, env(safe-area-inset-left));
+  --hy-mock-mode-shell-inset-inline-end: max(0.85rem, env(safe-area-inset-right));
+  --hy-mock-mode-bottom-nav-clearance: max(
+    5.75rem,
+    calc(
+      env(safe-area-inset-bottom, 0px) + var(--hy-size-bottom-nav-height, 4.5rem) + 1.125rem
+    )
+  );
+  --hy-mock-mode-shell-inset-block-end: max(3.75rem, calc(env(safe-area-inset-bottom) + 2.9rem));
+  --hy-mock-mode-shell-max-width: min(25rem, calc(100vw - 1.5rem));
+
   position: fixed;
-  left: max(.85rem, env(safe-area-inset-left));
-  bottom: max(3.75rem, calc(env(safe-area-inset-bottom) + 2.9rem));
-  z-index: 620;
+  left: var(--hy-mock-mode-shell-inset-inline-start);
+  bottom: var(--hy-mock-mode-shell-inset-block-end);
+  z-index: var(--hy-mock-mode-z-index);
   display: grid;
-  gap: .55rem;
-  max-width: min(25rem, calc(100vw - 1.5rem));
+  gap: var(--hy-mock-mode-shell-gap);
+  max-width: var(--hy-mock-mode-shell-max-width);
 }
 
 .trigger {
-  width: 3.2rem;
-  height: 3.2rem;
+  width: var(--hy-mock-mode-trigger-size);
+  height: var(--hy-mock-mode-trigger-size);
   display: inline-grid;
   place-items: center;
   padding: 0;
@@ -792,18 +806,20 @@
 
 @media (max-width: 860px) {
   .shell {
-    left: max(0.85rem, env(safe-area-inset-left));
-    bottom: max(5.5rem, calc(env(safe-area-inset-bottom) + 4.75rem));
+    --hy-mock-mode-trigger-size: 2.85rem;
+    --hy-mock-mode-shell-inset-block-end: var(--hy-mock-mode-bottom-nav-clearance);
+    --hy-mock-mode-shell-max-width: min(22rem, calc(100vw - 1rem));
+
+    left: auto;
+    right: var(--hy-mock-mode-shell-inset-inline-end);
+  }
+
+  .panel {
+    max-height: min(62vh, 36rem);
   }
 }
 
 @media (max-width: 720px) {
-  .shell {
-    max-width: min(22rem, calc(100vw - 1rem));
-    left: .5rem;
-    bottom: max(14.2rem, calc(env(safe-area-inset-bottom) + 12.8rem));
-  }
-
   .caseCard {
     grid-template-columns: 1fr;
     display: grid;
@@ -815,11 +831,5 @@
 
   .qaScenarioMeta {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 920px) {
-  .shell {
-    bottom: max(14.2rem, calc(env(safe-area-inset-bottom) + 12.8rem));
   }
 }

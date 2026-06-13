@@ -95,6 +95,15 @@ describe('Mobile product shell layout ownership', () => {
     expect(shellStyles).toContain('--hy-mobile-header-compact-padding-bottom');
   });
 
+  it('frost glass desliga backdrop-filter no rest mobile e liga só no compact', () => {
+    expect(shellStyles).toMatch(
+      /@media \(max-width: 860px\)[\s\S]*?&::before \{[\s\S]*?backdrop-filter:\s*none/,
+    );
+    expect(shellStyles).toMatch(
+      /&\[data-mobile-header-compact='true'\]::before[\s\S]*?backdrop-filter:\s*var\(--hy-mobile-header-glass-blur\)/,
+    );
+  });
+
   it('frost glass delega tokens HY e intensifica ao compactar no scroll', () => {
     const tokensPath = resolve(process.cwd(), 'src/shared/styles/tokens/_hy-v2-light.scss');
     const tokensSource = readFileSync(tokensPath, 'utf8');
@@ -102,10 +111,10 @@ describe('Mobile product shell layout ownership', () => {
     expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-rest: 0');
     expect(tokensSource).toContain('--hy-mobile-header-frost-opacity-compact: 0.98');
     expect(tokensSource).toContain('--hy-mobile-header-glass-blur: blur(1.125rem) saturate(1.24)');
-    expect(tokensSource).toContain('--hy-mobile-header-glass-blur-rest: blur(0.625rem) saturate(1.5)');
+    expect(tokensSource).toContain('--hy-mobile-header-glass-blur-rest: blur(1.125rem) saturate(1.24)');
     expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-rest, 0)');
     expect(shellStyles).toContain('opacity: var(--hy-mobile-header-frost-opacity-compact, 1)');
-    expect(shellStyles).toContain('var(--hy-mobile-header-glass-blur-rest)');
+    expect(tokensSource).toContain('--hy-mobile-header-glass-blur-rest: blur(1.125rem) saturate(1.24)');
     expect(shellStyles).not.toMatch(/\.header\s*\{[^}]*--hy-mobile-header-frost-opacity-rest:/);
   });
 
@@ -118,6 +127,14 @@ describe('Mobile product shell layout ownership', () => {
     expect(tokensSource).toMatch(/--hy-shadow-mobile-header-glass-compact:[^;]+0\.0625rem/);
     expect(shellStyles).toContain('var(--hy-color-mobile-header-glass-compact-surface)');
     expect(shellStyles).not.toMatch(/&\[data-mobile-header-compact='true'\]::before[\s\S]*0\.375rem 1\.25rem/);
+  });
+
+  it('frost glass não anima backdrop-filter (evita ghosting no scroll light mode)', () => {
+    expect(shellStyles).toContain('contain: paint');
+    expect(shellStyles).toContain('var(--hy-mobile-header-glass-paint-layer');
+    expect(shellStyles).toContain('background-color var(--hy-motion-duration-header-frost');
+    expect(shellStyles).not.toMatch(/\.header::before[\s\S]*backdrop-filter var\(--hy-motion-duration-header/);
+    expect(shellStyles).not.toMatch(/\.header::before[\s\S]*transition:[\s\S]*\bbackground var\(--hy-motion-duration-header/);
   });
 
   it('animações do header ficam no módulo do shell com prefers-reduced-motion', () => {

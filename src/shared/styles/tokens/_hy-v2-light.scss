@@ -166,15 +166,17 @@
   --hy-mobile-header-compact-padding-bottom: 0.55rem;
   --hy-blur-mobile-header: blur(1.25rem) saturate(1.08);
   --hy-mobile-header-glass-blur: blur(1.125rem) saturate(1.24);
-  --hy-mobile-header-glass-blur-rest: blur(0.625rem) saturate(1.5);
+  /* Match compact blur — animating/switching blur strengths caused light-mode scroll ghosting. */
+  --hy-mobile-header-glass-blur-rest: blur(1.125rem) saturate(1.24);
+  --hy-mobile-header-glass-paint-layer: translate3d(0, 0, 0);
   --hy-mobile-header-glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.16);
   --hy-mobile-header-glass-surface: none;
   --hy-mobile-header-glass-surface-compact:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.24) 0%,
-      rgba(255, 255, 255, 0.16) 58%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.52) 0%,
+      rgba(255, 255, 255, 0.38) 58%,
+      rgba(255, 255, 255, 0.22) 100%
     );
   --hy-mobile-header-glass-bg: none;
   --hy-mobile-header-glass-bg-compact: none;
@@ -188,8 +190,8 @@
       transparent 100%
     );
   --hy-mobile-header-glass-mask-rest: linear-gradient(to bottom, #000 70%, transparent 100%);
-  --hy-color-mobile-header-glass-rest-surface: rgba(255, 255, 255, 0.02);
-  --hy-color-mobile-header-glass-compact-surface: rgba(255, 255, 255, 0.2);
+  --hy-color-mobile-header-glass-rest-surface: rgba(255, 255, 255, 0.04);
+  --hy-color-mobile-header-glass-compact-surface: rgba(248, 250, 252, 0.68);
   --hy-color-mobile-header-glass-compact-title: rgba(15, 23, 42, 0.78);
   --hy-blur-overlay: blur(0.625rem) saturate(1.02);
   --hy-shadow-mobile-header-glass: none;

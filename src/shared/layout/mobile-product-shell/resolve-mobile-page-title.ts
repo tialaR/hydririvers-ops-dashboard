@@ -137,7 +137,7 @@ export function resolveMobileBottomNavActiveId(normalizedPathname: string): stri
     normalizedPathname === intlAppPaths.cargos.myCargos
     || normalizedPathname.startsWith(`${intlAppPaths.cargos.myCargos}/`)
   ) {
-    return 'dashboard';
+    return 'cargos';
   }
 
   if (
