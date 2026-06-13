@@ -19,7 +19,7 @@
     "audit:i18n:rendered": "node scripts/audit-i18n-rendered.mjs",
     "check:onboarding": "node scripts/check-onboarding-progress.mjs",
     "mock-data:reset": "node scripts/reset-mock-data.mjs",
-    "test:mock-mode": "vitest run tests/unit/shared/ui/mock-qa-scenarios.test.ts tests/unit/shared/server/mock-scenarios.test.ts tests/unit/features/notifications.client.test.ts tests/integration/api/mock-mode.post.test.ts tests/integration/api/mock-mode.login-as.post.test.ts",
+    "test:mock-mode": "vitest run tests/unit/shared/ui/mock-qa-scenarios.test.ts tests/unit/shared/ui/mock-mode-layout.test.ts tests/unit/shared/server/mock-scenarios.test.ts tests/unit/features/notifications.client.test.ts tests/integration/api/mock-mode.post.test.ts tests/integration/api/mock-mode.login-as.post.test.ts",
     "test": "vitest run",
     "test:unit": "vitest run tests/unit",
     "test:integration": "vitest run tests/integration",

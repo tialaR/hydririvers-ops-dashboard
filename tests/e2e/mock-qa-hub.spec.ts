@@ -13,6 +13,28 @@ test.describe('Mock QA Hub', () => {
     await expect(page.getByTestId('mock-mode-toggle')).toHaveCount(0);
   });
 
+  test('botão M não aparece em /cadastro (shell público de auth)', async ({ page }) => {
+    await page.goto('/pt-BR/cadastro');
+    await expect(page.getByTestId('mock-mode-toggle')).toHaveCount(0);
+  });
+
+  test('botão M fica no canto inferior direito acima da bottom nav no mobile', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/pt-BR/cargas');
+    const toggle = page.getByTestId('mock-mode-toggle');
+    await expect(toggle).toBeVisible();
+
+    const box = await toggle.boundingBox();
+    expect(box).not.toBeNull();
+    if (!box) return;
+
+    const centerX = box.x + box.width / 2;
+    expect(centerX).toBeGreaterThan(390 * 0.55);
+
+    const bottomEdge = box.y + box.height;
+    expect(bottomEdge).toBeLessThan(844 - 72);
+  });
+
   test('painel abre em /cargas sem MISSING_MESSAGE e lista personas BR, US e ES', async ({
     page
   }) => {
