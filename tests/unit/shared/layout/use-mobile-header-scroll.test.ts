@@ -2,6 +2,12 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
+import {
+  MOBILE_HEADER_COMPACT_SCROLL_Y,
+  MOBILE_HEADER_EXPAND_SCROLL_Y,
+  resolveMobileHeaderCompactState,
+} from '@/shared/layout/mobile-product-shell/use-mobile-header-scroll';
+
 const hookPath = resolve(
   process.cwd(),
   'src/shared/layout/mobile-product-shell/use-mobile-header-scroll.ts',
@@ -24,8 +30,10 @@ describe('useMobileHeaderScroll', () => {
     expect(hookSource).toContain('removeEventListener');
   });
 
-  it('usa threshold de 24px para compact state', () => {
+  it('usa threshold de 24px para compact state com histerese de 8px para expandir', () => {
     expect(hookSource).toContain('MOBILE_HEADER_COMPACT_SCROLL_Y = 24');
+    expect(hookSource).toContain('MOBILE_HEADER_EXPAND_SCROLL_Y = 8');
+    expect(hookSource).toContain('resolveMobileHeaderCompactState');
   });
 
   it('MobileProductHeader consome hook global e expõe marker compact', () => {
@@ -39,5 +47,23 @@ describe('useMobileHeaderScroll', () => {
   it('MobileProductHeader sincroniza spacer height via ResizeObserver', () => {
     expect(headerSource).toContain('ResizeObserver');
     expect(headerSource).toContain('--hy-mobile-header-spacer-height');
+  });
+
+  it('resolveMobileHeaderCompactState aplica histerese entre compact e expand', () => {
+    expect(MOBILE_HEADER_COMPACT_SCROLL_Y).toBe(24);
+    expect(MOBILE_HEADER_EXPAND_SCROLL_Y).toBe(8);
+
+    expect(resolveMobileHeaderCompactState(0, false)).toBe(false);
+    expect(resolveMobileHeaderCompactState(MOBILE_HEADER_COMPACT_SCROLL_Y, false)).toBe(false);
+    expect(resolveMobileHeaderCompactState(MOBILE_HEADER_COMPACT_SCROLL_Y + 1, false)).toBe(true);
+
+    expect(resolveMobileHeaderCompactState(MOBILE_HEADER_EXPAND_SCROLL_Y, true)).toBe(false);
+    expect(resolveMobileHeaderCompactState(MOBILE_HEADER_EXPAND_SCROLL_Y + 1, true)).toBe(true);
+  });
+
+  it('resolveMobileHeaderScrollOffset faz fallback para window quando container não rola', () => {
+    expect(hookSource).toContain('scrollHeight > scrollEl.clientHeight + 1');
+    expect(hookSource).toContain('return windowOffset');
+    expect(hookSource).toContain('Math.max(elementOffset, windowOffset)');
   });
 });
