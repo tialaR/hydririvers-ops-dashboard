@@ -55,3 +55,7 @@ hydririvers-vessel-hero-kit.zip
 
 # Hydri local backups
 .hydri-local-backups/
+
+# Local QA artifacts
+.playwright-cli/
+output/playwright/
