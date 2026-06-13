@@ -13,6 +13,15 @@ vi.mock('@/core/i18n/navigation', () => ({
   ),
 }));
 
+vi.mock('@/shared/components/bottom-nav', () => ({
+  BottomNav: ({ ariaLabel }: { ariaLabel?: string }) => (
+    <nav data-testid="mock-bottom-nav" aria-label={ariaLabel}>
+      BottomNav
+    </nav>
+  ),
+  bottomNavV2LightClassNames: {},
+}));
+
 const v2SourcePath = resolve(
   process.cwd(),
   'src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx',
