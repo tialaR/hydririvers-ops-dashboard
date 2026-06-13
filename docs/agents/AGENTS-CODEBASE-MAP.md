@@ -20,11 +20,9 @@ Mobile shell:
 - `src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx`
 - `src/shared/layout/mobile-product-shell/resolve-mobile-page-title.ts`
 
-BottomNav:
+BottomNav (official global mobile nav; legacy removed):
 - `src/shared/components/bottom-nav/BottomNav.tsx`
 - `src/shared/components/bottom-nav/BottomNav.module.sass`
-- `src/shared/components/bottom-nav/BottomNavLegacy.tsx`
-- `src/shared/components/bottom-nav/BottomNavLegacy.module.sass`
 - `src/shared/components/bottom-nav/index.ts`
 - `src/shared/components/bottom-nav/bottom-nav-icons.tsx`
 - `src/shared/components/bottom-nav/bottom-nav-motion.tsx`

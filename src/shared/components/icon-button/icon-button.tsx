@@ -1,14 +1,24 @@
 'use client';
 
-import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from 'react';
+import {
+  forwardRef,
+  type ButtonHTMLAttributes,
+  type KeyboardEvent,
+  type PointerEvent,
+  type ReactNode,
+} from 'react';
 
 import {
   renderIconButtonIcon,
   type IconButtonIconName,
 } from './icon-button-icons';
-import styles from './IconButton.module.scss';
+import styles from './icon-button.module.sass';
+import { useIconButtonPress } from './use-icon-button-press';
 
 export type IconButtonSize = 'sm' | 'md' | 'lg';
+
+/** Approved mobile glass shell — compact ~52px (md), not DevTools literal 76px. */
+export const ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT = 'glass-compact-production' as const;
 
 /** Semantic placement only — does not change the visual shell. */
 export type IconButtonRole = 'header' | 'page' | 'field' | 'sheet';
@@ -102,6 +112,24 @@ function resolveVisualVariant(variant: IconButtonVariant): IconButtonVariant {
   return 'v2';
 }
 
+function mergeHandlers<T extends PointerEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>>(
+  ours: ((event: T) => void) | undefined,
+  theirs: ((event: T) => void) | undefined,
+) {
+  if (!ours) {
+    return theirs;
+  }
+
+  if (!theirs) {
+    return ours;
+  }
+
+  return (event: T) => {
+    ours(event);
+    theirs(event);
+  };
+}
+
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(function IconButton(
   {
     ariaLabel,
@@ -118,6 +146,12 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
     className = '',
     disabled = false,
     type = 'button',
+    onPointerDown,
+    onPointerUp,
+    onPointerLeave,
+    onPointerCancel,
+    onKeyDown,
+    onKeyUp,
     ...props
   },
   ref,
@@ -131,41 +165,72 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
 
   const visualVariant = resolveVisualVariant(variant);
   const role = resolveIconButtonRole(variant, iconButtonRole);
+  const usesGlassPress = visualVariant === 'v2';
+  const isInteractionDisabled = disabled || loading;
+  const externalClassName = className.trim();
+
+  const { pressState, pressHandlers } = useIconButtonPress({
+    disabled: isInteractionDisabled,
+    enabled: usesGlassPress,
+  });
+
   const resolvedIcon =
     icon ??
     (iconName != null
       ? renderIconButtonIcon(iconName, iconName === 'language' ? icon : undefined)
       : null);
 
-  return (
+  const buttonClassName = [
+    styles.button,
+    styles[`variant_${visualVariant}`],
+    visualVariant === 'v2' ? styles.shell : '',
+    visualVariant === 'v2' ? styles.glassControl : '',
+    visualVariant === 'v2' ? styles.glassCompactProduction : '',
+    styles[`size_${size}`],
+    resolvedActive ? styles.isActive : '',
+    loading ? styles.isLoading : '',
+    usesGlassPress ? '' : externalClassName,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const button = (
     <button
       ref={ref}
       type={type}
-      className={[
-        styles.button,
-        styles[`variant_${visualVariant}`],
-        visualVariant === 'v2' ? styles.shell : '',
-        styles[`size_${size}`],
-        resolvedActive ? styles.isActive : '',
-        loading ? styles.isLoading : '',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={buttonClassName}
       data-icon-button-global={visualVariant === 'v2' ? 'true' : undefined}
+      data-icon-button-variant={
+        visualVariant === 'v2' ? ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT : undefined
+      }
       data-icon-button-role={role}
+      data-press={usesGlassPress ? pressState : undefined}
       aria-label={ariaLabel}
       aria-pressed={props['aria-pressed'] ?? (resolvedActive ? true : undefined)}
       aria-busy={loading ? true : undefined}
       data-active={resolvedActive ? 'true' : undefined}
       data-loading={loading ? 'true' : undefined}
-      disabled={disabled || loading}
+      disabled={isInteractionDisabled}
+      onPointerDown={mergeHandlers(pressHandlers.onPointerDown, onPointerDown)}
+      onPointerUp={mergeHandlers(pressHandlers.onPointerUp, onPointerUp)}
+      onPointerLeave={mergeHandlers(pressHandlers.onPointerLeave, onPointerLeave)}
+      onPointerCancel={mergeHandlers(pressHandlers.onPointerCancel, onPointerCancel)}
+      onKeyDown={mergeHandlers(pressHandlers.onKeyDown, onKeyDown)}
+      onKeyUp={mergeHandlers(pressHandlers.onKeyUp, onKeyUp)}
       {...props}
     >
+      {usesGlassPress ? <span className={styles.bubbleGlow} aria-hidden /> : null}
       <span className={styles.icon} aria-hidden>
         {resolvedIcon}
       </span>
       {showBadge ? <span className={styles.badge}>{resolvedBadge}</span> : null}
     </button>
   );
+
+  // overflow: visible — layout host uses display:contents so legacy feature mixins cannot paint over the glass shell.
+  if (usesGlassPress && externalClassName) {
+    return <span className={[styles.layoutHost, externalClassName].join(' ')}>{button}</span>;
+  }
+
+  return button;
 });

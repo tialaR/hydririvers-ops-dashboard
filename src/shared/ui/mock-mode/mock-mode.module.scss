@@ -795,10 +795,6 @@
     left: max(0.85rem, env(safe-area-inset-left));
     bottom: max(5.5rem, calc(env(safe-area-inset-bottom) + 4.75rem));
   }
-
-  .trigger {
-    display: none;
-  }
 }
 
 @media (max-width: 720px) {

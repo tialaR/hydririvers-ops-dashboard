@@ -26,6 +26,8 @@ describe('resolveMobilePageTitleKey', () => {
 
   it('resolve rotas principais do shell', () => {
     expect(resolveMobilePageTitleKey(intlAppPaths.dashboard.home)).toBe('nav.dashboard');
+    expect(resolveMobilePageTitleKey(intlAppPaths.cargos.myCargos)).toBe('nav.myCargoes');
+    expect(resolveMobilePageTitleKey(`${intlAppPaths.cargos.myCargos}/MY-CARGO-001`)).toBe('nav.myCargoes');
     expect(resolveMobilePageTitleKey(intlAppPaths.negotiations.home)).toBe('nav.negotiations');
     expect(resolveMobilePageTitleKey(intlAppPaths.tracking.home)).toBe('nav.tracking');
     expect(resolveMobilePageTitleKey(intlAppPaths.vessels.marketplace)).toBe('nav.vessels');
@@ -48,5 +50,12 @@ describe('resolveMobileBottomNavActiveId', () => {
     );
     expect(resolveMobileBottomNavActiveId(intlAppPaths.tracking.home)).toBe('tracking');
     expect(resolveMobileBottomNavActiveId(intlAppPaths.dashboard.home)).toBe('dashboard');
+  });
+
+  it('marca dashboard ativo em minhas cargas e subrotas', () => {
+    expect(resolveMobileBottomNavActiveId(intlAppPaths.cargos.myCargos)).toBe('dashboard');
+    expect(resolveMobileBottomNavActiveId(`${intlAppPaths.cargos.myCargos}/MY-CARGO-001`)).toBe(
+      'dashboard',
+    );
   });
 });

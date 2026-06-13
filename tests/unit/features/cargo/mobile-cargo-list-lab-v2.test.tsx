@@ -13,6 +13,15 @@ vi.mock('@/core/i18n/navigation', () => ({
   ),
 }));
 
+vi.mock('@/shared/components/bottom-nav', () => ({
+  BottomNav: ({ ariaLabel }: { ariaLabel?: string }) => (
+    <nav data-testid="mock-bottom-nav" aria-label={ariaLabel}>
+      BottomNav
+    </nav>
+  ),
+  bottomNavV2LightClassNames: {},
+}));
+
 const v2SourcePath = resolve(
   process.cwd(),
   'src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx',
@@ -175,6 +184,10 @@ describe('MobileCargoListLabV2 source contracts', () => {
     expect(source).toContain('open={sheetMode === \'filters\'}');
     expect(source).toContain('ariaLabel="Abrir filtros"');
     expect(source).toContain('ariaLabel="Visualizar filtros"');
+    expect(source).toContain('iconButtonRole="page"');
+    expect(source).toContain('iconButtonRole="field"');
+    expect(source).not.toContain('variant="filter"');
+    expect(source).not.toContain('variant="default"');
   });
 
   it('usa mocks de filtros compartilhados para todos os grupos', () => {

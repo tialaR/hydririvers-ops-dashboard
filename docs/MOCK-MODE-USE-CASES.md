@@ -95,6 +95,30 @@ Negotiation
 - `src/app/api/negociacoes/route.ts`
 - `src/features/marketplace/domain/marketplace.types.ts`
 
+## Mock Mode QA — documentação e fases
+
+Hub visual, personas e catálogo de cenários guiados:
+
+- [`docs/MOCK-MODE-QA-HUB.md`](MOCK-MODE-QA-HUB.md) — objetivo do menu **M**, botões do hub, OTP, rotas públicas/privadas
+- [`docs/audits/mock-mode-current-state.md`](audits/mock-mode-current-state.md) — arquivos, regras OTP/telefone, catálogo partial/duplicado
+- [`docs/audits/mock-users-and-permissions.md`](audits/mock-users-and-permissions.md) — matriz de personas e telefones
+
+### Plano em fases (auth / QA)
+
+| Fase | Escopo |
+|------|--------|
+| 1 | Docs confiáveis + higiene óbvia (`suggestedActions` removido; inventário de cenários) |
+| 2 (concluída) | **Fonte única** `mock-user-registry.ts` → auth, hub, prefill, whitelist |
+| 3 | Simplificar login UI/copy |
+| 4 | Returning user / register por telefone |
+| 5 | OTP mock dev colapsável no menu QA |
+| 6 | Menu QA compacto por abas + i18n do catálogo (`mock-qa-scenarios.ts`) |
+| 7 | Testes unit/e2e ampliados |
+
+### Registry canônico (Fase 2)
+
+`src/shared/mock-data/mock-user-registry.ts` é a fonte única. Consumidores derivados: `defaultUsers`, `.mock-data/users.json`, `MOCK_QA_PERSONAS`, `findSeedPhoneByEmail`, `getQaDirectLoginEmails`. Visitante em `MOCK_PUBLIC_VISITOR` (fora do array autenticado).
+
 ## Observação
 
 O projeto anexado usa Next `16.2.4` e React `19.0.0`.

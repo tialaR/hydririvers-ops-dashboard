@@ -1,3 +1,8 @@
+/**
+ * Catálogo do QA Assistant (painel Mock mode).
+ * Metadados de cenários partial/duplicados: `docs/audits/mock-mode-current-state.md`.
+ * Dívida Fase 6: strings do catálogo ainda em pt-BR hardcoded (sem next-intl).
+ */
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import type { MockScenarioId } from '@/shared/config/mock-scenario-ids';
 

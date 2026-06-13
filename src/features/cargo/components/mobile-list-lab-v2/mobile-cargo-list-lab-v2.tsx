@@ -284,7 +284,7 @@ export function MobileCargoListLabV2() {
           <div className={styles.headerActions}>
             <IconButton
               className={styles.headerButton}
-              variant="default"
+              iconButtonRole="page"
               ariaLabel="Abrir filtros"
               icon={<FilterIcon />}
               badgeCount={activeFilterCount > 0 ? activeFilterCount : undefined}
@@ -292,7 +292,7 @@ export function MobileCargoListLabV2() {
             />
             <IconButton
               className={styles.headerButton}
-              variant="theme"
+              iconButtonRole="header"
               ariaLabel="Alternar modo claro e escuro"
               icon={<SunMoonIcon theme={theme} />}
               onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
@@ -311,7 +311,7 @@ export function MobileCargoListLabV2() {
           />
           <IconButton
             className={styles.filterSquare}
-            variant="filter"
+            iconButtonRole="field"
             ariaLabel="Visualizar filtros"
             icon={<FilterIcon />}
             onClick={() => setSheetMode('filters')}

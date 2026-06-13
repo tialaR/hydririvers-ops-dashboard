@@ -1,9 +1,48 @@
 import { expect, test } from '@playwright/test';
 
+/** Abre o hub QA em rota de produto (M não aparece em /login). */
+async function openQaHubFromCargas(page: import('@playwright/test').Page) {
+  await page.goto('/pt-BR/cargas');
+  await page.getByTestId('mock-mode-toggle').click();
+  await expect(page.getByText('Modo mock · QA Assistant')).toBeVisible();
+}
+
 test.describe('Mock QA Hub', () => {
-  test('login direto pelo hub navega para cargas (Tiala)', async ({ page }) => {
+  test('botão M não aparece em /login (shell público de auth)', async ({ page }) => {
     await page.goto('/pt-BR/login');
-    await page.getByTestId('mock-mode-toggle').click();
+    await expect(page.getByTestId('mock-mode-toggle')).toHaveCount(0);
+  });
+
+  test('painel abre em /cargas sem MISSING_MESSAGE e lista personas BR, US e ES', async ({
+    page
+  }) => {
+    const missingMessages: string[] = [];
+    page.on('console', (msg) => {
+      const text = msg.text();
+      if (text.includes('MISSING_MESSAGE')) {
+        missingMessages.push(text);
+      }
+    });
+
+    await openQaHubFromCargas(page);
+
+    expect(missingMessages).toEqual([]);
+
+    await page.getByTestId('qa-hub-direct-mariana').scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('qa-hub-direct-mariana')).toBeVisible();
+    await expect(page.getByText('Mariana Tapajós')).toBeVisible();
+
+    await page.getByTestId('qa-hub-direct-emily-hartwell').scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('qa-hub-direct-emily-hartwell')).toBeVisible();
+    await expect(page.getByText('Emily Hartwell')).toBeVisible();
+
+    await page.getByTestId('qa-hub-direct-lucia-morales').scrollIntoViewIfNeeded();
+    await expect(page.getByTestId('qa-hub-direct-lucia-morales')).toBeVisible();
+    await expect(page.getByText('Lucía Morales')).toBeVisible();
+  });
+
+  test('login direto pelo hub navega para cargas (Tiala)', async ({ page }) => {
+    await openQaHubFromCargas(page);
     await expect(page.getByTestId('qa-hub-direct-tiala')).toBeVisible();
     await expect(page.getByTestId('qa-hub-fill-login-tiala')).toBeVisible();
 
@@ -14,10 +53,22 @@ test.describe('Mock QA Hub', () => {
     await page.waitForURL(/\/pt-BR\/cargas/, { timeout: 10_000 });
   });
 
-  test('Usar no login preenche credenciais sem POST automático', async ({ page }) => {
-    await page.goto('/pt-BR/login');
+  test('Entrar como Mariana autentica e permite acessar /minhas-cargas', async ({ page }) => {
+    await openQaHubFromCargas(page);
 
-    await page.getByTestId('mock-mode-toggle').click();
+    await page.getByTestId('qa-hub-direct-mariana').scrollIntoViewIfNeeded();
+    await page.getByTestId('qa-hub-direct-mariana').click();
+
+    await expect(page.getByTestId('qa-hub-feedback-success')).toContainText(/Mariana/i);
+    await page.waitForURL(/\/pt-BR\/cargas/, { timeout: 10_000 });
+
+    await page.goto('/pt-BR/minhas-cargas');
+    await expect(page).toHaveURL(/\/pt-BR\/minhas-cargas/);
+    await expect(page.getByTestId('minhas-cargas-grid')).toBeVisible();
+  });
+
+  test('Usar no login preenche credenciais sem POST automático', async ({ page }) => {
+    await openQaHubFromCargas(page);
     await page.getByTestId('qa-hub-fill-login-admin').click();
 
     await page.waitForURL(/\/pt-BR\/login/);

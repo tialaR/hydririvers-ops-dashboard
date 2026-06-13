@@ -18,10 +18,11 @@ alwaysApply: true
 
 - **feature-based**: domínio, UI rica, hooks, services, utils, mocks, types e testes em `src/features/`
 - **`src/app/`**: routing, layouts, pages, RSC e server actions — páginas finas
-- **`src/shared/`**: apenas itens realmente compartilhados entre domínios
+- **`src/shared/`**: apenas itens realmente compartilhados entre domínios — ver **Operation Zero Redemoinho** (`docs/agents/AGENTS-ZERO-REDEMOINHO.md`)
 - **mobile e desktop são experiências separadas**
 - mudança em desktop **não pode** quebrar mobile
 - mudança em mobile **não pode** quebrar desktop
+- **Zero Redemoinho Gate:** antes de criar, buscar padrão existente; reutilizar ou documentar; sem duplicata local
 
 ## CSS e estilo
 
@@ -29,6 +30,14 @@ alwaysApply: true
 - **não** usar CSS global para componentes de feature
 - **não** usar `!important`
 - estilos de feature ficam em CSS Modules da própria feature
+- **preferir** `.module.sass` para estilos novos/tocados de componente
+- tokens de componente: **`--hy-<componente>-<propriedade>`** — sem valores visuais soltos recorrentes
+- **proibido** magic numbers sem nome em TS/Sass recorrentes
+
+## i18n e naming
+
+- strings de UI via next-intl — **proibido** hardcode novo (pt-BR, en-US, es)
+- arquivos/pastas novos: **kebab-case**; exports React podem ser PascalCase
 
 ## Dependências e render
 
@@ -45,6 +54,7 @@ alwaysApply: true
 ## Referências
 
 - `AGENTS.md`
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md`
 - `docs/workflows/codex-visual-iteration.md`
 - `docs/workflows/desktop-expanded-map-playbook.md`
 - `docs/adr/0001-desktop-expanded-map-route.md`

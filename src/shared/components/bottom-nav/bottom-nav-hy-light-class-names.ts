@@ -1,4 +1,4 @@
-import type { BottomNavClassNames } from './BottomNav';
+import type { BottomNavClassNames } from './bottom-nav';
 import shellStyles from './bottom-nav-hy-light-shell.module.sass';
 
 /** ClassNames HY light premium — product shell e lab. */

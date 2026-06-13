@@ -13,6 +13,8 @@ mkdir -p "$OUT_DIR/code/cargo"
 mkdir -p "$OUT_DIR/code/layout"
 mkdir -p "$OUT_DIR/code/tests"
 mkdir -p "$OUT_DIR/docs"
+mkdir -p "$OUT_DIR/docs/agents"
+mkdir -p "$OUT_DIR/cursor-rules"
 
 echo "Exportando contexto do HydriRivers..."
 
@@ -31,20 +33,22 @@ find docs -maxdepth 1 -type f \
   \( -name "*.md" -o -name "*.txt" \) \
   -exec cp {} "$OUT_DIR/docs/" \; 2>/dev/null || true
 
+cp docs/agents/*.md "$OUT_DIR/docs/agents/" 2>/dev/null || true
+cp .cursor/rules/*.mdc "$OUT_DIR/cursor-rules/" 2>/dev/null || true
+
 cp src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx "$OUT_DIR/code/layout/" 2>/dev/null || true
 cp src/shared/layout/mobile-product-shell/resolve-mobile-page-title.ts "$OUT_DIR/code/layout/" 2>/dev/null || true
 
-cp src/shared/components/bottom-nav/BottomNav.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/bottom-nav/BottomNav.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/bottom-nav/BottomNavLegacy.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/bottom-nav/BottomNavLegacy.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
+cp src/shared/components/bottom-nav/bottom-nav.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
+cp src/shared/components/bottom-nav/bottom-nav.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/index.ts "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/bottom-nav-icons.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/bottom-nav-motion.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
 cp src/shared/components/bottom-nav/bottom-nav-state.ts "$OUT_DIR/code/shared/" 2>/dev/null || true
 
-cp src/shared/components/icon-button/IconButton.module.scss "$OUT_DIR/code/shared/" 2>/dev/null || true
-cp src/shared/components/icon-button/IconButton.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
+cp src/shared/components/icon-button/icon-button.module.sass "$OUT_DIR/code/shared/" 2>/dev/null || true
+cp src/shared/components/icon-button/icon-button.tsx "$OUT_DIR/code/shared/" 2>/dev/null || true
+cp src/shared/components/icon-button/use-icon-button-press.ts "$OUT_DIR/code/shared/" 2>/dev/null || true
 
 cp src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx "$OUT_DIR/code/cargo/" 2>/dev/null || true
 cp src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss "$OUT_DIR/code/cargo/" 2>/dev/null || true

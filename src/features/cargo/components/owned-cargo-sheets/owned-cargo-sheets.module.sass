@@ -1,0 +1,221 @@
+.sheet
+  --hy-owned-cargo-sheet-radius: 1.125rem 1.125rem 0 0
+  --hy-owned-cargo-sheet-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 96%, var(--hx-text, var(--text)) 4%)
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  --hy-owned-cargo-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent)
+  --hy-owned-cargo-gap: 0.75rem
+
+.body
+  display: grid
+  gap: var(--hy-owned-cargo-gap)
+
+.emptyState
+  margin: 0
+  padding: 1rem 0.75rem
+  border-radius: 0.875rem
+  border: 1px dashed var(--hy-owned-cargo-border)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 92%, transparent)
+  font-size: 0.8125rem
+  font-weight: 650
+  line-height: 1.45
+  color: var(--hy-owned-cargo-muted-color)
+  text-align: center
+
+.sectionTitle
+  margin: 0
+  font-size: 0.75rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-muted-color)
+  text-transform: uppercase
+  letter-spacing: 0.04em
+
+.metaList
+  display: grid
+  gap: 0.45rem
+  margin: 0
+  padding: 0
+  list-style: none
+
+.metaItem
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+  gap: 0.75rem
+  padding: 0.55rem 0.65rem
+  border-radius: 0.75rem
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+
+.metaLabel
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.metaValue
+  font-size: 0.8125rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+  text-align: right
+
+.routePreview
+  display: grid
+  gap: 0.5rem
+  padding: 0.85rem
+  border-radius: 0.875rem
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: linear-gradient(135deg, color-mix(in srgb, var(--hx-cyan, var(--brand)) 8%, transparent), color-mix(in srgb, var(--hx-green, var(--success)) 6%, transparent))
+
+.routeLine
+  position: relative
+  height: 0.25rem
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 70%, transparent)
+  overflow: hidden
+
+.routeProgress
+  display: block
+  height: 100%
+  border-radius: inherit
+  background: linear-gradient(90deg, color-mix(in srgb, var(--hx-cyan, var(--brand)) 80%, white), color-mix(in srgb, var(--hx-green, var(--success)) 76%, white))
+
+.routePoints
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.35rem
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-label-color)
+
+.routePoint
+  max-width: 42%
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.routeCheckpoint
+  margin: 0
+  font-size: 0.75rem
+  font-weight: 650
+  color: var(--hy-owned-cargo-muted-color)
+  text-align: center
+
+.timelineList
+  display: grid
+  gap: 0.45rem
+  margin: 0
+  padding: 0
+  list-style: none
+
+.timelineItem
+  display: grid
+  grid-template-columns: auto 1fr
+  gap: 0.55rem
+  align-items: start
+  padding: 0.55rem 0.65rem
+  border-radius: 0.75rem
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+
+  &[data-phase='current']
+    border-color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 32%, transparent)
+    background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 8%, transparent)
+
+.timelineDot
+  width: 0.625rem
+  height: 0.625rem
+  margin-top: 0.2rem
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 80%, transparent)
+
+  [data-phase='done'] &
+    background: color-mix(in srgb, var(--hx-green, var(--success)) 82%, white)
+
+  [data-phase='current'] &
+    background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 88%, white)
+
+.timelineLabel
+  margin: 0
+  font-size: 0.8125rem
+  font-weight: 700
+  line-height: 1.35
+  color: var(--hy-owned-cargo-label-color)
+
+.timelinePhase
+  margin: 0.1rem 0 0
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.documentList,
+.riskList
+  display: grid
+  gap: 0.45rem
+  margin: 0
+  padding: 0
+  list-style: none
+
+.documentItem,
+.riskItem
+  display: grid
+  gap: 0.2rem
+  padding: 0.6rem 0.7rem
+  border-radius: 0.75rem
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+
+.documentHeader,
+.riskHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.5rem
+
+.documentName,
+.riskLabel
+  margin: 0
+  font-size: 0.8125rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+
+.statusBadge
+  display: inline-flex
+  align-items: center
+  min-height: 1.375rem
+  padding: 0 0.5rem
+  border-radius: 999px
+  font-size: 0.625rem
+  font-weight: 780
+  text-transform: uppercase
+  letter-spacing: 0.03em
+  color: var(--hy-owned-cargo-label-color)
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 40%, transparent)
+
+  &[data-status='ok']
+    background: color-mix(in srgb, var(--hx-green, var(--success)) 14%, transparent)
+    color: color-mix(in srgb, var(--hx-green, var(--success)) 92%, var(--hx-text, var(--text)))
+
+  &[data-status='required'],
+  &[data-status='conditional']
+    background: color-mix(in srgb, var(--hx-yellow, var(--warning)) 14%, transparent)
+    color: color-mix(in srgb, var(--hx-yellow, var(--warning)) 92%, var(--hx-text, var(--text)))
+
+  &[data-severity='high']
+    background: color-mix(in srgb, var(--hx-red, var(--danger)) 14%, transparent)
+    color: color-mix(in srgb, var(--hx-red, var(--danger)) 92%, var(--hx-text, var(--text)))
+
+  &[data-severity='medium']
+    background: color-mix(in srgb, var(--hx-yellow, var(--warning)) 14%, transparent)
+    color: color-mix(in srgb, var(--hx-yellow, var(--warning)) 92%, var(--hx-text, var(--text)))
+
+.documentNote
+  margin: 0
+  font-size: 0.6875rem
+  font-weight: 650
+  line-height: 1.35
+  color: var(--hy-owned-cargo-muted-color)
+
+@media (prefers-reduced-motion: reduce)
+  .routeProgress
+    transition: none

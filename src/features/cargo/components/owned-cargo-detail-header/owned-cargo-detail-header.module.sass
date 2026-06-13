@@ -1,0 +1,127 @@
+.root
+  --hy-owned-cargo-detail-header-gap: 0.625rem
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  display: grid
+  gap: var(--hy-owned-cargo-detail-header-gap)
+
+.topRow
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.75rem
+
+.backLink
+  display: inline-flex
+  align-items: center
+  gap: 0.25rem
+  min-height: 2rem
+  padding: 0 0.35rem 0 0
+  color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 90%, var(--hx-text, var(--text)))
+  font-size: 0.8125rem
+  font-weight: 760
+  text-decoration: none
+  -webkit-tap-highlight-color: transparent
+
+  &:focus-visible
+    outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 72%, transparent)
+    outline-offset: 2px
+    border-radius: 0.375rem
+
+.backIcon
+  transform: rotate(90deg)
+
+.code
+  font-size: 0.6875rem
+  font-weight: 700
+  letter-spacing: 0.04em
+  text-transform: uppercase
+  color: var(--hy-owned-cargo-muted-color)
+
+.title
+  margin: 0
+  font-size: 1.125rem
+  font-weight: 860
+  line-height: 1.2
+  letter-spacing: -0.03em
+  color: var(--hy-owned-cargo-label-color)
+
+.route
+  display: flex
+  align-items: center
+  gap: 0.35rem
+  margin: 0
+  min-width: 0
+  font-size: 0.8125rem
+  font-weight: 650
+  color: var(--hy-owned-cargo-muted-color)
+
+  span
+    overflow: hidden
+    text-overflow: ellipsis
+    white-space: nowrap
+
+.routeIcon
+  flex: 0 0 auto
+  opacity: 0.72
+
+.statusRow
+  display: flex
+  align-items: center
+  gap: 0.5rem
+
+.statusChip
+  display: inline-flex
+  align-items: center
+  min-height: 1.5rem
+  padding: 0 0.625rem
+  border-radius: 999px
+  font-size: 0.75rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 24%, transparent)
+
+  &[data-tone='success']
+    background: color-mix(in srgb, var(--hx-green, var(--success)) 12%, transparent)
+    border-color: color-mix(in srgb, var(--hx-green, var(--success)) 28%, transparent)
+
+  &[data-tone='warning']
+    background: color-mix(in srgb, var(--hx-yellow, var(--warning)) 12%, transparent)
+    border-color: color-mix(in srgb, var(--hx-yellow, var(--warning)) 28%, transparent)
+
+.categoryChip
+  display: inline-flex
+  align-items: center
+  min-height: 1.5rem
+  padding: 0 0.625rem
+  border-radius: 999px
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 88%, var(--hx-text, var(--text)) 12%)
+  border: 1px solid color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  max-width: 52%
+
+.nextStepBlock
+  display: grid
+  gap: 0.2rem
+  padding: 0.7rem 0.75rem
+  border-radius: 0.875rem
+  border: 1px solid color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 92%, var(--hx-text, var(--text)) 8%)
+
+.nextStepLabel
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.nextStepText
+  margin: 0
+  font-size: 0.8125rem
+  font-weight: 650
+  line-height: 1.4
+  color: var(--hy-owned-cargo-label-color)

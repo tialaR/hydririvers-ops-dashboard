@@ -1,0 +1,92 @@
+---
+description: Mandatory HYDRI_IMPLEMENTATION_PROOF block after any implementation task
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Hydri Implementation Proof
+
+After any task that implements or fixes behavior, close with **Captain closeout** (user-facing, short, decisive) then `HYDRI_IMPLEMENTATION_PROOF` (technical). Do not claim "done" or "it works" without both. **Do not lead the close with technical proof.**
+
+Plan/audit-only: Captain closeout with 🟡 Segue com cuidado is enough — omit full proof block.
+
+Full spec: `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+
+## Captain closeout (required first in closing section)
+
+Written for the user, not another agent. No jargon when a human phrase works.
+
+```md
+## Captain closeout
+
+🟢/🟡/🔴 [Decisão curta]
+
+Em humano:
+[1 a 3 frases curtas sem jargão]
+
+Prova simples:
+[1 linha em linguagem simples]
+
+Falta provar:
+[1 linha objetiva]
+
+Próxima ação:
+[1 ação clara]
+```
+
+| Emoji | Decisão | Maps to **Result** |
+|-------|---------|-------------------|
+| 🟢 | Pode seguir | Worked |
+| 🟡 | Segue com cuidado | Partial |
+| 🔴 | Para agora | Did not work |
+
+Optional **Detalhes técnicos** after Captain closeout for paths, commands, components, proof levels.
+
+## HYDRI_IMPLEMENTATION_PROOF fields (technical)
+
+1. **Result:** Worked | Partial | Did not work
+2. Change implemented
+3. Objective evidence
+4. Commands run
+5. Tests affected
+6. Preview / manual QA (when applicable)
+7. **Mobile viewport coverage** (required for UI categories)
+8. **Operation Zero Redemoinho proof fields** (required for implementation): pattern reuse, token, magic number, i18n, kebab-case, sass module, dead code/docs, feature/shared, mock/domain, persona/value, CWV/cognitive cost, tests/lab cost — see `docs/agents/AGENTS-IMPLEMENTATION-PROOF.md`
+9. Files changed
+10. Not validated
+11. Remaining risks
+12. Why the implementation may still be wrong
+13. Recommended next action
+
+## Cannot claim success when
+
+- Mandatory validation was not run (`npm run lint`, `npm run typecheck`, `npm run check:i18n`)
+- Operation Zero Redemoinho proof fields skipped on implementation
+- New hardcoded UI string, token outside `--hy-*`, or path outside kebab-case
+- Affected route or component was not inspected
+- Tests only assert fragile text/class contracts
+- UI changed without visual/runtime preview
+- Mobile UI closed with 🟢 after testing only one width (must be 🟡 Partial)
+- Behavior changed without test or manual QA
+- Errors were waved off as "out of scope" without evidence
+
+## Proof levels (report highest achieved)
+
+- **P0:** lint, typecheck, i18n check
+- **P1:** affected unit/integration tests
+- **P2:** local preview / manual QA
+- **P3:** CI / PR green
+- **P4:** user sign-off or screenshot/video
+
+## Quick checklists
+
+**Mobile UI:** three widths (small 320×568 or 360×740, standard 390×844, large 430×932); nav/sheets/cards/chips/search/controls checks; width-dependent behavior when layout mutates; screenshot per width when used; light mode; initial state; primary interaction; close/cancel; scroll; safe-area/BottomNav; no desktop regression when mobile-only. Captain closeout: "Testado em celular pequeno, médio e grande." or "Só testado em um tamanho, precisa revisar responsividade."
+
+**i18n / routes:** `/[locale]`, locales when copy changes, no new hardcoded strings, `npm run check:i18n`.
+
+**CSS:** CSS/Sass Modules only, no `globals.scss` for features, no `!important`; prefer `.module.sass` for new/touched component styles; kebab-case for new/touched paths.
+
+**UI architecture:** dumb components, logic in hooks, data separated in scope; read `.cursor/rules/hydri-ui-architecture.mdc` before UI work.
+
+Default mobile preview: `/pt-BR/cargas`.

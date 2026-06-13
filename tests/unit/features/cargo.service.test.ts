@@ -10,9 +10,10 @@ import {
   canUserViewPrivateCargo,
   getCurrentUserCargoById,
   getCurrentUserCargos,
+  getMyCargoByIdForUser,
   getMyCargoesForUser
 } from '@/features/cargo/services/cargo.service';
-import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/my-cargos/mocks/myCargos.mock';
+import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
 
 describe('cargo.service', () => {
   beforeEach(() => {
@@ -75,5 +76,23 @@ describe('cargo.service', () => {
 
     await expect(getCurrentUserCargoById('u-shipper-1', 'a')).resolves.toEqual({ id: 'a', ownerId: 'u-shipper-1' });
     await expect(getCurrentUserCargoById('u-shipper-1', 'b')).resolves.toBeUndefined();
+  });
+
+  it('resolve id canônico normalizado entre card e detalhe (cargo-001 ↔ CARGO-001)', async () => {
+    mockReadMock.mockReturnValue([{ id: 'cargo-001', ownerId: 'u-shipper-1', shipperId: 'u-shipper-1' }]);
+
+    const expected = { id: 'cargo-001', ownerId: 'u-shipper-1', shipperId: 'u-shipper-1' };
+
+    await expect(getMyCargoByIdForUser('CARGO-001', 'u-shipper-1')).resolves.toEqual(expected);
+    await expect(getMyCargoByIdForUser('cargo-001', 'u-shipper-1')).resolves.toEqual(expected);
+    await expect(getCurrentUserCargoById('u-shipper-1', 'CARGO-001')).resolves.toEqual(expected);
+  });
+
+  it('resolve ids MY-CARGO-* estáveis do deck owned', async () => {
+    mockReadMock.mockReturnValue([]);
+
+    await expect(getMyCargoByIdForUser('MY-CARGO-001', 'u-shipper-1', 'shipper')).resolves.toMatchObject({
+      id: 'MY-CARGO-001',
+    });
   });
 });

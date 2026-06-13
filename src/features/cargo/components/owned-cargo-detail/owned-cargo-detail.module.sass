@@ -1,0 +1,47 @@
+.root
+  --hy-owned-cargo-detail-section-gap: 1rem
+  --hy-owned-cargo-detail-bottom-safe: calc(var(--mobile-bottom-nav-height, 5.75rem) + 1.25rem + env(safe-area-inset-bottom, 0px))
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  display: grid
+  gap: var(--hy-owned-cargo-detail-section-gap)
+  padding-bottom: var(--hy-owned-cargo-detail-bottom-safe)
+
+.actions
+  display: grid
+  gap: 0.5rem
+
+.actionsTitle
+  margin: 0
+  font-size: 0.875rem
+  font-weight: 820
+  color: var(--hy-owned-cargo-label-color)
+
+.actionRow
+  display: flex
+  flex-wrap: wrap
+  gap: 0.5rem
+
+.actionChip
+  min-height: 2rem
+  padding: 0 0.75rem
+  border-radius: 999px
+  border: 1px solid color-mix(in srgb, var(--hx-line-soft, var(--line)) 90%, transparent)
+  background: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+  color: var(--hy-owned-cargo-label-color)
+  font-size: 0.75rem
+  font-weight: 760
+  cursor: pointer
+  opacity: 0.94
+
+  &:disabled
+    cursor: not-allowed
+    opacity: 0.72
+
+  &:not(:disabled):focus-visible
+    outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 72%, transparent)
+    outline-offset: 2px
+
+@media (min-width: 861px)
+  .root
+    padding-bottom: 0

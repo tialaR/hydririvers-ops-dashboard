@@ -139,6 +139,32 @@ describe('PublicCargasMobileList', () => {
     expect((html.match(/data-mobile-cargas-filter-button="true"/g) ?? []).length).toBe(1);
   });
 
+  it('nao aplica mixin cargo sparkle-outline no botao de filtro', () => {
+    const stylesPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+    );
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+
+    expect(stylesSource).not.toContain('cargas-mobile-glass-icon-button-sparkle-outline');
+    expect(stylesSource).not.toContain('cargasGlassIconButton');
+  });
+
+  it('nao sobrescreve glass do IconButton global no fechar do filter sheet', () => {
+    const stylesPath = resolve(
+      process.cwd(),
+      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+    );
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+
+    expect(stylesSource).not.toMatch(
+      /:global\(button\[data-bottom-sheet-close='true'\]\)[\s\S]*?\{[\s\S]*?background:/,
+    );
+    expect(stylesSource).not.toMatch(
+      /:global\(button\[data-bottom-sheet-close='true'\]\)[\s\S]*?\{[\s\S]*?backdrop-filter:/,
+    );
+  });
+
   it('mostra Limpar filtros discreto ao lado do contador quando filtros estão ativos', () => {
     const htmlWithFilters = renderToStaticMarkup(
       <PublicCargasMobileList {...baseProps} filteredCargoes={[mockCargo]} hasAppliedFilters />,
@@ -189,5 +215,27 @@ describe('PublicCargasMobileList', () => {
 
     expect(source).toContain("tBoard('list.cardActionView')");
     expect(html).toContain('operationsBoard.list.cardActionView');
+  });
+
+  it('centraliza a supressão do BottomNav global em estado derivado de sheets ativos', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+
+    expect(source).toContain('const isFilterSheetActive = drawerOpen || isFilterClosing;');
+    expect(source).toContain(
+      'const isActionSheetActive = actionSheetOpen || isActionSheetClosing || Boolean(selectedCargo);',
+    );
+    expect(source).toContain('const shouldSuppressBottomNav = isFilterSheetActive || isActionSheetActive;');
+    expect(source).toContain('setBottomNavSuppressed(shouldSuppressBottomNav);');
+    expect(source).not.toContain('setBottomNavSuppressed(drawerOpen || isFilterClosing || Boolean(selectedCargo));');
+  });
+
+  it('mantém os sheets montados durante o fechamento para evitar flicker do BottomNav global', () => {
+    const source = readFileSync(listSourcePath, 'utf8');
+
+    expect(source).toContain('BOTTOM_SHEET_EXIT_SUPPRESSION_MS = BOTTOM_SHEET_TRANSITION_MS + 48');
+    expect(source).toContain('setDrawerOpen(false);');
+    expect(source).toContain('setActionSheetOpen(false);');
+    expect(source).toContain('setSelectedCargo(null);');
+    expect(source).toContain('window.clearTimeout(actionSheetCloseTimerRef.current);');
   });
 });
