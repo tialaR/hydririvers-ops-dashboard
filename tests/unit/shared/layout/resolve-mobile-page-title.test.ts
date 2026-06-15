@@ -27,7 +27,9 @@ describe('resolveMobilePageTitleKey', () => {
   it('resolve rotas principais do shell', () => {
     expect(resolveMobilePageTitleKey(intlAppPaths.dashboard.home)).toBe('nav.dashboard');
     expect(resolveMobilePageTitleKey(intlAppPaths.cargos.myCargos)).toBe('nav.myCargoes');
-    expect(resolveMobilePageTitleKey(`${intlAppPaths.cargos.myCargos}/MY-CARGO-001`)).toBe('nav.myCargoes');
+    expect(resolveMobilePageTitleKey(`${intlAppPaths.cargos.myCargos}/MY-CARGO-001`)).toBe(
+      'adminChrome.mobile.pageTitles.myCargoDetail',
+    );
     expect(resolveMobilePageTitleKey(intlAppPaths.negotiations.home)).toBe('nav.negotiations');
     expect(resolveMobilePageTitleKey(intlAppPaths.tracking.home)).toBe('nav.tracking');
     expect(resolveMobilePageTitleKey(intlAppPaths.vessels.marketplace)).toBe('nav.vessels');
