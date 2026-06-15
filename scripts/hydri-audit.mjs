@@ -15,6 +15,7 @@ const TOP_LEVEL_TARGETS = [
   '.artifacts',
   '.playwright-cli',
   'files',
+  'output',
   'test-results',
 ];
 

@@ -1,0 +1,50 @@
+---
+description: Hydri mobile UI — viewport coverage, visual QA, gate before green
+globs:
+  - "src/**/mobile*/**"
+  - "src/**/*mobile*"
+  - "src/**/minhas-cargas/**"
+  - "src/**/cargas/**"
+  - "src/shared/layout/mobile-product-shell/**"
+  - "src/shared/components/bottom-nav/**"
+alwaysApply: false
+---
+
+# Hydri mobile UI
+
+Apply when task is classified `mobile-ui`, `bottom-nav`, `bottom-sheet`, `filter-sheet`, or touches mobile routes.
+
+## Source docs
+
+- `docs/agents/AGENTS-UI-MOBILE-STANDARDS.md`
+- `docs/adr/0023-mobile-layout-and-bottom-navigation-pattern.md`
+- `.cursor/rules/hydri-ui-architecture.mdc`
+
+## Viewport coverage (mandatory before 🟢)
+
+Test **three widths**: 360×740 (small), 390×844 (standard), 430×932 (large).
+
+Check: overflow horizontal, BottomNav covering content, chips truncated, primary card, safe-area, sheets open/close.
+
+Routes: `/pt-BR/minhas-cargas`, `/pt-BR/cargas` (when in scope).
+
+One width only → 🟡 max, never 🟢.
+
+## Gate (mandatory)
+
+```bash
+npm run hydri:gate -- --scope=<scope> --mode=mobile
+```
+
+Optional QA scripts when scope includes minhas-cargas:
+
+```bash
+BASE_URL=http://localhost:3000 node scripts/minhas-cargas-list-premium-qa.mjs
+BASE_URL=http://localhost:3000 node scripts/minhas-cargas-phase-f-qa.mjs
+```
+
+## Proof
+
+Record **Mobile viewport coverage** in `HYDRI_IMPLEMENTATION_PROOF`. Screenshot per width in `output/` is evidence, not source-of-truth — never commit `output/` without approval.
+
+Tests passing ≠ visual OK. Playwright/preview failure = "não validado", not success.
