@@ -1,9 +1,9 @@
+@use '../../styles/owned-cargo-premium-surfaces' as premium
+
 .card
   --hy-owned-cargo-preview-card-min-height: 8.75rem
-  --hy-owned-cargo-preview-card-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
-  --hy-owned-cargo-preview-card-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 90%, transparent)
-  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
-  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  --hy-owned-cargo-label-color: var(--hy-color-text-primary, var(--hx-text, var(--text)))
+  --hy-owned-cargo-muted-color: var(--hy-color-text-secondary, color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted))))
   display: grid
   grid-template-rows: auto 1fr auto
   gap: 0.45rem
@@ -11,12 +11,11 @@
   width: 100%
   padding: 0.75rem 0.8rem 0.7rem
   border-radius: var(--hy-owned-cargo-preview-card-radius, 1rem)
-  border: 1px solid var(--hy-owned-cargo-preview-card-border)
-  background: var(--hy-owned-cargo-preview-card-surface)
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--hx-text, var(--text)) 4%, transparent)
   text-align: left
   cursor: pointer
   -webkit-tap-highlight-color: transparent
+
+  @include premium.owned-cargo-premium-card
 
   &:focus-visible
     outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 72%, transparent)
@@ -48,7 +47,7 @@
 .title
   margin: 0
   font-size: 0.8125rem
-  font-weight: 820
+  font-weight: 650
   line-height: 1.2
   color: var(--hy-owned-cargo-label-color)
   overflow: hidden
@@ -63,7 +62,7 @@
 .summary
   margin: 0
   font-size: 0.75rem
-  font-weight: 650
+  font-weight: 580
   line-height: 1.35
   color: var(--hy-owned-cargo-muted-color)
   overflow: hidden
@@ -114,11 +113,11 @@
   min-height: 1.625rem
   padding: 0 0.625rem
   border-radius: 999px
-  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 28%, transparent)
-  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 10%, transparent)
-  color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 92%, var(--hx-text, var(--text)))
+  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 22%, transparent)
+  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 8%, transparent)
+  color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 88%, var(--hx-text, var(--text)))
   font-size: 0.6875rem
-  font-weight: 780
+  font-weight: 650
   display: inline-flex
   align-items: center
   pointer-events: none

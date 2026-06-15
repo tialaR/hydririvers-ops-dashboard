@@ -1,45 +1,89 @@
+@use '../../styles/owned-cargo-premium-surfaces' as premium
+
 .root
   --hy-owned-cargo-gap: 0.5rem
-  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
-  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
-  --hy-owned-cargo-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 90%, transparent)
-  --hy-owned-cargo-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
-  --hy-owned-cargo-radius: 0.875rem
+  --hy-owned-cargo-label-color: var(--hy-color-text-primary, var(--hx-text, var(--text)))
+  --hy-owned-cargo-muted-color: var(--hy-color-text-secondary, color-mix(in srgb, var(--hx-text, var(--text)) 68%, var(--hx-muted, var(--muted))))
   display: grid
   gap: var(--hy-owned-cargo-gap)
 
 .title
   margin: 0
-  font-size: 0.875rem
-  font-weight: 820
-  color: var(--hy-owned-cargo-label-color)
+  font-size: 0.8125rem
+  font-weight: 760
+  letter-spacing: 0.04em
+  text-transform: uppercase
+  color: var(--hy-owned-cargo-muted-color)
 
 .list
   display: grid
-  gap: 0.45rem
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.5rem
 
 .card
   display: flex
-  align-items: center
-  justify-content: space-between
-  gap: 0.75rem
-  min-height: 2.75rem
-  padding: 0.55rem 0.75rem
-  border-radius: var(--hy-owned-cargo-radius)
-  border: 1px solid var(--hy-owned-cargo-border)
-  background: var(--hy-owned-cargo-surface)
+  align-items: flex-start
+  gap: 0.55rem
+  min-height: 3.5rem
+  padding: 0.65rem 0.7rem
+  border-radius: var(--hy-owned-cargo-radius, 0.9375rem)
+
+  @include premium.owned-cargo-premium-card
+
+  &[data-support='co2']
+    grid-column: 1 / -1
+    align-items: center
+
+    .value
+      text-align: right
+
+  &[data-support='volume']
+    border-color: color-mix(in srgb, var(--hy-color-brand, var(--hx-blue, var(--brand))) 20%, transparent)
+
+  &[data-support='window']
+    border-color: color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 22%, transparent)
+
+  &[data-support='co2']
+    border-color: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 24%, transparent)
+    background: linear-gradient(135deg, color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 8%, var(--hy-color-glass-strong, white)), color-mix(in srgb, var(--hy-color-glass-soft, white) 72%, transparent))
+
+.iconWrap
+  display: grid
+  place-items: center
+  flex: 0 0 auto
+  width: 1.75rem
+  height: 1.75rem
+  border-radius: 0.5625rem
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 88%, var(--hx-text, var(--text)))
+  background: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 10%, transparent)
+
+.copy
+  display: grid
+  gap: 0.15rem
+  min-width: 0
+  flex: 1 1 auto
 
 .label
-  font-size: 0.6875rem
-  font-weight: 760
+  font-size: 0.625rem
+  font-weight: 620
+  letter-spacing: 0.04em
+  text-transform: uppercase
   color: var(--hy-owned-cargo-muted-color)
 
 .value
-  font-size: 0.75rem
-  font-weight: 780
+  font-size: 0.8125rem
+  font-weight: 620
+  line-height: 1.3
   color: var(--hy-owned-cargo-label-color)
-  text-align: right
   overflow: hidden
   text-overflow: ellipsis
-  white-space: nowrap
-  max-width: 62%
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
+
+@media (min-width: 861px)
+  .list
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+
+  .card[data-support='co2']
+    grid-column: auto

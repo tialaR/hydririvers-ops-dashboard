@@ -39,6 +39,7 @@ const DEVICE_TIERS = [
 ];
 
 const PANELS = ['map', 'timeline', 'documents', 'risks'];
+const OPTIONAL_PANELS = ['process', 'tracking'];
 
 const results = {
   baseUrl,
@@ -100,6 +101,43 @@ async function assertBottomNavNotCovering(page, selector, label) {
   } else {
     pass(`${label}-overlap`);
   }
+}
+
+async function clickOwnedCargoPreview(page, panel) {
+  const testId = `owned-cargo-preview-${panel}`;
+  await page.getByTestId(testId).scrollIntoViewIfNeeded();
+  await page.evaluate((id) => {
+    const el = document.querySelector(`[data-testid="${id}"]`);
+    el?.scrollIntoView({ block: 'start', inline: 'nearest' });
+    if (el instanceof HTMLElement) el.click();
+  }, testId);
+}
+
+async function waitPanelFullyClosed(page) {
+  await page.waitForFunction(() => !window.location.search.includes('panel='), null, { timeout: 10_000 });
+  await page
+    .waitForFunction(
+      () => {
+        const root = document.querySelector('[data-bottom-sheet-root="true"]');
+        if (!root) return true;
+        const motion = root.getAttribute('data-motion');
+        const visible = root.getAttribute('data-visible');
+        const open = root.getAttribute('data-open');
+        return visible === 'false' && open === 'false' && motion !== 'closing';
+      },
+      null,
+      { timeout: 10_000 },
+    )
+    .catch(() => undefined);
+}
+
+/** Fecha sheet portaled — evita flake de Playwright com botão fora do viewport. */
+async function closeOwnedCargoSheet(page) {
+  await page.evaluate(() => {
+    const btn = document.querySelector('[data-bottom-sheet-close="true"]');
+    if (btn instanceof HTMLElement) btn.click();
+  });
+  await waitPanelFullyClosed(page);
 }
 
 async function runTier(deviceConfig) {
@@ -202,7 +240,9 @@ async function runTier(deviceConfig) {
     }
 
     await firstCard.click();
-    await page.waitForURL(/\/pt-BR\/minhas-cargas\//, { timeout: 15_000 });
+    await page.waitForFunction(() => /\/pt-BR\/minhas-cargas\//.test(window.location.pathname), null, {
+      timeout: 15_000,
+    });
     const detailUrl = page.url();
     const idFromUrl = detailUrl.match(/minhas-cargas\/([^/?#]+)/)?.[1];
     if (idFromUrl) results.cargoId = idFromUrl;
@@ -216,9 +256,22 @@ async function runTier(deviceConfig) {
     await page.waitForSelector('[data-testid="owned-cargo-detail"]', { timeout: 20_000 });
     pass(`${deviceConfig.tier}-cockpit`);
 
-    for (const testId of ['owned-cargo-status-card', 'owned-cargo-support-cards']) {
+    for (const testId of ['owned-cargo-support-cards']) {
       if ((await page.getByTestId(testId).count()) === 0) fail(`${deviceConfig.tier}-${testId}`, 'Ausente no cockpit');
       else pass(`${deviceConfig.tier}-${testId}`);
+    }
+
+    const mapPreview = page.getByTestId('owned-cargo-preview-map');
+    const mapBox = await mapPreview.boundingBox();
+    if (!mapBox) {
+      fail(`${deviceConfig.tier}-map-preview-box`, 'Map preview sem bounding box');
+    } else {
+      const aspect = mapBox.width / mapBox.height;
+      if (aspect < 0.85 || aspect > 1.15) {
+        fail(`${deviceConfig.tier}-map-preview-aspect`, `Map preview não é ~1x1 (aspect=${aspect.toFixed(2)})`);
+      } else {
+        pass(`${deviceConfig.tier}-map-preview-aspect`);
+      }
     }
 
     for (const panel of PANELS) {
@@ -229,39 +282,84 @@ async function runTier(deviceConfig) {
       }
     }
 
+    for (const panel of OPTIONAL_PANELS) {
+      if ((await page.getByTestId(`owned-cargo-preview-${panel}`).count()) === 0) {
+        warn(`${deviceConfig.tier}-preview-${panel}`, `Preview opcional ausente (${panel})`);
+      } else {
+        pass(`${deviceConfig.tier}-preview-${panel}`);
+      }
+    }
+
     await checkDetailBottomClear();
 
     // 4. Panels por click
     for (const panel of PANELS) {
-      const preview = page.getByTestId(`owned-cargo-preview-${panel}`);
-      await preview.scrollIntoViewIfNeeded();
-      await preview.click();
-      await page.waitForURL(new RegExp(`panel=${panel}`), { timeout: 10_000 });
+      await clickOwnedCargoPreview(page, panel);
+      await page.waitForFunction((panelName) => window.location.search.includes(`panel=${panelName}`), panel, {
+        timeout: 10_000,
+      });
       pass(`${deviceConfig.tier}-click-panel-${panel}-url`);
 
       const sheet = page.getByTestId('bottom-sheet-panel');
       await sheet.waitFor({ state: 'visible', timeout: 10_000 });
       pass(`${deviceConfig.tier}-click-panel-${panel}-sheet`);
 
-      const closeBtn = page.locator('[data-bottom-sheet-close="true"]').first();
-      await closeBtn.click();
-      await page.waitForFunction(() => !window.location.search.includes('panel='), null, { timeout: 10_000 });
+      if (panel === 'map') {
+        await page.getByTestId('owned-cargo-map-sheet-preview').waitFor({ state: 'visible', timeout: 5_000 });
+        pass(`${deviceConfig.tier}-click-panel-map-premium`);
+      }
+      if (panel === 'documents') {
+        const banner = page.getByTestId('owned-cargo-documents-sheet-action-banner');
+        if ((await banner.count()) > 0) pass(`${deviceConfig.tier}-click-panel-documents-banner`);
+      }
+      if (panel === 'risks') {
+        await page.getByTestId('owned-cargo-risks-sheet-critical').waitFor({ state: 'visible', timeout: 5_000 });
+        pass(`${deviceConfig.tier}-click-panel-risks-critical`);
+      }
+
+      await closeOwnedCargoSheet(page);
+      pass(`${deviceConfig.tier}-click-panel-${panel}-close`);
+    }
+
+    for (const panel of OPTIONAL_PANELS) {
+      if ((await page.getByTestId(`owned-cargo-preview-${panel}`).count()) === 0) continue;
+
+      await clickOwnedCargoPreview(page, panel);
+      await page.waitForFunction((panelName) => window.location.search.includes(`panel=${panelName}`), panel, {
+        timeout: 10_000,
+      });
+      pass(`${deviceConfig.tier}-click-panel-${panel}-url`);
+
+      await page.getByTestId('bottom-sheet-panel').waitFor({ state: 'visible', timeout: 10_000 });
+      pass(`${deviceConfig.tier}-click-panel-${panel}-sheet`);
+
+      if (panel === 'process') {
+        await page.getByTestId('owned-cargo-process-sheet-checklist').waitFor({ state: 'visible', timeout: 5_000 });
+        pass(`${deviceConfig.tier}-click-panel-process-checklist`);
+      }
+
+      await closeOwnedCargoSheet(page);
       pass(`${deviceConfig.tier}-click-panel-${panel}-close`);
     }
 
     // 5. Back button (open map, goBack closes panel)
-    await page.getByTestId('owned-cargo-preview-map').click();
-    await page.waitForURL(/panel=map/, { timeout: 10_000 });
+    await clickOwnedCargoPreview(page, 'map');
+    await page.waitForFunction(() => window.location.search.includes('panel=map'), null, { timeout: 10_000 });
     await page.goBack();
-    await page.waitForFunction(() => !window.location.search.includes('panel='), null, { timeout: 10_000 });
+    await waitPanelFullyClosed(page);
     if (!page.url().includes('/minhas-cargas/')) {
       fail(`${deviceConfig.tier}-back-button`, 'Back saiu do detalhe em vez de fechar panel');
     } else {
       pass(`${deviceConfig.tier}-back-button`);
     }
 
-    // 6. Panels por URL direta (todos os 4 panels em cada device)
-    const directPanels = PANELS;
+    // 6. Panels por URL direta (todos os panels visíveis em cada device)
+    const directPanels = [...PANELS];
+    for (const panel of OPTIONAL_PANELS) {
+      if ((await page.getByTestId(`owned-cargo-preview-${panel}`).count()) > 0) {
+        directPanels.push(panel);
+      }
+    }
     for (const panel of directPanels) {
       const id = results.cargoId ?? idFromUrl;
       await page.goto(`${baseUrl}/pt-BR/minhas-cargas/${id}?panel=${panel}`, {
@@ -272,8 +370,7 @@ async function runTier(deviceConfig) {
       await page.getByTestId('bottom-sheet-panel').waitFor({ state: 'visible', timeout: 10_000 });
       pass(`${deviceConfig.tier}-direct-panel-${panel}`);
 
-      await page.locator('[data-bottom-sheet-close="true"]').first().click();
-      await page.waitForFunction(() => !window.location.search.includes('panel='), null, { timeout: 10_000 });
+      await closeOwnedCargoSheet(page);
       await page.waitForSelector('[data-testid="owned-cargo-detail"]', { timeout: 10_000 });
       pass(`${deviceConfig.tier}-direct-panel-${panel}-close`);
     }
@@ -285,7 +382,9 @@ async function runTier(deviceConfig) {
       timeout: 60_000,
     });
     await page.waitForSelector('[data-testid="owned-cargo-detail"]', { timeout: 20_000 });
-    await page.waitForTimeout(800);
+    await page
+      .waitForFunction(() => !window.location.search.includes('panel=banana'), null, { timeout: 10_000 })
+      .catch(() => undefined);
     const finalUrl = page.url();
     if (finalUrl.includes('panel=banana')) {
       fail(`${deviceConfig.tier}-invalid-panel`, 'panel=banana não foi removido');

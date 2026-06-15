@@ -1,38 +1,81 @@
+@use '../../styles/owned-cargo-premium-surfaces' as premium
+
 .root
-  --hy-owned-cargo-summary-grid-gap: 0.625rem
-  --hy-owned-cargo-summary-metric-size: 1.75rem
-  --hy-owned-cargo-summary-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 92%, var(--hx-text, var(--text)) 8%)
-  --hy-owned-cargo-summary-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 88%, transparent)
-  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
-  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
-  margin-bottom: var(--hy-owned-cargo-summary-section-gap, 1rem)
+  --hy-owned-cargo-summary-grid-gap: 0.5rem
+  --hy-owned-cargo-summary-metric-size: 1.625rem
+  --hy-owned-cargo-label-color: var(--hy-color-text-primary, var(--hx-text, var(--text)))
+  --hy-owned-cargo-muted-color: var(--hy-color-text-secondary, color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted))))
+  margin-bottom: var(--hy-owned-cargo-summary-section-gap, 0.75rem)
+  width: 100%
+  max-width: 100%
+  min-width: 0
 
 .title
-  margin: 0 0 0.625rem
-  font-size: 0.875rem
-  font-weight: 820
-  letter-spacing: -0.02em
-  color: var(--hy-owned-cargo-label-color)
+  margin: 0 0 0.4375rem
+  font-size: 0.75rem
+  font-weight: 620
+  letter-spacing: 0.04em
+  text-transform: uppercase
+  color: var(--hy-owned-cargo-muted-color)
 
 .grid
-  display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
+  display: flex
   gap: var(--hy-owned-cargo-summary-grid-gap)
+  overflow-x: auto
+  overscroll-behavior-x: contain
+  scrollbar-width: none
+  -webkit-overflow-scrolling: touch
+  padding: 0.0625rem 0.0625rem 0.125rem
+  scroll-padding-inline: 0.125rem
+
+  &::-webkit-scrollbar
+    display: none
 
 .metric
   position: relative
   display: grid
   grid-template-columns: var(--hy-owned-cargo-summary-metric-size) minmax(0, 1fr)
   grid-template-rows: auto auto
-  column-gap: 0.5rem
-  row-gap: 0.125rem
+  column-gap: 0.45rem
+  row-gap: 0
   align-items: center
-  min-height: var(--hy-owned-cargo-summary-metric-min-height, 4.25rem)
-  padding: 0.625rem 0.7rem
+  flex: 0 0 auto
+  min-width: 8.25rem
+  min-height: var(--hy-owned-cargo-summary-metric-min-height, 3.5rem)
+  padding: 0.55rem 0.7rem 0.55rem 0.65rem
   border-radius: var(--hy-owned-cargo-summary-radius, 0.875rem)
-  border: 1px solid var(--hy-owned-cargo-summary-border)
-  background: var(--hy-owned-cargo-summary-surface)
-  box-shadow: 0 1px 0 color-mix(in srgb, var(--hx-text, var(--text)) 4%, transparent)
+  overflow: hidden
+
+  @include premium.owned-cargo-premium-card
+
+  &::after
+    content: ''
+    position: absolute
+    inset: auto 0 0 0
+    height: 2px
+    border-radius: 999px
+    background: linear-gradient(90deg, color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 72%, transparent), color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 18%, transparent) 72%, transparent)
+    opacity: 0.9
+
+  &::before
+    content: ''
+    position: absolute
+    inset: 0
+    pointer-events: none
+    background: linear-gradient(120deg, color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 4%, transparent) 0%, transparent 48%)
+    opacity: 0.75
+
+  &[data-metric='active']
+    --hy-owned-summary-accent: var(--hy-color-success, var(--hx-green, var(--success)))
+
+  &[data-metric='proposals']
+    --hy-owned-summary-accent: var(--hy-color-brand, var(--hx-blue, var(--brand)))
+
+  &[data-metric='pending']
+    --hy-owned-summary-accent: var(--hy-color-warning, var(--hx-yellow, var(--warning)))
+
+  &[data-metric='transit']
+    --hy-owned-summary-accent: var(--hy-color-cyan, var(--hx-cyan, var(--brand)))
 
 .iconWrap
   grid-row: 1 / span 2
@@ -40,24 +83,24 @@
   place-items: center
   width: var(--hy-owned-cargo-summary-metric-size)
   height: var(--hy-owned-cargo-summary-metric-size)
-  border-radius: 0.625rem
-  color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 88%, var(--hx-text, var(--text)))
-  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 12%, transparent)
-  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 22%, transparent)
+  border-radius: 0.5625rem
+  color: color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 86%, var(--hy-owned-cargo-label-color))
+  background: color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-owned-summary-accent, var(--hx-cyan, var(--brand))) 16%, transparent)
 
 .value
-  font-size: 1.125rem
-  font-weight: 900
+  font-size: 1.25rem
+  font-weight: 720
   line-height: 1
   letter-spacing: -0.03em
   color: var(--hy-owned-cargo-label-color)
 
 .label
   grid-column: 2
-  font-size: 0.75rem
-  font-weight: 760
-  line-height: 1.2
-  color: var(--hy-owned-cargo-label-color)
+  font-size: 0.625rem
+  font-weight: 580
+  line-height: 1.25
+  color: var(--hy-owned-cargo-muted-color)
 
 .hint
   position: absolute
@@ -72,7 +115,10 @@
 
 @media (min-width: 1024px)
   .grid
+    display: grid
     grid-template-columns: repeat(4, minmax(0, 1fr))
+    overflow: visible
 
   .metric
-    min-height: var(--hy-owned-cargo-summary-metric-min-height-desktop, 4.5rem)
+    min-width: 0
+    min-height: var(--hy-owned-cargo-summary-metric-min-height-desktop, 3.75rem)

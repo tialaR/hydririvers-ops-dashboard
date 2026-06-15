@@ -1088,6 +1088,71 @@ const exact: Record<string, Localized> = {
     'es': 'Terminal de Belém'
   },
 
+  'Previsão de chuva intensa na rota': {
+    'en-US': 'Heavy rain forecast on route',
+    'es': 'Previsión de lluvia intensa en la ruta'
+  },
+  'Nível do rio acima da média': {
+    'en-US': 'River level above average',
+    'es': 'Nivel del río por encima del promedio'
+  },
+  'Manutenção preventiva em dia': {
+    'en-US': 'Preventive maintenance up to date',
+    'es': 'Mantenimiento preventivo al día'
+  },
+  'Pode atrasar atracação ou exigir desvio de rota.': {
+    'en-US': 'May delay berthing or require a route diversion.',
+    'es': 'Puede retrasar el atraque o exigir desvío de ruta.'
+  },
+  'Monitorar condições e reforçar comunicação com a tripulação.': {
+    'en-US': 'Monitor conditions and reinforce communication with the crew.',
+    'es': 'Monitorear condiciones y reforzar comunicación con la tripulación.'
+  },
+  'Sem impacto imediato na operação.': {
+    'en-US': 'No immediate impact on the operation.',
+    'es': 'Sin impacto inmediato en la operación.'
+  },
+  'Acione a transportadora e revise janela de chegada.': {
+    'en-US': 'Contact the carrier and review arrival window.',
+    'es': 'Contacte al transportista y revise la ventana de llegada.'
+  },
+  'Acompanhe atualizações do corredor e confirme ETA.': {
+    'en-US': 'Follow corridor updates and confirm ETA.',
+    'es': 'Siga actualizaciones del corredor y confirme ETA.'
+  },
+  'Manter rotina de monitoramento.': {
+    'en-US': 'Keep routine monitoring.',
+    'es': 'Mantener rutina de monitoreo.'
+  },
+  'M/V São Gabriel': {
+    'en-US': 'M/V São Gabriel',
+    'es': 'M/V São Gabriel'
+  },
+  'HidroNave 12': {
+    'en-US': 'HidroNave 12',
+    'es': 'HidroNave 12'
+  },
+  'Operador hidroviário regional': {
+    'en-US': 'Regional waterway operator',
+    'es': 'Operador hidroviario regional'
+  },
+  'Anexar documentos pendentes': {
+    'en-US': 'Upload pending documents',
+    'es': 'Adjuntar documentos pendientes'
+  },
+  'Documentação conferida': {
+    'en-US': 'Documentation verified',
+    'es': 'Documentación verificada'
+  },
+  'Confirmar dados operacionais': {
+    'en-US': 'Confirm operational data',
+    'es': 'Confirmar datos operacionales'
+  },
+  'Operação em dia · nenhuma pendência crítica': {
+    'en-US': 'Operation on track · no critical pending items',
+    'es': 'Operación al día · sin pendientes críticas'
+  },
+
 };
 
 const patterns: Array<[RegExp, Localized]> = [

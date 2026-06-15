@@ -1,0 +1,182 @@
+@use '../../styles/owned-cargo-premium-surfaces' as premium
+
+.root
+  --hy-owned-route-visual-radius: 0.875rem
+  --hy-owned-route-visual-border: color-mix(in srgb, var(--hy-color-border-subtle, var(--hx-line-soft, var(--line))) 86%, transparent)
+  display: grid
+  gap: 0.45rem
+  padding: 0.75rem
+  border-radius: var(--hy-owned-route-visual-radius)
+  overflow: hidden
+
+  @include premium.owned-cargo-premium-card
+
+  &[data-variant='hero']
+    padding: 1rem 0.85rem 0.85rem
+
+  &[data-variant='map']
+    padding: 0
+    border: 0
+    background: transparent
+    box-shadow: none
+    backdrop-filter: none
+    -webkit-backdrop-filter: none
+
+.routeSvg
+  width: 100%
+  height: auto
+  max-height: 7.5rem
+
+  [data-variant='hero'] &
+    max-height: 9rem
+
+  [data-variant='map'] &
+    max-height: none
+    height: 100%
+    min-height: 11rem
+
+.mapTerrain
+  fill: url(#hy-owned-map-terrain)
+  color: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 88%, var(--hx-cyan, var(--brand)))
+
+.mapLand
+  color: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 72%, var(--hx-cyan, var(--brand)))
+
+.mapWater
+  color: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 88%, var(--hx-blue, var(--brand)))
+
+.corridorPath
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 34%, white)
+  stroke-width: 5
+  stroke-linecap: round
+  opacity: 0.55
+
+  &[data-corridor='para']
+    stroke-width: 4
+    opacity: 0.42
+
+.schematicRoute
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 48%, white)
+  stroke-width: 4
+  stroke-linecap: round
+  opacity: 0.72
+
+.schematicProgress
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 86%, white)
+  stroke-width: 5.5
+  stroke-linecap: round
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 32%, transparent))
+
+.cityMarker
+  color: color-mix(in srgb, var(--hy-color-text-secondary, var(--hx-muted, var(--muted))) 82%, var(--hx-text, var(--text)))
+
+.cityDot
+  fill: color-mix(in srgb, var(--hy-color-glass-strong, white) 88%, transparent)
+  stroke: currentColor
+  stroke-width: 1.25
+  opacity: 0.72
+
+.cityLabel
+  font-size: 11px
+  font-weight: 650
+  fill: currentColor
+  opacity: 0.78
+
+.mapGrid
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 42%, transparent)
+  opacity: 0.55
+
+.scaleLabel
+  font-size: 10px
+  font-weight: 600
+  fill: color-mix(in srgb, var(--hy-color-text-secondary, var(--hx-muted, var(--muted))) 78%, var(--hx-text, var(--text)))
+  opacity: 0.72
+
+.hydroLine
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 38%, white)
+  stroke-width: 1.25
+  stroke-linecap: round
+  opacity: 0.72
+
+.hydroLineMuted
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 24%, white)
+  stroke-width: 0.85
+  stroke-linecap: round
+  opacity: 0.45
+
+.routePath
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 58%, white)
+  stroke-width: 2.25
+  stroke-linecap: round
+  opacity: 0.72
+
+.routeProgress
+  fill: none
+  stroke: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 82%, white)
+  stroke-width: 2.75
+  stroke-linecap: round
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 28%, transparent))
+
+.point
+  fill: var(--hy-color-glass-strong, var(--hx-card, var(--surface)))
+  stroke-width: 2
+
+.pointOrigin
+  stroke: color-mix(in srgb, var(--hy-color-route-origin, var(--hx-green, var(--success))) 88%, white)
+
+.pointDest
+  stroke: color-mix(in srgb, var(--hy-color-route-destination, var(--hx-blue, var(--brand))) 88%, white)
+
+.vesselPulse
+  fill: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 18%, transparent)
+
+  @media (prefers-reduced-motion: no-preference)
+    animation: hy-owned-route-vessel-pulse 2.4s ease-in-out infinite
+
+.boat
+  fill: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 92%, var(--hx-text, var(--text)))
+
+.footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.35rem
+
+.endpoint
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-color-text-primary, color-mix(in srgb, var(--hx-text, var(--text)) 88%, transparent))
+  max-width: 34%
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.progressChip
+  display: inline-flex
+  align-items: center
+  min-height: 1.375rem
+  padding: 0 0.45rem
+  border-radius: 999px
+  font-size: 0.625rem
+  font-weight: 820
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 92%, var(--hx-text, var(--text)))
+  background: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 12%, transparent)
+
+@keyframes hy-owned-route-vessel-pulse
+  0%, 100%
+    opacity: 0.55
+  50%
+    opacity: 0.16
+
+@media (prefers-reduced-motion: reduce)
+  .routeProgress
+    transition: none
+
+  .vesselPulse
+    animation: none

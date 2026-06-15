@@ -14,8 +14,8 @@ export const ownedCargoSheetDefaults = {
   viewportAnchor: 'flush',
   enableDrag: true,
   closeOnOverlayClick: true,
-  variant: 'strong',
-  overlayVariant: 'strong',
+  variant: 'light',
+  overlayVariant: 'light',
   snapOrder: ownedCargoSheetSnapOrder,
   initialSnap: 'expanded',
 } satisfies Partial<BottomSheetProps>;

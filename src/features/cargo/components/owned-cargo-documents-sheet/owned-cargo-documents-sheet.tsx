@@ -28,6 +28,9 @@ export function OwnedCargoDocumentsSheet({
 
   useOwnedCargoSheetPortal(open, sheetStyles.sheet, ownedCargoSheetPortalAttributes);
 
+  const pendingDocuments = documents.filter((document) => document.needsAction);
+  const topPending = pendingDocuments[0]?.name ?? preview.topPendingName;
+
   return (
     <BottomSheet
       open={open}
@@ -47,28 +50,55 @@ export function OwnedCargoDocumentsSheet({
         </p>
       ) : (
         <>
-          <p className={sheetStyles.metaValue}>
-            {t('summary', {
-              total: preview.totalCount,
-              pending: preview.pendingCount,
-              readiness: preview.readinessPercent,
-            })}
-          </p>
+          <div className={sheetStyles.heroCard}>
+            <p className={sheetStyles.summaryLabel}>
+              {t('summary', {
+                total: preview.totalCount,
+                pending: preview.pendingCount,
+                readiness: preview.readinessPercent,
+              })}
+            </p>
+            <div className={sheetStyles.summaryBar}>
+              <div
+                className={sheetStyles.summaryTrack}
+                role="progressbar"
+                aria-valuenow={preview.readinessPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={t('readinessAria', { readiness: preview.readinessPercent })}
+              >
+                <span className={sheetStyles.summaryFill} style={{ width: `${preview.readinessPercent}%` }} />
+              </div>
+            </div>
+          </div>
+
+          {topPending ? (
+            <div className={sheetStyles.documentBanner} data-testid="owned-cargo-documents-sheet-action-banner">
+              <p className={sheetStyles.documentBannerTitle}>{t('actionBanner', { document: topPending })}</p>
+              <p className={sheetStyles.actionHint}>{t('actionHint')}</p>
+            </div>
+          ) : null}
+
           <ul className={sheetStyles.documentList} data-testid="owned-cargo-documents-sheet-list">
             {documents.map((document) => (
               <li key={document.name} className={sheetStyles.documentItem}>
                 <div className={sheetStyles.documentHeader}>
                   <p className={sheetStyles.documentName}>{document.name}</p>
-                  <span className={sheetStyles.statusBadge} data-status={document.status}>
-                    {t(`status.${document.status}`)}
+                  <span
+                    className={sheetStyles.statusBadge}
+                    data-display={document.displayStatus}
+                    data-status={document.status}
+                  >
+                    {t(`displayStatus.${document.displayStatus}`)}
                   </span>
                 </div>
                 {document.note ? <p className={sheetStyles.documentNote}>{document.note}</p> : null}
               </li>
             ))}
           </ul>
-          <button type="button" className={sheetStyles.statusBadge} disabled aria-label={t('actionAria')}>
-            {t('actionPlaceholder')}
+
+          <button type="button" className={sheetStyles.actionButton} disabled aria-label={t('actionAria')}>
+            {topPending ? t('actionCta', { document: topPending }) : t('actionPlaceholder')}
           </button>
         </>
       )}

@@ -5,16 +5,18 @@ export function OwnedCargoDetailSkeleton() {
     <div className={styles.root} data-testid="owned-cargo-detail-skeleton" aria-hidden>
       <div className={styles.header}>
         <div className={styles.backBar} />
-        <div className={styles.titleLine} />
-        <div className={styles.routeLine} />
-        <div className={styles.statusChip} />
-        <div className={styles.nextStep} />
+        <div className={styles.editorialBand} />
+        <div className={styles.identityCard}>
+          <div className={styles.identityTop} />
+          <div className={styles.titleLine} />
+        </div>
+        <div className={styles.contextGrid}>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div key={index} className={styles.contextCard} />
+          ))}
+        </div>
       </div>
-      <div className={styles.summaryGrid}>
-        {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className={styles.summaryMetric} />
-        ))}
-      </div>
+      <div className={styles.mapHero} />
       <div className={styles.previewGrid}>
         {Array.from({ length: 4 }).map((_, index) => (
           <div key={index} className={styles.previewCard} />
