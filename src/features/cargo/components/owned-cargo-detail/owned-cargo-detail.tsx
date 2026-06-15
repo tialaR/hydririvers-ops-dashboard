@@ -5,13 +5,14 @@ import { useTranslations } from 'next-intl';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 import { deriveOwnedCargoDetail } from '@/features/cargo/domain/derive-owned-cargo-detail';
 import { OwnedCargoDetailHeader } from '@/features/cargo/components/owned-cargo-detail-header/owned-cargo-detail-header';
-import { OwnedCargoStatusCard } from '@/features/cargo/components/owned-cargo-status-card/owned-cargo-status-card';
 import { OwnedCargoPreviewGrid } from '@/features/cargo/components/owned-cargo-preview-grid/owned-cargo-preview-grid';
 import { OwnedCargoSupportCards } from '@/features/cargo/components/owned-cargo-support-cards/owned-cargo-support-cards';
 import { OwnedCargoMapSheet } from '@/features/cargo/components/owned-cargo-map-sheet/owned-cargo-map-sheet';
 import { OwnedCargoTimelineSheet } from '@/features/cargo/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet';
 import { OwnedCargoDocumentsSheet } from '@/features/cargo/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet';
 import { OwnedCargoRisksSheet } from '@/features/cargo/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet';
+import { OwnedCargoTrackingSheet } from '@/features/cargo/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet';
+import { OwnedCargoProcessSheet } from '@/features/cargo/components/owned-cargo-process-sheet/owned-cargo-process-sheet';
 import { useOwnedCargoPanel } from '@/features/cargo/hooks/use-owned-cargo-panel';
 import styles from './owned-cargo-detail.module.sass';
 
@@ -21,7 +22,7 @@ export function OwnedCargoDetail({ cargo }: { cargo: Cargo }) {
   const { panelTarget, openPanel, closePanel, isPanelOpen } = useOwnedCargoPanel();
 
   const actions = [
-    derivation.showTrackAction ? { key: 'track' as const, label: t('actionTrack'), enabled: false } : null,
+    derivation.showTrackAction ? { key: 'track' as const, label: t('actionTrack'), enabled: derivation.showTrackingPreview } : null,
     derivation.showNegotiateAction ? { key: 'negotiate' as const, label: t('actionNegotiate'), enabled: false } : null,
     derivation.showUpdateStatusAction ? { key: 'updateStatus' as const, label: t('actionUpdateStatus'), enabled: false } : null,
     derivation.showObservationAction ? { key: 'observation' as const, label: t('actionObservation'), enabled: false } : null,
@@ -38,7 +39,6 @@ export function OwnedCargoDetail({ cargo }: { cargo: Cargo }) {
       data-panel-target={panelTarget ?? undefined}
     >
       <OwnedCargoDetailHeader cargo={cargo} />
-      <OwnedCargoStatusCard cargo={cargo} statusCard={derivation.statusCard} />
       <OwnedCargoPreviewGrid cargo={cargo} onOpenPanel={openPanel} />
       <OwnedCargoSupportCards cards={derivation.supportCards} />
 
@@ -62,7 +62,9 @@ export function OwnedCargoDetail({ cargo }: { cargo: Cargo }) {
                   onClick={
                     action.key === 'openDocuments' && action.enabled
                       ? () => openPanel('documents')
-                      : undefined
+                      : action.key === 'track' && action.enabled
+                        ? () => openPanel('tracking')
+                        : undefined
                   }
                 >
                   {action.label}
@@ -96,6 +98,20 @@ export function OwnedCargoDetail({ cargo }: { cargo: Cargo }) {
         risks={derivation.riskItems}
         open={isPanelOpen('risks')}
         onOpenChange={(open) => (open ? openPanel('risks') : closePanel())}
+      />
+      <OwnedCargoTrackingSheet
+        detail={derivation.trackingDetail}
+        originLabel={cargo.origin}
+        destinationLabel={cargo.destination}
+        open={isPanelOpen('tracking')}
+        onOpenChange={(open) => (open ? openPanel('tracking') : closePanel())}
+      />
+      <OwnedCargoProcessSheet
+        preview={derivation.process}
+        steps={derivation.processSteps}
+        documents={derivation.documentItems}
+        open={isPanelOpen('process')}
+        onOpenChange={(open) => (open ? openPanel('process') : closePanel())}
       />
     </div>
   );

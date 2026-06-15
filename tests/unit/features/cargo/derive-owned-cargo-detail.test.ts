@@ -62,6 +62,7 @@ describe('deriveOwnedCargoRisksPreview', () => {
       state: 'clear',
       count: 0,
       primaryRiskMock: null,
+      topSeverity: null,
     });
   });
 
@@ -72,6 +73,7 @@ describe('deriveOwnedCargoRisksPreview', () => {
       state: 'attention',
       count: 2,
       primaryRiskMock: 'Calado restrito',
+      topSeverity: 'high',
     });
   });
 });

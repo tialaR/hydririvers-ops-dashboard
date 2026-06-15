@@ -1,0 +1,57 @@
+@use '../../styles/cargo-v2-light-shell' as cargoShell
+
+.root
+  --hy-owned-cargo-list-filter-shell-padding-inline: var(--hy-spacing-shell-padding-inline, 1.125rem)
+  --hy-owned-cargo-list-filter-min-height: 2.125rem
+  --hy-owned-cargo-list-filter-gap: 0.4375rem
+  margin-bottom: 0
+  width: 100%
+  max-width: 100%
+  min-width: 0
+
+.rail
+  display: flex
+  align-items: stretch
+  gap: var(--hy-owned-cargo-list-filter-gap)
+  width: 100%
+  max-width: 100%
+  min-width: 0
+  overflow-x: auto
+  overscroll-behavior-x: contain
+  scrollbar-width: none
+  -webkit-overflow-scrolling: touch
+  padding: 0.125rem 0 0.25rem
+  scroll-padding-inline: 0
+
+  &::-webkit-scrollbar
+    display: none
+
+  .chip
+    flex: 0 0 auto
+    min-height: var(--hy-owned-cargo-list-filter-min-height)
+    border-radius: 999px
+    line-height: 1.2
+    white-space: nowrap
+    font-weight: 620
+
+    @include cargoShell.cargo-v2-light-filter-chip
+
+    &[data-active='true']
+      @include cargoShell.cargo-v2-light-filter-chip-selected
+      font-weight: 700
+
+    .count
+      color: var(--v2-text-secondary-muted, rgba(100, 116, 139, 0.82))
+      font-weight: inherit
+
+@media (max-width: 860px)
+  .rail
+    width: calc(100% + (var(--hy-owned-cargo-list-filter-shell-padding-inline) * 2))
+    max-width: calc(100% + (var(--hy-owned-cargo-list-filter-shell-padding-inline) * 2))
+    margin-inline: calc(-1 * var(--hy-owned-cargo-list-filter-shell-padding-inline))
+    padding-inline: var(--hy-owned-cargo-list-filter-shell-padding-inline)
+    scroll-padding-inline: var(--hy-owned-cargo-list-filter-shell-padding-inline)
+
+@media (prefers-reduced-motion: reduce)
+  .chip
+    transition-duration: 1ms

@@ -28,6 +28,14 @@ describe('resolveOwnedCargoPanelFromSearchParams', () => {
     expect(resolveOwnedCargoPanelFromSearchParams(new URLSearchParams('panel=risks'))).toBe('risks');
   });
 
+  it('resolve panel=tracking', () => {
+    expect(resolveOwnedCargoPanelFromSearchParams(new URLSearchParams('panel=tracking'))).toBe('tracking');
+  });
+
+  it('resolve panel=process', () => {
+    expect(resolveOwnedCargoPanelFromSearchParams(new URLSearchParams('panel=process'))).toBe('process');
+  });
+
   it('retorna null para panel inválido', () => {
     expect(resolveOwnedCargoPanelFromSearchParams(new URLSearchParams('panel=banana'))).toBeNull();
   });

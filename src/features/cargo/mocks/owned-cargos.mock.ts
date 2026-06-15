@@ -1,9 +1,10 @@
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
 
 const docPackA = [
-  { name: 'NF-e', status: 'required' as const, note: 'Nota fiscal da mercadoria.' },
-  { name: 'Romaneio', status: 'required' as const, note: 'Lista de volumes por lote.' },
-  { name: 'Laudo sanitário', status: 'conditional' as const, note: 'Recomendado para carga refrigerada.' }
+  { name: 'NF-e', status: 'ok' as const, note: 'Autorizada SEFAZ AM.' },
+  { name: 'Romaneio', status: 'ok' as const, note: 'Conferido na origem.' },
+  { name: 'Licença sanitária', status: 'ok' as const, note: 'Válida até ago/2026.' },
+  { name: 'Comprovante de coleta', status: 'required' as const, note: 'Pendente de anexo pelo embarcador.' }
 ];
 
 const docPackB = [
@@ -36,13 +37,17 @@ export const userCargosMock: Cargo[] = [
     visibility: 'private',
     publishedAt: null,
     productFamily: 'bioeconomy',
-    documentReadiness: 32,
-    documentsStatusSummary: 'Cadastro incompleto · faltam documentos',
+    documentReadiness: 72,
+    documentsStatusSummary: 'Quase pronto · falta comprovante de coleta',
     proposalsCount: 0,
-    operationalNextStep: 'Anexe a NF-e e o romaneio para publicar e receber propostas.',
+    operationalNextStep: 'Anexe o comprovante de coleta para publicar e receber propostas.',
     myCargoesCta: 'complete',
     requiredDocuments: docPackA,
-    operationalRisks: ['Cadeia térmica curta na origem'],
+    operationalRisks: [
+      'Previsão de chuva intensa na rota',
+      'Nível do rio acima da média',
+      'Manutenção preventiva em dia'
+    ],
     createdAt: '2026-05-01T08:00:00.000Z',
     updatedAt: '2026-05-09T14:30:00.000Z'
   },
@@ -196,6 +201,8 @@ export const userCargosMock: Cargo[] = [
     productFamily: 'territorialSupply',
     documentReadiness: 95,
     documentsStatusSummary: 'Em viagem · monitoramento ativo',
+    etaConfidence: '28–36 h',
+    carrierId: 'hidronave-12',
     proposalsCount: 1,
     operationalNextStep: 'Acompanhe a posição e comunique imprevistos ao cliente final.',
     myCargoesCta: 'track',

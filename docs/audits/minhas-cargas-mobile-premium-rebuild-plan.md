@@ -52,7 +52,7 @@ Screenshots obrigatórios por device na Fase F.
 
 | Camada | Atual | Gap |
 |--------|-------|-----|
-| Lista | `MyCargoesList` + `CargoCard variant="myCargos"` | Card público adaptado, não owned premium |
+| Lista | `MyCargoesList` + `OwnedCargoCard` + `OwnedCargoSummary` | Resumo 2×2 + faixa de chips operacionais (Todas, trânsito, atenção, docs, ETA) |
 | Resumo | 4 cards empilhados (1 col mobile) | Ocupa >50% viewport |
 | Detalhe | `CargoDetailLoader` → `CargoDetail` (marketplace) | Sem grid 2×2, sem timeline, mapa público |
 | Mobile title | Fallback Dashboard em subrotas privadas | Bug confirmado em código |
@@ -573,3 +573,20 @@ Fix test-only aplicado (commit separado recomendado):
 ```
 test(cargo-lab): mock BottomNav in lab-v2 SSR tests
 ```
+
+---
+
+## 16. Refino visual DS premium (2026-06-13)
+
+Passada focada em coerência Apple-like **sem feature nova**:
+
+| Área | Decisão |
+|------|---------|
+| Breadcrumb lista | `mobileHidden` no `Breadcrumb` — oculto visualmente no mobile, mantido para leitores de tela |
+| Superfícies | Mixin `_owned-cargo-premium-surfaces.sass` reutilizando `cargo-v2-light-filter-chip` + glass `--hy-color-*` |
+| Card lista | Borda lateral gradiente + glow por `data-status`; ícone tintado; CTA glass |
+| Rota no card | Contraste legível em `CargoRouteLine` (fallback light sem depender de `.root[data-theme]`) |
+| Map preview | `OwnedCargoRouteVisual` variant `map` — grid hidrográfico + linhas de rio + rota operacional |
+| Detalhe | Header, mini-previews, dados de apoio (grid 2 col) e ações com hierarquia primária/secundária |
+
+**QA:** Phase F 0 falhas (3 avisos tracking opcional); list premium QA 100% pass; screenshots `output/minhas-cargas-*`.

@@ -45,24 +45,36 @@ vi.mock('@/features/cargo/components/owned-cargo-documents-sheet/owned-cargo-doc
 vi.mock('@/features/cargo/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet', () => ({
   OwnedCargoRisksSheet: () => null,
 }));
+vi.mock('@/features/cargo/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet', () => ({
+  OwnedCargoTrackingSheet: () => null,
+}));
+vi.mock('@/features/cargo/components/owned-cargo-process-sheet/owned-cargo-process-sheet', () => ({
+  OwnedCargoProcessSheet: () => null,
+}));
 
 describe('OwnedCargoDetail', () => {
-  it('renderiza cockpit com header, status card, grid 2x2, support cards e data-panel-target', () => {
+  it('renderiza cockpit com header da carga, mapa hero, mini previews e support cards', () => {
     const cargo = userCargosMock[0]!;
     const html = renderToStaticMarkup(<OwnedCargoDetail cargo={cargo} />);
 
     expect(html).toContain('data-testid="owned-cargo-detail"');
     expect(html).toContain('data-testid="owned-cargo-detail-header"');
-    expect(html).toContain('data-testid="owned-cargo-status-card"');
+    expect(html).toContain(cargo.title);
+    expect(html).not.toContain('pages.minhasCargas.detail:editorial.headlineOpen');
+    expect(html).not.toContain('data-testid="owned-cargo-status-card"');
     expect(html).toContain('data-testid="owned-cargo-support-cards"');
     expect(html).toContain('data-testid="owned-cargo-preview-map"');
     expect(html).toContain('data-testid="owned-cargo-preview-timeline"');
     expect(html).toContain('data-testid="owned-cargo-preview-documents"');
     expect(html).toContain('data-testid="owned-cargo-preview-risks"');
+    expect(html).toContain('data-testid="owned-cargo-preview-process"');
+    expect(html).toContain('data-context="origin"');
+    expect(html).toContain('data-context="cargoType"');
     expect(html).toContain('data-panel-target="map"');
     expect(html).toContain('data-panel-target="timeline"');
     expect(html).toContain('data-panel-target="documents"');
     expect(html).toContain('data-panel-target="risks"');
+    expect(html).toContain('data-panel-target="process"');
     expect(html).toContain(cargo.id);
   });
 });

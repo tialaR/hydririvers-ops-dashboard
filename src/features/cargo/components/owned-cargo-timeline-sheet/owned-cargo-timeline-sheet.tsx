@@ -19,6 +19,13 @@ type OwnedCargoTimelineSheetProps = {
   onOpenChange: (open: boolean) => void;
 };
 
+function resolveTimelineProgress(events: OwnedCargoTimelineEvent[]): number {
+  if (!events.length) return 0;
+  const doneCount = events.filter((event) => event.phase === 'done').length;
+  const currentCount = events.some((event) => event.phase === 'current') ? 0.5 : 0;
+  return Math.round(((doneCount + currentCount) / events.length) * 100);
+}
+
 export function OwnedCargoTimelineSheet({
   preview,
   events,
@@ -27,6 +34,7 @@ export function OwnedCargoTimelineSheet({
 }: OwnedCargoTimelineSheetProps) {
   const t = useTranslations('pages.minhasCargas.detail.sheets.timeline');
   const locale = useLocale();
+  const progressPercent = resolveTimelineProgress(events);
 
   useOwnedCargoSheetPortal(open, sheetStyles.sheet, ownedCargoSheetPortalAttributes);
 
@@ -51,6 +59,26 @@ export function OwnedCargoTimelineSheet({
         </p>
       ) : (
         <>
+          <div className={sheetStyles.heroCard}>
+            <div className={sheetStyles.heroRow}>
+              <p className={sheetStyles.heroTitle}>{t(`status.${preview.statusKey}`)}</p>
+              <span className={sheetStyles.statusChip}>{t('progressValue', { progress: progressPercent })}</span>
+            </div>
+            <div className={sheetStyles.summaryBar}>
+              <div
+                className={sheetStyles.summaryTrack}
+                role="progressbar"
+                aria-valuenow={progressPercent}
+                aria-valuemin={0}
+                aria-valuemax={100}
+                aria-label={t('progressAria', { progress: progressPercent })}
+              >
+                <span className={sheetStyles.summaryFill} style={{ width: `${progressPercent}%` }} />
+              </div>
+              <p className={sheetStyles.summaryLabel}>{t('summary', { count: preview.eventCount })}</p>
+            </div>
+          </div>
+
           {nextEvent ? (
             <>
               <h3 className={sheetStyles.sectionTitle}>{t('nextEventSection')}</h3>
@@ -65,6 +93,7 @@ export function OwnedCargoTimelineSheet({
                 <span className={sheetStyles.timelineDot} aria-hidden />
                 <div>
                   <p className={sheetStyles.timelineLabel}>{translateMock(locale, event.labelMock)}</p>
+                  <p className={sheetStyles.timelineTimestamp}>{event.timestampMock}</p>
                   <p className={sheetStyles.timelinePhase}>{t(`phase.${event.phase}`)}</p>
                 </div>
               </li>

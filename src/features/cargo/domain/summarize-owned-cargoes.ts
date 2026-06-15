@@ -19,7 +19,7 @@ export const OWNED_CARGO_STATUS_PROGRESS: Record<CargoStatus, number> = {
   delivered: 100,
 };
 
-function cargoHasPendingItems(cargo: Cargo): boolean {
+export function ownedCargoHasDocumentPendency(cargo: Cargo): boolean {
   const readiness = cargo.documentReadiness ?? 100;
   const docPending = cargo.requiredDocuments?.some((document) => document.status === 'required') ?? false;
   const incompleteRegistration = !cargo.publishedAt && cargo.status === 'open';
@@ -35,7 +35,7 @@ export function summarizeOwnedCargoes(items: Cargo[]): OwnedCargoesSummary {
   for (const cargo of items) {
     if (cargo.status !== 'delivered') active += 1;
     proposals += typeof cargo.proposalsCount === 'number' ? cargo.proposalsCount : 0;
-    if (cargoHasPendingItems(cargo)) pending += 1;
+    if (ownedCargoHasDocumentPendency(cargo)) pending += 1;
     if (cargo.status === 'boarded') inTransit += 1;
   }
 

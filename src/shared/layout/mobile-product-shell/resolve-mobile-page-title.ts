@@ -14,6 +14,7 @@ export type MobilePageTitleMessageKey =
   | 'nav.government'
   | 'nav.admin'
   | 'adminChrome.mobile.pageTitles.cargoDetail'
+  | 'adminChrome.mobile.pageTitles.myCargoDetail'
   | 'adminChrome.mobile.pageTitles.cargoMap'
   | 'adminChrome.mobile.pageTitles.cargoPublish'
   | 'adminChrome.mobile.pageTitles.negotiationDetail'
@@ -39,9 +40,15 @@ export function resolveMobilePageTitleKey(normalizedPathname: string): MobilePag
 
   if (
     normalizedPathname === intlAppPaths.cargos.myCargos
-    || normalizedPathname.startsWith(`${intlAppPaths.cargos.myCargos}/`)
   ) {
     return 'nav.myCargoes';
+  }
+
+  const myCargoDetailMatch = normalizedPathname.match(
+    new RegExp(`^${escapeRegExp(intlAppPaths.cargos.myCargos)}/([^/]+)$`),
+  );
+  if (myCargoDetailMatch) {
+    return 'adminChrome.mobile.pageTitles.myCargoDetail';
   }
 
   if (normalizedPathname === intlAppPaths.cargos.publishCargo) {

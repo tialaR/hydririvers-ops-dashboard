@@ -7,7 +7,7 @@
   height: var(--hy-my-cargoes-skeleton-summary-row-height, 1.25rem)
   width: min(100%, var(--hy-my-cargoes-skeleton-summary-row-width, 14rem))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 8%, transparent))
   animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
 
 .summaryGrid
@@ -21,7 +21,7 @@
 .summaryMetric
   height: var(--hy-my-cargoes-skeleton-summary-metric-height, 4.25rem)
   border-radius: var(--hy-my-cargoes-skeleton-card-radius, 0.875rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 8%, transparent))
   animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
 
 .cardList
@@ -34,7 +34,7 @@
   min-height: var(--hy-owned-cargo-card-height-compact, 9.5rem)
   padding: var(--hy-my-cargoes-skeleton-card-padding, 0.85rem 0.9rem)
   border-radius: var(--hy-my-cargoes-skeleton-card-radius, 1rem)
-  background: var(--hy-my-cargoes-skeleton-card-surface, rgba(7, 17, 14, 0.06))
+  background: var(--hy-my-cargoes-skeleton-card-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 6%, transparent))
   animation: my-cargoes-skeleton-pulse var(--hy-my-cargoes-skeleton-duration, 1.2s) ease-in-out infinite
 
 .cardHeader
@@ -45,43 +45,43 @@
   width: var(--hy-my-cargoes-skeleton-chip-width, 4.5rem)
   height: var(--hy-my-cargoes-skeleton-chip-height, 1.375rem)
   border-radius: 999px
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 10%, transparent))
 
 .chipWide
   flex: 1
   max-width: var(--hy-my-cargoes-skeleton-chip-wide-max, 7rem)
   height: var(--hy-my-cargoes-skeleton-chip-height, 1.375rem)
   border-radius: 999px
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 8%, transparent))
 
 .cardCode
   height: var(--hy-my-cargoes-skeleton-code-height, 0.75rem)
   width: min(100%, var(--hy-my-cargoes-skeleton-code-width, 6rem))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 8%, transparent))
 
 .cardTitle
   height: var(--hy-my-cargoes-skeleton-title-height, 1rem)
   width: min(100%, var(--hy-my-cargoes-skeleton-title-width, 72%))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.1))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 10%, transparent))
 
 .cardRoute
   height: var(--hy-my-cargoes-skeleton-route-height, 0.85rem)
   width: min(100%, var(--hy-my-cargoes-skeleton-route-width, 88%))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.07))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 7%, transparent))
 
 .cardProgress
   height: var(--hy-my-cargoes-skeleton-progress-height, 1.5rem)
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.07))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 7%, transparent))
 
 .cardFooter
   height: var(--hy-my-cargoes-skeleton-footer-height, 0.85rem)
   width: min(100%, var(--hy-my-cargoes-skeleton-footer-width, 40%))
   border-radius: var(--hy-my-cargoes-skeleton-radius, 0.5rem)
-  background: var(--hy-my-cargoes-skeleton-surface, rgba(7, 17, 14, 0.08))
+  background: var(--hy-my-cargoes-skeleton-surface, color-mix(in srgb, var(--hy-color-text-primary, var(--hx-text, var(--text))) 8%, transparent))
 
 @keyframes my-cargoes-skeleton-pulse
   0%, 100%
