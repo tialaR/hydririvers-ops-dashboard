@@ -37,9 +37,11 @@ Próxima ação:
 
 | Emoji | Decisão | Maps to **Result** |
 |-------|---------|-------------------|
-| 🟢 | Pode seguir | Worked |
-| 🟡 | Segue com cuidado | Partial |
-| 🔴 | Para agora | Did not work |
+| 🟢 | Pode seguir | Worked — **only** when all mandatory `hydri:gate` runs are PASS |
+| 🟡 | Segue com cuidado | Partial — **required** when any gate WARN (no FAIL) |
+| 🔴 | Para agora | Did not work — **required** when any gate FAIL |
+
+Captain closeout emoji and **Result** must follow the **worst** mandatory gate outcome. Gate FAIL forbids 🟢 and "Pode seguir" even if governance/docs work succeeded.
 
 Optional **Detalhes técnicos** after Captain closeout for paths, commands, components, proof levels.
 
@@ -61,6 +63,8 @@ Optional **Detalhes técnicos** after Captain closeout for paths, commands, comp
 
 ## Cannot claim success when
 
+- Any mandatory **`npm run hydri:gate`** was not run, or any run printed `STATUS FINAL: FAIL` or a non-empty `── FAIL ──` section
+- Gate returned **WARN** but closeout used 🟢 or "Pode seguir"
 - Mandatory validation was not run (`npm run lint`, `npm run typecheck`, `npm run check:i18n`)
 - Operation Zero Redemoinho proof fields skipped on implementation
 - New hardcoded UI string, token outside `--hy-*`, or path outside kebab-case

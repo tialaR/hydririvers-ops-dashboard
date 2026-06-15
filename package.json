@@ -31,7 +31,8 @@
     "ds:check": "node tools/design-system/validate-hydro-design-system.mjs",
     "hydri:verify": "node scripts/hydri-verify.mjs",
     "hydri:audit": "node scripts/hydri-audit.mjs",
-    "hydri:agent:check": "node scripts/hydri-agent-check.mjs"
+    "hydri:agent:check": "node scripts/hydri-agent-check.mjs",
+    "hydri:gate": "node scripts/hydri-autopilot-gate.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
