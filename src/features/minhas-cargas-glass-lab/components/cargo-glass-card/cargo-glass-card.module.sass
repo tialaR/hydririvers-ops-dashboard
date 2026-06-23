@@ -1,0 +1,337 @@
+.cardShell
+  --accent-strong: #ff7600
+  --accent-mid: #ff8b0a
+  --accent-soft: rgba(255, 162, 42, 0.86)
+  --accent-fade: rgba(255, 198, 106, 0.44)
+  --accent-mid-transparent: rgba(255, 139, 24, 0.69)
+  --accent-faint: rgba(255, 198, 112, 0.24)
+  --accent-shadow: rgba(255, 117, 0, 0.19)
+  --accent-shadow-soft: rgba(255, 122, 0, 0.10)
+  --accent-left-glow: rgba(255, 126, 0, 0.35)
+  --accent-card-glow: rgba(255, 136, 22, 0.26)
+  --accent-card-glow-soft: rgba(255, 184, 116, 0.18)
+  --accent-icon: #ff9900
+  --badge-text: #ff6900
+  --badge-bg: linear-gradient(180deg, rgba(255, 239, 227, 0.91) 0%, rgba(255, 236, 223, 0.75) 100%)
+  --badge-border: rgba(255, 206, 177, 0.86)
+  --badge-shadow: rgba(255, 118, 0, 0.08)
+  --card-warm: rgba(255, 247, 240, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #565f7d
+  --dot-color: #555d78
+
+  position: relative
+  display: block
+  width: 100%
+  aspect-ratio: 1425 / 486
+  border: 0
+  padding: 0
+  background: transparent
+  color: inherit
+  font: inherit
+  appearance: none
+  text-align: left
+  isolation: isolate
+  container-type: inline-size
+  -webkit-tap-highlight-color: transparent
+
+.clickable
+  cursor: pointer
+
+  &:active
+    transform: scale(0.992)
+
+.accentBackPrimary
+  position: absolute
+  left: 0
+  top: 0.211cqw
+  width: 6.877cqw
+  height: 33.404cqw
+  border-radius: 4.772cqw 0 0 4.772cqw
+  background: linear-gradient(90deg, var(--accent-strong) 0%, var(--accent-mid) 25%, var(--accent-soft) 49%, var(--accent-fade) 72%, rgba(255, 255, 255, 0) 100%)
+  box-shadow: 0 0 0 0.14cqw rgba(255, 255, 255, 0.76), 0 0.842cqw 2.386cqw var(--accent-shadow)
+  pointer-events: none
+  z-index: 1
+
+.accentBackSecondary
+  position: absolute
+  left: 1.544cqw
+  top: 0.211cqw
+  width: 6.456cqw
+  height: 33.404cqw
+  border-radius: 4.491cqw 0 0 4.491cqw
+  background: linear-gradient(90deg, var(--accent-strong) 0%, var(--accent-mid-transparent) 36%, var(--accent-faint) 73%, rgba(255, 255, 255, 0) 100%)
+  box-shadow: inset 0.491cqw 0 0.982cqw rgba(255, 255, 255, 0.42), 0 0.561cqw 1.965cqw var(--accent-shadow-soft)
+  pointer-events: none
+  z-index: 1
+
+.mainCard
+  position: absolute
+  left: 2.246cqw
+  top: 0
+  z-index: 2
+  display: block
+  width: 97.684cqw
+  height: 34.105cqw
+  overflow: hidden
+  border-radius: 4.702cqw
+  background: linear-gradient(111deg, var(--card-warm) 0%, rgba(243, 247, 255, 0.84) 11%, rgba(239, 245, 255, 0.84) 43%, rgba(234, 242, 255, 0.77) 64%, rgba(244, 249, 255, 0.89) 100%)
+  border: 0.211cqw solid rgba(255, 255, 255, 0.83)
+  box-shadow: 0 1.754cqw 3.509cqw rgba(91, 112, 160, 0.18), 0 0.14cqw 0.561cqw rgba(255, 255, 255, 0.68), inset 0 0 2.175cqw rgba(255, 255, 255, 0.84), inset -1.263cqw -1.263cqw 2.667cqw rgba(255, 255, 255, 0.42)
+  backdrop-filter: blur(20px)
+  -webkit-backdrop-filter: blur(20px)
+
+  &::before
+    content: ""
+    position: absolute
+    inset: 0
+    background: linear-gradient(108deg, transparent 0%, transparent 68.7%, rgba(255, 255, 255, 0.44) 69.2%, rgba(255, 255, 255, 0.13) 76%, transparent 76.5%)
+    pointer-events: none
+
+  &::after
+    content: ""
+    position: absolute
+    left: -0.351cqw
+    top: 0
+    width: 9.474cqw
+    height: 100%
+    background: radial-gradient(circle at 0% 50%, var(--accent-left-glow), transparent 61%), linear-gradient(90deg, var(--accent-card-glow) 0%, var(--accent-card-glow-soft) 39%, rgba(255, 255, 255, 0.08) 70%, transparent 100%)
+    pointer-events: none
+
+.content
+  position: relative
+  z-index: 2
+  display: block
+  padding-left: 5.825cqw
+  padding-top: 7.93cqw
+  padding-right: 4cqw
+
+.header
+  display: grid
+  grid-template-columns: minmax(0, 1fr) auto
+  align-items: start
+  column-gap: 2cqw
+
+.title
+  display: block
+  color: var(--title-color)
+  font-size: 4.632cqw
+  line-height: 1
+  font-weight: 850
+  letter-spacing: -0.319cqw
+  margin-bottom: 2.526cqw
+  white-space: nowrap
+
+.route
+  display: block
+  color: var(--muted-color)
+  font-size: 3.509cqw
+  line-height: 1
+  font-weight: 550
+  letter-spacing: -0.228cqw
+  margin-bottom: 4.491cqw
+  white-space: nowrap
+
+.details
+  display: flex
+  align-items: center
+  color: var(--body-color)
+  font-size: 2.807cqw
+  line-height: 1
+  font-weight: 520
+  letter-spacing: -0.165cqw
+  white-space: nowrap
+
+.clock
+  width: 3.509cqw
+  height: 3.509cqw
+  margin-right: 1.474cqw
+  color: var(--accent-icon)
+  flex: 0 0 auto
+
+.dot
+  color: var(--dot-color)
+  font-size: 2.386cqw
+  font-weight: 700
+  margin-left: 2.456cqw
+  margin-right: 2.456cqw
+  transform: translateY(-0.14cqw)
+
+.cargoType
+  color: var(--muted-color)
+  font-weight: 500
+
+.badge
+  position: absolute
+  right: 3.86cqw
+  top: 7.088cqw
+  z-index: 3
+  display: flex
+  align-items: center
+  justify-content: center
+  width: 21.544cqw
+  height: 7.088cqw
+  border-radius: 2.737cqw
+  color: var(--badge-text)
+  font-size: 2.667cqw
+  line-height: 1
+  font-weight: 820
+  letter-spacing: -0.147cqw
+  background: var(--badge-bg)
+  border: 0.211cqw solid var(--badge-border)
+  box-shadow: inset 0 0.14cqw 0.912cqw rgba(255, 255, 255, 0.88), 0 0.632cqw 1.263cqw var(--badge-shadow)
+
+.orange
+  --accent-strong: #ff7600
+  --accent-mid: #ff8b0a
+  --accent-soft: rgba(255, 162, 42, 0.86)
+  --accent-fade: rgba(255, 198, 106, 0.44)
+  --accent-mid-transparent: rgba(255, 139, 24, 0.69)
+  --accent-faint: rgba(255, 198, 112, 0.24)
+  --accent-shadow: rgba(255, 117, 0, 0.19)
+  --accent-shadow-soft: rgba(255, 122, 0, 0.10)
+  --accent-left-glow: rgba(255, 126, 0, 0.35)
+  --accent-card-glow: rgba(255, 136, 22, 0.26)
+  --accent-card-glow-soft: rgba(255, 184, 116, 0.18)
+  --accent-icon: #ff9900
+  --badge-text: #ff6900
+  --badge-bg: linear-gradient(180deg, rgba(255, 239, 227, 0.91) 0%, rgba(255, 236, 223, 0.75) 100%)
+  --badge-border: rgba(255, 206, 177, 0.86)
+  --badge-shadow: rgba(255, 118, 0, 0.08)
+  --card-warm: rgba(255, 247, 240, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #565f7d
+  --dot-color: #555d78
+
+.purple
+  --accent-strong: #7d27f2
+  --accent-mid: #8b35ff
+  --accent-soft: rgba(158, 99, 255, 0.86)
+  --accent-fade: rgba(204, 166, 255, 0.44)
+  --accent-mid-transparent: rgba(139, 53, 255, 0.72)
+  --accent-faint: rgba(205, 170, 255, 0.26)
+  --accent-shadow: rgba(125, 39, 242, 0.20)
+  --accent-shadow-soft: rgba(125, 39, 242, 0.13)
+  --accent-left-glow: rgba(125, 39, 242, 0.35)
+  --accent-card-glow: rgba(139, 65, 255, 0.25)
+  --accent-card-glow-soft: rgba(190, 142, 255, 0.17)
+  --accent-icon: #7d27f2
+  --badge-text: #7d27f2
+  --badge-bg: linear-gradient(180deg, rgba(244, 233, 255, 0.91) 0%, rgba(239, 225, 255, 0.75) 100%)
+  --badge-border: rgba(199, 157, 255, 0.86)
+  --badge-shadow: rgba(125, 39, 242, 0.08)
+  --card-warm: rgba(246, 240, 255, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #565f7d
+  --dot-color: #555d78
+
+.cyan
+  --accent-strong: #12c9e8
+  --accent-mid: #23d4ee
+  --accent-soft: rgba(75, 221, 240, 0.86)
+  --accent-fade: rgba(157, 237, 247, 0.44)
+  --accent-mid-transparent: rgba(35, 212, 238, 0.72)
+  --accent-faint: rgba(154, 237, 247, 0.26)
+  --accent-shadow: rgba(18, 201, 232, 0.20)
+  --accent-shadow-soft: rgba(18, 201, 232, 0.13)
+  --accent-left-glow: rgba(18, 201, 232, 0.35)
+  --accent-card-glow: rgba(30, 207, 234, 0.25)
+  --accent-card-glow-soft: rgba(139, 232, 246, 0.17)
+  --accent-icon: #12c9e8
+  --badge-text: #09afd2
+  --badge-bg: linear-gradient(180deg, rgba(231, 252, 255, 0.91) 0%, rgba(220, 249, 255, 0.75) 100%)
+  --badge-border: rgba(145, 232, 244, 0.88)
+  --badge-shadow: rgba(18, 201, 232, 0.08)
+  --card-warm: rgba(239, 253, 255, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #565f7d
+  --dot-color: #555d78
+
+.graySoft
+  --accent-strong: #a4adbd
+  --accent-mid: #b4bdcc
+  --accent-soft: rgba(186, 195, 209, 0.86)
+  --accent-fade: rgba(215, 222, 235, 0.48)
+  --accent-mid-transparent: rgba(164, 173, 189, 0.72)
+  --accent-faint: rgba(201, 209, 222, 0.28)
+  --accent-shadow: rgba(91, 105, 130, 0.17)
+  --accent-shadow-soft: rgba(91, 105, 130, 0.10)
+  --accent-left-glow: rgba(130, 142, 160, 0.26)
+  --accent-card-glow: rgba(144, 154, 173, 0.20)
+  --accent-card-glow-soft: rgba(200, 209, 224, 0.16)
+  --accent-icon: #8c96a8
+  --badge-text: #747b89
+  --badge-bg: linear-gradient(180deg, rgba(244, 247, 251, 0.82) 0%, rgba(232, 237, 246, 0.68) 100%)
+  --badge-border: rgba(184, 193, 207, 0.78)
+  --badge-shadow: rgba(91, 105, 130, 0.06)
+  --card-warm: rgba(246, 248, 253, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #4d5870
+  --dot-color: #4e586e
+
+.dark
+  --accent-strong: #121923
+  --accent-mid: #27303d
+  --accent-soft: rgba(67, 78, 95, 0.88)
+  --accent-fade: rgba(140, 151, 168, 0.48)
+  --accent-mid-transparent: rgba(39, 48, 61, 0.78)
+  --accent-faint: rgba(143, 153, 169, 0.28)
+  --accent-shadow: rgba(11, 18, 28, 0.22)
+  --accent-shadow-soft: rgba(11, 18, 28, 0.14)
+  --accent-left-glow: rgba(22, 31, 43, 0.30)
+  --accent-card-glow: rgba(41, 51, 66, 0.22)
+  --accent-card-glow-soft: rgba(118, 131, 151, 0.16)
+  --accent-icon: #343d4d
+  --badge-text: #111827
+  --badge-bg: linear-gradient(180deg, rgba(243, 246, 251, 0.70) 0%, rgba(233, 238, 247, 0.58) 100%)
+  --badge-border: rgba(74, 82, 94, 0.54)
+  --badge-shadow: rgba(17, 24, 39, 0.05)
+  --card-warm: rgba(246, 248, 253, 0.78)
+  --title-color: #02030b
+  --body-color: #111827
+  --muted-color: #2f3b4f
+  --dot-color: #2f3b4f
+
+.red
+  --accent-strong: #f00018
+  --accent-mid: #ff1930
+  --accent-soft: rgba(255, 72, 90, 0.86)
+  --accent-fade: rgba(255, 167, 177, 0.44)
+  --accent-mid-transparent: rgba(255, 25, 48, 0.72)
+  --accent-faint: rgba(255, 168, 178, 0.26)
+  --accent-shadow: rgba(240, 0, 24, 0.20)
+  --accent-shadow-soft: rgba(240, 0, 24, 0.13)
+  --accent-left-glow: rgba(240, 0, 24, 0.35)
+  --accent-card-glow: rgba(255, 30, 52, 0.25)
+  --accent-card-glow-soft: rgba(255, 151, 164, 0.17)
+  --accent-icon: #f00018
+  --badge-text: #e60017
+  --badge-bg: linear-gradient(180deg, rgba(255, 236, 239, 0.91) 0%, rgba(255, 227, 231, 0.75) 100%)
+  --badge-border: rgba(255, 146, 158, 0.88)
+  --badge-shadow: rgba(240, 0, 24, 0.08)
+  --card-warm: rgba(255, 242, 244, 0.78)
+  --title-color: #03062d
+  --body-color: #02052b
+  --muted-color: #565f7d
+  --dot-color: #555d78
+
+@media (prefers-reduced-motion: no-preference)
+  .cardShell
+    transition: transform 180ms ease
+
+@media (max-width: 380px)
+  .title
+    font-size: 4.2cqw
+    letter-spacing: -0.24cqw
+
+  .route
+    font-size: 3.25cqw
+
+  .details
+    font-size: 2.58cqw
+    letter-spacing: -0.12cqw
