@@ -1,135 +1,63 @@
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const mockGetSessionUser = vi.hoisted(() => vi.fn());
-const mockGetMyCargoByIdForUser = vi.hoisted(() => vi.fn());
-const mockGetTranslations = vi.hoisted(() => vi.fn());
 const mockNotFound = vi.hoisted(() => vi.fn());
-const mockRedirect = vi.hoisted(() => vi.fn());
 
 vi.mock('next/navigation', () => ({
-  notFound: mockNotFound,
-  redirect: mockRedirect
+  notFound: mockNotFound
 }));
 
-vi.mock('next-intl/server', () => ({
-  getTranslations: mockGetTranslations
+vi.mock('@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id', () => ({
+  getShipperCargoById: vi.fn()
 }));
 
-vi.mock('@/shared/server/auth', () => ({
-  getSessionUser: mockGetSessionUser
-}));
-
-vi.mock('@/features/cargo/services/cargo.service', () => ({
-  getMyCargoByIdForUser: mockGetMyCargoByIdForUser
-}));
-
-vi.mock('@/shared/ui/page-shell/page-shell', () => ({
-  PageShell: ({ children, eyebrow, title, description }: { children: React.ReactNode; eyebrow?: string; title?: string; description?: string }) => (
-    <section data-testid="page-shell">
-      <header>
-        <p>{eyebrow}</p>
-        <h1>{title}</h1>
-        <span>{description}</span>
-      </header>
-      {children}
-    </section>
+vi.mock('@/features/shipper-mobile-flow/screens/cargo-detail-screen', () => ({
+  CargoDetailScreen: ({ cargo }: { cargo: { id: string; code: string } }) => (
+    <div data-testid="shipper-cargo-detail" data-id={cargo.id} data-code={cargo.code} />
   )
 }));
 
-vi.mock('@/shared/ui/breadcrumb/breadcrumb', () => ({
-  Breadcrumb: ({ items }: { items: Array<{ label: string; href?: string }> }) => (
-    <nav data-testid="breadcrumb">{items.map((item) => item.label).join(' > ')}</nav>
-  )
-}));
-
-vi.mock('@/features/cargo-market/components/cargo-detail/cargo-detail-loader', () => ({
-  CargoDetailLoader: ({ id }: { id: string }) => <div data-testid="cargo-detail-loader" data-id={id} />
-}));
-
-vi.mock('@/features/cargo/components/owned-cargo-detail/owned-cargo-detail', () => ({
-  OwnedCargoDetail: ({ cargo }: { cargo: { id: string } }) => (
-    <div data-testid="owned-cargo-detail" data-id={cargo.id} />
-  ),
-}));
-
-vi.mock('@/shared/i18n/mock-content', () => ({
-  translateMock: (_locale: string, value: string) => value
-}));
-
-import MyCargoDetailPage from '@/app/[locale]/(product-shell)/minhas-cargas/[id]/page';
+import { getShipperCargoById } from '@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id';
+import MyCargoDetailPage from '@/app/[locale]/(shipper-mobile-flow)/minhas-cargas/[id]/page';
 
 const cargo = {
-  id: 'MY-CARGO-001',
-  title: 'Açaí congelado para entrega regional',
-  origin: 'Belém, PA',
-  destination: 'Santarém, PA'
+  id: 'hr-4821',
+  code: 'HR-4821',
+  corridorId: 'madeira' as const,
+  origin: 'Porto Velho',
+  destination: 'Miritituba / Itaituba',
+  status: 'attention' as const,
+  riskLevel: 'high' as const,
+  freshnessMinutes: 12,
+  freshnessState: 'fresh' as const,
+  etaHours: 15,
+  offersCount: 3,
+  pendingDocsCount: 1
 };
 
-describe('minhas-cargas/[id] page', () => {
+describe('minhas-cargas/[id] page (shipper mobile flow)', () => {
   beforeEach(() => {
-    mockGetSessionUser.mockReset();
-    mockGetMyCargoByIdForUser.mockReset();
-    mockGetTranslations.mockReset();
     mockNotFound.mockReset();
-    mockRedirect.mockReset();
-
-    mockGetTranslations.mockImplementation(({ namespace }: { namespace: string }) => {
-      if (namespace === 'pages.cargoDetail') {
-        return Promise.resolve({
-          eyebrow: 'Detalhe',
-          title: 'Detalhe',
-          description: 'Descrição'
-        });
-      }
-      if (namespace === 'pages.minhasCargas.detail') {
-        return Promise.resolve((key: string) => key);
-      }
-      if (namespace === 'nav') {
-        return Promise.resolve({
-          dashboard: 'Dashboard',
-          myCargoes: 'Minhas cargas'
-        });
-      }
-      if (namespace === 'common') {
-        return Promise.resolve({
-          routeArrow: ' → '
-        });
-      }
-      return Promise.resolve({});
-    });
+    vi.mocked(getShipperCargoById).mockReset();
   });
 
-  it('renderiza o detalhe privado quando a carga pertence ao usuário', async () => {
-    mockGetSessionUser.mockResolvedValue({
-      id: 'u-shipper-1',
-      role: 'shipper',
-      approved: true
-    });
-    mockGetMyCargoByIdForUser.mockResolvedValue(cargo);
+  it('renderiza detalhe quando a carga mock existe', async () => {
+    vi.mocked(getShipperCargoById).mockResolvedValue(cargo);
 
-    const tree = await MyCargoDetailPage({ params: Promise.resolve({ locale: 'pt-BR', id: cargo.id }) });
+    const tree = await MyCargoDetailPage({ params: Promise.resolve({ id: cargo.id }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
 
-    expect(html).toContain('data-testid="owned-cargo-detail"');
-    expect(html).not.toContain('data-testid="cargo-detail-loader"');
+    expect(html).toContain('data-testid="shipper-cargo-detail"');
+    expect(html).toContain('HR-4821');
     expect(mockNotFound).not.toHaveBeenCalled();
-    expect(mockRedirect).not.toHaveBeenCalled();
   });
 
-  it('mostra estado seguro quando a carga não pertence ao usuário', async () => {
-    mockGetSessionUser.mockResolvedValue({
-      id: 'u-shipper-1',
-      role: 'shipper',
-      approved: true
-    });
-    mockGetMyCargoByIdForUser.mockResolvedValue(undefined);
+  it('dispara notFound quando a carga não existe no mock', async () => {
+    vi.mocked(getShipperCargoById).mockResolvedValue(undefined);
     mockNotFound.mockImplementation(() => {
       throw new Error('notFound');
     });
 
-    await expect(
-      MyCargoDetailPage({ params: Promise.resolve({ locale: 'pt-BR', id: 'missing-id' }) })
-    ).rejects.toThrow('notFound');
+    await expect(MyCargoDetailPage({ params: Promise.resolve({ id: 'missing-id' }) })).rejects.toThrow('notFound');
   });
 });

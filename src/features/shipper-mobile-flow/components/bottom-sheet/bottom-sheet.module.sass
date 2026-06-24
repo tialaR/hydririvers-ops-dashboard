@@ -1,0 +1,100 @@
+@use '../../styles/shipper-mixins' as *
+
+.overlay
+  position: fixed
+  inset: 0
+  background: rgba(5, 6, 7, 0.42)
+  z-index: 50
+  display: flex
+  align-items: flex-end
+  justify-content: center
+  animation: shipperFadeIn 0.18s ease
+
+  @media (prefers-reduced-motion: reduce)
+    animation: none
+
+@keyframes shipperFadeIn
+  from
+    opacity: 0
+  to
+    opacity: 1
+
+.sheet
+  @include shipper-glass
+  width: min(100%, var(--screen-w))
+  border-bottom-left-radius: 0
+  border-bottom-right-radius: 0
+  border-top-left-radius: var(--radius-xl)
+  border-top-right-radius: var(--radius-xl)
+  padding: var(--space-3) var(--space-4) var(--space-4)
+  padding-bottom: calc(var(--space-4) + var(--hy-shipper-safe-bottom))
+  overflow-y: auto
+  box-shadow: var(--hy-shipper-shadow-md)
+  animation: shipperSheetUp 0.24s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+
+  @media (prefers-reduced-motion: reduce)
+    animation: shipperFadeIn 0.12s ease
+
+.sheetCompact
+  max-height: var(--sheet-compact-h)
+  min-height: var(--sheet-compact-h)
+
+.sheetMedium
+  max-height: var(--sheet-medium-h)
+  min-height: min(var(--sheet-medium-h), 85dvh)
+
+.sheetFull
+  max-height: var(--sheet-full-h)
+  min-height: min(var(--sheet-full-h), 92dvh)
+
+@keyframes shipperSheetUp
+  from
+    transform: translateY(8%)
+    opacity: 0
+  to
+    transform: translateY(0)
+    opacity: 1
+
+.handle
+  width: 2.25rem
+  height: 0.3125rem
+  border-radius: var(--radius-pill)
+  background: var(--hy-shipper-border-strong, var(--hy-shipper-border))
+  margin: 0 auto var(--space-3)
+
+.title
+  @include shipper-body
+  font-weight: 700
+  font-size: clamp(1rem, 3.5vw, 1.125rem)
+  margin: 0 0 var(--space-2)
+  min-height: var(--touch-min)
+  display: flex
+  align-items: center
+
+.body
+  color: var(--hy-shipper-muted)
+  @include shipper-body
+  margin: 0
+
+.actions
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  margin-top: var(--space-4)
+
+.menuItem
+  @include shipper-pressable
+  @include shipper-focus
+  @include shipper-module-card
+  display: flex
+  align-items: center
+  justify-content: space-between
+  min-height: var(--card-profile-row-h)
+  padding: var(--space-3) var(--space-4)
+  text-decoration: none
+  color: var(--hy-shipper-text)
+  font-weight: 600
+  @include shipper-body
+
+.danger
+  color: var(--hy-shipper-danger)

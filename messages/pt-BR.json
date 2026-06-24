@@ -3052,5 +3052,421 @@
         }
       }
     }
+  },
+  "shipperMobileFlow": {
+    "header": {
+      "back": "Voltar",
+      "avatarMenu": "Abrir menu da conta",
+      "notifications": "Notificações"
+    },
+    "bottomNav": {
+      "label": "Navegação principal",
+      "cockpit": "Cockpit",
+      "publicCargoes": "Públicas",
+      "myCargoes": "Minhas",
+      "notifications": "Alertas",
+      "profile": "Perfil"
+    },
+    "language": {
+      "switch": "Trocar idioma",
+      "pt-BR": "Português",
+      "en-US": "English",
+      "es": "Español"
+    },
+    "theme": {
+      "toggle": "Alternar tema claro/escuro"
+    },
+    "avatarMenu": {
+      "label": "Menu da conta",
+      "profile": "Perfil",
+      "company": "Empresa",
+      "preferences": "Preferências",
+      "security": "Segurança",
+      "logout": "Sair"
+    },
+    "search": {
+      "label": "Buscar",
+      "placeholder": "Buscar cargas, rotas ou alertas",
+      "filters": "Filtros"
+    },
+    "risk": {
+      "low": "Baixo",
+      "medium": "Médio",
+      "high": "Alto",
+      "critical": "Crítico"
+    },
+    "freshness": {
+      "fresh": "Atualizado há {minutes} min",
+      "stale": "Dados defasados · {minutes} min",
+      "offline": "Sem conexão · último há {minutes} min"
+    },
+    "landing": {
+      "title": "HydriRivers",
+      "subtitle": "Operação hidroviária com confiança para embarcadoras do Arco Norte",
+      "publicRoutesTitle": "Rotas públicas Arco Norte",
+      "publicRoutesSummary": "Menos ruptura operacional e menos CO₂ em corredores amazônicos.",
+      "chartLegend": "Tendência operacional",
+      "chartAction": "Explore cargas públicas no corredor com melhor janela.",
+      "chartUnit": "índice",
+      "chartAria": "Micro tendência de rotas públicas no Arco Norte.",
+      "loginCta": "Entrar",
+      "registerCta": "Criar conta"
+    },
+    "auth": {
+      "login": {
+        "title": "Entrar",
+        "country": "País",
+        "phone": "Telefone",
+        "phonePlaceholder": "DDD + número",
+        "password": "Senha",
+        "submit": "Entrar",
+        "registerLink": "Criar conta",
+        "errors": {
+          "phone": "Informe um telefone válido.",
+          "password": "Senha muito curta."
+        }
+      },
+      "register": {
+        "title": "Registrar embarcadora",
+        "company": "Nome da empresa",
+        "responsible": "Responsável",
+        "country": "País / telefone",
+        "phone": "Telefone",
+        "consent": "Concordo com os termos e LGPD",
+        "submit": "Continuar",
+        "errors": {
+          "required": "Preencha empresa e responsável.",
+          "consent": "Aceite os termos para continuar."
+        }
+      },
+      "otp": {
+        "title": "Verificar OTP",
+        "subtitle": "Digite o código enviado ao telefone",
+        "digit": "Dígito {index}",
+        "resendHint": "Reenviar em 00:32",
+        "submit": "Verificar",
+        "changePhone": "Alterar telefone",
+        "errors": {
+          "incomplete": "Informe os 6 dígitos.",
+          "incorrect": "Código incorreto.",
+          "expired": "OTP expirado.",
+          "blocked": "Muitas tentativas. Tente mais tarde."
+        }
+      }
+    },
+    "phoneCountries": {
+      "br": "Brasil",
+      "es": "Espanha",
+      "us": "Estados Unidos"
+    },
+    "cockpit": {
+      "title": "Olá, embarcadora",
+      "filters": {
+        "all": "Todos",
+        "critical": "Críticos",
+        "docs": "Docs"
+      },
+      "criticalAlert": {
+        "title": "Risco crítico",
+        "body": "Calado restrito — Madeira · HR-4821"
+      },
+      "primaryAction": {
+        "title": "Decisão imediata",
+        "body": "Revisar HR-4821 — calado e documentos",
+        "cta": "Abrir carga"
+      },
+      "metrics": {
+        "cargoes": "Cargas",
+        "cargoesHint": "3 em trânsito",
+        "docs": "Docs",
+        "docsHint": "2 pendentes",
+        "eta": "ETA médio",
+        "etaHint": "15 horas",
+        "co2": "CO₂ evitado",
+        "co2Hint": "38% vs rodoviário"
+      },
+      "trend": {
+        "title": "Fila de risco",
+        "summary": "3 alertas críticos hoje — pico na sexta.",
+        "action": "Priorize HR-4821 e revise calado Madeira.",
+        "legend": "Alertas críticos",
+        "unit": "alertas",
+        "aria": "Tendência semanal de alertas críticos operacionais.",
+        "cta": "Ver hidrologia"
+      }
+    },
+    "publicList": {
+      "title": "Cargas públicas",
+      "filters": {
+        "all": "Todas",
+        "tapajos": "Tapajós",
+        "madeira": "Madeira",
+        "amazonas": "Amazonas"
+      }
+    },
+    "publicCargo": {
+      "restrictedNotice": "Apenas dados públicos.",
+      "manifestInterest": "Criar conta para negociar",
+      "viewDetails": "Ver detalhes públicos",
+      "cargoTypes": {
+        "solidBulk": "Granel sólido",
+        "general": "Carga geral",
+        "container": "Contêiner"
+      },
+      "windows": {
+        "approxWeek31": "Janela aprox. sem. 31",
+        "approxWeek32": "Janela aprox. sem. 32",
+        "approxWeek33": "Janela aprox. sem. 33"
+      },
+      "status": {
+        "openInterest": "Aberta para interesse",
+        "collectingOffers": "Coletando ofertas",
+        "windowClosing": "Janela fechando"
+      }
+    },
+    "publicCargoDetail": {
+      "title": "Carga pública",
+      "privacyTitle": "Visão pública restrita",
+      "privacyBody": "Visão pública — sem dados privados.",
+      "manifestInterest": "Manifestar interesse",
+      "createAccount": "Criar conta para negociar",
+      "facts": {
+        "corridor": "Corredor",
+        "window": "Janela",
+        "risk": "Risco",
+        "status": "Status"
+      }
+    },
+    "myCargoes": {
+      "title": "Minhas cargas",
+      "newCargo": "Nova carga",
+      "filters": {
+        "all": "Todas",
+        "transit": "Em trânsito",
+        "attention": "Em atenção"
+      }
+    },
+    "cargoCard": {
+      "view": "Ver"
+    },
+    "newCargo": {
+      "title": "Nova carga",
+      "origin": "Origem",
+      "destination": "Destino",
+      "type": "Tipo",
+      "types": {
+        "solid": "Granel sólido",
+        "general": "Carga geral",
+        "container": "Contêiner"
+      },
+      "window": "Janela",
+      "windowPlaceholder": "Ex.: 24–28 jun",
+      "draft": "Calado mínimo (m)",
+      "submit": "Criar carga",
+      "impactPreview": {
+        "title": "Impacto estimado",
+        "body": "Até 38% menos CO₂ vs modal rodoviário equivalente."
+      },
+      "errors": {
+        "window": "Informe a janela operacional."
+      }
+    },
+    "cargoDetail": {
+      "status": {
+        "open": "Aberta",
+        "inTransit": "Em trânsito",
+        "attention": "Em atenção",
+        "delivered": "Entregue",
+        "blocked": "Bloqueada"
+      },
+      "tiles": {
+        "risk": "Risco",
+        "docs": "Documentos",
+        "window": "Janela",
+        "windowValue": "24–28 jun",
+        "negotiation": "Negociação",
+        "offers": "{count} ofertas",
+        "map": "Mapa",
+        "mapValue": "Abrir rota"
+      }
+    },
+    "map": {
+      "previewTitle": "Mapa da operação",
+      "openFull": "Abrir mapa full-screen",
+      "fullTitle": "Mapa operacional",
+      "routeAria": "Rota da carga {code}",
+      "fallbackHint": "Visualização esquemática — dados operacionais ativos",
+      "layerStatus": "Camada de status",
+      "layerRiver": "Camada hidrológica",
+      "layerWeather": "Camada meteorológica",
+      "contextTitle": "Contexto operacional",
+      "contextBody": "ETA, risco e frescor dos dados para decisão imediata.",
+      "contextAction": "Revise hidrologia do trecho crítico antes de confirmar janela de embarque.",
+      "openContext": "Ver status, risco e ETA",
+      "riskLabel": "Risco",
+      "eta": "ETA estimado: {hours}h",
+      "etaLabel": "ETA",
+      "origin": "Origem",
+      "destination": "Destino",
+      "freshnessLabel": "Frescor",
+      "corridors": {
+        "tapajos": "Tapajós",
+        "madeira": "Madeira",
+        "amazonasSolimoes": "Amazonas-Solimões",
+        "tocantinsAraguaia": "Tocantins-Araguaia"
+      }
+    },
+    "chart": {
+      "empty": "Sem série recente para leitura operacional.",
+      "staleBanner": "Dado defasado — confirme antes de decidir.",
+      "actionLabel": "Agora:",
+      "tablePeriod": "Período",
+      "tableCategory": "Categoria",
+      "tableValue": "Valor"
+    },
+    "documents": {
+      "title": "Documentos",
+      "resolve": "Resolver pendência",
+      "confirm": {
+        "title": "Confirmar resolução",
+        "body": "Esta ação registra a resolução do documento bloqueante.",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+      },
+      "status": {
+        "ok": "OK",
+        "pending": "Pendente",
+        "blocked": "Bloqueado",
+        "expiring": "Vencendo"
+      },
+      "documents": {
+        "cte": "CT-e",
+        "environmentalLicense": "Licença ambiental",
+        "manifest": "Manifesto",
+        "insurance": "Seguro"
+      },
+      "dueToday": "Vence hoje",
+      "blocking": "Bloqueia operação"
+    },
+    "negotiation": {
+      "title": "Negociação",
+      "criterion": {
+        "title": "Critério sugerido",
+        "body": "Priorize ETA ≤ 16h com risco hidrológico baixo."
+      },
+      "selectOffer": "Selecionar oferta",
+      "eta": "ETA {hours}h",
+      "confirm": {
+        "title": "Confirmar oferta",
+        "body": "Confirma seleção de {offer}?",
+        "confirm": "Confirmar",
+        "cancel": "Cancelar"
+      },
+      "offers": {
+        "offerA": "Oferta A",
+        "offerB": "Oferta B",
+        "offerC": "Oferta C"
+      }
+    },
+    "offers": {
+      "offerA": "Oferta A",
+      "partnerA": "Armador Solimões",
+      "offerB": "Oferta B",
+      "partnerB": "Hidro Madeira",
+      "offerC": "Oferta C",
+      "partnerC": "Arco Norte Log"
+    },
+    "hydrology": {
+      "title": "Hidrologia",
+      "chart": {
+        "title": "Madeira — calado disponível",
+        "summary": "Vazante com calado 2,1 m no trecho crítico.",
+        "action": "Antecipe janela ou reduza carga no trecho Humaitá–Manaus.",
+        "legend": "Nível / calado",
+        "unit": "m",
+        "aria": "Tendência de calado na bacia Madeira com risco médio.",
+        "cta": "Abrir carga afetada"
+      },
+      "ebbTrend": "Vazante · calado {draft} m",
+      "stableTrend": "Estável · calado {draft} m",
+      "floodTrend": "Cheia · calado {draft} m",
+      "restrictedTrend": "Restrição · calado {draft} m",
+      "basins": {
+        "madeira": "Madeira",
+        "tapajos": "Tapajós",
+        "amazonas": "Amazonas-Solimões",
+        "tocantins": "Tocantins-Araguaia"
+      }
+    },
+    "impact": {
+      "title": "Impacto",
+      "ringAria": "CO₂ evitado 38 por cento",
+      "chart": {
+        "title": "Comparativo de emissões",
+        "summary": "Hidrovia vs rodoviário no mesmo corredor.",
+        "action": "Priorize hidrovia neste corredor para reduzir CO₂.",
+        "legend": "Índice relativo de CO₂",
+        "unit": "%",
+        "aria": "Comparativo operacional de emissões por modal."
+      },
+      "co2Avoided": "CO₂ evitado",
+      "licensing": "Licenciamento",
+      "community": "Comunidade",
+      "esgResidue": "Resíduos ESG"
+    },
+    "notifications": {
+      "title": "Notificações",
+      "items": {
+        "draftLow": {
+          "title": "Calado baixo",
+          "body": "Madeira com restrição nas próximas 48h.",
+          "time": "Há 12 min"
+        },
+        "docDue": {
+          "title": "Doc vence hoje",
+          "body": "Licença ambiental HR-4821.",
+          "time": "Há 1 h"
+        },
+        "offerReceived": {
+          "title": "Oferta recebida",
+          "body": "Nova proposta no corredor Tapajós.",
+          "time": "Há 3 h"
+        }
+      }
+    },
+    "profile": {
+      "title": "Perfil",
+      "menuLabel": "Configurações da conta",
+      "menu": {
+        "language": "Idioma",
+        "theme": "Tema",
+        "notifications": "Notificações",
+        "security": "Segurança",
+        "logout": "Sair"
+      }
+    },
+    "states": {
+      "offline": {
+        "title": "Sem conexão",
+        "body": "Mostrando último status conhecido. Sincronize quando voltar.",
+        "action": "Tentar sincronizar"
+      },
+      "serviceError": {
+        "title": "Serviço indisponível",
+        "body": "Mapa ou API temporariamente fora. Tente novamente.",
+        "action": "Tentar novamente"
+      },
+      "success": {
+        "title": "Ação operacional concluída",
+        "body": "Pendência resolvida com recibo auditável.",
+        "action": "Voltar ao cockpit"
+      }
+    },
+    "corridors": {
+      "amazonasSolimoes": "Amazonas-Solimões",
+      "madeira": "Madeira",
+      "tapajos": "Tapajós",
+      "tocantinsAraguaia": "Tocantins-Araguaia"
+    }
   }
 }
