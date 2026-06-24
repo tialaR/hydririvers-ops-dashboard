@@ -1,0 +1,26 @@
+@use '../../styles/shipper-mixins' as *
+
+.button
+  @include shipper-pressable
+  @include shipper-focus
+  @include shipper-glass
+  width: var(--header-icon)
+  height: var(--header-icon)
+  border-radius: var(--radius-pill)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  color: var(--hy-shipper-text)
+  cursor: pointer
+  text-decoration: none
+
+.avatar
+  width: var(--avatar)
+  height: var(--avatar)
+  border-radius: var(--radius-pill)
+  background: var(--hy-shipper-surface-secondary)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  @include shipper-label
+  font-weight: 700

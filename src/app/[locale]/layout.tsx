@@ -14,6 +14,7 @@ import { ToastProvider } from '@/shared/ui/toast/toast-provider';
 import { MockMode } from '@/shared/ui/mock-mode/mock-mode';
 import { isMockQaUiEnabled } from '@/shared/qa/mock-qa-ui-env';
 import { HydroDesignSystemRoot } from '@/shared/design-system/hydro-design-system-root';
+import { ReactGrabDevScript } from '@/shared/dev/react-grab-dev-script';
 
 const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
 
@@ -68,6 +69,7 @@ export default async function LocaleLayout({
             </HydroDesignSystemRoot>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <ReactGrabDevScript />
       </body>
     </html>
   );

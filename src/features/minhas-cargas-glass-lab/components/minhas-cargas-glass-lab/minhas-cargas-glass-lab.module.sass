@@ -1,0 +1,157 @@
+.page
+  position: relative
+  min-height: 100svh
+  overflow-x: hidden
+  color: #02052b
+  background: #dfe8f8
+  font-family: inherit
+
+.background
+  position: fixed
+  inset: 0
+  z-index: 0
+  pointer-events: none
+  background: radial-gradient(circle at 47% 11%, rgba(255, 255, 255, 0.62) 0 7%, rgba(255, 255, 255, 0) 32%), radial-gradient(circle at 9% 30%, rgba(73, 160, 255, 0.18) 0 10%, rgba(73, 160, 255, 0) 35%), radial-gradient(circle at 94% 70%, rgba(125, 39, 242, 0.14) 0 8%, rgba(125, 39, 242, 0) 34%), linear-gradient(180deg, #dfe8f8 0%, #dee7f8 48%, #dce6f8 100%)
+
+.contentShell
+  position: relative
+  z-index: 1
+  width: min(100%, 430px)
+  min-height: 100svh
+  margin-inline: auto
+  padding: 28px clamp(20px, 5vw, 28px) 44px
+  box-sizing: border-box
+
+.header
+  display: grid
+  gap: 10px
+  width: 100%
+  margin-bottom: 22px
+
+  h1
+    margin: 0
+    color: #02052b
+    font-size: clamp(42px, 12vw, 56px)
+    line-height: 0.92
+    font-weight: 880
+    letter-spacing: -0.075em
+
+  p
+    margin: 0
+    max-width: 34ch
+    color: rgba(43, 54, 80, 0.76)
+    font-size: 15px
+    line-height: 1.45
+    font-weight: 560
+    letter-spacing: -0.02em
+
+.backLink
+  width: max-content
+  border-radius: 999px
+  padding: 10px 14px
+  color: rgba(32, 44, 72, 0.74)
+  text-decoration: none
+  font-size: 13px
+  font-weight: 760
+  letter-spacing: -0.02em
+  background: rgba(255, 255, 255, 0.45)
+  border: 1px solid rgba(255, 255, 255, 0.68)
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.86), 0 10px 26px rgba(71, 91, 134, 0.09)
+  backdrop-filter: blur(18px) saturate(150%)
+  -webkit-backdrop-filter: blur(18px) saturate(150%)
+
+.kicker
+  color: rgba(47, 74, 116, 0.72)
+  font-size: 12px
+  line-height: 1
+  font-weight: 820
+  letter-spacing: 0.11em
+  text-transform: uppercase
+
+.summaryCard
+  width: 100%
+  margin-bottom: 20px
+  border-radius: 32px
+  padding: 22px
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.72), rgba(240, 247, 255, 0.48))
+  border: 1px solid rgba(255, 255, 255, 0.76)
+  box-shadow: 0 22px 52px rgba(58, 84, 129, 0.13), inset 0 1px 0 rgba(255, 255, 255, 0.88), inset 0 -1px 0 rgba(111, 144, 189, 0.08)
+  backdrop-filter: blur(24px) saturate(160%)
+  -webkit-backdrop-filter: blur(24px) saturate(160%)
+
+  span
+    display: block
+    margin-bottom: 6px
+    color: rgba(65, 78, 105, 0.72)
+    font-size: 12px
+    font-weight: 820
+    letter-spacing: 0.08em
+    text-transform: uppercase
+
+  strong
+    display: block
+    margin-bottom: 6px
+    color: #02052b
+    font-size: 28px
+    line-height: 1
+    font-weight: 860
+    letter-spacing: -0.06em
+
+  p
+    margin: 0
+    color: rgba(50, 64, 95, 0.72)
+    font-size: 14px
+    line-height: 1.36
+    font-weight: 560
+    letter-spacing: -0.02em
+
+.filters
+  width: 100%
+  display: flex
+  gap: 10px
+  margin-bottom: 24px
+  overflow-x: auto
+  overscroll-behavior-x: contain
+  padding: 2px 0 8px
+  scrollbar-width: none
+
+  &::-webkit-scrollbar
+    display: none
+
+.filterChip
+  flex: 0 0 auto
+  min-height: 42px
+  border: 1px solid rgba(255, 255, 255, 0.72)
+  border-radius: 999px
+  padding: 0 16px
+  color: rgba(44, 58, 91, 0.72)
+  background: rgba(255, 255, 255, 0.42)
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85), 0 10px 22px rgba(59, 84, 128, 0.08)
+  backdrop-filter: blur(18px) saturate(150%)
+  -webkit-backdrop-filter: blur(18px) saturate(150%)
+  font: inherit
+  font-size: 13px
+  font-weight: 760
+  letter-spacing: -0.02em
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+
+.filterChipActive
+  color: #02052b
+  background: rgba(255, 255, 255, 0.72)
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92), 0 14px 28px rgba(50, 75, 117, 0.14)
+
+.cargoList
+  width: 100%
+  display: grid
+  gap: clamp(24px, 6vw, 32px)
+  overflow: visible
+  padding-bottom: 24px
+
+@media (prefers-reduced-motion: no-preference)
+  .filterChip,
+  .backLink
+    transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease
+
+    &:active
+      transform: scale(0.985)

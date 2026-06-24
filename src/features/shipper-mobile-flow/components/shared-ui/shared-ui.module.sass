@@ -1,0 +1,752 @@
+@use '../../styles/shipper-mixins' as *
+
+.card
+  @include shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+.title
+  @include shipper-body
+  font-weight: 650
+  margin: 0
+
+.summary
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.chart
+  width: 100%
+  height: auto
+
+.chartCard
+  min-height: auto
+
+.chartInstrumentHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--space-2)
+
+.chartChangeInsight
+  @include shipper-label
+  color: var(--hy-shipper-text)
+  margin: 0
+  font-weight: 600
+
+.chartActionHint
+  @include shipper-label
+  margin: 0
+  color: var(--hy-shipper-muted)
+  line-height: 1.35
+
+.chartActionLabel
+  font-weight: 700
+  color: var(--hy-shipper-text)
+
+.chartEmpty
+  @include shipper-body
+  margin: 0
+  min-height: var(--chart-line-h)
+  display: flex
+  align-items: center
+  justify-content: center
+  color: var(--hy-shipper-muted)
+  background: color-mix(in srgb, var(--hy-shipper-border) 35%, transparent)
+  border-radius: var(--radius-sm)
+
+.chartStaleBanner
+  @include shipper-label
+  margin: 0
+  padding: var(--space-2) var(--space-3)
+  border-radius: var(--radius-sm)
+  background: color-mix(in srgb, var(--hy-shipper-warning) 18%, transparent)
+  color: var(--hy-shipper-text)
+  font-weight: 650
+
+.chartStale
+  border-color: color-mix(in srgb, var(--hy-shipper-warning) 45%, var(--hy-shipper-border))
+
+.chartLine
+  width: 100%
+  height: var(--chart-line-h)
+  display: block
+
+.chartBar
+  width: 100%
+  height: var(--chart-bar-h)
+  display: block
+
+.legend
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+
+.legendItem
+  display: inline-flex
+  align-items: center
+  gap: 0.25rem
+
+.swatch
+  width: 0.5rem
+  height: 0.5rem
+  border-radius: 0.125rem
+  background: var(--hy-shipper-primary)
+
+.srTable
+  position: absolute
+  width: 1px
+  height: 1px
+  padding: 0
+  margin: -1px
+  overflow: hidden
+  clip: rect(0, 0, 0, 0)
+  white-space: nowrap
+  border: 0
+
+.grid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-3)
+
+.metric
+  @include shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: var(--card-priority-h)
+
+.metricValue
+  @include shipper-metric-value
+  margin: 0
+
+.metricLabel
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.alert
+  @include shipper-solid-card
+  padding: 0.875rem 1rem
+  border-left: 0.25rem solid var(--hy-shipper-warning)
+  background: color-mix(in srgb, var(--hy-shipper-warning) 8%, var(--hy-shipper-surface))
+
+.criticalBanner
+  @include shipper-module-card
+  padding: var(--space-3)
+  border-left: 0.1875rem solid var(--hy-shipper-danger)
+  background: color-mix(in srgb, var(--hy-shipper-danger) 8%, var(--hy-shipper-glass-bg))
+  min-height: auto
+
+.criticalTitle
+  @include shipper-body
+  font-weight: 750
+  margin: 0 0 var(--space-1)
+  color: var(--hy-shipper-danger)
+
+.criticalBody
+  @include shipper-label
+  color: var(--hy-shipper-text)
+  margin: 0
+  line-height: 1.35
+
+.primaryDecision
+  @include shipper-module-card
+  @include shipper-pressable
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-3)
+  padding: var(--space-3) var(--space-4)
+  text-decoration: none
+  color: inherit
+  border-color: color-mix(in srgb, var(--hy-shipper-primary) 28%, var(--hy-shipper-glass-border))
+  min-height: var(--card-priority-h)
+
+.primaryDecisionLabel
+  @include shipper-operational-label
+  margin: 0 0 var(--space-1)
+
+.primaryDecisionBody
+  @include shipper-body
+  font-weight: 650
+  margin: 0
+  line-height: 1.35
+
+.primaryDecisionCta
+  flex-shrink: 0
+  @include shipper-label
+  font-weight: 700
+  color: var(--hy-shipper-info)
+  display: inline-flex
+  align-items: center
+  gap: var(--space-1)
+
+.alertTitle
+  font-size: 0.875rem
+  font-weight: 700
+  margin: 0 0 0.25rem
+
+.alertBody
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.form
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+  width: 100%
+  max-width: var(--content-w)
+  margin-inline: auto
+
+.formTitle
+  @include shipper-title
+  font-weight: 650
+  margin: 0 0 var(--space-2)
+
+.field
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+.label
+  @include shipper-label
+  font-weight: 600
+
+.input, .select
+  min-height: var(--input-h)
+  height: var(--input-h)
+  border-radius: var(--radius-md)
+  border: 1px solid var(--hy-shipper-border)
+  background: var(--hy-shipper-surface)
+  color: var(--hy-shipper-text)
+  padding: 0 var(--space-3)
+  @include shipper-body
+
+.error
+  @include shipper-label
+  color: var(--hy-shipper-danger)
+  margin: 0
+  min-height: 1.25rem
+
+.center
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  text-align: center
+  gap: 0.75rem
+  padding: 2rem 1rem
+  flex: 1
+
+.iconCircle
+  width: 4rem
+  height: 4rem
+  border-radius: 999px
+  display: inline-flex
+  align-items: center
+  justify-content: center
+
+.success
+  background: color-mix(in srgb, var(--hy-shipper-success) 20%, transparent)
+  color: var(--hy-shipper-success)
+
+.errorIcon
+  background: color-mix(in srgb, var(--hy-shipper-danger) 20%, transparent)
+  color: var(--hy-shipper-danger)
+
+.mapRoot
+  position: relative
+  flex: 1
+  min-height: var(--card-lg-h)
+  border-radius: var(--radius-md)
+  overflow: hidden
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-info) 12%, var(--hy-shipper-surface-secondary)), var(--hy-shipper-surface-secondary))
+
+.mapPreviewCard
+  min-height: var(--card-lg-h)
+  text-decoration: none
+  color: inherit
+
+.mapPreviewCanvas
+  position: relative
+  width: 100%
+  height: 5rem
+  border-radius: var(--radius-sm)
+  overflow: hidden
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-info) 12%, var(--hy-shipper-surface-secondary)), var(--hy-shipper-surface-secondary))
+
+.mapPreviewCanvas .mapRoute
+  inset: 10% 8% 15%
+  width: 84%
+  height: 75%
+
+.mapFullScreen
+  position: relative
+  flex: 1
+  width: 100%
+  min-height: calc(100dvh - var(--header-map-h) - env(safe-area-inset-top, 0px))
+  max-height: var(--screen-h)
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-info) 14%, var(--hy-shipper-surface-secondary)), var(--hy-shipper-surface-secondary))
+
+.mapRoute
+  position: absolute
+  border: 0
+
+.mapRoot .mapRoute
+  inset: 15% 10% 25%
+  width: 80%
+  height: 60%
+
+.mapFullScreen .mapRoute
+  inset: 0
+  width: 100%
+  height: 100%
+
+.mapControlsStack
+  position: absolute
+  right: var(--space-4)
+  bottom: calc(var(--sheet-compact-h) + var(--space-3))
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  z-index: 2
+
+.mapControl
+  @include shipper-glass
+  @include shipper-pressable
+  @include shipper-focus
+  width: var(--touch-min)
+  height: var(--touch-min)
+  min-width: var(--touch-min)
+  min-height: var(--touch-min)
+  border-radius: var(--radius-pill)
+  border: 0
+  cursor: pointer
+  color: var(--hy-shipper-text)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  box-shadow: var(--hy-shipper-shadow-sm)
+
+.mapStatusCard
+  @include shipper-glass
+  position: absolute
+  left: var(--space-4)
+  right: var(--space-4)
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px))
+  padding: var(--space-3)
+  border-radius: var(--radius-lg)
+  box-shadow: var(--hy-shipper-shadow-md)
+  z-index: 2
+  max-height: var(--sheet-compact-h)
+  overflow-y: auto
+
+.mapStatusHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.5rem
+  margin-bottom: 0.625rem
+
+.mapStatusCode
+  @include shipper-body
+  font-weight: 750
+  margin: 0
+  font-variant-numeric: tabular-nums
+
+.mapStatusCorridor
+  @include shipper-label
+  margin: var(--space-1) 0 0
+  color: var(--hy-shipper-muted)
+
+.mapStatusAction
+  @include shipper-pressable
+  @include shipper-focus
+  width: 100%
+  margin-top: var(--space-2)
+  min-height: var(--button-secondary-h)
+  padding: var(--space-2) var(--space-3)
+  border: 0
+  border-radius: var(--radius-md)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
+  color: var(--hy-shipper-primary)
+  @include shipper-label
+  font-weight: 700
+  cursor: pointer
+  text-align: left
+  display: flex
+  align-items: center
+
+.mapContextSheet
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+.mapContextRow
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+
+.mapContextAction
+  @include shipper-body
+  margin: 0
+  padding: var(--space-3)
+  border-radius: var(--radius-sm)
+  background: color-mix(in srgb, var(--hy-shipper-info) 12%, transparent)
+  font-weight: 650
+
+.mapStatusGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.5rem 0.75rem
+
+.mapStatusCell
+  display: flex
+  flex-direction: column
+  gap: 0.125rem
+  min-width: 0
+
+.mapStatusLabel
+  @include shipper-operational-label
+  font-size: clamp(0.625rem, 2.5vw, 0.6875rem)
+
+.mapStatusValue
+  @include shipper-body
+  font-weight: 650
+  line-height: 1.3
+
+.docRow
+  @include shipper-solid-card
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+  min-height: var(--card-doc-row-h)
+  padding: var(--space-3) var(--space-4)
+
+.offer
+  @include shipper-solid-card
+  padding: var(--space-3) var(--space-4)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  min-height: var(--card-offer-h)
+
+.recommended
+  border-color: var(--hy-shipper-success)
+
+.landingChart
+  width: 100%
+  max-width: var(--content-w)
+
+  .chartLine
+    height: calc(var(--card-xl-h) - var(--space-8))
+
+.landingLogo
+  width: var(--touch-comfort)
+  height: var(--touch-comfort)
+  border-radius: 999px
+  background: var(--hy-shipper-text)
+  color: var(--hy-shipper-bg)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 800
+  font-size: 1.25rem
+
+.landingHero
+  display: flex
+  flex-direction: column
+  align-items: center
+  text-align: center
+  gap: var(--space-4)
+  padding: var(--safe-top) var(--space-4) var(--space-8)
+  flex: 1
+  justify-content: center
+  width: 100%
+  max-width: var(--screen-w)
+  margin-inline: auto
+
+.landingTitle
+  @include shipper-title
+  font-weight: 750
+  margin: 0
+
+.landingSubtitle
+  @include shipper-body
+  color: var(--hy-shipper-muted)
+  margin: 0
+  max-width: var(--content-w)
+
+.landingActions
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  width: 100%
+  max-width: var(--content-w)
+  padding-bottom: calc(var(--space-4) + var(--hy-shipper-safe-bottom))
+
+.otpRow
+  display: flex
+  gap: var(--space-2)
+  justify-content: center
+
+.otpInput
+  width: var(--touch-min)
+  height: var(--input-h)
+  text-align: center
+  font-size: 1.125rem
+  font-weight: 700
+  border-radius: var(--radius-sm)
+  border: 1px solid var(--hy-shipper-border)
+  background: var(--hy-shipper-surface)
+  color: var(--hy-shipper-text)
+
+.profileHeader
+  @include shipper-solid-card
+  padding: var(--space-4)
+  min-height: var(--card-md-h)
+  display: flex
+  align-items: center
+  gap: var(--space-3)
+
+.profileAvatar
+  width: var(--avatar)
+  height: var(--avatar)
+  border-radius: 999px
+  background: var(--hy-shipper-surface-secondary)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  font-weight: 700
+
+.menuList
+  display: flex
+  flex-direction: column
+  gap: 0.5rem
+
+.menuLink
+  @include shipper-solid-card
+  @include shipper-pressable
+  min-height: var(--card-profile-row-h)
+  padding: var(--space-3) var(--space-4)
+  text-decoration: none
+  color: var(--hy-shipper-text)
+  font-weight: 600
+  @include shipper-body
+  display: flex
+  align-items: center
+
+.detailGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-3)
+
+.detailTile
+  @include shipper-module-card
+  @include shipper-pressable
+  padding: var(--space-3)
+  text-decoration: none
+  color: inherit
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: var(--card-detail-tile-h)
+
+.detailTileAccent
+  border-color: color-mix(in srgb, var(--hy-shipper-info) 35%, var(--hy-shipper-border))
+  background: color-mix(in srgb, var(--hy-shipper-info) 6%, var(--hy-shipper-surface))
+
+.tileLabel
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+
+.tileValue
+  @include shipper-body
+  font-weight: 700
+
+.statusBanner
+  @include shipper-solid-card
+  padding: var(--space-3) var(--space-4)
+  border-left: 0.25rem solid var(--hy-shipper-warning)
+
+.detailRiskBanner
+  @include shipper-module-card
+  padding: var(--space-3)
+  border-left: 0.1875rem solid var(--hy-shipper-danger)
+  background: color-mix(in srgb, var(--hy-shipper-danger) 8%, var(--hy-shipper-glass-bg))
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  min-height: auto
+
+.detailRiskHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--space-2)
+
+.detailRiskLabel
+  @include shipper-operational-label
+  margin: 0
+
+.detailRiskStatus
+  @include shipper-title
+  margin: var(--space-1) 0 0
+
+.detailRoute
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.notification
+  @include shipper-solid-card
+  display: flex
+  gap: var(--space-3)
+  min-height: var(--card-notification-h)
+  padding: var(--space-3) var(--space-4)
+  border-left: 0.25rem solid var(--hy-shipper-border)
+
+.notificationHigh
+  border-left-color: var(--hy-shipper-danger)
+
+.notificationMedium
+  border-left-color: var(--hy-shipper-warning)
+
+.notificationLow
+  border-left-color: var(--hy-shipper-success)
+
+.basinGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+.basin
+  @include shipper-solid-card
+  padding: var(--space-3)
+  min-height: var(--card-priority-h)
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+
+.impactHighlight
+  @include shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+  gap: var(--space-2)
+  min-height: var(--card-sm-h)
+
+.impactHighlightLabel
+  @include shipper-operational-label
+  margin: 0
+
+.impactHighlightValue
+  @include shipper-metric-value
+  margin: 0
+  color: var(--hy-shipper-success)
+
+.ringWrap
+  display: flex
+  justify-content: center
+  padding: var(--space-2) 0
+
+.ring
+  width: var(--card-md-h)
+  height: var(--card-md-h)
+
+.footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.5rem
+  flex-wrap: wrap
+
+.cta
+  font-size: 0.75rem
+  font-weight: 650
+  color: var(--hy-shipper-info)
+
+.list
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+.publicDetailHero
+  @include shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+.publicDetailHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--space-2)
+
+.publicDetailType
+  @include shipper-operational-label
+  margin: 0
+
+.publicDetailRoute
+  @include shipper-title
+  margin: var(--space-1) 0 0
+  line-height: 1.25
+
+.publicDetailMeta
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.publicDetailStatus
+  @include shipper-label
+  font-weight: 650
+  margin: 0
+
+.publicDetailPrivacy
+  @include shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+  padding-top: var(--space-1)
+  border-top: 1px solid var(--hy-shipper-border)
+
+.publicDetailFacts
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+.publicDetailFact
+  @include shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: 4.25rem
+
+.publicDetailActions
+  display: flex
+  flex-direction: column
+  gap: 0.5rem
+  margin-top: auto
+
+@media (prefers-reduced-motion: reduce)
+  .chartLine polyline,
+  .chartLine circle,
+  .chartBar rect
+    transition: none
+
+  .chartLine,
+  .chartBar
+    animation: none

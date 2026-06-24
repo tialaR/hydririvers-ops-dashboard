@@ -1,0 +1,983 @@
+.labPage
+  --lab-bg: #dceffc
+  --lab-bg-2: #f8fbff
+  --lab-ink: #101a2b
+  --lab-muted: rgba(34, 48, 72, 0.62)
+  --lab-line: rgba(255, 255, 255, 0.78)
+  --lab-glass: rgba(255, 255, 255, 0.36)
+  --lab-glass-strong: rgba(255, 255, 255, 0.54)
+  --lab-glass-soft: rgba(255, 255, 255, 0.2)
+  --lab-shadow: 0 24px 60px rgba(72, 111, 145, 0.18)
+  --lab-blue: #2583df
+  --lab-blue-soft: rgba(37, 131, 223, 0.18)
+  --lab-green: #2fd66e
+  --lab-orange: #ff9f16
+  --lab-red: #ff4f48
+  --lab-content-max: 430px
+  --lab-gutter: clamp(20px, 5vw, 28px)
+  position: relative
+  min-height: 100svh
+  overflow-x: hidden
+  box-sizing: border-box
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", sans-serif
+  color: var(--lab-ink)
+  background: radial-gradient(circle at 18% 10%, rgba(89, 179, 255, 0.35), transparent 36%), radial-gradient(circle at 82% 2%, rgba(148, 220, 212, 0.24), transparent 34%), linear-gradient(180deg, var(--lab-bg), var(--lab-bg-2))
+
+  *,
+  *::before,
+  *::after
+    box-sizing: border-box
+
+.dark
+  --lab-bg: #0f1011
+  --lab-bg-2: #1b1b1d
+  --lab-ink: #f6f7f8
+  --lab-muted: rgba(246, 247, 248, 0.58)
+  --lab-line: rgba(255, 255, 255, 0.12)
+  --lab-glass: rgba(255, 255, 255, 0.085)
+  --lab-glass-strong: rgba(255, 255, 255, 0.12)
+  --lab-glass-soft: rgba(255, 255, 255, 0.055)
+  --lab-shadow: 0 30px 80px rgba(0, 0, 0, 0.44)
+  background: radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.06), transparent 34%), radial-gradient(circle at 80% 2%, rgba(255, 255, 255, 0.045), transparent 32%), linear-gradient(180deg, var(--lab-bg), var(--lab-bg-2))
+
+.screenBackground
+  position: fixed
+  inset: 0
+  z-index: 0
+  pointer-events: none
+  border-radius: 0
+  width: 100%
+  min-height: 100svh
+  background: radial-gradient(circle at 18% 8%, rgba(94, 175, 255, 0.5), transparent 34%), radial-gradient(circle at 88% 22%, rgba(65, 213, 201, 0.32), transparent 36%), radial-gradient(circle at 48% 64%, rgba(255, 255, 255, 0.6), transparent 42%), linear-gradient(180deg, rgba(206, 235, 255, 0.82), rgba(245, 251, 255, 0.72)), linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.02))
+
+.dark .screenBackground
+  background: radial-gradient(circle at 22% 8%, rgba(255, 255, 255, 0.08), transparent 34%), radial-gradient(circle at 84% 18%, rgba(255, 255, 255, 0.055), transparent 34%), radial-gradient(circle at 42% 72%, rgba(255, 255, 255, 0.05), transparent 38%), linear-gradient(180deg, #111111, #1e1e20), linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02))
+
+.contentShell
+  position: relative
+  z-index: 1
+  width: min(100%, var(--lab-content-max))
+  margin-inline: auto
+  padding-inline: var(--lab-gutter)
+  padding-block: var(--lab-gutter) 44px
+  box-sizing: border-box
+  min-height: 100svh
+  overflow-x: clip
+  display: flex
+  flex-direction: column
+  gap: 20px
+
+.labIntro,
+.screenStack,
+.screen
+  width: 100%
+  max-width: 100%
+  box-sizing: border-box
+
+.labIntro
+  p
+    margin: 0 0 8px
+    color: var(--lab-muted)
+    font-size: 12px
+    font-weight: 800
+    letter-spacing: 0.18em
+    text-transform: uppercase
+  h1
+    margin: 0
+    font-size: clamp(32px, 8vw, 46px)
+    line-height: 0.95
+    letter-spacing: -0.05em
+  span
+    display: block
+    margin-top: 12px
+    color: var(--lab-muted)
+    font-size: 16px
+    line-height: 1.45
+
+.screen
+  position: relative
+  overflow: visible
+  padding: 0 0 118px
+
+.heroCard,
+.card,
+.flowStep,
+.createCargo,
+.cargoCard,
+.sheet,
+.bottomNav,
+.searchBar,
+.iconButton,
+.iconButtonLarge
+  backdrop-filter: blur(28px) saturate(1.25)
+  -webkit-backdrop-filter: blur(28px) saturate(1.25)
+  background: linear-gradient(135deg, var(--lab-glass-strong), var(--lab-glass-soft))
+  border: 1px solid var(--lab-line)
+  box-shadow: var(--lab-shadow), inset 0 1px 1px rgba(255, 255, 255, 0.5)
+  box-sizing: border-box
+
+.heroCard
+  width: 100%
+  border-radius: 36px
+  padding: 24px
+  min-height: 190px
+  p
+    margin: 28px 0 10px
+    color: var(--lab-muted)
+    font-size: 16px
+    font-weight: 700
+  h2
+    margin: 0
+    font-size: 46px
+    line-height: 0.95
+    letter-spacing: -0.06em
+  > span
+    display: block
+    margin-top: 14px
+    color: var(--lab-muted)
+    font-size: 17px
+    font-weight: 800
+
+.topRow,
+.compactHeader,
+.cardTitle,
+.sheetHeader
+  display: flex
+  align-items: center
+
+.topRow,
+.compactHeader,
+.sheetHeader
+  justify-content: space-between
+  gap: 12px
+
+.brand
+  font-weight: 900
+  letter-spacing: -0.03em
+
+.iconCluster
+  display: flex
+  gap: 8px
+
+.iconButton,
+.iconButtonLarge
+  border-radius: 999px
+  border: 0
+  color: var(--lab-ink)
+  display: inline-grid
+  place-items: center
+  cursor: pointer
+  transform: translateZ(0)
+  transition: transform 150ms ease, opacity 150ms ease
+  &:active
+    transform: scale(0.94)
+
+.iconButton
+  width: 46px
+  height: 46px
+  font-weight: 900
+
+.iconButtonLarge
+  width: 58px
+  height: 58px
+  font-size: 24px
+
+.searchRow
+  display: grid
+  grid-template-columns: minmax(0, 1fr) 58px
+  gap: 16px
+  width: 100%
+  margin-top: 16px
+  align-items: center
+
+.searchBar
+  min-height: 58px
+  width: 100%
+  border-radius: 999px
+  display: flex
+  align-items: center
+  gap: 12px
+  padding: 0 18px
+  span
+    color: var(--lab-muted)
+    font-size: 25px
+  input
+    min-width: 0
+    width: 100%
+    border: 0
+    outline: 0
+    background: transparent
+    color: var(--lab-ink)
+    font: inherit
+    font-size: 17px
+    font-weight: 700
+    &::placeholder
+      color: var(--lab-muted)
+
+.chipRail
+  display: flex
+  gap: 10px
+  margin-top: 16px
+  width: 100%
+  max-width: 100%
+  padding: 0 0 8px
+  overflow-x: auto
+  overflow-y: hidden
+  -webkit-overflow-scrolling: touch
+  scrollbar-width: none
+  &::-webkit-scrollbar
+    width: 0
+    height: 0
+
+.chip
+  border: 1px solid var(--lab-line)
+  border-radius: 999px
+  background: rgba(255, 255, 255, 0.2)
+  color: var(--lab-muted)
+  padding: 13px 18px
+  font-size: 15px
+  font-weight: 900
+  white-space: nowrap
+  cursor: pointer
+  transition: transform 150ms ease, background 150ms ease
+  &:active
+    transform: scale(0.95)
+
+.chipActive
+  color: var(--lab-blue)
+  background: rgba(86, 164, 255, 0.22)
+  border-color: rgba(86, 164, 255, 0.45)
+
+.createCargo
+  width: 100%
+  border-radius: 30px
+  border: 0
+  margin-top: 10px
+  min-height: 112px
+  padding: 20px
+  display: grid
+  grid-template-columns: 52px 1fr
+  gap: 6px 16px
+  text-align: left
+  color: var(--lab-ink)
+  cursor: pointer
+  span
+    grid-row: span 2
+    align-self: center
+    font-size: 34px
+    color: var(--lab-blue)
+  strong
+    font-size: 23px
+  small
+    color: var(--lab-muted)
+    font-size: 14px
+    font-weight: 700
+
+.cardList
+  display: grid
+  gap: 14px
+  margin-top: 18px
+  width: 100%
+
+.cargoCard
+  --cargo-accent: #2f8cff
+  --cargo-accent-soft: rgba(47, 140, 255, 0.16)
+  --cargo-accent-glow: rgba(47, 140, 255, 0.34)
+  --cargo-badge-bg: rgba(47, 140, 255, 0.14)
+  position: relative
+  width: 100%
+  max-width: 100%
+  overflow: visible
+  border: 1px solid rgba(255, 255, 255, 0.82)
+  border-radius: 36px
+  padding: 24px 24px 22px 32px
+  text-align: left
+  color: var(--lab-ink)
+  cursor: pointer
+  font: inherit
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.82), rgba(244, 250, 255, 0.58))
+  box-shadow: 0 22px 52px rgba(35, 72, 113, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 0 rgba(120, 156, 190, 0.12)
+  backdrop-filter: blur(28px) saturate(165%)
+  -webkit-backdrop-filter: blur(28px) saturate(165%)
+  transform: translateZ(0)
+  transition: transform 180ms ease, box-shadow 180ms ease
+  &:active
+    transform: scale(0.985)
+  &::before
+    content: ""
+    position: absolute
+    left: 0
+    top: 22px
+    bottom: 22px
+    width: 7px
+    border-radius: 999px
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.28), transparent 18%), linear-gradient(180deg, var(--cargo-accent), rgba(0, 0, 0, 0.08))
+    background-color: var(--cargo-accent)
+    box-shadow: 0 0 18px var(--cargo-accent-glow), 10px 0 24px var(--cargo-accent-soft), inset 0 1px 0 rgba(255, 255, 255, 0.45)
+    pointer-events: none
+  &::after
+    content: ""
+    position: absolute
+    left: 0
+    top: 28px
+    bottom: 28px
+    width: 14px
+    border-radius: 999px
+    background: linear-gradient(90deg, var(--cargo-accent-glow), rgba(255, 255, 255, 0))
+    filter: blur(8px)
+    opacity: 0.82
+    pointer-events: none
+
+.cargoCardHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: 12px
+
+.cargoTitle
+  flex: 1
+  min-width: 0
+  margin: 0
+  font-size: 22px
+  line-height: 1.1
+  letter-spacing: -0.04em
+
+.cargoBadge
+  flex-shrink: 0
+  border-radius: 999px
+  padding: 8px 12px
+  border: 1px solid rgba(47, 140, 255, 0.34)
+  color: var(--cargo-accent)
+  background: linear-gradient(135deg, var(--cargo-badge-bg), rgba(255, 255, 255, 0.48))
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 10px 24px var(--cargo-accent-soft)
+  backdrop-filter: blur(18px) saturate(150%)
+  -webkit-backdrop-filter: blur(18px) saturate(150%)
+  font-size: 13px
+  font-weight: 900
+  line-height: 1
+  white-space: nowrap
+
+.cargoRoute
+  margin: 10px 0 0
+  color: rgba(52, 68, 96, 0.72)
+  font-size: 15px
+  font-weight: 800
+  line-height: 1.35
+
+.cargoMeta
+  display: flex
+  align-items: flex-start
+  gap: 8px
+  margin-top: 14px
+  color: rgba(52, 68, 96, 0.68)
+  font-size: 14px
+  font-weight: 800
+  line-height: 1.45
+  span:last-child
+    min-width: 0
+    flex: 1
+
+.cargoMetaIcon
+  flex-shrink: 0
+  margin-top: 1px
+  color: var(--cargo-accent)
+  font-size: 15px
+  line-height: 1
+
+.statusInTransit
+  --cargo-accent: #2f8cff
+  --cargo-accent-soft: rgba(47, 140, 255, 0.16)
+  --cargo-accent-glow: rgba(47, 140, 255, 0.34)
+  --cargo-badge-bg: rgba(47, 140, 255, 0.14)
+  .cargoBadge
+    border-color: rgba(47, 140, 255, 0.34)
+
+.statusWaiting
+  --cargo-accent: #ff9f0a
+  --cargo-accent-soft: rgba(255, 159, 10, 0.18)
+  --cargo-accent-glow: rgba(255, 159, 10, 0.36)
+  --cargo-badge-bg: rgba(255, 159, 10, 0.16)
+  .cargoBadge
+    border-color: rgba(255, 159, 10, 0.38)
+
+.statusCompleted
+  --cargo-accent: #22c55e
+  --cargo-accent-soft: rgba(34, 197, 94, 0.16)
+  --cargo-accent-glow: rgba(34, 197, 94, 0.34)
+  --cargo-badge-bg: rgba(34, 197, 94, 0.14)
+  .cargoBadge
+    border-color: rgba(34, 197, 94, 0.34)
+
+.statusRisk
+  --cargo-accent: #ff3b30
+  --cargo-accent-soft: rgba(255, 59, 48, 0.16)
+  --cargo-accent-glow: rgba(255, 59, 48, 0.34)
+  --cargo-badge-bg: rgba(255, 59, 48, 0.14)
+  .cargoBadge
+    border-color: rgba(255, 59, 48, 0.34)
+
+.statusNeutral
+  --cargo-accent: #667085
+  --cargo-accent-soft: rgba(102, 112, 133, 0.16)
+  --cargo-accent-glow: rgba(102, 112, 133, 0.28)
+  --cargo-badge-bg: rgba(102, 112, 133, 0.12)
+  .cargoBadge
+    border-color: rgba(102, 112, 133, 0.32)
+
+.statusAnalysis
+  --cargo-accent: #7c3aed
+  --cargo-accent-soft: rgba(124, 58, 237, 0.16)
+  --cargo-accent-glow: rgba(124, 58, 237, 0.34)
+  --cargo-badge-bg: rgba(124, 58, 237, 0.14)
+  .cargoBadge
+    border-color: rgba(124, 58, 237, 0.34)
+
+.dark .cargoCard
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04))
+  border-color: rgba(255, 255, 255, 0.14)
+  box-shadow: 0 22px 52px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.12), inset 0 -1px 0 rgba(0, 0, 0, 0.18)
+
+.dark .cargoRoute,
+.dark .cargoMeta
+  color: rgba(246, 247, 248, 0.62)
+
+@media (prefers-reduced-motion: reduce)
+  .cargoCard
+    transition: none
+    &:active
+      transform: none
+
+.compactHeader
+  margin-bottom: 18px
+  align-items: flex-start
+  > div
+    flex: 1
+  span
+    display: inline-flex
+    margin-bottom: 8px
+    color: var(--lab-blue)
+    font-size: 12px
+    font-weight: 900
+    letter-spacing: 0.04em
+  h2
+    margin: 0
+    color: var(--lab-ink)
+    font-size: 34px
+    line-height: 1
+    letter-spacing: -0.05em
+  p
+    margin: 8px 0 0
+    color: var(--lab-muted)
+    font-size: 14px
+    font-weight: 800
+
+.card
+  border-radius: 30px
+  padding: 22px
+  color: var(--lab-ink)
+  text-align: left
+
+button.card
+  width: 100%
+  border: 0
+  cursor: pointer
+  transition: transform 150ms ease
+  &:active
+    transform: scale(0.985)
+
+.cardTitle
+  gap: 12px
+  color: var(--lab-muted)
+  text-transform: uppercase
+  letter-spacing: 0.14em
+  font-size: 13px
+  font-weight: 900
+  span
+    font-size: 22px
+    color: var(--lab-blue)
+  strong
+    flex: 1
+  em
+    color: var(--lab-blue)
+    font-size: 12px
+    font-style: normal
+    letter-spacing: 0
+    text-transform: none
+
+.mainAction
+  display: grid
+  justify-items: center
+  text-align: center
+  gap: 10px
+  .bigIcon
+    font-size: 54px
+    color: var(--lab-blue)
+  h3
+    margin: 0
+    font-size: 30px
+    letter-spacing: -0.04em
+  p
+    margin: 0
+    color: var(--lab-muted)
+    font-size: 15px
+    line-height: 1.45
+
+.primaryButton
+  border: 0
+  border-radius: 999px
+  background: linear-gradient(180deg, #52adff, #267bd6)
+  color: white
+  font-size: 16px
+  font-weight: 900
+  min-height: 48px
+  padding: 0 28px
+  cursor: pointer
+  box-shadow: 0 14px 30px rgba(37, 131, 223, 0.28)
+  &:active
+    transform: scale(0.96)
+
+.flowGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 12px
+  margin-top: 14px
+
+.flowStep
+  min-height: 176px
+  border: 0
+  border-radius: 26px
+  padding: 16px
+  color: var(--lab-ink)
+  text-align: left
+  cursor: pointer
+  span
+    display: inline-grid
+    place-items: center
+    width: 30px
+    height: 30px
+    border-radius: 999px
+    background: var(--lab-blue-soft)
+    color: var(--lab-blue)
+    font-size: 12px
+    font-weight: 900
+  strong
+    display: block
+    margin-top: 14px
+    font-size: 16px
+  small
+    display: block
+    margin-top: 8px
+    color: var(--lab-muted)
+    line-height: 1.35
+  em
+    display: inline-flex
+    margin-top: 14px
+    color: var(--lab-blue)
+    font-style: normal
+    font-weight: 900
+
+.scenarioGrid
+  display: grid
+  gap: 12px
+  margin-top: 14px
+
+.successCard
+  border-color: rgba(47, 214, 110, 0.34)
+  background: linear-gradient(135deg, rgba(47, 214, 110, 0.16), var(--lab-glass-soft))
+
+.errorCard
+  border-color: rgba(255, 79, 72, 0.34)
+  background: linear-gradient(135deg, rgba(255, 79, 72, 0.13), var(--lab-glass-soft))
+
+.mapPreview
+  min-height: 300px
+  overflow: hidden
+
+.mapCanvas
+  position: relative
+  height: 238px
+  margin-top: 18px
+  overflow: hidden
+  border-radius: 24px
+  background: linear-gradient(180deg, rgba(237, 248, 255, 0.74), rgba(222, 241, 255, 0.48))
+  border: 1px solid rgba(255, 255, 255, 0.7)
+
+.dark .mapCanvas
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.035))
+  border-color: rgba(255, 255, 255, 0.13)
+
+.river
+  position: absolute
+  height: 18px
+  border-radius: 999px
+  background: rgba(83, 166, 239, 0.24)
+  transform-origin: center
+
+.riverOne
+  width: 410px
+  top: 76px
+  left: -36px
+  transform: rotate(-4deg)
+
+.riverTwo
+  width: 360px
+  bottom: 46px
+  left: -18px
+  transform: rotate(-32deg)
+
+.riverLabel
+  position: absolute
+  color: rgba(37, 131, 223, 0.68)
+  font-size: 10px
+  font-weight: 800
+
+.rioNegro
+  top: 85px
+  left: 48px
+  transform: rotate(24deg)
+
+.rioSolimoes
+  top: 116px
+  left: 96px
+  transform: rotate(-20deg)
+
+.rioTapajos
+  bottom: 48px
+  left: 130px
+  transform: rotate(-62deg)
+
+.routeSvg
+  position: absolute
+  inset: 0
+  width: 100%
+  height: 100%
+  filter: drop-shadow(0 12px 16px rgba(37, 131, 223, 0.34))
+  path
+    fill: none
+    stroke: #2f8ced
+    stroke-width: 10
+    stroke-linecap: round
+  circle
+    fill: #ffffff
+    stroke: #11223a
+    stroke-width: 2
+
+.place
+  position: absolute
+  color: var(--lab-ink)
+  font-size: 11px
+  font-weight: 900
+
+.manaus
+  top: 64px
+  left: 82px
+
+.itacoatiara
+  top: 100px
+  left: 152px
+
+.santarem
+  top: 132px
+  left: 198px
+
+.altamira
+  bottom: 38px
+  right: 68px
+
+.routeBubble
+  position: absolute
+  right: 44px
+  bottom: 30px
+  width: 44px
+  height: 44px
+  display: grid
+  place-items: center
+  border-radius: 999px
+  background: rgba(255, 255, 255, 0.86)
+  color: #061426
+  box-shadow: 0 10px 24px rgba(37, 131, 223, 0.18)
+
+.metricsGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 12px
+  margin-top: 14px
+
+.metricCard
+  position: relative
+  min-height: 168px
+  overflow: hidden
+  strong
+    display: block
+    margin-top: 24px
+    font-size: 34px
+    line-height: 1
+    letter-spacing: -0.06em
+  p
+    max-width: 85%
+    margin: 12px 0 0
+    color: var(--lab-muted)
+    font-size: 15px
+    font-weight: 800
+    line-height: 1.35
+  i
+    position: absolute
+    width: 58px
+    height: 58px
+    right: 18px
+    bottom: 18px
+    border-radius: 999px
+    background: radial-gradient(circle at 30% 28%, rgba(255,255,255,0.7), rgba(255,255,255,0.18))
+
+.routeProgress,
+.costCard,
+.timelineCard
+  margin-top: 14px
+  strong
+    display: block
+    margin: 24px 0 12px
+    font-size: 28px
+    letter-spacing: -0.045em
+  p
+    color: var(--lab-muted)
+    font-weight: 800
+    line-height: 1.4
+
+.sliderTrack
+  position: relative
+  height: 20px
+  margin: 20px 2px 18px
+  border-radius: 999px
+  background: rgba(112, 127, 153, 0.16)
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5)
+  span
+    position: absolute
+    inset: 4px auto 4px 4px
+    border-radius: 999px
+    background: linear-gradient(90deg, #5fd7ff, #2a7dff)
+  i
+    position: absolute
+    top: 50%
+    width: 42px
+    height: 42px
+    margin-left: -21px
+    margin-top: -21px
+    border-radius: 999px
+    background: radial-gradient(circle, #fff 0 18%, #5b94ff 20% 46%, rgba(255,255,255,0.72) 48% 100%)
+    box-shadow: 0 8px 20px rgba(47, 140, 237, 0.32)
+
+.timelineDots
+  display: grid
+  grid-template-columns: repeat(3, 1fr)
+  gap: 16px 10px
+  margin-top: 30px
+  span
+    position: relative
+    color: var(--lab-muted)
+    font-size: 11px
+    font-weight: 900
+    text-align: center
+    &::before
+      content: ''
+      display: block
+      width: 28px
+      height: 28px
+      margin: 0 auto 8px
+      border-radius: 999px
+      border: 2px solid rgba(112, 127, 153, 0.42)
+      background: rgba(255, 255, 255, 0.32)
+    &[data-done='true']::before
+      border-color: var(--lab-blue)
+      background: var(--lab-blue)
+      box-shadow: 0 8px 20px rgba(37, 131, 223, 0.25)
+
+.fullMapCard
+  min-height: 660px
+  .mapCanvas
+    height: 520px
+  p
+    color: var(--lab-muted)
+    font-weight: 800
+
+.sheetOverlay
+  position: fixed
+  z-index: 12
+  inset: 0
+
+.scrim
+  position: absolute
+  inset: 0
+  border: 0
+  background: rgba(8, 13, 22, 0.18)
+  backdrop-filter: blur(10px)
+  -webkit-backdrop-filter: blur(10px)
+
+.sheet
+  position: absolute
+  left: 0
+  right: 0
+  bottom: 0
+  min-height: 78%
+  max-height: 90%
+  overflow-y: auto
+  border-radius: 32px 32px 0 0
+  padding: 14px 20px 96px
+  color: var(--lab-ink)
+
+.grabber
+  display: block
+  width: 52px
+  height: 5px
+  margin: 0 auto 18px
+  border-radius: 999px
+  background: rgba(112, 127, 153, 0.4)
+
+.sheetHeader
+  h3
+    margin: 0
+    font-size: 30px
+    letter-spacing: -0.05em
+  p
+    margin: 8px 0 0
+    color: var(--lab-muted)
+    font-weight: 800
+
+.sheetContent
+  display: grid
+  gap: 14px
+  margin-top: 18px
+
+.sheetRow
+  min-height: 72px
+  border: 1px solid var(--lab-line)
+  border-radius: 22px
+  background: rgba(255,255,255,0.16)
+  color: var(--lab-ink)
+  display: flex
+  align-items: center
+  justify-content: space-between
+  padding: 0 18px
+  font: inherit
+
+.sheetChartCard,
+.timelineList,
+.riskGauge
+  border: 1px solid var(--lab-line)
+  border-radius: 26px
+  background: rgba(255,255,255,0.16)
+  padding: 20px
+
+.sheetChartCard
+  strong
+    display: block
+    font-size: 52px
+    letter-spacing: -0.06em
+  p
+    color: var(--lab-muted)
+    font-weight: 800
+
+.timelineList
+  display: grid
+  gap: 16px
+  span
+    color: var(--lab-muted)
+    font-weight: 900
+    &::before
+      content: ''
+      display: inline-block
+      width: 9px
+      height: 9px
+      border-radius: 999px
+      margin-right: 12px
+      background: rgba(112, 127, 153, 0.45)
+    &[data-active='true']::before
+      background: var(--lab-green)
+
+.riskGauge
+  min-height: 240px
+  display: grid
+  place-items: center
+  strong
+    font-size: 56px
+    color: var(--lab-green)
+  span
+    position: absolute
+
+.barChart
+  height: 160px
+  display: grid
+  grid-template-columns: repeat(6, 1fr)
+  align-items: end
+  gap: 12px
+  margin-top: 22px
+  i
+    display: block
+    border-radius: 999px 999px 10px 10px
+    background: linear-gradient(180deg, rgba(255,255,255,0.9), #77bfff 52%, #e66fc9)
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.85), 0 10px 24px rgba(87,132,255,0.22)
+
+.bottomNav
+  position: fixed
+  z-index: 10
+  left: 50%
+  transform: translateX(-50%)
+  width: min(calc(100% - 2 * var(--lab-gutter)), calc(var(--lab-content-max) - 2 * var(--lab-gutter)))
+  max-width: calc(100% - 2 * var(--lab-gutter))
+  bottom: max(18px, env(safe-area-inset-bottom, 0px))
+  box-sizing: border-box
+  min-height: 82px
+  border-radius: 999px
+  display: grid
+  grid-template-columns: repeat(4, 1fr)
+  align-items: center
+  padding: 8px
+  button
+    position: relative
+    height: 66px
+    border: 0
+    border-radius: 999px
+    background: transparent
+    color: var(--lab-muted)
+    display: grid
+    place-items: center
+    gap: 2px
+    font: inherit
+    cursor: pointer
+    transition: transform 150ms ease, background 150ms ease, color 150ms ease
+    &:active
+      transform: scale(0.94)
+    span
+      font-size: 25px
+      line-height: 1
+    small
+      font-size: 11px
+      font-weight: 900
+
+.navActive
+  color: var(--lab-blue) !important
+  background: rgba(255, 255, 255, 0.38) !important
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 24px rgba(32,74,115,0.14)
+
+.dark .navActive
+  color: #f6f7f8 !important
+  background: rgba(255, 255, 255, 0.13) !important
+
+@media (max-width: 390px)
+  .heroCard h2
+    font-size: 40px
+  .cargoCard
+    padding: 22px 20px 20px 28px
+    border-radius: 32px
+  .cargoTitle
+    font-size: 20px
+  .cargoBadge
+    padding: 7px 10px
+    font-size: 12px
+  .metricsGrid,
+  .flowGrid
+    gap: 10px
+  .metricCard
+    min-height: 150px
+    padding: 18px
+    strong
+      font-size: 30px

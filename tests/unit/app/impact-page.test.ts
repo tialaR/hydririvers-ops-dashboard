@@ -1,74 +1,24 @@
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-import ptMessages from '../../../messages/pt-BR.json';
+import { describe, expect, it, vi } from 'vitest';
 
-const mockGetTranslations = vi.hoisted(() => vi.fn());
-
-vi.mock('next-intl/server', () => ({
-  getTranslations: mockGetTranslations
+vi.mock('@/features/shipper-mobile-flow/application/get-impact-summary', () => ({
+  getImpactSummary: vi.fn().mockResolvedValue({
+    metrics: [],
+    co2BarSeries: []
+  })
 }));
 
-vi.mock('@/features/impact/components/impact-story/impact-story', () => ({
-  ImpactStory: () => React.createElement('div', { 'data-testid': 'impact-story' })
+vi.mock('@/features/shipper-mobile-flow/screens/impact-screen', () => ({
+  ImpactScreen: () => React.createElement('div', { 'data-testid': 'shipper-impact-screen' })
 }));
 
-vi.mock('@/shared/ui/page-shell/page-shell', () => ({
-  PageShell: ({
-    children,
-    eyebrow,
-    title,
-    description
-  }: {
-    children: React.ReactNode;
-    eyebrow?: string;
-    title?: string;
-    description?: string;
-  }) =>
-    React.createElement(
-      'section',
-      { 'data-testid': 'page-shell' },
-      React.createElement(
-        'header',
-        null,
-        React.createElement('p', null, eyebrow),
-        React.createElement('h1', null, title),
-        React.createElement('span', null, description)
-      ),
-      children
-    )
-}));
+import ImpactPage from '@/app/[locale]/(shipper-mobile-flow)/impacto/page';
 
-import ImpactPage from '@/app/[locale]/(product-shell)/impacto/page';
-
-describe('impact page', () => {
-  beforeEach(() => {
-    mockGetTranslations.mockReset();
-    mockGetTranslations.mockImplementation(({ namespace }: { namespace: string }) => {
-      if (namespace === 'pages.impact') {
-        const m = ptMessages.pages.impact;
-        const t = (key: keyof typeof m) => m[key] as string;
-        return Promise.resolve(
-          Object.assign(t, {
-            has: (key: string) => key in m,
-            raw: () => undefined
-          })
-        );
-      }
-      return Promise.resolve(
-        Object.assign(() => '', {
-          has: () => false,
-          raw: () => undefined
-        })
-      );
-    });
-  });
-
-  it('renderiza topo humanizado e story', async () => {
-    const tree = await ImpactPage({ params: Promise.resolve({ locale: 'pt-BR' }) });
+describe('impact page (shipper mobile flow)', () => {
+  it('renderiza a tela de impacto da embarcadora', async () => {
+    const tree = await ImpactPage();
     const html = renderToStaticMarkup(tree as React.ReactElement);
-    expect(html).toContain(ptMessages.pages.impact.title);
-    expect(html).toContain(ptMessages.pages.impact.eyebrow);
-    expect(html).toContain('impact-story');
+    expect(html).toContain('shipper-impact-screen');
   });
 });
