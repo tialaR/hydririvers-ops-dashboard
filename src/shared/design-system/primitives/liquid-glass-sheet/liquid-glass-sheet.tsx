@@ -4,6 +4,7 @@ import type { MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, 
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 
 import '../../tokens/generated/hydro.semantic.module.scss';
+import { Sheet } from '@/shared/design-system/core/sheet';
 import { handleSheetEscapeKey } from './liquid-glass-sheet-keyboard';
 import styles from './liquid-glass-sheet.module.scss';
 
@@ -372,12 +373,12 @@ export function LiquidGlassSheet({
     >
       {stacked ? <div className={styles.stackedRail} aria-hidden /> : null}
 
-      <section
+      <Sheet
         className={sheetClassName}
         style={sheetStyle}
         role={role}
-        aria-modal={open && role === 'dialog' ? true : undefined}
-        aria-labelledby={title ? titleId : undefined}
+        modal={open && role === 'dialog'}
+        labelledBy={title ? titleId : undefined}
         data-variant={variant}
         data-tone={tone}
         data-stacked={stacked ? 'true' : 'false'}
@@ -445,7 +446,7 @@ export function LiquidGlassSheet({
         >
           {children}
         </div>
-      </section>
+      </Sheet>
     </div>
   );
 }

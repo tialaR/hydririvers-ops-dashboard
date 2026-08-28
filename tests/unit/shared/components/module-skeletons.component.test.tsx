@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
-import { PublicCargasMobileSkeleton } from '@/features/cargo/components/public-cargas-mobile/public-cargas-mobile-skeleton';
+import { PublicCargasMobileSkeleton } from '@/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-skeleton';
 import { NegotiationBoardSkeleton } from '@/features/negotiations/components/negotiation-board/negotiation-board-skeleton';
 import { TrackingMobileSkeleton } from '@/features/dashboard/components/operations-board/tracking-mobile-skeleton';
 

@@ -148,7 +148,7 @@ describe('Mobile product shell layout ownership', () => {
     const adminSource = readFileSync(adminChromePath, 'utf8');
     const publicCargasPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
+      'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
     );
     const publicCargasSource = readFileSync(publicCargasPath, 'utf8');
 

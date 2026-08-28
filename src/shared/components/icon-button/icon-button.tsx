@@ -8,6 +8,8 @@ import {
   type ReactNode,
 } from 'react';
 
+import { IconButton as CoreIconButton } from '@/shared/design-system/core/icon-button';
+
 import {
   renderIconButtonIcon,
   type IconButtonIconName,
@@ -195,7 +197,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
     .join(' ');
 
   const button = (
-    <button
+    <CoreIconButton
       ref={ref}
       type={type}
       className={buttonClassName}
@@ -205,12 +207,12 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
       }
       data-icon-button-role={role}
       data-press={usesGlassPress ? pressState : undefined}
-      aria-label={ariaLabel}
+      ariaLabel={ariaLabel}
       aria-pressed={props['aria-pressed'] ?? (resolvedActive ? true : undefined)}
-      aria-busy={loading ? true : undefined}
+      busy={loading}
       data-active={resolvedActive ? 'true' : undefined}
       data-loading={loading ? 'true' : undefined}
-      disabled={isInteractionDisabled}
+      disabled={disabled}
       onPointerDown={mergeHandlers(pressHandlers.onPointerDown, onPointerDown)}
       onPointerUp={mergeHandlers(pressHandlers.onPointerUp, onPointerUp)}
       onPointerLeave={mergeHandlers(pressHandlers.onPointerLeave, onPointerLeave)}
@@ -224,7 +226,7 @@ export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(functio
         {resolvedIcon}
       </span>
       {showBadge ? <span className={styles.badge}>{resolvedBadge}</span> : null}
-    </button>
+    </CoreIconButton>
   );
 
   // overflow: visible — layout host uses display:contents so legacy feature mixins cannot paint over the glass shell.

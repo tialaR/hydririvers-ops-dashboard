@@ -1,7 +1,7 @@
-import { getPhoneCountries } from '@/features/shipper-mobile-flow/application/get-phone-countries';
-import { RegisterScreen } from '@/features/shipper-mobile-flow/screens/register-screen';
+import { getAuthPhoneCountries } from '@/features/auth/application/get-auth-phone-countries';
+import { RegisterScreen } from '@/features/auth/screens/register-screen';
 
 export default async function RegisterPage() {
-  const phoneCountries = await getPhoneCountries();
+  const phoneCountries = await getAuthPhoneCountries();
   return <RegisterScreen phoneCountries={phoneCountries} />;
 }

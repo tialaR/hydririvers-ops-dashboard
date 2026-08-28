@@ -1,0 +1,115 @@
+@use '../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.nav
+  // removed missing mixin: shipper-glass
+  position: fixed
+  left: var(--space-4)
+  right: var(--space-4)
+  bottom: calc(var(--bottom-nav-float-gap) + env(safe-area-inset-bottom, 0px))
+  z-index: 30
+  height: var(--bottom-nav-h)
+  min-height: var(--bottom-nav-h)
+  max-width: calc(var(--screen-w) - var(--space-8))
+  margin-inline: auto
+  display: grid
+  grid-template-columns: repeat(5, 1fr)
+  border-radius: var(--radius-xl)
+  box-shadow: var(--hy-shipper-shadow-md)
+  overflow: hidden
+
+.item
+  // removed missing mixin: shipper-pressable
+  // removed missing mixin: shipper-focus
+  position: relative
+  display: flex
+  flex-direction: column
+  align-items: center
+  justify-content: center
+  gap: 0.125rem
+  min-height: var(--touch-min)
+  padding: var(--space-2) var(--space-1)
+  color: var(--hy-shipper-muted)
+  text-decoration: none
+  font-size: clamp(0.625rem, 2.6vw, 0.75rem)
+  font-weight: 600
+  border-radius: var(--radius-md)
+
+.itemActive
+  color: var(--hy-shipper-text)
+
+  &::before
+    content: ''
+    position: absolute
+    top: var(--space-1)
+    width: 1.5rem
+    height: 0.1875rem
+    border-radius: var(--radius-pill)
+    background: var(--hy-shipper-primary)
+
+  .icon
+    color: var(--hy-shipper-primary)
+    transform: translateY(-0.0625rem)
+
+.icon
+  width: var(--bottom-nav-icon)
+  height: var(--bottom-nav-icon)
+  transition: color 0.18s ease, transform 0.18s ease
+
+  @media (prefers-reduced-motion: reduce)
+    transition: none
+
+.label
+  line-height: 1.15
+  text-align: center
+  max-width: 100%
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+// SO-001-WAVE10:VISIBLE-NAV
+.nav
+  background: color-mix(in srgb, var(--hy-shipper-surface) 90%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-border-strong) 72%, transparent)
+  backdrop-filter: blur(1rem) saturate(118%)
+  -webkit-backdrop-filter: blur(1rem) saturate(118%)
+
+.itemActive
+  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
+
+@media (min-width: 48rem)
+  .nav
+    left: 50%
+    right: auto
+    width: min(34rem, calc(100% - 4rem))
+    transform: translateX(-50%)
+
+@media (min-width: 80rem)
+  .nav
+    left: 1.25rem
+    right: auto
+    top: 50%
+    bottom: auto
+    width: 4.75rem
+    max-width: 4.75rem
+    height: auto
+    min-height: 0
+    transform: translateY(-50%)
+    grid-template-columns: 1fr
+    grid-auto-rows: minmax(4.5rem, auto)
+    border-radius: 1.75rem
+    padding: 0.5rem
+    overflow: visible
+
+  .item
+    min-height: 4.5rem
+    border-radius: 1.25rem
+
+  .itemActive::before
+    top: 50%
+    left: -0.5rem
+    width: 0.1875rem
+    height: 1.5rem
+    transform: translateY(-50%)
+
+  .label
+    font-size: 0.625rem

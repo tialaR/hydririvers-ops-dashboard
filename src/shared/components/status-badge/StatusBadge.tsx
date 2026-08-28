@@ -1,7 +1,7 @@
 'use client';
 
 import type { HTMLAttributes, ReactNode } from 'react';
-
+import { StatusBadge as CoreStatusBadge } from '@/shared/design-system/core/status-badge';
 import styles from './StatusBadge.module.scss';
 import {
   STATUS_BADGE_DATA_ATTR,
@@ -44,21 +44,19 @@ export function StatusBadge({
   const resolvedStatus = STATUS_BADGE_DATA_ATTR[status] ? status : 'unknown';
 
   return (
-    <span
+    <CoreStatusBadge
       className={[
         styles.badge,
         styles[`size_${size}`],
         showDot ? styles.withDot : styles.noDot,
         className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      data-status={STATUS_BADGE_DATA_ATTR[resolvedStatus]}
-      data-status-tone={STATUS_BADGE_TONE[resolvedStatus]}
+      ].filter(Boolean).join(' ')}
+      statusKey={STATUS_BADGE_DATA_ATTR[resolvedStatus]}
+      tone={STATUS_BADGE_TONE[resolvedStatus]}
       aria-label={ariaLabel}
       {...props}
     >
       {label}
-    </span>
+    </CoreStatusBadge>
   );
 }

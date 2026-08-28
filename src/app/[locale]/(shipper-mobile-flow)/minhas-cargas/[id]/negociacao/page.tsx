@@ -1,14 +1,10 @@
-import { notFound } from 'next/navigation';
-import { NegotiationScreen } from '@/features/shipper-mobile-flow/screens/negotiation-screen';
-import { getShipperCargoById } from '@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id';
-import { getShipperOffers } from '@/features/shipper-mobile-flow/application/get-shipper-offers';
-
-type PageProps = { params: Promise<{ id: string }> };
-
-export default async function NegotiationPage({ params }: PageProps) {
+import { getOwnedCargoById } from '@/features/cargo/owned/application/get-owned-cargo-by-id';
+import { getOwnedCargoOffers } from '@/features/negotiations/application/get-owned-cargo-offers';
+import { MobileNegotiationScreen } from '@/features/negotiations/components/mobile-negotiation/mobile-negotiation-screen';
+export default async function NegotiationPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const cargo = await getShipperCargoById(id);
-  if (!cargo) notFound();
-  const offers = await getShipperOffers(id);
-  return <NegotiationScreen cargo={cargo} offers={offers} />;
+  const cargo = await getOwnedCargoById(id);
+  if (!cargo) return null;
+  const offers = await getOwnedCargoOffers(id);
+  return <MobileNegotiationScreen cargo={cargo} offers={offers} />;
 }

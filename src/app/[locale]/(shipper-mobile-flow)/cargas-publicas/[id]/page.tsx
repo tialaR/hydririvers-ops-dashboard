@@ -1,7 +1,8 @@
 import { notFound } from 'next/navigation';
 
-import { getPublicCargoById } from '@/features/shipper-mobile-flow/application/get-public-cargo-by-id';
-import { PublicCargoDetailScreen } from '@/features/shipper-mobile-flow/screens/public-cargo-detail-screen';
+import { getPublicCargoById } from '@/features/cargo/public/application/get-public-cargo-by-id';
+
+import { PublicCargoDetailRouteClient } from './public-cargo-detail-route-client';
 
 type PublicCargoDetailPageProps = {
   params: Promise<{ id: string }>;
@@ -15,5 +16,5 @@ export default async function PublicCargoDetailPage({ params }: PublicCargoDetai
     notFound();
   }
 
-  return <PublicCargoDetailScreen cargo={cargo} />;
+  return <PublicCargoDetailRouteClient cargo={cargo} />;
 }

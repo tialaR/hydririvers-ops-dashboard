@@ -7,17 +7,17 @@ vi.mock('next/navigation', () => ({
   notFound: mockNotFound
 }));
 
-vi.mock('@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id', () => ({
-  getShipperCargoById: vi.fn()
+vi.mock('@/features/cargo/owned/application/get-owned-cargo-by-id', () => ({
+  getOwnedCargoById: vi.fn()
 }));
 
-vi.mock('@/features/shipper-mobile-flow/screens/cargo-detail-screen', () => ({
-  CargoDetailScreen: ({ cargo }: { cargo: { id: string; code: string } }) => (
+vi.mock('@/app/[locale]/(shipper-mobile-flow)/minhas-cargas/[id]/owned-cargo-detail-route-client', () => ({
+  OwnedCargoDetailRouteClient: ({ cargo }: { cargo: { id: string; code: string } }) => (
     <div data-testid="shipper-cargo-detail" data-id={cargo.id} data-code={cargo.code} />
   )
 }));
 
-import { getShipperCargoById } from '@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id';
+import { getOwnedCargoById } from '@/features/cargo/owned/application/get-owned-cargo-by-id';
 import MyCargoDetailPage from '@/app/[locale]/(shipper-mobile-flow)/minhas-cargas/[id]/page';
 
 const cargo = {
@@ -38,11 +38,11 @@ const cargo = {
 describe('minhas-cargas/[id] page (shipper mobile flow)', () => {
   beforeEach(() => {
     mockNotFound.mockReset();
-    vi.mocked(getShipperCargoById).mockReset();
+    vi.mocked(getOwnedCargoById).mockReset();
   });
 
   it('renderiza detalhe quando a carga mock existe', async () => {
-    vi.mocked(getShipperCargoById).mockResolvedValue(cargo);
+    vi.mocked(getOwnedCargoById).mockResolvedValue(cargo);
 
     const tree = await MyCargoDetailPage({ params: Promise.resolve({ id: cargo.id }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
@@ -53,7 +53,7 @@ describe('minhas-cargas/[id] page (shipper mobile flow)', () => {
   });
 
   it('dispara notFound quando a carga não existe no mock', async () => {
-    vi.mocked(getShipperCargoById).mockResolvedValue(undefined);
+    vi.mocked(getOwnedCargoById).mockResolvedValue(undefined);
     mockNotFound.mockImplementation(() => {
       throw new Error('notFound');
     });

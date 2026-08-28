@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 const filterSheetSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
 );
 
 describe('PublicCargasMobileFilterSheet', () => {

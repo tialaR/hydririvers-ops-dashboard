@@ -3,22 +3,22 @@ import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { PublicCargoActionSheetContent } from '@/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet-content';
+import { PublicCargoActionSheetContent } from '@/features/cargo/public/components/public-cargas-mobile/public-cargo-action-sheet-content';
 import type { CargoLabV2 } from '@/features/cargo/types/cargo-lab-v2.types';
 
 const actionSheetSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargo-action-sheet.tsx',
 );
 
 const filterSheetSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
 );
 
 const contentSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet-content.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargo-action-sheet-content.tsx',
 );
 
 vi.mock('next-intl', () => ({

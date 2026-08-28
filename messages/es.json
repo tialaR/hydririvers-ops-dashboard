@@ -3057,7 +3057,9 @@
     "header": {
       "back": "Volver",
       "avatarMenu": "Abrir menú de cuenta",
-      "notifications": "Notificaciones"
+      "notifications": "Notificaciones",
+      "hubTitle": "Centro operativo",
+      "opsMode": "Modo operación"
     },
     "bottomNav": {
       "label": "Navegación principal",
@@ -3115,6 +3117,11 @@
     "auth": {
       "login": {
         "title": "Entrar",
+        "subtitle": "Acceso seguro para su operación fluvial",
+        "highlightsAria": "Destacados de seguridad y operación",
+        "highlightAudit": "Rastro auditable",
+        "highlightEta": "ETA confiable",
+        "highlightSecurity": "Sesión protegida",
         "country": "País",
         "phone": "Teléfono",
         "phonePlaceholder": "DDD + número",
@@ -3128,6 +3135,12 @@
       },
       "register": {
         "title": "Registrar embarcadora",
+        "subtitle": "Registro rápido con verificación OTP",
+        "highlightsAria": "Destacados del registro operativo",
+        "highlightIdentity": "Identidad de la empresa",
+        "highlightOps": "Lista para operar",
+        "highlightOtp": "Verificación OTP",
+        "stepLabel": "Paso 1 de 2 · Datos de la empresa",
         "company": "Nombre de la empresa",
         "responsible": "Responsable",
         "country": "País / telefone",
@@ -3142,6 +3155,11 @@
       "otp": {
         "title": "Verificar OTP",
         "subtitle": "Ingrese el código enviado al teléfono",
+        "secureBadge": "Verificación segura",
+        "highlightsAria": "Destacados de seguridad del OTP",
+        "highlightFraud": "Protección antifraude",
+        "highlightTraceability": "Trazabilidad de acceso",
+        "highlightSession": "Sesión validada",
         "digit": "Dígito {index}",
         "resendHint": "Reenviar em 00:32",
         "submit": "Verificar",
@@ -3160,7 +3178,14 @@
       "us": "Estados Unidos"
     },
     "cockpit": {
-      "title": "Hola, embarcadora",
+      "title": "Cockpit operativo",
+      "topMetaAria": "Resumen operativo superior",
+      "topMeta": {
+        "nextWindow": "Próxima ventana",
+        "nextWindowValue": "Hoy · 16:30",
+        "compliance": "Compliance",
+        "complianceValue": "97% validado"
+      },
       "filters": {
         "all": "Todos",
         "critical": "Críticos",
@@ -3197,6 +3222,15 @@
     },
     "publicList": {
       "title": "Cargas públicas",
+      "resultsCount": "{count} rutas",
+      "emptyTitle": "Ninguna ruta encontrada",
+      "emptyBody": "Ajuste filtros o busque otro corredor.",
+      "filtersSheet": {
+        "title": "Filtros premium",
+        "lead": "Ajuste corredor y foco operativo para refinar la lista.",
+        "clear": "Limpiar",
+        "apply": "Aplicar filtros"
+      },
       "filters": {
         "all": "Todas",
         "tapajos": "Tapajós",
@@ -3239,6 +3273,23 @@
     },
     "myCargoes": {
       "title": "Mis cargas",
+      "resultsCount": "{count} cargas",
+      "emptyTitle": "Ninguna carga en este filtro",
+      "emptyBody": "Pruebe otro filtro o limpie la búsqueda.",
+      "summaryAria": "Resumen operativo de cargas",
+      "summary": {
+        "inTransit": "En tránsito",
+        "attention": "En atención",
+        "docs": "Docs pendientes",
+        "eta": "ETA medio",
+        "etaValue": "{hours}h"
+      },
+      "filtersSheet": {
+        "title": "Filtros premium",
+        "lead": "Seleccione el recorte operativo que requiere atención.",
+        "clear": "Limpiar",
+        "apply": "Aplicar filtros"
+      },
       "newCargo": "Nueva carga",
       "filters": {
         "all": "Todas",
@@ -3288,6 +3339,22 @@
         "offers": "{count} ofertas",
         "map": "Mapa",
         "mapValue": "Abrir ruta"
+      },
+      "opsSectionAria": "Módulos operativos de la carga",
+      "opsSectionTitle": "Módulos operativos",
+      "modules": {
+        "timeline": "Timeline",
+        "timelineValue": "4 hitos activos",
+        "costs": "Costos",
+        "costsValue": "R$ 184 mil previstos",
+        "compliance": "Compliance",
+        "complianceValue": "2 validaciones pendientes",
+        "portWindow": "Ventana portuaria",
+        "portWindowValue": "24-28 jun",
+        "eta": "ETA",
+        "etaValue": "{hours}h estimadas",
+        "risk": "Riesgo compuesto",
+        "riskValue": "Hidro + docs"
       }
     },
     "map": {
@@ -3350,12 +3417,21 @@
     },
     "negotiation": {
       "title": "Negociación",
+      "heroAria": "Resumen de negociación",
+      "heroLabel": "Toma de decisión",
+      "heroBody": "{offers} ofertas disponibles para esta carga",
       "criterion": {
         "title": "Criterio sugerido",
         "body": "Priorice ETA ≤ 16h con bajo riesgo hidrológico."
       },
       "selectOffer": "Seleccionar oferta",
       "eta": "ETA {hours}h",
+      "meta": {
+        "price": "Precio por tonelada",
+        "risk": "Riesgo",
+        "low": "Bajo",
+        "medium": "Medio"
+      },
       "confirm": {
         "title": "Confirmar oferta",
         "body": "Confirma seleção de {offer}?",
@@ -3416,6 +3492,11 @@
     },
     "notifications": {
       "title": "Notificaciones",
+      "heroAria": "Resumen de notificaciones operativas",
+      "heroLabel": "Central operativa",
+      "heroValue": "{count} alertas activas",
+      "heroCritical": "{count} críticas",
+      "heroWarning": "{count} en atención",
       "items": {
         "draftLow": {
           "title": "Calado baixo",
@@ -3437,6 +3518,14 @@
     "profile": {
       "title": "Perfil",
       "menuLabel": "Configuración de cuenta",
+      "identityAria": "Identidad operativa de la cuenta",
+      "identity": {
+        "role": "Perfil",
+        "roleValue": "Embarcadora",
+        "locale": "Idioma",
+        "access": "Acceso",
+        "accessValue": "Operación privada"
+      },
       "menu": {
         "language": "Idioma",
         "theme": "Tema",

@@ -3057,7 +3057,9 @@
     "header": {
       "back": "Back",
       "avatarMenu": "Open account menu",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "hubTitle": "Operations hub",
+      "opsMode": "Ops mode"
     },
     "bottomNav": {
       "label": "Main navigation",
@@ -3115,6 +3117,11 @@
     "auth": {
       "login": {
         "title": "Sign in",
+        "subtitle": "Secure access for your waterway operations",
+        "highlightsAria": "Security and operations highlights",
+        "highlightAudit": "Auditable trail",
+        "highlightEta": "Trusted ETA",
+        "highlightSecurity": "Protected session",
         "country": "Country",
         "phone": "Phone",
         "phonePlaceholder": "Area code + number",
@@ -3128,6 +3135,12 @@
       },
       "register": {
         "title": "Register shipper",
+        "subtitle": "Quick signup with OTP verification",
+        "highlightsAria": "Operational signup highlights",
+        "highlightIdentity": "Company identity",
+        "highlightOps": "Ready to operate",
+        "highlightOtp": "OTP verification",
+        "stepLabel": "Step 1 of 2 · Company details",
         "company": "Company name",
         "responsible": "Contact person",
         "country": "Country / phone",
@@ -3142,6 +3155,11 @@
       "otp": {
         "title": "Verify OTP",
         "subtitle": "Enter the code sent to your phone",
+        "secureBadge": "Secure verification",
+        "highlightsAria": "OTP security highlights",
+        "highlightFraud": "Fraud protection",
+        "highlightTraceability": "Access traceability",
+        "highlightSession": "Validated session",
         "digit": "Digit {index}",
         "resendHint": "Resend in 00:32",
         "submit": "Verify",
@@ -3160,7 +3178,14 @@
       "us": "United States"
     },
     "cockpit": {
-      "title": "Hello, shipper",
+      "title": "Operational cockpit",
+      "topMetaAria": "Top operational summary",
+      "topMeta": {
+        "nextWindow": "Next window",
+        "nextWindowValue": "Today · 4:30 PM",
+        "compliance": "Compliance",
+        "complianceValue": "97% validated"
+      },
       "filters": {
         "all": "All",
         "critical": "Critical",
@@ -3197,6 +3222,15 @@
     },
     "publicList": {
       "title": "Public cargoes",
+      "resultsCount": "{count} routes",
+      "emptyTitle": "No routes found",
+      "emptyBody": "Adjust filters or search another corridor.",
+      "filtersSheet": {
+        "title": "Premium filters",
+        "lead": "Adjust corridor and operational focus to refine the list.",
+        "clear": "Clear",
+        "apply": "Apply filters"
+      },
       "filters": {
         "all": "All",
         "tapajos": "Tapajós",
@@ -3239,6 +3273,23 @@
     },
     "myCargoes": {
       "title": "My cargoes",
+      "resultsCount": "{count} cargoes",
+      "emptyTitle": "No cargoes in this filter",
+      "emptyBody": "Try another filter or clear the search.",
+      "summaryAria": "Operational cargo summary",
+      "summary": {
+        "inTransit": "In transit",
+        "attention": "Attention",
+        "docs": "Pending docs",
+        "eta": "Avg ETA",
+        "etaValue": "{hours}h"
+      },
+      "filtersSheet": {
+        "title": "Premium filters",
+        "lead": "Select the operational slice that needs attention.",
+        "clear": "Clear",
+        "apply": "Apply filters"
+      },
       "newCargo": "New cargo",
       "filters": {
         "all": "All",
@@ -3288,6 +3339,22 @@
         "offers": "{count} offers",
         "map": "Map",
         "mapValue": "Open route"
+      },
+      "opsSectionAria": "Cargo operational modules",
+      "opsSectionTitle": "Operational modules",
+      "modules": {
+        "timeline": "Timeline",
+        "timelineValue": "4 active milestones",
+        "costs": "Costs",
+        "costsValue": "R$ 184k forecast",
+        "compliance": "Compliance",
+        "complianceValue": "2 pending checks",
+        "portWindow": "Port window",
+        "portWindowValue": "Jun 24-28",
+        "eta": "ETA",
+        "etaValue": "{hours}h estimated",
+        "risk": "Composite risk",
+        "riskValue": "Hydro + docs"
       }
     },
     "map": {
@@ -3350,12 +3417,21 @@
     },
     "negotiation": {
       "title": "Negotiation",
+      "heroAria": "Negotiation summary",
+      "heroLabel": "Decision making",
+      "heroBody": "{offers} offers available for this cargo",
       "criterion": {
         "title": "Suggested criterion",
         "body": "Prioritize ETA ≤ 16h with low hydrology risk."
       },
       "selectOffer": "Select offer",
       "eta": "ETA {hours}h",
+      "meta": {
+        "price": "Price per ton",
+        "risk": "Risk",
+        "low": "Low",
+        "medium": "Medium"
+      },
       "confirm": {
         "title": "Confirm offer",
         "body": "Confirm selection of {offer}?",
@@ -3416,6 +3492,11 @@
     },
     "notifications": {
       "title": "Notifications",
+      "heroAria": "Operational notifications summary",
+      "heroLabel": "Operations center",
+      "heroValue": "{count} active alerts",
+      "heroCritical": "{count} critical",
+      "heroWarning": "{count} warning",
       "items": {
         "draftLow": {
           "title": "Low draft",
@@ -3437,6 +3518,14 @@
     "profile": {
       "title": "Profile",
       "menuLabel": "Account settings",
+      "identityAria": "Operational account identity",
+      "identity": {
+        "role": "Profile",
+        "roleValue": "Shipper",
+        "locale": "Locale",
+        "access": "Access",
+        "accessValue": "Private operations"
+      },
       "menu": {
         "language": "Language",
         "theme": "Theme",

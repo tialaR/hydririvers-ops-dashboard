@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import type { MobileCargoListFilters, MobileCargoListItem } from '@/features/cargo/domain/cargo-list.types';
-import { LiquidGlassBottomDock } from '@/shared/design-system/primitives/liquid-glass-bottom-dock';
-import { LiquidGlassSheet } from '@/shared/design-system/primitives/liquid-glass-sheet/liquid-glass-sheet';
+import { BottomNavigation } from '@/shared/design-system/components/bottom-navigation';
+import { BottomSheet } from '@/shared/design-system/components/bottom-sheet';
 import styles from './mobile-cargo-list-lab.module.scss';
 
 // Source-contract marker kept for legacy style tests: className={styles.sheetHeader}
@@ -916,7 +916,7 @@ function CargoCardActionSheet({
   onActionClick: (action: CargoActionItem) => void;
 }) {
   return (
-    <LiquidGlassSheet
+    <BottomSheet
       open={open}
       tone="dark"
       placement="bottom"
@@ -1023,7 +1023,7 @@ function CargoCardActionSheet({
           );
         })}
       </div>
-    </LiquidGlassSheet>
+    </BottomSheet>
   );
 }
 
@@ -1737,7 +1737,7 @@ export function MobileCargoListLab({
 
       {!isAnySheetOpen ? (
         <div className={styles.dockHost} data-testid="cargo-lab-bottom-dock">
-          <LiquidGlassBottomDock
+          <BottomNavigation
             items={dockItems}
             activeId={dockActiveId}
             tone="dark"
@@ -1760,7 +1760,7 @@ export function MobileCargoListLab({
         onActionClick={handleActionClick}
       />
 
-      <LiquidGlassSheet
+      <BottomSheet
         open={isFilterSheetOpen}
         tone="dark"
         placement="bottom"
@@ -1860,9 +1860,9 @@ export function MobileCargoListLab({
             </button>
           </div>
         </div>
-      </LiquidGlassSheet>
+      </BottomSheet>
 
-      <LiquidGlassSheet
+      <BottomSheet
         open={isMapHintOpen}
         tone="dark"
         placement="bottom"
@@ -1878,7 +1878,7 @@ export function MobileCargoListLab({
           <h2 className={styles.filterSheetTitle}>{t('mapHint.title')}</h2>
           <p className={styles.filterSheetSubtitle}>{t('mapHint.description')}</p>
         </header>
-      </LiquidGlassSheet>
+      </BottomSheet>
     </div>
   );
 }

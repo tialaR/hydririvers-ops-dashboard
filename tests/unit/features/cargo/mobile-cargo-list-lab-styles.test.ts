@@ -117,7 +117,8 @@ describe('mobile cargo list lab styles and scroll contract', () => {
     expect(source).toContain('className={styles.sheetHeader}');
     expect(source).toContain('cargo-lab-filter-sheet');
     expect(source).toContain('data-scrolled={isScrolled');
-    expect(source).toContain('LiquidGlassBottomDock');
+    expect(source).toContain('BottomNavigation');
+    expect(source).not.toContain('LiquidGlassBottomDock');
     expect(source).toContain('cargo-lab-bottom-dock');
     expect(source).not.toContain("id: 'filters'");
   });

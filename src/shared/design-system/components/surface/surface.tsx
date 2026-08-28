@@ -1,5 +1,7 @@
 import type { HTMLAttributes, ReactNode } from 'react';
 
+import { Surface as CoreSurface } from '@/shared/design-system/core/surface';
+
 import styles from './surface.module.scss';
 
 export type SurfaceTone = 'default' | 'glass' | 'elevated';
@@ -35,8 +37,8 @@ export function Surface({
     .join(' ');
 
   return (
-    <div className={classNames} {...props}>
+    <CoreSurface className={classNames} {...props}>
       {children}
-    </div>
+    </CoreSurface>
   );
 }

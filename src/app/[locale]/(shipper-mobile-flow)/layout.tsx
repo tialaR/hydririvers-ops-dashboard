@@ -1,10 +1,10 @@
 import type { ReactNode } from 'react';
 
-import { getCurrentShipperUser } from '@/features/shipper-mobile-flow/application/get-current-shipper-user';
-import { ShipperFlowProvider } from '@/features/shipper-mobile-flow/providers/shipper-flow-provider';
+import { getCurrentAuthUser } from '@/features/auth/application/get-current-auth-user';
+import { ProductShellProvider } from '@/features/product-shell/providers/product-shell-provider';
 
 export default async function ShipperMobileFlowLayout({ children }: { children: ReactNode }) {
-  const currentUser = await getCurrentShipperUser();
+  const currentUser = await getCurrentAuthUser();
 
-  return <ShipperFlowProvider currentUser={currentUser}>{children}</ShipperFlowProvider>;
+  return <ProductShellProvider currentUser={currentUser}>{children}</ProductShellProvider>;
 }

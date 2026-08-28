@@ -9,17 +9,17 @@ const bridgeSourcePath = resolve(
 
 const actionSheetSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargo-action-sheet.tsx',
 );
 
 const filterSheetSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx',
 );
 
 const actionContentSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet-content.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargo-action-sheet-content.tsx',
 );
 
 describe('CargoActionSheetBridge', () => {
@@ -43,15 +43,12 @@ describe('Public mobile bottom sheets shell parity', () => {
     const filterSource = readFileSync(filterSheetSourcePath, 'utf8');
     const actionSource = readFileSync(actionSheetSourcePath, 'utf8');
     const defaultsSource = readFileSync(
-      resolve(
-        process.cwd(),
-        'src/features/cargo/components/public-cargas-mobile/public-cargo-light-sheet-defaults.ts',
-      ),
+      resolve(process.cwd(), 'src/features/cargo/components/cargo-mobile-sheet/cargo-mobile-sheet.ts'),
       'utf8',
     );
 
-    expect(defaultsSource).toContain('publicCargoLightSheetDefaults');
-    expect(defaultsSource).toContain('publicCargoLightSheetSnapHeights');
+    expect(defaultsSource).toContain('cargoMobileSheetDefaults');
+    expect(defaultsSource).toContain('cargoMobileSheetSnapHeights');
     expect(defaultsSource).toContain("viewportAnchor: 'flush'");
     expect(defaultsSource).toContain("variant: 'light'");
     expect(defaultsSource).toContain("overlayVariant: 'light'");

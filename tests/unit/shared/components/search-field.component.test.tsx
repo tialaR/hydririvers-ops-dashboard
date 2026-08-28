@@ -9,7 +9,7 @@ import { SearchField } from '@/shared/components/search-field';
 
 const publicCargasListPath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
 );
 const searchFieldStylesPath = resolve(
   process.cwd(),

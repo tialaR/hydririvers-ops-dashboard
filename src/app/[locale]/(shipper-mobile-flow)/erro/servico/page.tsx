@@ -1,5 +1,2 @@
-import { ServiceErrorScreen } from '@/features/shipper-mobile-flow/screens/state-screens';
-
-export default function ServiceErrorPage() {
-  return <ServiceErrorScreen />;
-}
+import { ServiceErrorScreen } from '@/features/product-shell/screens/product-state-screens';
+export default function ServiceErrorPage() { return <ServiceErrorScreen />; }

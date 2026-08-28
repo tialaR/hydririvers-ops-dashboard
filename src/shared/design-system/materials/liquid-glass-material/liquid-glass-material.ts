@@ -1,11 +1,9 @@
-export const liquidGlassMaterialStyles = [
-  'ultrathin',
-  'thin',
-  'regular',
-  'thick',
-  'chrome',
-] as const;
+import {
+  glassMaterialDefaultStyle,
+  glassMaterialStyles,
+  type GlassMaterialStyle,
+} from '../glass';
 
-export type LiquidGlassMaterialStyle = (typeof liquidGlassMaterialStyles)[number];
-
-export const liquidGlassMaterialDefaultStyle: LiquidGlassMaterialStyle = 'regular';
+export const liquidGlassMaterialStyles = glassMaterialStyles;
+export type LiquidGlassMaterialStyle = GlassMaterialStyle;
+export const liquidGlassMaterialDefaultStyle: LiquidGlassMaterialStyle = glassMaterialDefaultStyle;

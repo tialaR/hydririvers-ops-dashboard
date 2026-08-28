@@ -1,13 +1,13 @@
-import { getCockpitMetrics } from '@/features/shipper-mobile-flow/application/get-cockpit-metrics';
-import { getCockpitTrendData } from '@/features/shipper-mobile-flow/application/get-cockpit-trend-data';
-import { getDefaultShipperCargoId } from '@/features/shipper-mobile-flow/application/get-default-shipper-cargo-id';
-import { CockpitScreen } from '@/features/shipper-mobile-flow/screens/cockpit-screen';
+import { getMobileCockpitMetrics } from '@/features/dashboard/application/get-mobile-cockpit-metrics';
+import { getMobileCockpitTrendData } from '@/features/dashboard/application/get-mobile-cockpit-trend-data';
+import { getMobileCockpitDefaultCargoId } from '@/features/dashboard/application/get-mobile-cockpit-default-cargo-id';
+import { MobileCockpitScreen } from '@/features/dashboard/components/mobile-cockpit/mobile-cockpit-screen';
 
 export default async function CockpitPage() {
   const [metrics, trend, defaultCargoId] = await Promise.all([
-    getCockpitMetrics(),
-    getCockpitTrendData(),
-    getDefaultShipperCargoId()
+    getMobileCockpitMetrics(),
+    getMobileCockpitTrendData(),
+    getMobileCockpitDefaultCargoId()
   ]);
-  return <CockpitScreen metrics={metrics} trend={trend} defaultCargoId={defaultCargoId} />;
+  return <MobileCockpitScreen metrics={metrics} trend={trend} defaultCargoId={defaultCargoId} />;
 }

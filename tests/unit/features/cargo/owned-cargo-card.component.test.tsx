@@ -4,7 +4,7 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
-import { OwnedCargoCard } from '@/features/cargo/components/owned-cargo-card/owned-cargo-card';
+import { OwnedCargoCard } from '@/features/cargo/owned/components/owned-cargo-card/owned-cargo-card';
 import { userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
 
 vi.mock('next-intl', () => ({
@@ -25,7 +25,7 @@ vi.mock('@/core/i18n/navigation', () => ({
 
 const ownedCargoCardSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/owned-cargo-card/owned-cargo-card.tsx',
+  'src/features/cargo/owned/components/owned-cargo-card/owned-cargo-card.tsx',
 );
 
 const cargo = userCargosMock[0]!;

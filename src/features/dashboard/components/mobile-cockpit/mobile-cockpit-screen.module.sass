@@ -1,0 +1,187 @@
+.grid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-3)
+
+.metric,
+.cockpitTopMetaCard,
+.cockpitOpsCard,
+.screenHero,
+.primaryDecision
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 24%, var(--hy-shipper-border))
+  border-radius: 1.25rem
+  background: color-mix(in srgb, var(--hy-shipper-primary) 8%, var(--hy-shipper-surface))
+  box-shadow: 0 0.75rem 2rem color-mix(in srgb, var(--hy-shipper-text) 5%, transparent)
+
+.metric
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: var(--card-priority-h)
+
+.metricValue,
+.metricLabel,
+.cockpitTopMetaLabel,
+.cockpitTopMetaValue,
+.cockpitOpsLabel,
+.cockpitOpsValue,
+.cockpitOpsHint,
+.screenHeroLabel,
+.screenHeroValue,
+.screenHeroMeta,
+.primaryDecisionLabel,
+.primaryDecisionBody,
+.criticalTitle,
+.criticalBody
+  margin: 0
+
+.metricLabel,
+.cockpitOpsHint,
+.screenHeroMeta
+  color: var(--hy-shipper-muted)
+
+.criticalBanner
+  padding: var(--space-3)
+  border: 0
+  border-left: 0.25rem solid var(--hy-shipper-danger)
+  border-radius: 0.875rem
+  background: color-mix(in srgb, var(--hy-shipper-danger) 7%, var(--hy-shipper-surface))
+
+.criticalTitle
+  font-weight: 750
+  color: var(--hy-shipper-danger)
+  margin-bottom: var(--space-1)
+
+.criticalBody
+  color: var(--hy-shipper-text)
+  line-height: 1.35
+
+.primaryDecision
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-3)
+  padding: var(--space-3) var(--space-4)
+  text-decoration: none
+  color: inherit
+  min-height: var(--card-priority-h)
+
+.primaryDecisionLabel
+  margin-bottom: var(--space-1)
+
+.primaryDecisionBody
+  font-weight: 650
+  line-height: 1.35
+
+.primaryDecisionCta
+  flex-shrink: 0
+  font-weight: 700
+  color: var(--hy-shipper-info)
+  display: inline-flex
+  align-items: center
+  gap: var(--space-1)
+
+.cockpitTopMeta,
+.cockpitOpsGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+.cockpitTopMetaCard
+  padding: var(--space-3)
+  min-height: 4.75rem
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.25rem
+
+.cockpitTopMetaLabel
+  font-size: 0.5625rem
+
+.cockpitTopMetaValue
+  font-weight: 680
+
+.cockpitOpsCard
+  min-height: 5.25rem
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.2rem
+
+.cockpitOpsValue
+  color: var(--hy-shipper-text)
+  font-weight: 730
+
+.screenHero
+  position: relative
+  z-index: 1
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  padding: var(--space-3)
+
+.screenHeroValue
+  font-weight: 760
+
+.cockpitTopMetaCard,
+.cockpitOpsCard,
+.metric,
+.cockpitOpsValue,
+.metricValue
+  font-variant-numeric: tabular-nums
+
+@media (hover: hover) and (pointer: fine)
+  .primaryDecision,
+  .cockpitTopMetaCard,
+  .cockpitOpsCard,
+  .metric
+    transition: transform var(--product-motion-standard, 220ms) ease, border-color var(--product-motion-standard, 220ms) ease, box-shadow var(--product-motion-standard, 220ms) ease
+
+  .primaryDecision:hover,
+  .cockpitTopMetaCard:hover,
+  .cockpitOpsCard:hover,
+  .metric:hover
+    transform: translateY(-0.125rem)
+    border-color: color-mix(in srgb, var(--hy-shipper-primary) 28%, var(--hy-shipper-border))
+    box-shadow: 0 1rem 2.25rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
+
+@media (min-width: 48rem)
+  .screenHero
+    padding: 1.5rem 1.75rem
+
+  .cockpitTopMeta,
+  .cockpitOpsGrid,
+  .grid
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+
+  .primaryDecision
+    padding: 1.25rem 1.5rem
+
+@media (min-width: 80rem)
+  .screenHero
+    min-height: 11rem
+    justify-content: flex-end
+    padding: 2rem 2.25rem
+
+  .cockpitTopMetaCard,
+  .cockpitOpsCard,
+  .metric
+    min-height: 6rem
+    padding: 1rem 1.125rem
+
+  .primaryDecision
+    min-height: 6rem
+    padding-inline: 1.75rem
+
+  .criticalBanner
+    padding: 1rem 1.25rem
+
+@media (prefers-reduced-motion: reduce)
+  .primaryDecision,
+  .cockpitTopMetaCard,
+  .cockpitOpsCard,
+  .metric
+    transition: none
+    transform: none
