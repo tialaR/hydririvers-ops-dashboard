@@ -17,6 +17,10 @@ export type HydroUser = {
   passwordHash?: string;
   createdAt?: string;
   updatedAt?: string;
+  /** Seeds de demo sao permanentes; registros mock sao efemeros. */
+  persistenceKind?: 'seed' | 'ephemeral';
+  /** ISO timestamp usado somente por usuarios efemeros. */
+  expiresAt?: string;
 };
 
 export type PublicHydroUser = Omit<HydroUser, 'passwordHash'>;

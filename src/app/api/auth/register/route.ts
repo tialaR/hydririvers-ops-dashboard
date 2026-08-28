@@ -1,6 +1,10 @@
 import { cookies } from 'next/headers';
 import type { HydroUser, PublicUserRole } from '@/features/auth/domain/auth.types';
-import { otpExpiresInSeconds, sessionCookieOptions } from '@/features/auth/domain/auth-constants';
+import {
+  ephemeralRegistrationTtlSeconds,
+  otpExpiresInSeconds,
+  sessionCookieOptions
+} from '@/features/auth/domain/auth-constants';
 import { registerOtpCompleteSchema, registerSchema } from '@/features/auth/domain/auth-schemas';
 import { isPhoneE164Taken } from '@/features/auth/server/find-user-by-identifier';
 import { createRegisterChallenge, verifyRegisterChallenge } from '@/features/auth/server/mock-otp-challenges';
@@ -43,7 +47,9 @@ export async function POST(request: Request) {
     }
 
     const d = verified.draft;
-    const now = new Date().toISOString();
+    const nowMs = Date.now();
+    const now = new Date(nowMs).toISOString();
+    const expiresAt = new Date(nowMs + ephemeralRegistrationTtlSeconds * 1000).toISOString();
     const user: HydroUser = {
       id: `u-${Date.now()}`,
       name: d.fullName,
@@ -56,7 +62,9 @@ export async function POST(request: Request) {
       phone: d.phone,
       phoneE164: d.phoneE164,
       createdAt: now,
-      updatedAt: now
+      updatedAt: now,
+      persistenceKind: 'ephemeral',
+      expiresAt
     };
 
     upsertUser(user);

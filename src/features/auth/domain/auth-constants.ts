@@ -16,6 +16,9 @@ export const publicUserRoles = ['shipper', 'carrier'] as const;
 /** Cookie de sessão mock (`hydrorivers_session`). */
 export const sessionMaxAgeSeconds = 60 * 60 * 24 * 7;
 
+/** TTL de usuarios criados via registro mock. Seeds/personas nunca expiram. */
+export const ephemeralRegistrationTtlSeconds = 60 * 60 * 24;
+
 export const sessionCookieOptions = {
   httpOnly: true,
   sameSite: 'lax' as const,
