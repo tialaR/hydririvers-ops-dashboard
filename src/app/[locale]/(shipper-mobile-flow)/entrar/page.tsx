@@ -1,7 +1,7 @@
-import { getPhoneCountries } from '@/features/shipper-mobile-flow/application/get-phone-countries';
-import { LoginScreen } from '@/features/shipper-mobile-flow/screens/login-screen';
+import { getAuthPhoneCountries } from '@/features/auth/application/get-auth-phone-countries';
+import { LoginScreen } from '@/features/auth/screens/login-screen';
 
 export default async function LoginPage() {
-  const phoneCountries = await getPhoneCountries();
+  const phoneCountries = await getAuthPhoneCountries();
   return <LoginScreen phoneCountries={phoneCountries} />;
 }

@@ -4,11 +4,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
-import { PublicCargasMobileList } from '@/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list';
+import { PublicCargasMobileList } from '@/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-list';
 
 const listSourcePath = resolve(
   process.cwd(),
-  'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
+  'src/features/cargo/public/components/public-cargas-mobile/public-cargas-mobile-list.tsx',
 );
 
 vi.mock('next-intl', () => ({
@@ -109,7 +109,7 @@ describe('PublicCargasMobileList', () => {
     const source = readFileSync(listSourcePath, 'utf8');
     const stylesPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+      'src/features/cargo/components/cargo-mobile-sheet/cargo-mobile-sheet.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 
@@ -142,7 +142,7 @@ describe('PublicCargasMobileList', () => {
   it('nao aplica mixin cargo sparkle-outline no botao de filtro', () => {
     const stylesPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+      'src/features/cargo/components/cargo-mobile-sheet/cargo-mobile-sheet.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 
@@ -153,7 +153,7 @@ describe('PublicCargasMobileList', () => {
   it('nao sobrescreve glass do IconButton global no fechar do filter sheet', () => {
     const stylesPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+      'src/features/cargo/components/cargo-mobile-sheet/cargo-mobile-sheet.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 
@@ -195,7 +195,7 @@ describe('PublicCargasMobileList', () => {
   it('empty state usa InformationalCard shared centralizado com respiro próprio', () => {
     const stylesPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.module.scss',
+      'src/features/cargo/components/cargo-mobile-sheet/cargo-mobile-sheet.module.scss',
     );
     const stylesSource = readFileSync(stylesPath, 'utf8');
 

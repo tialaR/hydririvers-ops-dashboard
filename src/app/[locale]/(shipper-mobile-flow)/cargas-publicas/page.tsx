@@ -1,7 +1,8 @@
-import { listPublicCargoes } from '@/features/shipper-mobile-flow/application/list-public-cargoes';
-import { PublicCargoesScreen } from '@/features/shipper-mobile-flow/screens/public-cargoes-screen';
+import { listPublicCargoes } from '@/features/cargo/public/application/list-public-cargoes';
+
+import { PublicCargoesRouteClient } from './public-cargoes-route-client';
 
 export default async function PublicCargoesPage() {
   const initialCargoes = await listPublicCargoes();
-  return <PublicCargoesScreen initialCargoes={initialCargoes} />;
+  return <PublicCargoesRouteClient initialCargoes={initialCargoes} />;
 }

@@ -1,0 +1,4 @@
+SO-001 Wave 04 applied
+UTC: 2026-08-25T08:41:37Z
+Mode: TSUNAMI
+Core: TextField + SearchField + FilterChip + StatusBadge

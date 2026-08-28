@@ -1,14 +1,16 @@
 import { notFound } from 'next/navigation';
-import { DocumentsScreen } from '@/features/shipper-mobile-flow/screens/documents-screen';
-import { getShipperCargoById } from '@/features/shipper-mobile-flow/application/get-shipper-cargo-by-id';
-import { getShipperDocuments } from '@/features/shipper-mobile-flow/application/get-shipper-documents';
+
+import { getOwnedCargoById } from '@/features/cargo/owned/application/get-owned-cargo-by-id';
+import { getOwnedCargoDocuments } from '@/features/cargo/owned/application/get-owned-cargo-documents';
+
+import { OwnedCargoDocumentsRouteClient } from './owned-cargo-documents-route-client';
 
 type PageProps = { params: Promise<{ id: string }> };
 
 export default async function DocumentsPage({ params }: PageProps) {
   const { id } = await params;
-  const cargo = await getShipperCargoById(id);
+  const cargo = await getOwnedCargoById(id);
   if (!cargo) notFound();
-  const documents = await getShipperDocuments(id);
-  return <DocumentsScreen cargo={cargo} documents={documents} />;
+  const documents = await getOwnedCargoDocuments(id);
+  return <OwnedCargoDocumentsRouteClient cargo={cargo} documents={documents} />;
 }

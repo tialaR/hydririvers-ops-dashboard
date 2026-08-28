@@ -3,6 +3,7 @@
 import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode, type PointerEvent as ReactPointerEvent } from 'react';
 import { IconButton } from '@/shared/components/icon-button';
+import { Sheet } from '@/shared/design-system/core/sheet';
 import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
 import { zIndex } from '@/shared/constants/z-index';
 import {
@@ -613,7 +614,7 @@ export function BottomSheet({
       role="presentation"
       style={overlayStyle}
     >
-      <section
+      <Sheet
         ref={sheetRef}
         className={[styles.sheet, className].filter(Boolean).join(' ')}
         data-variant={variant}
@@ -623,7 +624,7 @@ export function BottomSheet({
         data-testid="bottom-sheet-panel"
         style={sheetStyle}
         role="dialog"
-        aria-modal="true"
+        modal
         aria-label={ariaLabel}
         aria-labelledby={ariaLabel ? undefined : (labelledById ?? titleId)}
         aria-describedby={description ? (describedById ?? descriptionId) : undefined}
@@ -688,7 +689,7 @@ export function BottomSheet({
             {footer}
           </div>
         ) : null}
-      </section>
+      </Sheet>
     </div>,
     document.body
   );

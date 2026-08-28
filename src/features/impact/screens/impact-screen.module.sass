@@ -1,0 +1,44 @@
+.root
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+.highlight
+  padding: var(--space-3)
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+  gap: var(--space-2)
+  min-height: var(--card-sm-h)
+
+.highlightLabel
+  margin: 0
+  font-weight: 700
+
+.highlightValue
+  margin: 0
+  color: var(--hy-shipper-success)
+  font-size: clamp(1.25rem, 5vw, 1.75rem)
+  font-weight: 800
+
+.list
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+.row
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+  min-height: var(--card-doc-row-h)
+  padding: var(--space-3) var(--space-4)
+  border-radius: var(--radius-md)
+  border: 1px solid var(--hy-shipper-border)
+  background: var(--hy-shipper-surface)
+
+.title
+  font-weight: 650
+
+.value
+  font-weight: 700

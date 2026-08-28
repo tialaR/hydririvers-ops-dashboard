@@ -1,9 +1,15 @@
 import type { ReactNode } from 'react';
 
+import {
+  Badge as CoreBadge,
+  type BadgeDensity,
+  type BadgeTone,
+} from '@/shared/design-system/core/badge';
+
 import styles from './badge.module.scss';
 
-export type DsBadgeTone = 'neutral' | 'success' | 'warning' | 'danger' | 'info';
-export type DsBadgeDensity = 'default' | 'compact';
+export type DsBadgeTone = BadgeTone;
+export type DsBadgeDensity = BadgeDensity;
 
 export type DsBadgeProps = {
   children: ReactNode;
@@ -12,6 +18,10 @@ export type DsBadgeProps = {
   className?: string;
 };
 
+/**
+ * HydroRivers Design System skin over the product-agnostic core Badge.
+ * Existing visual classes are intentionally preserved during extraction.
+ */
 export function DsBadge({
   children,
   tone = 'neutral',
@@ -19,10 +29,12 @@ export function DsBadge({
   className = '',
 }: DsBadgeProps) {
   return (
-    <span
+    <CoreBadge
+      tone={tone}
+      density={density}
       className={`${styles.badge} ${styles[`tone_${tone}`]} ${styles[`density_${density}`]} ${className}`.trim()}
     >
       {children}
-    </span>
+    </CoreBadge>
   );
 }

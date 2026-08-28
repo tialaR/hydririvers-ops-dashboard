@@ -1,7 +1,8 @@
-import { listShipperCargoes } from '@/features/shipper-mobile-flow/application/list-shipper-cargoes';
-import { MyCargoesScreen } from '@/features/shipper-mobile-flow/screens/my-cargoes-screen';
+import { listOwnedCargoes } from '@/features/cargo/owned/application/list-owned-cargoes';
+
+import { OwnedCargoListRouteClient } from './owned-cargo-list-route-client';
 
 export default async function MyCargoesPage() {
-  const initialCargoes = await listShipperCargoes();
-  return <MyCargoesScreen initialCargoes={initialCargoes} />;
+  const initialCargoes = await listOwnedCargoes();
+  return <OwnedCargoListRouteClient initialCargoes={initialCargoes} />;
 }

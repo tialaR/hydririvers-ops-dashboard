@@ -1,7 +1,7 @@
-import { getMockOtp } from '@/features/shipper-mobile-flow/application/get-mock-otp';
-import { VerifyOtpScreen } from '@/features/shipper-mobile-flow/screens/verify-otp-screen';
+import { getMockAuthOtp } from '@/features/auth/application/get-mock-auth-otp';
+import { VerifyOtpScreen } from '@/features/auth/screens/verify-otp-screen';
 
 export default async function VerifyOtpPage() {
-  const mockOtp = await getMockOtp();
+  const mockOtp = await getMockAuthOtp();
   return <VerifyOtpScreen mockOtp={mockOtp} />;
 }

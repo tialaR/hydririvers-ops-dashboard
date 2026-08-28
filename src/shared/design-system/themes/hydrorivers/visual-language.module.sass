@@ -1,0 +1,14 @@
+.theme
+  --product-density-compact: 0.875rem
+  --product-density-comfortable: 1rem
+  --product-radius-control: 0.875rem
+  --product-radius-surface: 1.25rem
+  --product-motion-fast: 140ms
+  --product-motion-standard: 220ms
+  --product-motion-emphasis: 360ms
+
+@media (prefers-reduced-motion: reduce)
+  .theme
+    --product-motion-fast: 0ms
+    --product-motion-standard: 0ms
+    --product-motion-emphasis: 0ms

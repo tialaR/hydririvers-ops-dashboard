@@ -9,12 +9,12 @@ import {
   deriveOwnedCargoProcessSteps,
   deriveOwnedCargoRiskItems,
 } from '@/features/cargo/domain/derive-owned-cargo-detail';
-import { OwnedCargoDocumentsSheet } from '@/features/cargo/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet';
-import { OwnedCargoMapSheet } from '@/features/cargo/components/owned-cargo-map-sheet/owned-cargo-map-sheet';
-import { OwnedCargoProcessSheet } from '@/features/cargo/components/owned-cargo-process-sheet/owned-cargo-process-sheet';
-import { OwnedCargoRisksSheet } from '@/features/cargo/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet';
-import { OwnedCargoTimelineSheet } from '@/features/cargo/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet';
-import { OwnedCargoTrackingSheet } from '@/features/cargo/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet';
+import { OwnedCargoDocumentsSheet } from '@/features/cargo/owned/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet';
+import { OwnedCargoMapSheet } from '@/features/cargo/owned/components/owned-cargo-map-sheet/owned-cargo-map-sheet';
+import { OwnedCargoProcessSheet } from '@/features/cargo/owned/components/owned-cargo-process-sheet/owned-cargo-process-sheet';
+import { OwnedCargoRisksSheet } from '@/features/cargo/owned/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet';
+import { OwnedCargoTimelineSheet } from '@/features/cargo/owned/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet';
+import { OwnedCargoTrackingSheet } from '@/features/cargo/owned/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet';
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => {
@@ -41,7 +41,7 @@ vi.mock('@/shared/components/bottom-sheet', () => ({
     ),
 }));
 
-vi.mock('@/features/cargo/components/owned-cargo-sheet-defaults/owned-cargo-sheet-defaults', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-sheet-defaults/owned-cargo-sheet-defaults', () => ({
   ownedCargoSheetDefaults: {},
   ownedCargoSheetPortalAttributes: {},
   ownedCargoSheetSnapHeights: [],

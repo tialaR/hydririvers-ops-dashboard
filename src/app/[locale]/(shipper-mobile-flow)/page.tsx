@@ -1,7 +1,7 @@
-import { getLandingChartPoints } from '@/features/shipper-mobile-flow/application/get-landing-chart-points';
-import { LandingScreen } from '@/features/shipper-mobile-flow/screens/landing-screen';
+import { getShipperLandingChartPoints } from '@/features/home/application/get-shipper-landing-chart-points';
+import { ShipperLandingScreen } from '@/features/home/components/shipper-landing/shipper-landing-screen';
 
 export default async function ShipperLandingPage() {
-  const chartPoints = await getLandingChartPoints();
-  return <LandingScreen chartPoints={chartPoints} />;
+  const chartPoints = await getShipperLandingChartPoints();
+  return <ShipperLandingScreen chartPoints={chartPoints} />;
 }

@@ -1,5 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
+import { IconButton as CoreIconButton } from '@/shared/design-system/core/icon-button';
+
 import styles from './icon-button.module.scss';
 
 export type DsIconButtonSize = 'sm' | 'md' | 'lg';
@@ -24,8 +26,9 @@ export function DsIconButton({
   ...props
 }: DsIconButtonProps) {
   return (
-    <button
+    <CoreIconButton
       type={type}
+      ariaLabel={ariaLabel}
       className={[
         styles.button,
         styles[`size_${size}`],
@@ -35,13 +38,12 @@ export function DsIconButton({
       ]
         .filter(Boolean)
         .join(' ')}
-      aria-label={ariaLabel}
       aria-pressed={props['aria-pressed'] ?? (active ? true : undefined)}
       {...props}
     >
       <span className={styles.icon} aria-hidden>
         {icon}
       </span>
-    </button>
+    </CoreIconButton>
   );
 }

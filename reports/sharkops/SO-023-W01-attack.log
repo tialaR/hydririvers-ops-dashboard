@@ -1,0 +1,62 @@
+=== SHARKOPS ATTACK SO-023/W01 ===
+root: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard
+started: 2026-08-28 00:22:45
+[operational-map-create-cargo-ownership] PASS
+ shipper-mobile-flow files: 18
+ external persona consumers: 0
+ waterway-map/cargo -> shipper-mobile-flow dependency: 0
+ legacy shared-ui stylesheet: retired
+[persona-god-feature] PASS
+ frozen feature files: 139; current: 18
+ frozen external consumers: 21; current: 0
+ rule: shipper-mobile-flow may shrink, but it cannot gain new files or new consumers
+ rule: shared cannot import persona-specific feature code
+[shared-ui-god-stylesheet] PASS
+ frozen lines: 1504; current: retired
+ frozen consumers: 16; current: 0
+ rule: shared-ui.module.sass may shrink, never grow
+ rule: features/cargo cannot consume persona shared styles
+[SO-023/W01] APPLIED
+=== SO-023/W01 ARCHITECTURE CONTRACTS ===
+[operational-map-create-cargo-ownership] PASS
+ shipper-mobile-flow files: 18
+ external persona consumers: 0
+ waterway-map/cargo -> shipper-mobile-flow dependency: 0
+ legacy shared-ui stylesheet: retired
+[persona-god-feature] PASS
+ frozen feature files: 139; current: 18
+ frozen external consumers: 21; current: 0
+ rule: shipper-mobile-flow may shrink, but it cannot gain new files or new consumers
+ rule: shared cannot import persona-specific feature code
+[shared-ui-god-stylesheet] PASS
+ frozen lines: 1504; current: retired
+ frozen consumers: 16; current: 0
+ rule: shared-ui.module.sass may shrink, never grow
+ rule: features/cargo cannot consume persona shared styles
+[auth-closeout] PASS
+ auth read spine + login/register/OTP presentation: features/auth ownership
+ persona auth compatibility adapters: 0
+ features/auth -> shipper-mobile-flow dependency: 0
+ auth routes consume canonical auth screens directly
+ dead persona authentication state: absent
+ shell identity/profile concerns remain explicitly outside SO-017 closeout
+node:fs:441
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass'
+    at readFileSync (node:fs:441:20)
+    at file:///Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/.sharkops/contracts/verify-notification-capability-extraction.mjs:82:22
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass'
+}
+
+Node.js v22.17.0
+=== SHARKOPS RESULT: RED ===
+Stopped safely. Report: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/sharkops/SO-023-W01-attack.log
+Rollback: bash /Users/tialarocha/Downloads/HYDRORIVERS-SO023-WAVE01-OPERATIONAL-MAP-CREATE-CARGO-OWNERSHIP/rollback.sh

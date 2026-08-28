@@ -1,0 +1,16 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd();
+const persona='src/features/shipper-mobile-flow';
+const abs=p=>path.join(root,p);
+const fail=m=>{console.error(`[final-persona-collapse] FAIL: ${m}`);process.exit(1)};
+const walk=dir=>{const a=abs(dir);if(!fs.existsSync(a))return[];return fs.readdirSync(a,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(dir,e.name)):[path.join(dir,e.name)]);};
+if(fs.existsSync(abs(persona))) fail('legacy shipper-mobile-flow feature directory still exists');
+const refs=walk('src').filter(p=>/\.(ts|tsx|js|mjs|sass|scss)$/.test(p)&&fs.readFileSync(abs(p),'utf8').includes('@/features/shipper-mobile-flow'));
+if(refs.length) fail(`source still references retired persona feature: ${refs.join(', ')}`);
+const tests=walk('tests').filter(p=>/\.(ts|tsx|js|mjs)$/.test(p)&&fs.readFileSync(abs(p),'utf8').includes('@/features/shipper-mobile-flow'));
+if(tests.length) fail(`tests still reference retired persona feature: ${tests.join(', ')}`);
+console.log('[final-persona-collapse] PASS');
+console.log(' shipper-mobile-flow directory: retired');
+console.log(' external persona consumers: 0');
+console.log(' source/test references to persona feature: 0');

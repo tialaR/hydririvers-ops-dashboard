@@ -68,7 +68,7 @@ import {
   HydroRouteTrackingMapSvg
 } from '@/features/dashboard/components/operations-board/tracking-map/hydro-route-tracking-map';
 import { buildVisualCargoPool } from '@/features/cargo/data/build-visual-cargo-pool';
-import { PublicCargasMobileList } from '@/features/cargo/components/public-cargas-mobile';
+import { PublicCargasMobileList } from '@/features/cargo/public/components/public-cargas-mobile';
 import { getVesselVisual } from '@/features/cargo-market/components/cargo-detail/cargo-vessel-visual';
 import {
   getCargoWaterwayTracking,

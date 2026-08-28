@@ -1,0 +1,70 @@
+@use '../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.bar
+  display: flex
+  align-items: center
+  gap: var(--space-2)
+  padding: 0 var(--space-3)
+  border-radius: var(--radius-lg)
+  min-height: var(--search-h)
+  height: var(--search-h)
+
+.input
+  flex: 1
+  border: 0
+  background: transparent
+  color: var(--hy-shipper-text)
+  font-size: clamp(0.875rem, 3vw, 1rem)
+  outline: none
+  min-width: 0
+
+  &::placeholder
+    color: var(--hy-shipper-muted)
+
+.filterBtn
+  width: var(--touch-comfort)
+  height: var(--touch-comfort)
+  flex-shrink: 0
+  border-radius: var(--radius-pill)
+  border: 0
+  background: var(--hy-shipper-surface-secondary)
+  color: var(--hy-shipper-text)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  cursor: pointer
+
+.chips
+  display: flex
+  gap: var(--space-2)
+  overflow-x: auto
+  padding-bottom: var(--space-1)
+  -webkit-overflow-scrolling: touch
+  scrollbar-width: none
+
+  &::-webkit-scrollbar
+    display: none
+
+.chip
+  flex-shrink: 0
+  height: var(--chip-h)
+  min-height: var(--chip-h)
+  padding: 0 var(--space-3)
+  border-radius: var(--radius-pill)
+  font-weight: 600
+  color: var(--hy-shipper-muted)
+  cursor: pointer
+  border: 1px solid var(--hy-shipper-glass-border)
+  display: inline-flex
+  align-items: center
+
+.chipActive
+  color: var(--hy-shipper-text)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 14%, var(--hy-shipper-surface))
+  border-color: color-mix(in srgb, var(--hy-shipper-primary) 35%, var(--hy-shipper-glass-border))
+  font-weight: 700
+
+.stack
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)

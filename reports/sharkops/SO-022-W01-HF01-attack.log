@@ -1,0 +1,49 @@
+=== SHARKOPS ATTACK SO-022/W01/HF01 ===
+root: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard
+started: 2026-08-27 23:55:17
+[negotiation-profile-states-ownership] PASS
+ shipper-mobile-flow files: 27
+ external persona consumers: 3
+ canonical owners -> shipper-mobile-flow dependency: 0
+[SO-022/W01/HF01] APPLIED: verifier corrected to canonical auth contract name; production tree unchanged.
+=== SO-022/W01/HF01 ARCHITECTURE CONTRACTS ===
+[negotiation-profile-states-ownership] PASS
+ shipper-mobile-flow files: 27
+ external persona consumers: 3
+ canonical owners -> shipper-mobile-flow dependency: 0
+[persona-god-feature] PASS
+ frozen feature files: 139; current: 27
+ frozen external consumers: 21; current: 3
+ rule: shipper-mobile-flow may shrink, but it cannot gain new files or new consumers
+ rule: shared cannot import persona-specific feature code
+[shared-ui-god-stylesheet] PASS
+ frozen lines: 1504; current: 891
+ frozen consumers: 16; current: 1
+ rule: shared-ui.module.sass may shrink, never grow
+ rule: features/cargo cannot consume persona shared styles
+[auth-closeout] PASS
+ auth read spine + login/register/OTP presentation: features/auth ownership
+ persona auth compatibility adapters: 0
+ features/auth -> shipper-mobile-flow dependency: 0
+ auth routes consume canonical auth screens directly
+ dead persona authentication state: absent
+ shell identity/profile concerns remain explicitly outside SO-017 closeout
+node:fs:441
+    return binding.readFileUtf8(path, stringToFlags(options.flag));
+                   ^
+
+Error: ENOENT: no such file or directory, open '/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/src/features/shipper-mobile-flow/data/repositories/repository-provider.ts'
+    at readFileSync (node:fs:441:20)
+    at file:///Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/.sharkops/contracts/verify-notification-capability-extraction.mjs:66:28
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/src/features/shipper-mobile-flow/data/repositories/repository-provider.ts'
+}
+
+Node.js v22.17.0
+=== SHARKOPS RESULT: RED ===
+Stopped safely. Report: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/sharkops/SO-022-W01-HF01-attack.log

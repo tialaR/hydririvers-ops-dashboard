@@ -1,0 +1,301 @@
+=== SO-001 MORDIDA 03 — DUPLICATE AUTOPSY ===
+
+
+==================================================
+CONCEPT: bottom-sheet
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass
+src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.tsx
+src/shared/components/bottom-sheet/BottomSheet.module.scss
+src/shared/components/bottom-sheet/BottomSheet.tsx
+src/shared/components/bottom-sheet/README.md
+src/shared/components/bottom-sheet/bottom-sheet-snap-math.ts
+src/shared/components/bottom-sheet/index.ts
+src/shared/ui/bottom-sheet/bottom-sheet.tsx
+src/shared/ui/bottom-sheet/index.ts
+
+--- IMPORT COUNT ---
+      33
+
+--- DIRECT IMPORTS ---
+src/features/cargo-market/components/cargo-list/cargo-list.tsx:8:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+src/features/cargo-market/components/my-cargoes-list/my-cargoes-list.tsx:15:import { BOTTOM_SHEET_TRANSITION_MS } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet.tsx:6:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-map-sheet/owned-cargo-map-sheet.tsx:7:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet.tsx:5:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet.tsx:5:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-sheet-defaults/owned-cargo-sheet-defaults.ts:3:import type { BottomSheetProps, BottomSheetSnapHeights } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-process-sheet/owned-cargo-process-sheet.tsx:9:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/public-cargas-mobile/public-cargo-light-sheet-defaults.ts:3:import type { BottomSheetProps, BottomSheetSnapHeights } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx:14:import { BOTTOM_SHEET_TRANSITION_MS } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/public-cargas-mobile/public-cargo-action-sheet.tsx:7:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-filter-sheet.tsx:8:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-mobile-filter-sheet/owned-cargo-mobile-filter-sheet.tsx:16:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet.tsx:5:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/cargo/components/cargo-action-sheet/cargo-action-sheet-bridge.tsx:16:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx:23:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/features/waterway-map/components/mobile/mobile-route-sheet.tsx:6:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+src/shared/ui/bottom-sheet/bottom-sheet.tsx:5:} from '@/shared/components/bottom-sheet';
+src/shared/ui/bottom-sheet/bottom-sheet.tsx:12:} from '@/shared/components/bottom-sheet';
+src/shared/layout/app-header/app-header.tsx:11:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+src/shared/layout/admin-chrome/admin-chrome.tsx:63:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+src/shared/components/bottom-sheet/README.md:24:import { BottomSheet } from '@/shared/components/bottom-sheet';
+src/shared/components/bottom-sheet/README.md:72:Preferir `@/shared/components/bottom-sheet`. O caminho `@/shared/ui` reexporta o mesmo componente (compatibilidade).
+tests/unit/features/cargo/owned-cargo-sheets.test.ts:34:vi.mock('@/shared/components/bottom-sheet', () => ({
+tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx:53:vi.mock('@/shared/components/bottom-sheet', () => ({
+tests/unit/features/cargo/cargo-action-sheet-bridge.test.ts:29:    expect(source).toContain("from '@/shared/components/bottom-sheet/BottomSheet'");
+tests/unit/features/cargo/cargo-action-sheet-bridge.test.ts:61:      expect(source).toContain("from '@/shared/components/bottom-sheet'");
+tests/unit/features/waterway-map/mobile-route-sheet-shell.test.ts:12:    expect(source).toContain("from '@/shared/components/bottom-sheet/BottomSheet'");
+tests/unit/features/waterway-map/mobile-route-sheet.test.tsx:24:vi.mock('@/shared/components/bottom-sheet/BottomSheet', () => ({
+tests/unit/shared/components/bottom-sheet.test.ts:6:} from '@/shared/components/bottom-sheet/BottomSheet';
+tests/unit/shared/components/bottom-sheet.test.ts:11:} from '@/shared/components/bottom-sheet/bottom-sheet-snap-math';
+tests/unit/shared/components/bottom-sheet.component.test.tsx:6:import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+
+==================================================
+CONCEPT: button
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.tsx
+src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass
+src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx
+src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass
+src/features/shipper-mobile-flow/components/primary-button/primary-button.tsx
+src/shared/components/button/Button.module.scss
+src/shared/components/button/Button.tsx
+src/shared/components/button/index.ts
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-glass-step1-controls.bak
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-glass-step1b-controls.bak
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-global-glass-fix.bak
+src/shared/components/icon-button/icon-button-icons.tsx
+src/shared/components/icon-button/icon-button.module.sass
+src/shared/components/icon-button/icon-button.tsx
+src/shared/components/icon-button/use-icon-button-press.ts
+src/shared/design-system/components/icon-button/icon-button.module.scss
+src/shared/design-system/components/icon-button/icon-button.tsx
+src/shared/ui/button/button.module.scss
+src/shared/ui/button/button.tsx
+src/shared/ui/button/index.ts
+
+--- IMPORT COUNT ---
+      21
+
+--- DIRECT IMPORTS ---
+src/features/home/components/hydro-hero/hydro-hero.tsx:3:import { Button } from '@/shared/ui/button/button';
+src/features/cargo-market/components/cargo-detail/cargo-detail.tsx:8:import { Button } from '@/shared/ui/button/button';
+src/features/cargo-market/components/cargo-detail/cargo-detail.tsx:9:import buttonStyles from '@/shared/ui/button/button.module.scss';
+src/features/cargo-market/components/my-cargoes-list/my-cargoes-list.tsx:16:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo-market/components/new-cargo-form/new-cargo-form.tsx:7:import { Button } from '@/shared/ui/button/button';
+src/features/ai-assist/components/CargoStatusAssistantCard.tsx:9:import { Button } from '@/shared/ui/button/button';
+src/features/auth/components/profile-panel/profile-panel.tsx:19:import { Button } from '@/shared/components/button';
+src/features/auth/components/auth-form/auth-form.tsx:22:import { Button } from '@/shared/components/button';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx:12:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx.before-hy-glass-controls.bak:12:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo/components/cargo-filter-sheet-content/CargoFilterSheetContent.tsx:28:import { Button } from '@/shared/components/button';
+src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx:25:import { IconButton } from '@/shared/components/icon-button';
+src/features/dashboard/components/priority-tab/priority-tab.tsx:20:import { Button } from '@/shared/ui/button/button';
+src/features/tracking/components/tracking-timeline/tracking-timeline.tsx:6:import { Button } from '@/shared/ui/button/button';
+src/shared/layout/mobile-product-shell/mobile-product-header.tsx:11:import { ICON_BUTTON_ICON_SIZE, IconButton } from '@/shared/components/icon-button';
+src/shared/components/bottom-sheet/BottomSheet.tsx:5:import { IconButton } from '@/shared/components/icon-button';
+src/shared/design-system/components/icon-button/index.ts:3: * Mobile production uses `@/shared/components/icon-button` (`glass-compact-production`).
+tests/unit/shared/layout/admin-chrome-mobile-product-shell.test.ts:31:    expect(headerSource).toContain("from '@/shared/components/icon-button'");
+tests/unit/shared/components/icon-button.component.test.tsx:10:} from '@/shared/components/icon-button';
+tests/unit/shared/components/icon-button.component.test.tsx:11:import { renderIconButtonIcon } from '@/shared/components/icon-button/icon-button-icons';
+tests/unit/shared/components/use-icon-button-press.test.ts:7:} from '@/shared/components/icon-button/use-icon-button-press';
+tests/unit/shared/components/button.component.test.tsx:5:import { Button, type ButtonProps } from '@/shared/components/button';
+tests/unit/shared/design-system/liquid-glass-button.test.tsx:4:import { LiquidGlassButton } from '@/shared/design-system/primitives/liquid-glass-button';
+
+==================================================
+CONCEPT: icon-button
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass
+src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-glass-step1-controls.bak
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-glass-step1b-controls.bak
+src/shared/components/icon-button/IconButton.module.scss.before-hy-cargas-global-glass-fix.bak
+src/shared/components/icon-button/icon-button-icons.tsx
+src/shared/components/icon-button/icon-button.module.sass
+src/shared/components/icon-button/icon-button.tsx
+src/shared/components/icon-button/index.ts
+src/shared/components/icon-button/use-icon-button-press.ts
+src/shared/design-system/components/icon-button/icon-button.module.scss
+src/shared/design-system/components/icon-button/icon-button.tsx
+src/shared/design-system/components/icon-button/index.ts
+
+--- IMPORT COUNT ---
+      10
+
+--- DIRECT IMPORTS ---
+src/features/cargo-market/components/my-cargoes-list/my-cargoes-list.tsx:16:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx:12:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo/components/public-cargas-mobile/public-cargas-mobile-list.tsx.before-hy-glass-controls.bak:12:import { IconButton } from '@/shared/components/icon-button';
+src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx:25:import { IconButton } from '@/shared/components/icon-button';
+src/shared/layout/mobile-product-shell/mobile-product-header.tsx:11:import { ICON_BUTTON_ICON_SIZE, IconButton } from '@/shared/components/icon-button';
+src/shared/components/bottom-sheet/BottomSheet.tsx:5:import { IconButton } from '@/shared/components/icon-button';
+src/shared/design-system/components/icon-button/index.ts:3: * Mobile production uses `@/shared/components/icon-button` (`glass-compact-production`).
+tests/unit/shared/layout/admin-chrome-mobile-product-shell.test.ts:31:    expect(headerSource).toContain("from '@/shared/components/icon-button'");
+tests/unit/shared/components/icon-button.component.test.tsx:10:} from '@/shared/components/icon-button';
+tests/unit/shared/components/icon-button.component.test.tsx:11:import { renderIconButtonIcon } from '@/shared/components/icon-button/icon-button-icons';
+tests/unit/shared/components/use-icon-button-press.test.ts:7:} from '@/shared/components/icon-button/use-icon-button-press';
+
+==================================================
+CONCEPT: surface
+==================================================
+--- FILES ---
+src/shared/components/surface/Surface.module.scss
+src/shared/components/surface/Surface.tsx
+src/shared/components/surface/index.ts
+src/shared/design-system/components/pressable-surface/pressable-surface.module.scss
+src/shared/design-system/components/pressable-surface/pressable-surface.tsx
+src/shared/design-system/components/surface/index.ts
+src/shared/design-system/components/surface/surface.module.scss
+src/shared/design-system/components/surface/surface.tsx
+
+--- IMPORT COUNT ---
+       6
+
+--- DIRECT IMPORTS ---
+src/features/auth/components/profile-panel/profile-panel.tsx:21:import { Surface } from '@/shared/components/surface';
+src/features/waterway-map/components/mobile/mobile-route-dock.tsx:5:import { Surface } from '@/shared/design-system/components/surface';
+src/features/waterway-map/components/mobile/mobile-route-sheet-partial-summary.tsx:17:import { Surface } from '@/shared/design-system/components/surface';
+src/features/waterway-map/components/mobile/mobile-route-sheet-content.tsx:22:import { Surface } from '@/shared/design-system/components/surface';
+tests/unit/shared/components/surface.component.test.tsx:5:import { Surface } from '@/shared/components/surface';
+tests/unit/shared/design-system/liquid-glass-surface.test.tsx:4:import { LiquidGlassSurface } from '@/shared/design-system/primitives/liquid-glass-surface';
+
+==================================================
+CONCEPT: status-badge
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass
+src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx
+src/shared/components/status-badge/StatusBadge.module.scss
+src/shared/components/status-badge/StatusBadge.tsx
+src/shared/components/status-badge/index.ts
+src/shared/components/status-badge/status-badge-utils.ts
+src/shared/design-system/components/status-badge/index.ts
+src/shared/design-system/components/status-badge/status-badge.tsx
+
+--- IMPORT COUNT ---
+       6
+
+--- DIRECT IMPORTS ---
+src/features/cargo/utils/cargo-status-semantic.ts:2:import type { StatusBadgeStatus } from '@/shared/components/status-badge';
+src/features/cargo/components/owned-cargo-card/owned-cargo-card.tsx:19:import { StatusBadge } from '@/shared/components/status-badge';
+src/features/cargo/components/cargo-lab-v2/cargo-lab-v2-status-badge.tsx:1:import { StatusBadge } from '@/shared/components/status-badge';
+src/features/cargo/domain/cargo-list.types.ts:2:import type { StatusBadgeTone } from '@/shared/design-system/components/status-badge';
+src/features/cargo/services/cargo-list.service.ts:2:import type { StatusBadgeTone } from '@/shared/design-system/components/status-badge';
+tests/unit/shared/components/status-badge.component.test.tsx:4:import { StatusBadge } from '@/shared/components/status-badge';
+
+==================================================
+CONCEPT: badge
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass
+src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx
+src/features/shipper-mobile-flow/components/risk-badge/risk-badge.module.sass
+src/features/shipper-mobile-flow/components/risk-badge/risk-badge.tsx
+src/shared/components/status-badge/StatusBadge.module.scss
+src/shared/components/status-badge/StatusBadge.tsx
+src/shared/components/status-badge/status-badge-utils.ts
+src/shared/design-system/components/badge/badge.module.scss
+src/shared/design-system/components/badge/badge.tsx
+src/shared/design-system/components/badge/index.ts
+src/shared/design-system/components/status-badge/status-badge.tsx
+src/shared/ui/badge/badge.module.scss
+src/shared/ui/badge/badge.tsx
+src/shared/ui/badge/index.ts
+
+--- IMPORT COUNT ---
+      17
+
+--- DIRECT IMPORTS ---
+src/features/negotiations/components/negotiation-board/negotiation-board.tsx:5:import { Badge } from '@/shared/ui/badge/badge';
+src/features/vessels/components/vessel-card/vessel-card.tsx:4:import { Badge } from '@/shared/ui/badge/badge';
+src/features/cargo-market/components/cargo-card/cargo-card.tsx:4:import { Badge } from '@/shared/ui/badge/badge';
+src/features/cargo-market/components/cargo-detail/cargo-detail.tsx:10:import { Badge } from '@/shared/ui/badge/badge';
+src/features/cargo-market/components/cargo-detail/cargo-detail.tsx:24:import type { BadgeProps } from '@/shared/ui/badge/badge';
+src/features/government/components/government-dashboard/government-dashboard.tsx:4:import { Badge } from '@/shared/ui/badge/badge';
+src/features/auth/components/profile-panel/profile-panel.tsx:22:import { Badge } from '@/shared/ui/badge/badge';
+src/features/cargo/utils/cargo-status-semantic.ts:2:import type { StatusBadgeStatus } from '@/shared/components/status-badge';
+src/features/cargo/components/owned-cargo-card/owned-cargo-card.tsx:19:import { StatusBadge } from '@/shared/components/status-badge';
+src/features/cargo/components/cargo-lab-v2/cargo-lab-v2-status-badge.tsx:1:import { StatusBadge } from '@/shared/components/status-badge';
+src/features/cargo/domain/cargo-list.types.ts:2:import type { StatusBadgeTone } from '@/shared/design-system/components/status-badge';
+src/features/cargo/services/cargo-list.service.ts:2:import type { StatusBadgeTone } from '@/shared/design-system/components/status-badge';
+src/features/admin/components/admin-console/admin-console.tsx:4:import { Badge } from '@/shared/ui/badge/badge';
+src/features/dashboard/components/priority-tab/priority-tab.tsx:19:import { Badge } from '@/shared/ui/badge/badge';
+src/features/waterway-map/components/mobile/mobile-offline-status-pill.tsx:5:import { DsBadge } from '@/shared/design-system/components/badge';
+src/features/waterway-map/components/mobile/mobile-route-sheet-partial-summary.tsx:16:import { DsBadge } from '@/shared/design-system/components/badge';
+src/features/waterway-map/components/mobile/mobile-route-sheet-content.tsx:21:import { DsBadge } from '@/shared/design-system/components/badge';
+tests/unit/shared/components/status-badge.component.test.tsx:4:import { StatusBadge } from '@/shared/components/status-badge';
+
+==================================================
+CONCEPT: bottom-nav
+==================================================
+--- FILES ---
+src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass
+src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx
+src/shared/components/bottom-nav/BottomNav.module.sass.before-hy-preview-global.bak
+src/shared/components/bottom-nav/BottomNav.tsx.before-hy-bottom-menu-real-v3.bak
+src/shared/components/bottom-nav/BottomNav.tsx.before-hy-preview-global.bak
+src/shared/components/bottom-nav/bottom-nav-gooey-pill.tsx.before-hy-bottom-menu-real-v3.bak
+src/shared/components/bottom-nav/bottom-nav-hy-dark-glass-class-names.ts
+src/shared/components/bottom-nav/bottom-nav-hy-dark-glass-shell.module.sass
+src/shared/components/bottom-nav/bottom-nav-hy-light-class-names.ts
+src/shared/components/bottom-nav/bottom-nav-hy-light-class-names.ts.before-hy-bottom-menu-real-v3.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-bottom-menu-preview-replace.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-bottom-menu-real-v3.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-bottom-menu-real-v3b.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-cargas-bottom-menu-real-v2.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-cargas-glass-step2-bottomnav.bak
+src/shared/components/bottom-nav/bottom-nav-hy-light-shell.module.sass.before-hy-cargas-global-glass-fix.bak
+src/shared/components/bottom-nav/bottom-nav-icons.tsx
+src/shared/components/bottom-nav/bottom-nav-items.tsx
+src/shared/components/bottom-nav/bottom-nav-light-tokens.sass
+src/shared/components/bottom-nav/bottom-nav-measurement.ts
+src/shared/components/bottom-nav/bottom-nav-motion-tokens.ts
+src/shared/components/bottom-nav/bottom-nav-motion.tsx
+src/shared/components/bottom-nav/bottom-nav-state.ts
+src/shared/components/bottom-nav/bottom-nav-v2-light-class-names.ts
+src/shared/components/bottom-nav/bottom-nav.module.sass
+src/shared/components/bottom-nav/bottom-nav.tsx
+src/shared/components/bottom-nav/index.ts
+src/shared/components/bottom-nav/index.ts.before-hy-preview-global.bak
+src/shared/components/bottom-nav/use-bottom-nav-indicator.ts
+src/shared/components/bottom-nav/with-press-feedback.ts
+
+--- IMPORT COUNT ---
+      11
+
+--- DIRECT IMPORTS ---
+src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx:8:import { BottomNav as SharedBottomNav, type BottomNavItem } from '@/shared/components/bottom-nav';
+src/features/cargo/components/mobile-list-lab-v2/mobile-cargo-list-lab-v2.tsx:24:import { BottomNav, bottomNavV2LightClassNames } from '@/shared/components/bottom-nav';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx.before-hy-preview-runtime-clean.bak:11:} from '@/shared/components/bottom-nav';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx.before-hy-preview-runtime-clean.bak:12:import { renderBottomNavIcon, type BottomNavIconId } from '@/shared/components/bottom-nav/bottom-nav-icons';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx:7:import { BottomNav } from '@/shared/components/bottom-nav';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx:8:import { renderBottomNavIcon, type BottomNavIconId } from '@/shared/components/bottom-nav/bottom-nav-icons';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx.before-hy-bottom-menu-preview-replace.bak:11:} from '@/shared/components/bottom-nav';
+src/shared/layout/mobile-product-shell/product-mobile-bottom-nav.tsx.before-hy-bottom-menu-preview-replace.bak:12:import { renderBottomNavIcon, type BottomNavIconId } from '@/shared/components/bottom-nav/bottom-nav-icons';
+tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx:16:vi.mock('@/shared/components/bottom-nav', () => ({
+tests/unit/shared/layout/product-mobile-bottom-nav.test.ts:12:    expect(source).toContain("from '@/shared/components/bottom-nav'");
+tests/unit/shared/components/bottom-nav.component.test.tsx:15:} from '@/shared/components/bottom-nav';
+tests/unit/shared/components/bottom-nav.component.test.tsx:16:import navStyles from '@/shared/components/bottom-nav/bottom-nav.module.sass';
+tests/unit/shared/components/with-press-feedback.test.ts:8:} from '@/shared/components/bottom-nav/with-press-feedback';
+tests/unit/shared/components/bottom-nav-state.test.ts:7:} from '@/shared/components/bottom-nav/bottom-nav-state';
+
+=== REEXPORT / WRAPPER CLUES ===
+src/shared/ui/tooltip/tooltip.tsx:2:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/toast/toast-provider.tsx:5:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/toast/toast-provider.tsx:6:import { toastConstants } from '@/shared/ui/toast/toast-constants';
+src/shared/ui/toast/use-humanized-http-toast.ts:5:import { useToast } from '@/shared/ui/toast/toast-provider';
+src/shared/ui/toast/use-humanized-http-toast.ts:6:import { humanizedHttpToastMeta, type HttpToastContext } from '@/shared/ui/toast/http-humanized-toast';
+src/shared/ui/toast/http-humanized-toast.ts:2:import type { ToastTone } from '@/shared/ui/toast/toast-provider';
+src/shared/ui/mock-mode/mock-qa-assistant.tsx:9:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/mock-mode/mock-mode.tsx:7:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/mock-mode/mock-scenario-control.tsx:6:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/breadcrumb/breadcrumb.tsx:3:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/ui/theme-toggle/theme-toggle.tsx:6:import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
+src/shared/components/bottom-sheet/BottomSheet.tsx:5:import { IconButton } from '@/shared/components/icon-button';
+src/shared/components/bottom-sheet/README.md:24:import { BottomSheet } from '@/shared/components/bottom-sheet';

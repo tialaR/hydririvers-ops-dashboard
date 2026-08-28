@@ -1,0 +1,534 @@
+// SO-013 Wave 02: cargo-owned visual rules carved out of the legacy persona stylesheet.
+// Do not add persona or shared application concerns here.
+
+.title
+  // removed missing mixin: shipper-body
+  font-weight: 650
+  margin: 0
+
+
+.summary
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+
+.docRow
+  // removed missing mixin: shipper-solid-card
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+  min-height: var(--card-doc-row-h)
+  padding: var(--space-3) var(--space-4)
+
+
+.detailGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-3)
+
+
+.detailTile
+  // removed missing mixin: shipper-module-card
+  // removed missing mixin: shipper-pressable
+  padding: var(--space-3)
+  text-decoration: none
+  color: inherit
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: var(--card-detail-tile-h)
+
+
+.detailTileAccent
+  border-color: color-mix(in srgb, var(--hy-shipper-info) 35%, var(--hy-shipper-border))
+  background: color-mix(in srgb, var(--hy-shipper-info) 6%, var(--hy-shipper-surface))
+
+
+.tileLabel
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-muted)
+
+
+.tileValue
+  // removed missing mixin: shipper-body
+  font-weight: 700
+
+
+.detailRiskBanner
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  border-left: 0.1875rem solid var(--hy-shipper-danger)
+  background: color-mix(in srgb, var(--hy-shipper-danger) 8%, var(--hy-shipper-glass-bg))
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  min-height: auto
+
+
+.detailRiskHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--space-2)
+
+
+.detailRiskLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+
+
+.detailRiskStatus
+  // removed missing mixin: shipper-title
+  margin: var(--space-1) 0 0
+
+
+.detailRoute
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+
+.detailOpsSection
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+
+.detailOpsTitle
+  // removed missing mixin: shipper-body
+  margin: 0
+  font-weight: 700
+
+
+.detailOpsGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+
+.detailOpsCard
+  // removed missing mixin: shipper-glass
+  border-radius: var(--radius-md)
+  padding: var(--space-2)
+  min-height: 4rem
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.25rem
+
+
+.detailOpsLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+  font-size: 0.5625rem
+
+
+.detailOpsValue
+  // removed missing mixin: shipper-label
+  margin: 0
+  color: var(--hy-shipper-text)
+  font-weight: 680
+
+
+.detailFactsStrip
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: var(--space-2)
+
+
+.detailFactCard
+  // removed missing mixin: shipper-module-card
+  min-height: 4.25rem
+  padding: var(--space-2)
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.2rem
+
+
+.detailFactLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+  font-size: 0.5625rem
+
+
+.detailFactValue
+  // removed missing mixin: shipper-label
+  margin: 0
+  color: var(--hy-shipper-text)
+  font-weight: 700
+
+
+.detailTimelineSection
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+
+.detailTimelineList
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+
+.detailTimelineItem
+  // removed missing mixin: shipper-glass
+  border-radius: var(--radius-sm)
+  min-height: 3.5rem
+  padding: var(--space-2) var(--space-3)
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+
+
+.detailTimelineLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+
+
+.detailTimelineValue
+  // removed missing mixin: shipper-label
+  margin: 0
+  color: var(--hy-shipper-text)
+  font-weight: 700
+
+
+.list
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+
+.listSectionHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: clamp(0.75rem, 2vw, 1rem)
+  // removed missing mixin: shipper-glass
+  padding: var(--space-2) var(--space-3)
+  border-radius: var(--radius-md)
+  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 14%, var(--hy-shipper-glass-border))
+  box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-sm)
+
+
+.listSectionTitle
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+
+
+.listSectionCount
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-text)
+  margin: 0
+  font-variant-numeric: tabular-nums
+  padding: 0.25rem 0.5rem
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
+
+
+.listHeroCard
+  // removed missing mixin: shipper-module-card
+  min-height: var(--hy-shipper-hero-min-h)
+  padding: var(--space-4) var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 18%, var(--hy-shipper-glass-border))
+  background: linear-gradient(150deg, color-mix(in srgb, var(--hy-shipper-surface) 94%, var(--hy-shipper-accent-premium)) 0%, color-mix(in srgb, var(--hy-shipper-glass-bg) 88%, var(--hy-shipper-surface)) 100%)
+  box-shadow: var(--hy-shipper-glass-inner-glow), 0 0.625rem 1.75rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
+
+
+.listHeroLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+
+
+.listHeroValue
+  // removed missing mixin: shipper-title
+  margin: 0
+  font-weight: 760
+  letter-spacing: -0.02em
+
+
+.listHeroBody
+  // removed missing mixin: shipper-label
+  margin: 0
+  color: var(--hy-shipper-muted)
+  line-height: 1.4
+
+
+.corridorMiniGrid
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: var(--space-2)
+
+
+.corridorMiniCard
+  // removed missing mixin: shipper-module-card
+  min-height: 4.25rem
+  padding: var(--space-2)
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.2rem
+
+
+.corridorMiniLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+  font-size: 0.5625rem
+
+
+.corridorMiniValue
+  // removed missing mixin: shipper-body
+  margin: 0
+  color: var(--hy-shipper-text)
+  font-weight: 700
+
+
+.operationalStrip
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+
+.operationalMiniCard
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  min-height: 4.5rem
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: 0.2rem
+
+
+.operationalMiniLabel
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+  font-size: 0.5625rem
+
+
+.operationalMiniValue
+  // removed missing mixin: shipper-body
+  margin: 0
+  font-weight: 700
+  color: var(--hy-shipper-text)
+
+
+.sheetLead
+  // removed missing mixin: shipper-label
+  margin: 0
+  color: var(--hy-shipper-muted)
+  padding-bottom: var(--space-2)
+
+
+.sheetChipList
+  display: flex
+  flex-wrap: wrap
+  gap: var(--space-2)
+
+
+.sheetChip
+  transition: transform 180ms ease, opacity 180ms ease
+
+  &:active
+    transform: scale(0.985)
+  // removed missing mixin: shipper-focus
+  min-height: var(--chip-h)
+  border-radius: var(--radius-pill)
+  border: 1px solid var(--hy-shipper-glass-border)
+  background: color-mix(in srgb, var(--hy-shipper-glass-bg) 82%, transparent)
+  color: var(--hy-shipper-muted)
+  // removed missing mixin: shipper-label
+  font-weight: 620
+  padding: 0 var(--space-3)
+  cursor: pointer
+
+
+.sheetChipActive
+  color: var(--hy-shipper-text)
+  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 26%, transparent)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
+
+
+.sheetActions
+  display: flex
+  gap: var(--space-2)
+  margin-top: var(--space-3)
+
+
+.sheetPrimaryAction, .sheetSecondaryAction
+  transition: transform 180ms ease, opacity 180ms ease
+
+  &:active
+    transform: scale(0.985)
+  // removed missing mixin: shipper-focus
+  min-height: var(--button-secondary-h)
+  border-radius: var(--radius-pill)
+  border: 1px solid var(--hy-shipper-glass-border)
+  cursor: pointer
+  // removed missing mixin: shipper-label
+  font-weight: 680
+  padding: 0 var(--space-3)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+
+
+.sheetPrimaryAction
+  flex: 1
+  color: var(--hy-shipper-text)
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-primary) 14%, var(--hy-shipper-surface)) 0%, color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, var(--hy-shipper-glass-bg)) 100%)
+  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 22%, transparent)
+
+
+.sheetSecondaryAction
+  color: var(--hy-shipper-muted)
+  background: color-mix(in srgb, var(--hy-shipper-glass-bg) 88%, transparent)
+
+
+.publicDetailHero
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+
+
+.publicDetailHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--space-2)
+
+
+.publicDetailType
+  // removed missing mixin: shipper-operational-label
+  margin: 0
+
+
+.publicDetailRoute
+  // removed missing mixin: shipper-title
+  margin: var(--space-1) 0 0
+  line-height: 1.25
+
+
+.publicDetailMeta
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+
+.publicDetailStatus
+  // removed missing mixin: shipper-label
+  font-weight: 650
+  margin: 0
+
+
+.publicDetailPrivacy
+  // removed missing mixin: shipper-label
+  color: var(--hy-shipper-muted)
+  margin: 0
+  padding-top: var(--space-1)
+  border-top: 1px solid var(--hy-shipper-border)
+
+
+.publicDetailFacts
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--space-2)
+
+
+.publicDetailFact
+  // removed missing mixin: shipper-module-card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-1)
+  min-height: 4.25rem
+
+
+.publicDetailActions
+  display: flex
+  flex-direction: column
+  gap: 0.5rem
+  margin-top: auto
+
+
+@media (max-width: 22.5rem)
+  .detailFactsStrip,
+  .corridorMiniGrid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+
+.listHeroCard
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 16%, var(--hy-shipper-border))
+  border-radius: 1.5rem
+  background: linear-gradient(145deg, color-mix(in srgb, var(--hy-shipper-surface) 96%, var(--hy-shipper-primary)) 0%, var(--hy-shipper-surface) 72%)
+  box-shadow: 0 1rem 2.5rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
+
+
+.listHeroValue
+  font-size: clamp(1.8rem, 7vw, 3.25rem)
+  line-height: 0.98
+  letter-spacing: -0.045em
+
+
+.operationalMiniCard
+  border: 1px solid var(--hy-shipper-border)
+  border-radius: 1.125rem
+  background: var(--hy-shipper-surface)
+  box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--hy-shipper-text) 4%, transparent)
+
+
+.operationalMiniValue,
+
+.listSectionHeader
+  background: transparent
+  border: 0
+  box-shadow: none
+  padding-inline: 0
+
+
+@media (hover: hover) and (pointer: fine)
+  .operationalMiniCard
+    transition: transform var(--product-motion-standard, 220ms) ease, border-color var(--product-motion-standard, 220ms) ease, box-shadow var(--product-motion-standard, 220ms) ease
+
+  .operationalMiniCard:hover
+    transform: translateY(-0.125rem)
+    border-color: color-mix(in srgb, var(--hy-shipper-primary) 28%, var(--hy-shipper-border))
+    box-shadow: 0 1rem 2.25rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
+
+
+@media (min-width: 48rem)
+  .listHeroCard
+    padding: 1.5rem 1.75rem
+
+  .operationalStrip
+    grid-template-columns: repeat(4, minmax(0, 1fr))
+
+
+@media (min-width: 80rem)
+  .listHeroCard
+    min-height: 11rem
+    justify-content: flex-end
+    padding: 2rem 2.25rem
+
+  .operationalMiniCard
+    min-height: 6rem
+    padding: 1rem 1.125rem
+
+
+@media (prefers-reduced-motion: reduce)
+  .operationalMiniCard
+    transition: none
+    transform: none
+

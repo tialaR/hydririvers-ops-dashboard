@@ -2,6 +2,8 @@
 
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
+import { Button as CoreButton } from '@/shared/design-system/core/button';
+
 import styles from './Button.module.scss';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'ghost' | 'danger';
@@ -38,7 +40,7 @@ export function Button({
   const isDisabled = disabled || isLoading;
 
   return (
-    <button
+    <CoreButton
       type={type}
       className={[
         styles.button,
@@ -52,12 +54,12 @@ export function Button({
       data-primary={isPrimary ? 'true' : undefined}
       data-loading={isLoading ? 'true' : undefined}
       disabled={isDisabled}
-      aria-busy={isLoading ? true : undefined}
+      busy={isLoading}
       {...props}
     >
       {iconLeft ? <span className={styles.iconLeft}>{iconLeft}</span> : null}
       <span className={isLoading ? styles.loadingLabel : undefined}>{children}</span>
       {iconRight ? <span className={styles.iconRight}>{iconRight}</span> : null}
-    </button>
+    </CoreButton>
   );
 }

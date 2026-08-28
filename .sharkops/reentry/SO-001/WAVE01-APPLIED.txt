@@ -1,0 +1,3 @@
+SO-001 Wave 01 applied
+UTC: 2026-08-25T08:13:19Z
+Contract: extractable UI core boundary

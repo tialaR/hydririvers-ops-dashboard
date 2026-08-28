@@ -1,0 +1,1588 @@
+diff --git a/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass b/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
+index afefd0c6..14015390 100644
+--- a/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
++++ b/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .header
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   position: sticky
+   top: 0
+   z-index: 20
+@@ -32,7 +32,7 @@
+   min-width: 0
+ 
+ .title
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 750
+   font-size: clamp(1rem, 3.5vw, 1.125rem)
+   margin: 0
+@@ -48,7 +48,7 @@
+   min-height: var(--touch-min)
+ 
+ .metaCompany
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   max-width: 12rem
+   overflow: hidden
+@@ -56,7 +56,7 @@
+   white-space: nowrap
+ 
+ .metaBadge
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   padding: 0.125rem 0.5rem
+   border-radius: var(--radius-pill)
+   background: color-mix(in srgb, var(--hy-shipper-accent-premium) 11%, transparent)
+@@ -64,9 +64,12 @@
+   color: color-mix(in srgb, var(--hy-shipper-accent-operational) 72%, var(--hy-shipper-text))
+ 
+ .back
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
+-  @include shipper-glass
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   width: var(--header-icon)
+   height: var(--header-icon)
+   min-width: var(--touch-min)
+diff --git a/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass b/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+index c9c09496..c990dcbc 100644
+--- a/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
++++ b/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+@@ -1,9 +1,9 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .button
+-  @include shipper-pressable
+-  @include shipper-focus
+-  @include shipper-glass
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   width: var(--header-icon)
+   height: var(--header-icon)
+   border-radius: var(--radius-pill)
+@@ -24,6 +24,6 @@
+   display: inline-flex
+   align-items: center
+   justify-content: center
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 700
+   border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 22%, transparent)
+diff --git a/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass b/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass
+index 5fb07ef3..5cae55fa 100644
+--- a/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass
++++ b/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .nav
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   position: fixed
+   left: var(--space-4)
+   right: var(--space-4)
+@@ -18,8 +18,8 @@
+   overflow: hidden
+ 
+ .item
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   position: relative
+   display: flex
+   flex-direction: column
+diff --git a/src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass b/src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass
+index 94ef7402..615e9251 100644
+--- a/src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass
++++ b/src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass
+@@ -20,7 +20,7 @@
+     opacity: 1
+ 
+ .sheet
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   width: min(100%, var(--screen-w))
+   border-bottom-left-radius: 0
+   border-bottom-right-radius: 0
+@@ -63,7 +63,7 @@
+   margin: 0 auto var(--space-3)
+ 
+ .title
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 700
+   font-size: clamp(1rem, 3.5vw, 1.125rem)
+   margin: 0 0 var(--space-2)
+@@ -73,7 +73,7 @@
+ 
+ .body
+   color: var(--hy-shipper-muted)
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+ 
+ .actions
+@@ -83,9 +83,9 @@
+   margin-top: var(--space-4)
+ 
+ .menuItem
+-  @include shipper-pressable
+-  @include shipper-focus
+-  @include shipper-module-card
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-module-card
+   display: flex
+   align-items: center
+   justify-content: space-between
+@@ -94,7 +94,7 @@
+   text-decoration: none
+   color: var(--hy-shipper-text)
+   font-weight: 600
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+ 
+ .danger
+   color: var(--hy-shipper-danger)
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card/cargo-card.module.sass b/src/features/shipper-mobile-flow/components/cargo-card/cargo-card.module.sass
+index c670e751..803c1e04 100644
+--- a/src/features/shipper-mobile-flow/components/cargo-card/cargo-card.module.sass
++++ b/src/features/shipper-mobile-flow/components/cargo-card/cargo-card.module.sass
+@@ -1,8 +1,8 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .card
+-  @include shipper-module-card
+-  @include shipper-pressable
++  // removed missing mixin: shipper-module-card
++  // removed missing mixin: shipper-pressable
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -20,13 +20,13 @@
+   color: inherit
+ 
+ .code
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 750
+   margin: 0
+   font-variant-numeric: tabular-nums
+ 
+ .route
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: var(--space-1) 0 0
+ 
+@@ -44,7 +44,7 @@
+   min-height: var(--chip-h)
+   padding: 0 var(--space-3)
+   border-radius: var(--radius-pill)
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   font-size: clamp(0.625rem, 2.5vw, 0.6875rem)
+   background: var(--hy-shipper-surface-secondary)
+   color: var(--hy-shipper-text)
+@@ -72,7 +72,7 @@
+   margin-top: auto
+ 
+ .cta
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 700
+   color: var(--hy-shipper-info)
+   display: inline-flex
+@@ -81,12 +81,12 @@
+   min-height: var(--touch-min)
+ 
+ .restricted
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+ .publicStatus
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 650
+   color: var(--hy-shipper-text)
+   margin: 0
+diff --git a/src/features/shipper-mobile-flow/components/charts/hydri-chart-card.module.sass b/src/features/shipper-mobile-flow/components/charts/hydri-chart-card.module.sass
+index 580a98a0..24287dba 100644
+--- a/src/features/shipper-mobile-flow/components/charts/hydri-chart-card.module.sass
++++ b/src/features/shipper-mobile-flow/components/charts/hydri-chart-card.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .card
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -29,19 +29,19 @@
+   gap: var(--space-2)
+ 
+ .title
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 650
+   margin: 0
+ 
+ .insight
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-text)
+   margin: 0
+   font-weight: 600
+   line-height: 1.35
+ 
+ .staleBanner
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   padding: var(--space-2) var(--space-3)
+   border-radius: var(--radius-sm)
+@@ -50,7 +50,7 @@
+   font-weight: 650
+ 
+ .empty
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   min-height: var(--hy-chart-micro-h)
+   display: flex
+@@ -84,7 +84,7 @@
+   align-items: center
+   justify-content: space-between
+   gap: var(--space-2)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+ 
+ .legendItem
+@@ -100,7 +100,7 @@
+   flex-shrink: 0
+ 
+ .actionHint
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+   line-height: 1.35
+@@ -110,9 +110,9 @@
+   color: var(--hy-shipper-text)
+ 
+ .cta
+-  @include shipper-label
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-label
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   align-self: flex-start
+   display: inline-flex
+   align-items: center
+diff --git a/src/features/shipper-mobile-flow/components/freshness-indicator/freshness-indicator.module.sass b/src/features/shipper-mobile-flow/components/freshness-indicator/freshness-indicator.module.sass
+index e3b80974..f8a33b7a 100644
+--- a/src/features/shipper-mobile-flow/components/freshness-indicator/freshness-indicator.module.sass
++++ b/src/features/shipper-mobile-flow/components/freshness-indicator/freshness-indicator.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .root
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 600
+   color: var(--hy-shipper-muted)
+   display: inline-flex
+diff --git a/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass b/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
+index 82e6efa4..0b2b8513 100644
+--- a/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
++++ b/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
+@@ -4,9 +4,12 @@
+   position: relative
+ 
+ .control
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
+-  @include shipper-glass
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   min-width: var(--header-icon)
+   height: var(--header-icon)
+   padding: 0 var(--space-2)
+@@ -14,14 +17,14 @@
+   display: inline-flex
+   align-items: center
+   justify-content: center
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   font-size: 0.625rem
+   letter-spacing: 0.07em
+   color: var(--hy-shipper-text)
+   cursor: pointer
+ 
+ .menu
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   position: absolute
+   top: calc(100% + var(--space-1))
+   right: 0
+@@ -35,14 +38,17 @@
+   box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-md)
+ 
+ .option
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
+   min-height: var(--touch-min)
+   border: 0
+   border-radius: var(--radius-sm)
+   background: transparent
+   color: var(--hy-shipper-muted)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 620
+   cursor: pointer
+   text-align: left
+diff --git a/src/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell.module.sass b/src/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell.module.sass
+index 72d4cccb..a658aec7 100644
+--- a/src/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell.module.sass
++++ b/src/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .root
+-  @include shipper-rem-scale-tokens
++  // removed missing mixin: shipper-rem-scale-tokens
+   --hy-shipper-bg: #F2F5F4
+   --hy-shipper-surface: #FFFFFF
+   --hy-shipper-surface-secondary: #EEF2F1
+diff --git a/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass b/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
+index f47cebe2..a9284a1f 100644
+--- a/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
++++ b/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
+@@ -1,9 +1,12 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .link
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
+-  @include shipper-glass
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   width: var(--header-icon)
+   height: var(--header-icon)
+   border-radius: var(--radius-pill)
+diff --git a/src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass b/src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass
+index 8a335ccd..097eedc9 100644
+--- a/src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass
++++ b/src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass
+@@ -1,14 +1,14 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .button
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   min-height: var(--button-h)
+   height: var(--button-h)
+   width: 100%
+   border-radius: var(--radius-md)
+   border: 1px solid transparent
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 650
+   cursor: pointer
+   display: inline-flex
+@@ -60,5 +60,5 @@
+   max-width: var(--button-inline-w)
+   align-self: flex-start
+   padding-inline: var(--space-4)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 650
+diff --git a/src/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar.module.sass b/src/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar.module.sass
+index 0867bd9c..7c9c8565 100644
+--- a/src/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar.module.sass
++++ b/src/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .bar
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   display: flex
+   align-items: center
+   gap: var(--space-2)
+@@ -15,7 +15,7 @@
+   border: 0
+   background: transparent
+   color: var(--hy-shipper-text)
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-size: clamp(0.875rem, 3vw, 1rem)
+   outline: none
+   min-width: 0
+@@ -24,8 +24,8 @@
+     color: var(--hy-shipper-muted)
+ 
+ .filterBtn
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   width: var(--touch-comfort)
+   height: var(--touch-comfort)
+   flex-shrink: 0
+@@ -50,15 +50,15 @@
+     display: none
+ 
+ .chip
+-  @include shipper-pressable
+-  @include shipper-focus
+-  @include shipper-glass
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   flex-shrink: 0
+   height: var(--chip-h)
+   min-height: var(--chip-h)
+   padding: 0 var(--space-3)
+   border-radius: var(--radius-pill)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 600
+   color: var(--hy-shipper-muted)
+   cursor: pointer
+diff --git a/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass b/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
+index d63a9506..4cc22ffa 100644
+--- a/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
++++ b/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
+@@ -1,19 +1,19 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .card
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+   gap: var(--space-2)
+ 
+ .title
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 650
+   margin: 0
+ 
+ .summary
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+@@ -31,13 +31,13 @@
+   gap: var(--space-2)
+ 
+ .chartChangeInsight
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-text)
+   margin: 0
+   font-weight: 600
+ 
+ .chartActionHint
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+   line-height: 1.35
+@@ -47,7 +47,7 @@
+   color: var(--hy-shipper-text)
+ 
+ .chartEmpty
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   min-height: var(--chart-line-h)
+   display: flex
+@@ -58,7 +58,7 @@
+   border-radius: var(--radius-sm)
+ 
+ .chartStaleBanner
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   padding: var(--space-2) var(--space-3)
+   border-radius: var(--radius-sm)
+@@ -85,7 +85,7 @@
+   align-items: center
+   justify-content: space-between
+   gap: var(--space-2)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+ 
+ .legendItem
+@@ -116,7 +116,7 @@
+   gap: var(--space-3)
+ 
+ .metric
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -124,42 +124,42 @@
+   min-height: var(--card-priority-h)
+ 
+ .metricValue
+-  @include shipper-metric-value
++  // removed missing mixin: shipper-metric-value
+   margin: 0
+ 
+ .metricLabel
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+ .alert
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   padding: 0.875rem 1rem
+   border-left: 0.25rem solid var(--hy-shipper-warning)
+   background: color-mix(in srgb, var(--hy-shipper-warning) 8%, var(--hy-shipper-surface))
+ 
+ .criticalBanner
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   border-left: 0.1875rem solid var(--hy-shipper-danger)
+   background: color-mix(in srgb, var(--hy-shipper-danger) 8%, var(--hy-shipper-glass-bg))
+   min-height: auto
+ 
+ .criticalTitle
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 750
+   margin: 0 0 var(--space-1)
+   color: var(--hy-shipper-danger)
+ 
+ .criticalBody
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-text)
+   margin: 0
+   line-height: 1.35
+ 
+ .primaryDecision
+-  @include shipper-module-card
+-  @include shipper-pressable
++  // removed missing mixin: shipper-module-card
++  // removed missing mixin: shipper-pressable
+   display: flex
+   align-items: center
+   justify-content: space-between
+@@ -171,18 +171,18 @@
+   min-height: var(--card-priority-h)
+ 
+ .primaryDecisionLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0 0 var(--space-1)
+ 
+ .primaryDecisionBody
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 650
+   margin: 0
+   line-height: 1.35
+ 
+ .primaryDecisionCta
+   flex-shrink: 0
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 700
+   color: var(--hy-shipper-info)
+   display: inline-flex
+@@ -195,7 +195,7 @@
+   margin: 0 0 0.25rem
+ 
+ .alertBody
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+@@ -208,7 +208,7 @@
+   margin-inline: auto
+ 
+ .formTitle
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   font-weight: 650
+   margin: 0 0 var(--space-2)
+ 
+@@ -218,7 +218,7 @@
+   gap: var(--space-2)
+ 
+ .label
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 600
+ 
+ .input, .select
+@@ -229,10 +229,10 @@
+   background: var(--hy-shipper-surface)
+   color: var(--hy-shipper-text)
+   padding: 0 var(--space-3)
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+ 
+ .error
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-danger)
+   margin: 0
+   min-height: 1.25rem
+@@ -321,9 +321,9 @@
+   z-index: 2
+ 
+ .mapControl
+-  @include shipper-glass
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-glass
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   width: var(--touch-min)
+   height: var(--touch-min)
+   min-width: var(--touch-min)
+@@ -338,7 +338,7 @@
+   box-shadow: var(--hy-shipper-shadow-sm)
+ 
+ .mapStatusCard
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   position: absolute
+   left: var(--space-4)
+   right: var(--space-4)
+@@ -358,19 +358,19 @@
+   margin-bottom: 0.625rem
+ 
+ .mapStatusCode
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 750
+   margin: 0
+   font-variant-numeric: tabular-nums
+ 
+ .mapStatusCorridor
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: var(--space-1) 0 0
+   color: var(--hy-shipper-muted)
+ 
+ .mapStatusAction
+-  @include shipper-pressable
+-  @include shipper-focus
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
+   width: 100%
+   margin-top: var(--space-2)
+   min-height: var(--button-secondary-h)
+@@ -379,7 +379,7 @@
+   border-radius: var(--radius-md)
+   background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
+   color: var(--hy-shipper-primary)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 700
+   cursor: pointer
+   text-align: left
+@@ -398,7 +398,7 @@
+   gap: var(--space-2)
+ 
+ .mapContextAction
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   padding: var(--space-3)
+   border-radius: var(--radius-sm)
+@@ -417,16 +417,16 @@
+   min-width: 0
+ 
+ .mapStatusLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   font-size: clamp(0.625rem, 2.5vw, 0.6875rem)
+ 
+ .mapStatusValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 650
+   line-height: 1.3
+ 
+ .docRow
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   display: flex
+   align-items: center
+   justify-content: space-between
+@@ -435,7 +435,7 @@
+   padding: var(--space-3) var(--space-4)
+ 
+ .offer
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   padding: var(--space-3) var(--space-4)
+   display: flex
+   flex-direction: column
+@@ -478,12 +478,12 @@
+   margin-inline: auto
+ 
+ .landingTitle
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   font-weight: 750
+   margin: 0
+ 
+ .landingSubtitle
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   color: var(--hy-shipper-muted)
+   margin: 0
+   max-width: var(--content-w)
+@@ -513,7 +513,7 @@
+   color: var(--hy-shipper-text)
+ 
+ .profileHeader
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   padding: var(--space-4)
+   min-height: var(--card-md-h)
+   display: flex
+@@ -521,7 +521,7 @@
+   gap: var(--space-3)
+ 
+ .profileContextLine
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0.15rem 0 0
+   color: var(--hy-shipper-muted)
+   font-weight: 560
+@@ -542,14 +542,14 @@
+   gap: 0.5rem
+ 
+ .menuLink
+-  @include shipper-solid-card
+-  @include shipper-pressable
++  // removed missing mixin: shipper-solid-card
++  // removed missing mixin: shipper-pressable
+   min-height: var(--card-profile-row-h)
+   padding: var(--space-3) var(--space-4)
+   text-decoration: none
+   color: var(--hy-shipper-text)
+   font-weight: 600
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   display: flex
+   align-items: center
+ 
+@@ -559,7 +559,7 @@
+   gap: var(--space-2)
+ 
+ .profileIdentityCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3) var(--space-2)
+   min-height: 4.25rem
+   display: flex
+@@ -568,12 +568,12 @@
+   justify-content: center
+ 
+ .profileIdentityLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .profileIdentityValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+@@ -584,7 +584,7 @@
+   gap: var(--space-2)
+ 
+ .profileQuickCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: 4rem
+   padding: var(--space-3)
+   display: flex
+@@ -593,11 +593,11 @@
+   gap: 0.2rem
+ 
+ .profileQuickLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .profileQuickValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 680
+@@ -608,8 +608,8 @@
+   gap: var(--space-3)
+ 
+ .detailTile
+-  @include shipper-module-card
+-  @include shipper-pressable
++  // removed missing mixin: shipper-module-card
++  // removed missing mixin: shipper-pressable
+   padding: var(--space-3)
+   text-decoration: none
+   color: inherit
+@@ -623,20 +623,20 @@
+   background: color-mix(in srgb, var(--hy-shipper-info) 6%, var(--hy-shipper-surface))
+ 
+ .tileLabel
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+ 
+ .tileValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   font-weight: 700
+ 
+ .statusBanner
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   padding: var(--space-3) var(--space-4)
+   border-left: 0.25rem solid var(--hy-shipper-warning)
+ 
+ .detailRiskBanner
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   border-left: 0.1875rem solid var(--hy-shipper-danger)
+   background: color-mix(in srgb, var(--hy-shipper-danger) 8%, var(--hy-shipper-glass-bg))
+@@ -652,27 +652,27 @@
+   gap: var(--space-2)
+ 
+ .detailRiskLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .detailRiskStatus
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: var(--space-1) 0 0
+ 
+ .detailRoute
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+ .detailOpsSection
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+   gap: var(--space-3)
+ 
+ .detailOpsTitle
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   font-weight: 700
+ 
+@@ -682,7 +682,7 @@
+   gap: var(--space-2)
+ 
+ .detailOpsCard
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   border-radius: var(--radius-md)
+   padding: var(--space-2)
+   min-height: 4rem
+@@ -692,12 +692,12 @@
+   gap: 0.25rem
+ 
+ .detailOpsLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .detailOpsValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 680
+@@ -708,7 +708,7 @@
+   gap: var(--space-2)
+ 
+ .detailFactCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: 4.25rem
+   padding: var(--space-2)
+   display: flex
+@@ -717,18 +717,18 @@
+   gap: 0.2rem
+ 
+ .detailFactLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .detailFactValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+ 
+ .detailTimelineSection
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -740,7 +740,7 @@
+   gap: var(--space-2)
+ 
+ .detailTimelineItem
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   border-radius: var(--radius-sm)
+   min-height: 3.5rem
+   padding: var(--space-2) var(--space-3)
+@@ -750,17 +750,17 @@
+   gap: var(--space-2)
+ 
+ .detailTimelineLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .detailTimelineValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+ 
+ .notification
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   display: flex
+   gap: var(--space-3)
+   min-height: var(--card-notification-h)
+@@ -782,18 +782,21 @@
+   gap: var(--space-2)
+ 
+ .notificationSectionHeader
+-  @include shipper-list-section-header
+-  @include shipper-glass
++  display: flex
++  align-items: center
++  justify-content: space-between
++  gap: clamp(0.75rem, 2vw, 1rem)
++  // removed missing mixin: shipper-glass
+   border-radius: var(--radius-md)
+   padding: var(--space-2) var(--space-3)
+   border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 14%, var(--hy-shipper-glass-border))
+ 
+ .notificationSectionTitle
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .notificationSectionCount
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-variant-numeric: tabular-nums
+@@ -808,7 +811,7 @@
+   gap: var(--space-2)
+ 
+ .notificationsHero
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-4) var(--space-3)
+   min-height: var(--hy-shipper-hero-min-h)
+   display: flex
+@@ -817,11 +820,11 @@
+   border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 18%, var(--hy-shipper-glass-border))
+ 
+ .notificationsHeroLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .notificationsHeroValue
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: 0
+   font-weight: 760
+ 
+@@ -831,7 +834,7 @@
+   gap: var(--space-2)
+ 
+   span
+-    @include shipper-label
++    // removed missing mixin: shipper-label
+     padding: 0.25rem 0.625rem
+     border-radius: var(--radius-pill)
+     border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 22%, transparent)
+@@ -843,7 +846,7 @@
+   gap: var(--space-2)
+ 
+ .basin
+-  @include shipper-solid-card
++  // removed missing mixin: shipper-solid-card
+   padding: var(--space-3)
+   min-height: var(--card-priority-h)
+   display: flex
+@@ -856,7 +859,7 @@
+   gap: var(--space-2)
+ 
+ .cockpitTopMetaCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   min-height: 4.75rem
+   display: flex
+@@ -865,12 +868,12 @@
+   gap: 0.25rem
+ 
+ .cockpitTopMetaLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .cockpitTopMetaValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   font-weight: 680
+ 
+@@ -880,7 +883,7 @@
+   gap: var(--space-2)
+ 
+ .cockpitOpsCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: 5.25rem
+   padding: var(--space-3)
+   display: flex
+@@ -889,22 +892,22 @@
+   gap: 0.2rem
+ 
+ .cockpitOpsLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .cockpitOpsValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 730
+ 
+ .cockpitOpsHint
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+ 
+ .impactHighlight
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   align-items: baseline
+@@ -913,11 +916,11 @@
+   min-height: var(--card-sm-h)
+ 
+ .impactHighlightLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .impactHighlightValue
+-  @include shipper-metric-value
++  // removed missing mixin: shipper-metric-value
+   margin: 0
+   color: var(--hy-shipper-success)
+ 
+@@ -948,19 +951,22 @@
+   gap: var(--space-3)
+ 
+ .listSectionHeader
+-  @include shipper-list-section-header
+-  @include shipper-glass
++  display: flex
++  align-items: center
++  justify-content: space-between
++  gap: clamp(0.75rem, 2vw, 1rem)
++  // removed missing mixin: shipper-glass
+   padding: var(--space-2) var(--space-3)
+   border-radius: var(--radius-md)
+   border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 14%, var(--hy-shipper-glass-border))
+   box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-sm)
+ 
+ .listSectionTitle
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .listSectionCount
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-text)
+   margin: 0
+   font-variant-numeric: tabular-nums
+@@ -970,7 +976,7 @@
+   border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
+ 
+ .listHeroCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: var(--hy-shipper-hero-min-h)
+   padding: var(--space-4) var(--space-3)
+   display: flex
+@@ -981,17 +987,17 @@
+   box-shadow: var(--hy-shipper-glass-inner-glow), 0 0.625rem 1.75rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
+ 
+ .listHeroLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .listHeroValue
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: 0
+   font-weight: 760
+   letter-spacing: -0.02em
+ 
+ .listHeroBody
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+   line-height: 1.4
+@@ -1002,7 +1008,7 @@
+   gap: var(--space-2)
+ 
+ .corridorMiniCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: 4.25rem
+   padding: var(--space-2)
+   display: flex
+@@ -1011,12 +1017,12 @@
+   gap: 0.2rem
+ 
+ .corridorMiniLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .corridorMiniValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+@@ -1027,7 +1033,7 @@
+   gap: var(--space-2)
+ 
+ .operationalMiniCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   min-height: 4.5rem
+   display: flex
+@@ -1036,18 +1042,18 @@
+   gap: 0.2rem
+ 
+ .operationalMiniLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .operationalMiniValue
+-  @include shipper-body
++  // removed missing mixin: shipper-body
+   margin: 0
+   font-weight: 700
+   color: var(--hy-shipper-text)
+ 
+ .sheetLead
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+   padding-bottom: var(--space-2)
+@@ -1058,14 +1064,17 @@
+   gap: var(--space-2)
+ 
+ .sheetChip
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
+   min-height: var(--chip-h)
+   border-radius: var(--radius-pill)
+   border: 1px solid var(--hy-shipper-glass-border)
+   background: color-mix(in srgb, var(--hy-shipper-glass-bg) 82%, transparent)
+   color: var(--hy-shipper-muted)
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 620
+   padding: 0 var(--space-3)
+   cursor: pointer
+@@ -1081,13 +1090,16 @@
+   margin-top: var(--space-3)
+ 
+ .sheetPrimaryAction, .sheetSecondaryAction
+-  @include shipper-pressable-subtle
+-  @include shipper-focus
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)
++  // removed missing mixin: shipper-focus
+   min-height: var(--button-secondary-h)
+   border-radius: var(--radius-pill)
+   border: 1px solid var(--hy-shipper-glass-border)
+   cursor: pointer
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 680
+   padding: 0 var(--space-3)
+   display: inline-flex
+@@ -1111,7 +1123,7 @@
+   gap: var(--space-2)
+ 
+ .authHighlight
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   font-size: 0.5625rem
+   padding: 0.125rem 0.5rem
+   border-radius: var(--radius-pill)
+@@ -1120,7 +1132,7 @@
+   color: var(--hy-shipper-text)
+ 
+ .negotiationHero
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-4) var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -1128,15 +1140,15 @@
+   min-height: var(--hy-shipper-hero-min-h)
+ 
+ .negotiationHeroLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .negotiationHeroTitle
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: 0
+ 
+ .negotiationHeroBody
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+@@ -1146,7 +1158,7 @@
+   gap: var(--space-2)
+ 
+ .negotiationFactCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   min-height: 4.5rem
+   padding: var(--space-3)
+   display: flex
+@@ -1155,12 +1167,12 @@
+   gap: 0.15rem
+ 
+ .negotiationFactLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .negotiationFactValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+@@ -1171,7 +1183,7 @@
+   gap: var(--space-2)
+ 
+ .offerMetaCell
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   border-radius: var(--radius-sm)
+   min-height: 3.5rem
+   padding: var(--space-2)
+@@ -1181,17 +1193,17 @@
+   gap: 0.15rem
+ 
+ .offerMetaLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+   font-size: 0.5625rem
+ 
+ .offerMetaValue
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-text)
+   font-weight: 700
+ .publicDetailHero
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -1204,26 +1216,26 @@
+   gap: var(--space-2)
+ 
+ .publicDetailType
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .publicDetailRoute
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: var(--space-1) 0 0
+   line-height: 1.25
+ 
+ .publicDetailMeta
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
+ .publicDetailStatus
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   font-weight: 650
+   margin: 0
+ 
+ .publicDetailPrivacy
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-muted)
+   margin: 0
+   padding-top: var(--space-1)
+@@ -1235,7 +1247,7 @@
+   gap: var(--space-2)
+ 
+ .publicDetailFact
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   padding: var(--space-3)
+   display: flex
+   flex-direction: column
+@@ -1267,7 +1279,7 @@
+   opacity: 0.75
+ 
+ .authCard
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   position: relative
+   z-index: 1
+   display: flex
+@@ -1282,7 +1294,7 @@
+   align-self: flex-start
+ 
+ .authBrandMark
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   padding: 0.25rem 0.5rem
+   border-radius: var(--radius-pill)
+   background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
+@@ -1296,7 +1308,7 @@
+   background: color-mix(in srgb, var(--hy-shipper-border) 90%, transparent)
+ 
+ .authStepBadge
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   width: fit-content
+   padding: 0.25rem 0.625rem
+   border-radius: var(--radius-pill)
+@@ -1305,7 +1317,7 @@
+   color: var(--hy-shipper-text)
+ 
+ .authSecureBadge
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   width: fit-content
+   padding: 0.25rem 0.625rem
+   border-radius: var(--radius-pill)
+@@ -1314,7 +1326,7 @@
+   color: var(--hy-shipper-text)
+ 
+ .formIntro
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+   line-height: 1.4
+@@ -1331,12 +1343,12 @@
+   gap: var(--space-2)
+ 
+ .consentLabel
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   color: var(--hy-shipper-text)
+   line-height: 1.35
+ 
+ .screenHero
+-  @include shipper-module-card
++  // removed missing mixin: shipper-module-card
+   position: relative
+   z-index: 1
+   display: flex
+@@ -1345,16 +1357,16 @@
+   padding: var(--space-3)
+ 
+ .screenHeroLabel
+-  @include shipper-operational-label
++  // removed missing mixin: shipper-operational-label
+   margin: 0
+ 
+ .screenHeroValue
+-  @include shipper-title
++  // removed missing mixin: shipper-title
+   margin: 0
+   font-weight: 760
+ 
+ .screenHeroMeta
+-  @include shipper-label
++  // removed missing mixin: shipper-label
+   margin: 0
+   color: var(--hy-shipper-muted)
+ 
+diff --git a/src/features/shipper-mobile-flow/components/shipper-operation-map/shipper-operation-map.module.sass b/src/features/shipper-mobile-flow/components/shipper-operation-map/shipper-operation-map.module.sass
+index 4162560d..5fa11047 100644
+--- a/src/features/shipper-mobile-flow/components/shipper-operation-map/shipper-operation-map.module.sass
++++ b/src/features/shipper-mobile-flow/components/shipper-operation-map/shipper-operation-map.module.sass
+@@ -34,7 +34,7 @@
+   position: absolute
+   left: var(--space-4)
+   top: var(--space-4)
+-  @include shipper-glass
++  // removed missing mixin: shipper-glass
+   padding: var(--space-2) var(--space-3)
+   border-radius: var(--radius-sm)
+   font-size: 0.6875rem
+diff --git a/src/features/shipper-mobile-flow/components/theme-switcher/theme-switcher.module.sass b/src/features/shipper-mobile-flow/components/theme-switcher/theme-switcher.module.sass
+index af09da61..b182a612 100644
+--- a/src/features/shipper-mobile-flow/components/theme-switcher/theme-switcher.module.sass
++++ b/src/features/shipper-mobile-flow/components/theme-switcher/theme-switcher.module.sass
+@@ -1,9 +1,9 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+ .button
+-  @include shipper-pressable
+-  @include shipper-focus
+-  @include shipper-glass
++  // removed missing mixin: shipper-pressable
++  // removed missing mixin: shipper-focus
++  // removed missing mixin: shipper-glass
+   width: var(--header-icon)
+   height: var(--header-icon)
+   border-radius: var(--radius-pill)
+diff --git a/src/features/shipper-mobile-flow/styles/_shipper-mixins.sass b/src/features/shipper-mobile-flow/styles/_shipper-mixins.sass
+index a91c43fd..9722f4a4 100644
+--- a/src/features/shipper-mobile-flow/styles/_shipper-mixins.sass
++++ b/src/features/shipper-mobile-flow/styles/_shipper-mixins.sass
+@@ -30,6 +30,16 @@
+       transform: none
+       opacity: 0.86
+ 
++@mixin shipper-pressable-subtle
++  transition: transform 0.16s ease, opacity 0.14s ease
++  &:active:not(:disabled)
++    transform: scale(0.98)
++  @media (prefers-reduced-motion: reduce)
++    transition: opacity 0.1s ease
++    &:active:not(:disabled)
++      transform: none
++      opacity: 0.9
++
+ @mixin shipper-focus
+   &:focus-visible
+     outline: 2px solid var(--hy-shipper-focus)
+@@ -61,3 +71,9 @@
+   line-height: 1.15
+   font-weight: 750
+   font-variant-numeric: tabular-nums
++
++@mixin shipper-pressable-subtle
++  transition: transform 180ms ease, opacity 180ms ease
++
++  &:active
++    transform: scale(0.985)

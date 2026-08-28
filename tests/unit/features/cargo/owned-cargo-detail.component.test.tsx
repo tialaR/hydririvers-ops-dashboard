@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
 import { userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
-import { OwnedCargoDetail } from '@/features/cargo/components/owned-cargo-detail/owned-cargo-detail';
+import { OwnedCargoDetail } from '@/features/cargo/owned/components/owned-cargo-detail/owned-cargo-detail';
 
 vi.mock('next-intl', () => ({
   useTranslations: (namespace: string) => {
@@ -33,22 +33,22 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
-vi.mock('@/features/cargo/components/owned-cargo-map-sheet/owned-cargo-map-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-map-sheet/owned-cargo-map-sheet', () => ({
   OwnedCargoMapSheet: () => null,
 }));
-vi.mock('@/features/cargo/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-timeline-sheet/owned-cargo-timeline-sheet', () => ({
   OwnedCargoTimelineSheet: () => null,
 }));
-vi.mock('@/features/cargo/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-documents-sheet/owned-cargo-documents-sheet', () => ({
   OwnedCargoDocumentsSheet: () => null,
 }));
-vi.mock('@/features/cargo/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-risks-sheet/owned-cargo-risks-sheet', () => ({
   OwnedCargoRisksSheet: () => null,
 }));
-vi.mock('@/features/cargo/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-tracking-sheet/owned-cargo-tracking-sheet', () => ({
   OwnedCargoTrackingSheet: () => null,
 }));
-vi.mock('@/features/cargo/components/owned-cargo-process-sheet/owned-cargo-process-sheet', () => ({
+vi.mock('@/features/cargo/owned/components/owned-cargo-process-sheet/owned-cargo-process-sheet', () => ({
   OwnedCargoProcessSheet: () => null,
 }));
 

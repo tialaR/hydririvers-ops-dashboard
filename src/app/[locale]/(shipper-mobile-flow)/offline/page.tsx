@@ -1,5 +1,2 @@
-import { OfflineScreen } from '@/features/shipper-mobile-flow/screens/state-screens';
-
-export default function OfflinePage() {
-  return <OfflineScreen />;
-}
+import { OfflineScreen } from '@/features/product-shell/screens/product-state-screens';
+export default function OfflinePage() { return <OfflineScreen />; }

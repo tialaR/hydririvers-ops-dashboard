@@ -1,0 +1,520 @@
+=== SHARKOPS ATTACK SO-022/W01/HF02 ===
+root: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard
+started: 2026-08-27 23:56:56
+[notification-capability] PASS
+ notification data, repository, application and presentation ownership: features/notifications
+ shipper-mobile-flow files: 27
+ notification feature -> shipper-mobile-flow dependency: 0
+ notification route preserves existing shipper shell composition
+[SO-022/W01/HF02] APPLIED: notification contract accepts retired persona repository provider while preserving notification ownership checks.
+=== SO-022/W01/HF02 ARCHITECTURE CONTRACTS ===
+[negotiation-profile-states-ownership] PASS
+ shipper-mobile-flow files: 27
+ external persona consumers: 3
+ canonical owners -> shipper-mobile-flow dependency: 0
+[persona-god-feature] PASS
+ frozen feature files: 139; current: 27
+ frozen external consumers: 21; current: 3
+ rule: shipper-mobile-flow may shrink, but it cannot gain new files or new consumers
+ rule: shared cannot import persona-specific feature code
+[shared-ui-god-stylesheet] PASS
+ frozen lines: 1504; current: 891
+ frozen consumers: 16; current: 1
+ rule: shared-ui.module.sass may shrink, never grow
+ rule: features/cargo cannot consume persona shared styles
+[auth-closeout] PASS
+ auth read spine + login/register/OTP presentation: features/auth ownership
+ persona auth compatibility adapters: 0
+ features/auth -> shipper-mobile-flow dependency: 0
+ auth routes consume canonical auth screens directly
+ dead persona authentication state: absent
+ shell identity/profile concerns remain explicitly outside SO-017 closeout
+[notification-capability] PASS
+ notification data, repository, application and presentation ownership: features/notifications
+ shipper-mobile-flow files: 27
+ notification feature -> shipper-mobile-flow dependency: 0
+ notification route preserves existing shipper shell composition
+[hydrology-impact-ownership] PASS
+ hydrology domain/application/data/presentation: features/hydrology
+ impact operational ownership: features/impact
+ operational Recharts core: shared/design-system/patterns/operational-chart
+ shipper-mobile-flow files: 27
+ hydrology -> shipper-mobile-flow dependency: 0
+ impact -> shipper-mobile-flow dependency: 0
+[product-shell-ownership] PASS
+ shell/chrome ownership: features/product-shell
+ shipper-mobile-flow files: 27
+ external persona consumers: 3
+ product-shell -> shipper-mobile-flow dependency: 0
+ shared -> shipper-mobile-flow dependency: 0
+ visual behavior/i18n contracts preserved; ownership only
+[cockpit-landing-chart-ownership] PASS
+ cockpit ownership: features/dashboard
+ landing ownership: features/home
+ chart rendering: canonical shared/design-system operational-chart
+ shipper-mobile-flow files: 27
+ dashboard/home -> shipper-mobile-flow dependency: 0
+=== STANDARD GREEN GATES ===
+
+> hydrorivers-v056-template@0.8.7 lint
+> eslint .
+
+
+> hydrorivers-v056-template@0.8.7 typecheck
+> tsc --noEmit
+
+
+> hydrorivers-v056-template@0.8.7 check:i18n
+> node scripts/check-i18n.mjs
+
+i18n ok: 2642 keys aligned in pt-BR, en-US, es
+
+> hydrorivers-v056-template@0.8.7 test
+> vitest run
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.5 [39m[90m/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard[39m
+
+ [32m✓[39m tests/unit/shared/observability/dev-scenario-reporter.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/mock-geojson-schema.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/server/mock-db.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 218[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/server/auth.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.logout.post.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/unit/features/negotiations/negotiation-detail.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/unit/features/negotiations/negotiation-board-render.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/public-cargo-list-map-legacy.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo.service.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/public-cargo-operational-map-coverage.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m tests/integration/api/negociacoes.post.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m tests/unit/features/impact/impact-detail-body.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/public-cargas-mobile-list.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/my-cargoes-list.component.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+[90mstderr[2m | tests/unit/features/auth/auth-form.component.test.tsx[2m > [22m[2mAuthForm DS v2[2m > [22m[2mrenderiza login com telefone e CTA OTP
+[22m[39mReceived `false` for a non-boolean attribute `initial`.
+
+If you want to write it to the DOM, pass a string instead: initial="false" or initial={value.toString()}.
+
+If you used to conditionally omit it with initial={condition && value}, pass initial={condition ? value : undefined} instead.
+
+ [32m✓[39m tests/unit/features/auth/auth-form.component.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/hyd-cargo-id-resolution.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m tests/integration/api/negociacoes.patch.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.register.post.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.login.post.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.profile.put.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-card.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/hydro-design-tokens.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m tests/integration/api/ai.cargo-status.post.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-search-field.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/integration/api/mock-mode.post.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/integration/api/cargas.post.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-popover.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/hydro-design-system-boundaries.test.ts [2m([22m[2m7 tests[22m[2m)[22m[33m 1747[2mms[22m[39m
+     [33m[2m✓[22m[39m ds:check passes [33m 1673[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.qa-direct-login.post.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/integration/api/embarcacoes.get.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/bottom-nav.component.test.tsx [2m([22m[2m27 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-sheet.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/integration/api/mock-mode.login-as.post.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-sheets.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-detail-sheet-content.component.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/integration/api/auth.me.get.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/bottom-sheet.component.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/icon-button.component.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-button.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-detail.component.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/otp-input.component.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/unit/features/auth/profile-panel.component.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-tab-bar.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/get-public-cargo-action-routes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/module-skeletons.component.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/features/marketplace.service.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-surface.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/integration/api/rastreio.get.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-card.component.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-progress.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-segmented-control.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/unit/features/auth/auth-schemas.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-filter-sheet-content.component.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-card.component.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydro-maplibre-operational-overlay.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-interactions.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/observability/use-case-logger.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/resolve-cargo-operational-waterway-context.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydro-maplibre-native.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-toolbar.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-window.test.tsx [2m([22m[2m13 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/features/impact/impact-story.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-switch.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-empty-state.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/app/profile-page.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-text-field.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-scroll-edge.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/informational-card.component.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/cargo-to-hydroway-geo.adapter.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-styles.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/features/forms-validation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-route-line.component.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/button.component.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/status-badge.component.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/resolve-cargo-hydroway-model.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/search-field.component.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo-market/cargo-vessel-visual.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/app/minhas-cargas-detail-page.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/ui/mock-qa-scenarios.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydroway-operational-layers-domain.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/ui/http-humanized-toast.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/route-marker-geometry.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/filter-chip.component.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/derive-owned-cargo-detail.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/config/navigation.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/mock-data/mock-user-registry.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/admin-chrome-header-structure.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/qa/mock-qa-personas.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/text-field.component.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/features/notifications.client.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/features/ai-assist/cargo-status-assistant.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/use-icon-button-press.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-panel-search-params.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/app/impact-page.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/geo-to-schematic.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/mobile-product-shell-layout.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/app/mobile-cargo-list-lab-route-guard.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/mock-geojson-budget.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/app/mobile-cargo-list-lab-page.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-list-filters.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/resolve-spike-hydroway-model.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-status-semantic.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/preferences/resolve-server-theme.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/with-press-feedback.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/i18n/mock-content.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/use-mobile-header-scroll.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/inline-alert.component.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/parse-cargo-eta-meta.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/surface.component.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/design-system/liquid-glass-material.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/public-marketplace-cargo-list.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/auth/user-display-name.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/bottom-sheet.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-sheet-scroll.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/resolve-mobile-page-title.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/features/marketplace/tracking.helpers.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/preferences/client-preferences.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-list.repository.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-visibility-policy.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/parse-next-segment-operational-brief.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-list.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/integration/api/cargas.get.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/schematic-to-geo.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydro-maplibre-route-markers.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/marketplace/my-cargoes.filters.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo-market/cargo-proposal-visibility.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydroway-map-layer-presets.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydroway-map-layer-tooltips.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/qa/mock-scenario-catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/mobile-route-overview-camera.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/qa/mock-qa-ui-env.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/admin-chrome-mobile-product-shell.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/summarize-owned-cargoes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/use-hydroway-map-runtime-route-overview.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/mobile-route-sheet-shell.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-filters-labels.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/dashboard/operations-board-mobile-experience.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/auth/access-control.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/owned-cargo-map-scene.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-filter-options.mock.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/cargo-action-sheet-bridge.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/config/env.mock-mode-reset.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/map-marketplace-cargo-to-lab-v2.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/components/bottom-nav-state.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/product-mobile-bottom-nav.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/unit/features/negotiations/negotiation-board.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/mobile-cargo-list-lab-filters.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/normalize-eta-value.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/features/ai-assist/cargo-status-ai-access.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/routing/dev-mobile-cargo-list-lab-route.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/server/mock-scenarios.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m tests/unit/features/cargo/public-cargas-mobile-filter-sheet.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/ui/mock-mode-layout.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/hydroway-map-model.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/negotiations/negotiation-documents.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/waterway-map/route-coordinate-at-progress.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/layout/resolve-mobile-locale-abbrev.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 2[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m158 passed[39m[22m[90m (158)[39m
+[2m      Tests [22m [1m[32m945 passed[39m[22m[90m (945)[39m
+[2m   Start at [22m 23:57:13
+[2m   Duration [22m 5.56s[2m (transform 6.11s, setup 0ms, import 14.96s, tests 4.10s, environment 13ms)[22m
+
+
+> hydrorivers-v056-template@0.8.7 test:mock-mode
+> vitest run tests/unit/shared/ui/mock-qa-scenarios.test.ts tests/unit/shared/ui/mock-mode-layout.test.ts tests/unit/shared/server/mock-scenarios.test.ts tests/unit/features/notifications.client.test.ts tests/integration/api/mock-mode.post.test.ts tests/integration/api/mock-mode.login-as.post.test.ts
+
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.5 [39m[90m/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard[39m
+
+ [32m✓[39m tests/unit/shared/ui/mock-mode-layout.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 2[2mms[22m[39m
+ [32m✓[39m tests/unit/features/notifications.client.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/ui/mock-qa-scenarios.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m tests/integration/api/mock-mode.post.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m tests/unit/shared/server/mock-scenarios.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m tests/integration/api/mock-mode.login-as.post.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m6 passed[39m[22m[90m (6)[39m
+[2m      Tests [22m [1m[32m36 passed[39m[22m[90m (36)[39m
+[2m   Start at [22m 23:57:19
+[2m   Duration [22m 238ms[2m (transform 405ms, setup 0ms, import 565ms, tests 63ms, environment 0ms)[22m
+
+
+> hydrorivers-v056-template@0.8.7 build
+> next build
+
+▲ Next.js 16.2.4 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 6.7s
+  Running TypeScript ...
+  Finished TypeScript in 9.0s ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/2) ...
+✓ Generating static pages using 7 workers (2/2) in 64ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /_not-found
+├ ƒ /[locale]
+├ ƒ /[locale]/admin
+├ ƒ /[locale]/cadastro
+├ ƒ /[locale]/cargas
+├ ƒ /[locale]/cargas-publicas
+├ ƒ /[locale]/cargas-publicas/[id]
+├ ƒ /[locale]/cargas/[id]
+├ ƒ /[locale]/cargas/[id]/mapa
+├ ƒ /[locale]/cargas/minhas-cargas
+├ ƒ /[locale]/cargas/minhas-cargas/[id]
+├ ƒ /[locale]/cargas/nova
+├ ƒ /[locale]/cockpit
+├ ƒ /[locale]/dashboard
+├ ƒ /[locale]/dev-onboarding
+├ ƒ /[locale]/dev-v2
+├ ƒ /[locale]/dev-v2/mobile-cargo-list-lab
+├ ƒ /[locale]/dev/hydroway-map-spike
+├ ƒ /[locale]/dev/mobile-cargo-list-lab
+├ ƒ /[locale]/embarcacoes
+├ ƒ /[locale]/embarcacoes/[id]
+├ ƒ /[locale]/entrar
+├ ƒ /[locale]/erro/servico
+├ ƒ /[locale]/governo
+├ ƒ /[locale]/hidrologia
+├ ƒ /[locale]/impacto
+├ ƒ /[locale]/impacto/[id]
+├ ƒ /[locale]/lab/embarcador-glass-flow
+├ ƒ /[locale]/lab/minhas-cargas
+├ ƒ /[locale]/login
+├ ƒ /[locale]/logout
+├ ƒ /[locale]/minhas-cargas
+├ ƒ /[locale]/minhas-cargas/[id]
+├ ƒ /[locale]/minhas-cargas/[id]/documentos
+├ ƒ /[locale]/minhas-cargas/[id]/mapa
+├ ƒ /[locale]/minhas-cargas/[id]/negociacao
+├ ƒ /[locale]/minhas-cargas/nova
+├ ƒ /[locale]/negociacoes
+├ ƒ /[locale]/negociacoes/[id]
+├ ƒ /[locale]/notificacoes
+├ ƒ /[locale]/offline
+├ ƒ /[locale]/perfil
+├ ƒ /[locale]/rastreio
+├ ƒ /[locale]/registrar
+├ ƒ /[locale]/sucesso/acao-operacional
+├ ƒ /[locale]/verificar-otp
+├ ƒ /api/ai/cargo-status
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/me
+├ ƒ /api/auth/profile
+├ ƒ /api/auth/qa-direct-login
+├ ƒ /api/auth/register
+├ ƒ /api/cargas
+├ ƒ /api/embarcacoes
+├ ƒ /api/mock-mode
+├ ƒ /api/mock-mode/login-as
+├ ƒ /api/negociacoes
+└ ƒ /api/rastreio
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+> hydrorivers-v056-template@0.8.7 test:shipper-mobile-p0
+> playwright test --config=playwright.shipper-mobile-p0.config.ts
+
+[2m[WebServer] [22m
+[2m[WebServer] [22m> hydrorivers-v056-template@0.8.7 build
+[2m[WebServer] [22m> next build
+[2m[WebServer] [22m
+[2m[WebServer] [22m[1m[38;2;173;127;168m▲ Next.js 16.2.4[39m[22m (Turbopack)
+[2m[WebServer] [22m
+[2m[WebServer] [22m[37m[1m [22m[39m Creating an optimized production build ...
+[2m[WebServer] [22m[32m[1m✓[22m[39m Compiled successfully in 6.5s
+[2m[WebServer] [22m[37m[1m [22m[39m Running TypeScript ...
+[2m[WebServer] [22m[37m[1m [22m[39m Finished TypeScript in 9.2s ...
+[2m[WebServer] [22m[37m[1m [22m[39m Collecting page data using 7 workers ...
+[2m[WebServer] [22m[37m[1m [22m[39m Generating static pages using 7 workers (0/2) ...
+[2m[WebServer] [22m[32m[1m✓[22m[39m Generating static pages using 7 workers (2/2) in 63ms
+[2m[WebServer] [22m[37m[1m [22m[39m Finalizing page optimization ...
+[2m[WebServer] [22m
+[2m[WebServer] [22m[4mRoute (app)[24m
+[2m[WebServer] [22m┌ ○ /_not-found
+[2m[WebServer] [22m├ ƒ /[locale]
+[2m[WebServer] [22m├ ƒ /[locale]/admin
+[2m[WebServer] [22m├ ƒ /[locale]/cadastro
+[2m[WebServer] [22m├ ƒ /[locale]/cargas
+[2m[WebServer] [22m├ ƒ /[locale]/cargas-publicas
+[2m[WebServer] [22m├ ƒ /[locale]/cargas-publicas/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/cargas/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/cargas/[id]/mapa
+[2m[WebServer] [22m├ ƒ /[locale]/cargas/minhas-cargas
+[2m[WebServer] [22m├ ƒ /[locale]/cargas/minhas-cargas/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/cargas/nova
+[2m[WebServer] [22m├ ƒ /[locale]/cockpit
+[2m[WebServer] [22m├ ƒ /[locale]/dashboard
+[2m[WebServer] [22m├ ƒ /[locale]/dev-onboarding
+[2m[WebServer] [22m├ ƒ /[locale]/dev-v2
+[2m[WebServer] [22m├ ƒ /[locale]/dev-v2/mobile-cargo-list-lab
+[2m[WebServer] [22m├ ƒ /[locale]/dev/hydroway-map-spike
+[2m[WebServer] [22m├ ƒ /[locale]/dev/mobile-cargo-list-lab
+[2m[WebServer] [22m├ ƒ /[locale]/embarcacoes
+[2m[WebServer] [22m├ ƒ /[locale]/embarcacoes/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/entrar
+[2m[WebServer] [22m├ ƒ /[locale]/erro/servico
+[2m[WebServer] [22m├ ƒ /[locale]/governo
+[2m[WebServer] [22m├ ƒ /[locale]/hidrologia
+[2m[WebServer] [22m├ ƒ /[locale]/impacto
+[2m[WebServer] [22m├ ƒ /[locale]/impacto/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/lab/embarcador-glass-flow
+[2m[WebServer] [22m├ ƒ /[locale]/lab/minhas-cargas
+[2m[WebServer] [22m├ ƒ /[locale]/login
+[2m[WebServer] [22m├ ƒ /[locale]/logout
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas/[id]/documentos
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas/[id]/mapa
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas/[id]/negociacao
+[2m[WebServer] [22m├ ƒ /[locale]/minhas-cargas/nova
+[2m[WebServer] [22m├ ƒ /[locale]/negociacoes
+[2m[WebServer] [22m├ ƒ /[locale]/negociacoes/[id]
+[2m[WebServer] [22m├ ƒ /[locale]/notificacoes
+[2m[WebServer] [22m├ ƒ /[locale]/offline
+[2m[WebServer] [22m├ ƒ /[locale]/perfil
+[2m[WebServer] [22m├ ƒ /[locale]/rastreio
+[2m[WebServer] [22m├ ƒ /[locale]/registrar
+[2m[WebServer] [22m├ ƒ /[locale]/sucesso/acao-operacional
+[2m[WebServer] [22m├ ƒ /[locale]/verificar-otp
+[2m[WebServer] [22m├ ƒ /api/ai/cargo-status
+[2m[WebServer] [22m├ ƒ /api/auth/login
+[2m[WebServer] [22m├ ƒ /api/auth/logout
+[2m[WebServer] [22m├ ƒ /api/auth/me
+[2m[WebServer] [22m├ ƒ /api/auth/profile
+[2m[WebServer] [22m├ ƒ /api/auth/qa-direct-login
+[2m[WebServer] [22m├ ƒ /api/auth/register
+[2m[WebServer] [22m├ ƒ /api/cargas
+[2m[WebServer] [22m├ ƒ /api/embarcacoes
+[2m[WebServer] [22m├ ƒ /api/mock-mode
+[2m[WebServer] [22m├ ƒ /api/mock-mode/login-as
+[2m[WebServer] [22m├ ƒ /api/negociacoes
+[2m[WebServer] [22m└ ƒ /api/rastreio
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m○  (Static)   prerendered as static content
+[2m[WebServer] [22mƒ  (Dynamic)  server-rendered on demand
+[2m[WebServer] [22m
+[2m[WebServer] [22m
+[2m[WebServer] [22m> hydrorivers-v056-template@0.8.7 start
+[2m[WebServer] [22m> next start --hostname 127.0.0.1 --port 3100
+[2m[WebServer] [22m
+[2m[WebServer] [22m[1m[38;2;173;127;168m▲ Next.js 16.2.4[39m[22m
+[2m[WebServer] [22m- Local:         http://127.0.0.1:3100
+[2m[WebServer] [22m- Network:       http://127.0.0.1:3100
+[2m[WebServer] [22m[32m[1m✓[22m[39m Ready in 89ms
+
+Running 12 tests using 1 worker
+
+[shipper-p0] no theme switch on /pt-BR; capturing current theme only
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-root-390x844-current.png
+[shipper-p0] no theme switch on /pt-BR/entrar; capturing current theme only
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-entrar-390x844-current.png
+[shipper-p0] no theme switch on /pt-BR/registrar; capturing current theme only
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-registrar-390x844-current.png
+[shipper-p0] no theme switch on /pt-BR/verificar-otp; capturing current theme only
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-verificar-otp-390x844-current.png
+  ✓   1 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:312:5 › Shipper mobile P0 — visual & functional QA › pt-BR P0 screenshots — auth and landing (5.3s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cockpit-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cockpit-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-notificacoes-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-notificacoes-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-perfil-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-perfil-390x844-dark.png
+  ✓   2 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:312:5 › Shipper mobile P0 — visual & functional QA › pt-BR P0 screenshots — authenticated shell (14.9s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-documentos-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-documentos-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-negociacao-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-negociacao-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-hidrologia-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-hidrologia-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-impacto-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-impacto-390x844-dark.png
+  ✓   3 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:312:5 › Shipper mobile P0 — visual & functional QA › pt-BR P0 screenshots — cargo detail and hydro (16.8s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-offline-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-offline-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-erro-servico-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-erro-servico-390x844-dark.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-sucesso-acao-operacional-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-sucesso-acao-operacional-390x844-dark.png
+  ✓   4 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:312:5 › Shipper mobile P0 — visual & functional QA › pt-BR P0 screenshots — state screens (6.7s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-390x844-light.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-390x844-dark.png
+  ✓   5 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:317:3 › Shipper mobile P0 — visual & functional QA › public cargo detail pub-001 — light and dark screenshots (1.8s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cockpit-375x667-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-375x667-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-375x667-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-375x667-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-375x667-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cockpit-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cockpit-430x932-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-430x932-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-cargas-publicas-pub-001-430x932-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-430x932-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-430x932-current.png
+  ✓   6 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:323:3 › Shipper mobile P0 — visual & functional QA › pt-BR P0 routes — three mobile viewports (standard capture set) (13.0s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/en-US-cockpit-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/es-cockpit-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/en-US-minhas-cargas-390x844-current.png
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/es-minhas-cargas-390x844-current.png
+  ✓   7 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:342:3 › Shipper mobile P0 — visual & functional QA › i18n key routes render localized shell (5.7s)
+  ✓   8 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:355:3 › Shipper mobile P0 — visual & functional QA › public cargoes do not expose sensitive data (1.5s)
+[shipper-p0] screenshot /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/shipper-mobile-p0-screenshots/pt-BR-minhas-cargas-hr-4821-mapa-390x844-current.png
+  ✓   9 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:362:3 › Shipper mobile P0 — visual & functional QA › full-screen map hides bottom nav (3.3s)
+  ✓  10 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:369:3 › Shipper mobile P0 — visual & functional QA › authenticated shell chrome — header and bottom nav contracts (9.6s)
+  ✓  11 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:385:3 › Shipper mobile P0 — visual & functional QA › mobile layout — no horizontal overflow on P0 routes (37.5s)
+  ✓  12 [mobile-chromium] › tests/shipper-mobile-p0.visual.spec.ts:395:3 › Shipper mobile P0 — visual & functional QA › primary controls meet minimum touch target height (3.2s)
+
+  12 passed (2.3m)
+[SO-022/W01/HF02] GREEN
+=== SHARKOPS RESULT: GREEN ===
+Report: /Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard/reports/sharkops/SO-022-W01-HF02-attack.log

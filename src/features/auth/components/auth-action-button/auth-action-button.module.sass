@@ -1,0 +1,53 @@
+.button
+  min-height: var(--button-h)
+  height: var(--button-h)
+  width: 100%
+  border-radius: var(--radius-md)
+  border: 1px solid transparent
+  font-weight: 650
+  cursor: pointer
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  gap: var(--space-2)
+
+  &:focus-visible
+    outline: 2px solid var(--hy-auth-focus)
+    outline-offset: 2px
+
+.primary
+  background: var(--hy-auth-text)
+  color: var(--hy-auth-bg)
+
+.secondary
+  background: var(--hy-auth-surface-secondary)
+  color: var(--hy-auth-text)
+  border-color: var(--hy-auth-border)
+  min-height: var(--button-secondary-h)
+  height: var(--button-secondary-h)
+
+.ghost
+  background: transparent
+  color: var(--hy-auth-text)
+  border-color: var(--hy-auth-border)
+  min-height: var(--button-secondary-h)
+  height: var(--button-secondary-h)
+
+.loading
+  opacity: 0.72
+  pointer-events: none
+
+.success
+  background: var(--hy-auth-success)
+  color: var(--hy-auth-bg)
+
+.error
+  background: var(--hy-auth-danger)
+  color: var(--hy-auth-bg)
+
+.disabled
+  opacity: 0.45
+  pointer-events: none
+
+.link
+  text-decoration: none
