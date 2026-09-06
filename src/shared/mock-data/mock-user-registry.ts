@@ -410,7 +410,8 @@ export function toHydroUser(entry: MockRegistryUser): HydroUser {
     countryCode: registryCountryDialCode(entry.country),
     phone: entry.phoneE164,
     phoneE164: entry.phoneE164,
-    passwordHash: entry.passwordHash
+    passwordHash: entry.passwordHash,
+    persistenceKind: 'seed'
   };
 }
 

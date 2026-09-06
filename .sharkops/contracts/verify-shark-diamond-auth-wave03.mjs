@@ -1,0 +1,16 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+const root = process.cwd();
+const login = readFileSync(resolve(root, 'src/app/[locale]/(product-shell)/login/page.tsx'), 'utf8');
+const register = readFileSync(resolve(root, 'src/app/[locale]/(product-shell)/cadastro/page.tsx'), 'utf8');
+const routes = readFileSync(resolve(root, 'src/shared/routing/app-routes.ts'), 'utf8');
+const fail = (message) => { console.error(`[shark-diamond-auth-w03] FAIL: ${message}`); process.exit(1); };
+if (!login.includes("redirect(`/${locale}/entrar${suffix}`)")) fail('legacy /login must redirect to canonical /entrar');
+if (!register.includes("redirect(`/${locale}/registrar${suffix}`)")) fail('legacy /cadastro must redirect to canonical /registrar');
+if (login.includes('AuthForm') || register.includes('AuthForm')) fail('legacy aliases cannot render duplicate auth UI');
+if (!routes.includes("login: '/entrar'")) fail('app route login must remain canonical /entrar');
+if (!routes.includes("cadastro: '/registrar'")) fail('app route register must remain canonical /registrar');
+console.log('[shark-diamond-auth-w03] PASS');
+console.log(' canonical UI owners: /entrar + /registrar');
+console.log(' legacy /login + /cadastro: compatibility redirects only');
+console.log(' duplicate auth presentation: retired');

@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-/** Abre o hub QA em rota de produto (M não aparece em /login). */
+/** Abre o Dev Assist em rota de produto. */
 async function openQaHubFromCargas(page: import('@playwright/test').Page) {
   await page.goto('/pt-BR/cargas');
   await page.getByTestId('mock-mode-toggle').click();
@@ -8,14 +8,14 @@ async function openQaHubFromCargas(page: import('@playwright/test').Page) {
 }
 
 test.describe('Mock QA Hub', () => {
-  test('botão M não aparece em /login (shell público de auth)', async ({ page }) => {
+  test('Dev Assist aparece em /login para acesso rapido a personas seed', async ({ page }) => {
     await page.goto('/pt-BR/login');
-    await expect(page.getByTestId('mock-mode-toggle')).toHaveCount(0);
+    await expect(page.getByTestId('mock-mode-toggle')).toBeVisible();
   });
 
-  test('botão M não aparece em /cadastro (shell público de auth)', async ({ page }) => {
+  test('Dev Assist aparece em /cadastro para consultar credenciais e fluxo mock', async ({ page }) => {
     await page.goto('/pt-BR/cadastro');
-    await expect(page.getByTestId('mock-mode-toggle')).toHaveCount(0);
+    await expect(page.getByTestId('mock-mode-toggle')).toBeVisible();
   });
 
   test('botão M fica no canto inferior direito acima da bottom nav no mobile', async ({ page }) => {

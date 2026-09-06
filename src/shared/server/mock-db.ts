@@ -61,6 +61,18 @@ export function resetMockScenario(scenario?: string) {
 }
 
 
+
+function isExpiredEphemeralUser(user: HydroUser, nowMs = Date.now()): boolean {
+  if (user.persistenceKind !== 'ephemeral') return false;
+  if (!user.expiresAt) return true;
+  const expiresAtMs = Date.parse(user.expiresAt);
+  return !Number.isFinite(expiresAtMs) || expiresAtMs <= nowMs;
+}
+
+function pruneExpiredUsers(users: HydroUser[]): HydroUser[] {
+  return users.filter((user) => !isExpiredEphemeralUser(user));
+}
+
 function mergeSeededArray<T extends { id: string }>(stored: T[], seeded: T[]) {
   const ids = new Set(stored.map((item) => item.id));
   return [...stored, ...seeded.filter((item) => !ids.has(item.id))];
@@ -77,12 +89,19 @@ export function readMock<K extends keyof MockData>(key: K): MockData[K] {
     const stored = JSON.parse(readFileSync(file, 'utf8')) as MockData[K];
 
     if (Array.isArray(stored) && Array.isArray(seeds[key])) {
+      const storedArray = key === 'users'
+        ? pruneExpiredUsers(stored as HydroUser[]) as Array<{ id: string }>
+        : stored as Array<{ id: string }>;
       const merged = mergeSeededArray(
-        stored as Array<{ id: string }>,
+        storedArray,
         seeds[key] as Array<{ id: string }>
       ) as MockData[K];
 
-      if ((merged as Array<{ id: string }>).length !== (stored as Array<{ id: string }>).length) {
+      const storedLength = (stored as Array<{ id: string }>).length;
+      const mergedLength = (merged as Array<{ id: string }>).length;
+      const prunedExpiredUser = key === 'users' && storedArray.length !== storedLength;
+
+      if (prunedExpiredUser || mergedLength !== storedLength) {
         writeFileSync(file, JSON.stringify(merged, null, 2));
       }
 

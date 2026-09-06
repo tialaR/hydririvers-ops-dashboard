@@ -1,6 +1,4 @@
-import { Suspense } from 'react';
-import { getTranslations } from 'next-intl/server';
-import { AuthForm } from '@/features/auth/components/auth-form/auth-form';
+import { redirect } from 'next/navigation';
 
 function firstSearchParam(value: string | string[] | undefined): string | undefined {
   if (value === undefined) return undefined;
@@ -8,17 +6,21 @@ function firstSearchParam(value: string | string[] | undefined): string | undefi
   return typeof raw === 'string' ? raw : undefined;
 }
 
-export default async function LoginPage({
+/** @deprecated Compatibility alias. Canonical public login is /entrar. */
+export default async function LegacyLoginAlias({
+  params,
   searchParams
 }: {
-  searchParams?: Promise<{ prefill?: string | string[] }>;
+  params: Promise<{ locale: string }>;
+  searchParams?: Promise<{ prefill?: string | string[]; next?: string | string[] }>;
 }) {
+  const { locale } = await params;
   const sp = (await searchParams) ?? {};
+  const query = new URLSearchParams();
   const prefill = firstSearchParam(sp.prefill);
-  const t = await getTranslations('pages.login');
-  return (
-    <Suspense fallback={<section aria-busy="true" aria-label={t('loading')} />}>
-      <AuthForm mode="login" loginPrefill={prefill} />
-    </Suspense>
-  );
+  const next = firstSearchParam(sp.next);
+  if (prefill) query.set('prefill', prefill);
+  if (next) query.set('next', next);
+  const suffix = query.size > 0 ? `?${query.toString()}` : '';
+  redirect(`/${locale}/entrar${suffix}`);
 }

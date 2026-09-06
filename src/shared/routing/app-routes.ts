@@ -7,9 +7,9 @@ export type CargoDetailTabView = 'jornada' | 'documentos' | 'custos' | 'priorida
 
 /** Segmentos sem prefixo de locale (uso com next-intl Link / router + proxy). */
 const intlSegments = {
-  login: '/login',
-  /** Cadastro — rota `[locale]/cadastro`. */
-  cadastro: '/cadastro',
+  login: '/entrar',
+  /** Registro público canônico — rota `[locale]/registrar`. */
+  cadastro: '/registrar',
   perfil: '/perfil',
   logout: '/logout',
   dashboard: '/dashboard',
@@ -109,7 +109,7 @@ export const intlAppPaths = {
 const localePathPrefix = /^\/(pt-BR|en-US|es)(?=\/|$)/;
 
 /**
- * Caminho após o segmento de locale (ex.: `/login`, `/cadastro`).
+ * Caminho após o segmento de locale (ex.: `/entrar`, `/registrar`).
  * Usado para detectar páginas públicas de auth sem depender do locale.
  */
 export function stripLocaleSegmentPath(pathname: string): string {
