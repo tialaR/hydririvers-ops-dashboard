@@ -13,6 +13,11 @@
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
 }
 .button:hover { transform: translateY(-1px); }
+.button:focus:not(:focus-visible) { outline: none; }
+.button:focus-visible {
+  outline: 2px solid var(--hy-color-info);
+  outline-offset: 3px;
+}
 .primary {
   background: linear-gradient(135deg, var(--brand), var(--river));
   color: #07110e;
@@ -33,7 +38,7 @@
 }
 .ghost:hover { color: var(--text); border-color: var(--brand-soft-line); }
 
-.button:disabled { cursor: not-allowed; }
+.button:disabled { cursor: not-allowed; opacity: .56; }
 .button:disabled:hover { transform: none; }
 .loading { position: relative; }
 .loadingContent { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; }
@@ -46,3 +51,9 @@
   animation: spin .7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .button { transition: none; }
+  .button:hover { transform: none; }
+  .spinner { animation-duration: 1.4s; }
+}

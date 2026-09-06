@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Button } from './button';
 
 const meta = {
-  title: 'Foundations/Button',
+  title: 'Primitives/Button',
   component: Button,
   parameters: {
     docs: {

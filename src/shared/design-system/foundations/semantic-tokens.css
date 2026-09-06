@@ -15,6 +15,54 @@
   --hy-shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.24);
   --hy-radius-control: 999px;
 
+  /* Stable component aliases consumed by the extracted DS skins. */
+  --ds-accent-primary: var(--hy-color-accent);
+  --ds-status-neutral: var(--hy-color-text-secondary);
+  --ds-status-success: var(--hy-color-success);
+  --ds-status-warning: var(--hy-color-warning);
+  --ds-status-danger: var(--hy-color-critical);
+  --ds-text-secondary: var(--hy-color-text-secondary);
+  --ds-surface-subtle: color-mix(in srgb, var(--hy-color-text-primary) 9%, transparent);
+  --ds-surface-card: var(--hy-color-surface);
+  --ds-surface-card-elevated: var(--hy-color-surface-raised);
+  --ds-surface-panel: var(--hy-color-surface);
+  --ds-surface-sheet: var(--hy-color-surface-raised);
+  --ds-surface-overlay: color-mix(in srgb, var(--hy-color-canvas) 78%, transparent);
+  --ds-elevation-medium: var(--hy-shadow-soft);
+  --ds-elevation-card: var(--hy-shadow-soft);
+  --ds-radius-pill: var(--hy-radius-control);
+  --ds-radius-card: 1rem;
+  --ds-radius-panel: 0.75rem;
+  --ds-radius-sheet: 1.25rem;
+  --ds-radius-lg: 1rem;
+
+  --hy-color-status-open-text: var(--hy-color-info);
+  --hy-color-status-open-bg: color-mix(in srgb, var(--hy-color-info) 14%, transparent);
+  --hy-color-status-open-border: color-mix(in srgb, var(--hy-color-info) 38%, transparent);
+  --hy-color-status-quotation-text: var(--hy-color-warning);
+  --hy-color-status-quotation-bg: color-mix(in srgb, var(--hy-color-warning) 14%, transparent);
+  --hy-color-status-quotation-border: color-mix(in srgb, var(--hy-color-warning) 38%, transparent);
+  --hy-color-status-contracting-text: var(--hy-color-accent);
+  --hy-color-status-contracting-bg: color-mix(in srgb, var(--hy-color-accent) 14%, transparent);
+  --hy-color-status-contracting-border: color-mix(in srgb, var(--hy-color-accent) 38%, transparent);
+  --hy-color-status-operating-text: var(--hy-color-accent);
+  --hy-color-status-operating-bg: color-mix(in srgb, var(--hy-color-accent) 14%, transparent);
+  --hy-color-status-operating-border: color-mix(in srgb, var(--hy-color-accent) 38%, transparent);
+  --hy-color-status-in-transit-text: var(--hy-color-success);
+  --hy-color-status-in-transit-bg: color-mix(in srgb, var(--hy-color-success) 14%, transparent);
+  --hy-color-status-in-transit-border: color-mix(in srgb, var(--hy-color-success) 38%, transparent);
+  --hy-color-status-completed-text: var(--hy-color-success);
+  --hy-color-status-completed-bg: color-mix(in srgb, var(--hy-color-success) 14%, transparent);
+  --hy-color-status-completed-border: color-mix(in srgb, var(--hy-color-success) 38%, transparent);
+  --hy-color-status-delayed-text: var(--hy-color-warning);
+  --hy-color-status-delayed-bg: color-mix(in srgb, var(--hy-color-warning) 14%, transparent);
+  --hy-color-status-delayed-border: color-mix(in srgb, var(--hy-color-warning) 38%, transparent);
+  --hy-color-status-blocked-text: var(--hy-color-critical);
+  --hy-color-status-blocked-bg: color-mix(in srgb, var(--hy-color-critical) 14%, transparent);
+  --hy-color-status-blocked-border: color-mix(in srgb, var(--hy-color-critical) 38%, transparent);
+  --hy-color-surface-muted: var(--hy-color-surface-raised);
+  --hy-color-border-subtle: color-mix(in srgb, var(--hy-color-border) 72%, transparent);
+
   /* Legacy aliases kept while the application migrates to semantic tokens. */
   --brand: var(--hy-color-accent);
   --river: var(--hy-color-info);
