@@ -33,7 +33,9 @@
     "hydri:verify": "node scripts/hydri-verify.mjs",
     "hydri:audit": "node scripts/hydri-audit.mjs",
     "hydri:agent:check": "node scripts/hydri-agent-check.mjs",
-    "hydri:gate": "node scripts/hydri-autopilot-gate.mjs"
+    "hydri:gate": "node scripts/hydri-autopilot-gate.mjs",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
@@ -53,12 +55,16 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
+    "@storybook/addon-a11y": "^10.6.0",
+    "@storybook/addon-docs": "^10.6.0",
+    "@storybook/nextjs-vite": "^10.6.0",
     "@types/d3-geo": "^3.1.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "eslint": "^9.17.0",
     "eslint-config-next": "16.2.4",
+    "storybook": "^10.6.0",
     "typescript": "^5.7.2",
     "vitest": "^4.1.5"
   }

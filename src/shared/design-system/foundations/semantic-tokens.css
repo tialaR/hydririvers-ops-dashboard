@@ -1,0 +1,45 @@
+:root,
+[data-hy-theme='dark'] {
+  color-scheme: dark;
+  --hy-color-canvas: #080a0d;
+  --hy-color-surface: #10151b;
+  --hy-color-surface-raised: #161d25;
+  --hy-color-border: #2a3440;
+  --hy-color-text-primary: #f5f7fa;
+  --hy-color-text-secondary: #8f9baa;
+  --hy-color-accent: #31c6d6;
+  --hy-color-info: #42a5ff;
+  --hy-color-success: #27c982;
+  --hy-color-warning: #f0b847;
+  --hy-color-critical: #ff5b6d;
+  --hy-shadow-soft: 0 18px 48px rgba(0, 0, 0, 0.24);
+  --hy-radius-control: 999px;
+
+  /* Legacy aliases kept while the application migrates to semantic tokens. */
+  --brand: var(--hy-color-accent);
+  --river: var(--hy-color-info);
+  --surface: var(--hy-color-surface);
+  --text: var(--hy-color-text-primary);
+  --muted-soft: var(--hy-color-text-secondary);
+  --line-strong: var(--hy-color-border);
+  --brand-soft-line: color-mix(in srgb, var(--hy-color-accent) 54%, transparent);
+  --glow: color-mix(in srgb, var(--hy-color-accent) 22%, transparent);
+  --shadow-soft: var(--hy-shadow-soft);
+  --radius-pill: var(--hy-radius-control);
+}
+
+[data-hy-theme='light'] {
+  color-scheme: light;
+  --hy-color-canvas: #f4f7fa;
+  --hy-color-surface: #ffffff;
+  --hy-color-surface-raised: #f7f9fb;
+  --hy-color-border: #d7dee6;
+  --hy-color-text-primary: #14202a;
+  --hy-color-text-secondary: #687686;
+  --hy-color-accent: #087f8c;
+  --hy-color-info: #1a78c8;
+  --hy-color-success: #168a5b;
+  --hy-color-warning: #a96c00;
+  --hy-color-critical: #c83b4a;
+  --hy-shadow-soft: 0 14px 36px rgba(20, 32, 42, 0.10);
+}
