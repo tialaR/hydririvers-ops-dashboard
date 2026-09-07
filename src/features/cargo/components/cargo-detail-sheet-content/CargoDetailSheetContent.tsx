@@ -68,12 +68,13 @@ export function CargoDetailSheetContent({
         ]}
       />
 
-      <div className={styles.actionList}>
+      <div className={styles.actionList} role="group" aria-label="Seções da carga">
         {DEFAULT_SECTIONS.map((item) => (
           <button
             key={item.id}
             type="button"
             aria-pressed={selectedSection === item.id}
+            data-selected={selectedSection === item.id ? 'true' : undefined}
             onClick={() => onSelectSection?.(item.id)}
           >
             <span>{item.icon}</span>
@@ -86,7 +87,7 @@ export function CargoDetailSheetContent({
         ))}
       </div>
 
-      <button type="button" className={styles.moreActions} onClick={onAction}>
+      <button type="button" className={styles.moreActions} onClick={onAction} aria-label={`Abrir ações da carga ${cargo.id}`}>
         Ações da carga <span>•••</span>
       </button>
     </div>

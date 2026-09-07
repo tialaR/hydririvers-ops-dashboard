@@ -168,6 +168,20 @@
   touch-action: none;
 }
 
+.handleZone[role='slider'] {
+  cursor: grab;
+}
+
+.handleZone[role='slider']:focus-visible {
+  outline: 2px solid var(--hy-color-info, #42a5ff);
+  outline-offset: -2px;
+  border-radius: 0.75rem;
+}
+
+.handleZone[role='slider']:active {
+  cursor: grabbing;
+}
+
 .handle {
   width: 3rem;
   height: .34rem;

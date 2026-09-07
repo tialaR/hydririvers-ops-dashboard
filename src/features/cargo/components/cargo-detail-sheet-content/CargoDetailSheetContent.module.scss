@@ -90,6 +90,17 @@
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
 
+    &:focus-visible {
+      position: relative;
+      z-index: 1;
+      outline: 2px solid var(--hy-color-info, #42a5ff);
+      outline-offset: -3px;
+    }
+
+    &[data-selected='true'] {
+      background: color-mix(in srgb, var(--hy-color-info, #42a5ff) 12%, transparent);
+    }
+
     &:last-child {
       border-bottom: 0;
     }
@@ -168,6 +179,11 @@
     font-size: 18px;
     letter-spacing: 0.08em;
   }
+}
+
+.moreActions:focus-visible {
+  outline: 2px solid var(--hy-color-info, #42a5ff);
+  outline-offset: 3px;
 }
 
 :global(.root[data-theme='light']) .icon {

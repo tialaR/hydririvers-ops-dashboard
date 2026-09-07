@@ -74,6 +74,15 @@
   --glow: color-mix(in srgb, var(--hy-color-accent) 22%, transparent);
   --shadow-soft: var(--hy-shadow-soft);
   --radius-pill: var(--hy-radius-control);
+
+  /* BottomSheet compatibility aliases; semantic tokens remain the source. */
+  --hx-overlay: color-mix(in srgb, var(--hy-color-canvas) 88%, transparent);
+  --hx-cyan: var(--hy-color-accent);
+  --hx-card: var(--hy-color-surface);
+  --hx-card-2: var(--hy-color-surface-raised);
+  --hx-line-soft: color-mix(in srgb, var(--hy-color-border) 72%, transparent);
+  --hx-text: var(--hy-color-text-primary);
+  --hx-muted: var(--hy-color-text-secondary);
 }
 
 [data-hy-theme='light'] {
@@ -108,4 +117,7 @@
   --v2-surface-frosted-66: color-mix(in srgb, var(--hy-color-surface-raised) 66%, transparent);
   --v2-blue: var(--hy-color-info);
   --v2-green: var(--hy-color-success);
+  --hx-overlay: rgba(20, 32, 42, 0.24);
+  --hx-card: var(--hy-color-surface);
+  --hx-card-2: var(--hy-color-surface-raised);
 }

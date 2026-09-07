@@ -3,7 +3,10 @@ import { resolve } from 'node:path';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { BottomSheet } from '@/shared/components/bottom-sheet/BottomSheet';
+import {
+  BottomSheet,
+  resolveBottomSheetSnapIndexFromKey,
+} from '@/shared/components/bottom-sheet/BottomSheet';
 
 const bottomSheetSourcePath = resolve(
   process.cwd(),
@@ -95,6 +98,19 @@ describe('BottomSheet component', () => {
     expect(html).toContain('data-bottom-sheet-title="true"');
     expect(html).toContain('data-bottom-sheet-header="true"');
     expect(html).toContain('data-bottom-sheet-body="true"');
+    expect(html).toContain('role="slider"');
+    expect(html).toContain('tabindex="0"');
+    expect(html).toContain('aria-label="Filtros: ajustar altura"');
+    expect(html).toContain('aria-valuetext="1 de 1"');
+  });
+
+  it('resolve navegação de snap por teclado dentro dos limites', () => {
+    expect(resolveBottomSheetSnapIndexFromKey('ArrowUp', 0, 2)).toBe(1);
+    expect(resolveBottomSheetSnapIndexFromKey('ArrowRight', 2, 2)).toBe(2);
+    expect(resolveBottomSheetSnapIndexFromKey('ArrowDown', 2, 2)).toBe(1);
+    expect(resolveBottomSheetSnapIndexFromKey('Home', 2, 2)).toBe(0);
+    expect(resolveBottomSheetSnapIndexFromKey('End', 0, 2)).toBe(2);
+    expect(resolveBottomSheetSnapIndexFromKey('Enter', 1, 2)).toBe(1);
   });
 
   it('renderiza description opcional com aria-describedby', () => {
