@@ -29,8 +29,45 @@ describe('CargoCard', () => {
 
   it('chama onClick ao acionar o card', () => {
     const onClick = vi.fn();
-    renderToStaticMarkup(<CargoCard cargo={cargo} onClick={onClick} />);
+    const element = CargoCard({ cargo, onClick });
+
+    element.props.onClick({ target: {}, currentTarget: {} });
+    expect(onClick).toHaveBeenCalledWith(cargo);
+  });
+
+  it('expõe semântica de botão e seleção quando o card é a ação', () => {
+    const html = renderToStaticMarkup(
+      <CargoCard cargo={cargo} onClick={() => undefined} isSelected />,
+    );
+
+    expect(html).toContain('role="button"');
+    expect(html).toContain('tabindex="0"');
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('data-selected="true"');
+    expect(html).toContain('data-interaction-mode="card-button"');
+  });
+
+  it('aciona o card por Enter e Espaço', () => {
+    const onClick = vi.fn();
+    const element = CargoCard({ cargo, onClick });
+    const preventDefault = vi.fn();
+
+    element.props.onKeyDown({ key: 'Enter', target: element, currentTarget: element, preventDefault });
+    element.props.onKeyDown({ key: ' ', target: element, currentTarget: element, preventDefault });
+
+    expect(preventDefault).toHaveBeenCalledTimes(2);
+    expect(onClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('remove o card desabilitado da ordem de tab e bloqueia a ação', () => {
+    const onClick = vi.fn();
+    const element = CargoCard({ cargo, onClick, isDisabled: true });
+    const html = renderToStaticMarkup(element);
+
+    element.props.onClick({ target: {}, currentTarget: {} });
     expect(onClick).not.toHaveBeenCalled();
+    expect(html).toContain('aria-disabled="true"');
+    expect(html).toContain('tabindex="-1"');
   });
 
   it('renderiza CTA Acompanhar para carga em trânsito', () => {
@@ -88,5 +125,23 @@ describe('CargoCard', () => {
     expect(html).toContain('data-public-cargo-action="true"');
     expect(html).toContain('Ver detalhes');
     expect(html).not.toContain('Ver rota');
+    expect(html).not.toContain('role="button"');
+    expect(html).toContain('data-interaction-mode="direct-action"');
+  });
+
+  it('não expõe link acionável quando o card está desabilitado', () => {
+    const html = renderToStaticMarkup(
+      <CargoCard
+        cargo={cargo}
+        onClick={() => undefined}
+        primaryActionHref="/cargas/CRG-7845/mapa"
+        isDisabled
+      />,
+    );
+
+    expect(html).not.toContain('href=');
+    expect(html).toContain('role="button"');
+    expect(html).toContain('tabindex="-1"');
+    expect(html).toContain('aria-disabled="true"');
   });
 });

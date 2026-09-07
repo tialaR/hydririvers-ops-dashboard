@@ -131,7 +131,8 @@ describe('MobileCargoListLabV2', () => {
     const cargoCardSource = readFileSync(cargoCardPath, 'utf8');
 
     expect(cargoCardSource).toContain('<article');
-    expect(cargoCardSource).toContain('role={onClick || onPrimaryAction ? \'button\' : undefined}');
+    expect(cargoCardSource).toContain("role={exposesCardButton ? 'button' : undefined}");
+    expect(cargoCardSource).toContain("hasDirectAction ? 'direct-action'");
     expect(cargoCardSource).toContain('className={styles.cardAction}');
     expect(cargoCardSource).toContain('aria-hidden="true"');
     expect(cargoCardSource).not.toMatch(/<button[^>]*className=\{styles\.cardAction/);
