@@ -28,6 +28,9 @@ describe('CargoDetailSheetContent', () => {
     expect(html).toContain('Documentos');
     expect(html).toContain('Custos');
     expect(html).toContain('Ações da carga');
+    expect(html).toContain('role="group"');
+    expect(html).toContain('aria-label="Seções da carga"');
+    expect(html).toContain('aria-label="Abrir ações da carga CRG-7845"');
   });
 
   it('marca seção selecionada e chama callback', () => {
@@ -41,6 +44,7 @@ describe('CargoDetailSheetContent', () => {
     );
 
     expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('data-selected="true"');
     expect(onSelectSection).not.toHaveBeenCalled();
   });
 });

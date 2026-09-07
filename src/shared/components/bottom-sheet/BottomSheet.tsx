@@ -1,7 +1,7 @@
 'use client';
 
 import { createPortal } from 'react-dom';
-import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode, type PointerEvent as ReactPointerEvent } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type ReactNode, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from 'react';
 import { IconButton } from '@/shared/components/icon-button';
 import { Sheet } from '@/shared/design-system/core/sheet';
 import { useLockBodyScroll } from '@/shared/hooks/use-lock-body-scroll';
@@ -91,6 +91,18 @@ export function resolveBottomSheetInitialSnapIndex(
   if (!initialSnap) return 0;
   const index = snapOrder.indexOf(initialSnap);
   return index >= 0 ? index : 0;
+}
+
+export function resolveBottomSheetSnapIndexFromKey(
+  key: string,
+  currentIndex: number,
+  maxIndex: number,
+) {
+  if (key === 'Home') return 0;
+  if (key === 'End') return maxIndex;
+  if (key === 'ArrowUp' || key === 'ArrowRight') return Math.min(maxIndex, currentIndex + 1);
+  if (key === 'ArrowDown' || key === 'ArrowLeft') return Math.max(0, currentIndex - 1);
+  return currentIndex;
 }
 
 function resolveSnapPoint(snapPoints: BottomSheetSnapPoint[] | undefined) {
@@ -316,16 +328,14 @@ export function BottomSheet({
     onSnapChange?.(activeSnapId, snapIndex);
   }, [activeSnapId, onSnapChange, open, snapIndex, usesNamedSnaps]);
 
-  const requestClose = useMemo(() => {
-    return () => {
-      setDragOffset(0);
-      setDragTranslateYpx(null);
-      if (onOpenChange) {
-        onOpenChange(false);
-        return;
-      }
-      onClose?.();
-    };
+  const requestClose = useCallback(() => {
+    setDragOffset(0);
+    setDragTranslateYpx(null);
+    if (onOpenChange) {
+      onOpenChange(false);
+      return;
+    }
+    onClose?.();
   }, [onClose, onOpenChange]);
 
   useEffect(() => () => {
@@ -594,6 +604,18 @@ export function BottomSheet({
     window.addEventListener('pointercancel', onUp);
   }
 
+  function handleDragHandleKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (!dragEnabled) return;
+    const nextIndex = resolveBottomSheetSnapIndexFromKey(event.key, snapIndex, maxSnapIndex);
+    if (nextIndex === snapIndex) return;
+
+    event.preventDefault();
+    snapIndexRef.current = nextIndex;
+    setSnapIndex(nextIndex);
+    setDragOffset(0);
+    setDragTranslateYpx(null);
+  }
+
   useEffect(() => () => {
     clearDragListeners();
     cancelDragRaf();
@@ -634,12 +656,14 @@ export function BottomSheet({
           className={styles.handleZone}
           data-testid="bottom-sheet-handle"
           role={dragEnabled ? 'slider' : undefined}
-          aria-label={dragEnabled ? dragHandleAriaLabel : undefined}
+          tabIndex={dragEnabled ? 0 : undefined}
+          aria-label={dragEnabled ? (dragHandleAriaLabel ?? `${title}: ajustar altura`) : undefined}
           aria-valuemin={dragEnabled ? 0 : undefined}
           aria-valuemax={dragEnabled ? maxSnapIndex : undefined}
           aria-valuenow={dragEnabled ? snapIndex : undefined}
-          aria-valuetext={dragEnabled && activeSnapId ? activeSnapId : undefined}
+          aria-valuetext={dragEnabled ? (activeSnapId ?? `${snapIndex + 1} de ${maxSnapIndex + 1}`) : undefined}
           onPointerDown={startDrag}
+          onKeyDown={handleDragHandleKeyDown}
         >
           <span className={styles.handle} aria-hidden="true" />
         </div>
@@ -668,7 +692,7 @@ export function BottomSheet({
             className={styles.closeButton}
             iconButtonRole="sheet"
             data-bottom-sheet-close="true"
-            ariaLabel={closeAriaLabel ?? title}
+            ariaLabel={closeAriaLabel ?? `Fechar ${title}`}
             iconName="close"
             onClick={resetAndClose}
           />
