@@ -55,6 +55,7 @@ export default defineConfig({
       'tests/unit/shared/components/inline-alert.component.test.tsx',
       'tests/unit/shared/components/informational-card.component.test.tsx',
       'tests/unit/shared/components/surface.component.test.tsx',
+      'tests/unit/shared/design-system/storybook-primitives.test.tsx',
       'tests/unit/features/auth/auth-form.component.test.tsx',
       'tests/unit/features/auth/profile-panel.component.test.tsx',
       'tests/unit/app/mobile-cargo-list-lab-page.test.tsx',

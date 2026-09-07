@@ -34,7 +34,9 @@ const preview: Preview = {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: { expanded: true },
     layout: 'centered',
-    a11y: { test: 'todo' },
+    a11y: {
+      test: 'error',
+    },
   },
 };
 

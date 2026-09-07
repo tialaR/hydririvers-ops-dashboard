@@ -19,6 +19,13 @@ The `--hy-*` variables are the forward-facing semantic contract. Existing variab
 
 A story is not proof that a component is APPROVED/DIAMOND. Storybook proves implementation states. Product homologation still follows the canonical HydroRivers Source of Truth.
 
-## First published primitive
+## Published catalog
 
-`Foundations/Button` exposes primary, secondary, ghost, loading and disabled states in both themes through the global theme control.
+- `Primitives/Button`: primary, secondary, ghost, loading and disabled states.
+- `Primitives/StatusBadge`: full logistics status vocabulary, dot and density states.
+- `Primitives/ProgressBar`: semantic tones, boundaries and visible value.
+- `Primitives/Surface`: material, padding, semantic role and interactive state.
+- `Primitives/IconButton`: role, icon, active, badge, loading and disabled states.
+- `Operational/CargoStatusBadge`: first stabilized HydroRivers operational composition, reusing the shared `StatusBadge` contract.
+
+Every story runs in Dark and Light through the global theme control. The a11y addon is configured with `test: 'error'`, so accessibility violations are blocking when stories run through Storybook's test integration rather than remaining informational.
