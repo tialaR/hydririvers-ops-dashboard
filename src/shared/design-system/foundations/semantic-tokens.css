@@ -90,4 +90,22 @@
   --hy-color-warning: #a96c00;
   --hy-color-critical: #c83b4a;
   --hy-shadow-soft: 0 14px 36px rgba(20, 32, 42, 0.10);
+
+  /* Legacy v2 aliases required by the production CargoCard skin in isolation. */
+  --v2-surface-card: var(--hy-color-surface);
+  --v2-shadow-card-elevated: var(--hy-shadow-soft);
+  --v2-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  --v2-text: var(--hy-color-text-primary);
+  --v2-title: var(--hy-color-text-primary);
+  --v2-text-strong: var(--hy-color-text-primary);
+  --v2-text-accent: var(--hy-color-info);
+  --v2-text-route-city: var(--hy-color-text-primary);
+  --v2-text-secondary-muted: var(--hy-color-text-secondary);
+  --v2-text-secondary-soft: var(--hy-color-text-secondary);
+  --v2-line-faint: color-mix(in srgb, var(--hy-color-border) 62%, transparent);
+  --v2-border-strong: var(--hy-color-border);
+  --v2-border-slate-11: color-mix(in srgb, var(--hy-color-border) 76%, transparent);
+  --v2-surface-frosted-66: color-mix(in srgb, var(--hy-color-surface-raised) 66%, transparent);
+  --v2-blue: var(--hy-color-info);
+  --v2-green: var(--hy-color-success);
 }

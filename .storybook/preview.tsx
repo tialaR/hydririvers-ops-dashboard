@@ -8,7 +8,7 @@ const withHydroTheme: Decorator = (Story, context) => {
   const theme = context.globals.theme === 'light' ? 'light' : 'dark';
 
   return (
-    <div className="hy-storybook-canvas" data-hy-theme={theme}>
+    <div className="hy-storybook-canvas root" data-hy-theme={theme} data-theme={theme}>
       <Story />
     </div>
   );

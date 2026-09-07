@@ -37,8 +37,13 @@ export function CargoCard({
   primaryActionHref,
   actionLabel,
   className,
+  isSelected = false,
   isDisabled = false,
 }: CargoCardProps) {
+  const hasCardInteraction = Boolean(onClick || onPrimaryAction);
+  const directActionHref = isDisabled ? undefined : primaryActionHref;
+  const hasDirectAction = Boolean(directActionHref);
+  const exposesCardButton = hasCardInteraction && !hasDirectAction;
   const etaValue = normalizeEtaValue(cargo.eta);
   const resolvedActionLabel =
     actionLabel ??
@@ -49,7 +54,11 @@ export function CargoCard({
   function handleOpen(event?: MouseEvent<HTMLElement>) {
     if (isDisabled) return;
 
-    if (event?.target instanceof Element && event.target.closest('[data-cargo-primary-action]')) {
+    if (
+      typeof Element !== 'undefined' &&
+      event?.target instanceof Element &&
+      event.target.closest('[data-cargo-primary-action]')
+    ) {
       return;
     }
 
@@ -72,11 +81,14 @@ export function CargoCard({
       data-cargo-id={cargo.id}
       data-cargo-label={cargo.title}
       data-ds-v2-cargo-card="true"
-      role={onClick || onPrimaryAction ? 'button' : undefined}
-      tabIndex={onClick || onPrimaryAction ? 0 : undefined}
+      data-selected={isSelected ? 'true' : undefined}
+      data-interaction-mode={hasDirectAction ? 'direct-action' : exposesCardButton ? 'card-button' : 'static'}
+      role={exposesCardButton ? 'button' : undefined}
+      tabIndex={exposesCardButton ? (isDisabled ? -1 : 0) : undefined}
+      aria-pressed={exposesCardButton ? isSelected : undefined}
       aria-disabled={isDisabled || undefined}
-      onClick={onClick || onPrimaryAction ? (event) => handleOpen(event) : undefined}
-      onKeyDown={onClick || onPrimaryAction ? handleKeyDown : undefined}
+      onClick={hasCardInteraction ? (event) => handleOpen(event) : undefined}
+      onKeyDown={exposesCardButton ? handleKeyDown : undefined}
     >
       <div className={styles.cardHeader}>
         <span className={styles.cargoIcon}>
@@ -92,9 +104,9 @@ export function CargoCard({
 
       <div className={styles.footer}>
         <CargoEtaBlock label="ETA" value={etaValue || '—'} />
-        {primaryActionHref ? (
+        {directActionHref ? (
           <Link
-            href={primaryActionHref}
+            href={directActionHref}
             className={styles.cardAction}
             data-cargo-primary-action="true"
             data-public-cargo-action="true"
