@@ -100,6 +100,8 @@ describe('owned cargo premium sheets', () => {
     );
 
     expect(html).toContain('data-testid="owned-cargo-map-sheet-preview"');
+    expect(html).toContain('role="progressbar"');
+    expect(html).toContain(`aria-valuenow="${detail.map.progressPercent}"`);
     expect(html).toContain('pages.minhasCargas.detail.sheets.map:status.open');
     expect(html).toContain(cargo.origin);
   });
@@ -116,6 +118,7 @@ describe('owned cargo premium sheets', () => {
 
     expect(html).toContain('data-testid="owned-cargo-timeline-sheet-list"');
     expect(html).toContain(detail.timelineEvents[0]!.timestampMock);
+    expect(html).toContain('aria-current="step"');
   });
 
   it('renderiza documentos premium com banner de ação', () => {
@@ -145,6 +148,60 @@ describe('owned cargo premium sheets', () => {
 
     expect(html).toContain('data-testid="owned-cargo-risks-sheet-critical"');
     expect(html).toContain('data-testid="owned-cargo-risks-sheet-list"');
+    expect(html).toContain('role="alert"');
+  });
+
+  it('renderiza os estados sem dados dos quatro painéis operacionais', () => {
+    const mapHtml = renderToStaticMarkup(
+      React.createElement(OwnedCargoMapSheet, {
+        cargo,
+        map: { ...detail.map, state: 'unavailable', statusKey: 'unavailable' },
+        open: true,
+        onOpenChange: () => undefined,
+      }),
+    );
+    const timelineHtml = renderToStaticMarkup(
+      React.createElement(OwnedCargoTimelineSheet, {
+        preview: {
+          ...detail.timeline,
+          state: 'empty',
+          eventCount: 0,
+          nextEventMock: null,
+          phaseDots: [],
+        },
+        events: [],
+        open: true,
+        onOpenChange: () => undefined,
+      }),
+    );
+    const documentsHtml = renderToStaticMarkup(
+      React.createElement(OwnedCargoDocumentsSheet, {
+        preview: {
+          ...detail.documents,
+          state: 'empty',
+          totalCount: 0,
+          pendingCount: 0,
+          readinessPercent: 0,
+          topPendingName: null,
+        },
+        documents: [],
+        open: true,
+        onOpenChange: () => undefined,
+      }),
+    );
+    const risksHtml = renderToStaticMarkup(
+      React.createElement(OwnedCargoRisksSheet, {
+        preview: { state: 'clear', count: 0, primaryRiskMock: null, topSeverity: null },
+        risks: [],
+        open: true,
+        onOpenChange: () => undefined,
+      }),
+    );
+
+    expect(mapHtml).toContain('data-testid="owned-cargo-map-sheet-empty"');
+    expect(timelineHtml).toContain('data-testid="owned-cargo-timeline-sheet-empty"');
+    expect(documentsHtml).toContain('data-testid="owned-cargo-documents-sheet-empty"');
+    expect(risksHtml).toContain('data-testid="owned-cargo-risks-sheet-clear"');
   });
 
   it('renderiza processo premium com checklist', () => {
