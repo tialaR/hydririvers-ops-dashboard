@@ -89,7 +89,12 @@ export function OwnedCargoTimelineSheet({
           <h3 className={sheetStyles.sectionTitle}>{t('eventsSection')}</h3>
           <ul className={sheetStyles.timelineList} data-testid="owned-cargo-timeline-sheet-list">
             {events.map((event) => (
-              <li key={event.id} className={sheetStyles.timelineItem} data-phase={event.phase}>
+              <li
+                key={event.id}
+                className={sheetStyles.timelineItem}
+                data-phase={event.phase}
+                aria-current={event.phase === 'current' ? 'step' : undefined}
+              >
                 <span className={sheetStyles.timelineDot} aria-hidden />
                 <div>
                   <p className={sheetStyles.timelineLabel}>{translateMock(locale, event.labelMock)}</p>

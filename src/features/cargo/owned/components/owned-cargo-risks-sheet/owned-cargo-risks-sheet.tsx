@@ -55,6 +55,7 @@ export function OwnedCargoRisksSheet({
           {criticalRisk ? (
             <div
               className={sheetStyles.riskHero}
+              role="alert"
               data-critical={criticalRisk.isCritical ? 'true' : undefined}
               data-testid="owned-cargo-risks-sheet-critical"
             >

@@ -39,5 +39,9 @@ A story is not proof that a component is APPROVED/DIAMOND. Storybook proves impl
 - `Forms/OtpInput`: empty, filled, invalid, disabled and controlled verification-code states.
 - `Feedback/InlineAlert`: assertive errors plus polite success and informational announcements.
 - `Feedback/InformationalCard`: neutral, informational, success, warning and danger compositions, including actions.
+- `Operational/OwnedCargoMapSheet`: available route progress and unavailable map states.
+- `Operational/OwnedCargoTimelineSheet`: active journey with current-step semantics and empty history.
+- `Operational/OwnedCargoDocumentsSheet`: pending action, ready package and empty document states.
+- `Operational/OwnedCargoRisksSheet`: critical operational alert and clear-route states.
 
 Every story runs in Dark and Light through the global theme control. The a11y addon is configured with `test: 'error'`, so accessibility violations are blocking when stories run through Storybook's test integration rather than remaining informational.
