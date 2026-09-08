@@ -23,6 +23,7 @@ Este diretório reúne as decisões, regras e guias do produto.
 - [design-system/components.md](./design-system/components.md)
 - [design-system/responsive.md](./design-system/responsive.md)
 - [design-system/storybook-readiness.md](./design-system/storybook-readiness.md)
+- [audits/design-system-storybook-cycle-closeout.md](./audits/design-system-storybook-cycle-closeout.md)
 - [accessibility/accessibility-guidelines.md](./accessibility/accessibility-guidelines.md)
 - [i18n/i18n-guidelines.md](./i18n/i18n-guidelines.md)
 - [testing/testing-strategy.md](./testing/testing-strategy.md)

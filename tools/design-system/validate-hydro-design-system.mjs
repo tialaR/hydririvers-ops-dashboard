@@ -81,14 +81,21 @@ async function validatePrimitiveImports(files) {
   }
 }
 
-async function validateBackupsInApp(files) {
+async function validateBackupsInSource(files) {
   for (const file of files) {
     const rel = toPosix(path.relative(root, file));
-    if (!rel.startsWith('src/app/')) {
-      continue;
-    }
     if (rel.includes('.backup-') || rel.includes('.before')) {
-      errors.push(`Arquivo de backup proibido em src/app: ${rel}`);
+      errors.push(`Arquivo de backup proibido em src: ${rel}`);
+    }
+  }
+}
+
+async function validateStorybookCatalog(files) {
+  const forbiddenStoryPath = /\/(?:dev-v2|lab-v2|legacy|tmp-[^/]+)\//;
+  for (const file of files) {
+    const rel = toPosix(path.relative(root, file));
+    if (/\.stories\.[cm]?[jt]sx?$/.test(rel) && forbiddenStoryPath.test(`/${rel}`)) {
+      errors.push(`Story de catálogo legado/lab proibida: ${rel}`);
     }
   }
 }
@@ -219,7 +226,8 @@ const allFiles = [...srcFiles, ...docFiles, ...toolFiles];
 
 await validateTokenPrefixes(allFiles);
 await validatePrimitiveImports(srcFiles);
-await validateBackupsInApp(srcFiles);
+await validateBackupsInSource(srcFiles);
+await validateStorybookCatalog(srcFiles);
 await validateNonEmptyDesignSystem(srcFiles);
 await validateRequiredFiles();
 await validateGeneratedHeaders(srcFiles);
