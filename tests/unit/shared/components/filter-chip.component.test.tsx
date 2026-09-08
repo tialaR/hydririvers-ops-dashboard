@@ -47,6 +47,13 @@ describe('FilterChip', () => {
     expect(html).toContain('data-active="true"');
   });
 
+  it('expõe explicitamente o estado não selecionado', () => {
+    const html = renderToStaticMarkup(<FilterChip>Todos</FilterChip>);
+
+    expect(html).toContain('aria-pressed="false"');
+    expect(html).not.toContain('data-active="true"');
+  });
+
   it('aceita className', () => {
     const html = renderToStaticMarkup(
       <FilterChip className="lab-filter-chip">

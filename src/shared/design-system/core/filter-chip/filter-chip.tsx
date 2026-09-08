@@ -75,7 +75,7 @@ export function FilterChip({
       data-ui-component="filter-chip"
       data-active={selected ? 'true' : undefined}
       data-pressing={pressing ? 'true' : undefined}
-      aria-pressed={ariaPressed ?? (selected ? true : undefined)}
+      aria-pressed={ariaPressed ?? selected}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onPointerLeave={handlePointerLeave}
