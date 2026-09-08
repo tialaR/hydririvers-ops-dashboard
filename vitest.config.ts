@@ -37,6 +37,7 @@ export default defineConfig({
       'tests/unit/features/cargo/my-cargoes-list.component.test.tsx',
       'tests/unit/app/minhas-cargas-detail-page.test.tsx',
       'tests/unit/features/cargo/cargo-route-line.component.test.tsx',
+      'tests/unit/features/cargo/cargo-eta-block.component.test.tsx',
       'tests/unit/features/cargo/cargo-filter-sheet-content.component.test.tsx',
       'tests/unit/features/cargo/cargo-detail-sheet-content.component.test.tsx',
       'tests/unit/features/cargo/mobile-cargo-empty-state.test.tsx',

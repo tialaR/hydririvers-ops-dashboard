@@ -32,5 +32,7 @@ A story is not proof that a component is APPROVED/DIAMOND. Storybook proves impl
 - `Operational/CargoCard`: first complete operational block, covering logistics states, selection, disabled behavior, direct navigation and long-content resilience.
 - `Patterns/BottomSheet`: production modal pattern with focus management, Escape, overlay, footer and keyboard-operable snaps.
 - `Operational/CargoDetailSheetContent`: cargo detail composition with route, ETA, delivery forecast and section states.
+- `Operational/CargoRouteLine`: card and sheet routes, terminal metadata, absent metadata and long-corridor resilience.
+- `Operational/CargoEtaBlock`: compact ETA, unavailable value, forecast metrics and revised-window states.
 
 Every story runs in Dark and Light through the global theme control. The a11y addon is configured with `test: 'error'`, so accessibility violations are blocking when stories run through Storybook's test integration rather than remaining informational.
