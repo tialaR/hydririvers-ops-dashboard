@@ -2,4 +2,4 @@ export {
   CargoFilterSheetContent,
   CargoFilterSheetFooter,
   type CargoFilterSheetContentProps,
-} from './CargoFilterSheetContent';
+} from './cargo-filter-sheet-content';
