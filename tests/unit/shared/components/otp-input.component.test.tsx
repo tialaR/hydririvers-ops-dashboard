@@ -21,4 +21,22 @@ describe('OtpInput', () => {
     expect(html).toContain('value="1"');
     expect(html).toContain('value="2"');
   });
+
+  it('propaga estados inválido e desabilitado para todos os dígitos', () => {
+    const html = renderToStaticMarkup(
+      <OtpInput
+        value="123456"
+        onChange={() => undefined}
+        groupLabel="Código de verificação"
+        digitAriaLabel={(index) => `Dígito ${index}`}
+        describedBy="otp-error"
+        invalid
+        disabled
+      />,
+    );
+
+    expect(html).toContain('aria-describedby="otp-error"');
+    expect(html.match(/aria-invalid="true"/g)).toHaveLength(6);
+    expect(html.match(/disabled=""/g)).toHaveLength(6);
+  });
 });

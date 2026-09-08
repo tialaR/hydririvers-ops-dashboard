@@ -36,4 +36,21 @@ describe('TextField', () => {
     expect(html).toContain('Telefone inválido');
     expect(html).toContain('aria-invalid="true"');
   });
+
+  it('preserva a ajuda e referencia ajuda mais erro quando ambos existem', () => {
+    const html = renderToStaticMarkup(
+      <TextField
+        id="company-email"
+        label="E-mail corporativo"
+        hint="Use o endereço da empresa"
+        error="Informe um e-mail válido"
+        value="invalido"
+        onChange={() => undefined}
+      />,
+    );
+
+    expect(html).toContain('aria-describedby="company-email-hint company-email-error"');
+    expect(html).toContain('id="company-email-hint"');
+    expect(html).toContain('id="company-email-error"');
+  });
 });

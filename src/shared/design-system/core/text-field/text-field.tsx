@@ -60,11 +60,8 @@ export function TextField({
         />
         {trailing ? <span className={classNames.trailing}>{trailing}</span> : null}
       </div>
-      {error ? (
-        <p className={classNames.error} id={errorId} role="alert">{error}</p>
-      ) : hint ? (
-        <p className={classNames.hint} id={hintId}>{hint}</p>
-      ) : null}
+      {hint ? <p className={classNames.hint} id={hintId}>{hint}</p> : null}
+      {error ? <p className={classNames.error} id={errorId} role="alert">{error}</p> : null}
     </label>
   );
 }
