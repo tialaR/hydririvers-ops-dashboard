@@ -14,4 +14,12 @@ describe('InlineAlert', () => {
     expect(html).toContain('role="alert"');
     expect(html).toContain('Falha no login');
   });
+
+  it('usa status polite para feedback de sucesso e informação', () => {
+    const success = renderToStaticMarkup(<InlineAlert tone="success">Dados salvos</InlineAlert>);
+    const info = renderToStaticMarkup(<InlineAlert tone="info">Confira seu e-mail</InlineAlert>);
+
+    expect(success).toContain('role="status"');
+    expect(info).toContain('role="status"');
+  });
 });

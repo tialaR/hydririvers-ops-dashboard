@@ -35,5 +35,9 @@ A story is not proof that a component is APPROVED/DIAMOND. Storybook proves impl
 - `Operational/CargoRouteLine`: card and sheet routes, terminal metadata, absent metadata and long-corridor resilience.
 - `Operational/CargoEtaBlock`: compact ETA, unavailable value, forecast metrics and revised-window states.
 - `Operational/CargoFilterSheetContent`: seven operational filter groups, default and active selections, long labels and interactive controlled state.
+- `Forms/TextField`: hint, invalid, disabled, icon and trailing-action states with complete descriptions.
+- `Forms/OtpInput`: empty, filled, invalid, disabled and controlled verification-code states.
+- `Feedback/InlineAlert`: assertive errors plus polite success and informational announcements.
+- `Feedback/InformationalCard`: neutral, informational, success, warning and danger compositions, including actions.
 
 Every story runs in Dark and Light through the global theme control. The a11y addon is configured with `test: 'error'`, so accessibility violations are blocking when stories run through Storybook's test integration rather than remaining informational.
