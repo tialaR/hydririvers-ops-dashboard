@@ -26,6 +26,8 @@ A story is not proof that a component is APPROVED/DIAMOND. Storybook proves impl
 - `Primitives/ProgressBar`: semantic tones, boundaries and visible value.
 - `Primitives/Surface`: material, padding, semantic role and interactive state.
 - `Primitives/IconButton`: role, icon, active, badge, loading and disabled states.
+- `Primitives/FilterChip`: selected, unselected, disabled, long-label and interactive group states.
+- `Primitives/SearchField`: empty, populated, disabled and controlled interaction states.
 - `Operational/CargoStatusBadge`: first stabilized HydroRivers operational composition, reusing the shared `StatusBadge` contract.
 - `Operational/CargoCard`: first complete operational block, covering logistics states, selection, disabled behavior, direct navigation and long-content resilience.
 - `Patterns/BottomSheet`: production modal pattern with focus management, Escape, overlay, footer and keyboard-operable snaps.
