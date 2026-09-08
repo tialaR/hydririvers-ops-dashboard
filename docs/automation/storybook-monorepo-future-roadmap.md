@@ -1,7 +1,9 @@
-# Roadmap futuro: Storybook e Monorepo (não implementado)
+# Storybook entregue; monorepo permanece futuro
 
 Data: 2026-05-11  
-Status: **futuro** (este documento não descreve algo já entregue).
+Status: **Storybook implementado; monorepo não iniciado**.
+
+> A decisão antiga de adiar o Storybook foi superada pelo ciclo de estabilização do Design System. O catálogo vigente e sua cobertura estão documentados em [`../design-system/STORYBOOK.md`](../design-system/STORYBOOK.md). O histórico abaixo permanece para explicar os pré-requisitos originais.
 
 ## Objetivo
 
@@ -15,10 +17,9 @@ Registrar que Storybook e monorepo são iniciativas valiosas, mas **adiadas** at
 - mobile estável (bottom nav/safe-area/BottomSheet);
 - primitives visuais estabilizadas (sem “design system ornamental”).
 
-## Por que não agora
+## Por que o monorepo não entra agora
 
 - Trocar fundação antes de estabilizar regras de negócio aumenta risco de retrabalho.
-- Storybook é mais útil quando componentes e variantes já têm contratos mais estáveis.
 - Monorepo sem clareza de boundaries vira “condomínio de arquivos sem síndico”.
 
 ## Pré-requisitos (checklist)
@@ -29,17 +30,8 @@ Registrar que Storybook e monorepo são iniciativas valiosas, mas **adiadas** at
 - Mobile guidelines + workflows aplicados nas rotas principais.
 - Quality gates consistentes (CI + reproduzível localmente).
 
-## Próximos passos (quando chegar a hora)
-
-Storybook:
-
-- mapear quais primitives e padrões valem virar “stories”;
-- definir estratégia de i18n/theme no Storybook;
-- garantir que stories não dependam de mock state mutável.
-
-Monorepo:
+## Próximos passos do monorepo (quando houver consumo real)
 
 - definir boundary real (apps vs packages);
 - extrair shared/ui e domain libs apenas quando houver consumo real;
 - evitar mover “feature específica” para shared sem múltiplos consumidores.
-

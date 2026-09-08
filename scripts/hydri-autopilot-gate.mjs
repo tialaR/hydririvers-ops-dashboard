@@ -721,6 +721,7 @@ function checkArtifacts(untracked, changed) {
   }
 
   for (const f of [...changed, ...untracked]) {
+    if (!existsSync(join(ROOT, f))) continue;
     if (/\.bak$/.test(f) || /before-/.test(basename(f)) || /\.backup-/.test(f)) {
       if (f.startsWith('src/') || f.startsWith('docs/') || f.startsWith('scripts/')) {
         warn(`Backup/artefato em tree produtiva: ${f}`);

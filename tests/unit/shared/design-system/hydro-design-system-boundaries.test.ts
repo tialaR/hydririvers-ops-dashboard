@@ -63,12 +63,19 @@ describe('Hydro design system boundaries', () => {
     }
   });
 
-  it('does not keep backup files in src/app', () => {
-    const appDir = path.join(srcDir, 'app');
-    const files = walk(appDir);
+  it('does not keep backup files in src', () => {
+    const files = walk(srcDir);
     for (const file of files) {
       const normalized = file.split(path.sep).join('/');
       expect(normalized.includes('.backup-') || normalized.includes('.before')).toBe(false);
+    }
+  });
+
+  it('does not publish stories from legacy or lab paths', () => {
+    const storyFiles = walk(srcDir).filter((file) => /\.stories\.[cm]?[jt]sx?$/.test(file));
+    for (const file of storyFiles) {
+      const normalized = file.split(path.sep).join('/');
+      expect(normalized).not.toMatch(/\/(?:dev-v2|lab-v2|legacy|tmp-[^/]+)\//);
     }
   });
 

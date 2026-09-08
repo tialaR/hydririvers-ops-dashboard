@@ -1,5 +1,7 @@
 # HydriRivers DS — Contrato de Componentes
 
+> **Nota de vigência (2026-09-08):** a proposta histórica de catálogo em `/[locale]/dev/design-system` foi substituída pelo Storybook real. Não crie essa rota. Use [`../design-system/STORYBOOK.md`](../design-system/STORYBOOK.md) como contrato atual do catálogo; as seções abaixo sobre a rota permanecem apenas como registro histórico.
+
 | Metadado | Valor |
 |----------|-------|
 | **Status** | **Contrato de implementação** — documentação apenas |
