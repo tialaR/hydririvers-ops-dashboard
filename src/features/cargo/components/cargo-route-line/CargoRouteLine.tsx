@@ -9,6 +9,7 @@ export type CargoRouteLineProps = {
   destinationLabel: string;
   originMeta?: string;
   destinationMeta?: string;
+  ariaLabel?: string;
   variant?: CargoRouteLineVariant;
   className?: string;
 };
@@ -18,12 +19,21 @@ export function CargoRouteLine({
   destinationLabel,
   originMeta,
   destinationMeta,
+  ariaLabel,
   variant = 'card',
   className,
 }: CargoRouteLineProps) {
+  const accessibleRouteLabel = ariaLabel ?? `${originLabel} → ${destinationLabel}`;
+
   if (variant === 'sheet') {
     return (
-      <div className={[styles.sheetRouteBox, className].filter(Boolean).join(' ')}>
+      <div
+        className={[styles.sheetRouteBox, className].filter(Boolean).join(' ')}
+        role="group"
+        aria-label={accessibleRouteLabel}
+        data-ui-component="cargo-route-line"
+        data-variant="sheet"
+      >
         <div>
           <strong>{originLabel}</strong>
           {originMeta ? <span>{originMeta}</span> : null}
@@ -40,7 +50,13 @@ export function CargoRouteLine({
   }
 
   return (
-    <div className={[styles.routeLine, className].filter(Boolean).join(' ')}>
+    <div
+      className={[styles.routeLine, className].filter(Boolean).join(' ')}
+      role="group"
+      aria-label={accessibleRouteLabel}
+      data-ui-component="cargo-route-line"
+      data-variant="card"
+    >
       <div className={styles.routeEndpoint}>
         <span className={styles.routeDot} data-tone="origin" aria-hidden="true" />
         <span className={styles.routeCity}>{originLabel}</span>

@@ -11,6 +11,7 @@ export type CargoEtaBlockProps = {
   label?: string;
   value?: string;
   metrics?: CargoEtaMetric[];
+  ariaLabel?: string;
   className?: string;
 };
 
@@ -19,6 +20,7 @@ export function CargoEtaBlock({
   label = 'ETA',
   value = '',
   metrics,
+  ariaLabel,
   className,
 }: CargoEtaBlockProps) {
   if (variant === 'sheet') {
@@ -26,9 +28,14 @@ export function CargoEtaBlock({
       { label: 'ETA', value },
       { label: 'Entrega prevista', value: '', tone: 'success' as const },
     ];
-
     return (
-      <div className={[styles.sheetStats, className].filter(Boolean).join(' ')}>
+      <div
+        className={[styles.sheetStats, className].filter(Boolean).join(' ')}
+        role={ariaLabel ? 'group' : undefined}
+        aria-label={ariaLabel}
+        data-ui-component="cargo-eta-block"
+        data-variant="sheet"
+      >
         {items.map((item) => (
           <div key={item.label}>
             <span>{item.label}</span>
@@ -40,7 +47,12 @@ export function CargoEtaBlock({
   }
 
   return (
-    <div className={className}>
+    <div
+      className={className}
+      aria-label={ariaLabel}
+      data-ui-component="cargo-eta-block"
+      data-variant="card"
+    >
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
