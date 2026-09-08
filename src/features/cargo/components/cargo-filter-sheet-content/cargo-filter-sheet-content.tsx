@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
 
 import {
   BoatIcon,
@@ -29,6 +29,8 @@ import { Button } from '@/shared/components/button';
 import { FilterChip } from '@/shared/components/filter-chip';
 
 import styles from './CargoFilterSheetContent.module.scss';
+
+const FILTER_ACTION_DELAY_MS = 160;
 
 export type CargoFilterSheetContentProps = {
   status: CargoStatusFilterValue;
@@ -85,7 +87,7 @@ export function CargoFilterSheetFooter({
       }
       setPressingAction(null);
       closeDelayTimeoutRef.current = null;
-    }, 160);
+    }, FILTER_ACTION_DELAY_MS);
   }
 
   return (
@@ -116,6 +118,50 @@ export function CargoFilterSheetFooter({
   );
 }
 
+type FilterSectionProps<TValue extends string> = {
+  title: string;
+  icon?: ReactNode;
+  options: readonly { id: string; label: string; value: TValue }[];
+  selectedValue: TValue;
+  onChange: (value: TValue) => void;
+};
+
+function FilterSection<TValue extends string>({
+  title,
+  icon,
+  options,
+  selectedValue,
+  onChange,
+}: FilterSectionProps<TValue>) {
+  const titleId = useId();
+
+  return (
+    <section className={styles.section} aria-labelledby={titleId}>
+      <h3 id={titleId}>
+        {icon}
+        {title}
+      </h3>
+      <div className={styles.chipGrid} role="group" aria-labelledby={titleId}>
+        {options.map((item) => {
+          const isSelected = item.value === selectedValue;
+
+          return (
+            <FilterChip
+              key={item.id}
+              className={styles.filterChip}
+              isSelected={isSelected}
+              ariaPressed={isSelected}
+              onClick={() => onChange(item.value)}
+            >
+              {item.label}
+            </FilterChip>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
 export function CargoFilterSheetContent({
   status,
   cargoType,
@@ -135,137 +181,13 @@ export function CargoFilterSheetContent({
 }: CargoFilterSheetContentProps) {
   return (
     <div className={[styles.content, className].filter(Boolean).join(' ')}>
-      <section className={styles.section}>
-        <h3>Status</h3>
-        <div className={styles.chipGrid}>
-          {cargoStatusFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === status}
-              onClick={() => onStatusChange(item.value)}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <LocationPinIcon />
-          Origem
-        </h3>
-        <div className={styles.chipGrid} aria-label="Selecionar origem">
-          {cargoOriginFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === origin}
-              onClick={() => onOriginChange(item.value)}
-              ariaPressed={item.value === origin}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <LocationPinIcon />
-          Destino
-        </h3>
-        <div className={styles.chipGrid} aria-label="Selecionar destino">
-          {cargoDestinationFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === destination}
-              onClick={() => onDestinationChange(item.value)}
-              ariaPressed={item.value === destination}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <PackageIcon />
-          Tipo de carga
-        </h3>
-        <div className={styles.chipGrid}>
-          {cargoTypeFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === cargoType}
-              onClick={() => onCargoTypeChange(item.value)}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <BoatIcon />
-          Tipo de embarcação
-        </h3>
-        <div className={styles.chipGrid}>
-          {cargoVesselTypeFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === vesselType}
-              onClick={() => onVesselTypeChange(item.value)}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <CalendarIcon />
-          Disponibilidade / Data de corte
-        </h3>
-        <div className={styles.chipGrid}>
-          {cargoCutoffFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === cutoff}
-              onClick={() => onCutoffChange(item.value)}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
-
-      <section className={styles.section}>
-        <h3>
-          <ScaleIcon />
-          Capacidade / Peso bruto
-        </h3>
-        <div className={styles.chipGrid}>
-          {cargoCapacityFilterOptions.map((item) => (
-            <FilterChip
-              key={item.id}
-              className={styles.filterChip}
-              isSelected={item.value === capacity}
-              onClick={() => onCapacityChange(item.value)}
-            >
-              {item.label}
-            </FilterChip>
-          ))}
-        </div>
-      </section>
+      <FilterSection title="Status" options={cargoStatusFilterOptions} selectedValue={status} onChange={onStatusChange} />
+      <FilterSection title="Origem" icon={<LocationPinIcon />} options={cargoOriginFilterOptions} selectedValue={origin} onChange={onOriginChange} />
+      <FilterSection title="Destino" icon={<LocationPinIcon />} options={cargoDestinationFilterOptions} selectedValue={destination} onChange={onDestinationChange} />
+      <FilterSection title="Tipo de carga" icon={<PackageIcon />} options={cargoTypeFilterOptions} selectedValue={cargoType} onChange={onCargoTypeChange} />
+      <FilterSection title="Tipo de embarcação" icon={<BoatIcon />} options={cargoVesselTypeFilterOptions} selectedValue={vesselType} onChange={onVesselTypeChange} />
+      <FilterSection title="Disponibilidade / Data de corte" icon={<CalendarIcon />} options={cargoCutoffFilterOptions} selectedValue={cutoff} onChange={onCutoffChange} />
+      <FilterSection title="Capacidade / Peso bruto" icon={<ScaleIcon />} options={cargoCapacityFilterOptions} selectedValue={capacity} onChange={onCapacityChange} />
     </div>
   );
 }

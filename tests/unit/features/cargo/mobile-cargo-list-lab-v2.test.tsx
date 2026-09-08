@@ -99,7 +99,7 @@ describe('MobileCargoListLabV2', () => {
     expect(html).toContain('data-testid="mock-bottom-sheet"');
     expect(html).toContain('data-title="Filtros"');
     expect(html).toContain('<h2>Filtros</h2>');
-    expect(html).toContain('<h3>Status</h3>');
+    expect(html).toContain('>Status</h3>');
     expect(html).toContain('Origem');
     expect(html).toContain('Destino');
     expect(html).toContain('Tipo de carga');
@@ -153,7 +153,7 @@ describe('MobileCargoListLabV2', () => {
 
     const footerPath = resolve(
       process.cwd(),
-      'src/features/cargo/components/cargo-filter-sheet-content/CargoFilterSheetContent.tsx',
+      'src/features/cargo/components/cargo-filter-sheet-content/cargo-filter-sheet-content.tsx',
     );
     expect(readFileSync(footerPath, 'utf8')).toContain("scheduleAction('reset')");
   });
@@ -195,7 +195,7 @@ describe('MobileCargoListLabV2 source contracts', () => {
     const filterSource = readFileSync(
       resolve(
         process.cwd(),
-        'src/features/cargo/components/cargo-filter-sheet-content/CargoFilterSheetContent.tsx',
+        'src/features/cargo/components/cargo-filter-sheet-content/cargo-filter-sheet-content.tsx',
       ),
       'utf8',
     );
