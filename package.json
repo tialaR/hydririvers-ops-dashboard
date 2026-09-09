@@ -1,6 +1,6 @@
 {
-  "name": "hydrorivers-v056-template",
-  "version": "0.8.7",
+  "name": "hydrorivers-ops-dashboard",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {

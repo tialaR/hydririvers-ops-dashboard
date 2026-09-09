@@ -475,12 +475,10 @@ function checkInferenceQuality(inferenceMeta) {
 // ── Legacy inventory (pre-existing — not errors by themselves) ─────────────────
 
 const LEGACY_PATH_INVENTORY = [
-  'src/features/cargo/components/mobile-list-lab-v2/',
   'src/features/cargo/components/cargo-lab-v2/',
   'src/features/cargo/data/cargo-lab-v2.mock.ts',
   'src/features/cargo/types/cargo-lab-v2.types.ts',
   'src/features/cargo/utils/map-marketplace-cargo-to-lab-v2.ts',
-  'src/app/[locale]/dev-v2/',
   'src/shared/components/bottom-nav/BottomNav.module.sass',
   'src/shared/components/icon-button/IconButton.module.scss',
   'src/features/cargo/components/cargo-card/CargoCard.tsx',
@@ -837,7 +835,7 @@ function printLegacyInventory() {
     console.log(`  legacy/frozen: ${p}`);
   }
   console.log('  artifact/remove-before-commit: output/, test-results/, .playwright-cli/, __MACOSX/, *.bak, *before-*');
-  console.log('  lab/dev-only: src/app/[locale]/dev-v2/, mobile-list-lab-v2/, cargo-lab-v2/');
+  console.log('  legacy compatibility: cargo-lab-v2/ (still consumed by production CargoCard)');
 }
 
 function printReport(opts, branch, changed, untracked, diffStat, inferenceMeta) {

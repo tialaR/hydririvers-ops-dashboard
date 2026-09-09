@@ -17,14 +17,9 @@ export default defineConfig({
   },
   webServer: {
     command: 'npm run dev -- --port 3000',
-    /** Raiz `/` responde 404; usar rota localizada para health-check e reuseExistingServer. */
-    url: `${baseURL}/pt-BR`,
+    url: baseURL,
     reuseExistingServer: !process.env.CI,
     timeout: 300_000,
-    env: {
-      ...process.env,
-      HYDRORIVERS_HYDROWAY_MAP_SPIKE_ROUTE: 'true',
-    },
   },
   projects: [
     {
