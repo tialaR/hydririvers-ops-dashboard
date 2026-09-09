@@ -25,6 +25,7 @@
     "test:integration": "vitest run tests/integration",
     "test:e2e": "playwright test",
     "test:shipper-mobile-p0": "playwright test --config=playwright.shipper-mobile-p0.config.ts",
+    "test:portfolio-visual": "playwright test --config=playwright.portfolio-visual.config.ts",
     "test:hydroway-routes": "playwright test --config=playwright.hydroway-routes.config.ts",
     "visual:hero-check": "node scripts/phase-visual-check.mjs",
     "tokens:design": "node tools/design-token-import/generate-design-tokens.mjs",
