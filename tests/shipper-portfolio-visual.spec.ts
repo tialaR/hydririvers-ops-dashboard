@@ -11,8 +11,12 @@ async function setTheme(page: Page, theme: (typeof themes)[number]) {
 }
 
 async function authenticateShipper(page: Page) {
-  const response = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-shipper-1' } });
-  expect(response.status()).toBe(200);
+  const adminLogin = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-admin-1' } });
+  expect(adminLogin.status()).toBe(200);
+  const reset = await page.request.post('/api/mock-mode', { data: { scenario: 'market-active' } });
+  expect(reset.status()).toBe(200);
+  const shipperLogin = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-shipper-1' } });
+  expect(shipperLogin.status()).toBe(200);
 }
 
 async function openPrivateRoute(page: Page, route: string, theme: (typeof themes)[number]) {
