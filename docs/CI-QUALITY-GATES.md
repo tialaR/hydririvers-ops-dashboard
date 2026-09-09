@@ -2,7 +2,7 @@
 
 ## 1. Objetivo
 
-Garantir que cada alteração enviada ao repositório e cada pull request passe por um conjunto mínimo e reproduzível de verificações de qualidade (onboarding, auditoria de documentação, estilo/análise estática, TypeScript, chaves i18n, testes automatizados e, no fluxo principal de CI, build de produção) antes da revisão ou do merge.
+Garantir que cada alteração enviada ao repositório e cada pull request passe por verificações reproduzíveis de código, documentação, build e experiência visual antes do merge.
 
 ## 2. Quando os workflows rodam
 
@@ -17,6 +17,11 @@ Há **cancelamento entre execuções** do mesmo fluxo (`concurrency`) para não 
 
 - **pull_request** apenas.
 - Executa `npm run verify` após onboarding e auditoria de docs (ver secção 3).
+
+### [`visual-quality.yml`](../.github/workflows/visual-quality.yml)
+
+- **push** em `dev` e branches `feat/**`, **pull request** e execução manual.
+- Instala Chromium com dependências Linux, percorre a matriz Portfolio-Ready e publica screenshots, relatório e traces por 14 dias.
 
 ## 3. Quais checks executam
 
@@ -51,6 +56,17 @@ O script **`verify`** no `package.json` corresponde a:
 
 **Nota:** o job de PR **não** executa `npm run build` (o push/CI principal sim). Para validar build antes de abrir PR, rode localmente `npm run build`.
 
+### Pipeline `visual-quality.yml` (job `shipper-visual-proof`)
+
+| Etapa | Comando |
+|-------|---------|
+| Instalação | `npm ci` |
+| Browser | `npx playwright install --with-deps chromium` |
+| Jornada e regressão visual | `npm run test:portfolio-visual` |
+| Evidências | upload de screenshots, HTML report e traces |
+
+A matriz cobre Desktop 1440, Mobile 375/390/430, Light/Dark, `pt-BR`/`en-US`/`es`, primeiro acesso e o fluxo operacional da Embarcadora. Dez telas determinísticas possuem pixel-diff; mapas dinâmicos permanecem na prova funcional e nos screenshots.
+
 ## 4. Por que cada check existe
 
 - **`npm ci`**: instala dependências a partir do `package-lock.json` de forma determinística, reproduzindo o ambiente local e de CI.
@@ -62,6 +78,7 @@ O script **`verify`** no `package.json` corresponde a:
 - **`test`**: executa a suíte Vitest completa.
 - **`test:mock-mode`**: executa subconjunto crítico de testes ligados a mock mode, cenários mock e APIs relacionadas (definido em `package.json`).
 - **`build`**: valida o bundle Next.js em modo produção (apenas no `ci.yml`).
+- **`test:portfolio-visual`**: prova a aplicação real no Chromium, verifica overflow/hierarquia/nomes acessíveis e compara baselines estáveis.
 
 ## 5. Como rodar localmente
 
@@ -97,15 +114,9 @@ Para desenvolvimento iterativo, `npm install` costuma ser suficiente; para espel
 3. Leia a saída do comando: ESLint, `tsc`, relatório i18n, Vitest, `audit:docs` ou build.
 4. Reproduza localmente (secção 5) no mesmo commit.
 
-## 7. Próximos passos opcionais
+## 7. Regra de merge
 
-Ideias quando o time quiser ampliar a pipeline (não obrigatórias hoje):
-
-- **E2E no CI**: job com `npm run test:e2e` (Playwright), com `npx playwright install --with-deps` e artefatos em falha.
-- **Build também em PR**: adicionar step `npm run build` em `pr-quality.yml` se o tempo de job for aceitável.
-- **Proteção de branch**: exigir status verde dos workflows obrigatórios antes do merge.
-
-Mudanças futuras devem preservar os scripts existentes no `package.json` e alinhar novos jobs à mesma versão de Node, salvo decisão explícita de atualizar o projeto.
+Mudanças Portfolio-Ready só são mergeadas com **CI**, **PR Quality** e **Visual Quality** verdes. Atualizar baseline exige inspeção humana ou automatizada explícita do artefato; não é resposta automática a pixel-diff.
 
 ## 8. Scripts referenciados em documentação mas inexistentes
 

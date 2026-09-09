@@ -10,6 +10,7 @@ import {
 } from '@/shared/design-system/patterns/operational-chart';
 import { useTheme } from '@/shared/providers/theme-provider';
 import shellStyles from '@/features/product-shell/components/mobile-app-shell/mobile-app-shell.module.sass';
+import { DemoEntryButton } from './demo-entry-button';
 import styles from './shipper-landing-screen.module.sass';
 
 type ShipperLandingScreenProps = { chartPoints: OperationalChartPoint[] };
@@ -55,8 +56,9 @@ export function ShipperLandingScreen({ chartPoints }: ShipperLandingScreenProps)
           </OperationalChartCard>
         </div>
         <div className={styles.landingActions}>
-          <PrimaryButton label={t('loginCta')} href="/entrar" />
-          <PrimaryButton label={t('registerCta')} href="/registrar" variant="secondary" />
+          <DemoEntryButton />
+          <PrimaryButton label={t('loginCta')} href="/entrar" variant="secondary" />
+          <PrimaryButton label={t('registerCta')} href="/registrar" variant="ghost" />
         </div>
       </div>
     </div>

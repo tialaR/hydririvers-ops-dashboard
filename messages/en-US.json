@@ -3103,7 +3103,7 @@
       "offline": "Offline · last {minutes} min ago"
     },
     "landing": {
-      "title": "HydriRivers",
+      "title": "HydroRivers",
       "subtitle": "River operations with trust for North Arc shippers",
       "publicRoutesTitle": "North Arc public routes",
       "publicRoutesSummary": "Less disruption and less CO₂ on Amazon corridors.",
@@ -3111,6 +3111,8 @@
       "chartAction": "Explore public cargoes on the corridor with the best window.",
       "chartUnit": "index",
       "chartAria": "Micro trend of public routes on the North Arc.",
+      "demoCta": "Explore the demo",
+      "demoLoading": "Preparing the demo…",
       "loginCta": "Sign in",
       "registerCta": "Create account"
     },

@@ -42,5 +42,6 @@ A story is not proof that a component is APPROVED/DIAMOND. Storybook proves impl
 - `Operational/OwnedCargoTimelineSheet`: active journey with current-step semantics and empty history.
 - `Operational/OwnedCargoDocumentsSheet`: pending action, ready package and empty document states.
 - `Operational/OwnedCargoRisksSheet`: critical operational alert and clear-route states.
+- `Operational/Shipper Flow Controls`: exact search, filter, CTA and sheet adapters consumed by the demonstrable Embarcadora journey.
 
 Every story runs in Dark and Light through the global theme control. The a11y addon is configured with `test: 'error'`, so accessibility violations are blocking when stories run through Storybook's test integration rather than remaining informational.

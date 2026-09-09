@@ -58,6 +58,19 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
     await authenticateShipper(page);
   });
 
+  test('first access enters the Embarcadora demo from the canonical root', async ({ page }, testInfo) => {
+    await page.context().clearCookies();
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/pt-BR$/);
+    await expect(page.getByRole('heading', { name: 'HydroRivers' })).toBeVisible();
+    await assertVisualIntegrity(page, '/');
+    await capture(page, testInfo, 'portfolio-entry-light');
+
+    await page.getByRole('button', { name: /explorar demonstração/i }).click();
+    await expect(page).toHaveURL(/\/pt-BR\/minhas-cargas$/);
+    await expect(page.getByRole('heading', { name: /minhas cargas/i }).first()).toBeVisible();
+  });
+
   test('entry and unauthenticated redirect remain demonstrable', async ({ page }, testInfo) => {
     await page.context().clearCookies();
     await page.goto('/pt-BR/minhas-cargas', { waitUntil: 'domcontentloaded' });
