@@ -2,6 +2,10 @@
 
 import { Search, SlidersHorizontal } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+
+import { FilterChip } from '@/shared/design-system/core/filter-chip';
+import { SearchField } from '@/shared/design-system/core/search-field';
+
 import styles from './search-filter-stack.module.sass';
 
 type SearchFilterBarProps = {
@@ -14,25 +18,31 @@ type SearchFilterBarProps = {
 export function SearchFilterBar({ value, onChange, onFilterClick }: SearchFilterBarProps) {
   const t = useTranslations('shipperMobileFlow.search');
   return (
-    <div className={styles.bar}>
-      <Search size={18} aria-hidden />
-      <input className={styles.input} type="search" value={value} onChange={(event) => onChange(event.target.value)} placeholder={t('placeholder')} aria-label={t('label')} />
-      {onFilterClick ? (
+    <SearchField
+      value={value}
+      onChange={onChange}
+      placeholder={t('placeholder')}
+      ariaLabel={t('label')}
+      icon={<Search size={18} />}
+      classNames={{ root: styles.bar, input: styles.input, rightSlot: styles.rightSlot }}
+      rightSlot={onFilterClick ? (
         <button type="button" className={styles.filterBtn} onClick={onFilterClick} aria-label={t('filters')}>
           <SlidersHorizontal size={18} aria-hidden />
         </button>
-      ) : null}
-    </div>
+      ) : undefined}
+    />
   );
 }
 
 export function FilterChips({ options, activeId, onChange }: { options: { id: string; label: string }[]; activeId: string; onChange: (id: string) => void }) {
+  const t = useTranslations('shipperMobileFlow.search');
+
   return (
-    <div className={styles.chips} role="tablist">
+    <div className={styles.chips} role="group" aria-label={t('filters')}>
       {options.map((option) => (
-        <button key={option.id} type="button" role="tab" aria-selected={activeId === option.id} className={`${styles.chip} ${activeId === option.id ? styles.chipActive : ''}`} onClick={() => onChange(option.id)}>
+        <FilterChip key={option.id} selected={activeId === option.id} className={`${styles.chip} ${activeId === option.id ? styles.chipActive : ''}`} onClick={() => onChange(option.id)}>
           {option.label}
-        </button>
+        </FilterChip>
       ))}
     </div>
   );

@@ -3,6 +3,8 @@
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 
+import { Sheet } from '@/shared/design-system/core/sheet';
+
 import styles from './bottom-sheet.module.sass';
 
 type BottomSheetProps = {
@@ -28,17 +30,17 @@ export function BottomSheet({ open, onClose, title, children, ariaLabel, size = 
 
   return (
     <div className={styles.overlay} role="presentation" onClick={onClose}>
-      <div
+      <Sheet
+        as="div"
         className={`${styles.sheet} ${size === 'compact' ? styles.sheetCompact : ''} ${size === 'full' ? styles.sheetFull : ''} ${size === 'medium' ? styles.sheetMedium : ''}`}
-        role="dialog"
-        aria-modal="true"
+        modal
         aria-label={ariaLabel ?? title}
         onClick={(event) => event.stopPropagation()}
       >
         <div className={styles.handle} aria-hidden />
         {title ? <h2 className={styles.title}>{title}</h2> : null}
         {children}
-      </div>
+      </Sheet>
     </div>
   );
 }
