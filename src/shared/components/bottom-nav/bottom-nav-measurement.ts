@@ -38,21 +38,10 @@ function parseCssLengthPx(value: string, rootFontSize: number): number {
 }
 
 function measureIntrinsicInlineWidth(element: HTMLElement): number {
-  const style = getComputedStyle(element);
-
-  if (style.display !== 'none' && style.overflow !== 'hidden') {
-    const unconstrained = element.scrollWidth;
-    const rendered = element.getBoundingClientRect().width;
-
-    if (unconstrained > rendered + 0.5) {
-      return unconstrained;
-    }
-
-    if (unconstrained > 0) {
-      return unconstrained;
-    }
-  }
-
+  // Labels are block elements with width: 100%. Reading scrollWidth here feeds the
+  // current grid-track width back into the next container measurement. A
+  // ResizeObserver then repeats that expansion until the nav reaches the viewport.
+  // Measure a detached max-content probe so the result depends only on the label.
   const probe = element.cloneNode(true) as HTMLElement;
   probe.style.cssText =
     'position:absolute;visibility:hidden;display:block;width:max-content;max-width:none;min-width:0;overflow:visible;white-space:nowrap;pointer-events:none;';
