@@ -3,7 +3,9 @@
 | Metadado | Valor |
 |----------|-------|
 | **Status** | **Atual** — documento de produto (somente leitura do repo em 2026-06-01) |
-| **Escopo** | Produto, fluxos, mocks, rotas, dev-v2 e evolução para produção |
+> **Snapshot histórico.** As rotas `dev-v2` e `lab` descritas abaixo foram removidas no fechamento Portfolio-Ready. Para o produto demonstrável atual, use [`../PORTFOLIO-READY.md`](../PORTFOLIO-READY.md) e os fluxos canônicos em [`flows/`](./flows/).
+
+| **Escopo** | Registro histórico de produto, fluxos, mocks e laboratórios |
 | **Fontes auditadas** | `src/app/[locale]`, mocks em `src/features/**`, `MobileCargoListLabV2`, DS oficial, `docs/product/roles-and-permissions.md` |
 | **Não substitui** | Código, testes, ADRs individuais — em divergência, o código vence até este doc ser atualizado |
 

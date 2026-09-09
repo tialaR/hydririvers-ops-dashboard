@@ -2,7 +2,6 @@
  * Barrel client-safe do feature waterway-map.
  * Resolvers com fs/GeoJSON e adapters server-only: importar de `@/features/waterway-map/data/*` ou `*.server.ts`.
  */
-export { HydrowayMapSpikeShell } from './components/hydroway-map-spike-shell';
 export { HydrowayMapSpikeClient } from './components/hydroway-map-spike-client';
 export { HydrowayMapProductShell } from './components/hydroway-map-product-shell';
 export { MobileHydrowayMapExperience } from './components/mobile/mobile-hydroway-map-experience';

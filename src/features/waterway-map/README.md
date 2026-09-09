@@ -1,10 +1,10 @@
-# waterway-map — spike MapLibre (V2.1b–V2.7)
+# waterway-map — mapa hidroviário operacional
 
 Feature isolada para o mapa hidroviário profissional do desktop expanded. Complementa [ADR 0030](../../docs/adr/0030-professional-hydroway-map-provider.md) e [ADR 0031](../../docs/adr/0031-hydroway-geodata-pipeline.md).
 
 ## Objetivo
 
-Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas GeoJSON fictícias e **MapLibre GL JS** sem alterar a rota de produção `/<locale>/cargas/[id]/mapa`, cockpit ou mobile.
+Módulo de produção do mapa operacional (`HydrowayMapProvider`), câmera, camadas GeoJSON fictícias e **MapLibre GL JS**. O histórico de microfases abaixo registra a evolução que culminou na rota canônica `/<locale>/cargas/[id]/mapa`.
 
 | Microfase | Entrega |
 |-----------|---------|
@@ -21,30 +21,13 @@ Validar arquitetura de **provider** (`HydrowayMapProvider`), câmera, camadas Ge
 | **V2.7c** (atual) | MVP mínimo aceitável: basemap OpenFreeMap (dev only), overlay rota/hidrovias, capítulos `flyTo`, controles simples |
 | **V2.3** | Integração em `/cargas/[id]/mapa` atrás de `hydrowayMapLibreEnabled` |
 
-## Rota dev
+## Rota canônica
 
+```text
+/<locale>/cargas/<cargo-id>/mapa
 ```
-/<locale>/dev/hydroway-map-spike
-```
 
-Exemplos locais (cargo demo via `?cargoId=`, default **CARGO-001**):
-
-- CARGO-001: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-001`
-- CARGO-002: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-002`
-- CARGO-004: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-004`
-- MapLibre (default com WebGL): `http://localhost:3000/pt-BR/dev/hydroway-map-spike`
-- Forçar fallback SVG: `http://localhost:3000/pt-BR/dev/hydroway-map-spike?cargoId=CARGO-001&forceSvgFallback=1`
-
-Use os chips **CARGO-*** no mapa ou a query `cargoId`. No banner, alterne **SVG schematic** / **MapLibre GL**.
-
-## Variáveis de ambiente
-
-| Variável | Default | Efeito |
-|----------|---------|--------|
-| `HYDRORIVERS_HYDROWAY_MAP_SPIKE_ROUTE` | `true` em dev; `false` em production | Habilita a rota dev (`notFound` se desligada) |
-| `hydrowayMapLibreEnabled` | — | Reservada para V2.3 (produção `/mapa`) |
-
-Helper: `isHydrowayMapLibreSpikeRouteEnabled()` em `src/shared/config/env.ts`.
+As rotas de spike foram removidas no fechamento Portfolio-Ready. O fallback SVG e os adapters continuam cobertos dentro do módulo de produção.
 
 ## Estrutura
 
@@ -210,8 +193,7 @@ npm run test:hydroway-routes
 
 O que valida:
 
-- Rotas dev do spike (`/dev/hydroway-map-spike`) para CARGO-001/002/004, locales `pt-BR` / `en-US` / `es`, e `?forceSvgFallback=1`
-- Rotas de produção `/pt-BR/cargas` e `/pt-BR/cargas/CARGO-001/mapa` (sem confundir com o spike)
+- Rotas de produção `/pt-BR/cargas` e `/pt-BR/cargas/<id>/mapa`
 - Smoke mobile em `/pt-BR/cargas` (viewport Pixel 5)
 - Ausência de `pageerror`, erros de console MapLibre/Style Spec, HTTP 500 e 404 do documento
 - `401` conhecido em `/api/auth/me` é ignorado
@@ -223,15 +205,4 @@ Evidências (screenshots e traces em falha):
 
 ## Rollback
 
-1. Desinstalar `maplibre-gl` (se remover o spike por completo).
-2. Apagar `providers/maplibre-hydroway-provider.tsx` e viewport MapLibre.
-3. Na rota dev, voltar o client para apenas `SvgSchematicHydrowayProvider`.
-4. Manter `SvgSchematicHydrowayProvider` como fallback de produção até V2.3.
-
-## Remover o spike
-
-Quando V2.3 estiver estável em produção:
-
-1. Apagar `src/app/[locale]/dev/hydroway-map-spike/`
-2. Remover `isHydrowayMapLibreSpikeRouteEnabled` se não houver outros usos
-3. Manter `src/features/waterway-map/` como módulo de produção
+Reverta o commit de fechamento Portfolio-Ready se a remoção das rotas laboratoriais precisar ser auditada. Não reintroduza uma rota pública de spike; valide providers e fallbacks pela rota canônica e pelos testes focados.
