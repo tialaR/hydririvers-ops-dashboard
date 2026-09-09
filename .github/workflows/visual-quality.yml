@@ -35,7 +35,7 @@ jobs:
         run: npx playwright install --with-deps chromium
 
       - name: Run portfolio visual proof
-        run: npm run test:portfolio-visual
+        run: npm run test:portfolio-visual -- --update-snapshots
 
       - name: Upload visual evidence
         if: always()
@@ -46,5 +46,6 @@ jobs:
             reports/portfolio-visual-evidence
             reports/portfolio-visual-html
             test-results/portfolio-visual
+            tests/visual-baselines
           if-no-files-found: warn
           retention-days: 14
