@@ -9,6 +9,7 @@ export default defineConfig({
   timeout: 180_000,
   expect: { timeout: 20_000 },
   outputDir: 'test-results/portfolio-visual',
+  snapshotPathTemplate: '{testDir}/visual-baselines/{projectName}/{arg}{ext}',
   reporter: process.env.CI
     ? [['list'], ['html', { outputFolder: 'reports/portfolio-visual-html', open: 'never' }]]
     : [['list']],

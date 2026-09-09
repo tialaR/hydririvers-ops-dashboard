@@ -101,6 +101,33 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
     }
   });
 
+  test('stable recruiter-facing screens match reviewed baselines', async ({ page }, testInfo) => {
+    test.skip(!['desktop-1440', 'mobile-390'].includes(testInfo.project.name), 'Stable baseline viewports');
+
+    for (const theme of themes) {
+      await openPrivateRoute(page, '/pt-BR/minhas-cargas', theme);
+      await expect(page).toHaveScreenshot(`cargo-list-${theme}.png`, {
+        animations: 'disabled',
+        caret: 'hide',
+        maxDiffPixelRatio: 0.005,
+      });
+
+      await openPrivateRoute(page, '/pt-BR/minhas-cargas/cargo-001', theme);
+      await expect(page).toHaveScreenshot(`cargo-detail-${theme}.png`, {
+        animations: 'disabled',
+        caret: 'hide',
+        maxDiffPixelRatio: 0.005,
+      });
+    }
+
+    await openPrivateRoute(page, '/es/minhas-cargas/cargo-001', 'light');
+    await expect(page).toHaveScreenshot('cargo-detail-es-light.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      maxDiffPixelRatio: 0.005,
+    });
+  });
+
   test('filters, risk, timeline, documents and feedback form a real action journey', async ({ page }, testInfo) => {
     test.skip(!['desktop-1440', 'mobile-390'].includes(testInfo.project.name), 'Representative interaction viewports');
     await openPrivateRoute(page, '/pt-BR/minhas-cargas', 'light');
