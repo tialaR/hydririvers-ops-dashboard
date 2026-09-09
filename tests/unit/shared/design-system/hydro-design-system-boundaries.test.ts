@@ -79,6 +79,31 @@ describe('Hydro design system boundaries', () => {
     }
   });
 
+  it('keeps the demonstrable shipper flow on canonical semantic owners', () => {
+    const productComponents = path.join(srcDir, 'features', 'product-shell', 'components');
+    const primaryButton = readFileSync(
+      path.join(productComponents, 'primary-button', 'primary-button.tsx'),
+      'utf8',
+    );
+    const searchFilterStack = readFileSync(
+      path.join(productComponents, 'search-filter-stack', 'search-filter-stack.tsx'),
+      'utf8',
+    );
+    const bottomSheet = readFileSync(
+      path.join(productComponents, 'bottom-sheet', 'bottom-sheet.tsx'),
+      'utf8',
+    );
+
+    expect(primaryButton).toContain("from '@/shared/design-system/core/button'");
+    expect(primaryButton).toContain('<Button');
+    expect(searchFilterStack).toContain("from '@/shared/design-system/core/search-field'");
+    expect(searchFilterStack).toContain("from '@/shared/design-system/core/filter-chip'");
+    expect(searchFilterStack).toContain('<SearchField');
+    expect(searchFilterStack).toContain('<FilterChip');
+    expect(bottomSheet).toContain("from '@/shared/design-system/core/sheet'");
+    expect(bottomSheet).toContain('<Sheet');
+  });
+
   it(
     'ds:check passes',
     () => {

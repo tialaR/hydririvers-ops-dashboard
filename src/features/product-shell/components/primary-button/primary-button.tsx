@@ -1,9 +1,11 @@
 'use client';
 
-export type ProductCtaState = 'idle' | 'pressed' | 'loading' | 'success' | 'error' | 'disabled';
 import { Link } from '@/core/i18n/navigation';
+import { Button } from '@/shared/design-system/core/button';
 
 import styles from './primary-button.module.sass';
+
+export type ProductCtaState = 'idle' | 'pressed' | 'loading' | 'success' | 'error' | 'disabled';
 
 type PrimaryButtonProps = {
   label: string;
@@ -45,8 +47,14 @@ export function PrimaryButton({
   }
 
   return (
-    <button type={type} className={className} onClick={onClick} disabled={state === 'disabled' || state === 'loading'}>
+    <Button
+      type={type}
+      className={className}
+      onClick={onClick}
+      disabled={state === 'disabled'}
+      busy={state === 'loading'}
+    >
       {label}
-    </button>
+    </Button>
   );
 }
