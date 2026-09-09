@@ -3103,7 +3103,7 @@
       "offline": "Sem conexão · último há {minutes} min"
     },
     "landing": {
-      "title": "HydriRivers",
+      "title": "HydroRivers",
       "subtitle": "Operação hidroviária com confiança para embarcadoras do Arco Norte",
       "publicRoutesTitle": "Rotas públicas Arco Norte",
       "publicRoutesSummary": "Menos ruptura operacional e menos CO₂ em corredores amazônicos.",
@@ -3111,6 +3111,8 @@
       "chartAction": "Explore cargas públicas no corredor com melhor janela.",
       "chartUnit": "índice",
       "chartAria": "Micro tendência de rotas públicas no Arco Norte.",
+      "demoCta": "Explorar demonstração",
+      "demoLoading": "Preparando demonstração…",
       "loginCta": "Entrar",
       "registerCta": "Criar conta"
     },
