@@ -13,7 +13,7 @@ async function setTheme(page: Page, theme: (typeof themes)[number]) {
 
 async function openPrivateRoute(page: Page, route: string, theme: (typeof themes)[number]) {
   await setTheme(page, theme);
-  await page.goto(route, { waitUntil: 'networkidle' });
+  await page.goto(route, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
   await expect(page.locator('body')).toBeVisible();
 }
@@ -97,7 +97,7 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
     await assertVisualIntegrity(page, '/pt-BR/minhas-cargas?filter=attention');
     await capture(page, testInfo, 'filters-applied-light');
 
-    await page.goto('/pt-BR/minhas-cargas/cargo-001', { waitUntil: 'networkidle' });
+    await page.goto('/pt-BR/minhas-cargas/cargo-001', { waitUntil: 'domcontentloaded' });
     await expect(page.getByRole('heading', { name: /atenção/i })).toBeVisible();
     await expect(page.getByRole('region', { name: /linha do tempo/i })).toBeVisible();
     await capture(page, testInfo, 'risk-timeline-light');
