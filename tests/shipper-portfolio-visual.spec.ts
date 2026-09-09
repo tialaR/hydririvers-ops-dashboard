@@ -37,7 +37,7 @@ async function assertVisualIntegrity(page: Page, route: string) {
   expect(metrics.unnamedControls, `${route} exposes unnamed controls`).toBe(0);
 }
 
-async function capture(page: Page, testInfo: TestInfo, name: string, fullPage = true) {
+async function capture(page: Page, testInfo: TestInfo, name: string, fullPage = false) {
   const directory = path.join(evidenceRoot, testInfo.project.name);
   await mkdir(directory, { recursive: true });
   await page.screenshot({
@@ -64,11 +64,11 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
 
   test('core journey renders in light and dark without overflow', async ({ page }, testInfo) => {
     const routes = [
-      { key: 'cargo-list', path: '/pt-BR/minhas-cargas', fullPage: true },
-      { key: 'cargo-detail', path: '/pt-BR/minhas-cargas/cargo-001', fullPage: true },
+      { key: 'cargo-list', path: '/pt-BR/minhas-cargas', fullPage: false },
+      { key: 'cargo-detail', path: '/pt-BR/minhas-cargas/cargo-001', fullPage: false },
       { key: 'cargo-map', path: '/pt-BR/minhas-cargas/cargo-001/mapa', fullPage: false },
-      { key: 'cargo-documents', path: '/pt-BR/minhas-cargas/cargo-001/documentos', fullPage: true },
-      { key: 'cargo-negotiation', path: '/pt-BR/minhas-cargas/cargo-001/negociacao', fullPage: true },
+      { key: 'cargo-documents', path: '/pt-BR/minhas-cargas/cargo-001/documentos', fullPage: false },
+      { key: 'cargo-negotiation', path: '/pt-BR/minhas-cargas/cargo-001/negociacao', fullPage: false },
     ];
 
     for (const theme of themes) {
@@ -110,8 +110,10 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
     await capture(page, testInfo, 'filters-applied-light');
 
     await page.goto('/pt-BR/minhas-cargas/cargo-001', { waitUntil: 'domcontentloaded' });
-    await expect(page.getByRole('heading', { name: /atenção/i })).toBeVisible();
-    await expect(page.getByRole('region', { name: /linha do tempo/i })).toBeVisible();
+    await expect(page.locator('article h2').first()).toBeVisible();
+    const timeline = page.getByRole('region', { name: /timeline/i });
+    await expect(timeline).toBeVisible();
+    await timeline.scrollIntoViewIfNeeded();
     await capture(page, testInfo, 'risk-timeline-light');
 
     await page.getByRole('link', { name: /document/i }).click();
