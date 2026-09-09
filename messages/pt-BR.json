@@ -3319,7 +3319,8 @@
         "body": "Até 38% menos CO₂ vs modal rodoviário equivalente."
       },
       "errors": {
-        "window": "Informe a janela operacional."
+        "window": "Informe a janela operacional.",
+        "submit": "Não foi possível criar a carga. Revise os dados ou entre novamente."
       }
     },
     "cargoDetail": {

@@ -20,8 +20,8 @@ export function AvatarMenuSheet({ open, onClose }: AvatarMenuSheetProps) {
   const { currentUser } = useProductShell();
 
   return (
-    <BottomSheet open={open} onClose={onClose} title={currentUser.name} ariaLabel={t('label')}>
-      <p className={styles.body}>{currentUser.company}</p>
+    <BottomSheet open={open} onClose={onClose} title={currentUser?.name ?? t('label')} ariaLabel={t('label')}>
+      {currentUser ? <p className={styles.body}>{currentUser.company}</p> : null}
       <div className={styles.actions}>
         {MENU_KEYS.map((key) => (
           <Link key={key} href="/perfil" className={styles.menuItem} onClick={onClose}>

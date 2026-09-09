@@ -11,6 +11,10 @@ vi.mock('@/features/cargo/owned/application/get-owned-cargo-by-id', () => ({
   getOwnedCargoById: vi.fn()
 }));
 
+vi.mock('@/features/auth/application/require-shipper-session', () => ({
+  requireShipperSession: vi.fn().mockResolvedValue({ id: 'u-shipper-1' })
+}));
+
 vi.mock('@/app/[locale]/(shipper-mobile-flow)/minhas-cargas/[id]/owned-cargo-detail-route-client', () => ({
   OwnedCargoDetailRouteClient: ({ cargo }: { cargo: { id: string; code: string } }) => (
     <div data-testid="shipper-cargo-detail" data-id={cargo.id} data-code={cargo.code} />
@@ -44,11 +48,12 @@ describe('minhas-cargas/[id] page (shipper mobile flow)', () => {
   it('renderiza detalhe quando a carga mock existe', async () => {
     vi.mocked(getOwnedCargoById).mockResolvedValue(cargo);
 
-    const tree = await MyCargoDetailPage({ params: Promise.resolve({ id: cargo.id }) });
+    const tree = await MyCargoDetailPage({ params: Promise.resolve({ id: cargo.id, locale: 'pt-BR' }) });
     const html = renderToStaticMarkup(tree as React.ReactElement);
 
     expect(html).toContain('data-testid="shipper-cargo-detail"');
     expect(html).toContain('HR-4821');
+    expect(getOwnedCargoById).toHaveBeenCalledWith(cargo.id, 'u-shipper-1');
     expect(mockNotFound).not.toHaveBeenCalled();
   });
 
@@ -58,6 +63,6 @@ describe('minhas-cargas/[id] page (shipper mobile flow)', () => {
       throw new Error('notFound');
     });
 
-    await expect(MyCargoDetailPage({ params: Promise.resolve({ id: 'missing-id' }) })).rejects.toThrow('notFound');
+    await expect(MyCargoDetailPage({ params: Promise.resolve({ id: 'missing-id', locale: 'pt-BR' }) })).rejects.toThrow('notFound');
   });
 });

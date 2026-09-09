@@ -1,11 +1,13 @@
 'use client';
 
+import { useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from '@/core/i18n/navigation';
 import { MobileAppShell } from '@/features/product-shell/components/mobile-app-shell/mobile-app-shell';
 import { PrimaryButton } from '@/features/product-shell/components/primary-button/primary-button';
 import { useProductShell } from '@/features/product-shell/providers/product-shell-provider';
 import type { CargoOffer, OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
+import { acceptOwnedCargoOfferAction } from '@/features/negotiations/actions/accept-owned-cargo-offer-action';
 
 import styles from './mobile-negotiation-screen.module.sass';
 
@@ -19,6 +21,7 @@ export function MobileNegotiationScreen({ cargo, offers }: MobileNegotiationScre
   const tOffers = useTranslations('shipperMobileFlow.offers');
   const router = useRouter();
   const { openConfirmation } = useProductShell();
+  const [pending, startTransition] = useTransition();
   const bestEta = offers.reduce((min, offer) => Math.min(min, offer.etaHours), offers[0]?.etaHours ?? 0);
 
   const selectOffer = (offer: CargoOffer) => {
@@ -27,7 +30,13 @@ export function MobileNegotiationScreen({ cargo, offers }: MobileNegotiationScre
       description: t('confirm.body', { offer: tOffers(offer.labelKey) }),
       confirmLabel: t('confirm.confirm'),
       cancelLabel: t('confirm.cancel'),
-      onConfirm: () => router.push('/sucesso/acao-operacional')
+      onConfirm: () => startTransition(async () => {
+        const result = await acceptOwnedCargoOfferAction(cargo.id, offer.id);
+        if (result.ok) {
+          router.push(`/minhas-cargas/${cargo.id}`);
+          router.refresh();
+        }
+      })
     });
   };
 
@@ -68,7 +77,7 @@ export function MobileNegotiationScreen({ cargo, offers }: MobileNegotiationScre
                 <strong className={styles.offerMetaValue}>{offer.recommended ? t('meta.low') : t('meta.medium')}</strong>
               </div>
             </div>
-            <PrimaryButton label={t('selectOffer')} onClick={() => selectOffer(offer)} variant="secondary" />
+            <PrimaryButton label={t('selectOffer')} onClick={() => selectOffer(offer)} variant="secondary" state={pending ? 'loading' : 'idle'} />
           </article>
         ))}
       </div>
