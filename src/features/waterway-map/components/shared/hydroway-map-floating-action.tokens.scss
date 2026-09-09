@@ -1,0 +1,24 @@
+// Tokens visuais compartilhados — floating actions HydroRivers map (mobile + desktop).
+
+$fab-button-background: rgba(5, 16, 18, 0.78);
+$fab-button-background-hover: rgba(8, 28, 30, 0.88);
+$fab-button-background-active: linear-gradient(180deg, rgba(10, 42, 45, 0.96), rgba(4, 18, 20, 0.96));
+$fab-button-border: rgba(127, 255, 242, 0.28);
+$fab-button-border-hover: rgba(127, 255, 242, 0.42);
+$fab-button-border-active: rgba(127, 255, 242, 0.76);
+$fab-button-color: #cffdf8;
+$fab-button-color-hover: #effffc;
+$fab-button-color-active: #effffc;
+$fab-button-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+$fab-button-shadow-active:
+  0 0 0 1px rgba(127, 255, 242, 0.24),
+  0 0 18px rgba(0, 230, 208, 0.32),
+  0 12px 28px rgba(0, 0, 0, 0.34);
+$fab-button-icon-glow-active: drop-shadow(0 0 5px rgba(127, 255, 242, 0.34));
+$fab-button-backdrop-filter: blur(10px);
+$fab-button-focus-outline: rgba(127, 255, 242, 0.85);
+$fab-active-indicator-color: rgba(127, 255, 242, 0.95);
+$fab-active-indicator-glow: 0 0 6px rgba(0, 230, 208, 0.6);
+
+$fab-size-mobile: 2.75rem; // 44px — touch target
+$fab-size-desktop: 2.75rem; // alinhado ao mobile — mesma hierarquia visual

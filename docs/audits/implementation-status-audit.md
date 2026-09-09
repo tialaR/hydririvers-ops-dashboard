@@ -1,5 +1,7 @@
 # Auditoria de implementação — HydroRivers
 
+> **Snapshot histórico.** Para o encerramento atual do Design System e Storybook, consulte [`design-system-storybook-cycle-closeout.md`](./design-system-storybook-cycle-closeout.md). As contagens e pendências abaixo refletem a data desta auditoria e não devem orientar o catálogo vigente.
+
 ## Resumo executivo
 
 O projeto avançou bastante em arquitetura, mobile-first, i18n e Design System, com várias entregas já consolidadas em código e documentação. Os maiores pontos ainda em aberto são a falha recorrente no teste de OTP do cadastro, o `build` travando em `next build`, a coexistência de caminhos legados para bottom sheet e a adoção ainda parcial de Zod/React Hook Form e endurecimento total de TypeScript.
@@ -26,7 +28,7 @@ O projeto avançou bastante em arquitetura, mobile-first, i18n e Design System, 
 | TypeScript | Implementado parcial | `tsconfig.json`, `src/shared/preferences/client-preferences.ts`, `src/features/auth/domain/auth-schemas.ts` | `strict` está ligado, mas ainda faltam flags mais duras e há casts/compat shims em várias camadas | Endurecer progressivamente sem quebrar runtime |
 | Zod / React Hook Form | Implementado parcial | `src/features/auth/domain/auth-schemas.ts`, `src/shared/preferences/client-preferences.ts`, `docs/adr/0014-form-validation-zod-react-hook-form.md` | Schemas existem, mas a adoção de RHF não está homogênea no app | Migrar os formulários prioritários por domínio |
 | Performance / Core Web Vitals | Implementado parcial | `src/features/dashboard/components/operations-board/operations-board.tsx`, `docs/architecture/code-quality-audit.md`, `docs/engineering/typescript-guidelines.md` | Há esforço de lazy/render controlado, mas o build travando impede validação completa de produção | Revisar mapas/gráficos pesados e executar build estável |
-| Storybook readiness | Implementado parcial | `docs/design-system/storybook-readiness.md`, `src/shared/ui/*`, `src/shared/layout/*` | A documentação e a separação base existem, mas não há stories reais ainda | Criar stories quando a prioridade de implementação permitir |
+| Storybook readiness | Superado por auditoria posterior | `docs/design-system/STORYBOOK.md`, `docs/audits/design-system-storybook-cycle-closeout.md` | Este snapshot antecede a implementação do catálogo real | Consultar o closeout atual |
 | Arquitetura / docs / ADRs | Implementado | `docs/architecture/project-tree.md`, `docs/architecture/code-quality-audit.md`, `docs/adr/*` | Cobertura documental ampla; pode haver ajustes pontuais conforme features mudem | Manter docs em paridade com qualquer alteração estrutural |
 
 ## Implementado
@@ -86,7 +88,7 @@ O projeto avançou bastante em arquitetura, mobile-first, i18n e Design System, 
 
 ### Baixo
 
-- Criar stories reais para os componentes já documentados como Storybook-ready.
+- Item encerrado em auditoria posterior: o catálogo Storybook real foi implementado e validado.
 - Refino fino de espaçamentos e microinterações em telas já funcionalmente estáveis.
 
 ## Bugs encontrados

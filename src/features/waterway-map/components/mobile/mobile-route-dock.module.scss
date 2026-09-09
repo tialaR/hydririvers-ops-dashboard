@@ -1,0 +1,142 @@
+.dock {
+  position: relative;
+  z-index: 5;
+  flex-shrink: 0;
+  margin: 0 0.55rem calc(0.45rem + env(safe-area-inset-bottom, 0px));
+  min-height: 0;
+  border-radius: 1rem;
+  border-color: rgba(47, 224, 208, 0.2);
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition:
+    opacity 220ms cubic-bezier(0.2, 0, 0, 1),
+    transform 220ms cubic-bezier(0.2, 0, 0, 1),
+    box-shadow 220ms cubic-bezier(0.2, 0, 0, 1);
+  animation: dockEnter 320ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+.dockSheetOpen {
+  opacity: 0.5;
+  transform: translate3d(0, 0.2rem, 0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
+}
+
+.inner {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.45rem 0.7rem 0.5rem;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cargoId {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #e8fffb;
+}
+
+.routeLine {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.routeEndpoint {
+  flex: 1 1 0;
+  min-width: 0;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: rgba(232, 255, 251, 0.92);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.routeArrow {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(142, 245, 232, 0.88);
+}
+
+.metricsRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.85rem;
+}
+
+.metric {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  min-width: 0;
+}
+
+.metricLabel {
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.65);
+}
+
+.metricValue {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: rgba(232, 255, 251, 0.95);
+}
+
+.progressTrack {
+  height: 0.22rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(20, 216, 196, 0.85), rgba(35, 156, 214, 0.9));
+  transition: width 220ms cubic-bezier(0.2, 0, 0, 1);
+}
+
+@keyframes dockEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock {
+    animation: none;
+    transition: none;
+  }
+
+  .dockSheetOpen {
+    opacity: 0.55;
+    transform: none;
+  }
+
+  .progressFill {
+    transition: none;
+  }
+}

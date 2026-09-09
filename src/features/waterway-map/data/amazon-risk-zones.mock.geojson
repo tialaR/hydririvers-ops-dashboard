@@ -1,0 +1,229 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "risk-obidos-calha",
+        "name": "Zona calha Óbidos",
+        "kind": "risk-zone",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "Domain-inspired bottleneck",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "risk-zone",
+        "corridorId": "amazonas",
+        "navigabilityRisk": "high",
+        "operationalStatus": "attention",
+        "importance": "high"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -50.7,
+              -1.88
+            ],
+            [
+              -50,
+              -1.88
+            ],
+            [
+              -50,
+              -1.64
+            ],
+            [
+              -50.7,
+              -1.64
+            ],
+            [
+              -50.7,
+              -1.88
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "risk-tocantins-draft",
+        "name": "Zona calado Tocantins",
+        "kind": "risk-zone",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT seca Tocantins — schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "risk-zone",
+        "corridorId": "tocantins-araguaia",
+        "navigabilityRisk": "critical",
+        "operationalStatus": "attention"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -52.175,
+              -2.15
+            ],
+            [
+              -51.275,
+              -2.15
+            ],
+            [
+              -51.275,
+              -1.85
+            ],
+            [
+              -52.175,
+              -1.85
+            ],
+            [
+              -52.175,
+              -2.15
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "floodplain-marajo",
+        "name": "Várzea Marajó (sutil)",
+        "kind": "floodplain",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "ANA bacias — schematic floodplain",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "low",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "floodplain-context",
+        "corridorId": "barra-norte",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -51.03,
+              -1.22
+            ],
+            [
+              -49.93,
+              -1.22
+            ],
+            [
+              -49.93,
+              -0.82
+            ],
+            [
+              -51.03,
+              -0.82
+            ],
+            [
+              -51.03,
+              -1.22
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "floodplain-amazonas-central",
+        "name": "Várzea Amazonas central",
+        "kind": "floodplain",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "low",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "floodplain-context",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -54.2,
+              -2.03
+            ],
+            [
+              -52.8,
+              -2.03
+            ],
+            [
+              -52.8,
+              -1.67
+            ],
+            [
+              -54.2,
+              -1.67
+            ],
+            [
+              -54.2,
+              -2.03
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "risk-estuario-traffic",
+        "name": "Zona tráfego estuário",
+        "kind": "risk-zone",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ tráfego estuário",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "risk-zone",
+        "corridorId": "barra-norte",
+        "navigabilityRisk": "medium",
+        "operationalStatus": "attention"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -48.91875,
+              -1.79
+            ],
+            [
+              -48.11875,
+              -1.79
+            ],
+            [
+              -48.11875,
+              -1.51
+            ],
+            [
+              -48.91875,
+              -1.51
+            ],
+            [
+              -48.91875,
+              -1.79
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}

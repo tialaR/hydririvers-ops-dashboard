@@ -1,0 +1,79 @@
+// Wireflow v4 = estrutura visual (layout, hierarquia, composição por tela).
+// Anexo REM (hydririvers-mobile-rem-measurements.md) = escala (tokens, alturas, spacing).
+// Em conflito entre gosto visual e escala do anexo → seguir o anexo.
+// Base: html 16px → 1rem = 16px; viewport 390×844 = 24.375rem × 52.75rem.
+
+@mixin shipper-rem-scale-tokens
+  --screen-w: 24.375rem
+  --screen-h: 52.75rem
+
+  --safe-top: 2.75rem
+  --safe-bottom: 2.125rem
+
+  --space-1: 0.25rem
+  --space-2: 0.5rem
+  --space-3: 0.75rem
+  --space-4: 1rem
+  --space-5: 1.25rem
+  --space-6: 1.5rem
+  --space-8: 2rem
+
+  --radius-sm: 0.75rem
+  --radius-md: 1rem
+  --radius-lg: 1.25rem
+  --radius-xl: 1.5rem
+  --radius-pill: 999rem
+
+  --touch-min: 2.75rem
+  --touch-comfort: 3rem
+
+  --header-h: 4rem
+  --header-map-h: 3.75rem
+  --header-icon: 2.75rem
+  --avatar: 2.25rem
+
+  --bottom-nav-h: 5.25rem
+  --bottom-nav-float-gap: 0.625rem
+  --bottom-nav-icon: 2.75rem
+  --hy-shipper-nav-clearance: calc(var(--bottom-nav-h) + var(--bottom-nav-float-gap) + var(--hy-shipper-safe-bottom))
+
+  --input-h: 3.25rem
+  --search-h: 3rem
+  --chip-h: 2.75rem
+  --button-h: 3.25rem
+  --button-secondary-h: 3rem
+  --button-inline-w: 9rem
+  --button-inline-h: 2.5rem
+
+  --card-sm-h: 5.5rem
+  --card-md-h: 7rem
+  --card-list-h: 6.5rem
+  --card-lg-h: 9rem
+  --card-xl-h: 12rem
+  --card-priority-h: 6rem
+  --card-profile-row-h: 3.5rem
+  --card-notification-h: 4.5rem
+  --card-offer-h: 7rem
+  --card-doc-row-h: 4.25rem
+  --card-detail-hero-h: 6rem
+  --card-detail-tile-h: 6.5rem
+
+  --content-w: calc(var(--screen-w) - var(--space-8))
+
+  --chart-line-h: 10rem
+  --chart-bar-h: 9rem
+
+  --sheet-compact-h: 13rem
+  --sheet-medium-h: 24rem
+  --sheet-full-h: 45.5rem
+
+  // Bridge legacy --hy-shipper-* tokens to rem scale
+  --hy-shipper-header-height: var(--header-h)
+  --hy-shipper-header-map-height: var(--header-map-h)
+  --hy-shipper-bottom-nav-height: var(--bottom-nav-h)
+  --hy-shipper-content-padding: var(--space-4)
+  --hy-shipper-safe-bottom: max(var(--safe-bottom), env(safe-area-inset-bottom, 0px))
+  --hy-shipper-radius-sm: var(--radius-sm)
+  --hy-shipper-radius-md: var(--radius-md)
+  --hy-shipper-radius-lg: var(--radius-lg)
+  --hy-shipper-touch-min: var(--touch-min)

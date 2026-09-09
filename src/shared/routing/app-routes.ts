@@ -1,11 +1,15 @@
 import type { AppLocale } from './route-types';
 import { routeSearchParams } from './route-search-params';
+import { normalizeCargoId } from './normalize-cargo-id';
+
+/** Abas do detalhe de carga via `?view=` — mapa oficial usa `cargoMap`, não query. */
+export type CargoDetailTabView = 'jornada' | 'documentos' | 'custos' | 'prioridade';
 
 /** Segmentos sem prefixo de locale (uso com next-intl Link / router + proxy). */
 const intlSegments = {
-  login: '/login',
-  /** Cadastro — rota `[locale]/cadastro`. */
-  cadastro: '/cadastro',
+  login: '/entrar',
+  /** Registro público canônico — rota `[locale]/registrar`. */
+  cadastro: '/registrar',
   perfil: '/perfil',
   logout: '/logout',
   dashboard: '/dashboard',
@@ -20,6 +24,21 @@ const intlSegments = {
   governo: '/governo'
 } as const;
 
+function splitPathSearchAndHash(value: string) {
+  const hashIndex = value.indexOf('#');
+  const hash = hashIndex >= 0 ? value.slice(hashIndex) : '';
+  const pathAndSearch = hashIndex >= 0 ? value.slice(0, hashIndex) : value;
+  const searchIndex = pathAndSearch.indexOf('?');
+  const pathname = searchIndex >= 0 ? pathAndSearch.slice(0, searchIndex) : pathAndSearch;
+  const search = searchIndex >= 0 ? pathAndSearch.slice(searchIndex) : '';
+
+  return {
+    pathname,
+    search,
+    hash
+  };
+}
+
 /**
  * Monta caminho absoluto com locale (`/{locale}/...`) para `redirect()` do Next,
  * `revalidatePath`, `window.location`, URLs completas em E2E, etc.
@@ -27,7 +46,13 @@ const intlSegments = {
 export function localizedAppPath(locale: AppLocale, pathname: string): string {
   if (pathname === '/') return `/${locale}`;
   const normalized = pathname.startsWith('/') ? pathname : `/${pathname}`;
-  return `/${locale}${normalized}`;
+  const { pathname: cleanPathname, search, hash } = splitPathSearchAndHash(normalized);
+
+  if (localePathPrefix.test(cleanPathname)) {
+    return `${cleanPathname}${search}${hash}`;
+  }
+
+  return `/${locale}${cleanPathname}${search}${hash}`;
 }
 
 /**
@@ -49,8 +74,14 @@ export const intlAppPaths = {
     marketplace: intlSegments.cargasRoot,
     myCargos: intlSegments.minhasCargas,
     publishCargo: intlSegments.cargasNova,
-    cargoDetail: (cargoId: string) => `${intlSegments.cargasRoot}/${cargoId}`,
-    myCargoDetail: (cargoId: string) => `${intlSegments.minhasCargas}/${cargoId}`
+    cargoDetail: (cargoId: string) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
+    myCargoDetail: (cargoId: string) =>
+      `${intlSegments.minhasCargas}/${encodeURIComponent(normalizeCargoId(cargoId))}`,
+    cargoView: (cargoId: string, view: CargoDetailTabView) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}?view=${encodeURIComponent(view)}`,
+    cargoMap: (cargoId: string) =>
+      `${intlSegments.cargasRoot}/${encodeURIComponent(normalizeCargoId(cargoId))}/mapa`
   },
   admin: {
     home: intlSegments.admin
@@ -75,13 +106,39 @@ export const intlAppPaths = {
   }
 } as const;
 
+const localePathPrefix = /^\/(pt-BR|en-US|es)(?=\/|$)/;
+
+/**
+ * Caminho após o segmento de locale (ex.: `/entrar`, `/registrar`).
+ * Usado para detectar páginas públicas de auth sem depender do locale.
+ */
+export function stripLocaleSegmentPath(pathname: string): string {
+  const normalized = pathname.replace(localePathPrefix, '') || '/';
+  return normalized.length > 1 && normalized.endsWith('/') ? normalized.slice(0, -1) : normalized;
+}
+
+/** Login e cadastro: fluxo público sem chrome logado (sidebar, nav mobile, FAB do shell). */
+export function isAuthPublicShellPathname(pathname: string): boolean {
+  const stripped = stripLocaleSegmentPath(pathname);
+  return stripped === intlAppPaths.auth.login || stripped === intlAppPaths.auth.register;
+}
+
+/** Mapa hidroviário de carga (`/[locale]/cargas/[id]/mapa`) — experiência imersiva no mobile. */
+export function isCargoHydrowayMapPathname(pathname: string): boolean {
+  return /^\/cargas\/[^/]+\/mapa$/.test(stripLocaleSegmentPath(pathname));
+}
+
 /** Rotas que exigem cookie `hydrorivers_session` (mesma ordem semântica que `proxy.ts`). */
 export const middlewarePrivateIntlPaths: readonly string[] = [
   intlAppPaths.dashboard.home,
+  intlAppPaths.cargos.myCargos,
   intlAppPaths.cargos.publishCargo,
   intlAppPaths.auth.profile,
   intlAppPaths.negotiations.home,
   intlAppPaths.tracking.home,
+  intlAppPaths.vessels.marketplace,
+  intlAppPaths.impact.home,
+  intlAppPaths.government.home,
   intlAppPaths.admin.home
 ];
 
@@ -106,8 +163,12 @@ export const appRoutes = {
     publishCargo: (locale: AppLocale) => localizedAppPath(locale, intlAppPaths.cargos.publishCargo),
     cargoDetail: (locale: AppLocale, cargoId: string) =>
       localizedAppPath(locale, intlAppPaths.cargos.cargoDetail(cargoId)),
+    cargoView: (locale: AppLocale, cargoId: string, view: CargoDetailTabView) =>
+      localizedAppPath(locale, intlAppPaths.cargos.cargoView(cargoId, view)),
     myCargoDetail: (locale: AppLocale, cargoId: string) =>
-      localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId))
+      localizedAppPath(locale, intlAppPaths.cargos.myCargoDetail(cargoId)),
+    cargoMap: (locale: AppLocale, cargoId: string) =>
+      localizedAppPath(locale, intlAppPaths.cargos.cargoMap(cargoId))
   },
   admin: {
     home: (locale: AppLocale) => localizedAppPath(locale, intlAppPaths.admin.home)

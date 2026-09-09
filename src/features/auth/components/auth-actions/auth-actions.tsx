@@ -8,6 +8,7 @@ import { Link, useRouter } from '@/core/i18n/navigation';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import { useAuthSession } from '../../hooks/use-auth-session';
 import { logout } from '../../services/auth.client';
+import { getCompactUserDisplayName } from '../../domain/user-display-name';
 import styles from './auth-actions.module.scss';
 
 
@@ -55,10 +56,12 @@ export function AuthActions() {
     );
   }
 
+  const displayName = getCompactUserDisplayName(user.name) || user.name;
+
   return (
     <div className={styles.session}>
-      <Link href={intlAppPaths.auth.profile} className={styles.avatar} aria-label={t('profile')} title={user.name}>
-        <UserAvatar name={user.name} avatarUrl={user.avatarUrl} />
+      <Link href={intlAppPaths.auth.profile} className={styles.avatar} aria-label={t('profile')} title={displayName}>
+        <UserAvatar name={displayName} avatarUrl={user.avatarUrl} />
       </Link>
       <button
         className={styles.logout}

@@ -1,0 +1,797 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-belem",
+        "name": "Porto Interior Belém",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ instalações portuárias PA",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Belém",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "critical",
+        "operationalRole": "hub-estuarino",
+        "cargoProfile": "general",
+        "strategicRole": "hub-estuarino",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 GOV-enriched — Belém/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.51875,
+          -1.65
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-barcarena",
+        "name": "Porto Barcarena",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ terminais privados",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "tocantins-araguaia",
+        "city": "Barcarena",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "high",
+        "operationalRole": "terminal-industrial",
+        "cargoProfile": "bulk",
+        "strategicRole": "terminal-industrial",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Barcarena/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.28,
+          -1.38
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-vila-conde",
+        "name": "Terminal Vila do Conde",
+        "kind": "terminal",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Vila do Conde",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "tocantins-araguaia",
+        "city": "Barcarena",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "critical",
+        "operationalRole": "exportacao-estuarina",
+        "cargoProfile": "bulk,container",
+        "strategicRole": "exportacao-estuarina",
+        "operationalStatus": "attention",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 GOV-enriched — Barcarena/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.0125,
+          -1.46
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-santarem",
+        "name": "Porto Interior Santarém",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT hidroviário Santarém",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Santarém",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "high",
+        "operationalRole": "confluencia-tapajos",
+        "cargoProfile": "grains,general",
+        "strategicRole": "confluencia-tapajos",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Santarém/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.23125,
+          -1.84
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-itaituba",
+        "name": "Porto Itaituba",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Tapajós",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Itaituba",
+        "state": "PA",
+        "waterway": "tapajos",
+        "importance": "high",
+        "operationalRole": "origem-graos",
+        "cargoProfile": "grains",
+        "strategicRole": "origem-graos",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Itaituba/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.35,
+          -2.28
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-manaus",
+        "name": "Porto Interior Manaus",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Manaus",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Manaus",
+        "state": "AM",
+        "waterway": "amazonas",
+        "importance": "critical",
+        "operationalRole": "hub-zfm",
+        "cargoProfile": "general,container",
+        "strategicRole": "hub-zfm",
+        "operationalStatus": "active",
+        "navigabilityRisk": "low",
+        "referenceContext": "V2.6 GOV-enriched — Manaus/AM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -56.1125,
+          -1.79
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-itacoatiara",
+        "name": "Porto Itacoatiara",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Itacoatiara",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "madeira",
+        "city": "Itacoatiara",
+        "state": "AM",
+        "waterway": "amazonas",
+        "importance": "high",
+        "operationalRole": "transbordo-madeira",
+        "cargoProfile": "fuel,grains",
+        "strategicRole": "transbordo-madeira",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Itacoatiara/AM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -54.05,
+          -1.72
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-porto-velho",
+        "name": "Porto Porto Velho",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT Madeira RO",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "madeira",
+        "city": "Porto Velho",
+        "state": "RO",
+        "waterway": "madeira",
+        "importance": "high",
+        "operationalRole": "origem-madeira",
+        "cargoProfile": "grains,fuel",
+        "strategicRole": "origem-madeira",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Porto Velho/RO"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.95,
+          -2.28
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-macapa",
+        "name": "Porto Macapá",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ AP",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Macapá",
+        "state": "AP",
+        "waterway": "amazonas",
+        "importance": "medium",
+        "operationalRole": "acesso-ap",
+        "cargoProfile": "general",
+        "strategicRole": "acesso-ap",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Macapá/AP"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -51.05,
+          -0.42
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-abaetetuba",
+        "name": "Porto Abaetetuba",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired estuário",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "barra-norte",
+        "city": "Abaetetuba",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "medium",
+        "operationalRole": "apoio-estuario",
+        "cargoProfile": "general",
+        "strategicRole": "apoio-estuario",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Abaetetuba/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -49.85,
+          -1.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-obidos",
+        "name": "Porto Óbidos",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT calha Óbidos",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Óbidos",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "medium",
+        "operationalRole": "calha-estreita",
+        "cargoProfile": "general",
+        "strategicRole": "calha-estreita",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Óbidos/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -50.35,
+          -1.76
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-parintins",
+        "name": "Porto Parintins",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ interior AM",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Parintins",
+        "state": "AM",
+        "waterway": "amazonas",
+        "importance": "medium",
+        "operationalRole": "apoio-interior",
+        "cargoProfile": "general",
+        "strategicRole": "apoio-interior",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Parintins/AM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.38,
+          -1.82
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-tefe",
+        "name": "Porto Tefé",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Solimões",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Tefé",
+        "state": "AM",
+        "waterway": "solimoes",
+        "importance": "medium",
+        "operationalRole": "interior-solimoes",
+        "cargoProfile": "general",
+        "strategicRole": "interior-solimoes",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Tefé/AM"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -58.25,
+          -1.52
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-maraba",
+        "name": "Porto Interior Marabá",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT Tocantins origem",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "tocantins-araguaia",
+        "city": "Marabá",
+        "state": "PA",
+        "waterway": "tocantins",
+        "importance": "high",
+        "operationalRole": "origem-tocantins",
+        "cargoProfile": "grains,ore",
+        "strategicRole": "origem-tocantins",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Marabá/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -51.725,
+          -2
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-miritituba",
+        "name": "Terminal Miritituba",
+        "kind": "terminal",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Miritituba",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Miritituba",
+        "state": "PA",
+        "waterway": "tapajos",
+        "importance": "high",
+        "operationalRole": "transbordo-soja",
+        "cargoProfile": "grains",
+        "strategicRole": "transbordo-soja",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Miritituba/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.05,
+          -2.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-breves",
+        "name": "Porto Breves",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired Marajó",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "barra-norte",
+        "city": "Breves",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "medium",
+        "operationalRole": "marajo-gateway",
+        "cargoProfile": "general",
+        "strategicRole": "marajo-gateway",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Breves/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -50.48,
+          -1.02
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-alenquer",
+        "name": "Porto Alenquer",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Alenquer",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "low",
+        "operationalRole": "apoio-regional",
+        "cargoProfile": "general",
+        "strategicRole": "apoio-regional",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Alenquer/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -54.32,
+          -1.18
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-juruti",
+        "name": "Porto Juruti",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ mineral",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Juruti",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "medium",
+        "operationalRole": "bauxite-hub",
+        "cargoProfile": "ore",
+        "strategicRole": "bauxite-hub",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Juruti/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -53.05,
+          -1.92
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-altamira",
+        "name": "Porto Altamira",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired Xingu",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Altamira",
+        "state": "PA",
+        "waterway": "xingu",
+        "importance": "medium",
+        "operationalRole": "xingu-access",
+        "cargoProfile": "general",
+        "strategicRole": "xingu-access",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Altamira/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.05,
+          -2.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "port-prainha",
+        "name": "Porto Prainha",
+        "kind": "port",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired calha",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Prainha",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "low",
+        "operationalRole": "calha-support",
+        "cargoProfile": "general",
+        "strategicRole": "calha-support",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Prainha/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -51.68,
+          -1.48
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "transshipment-belem-mosqueiro",
+        "name": "Transbordo Mosqueiro",
+        "kind": "transshipment",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "transshipment-node",
+        "corridorId": "barra-norte",
+        "city": "Belém",
+        "state": "PA",
+        "waterway": "para-estuario",
+        "importance": "medium",
+        "operationalRole": "transbordo-estuario",
+        "cargoProfile": "general",
+        "strategicRole": "transbordo-estuario",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Belém/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -48.42,
+          -1.58
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "transshipment-santarem-tapajos",
+        "name": "Transbordo Santarém Tapajós",
+        "kind": "transshipment",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ transbordo",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "transshipment-node",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Santarém",
+        "state": "PA",
+        "waterway": "tapajos",
+        "importance": "high",
+        "operationalRole": "transbordo-graos",
+        "cargoProfile": "grains",
+        "strategicRole": "transbordo-graos",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Santarém/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.05,
+          -1.78
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "transshipment-itaituba-flex",
+        "name": "Transbordo Itaituba Flex",
+        "kind": "transshipment",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "Domain-inspired",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "transshipment-node",
+        "corridorId": "tapajos-teles-pires",
+        "city": "Itaituba",
+        "state": "PA",
+        "waterway": "tapajos",
+        "importance": "medium",
+        "operationalRole": "transbordo-flex",
+        "cargoProfile": "grains",
+        "strategicRole": "transbordo-flex",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Itaituba/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -55.22,
+          -2.22
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "terminal-santarem-oeste",
+        "name": "Terminal Santarém Oeste",
+        "kind": "terminal",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Santarém",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "logistics-node",
+        "corridorId": "amazonas",
+        "city": "Santarém",
+        "state": "PA",
+        "waterway": "amazonas",
+        "importance": "high",
+        "operationalRole": "transbordo-graos",
+        "cargoProfile": "grains",
+        "strategicRole": "transbordo-graos",
+        "operationalStatus": "active",
+        "navigabilityRisk": "medium",
+        "referenceContext": "V2.6 GOV-enriched — Santarém/PA"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -52.15,
+          -1.82
+        ]
+      }
+    }
+  ]
+}

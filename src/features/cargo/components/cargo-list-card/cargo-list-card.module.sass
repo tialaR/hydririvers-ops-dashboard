@@ -1,0 +1,276 @@
+.root
+  --cargo-accent-strong: rgba(82, 94, 112, 0.42)
+  --cargo-accent-mid: rgba(120, 132, 150, 0.22)
+  --cargo-accent-soft: rgba(255, 255, 255, 0.14)
+  --cargo-accent-fade: rgba(255, 255, 255, 0)
+  --cargo-left-glow: rgba(255, 255, 255, 0.07)
+  --cargo-card-tint: rgba(255, 255, 255, 0.076)
+  --cargo-card-tint-soft: rgba(255, 255, 255, 0.032)
+  --cargo-card-border: rgba(255, 255, 255, 0.22)
+  --cargo-title-color: rgba(11, 18, 34, 0.92)
+  --cargo-body-color: rgba(19, 28, 44, 0.82)
+  --cargo-muted-color: rgba(47, 60, 78, 0.66)
+  --cargo-icon-color: rgba(51, 65, 84, 0.58)
+  --cargo-badge-text: rgba(42, 52, 67, 0.72)
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.064))
+  --cargo-badge-border: rgba(255, 255, 255, 0.28)
+  position: relative
+  display: block
+  width: 100%
+  min-height: clamp(6.62rem, 27.5vw, 7.32rem)
+  isolation: isolate
+  color: var(--cargo-title-color)
+  text-decoration: none
+  transform: translateZ(0)
+  transition: transform 150ms ease, filter 150ms ease
+
+.root[data-visual-status='orange'],
+.root[data-visual-status='purple'],
+.root[data-visual-status='cyan'],
+.root[data-visual-status='red'],
+.root[data-visual-status='dark'],
+.root[data-visual-status='gray']
+  --cargo-card-tint: rgba(255, 255, 255, 0.078)
+  --cargo-card-tint-soft: rgba(255, 255, 255, 0.034)
+  --cargo-accent-soft: rgba(255, 255, 255, 0.16)
+  --cargo-left-glow: rgba(255, 255, 255, 0.08)
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.07))
+  --cargo-badge-border: rgba(255, 255, 255, 0.3)
+  --cargo-badge-text: rgba(38, 48, 63, 0.76)
+
+.root[data-visual-status='orange']
+  --cargo-accent-strong: rgba(255, 123, 0, 0.54)
+  --cargo-accent-mid: rgba(255, 143, 31, 0.26)
+  --cargo-icon-color: rgba(255, 123, 0, 0.6)
+
+.root[data-visual-status='purple']
+  --cargo-accent-strong: rgba(125, 39, 242, 0.54)
+  --cargo-accent-mid: rgba(139, 53, 255, 0.25)
+  --cargo-icon-color: rgba(125, 39, 242, 0.6)
+
+.root[data-visual-status='cyan']
+  --cargo-accent-strong: rgba(18, 201, 232, 0.5)
+  --cargo-accent-mid: rgba(35, 212, 238, 0.23)
+  --cargo-icon-color: rgba(9, 154, 185, 0.55)
+
+.root[data-visual-status='red']
+  --cargo-accent-strong: rgba(240, 0, 24, 0.54)
+  --cargo-accent-mid: rgba(255, 25, 48, 0.25)
+  --cargo-icon-color: rgba(224, 0, 23, 0.6)
+
+.root[data-visual-status='dark']
+  --cargo-accent-strong: rgba(18, 25, 35, 0.46)
+  --cargo-accent-mid: rgba(39, 48, 61, 0.22)
+  --cargo-icon-color: rgba(43, 52, 66, 0.6)
+
+.root:active
+  transform: scale(0.99)
+
+.root:focus-visible
+  outline: 0.1875rem solid rgba(23, 31, 42, 0.22)
+  outline-offset: 0.1875rem
+  border-radius: 1.65rem
+
+.surface
+  position: absolute
+  z-index: 1
+  inset: 0 0 0 0.56rem
+  border: 0.0625rem solid var(--cargo-card-border)
+  border-radius: clamp(1.45rem, 5.9vw, 1.86rem)
+  overflow: hidden
+  background: linear-gradient(112deg, var(--cargo-card-tint) 0%, rgba(255, 255, 255, 0.052) 24%, rgba(255, 255, 255, 0.032) 52%, rgba(255, 255, 255, 0.07) 100%)
+  box-shadow: 0 0.95rem 1.8rem rgba(26, 38, 52, 0.045), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.26), inset 0 0 1.4rem rgba(255, 255, 255, 0.11)
+  -webkit-backdrop-filter: blur(3.2rem) saturate(185%) brightness(1.045)
+  backdrop-filter: blur(3.2rem) saturate(185%) brightness(1.045)
+
+.surface::before
+  content: ''
+  position: absolute
+  inset: 0
+  background: linear-gradient(108deg, transparent 0%, transparent 70%, rgba(255, 255, 255, 0.095) 70.45%, rgba(255, 255, 255, 0.024) 76%, transparent 76.5%)
+  pointer-events: none
+
+.surface::after
+  content: ''
+  position: absolute
+  left: -0.28rem
+  inset-block: 0
+  width: 1.75rem
+  background: linear-gradient(90deg, var(--cargo-left-glow) 0%, var(--cargo-card-tint-soft) 42%, transparent 100%)
+  pointer-events: none
+
+.card
+  position: relative
+  z-index: 2
+  display: flex
+  min-height: inherit
+  margin-left: 0.56rem
+  align-items: stretch
+  border-radius: clamp(1.45rem, 5.9vw, 1.86rem)
+
+.shine
+  position: absolute
+  inset: 0
+  z-index: 0
+  border-radius: inherit
+  overflow: hidden
+  pointer-events: none
+
+.shine::before
+  content: ''
+  position: absolute
+  inset: 0
+  background: linear-gradient(112deg, transparent 0%, transparent 72%, rgba(255, 255, 255, 0.12) 72.35%, rgba(255, 255, 255, 0.03) 78%, transparent 78.4%)
+
+.content
+  position: relative
+  z-index: 1
+  display: grid
+  width: 100%
+  align-content: center
+  gap: clamp(0.48rem, 2vw, 0.6rem)
+  padding: clamp(0.9rem, 3.6vw, 1.05rem) clamp(0.95rem, 4vw, 1.15rem) clamp(0.9rem, 3.6vw, 1.05rem) clamp(1.1rem, 4.4vw, 1.32rem)
+
+.headerRow
+  display: grid
+  grid-template-columns: minmax(0, 1fr) auto
+  align-items: start
+  gap: 0.7rem
+
+.title
+  min-width: 0
+  overflow: hidden
+  color: var(--cargo-title-color)
+  font-size: clamp(1.02rem, 4.55vw, 1.22rem)
+  font-weight: 640
+  letter-spacing: -0.03em
+  line-height: 1.05
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.route
+  min-width: 0
+  overflow: hidden
+  color: var(--cargo-muted-color)
+  font-size: clamp(0.84rem, 3.4vw, 0.95rem)
+  font-weight: 430
+  letter-spacing: -0.018em
+  line-height: 1.18
+  text-overflow: ellipsis
+  white-space: nowrap
+
+@media (prefers-reduced-motion: reduce)
+  .root
+    transition: none
+
+  .root:active
+    transform: none
+// HYDRI PATCH: final-gutter-badge-restore START
+// Restore semantic badge color tokens while keeping softened liquid-glass cards.
+.root
+  --cargo-badge-text: #747b89
+  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 247, 251, 0.62) 0%, rgba(232, 237, 246, 0.42) 100%)
+  --cargo-badge-border: rgba(184, 193, 207, 0.58)
+  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
+
+.root[data-visual-status='gray']
+  --cargo-badge-text: #747b89
+  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 247, 251, 0.62) 0%, rgba(232, 237, 246, 0.42) 100%)
+  --cargo-badge-border: rgba(184, 193, 207, 0.58)
+  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
+
+.root[data-visual-status='orange']
+  --cargo-badge-text: #df6200
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 240, 224, 0.62) 0%, rgba(255, 230, 205, 0.42) 100%)
+  --cargo-badge-border: rgba(255, 173, 96, 0.66)
+  --cargo-badge-shadow: rgba(255, 123, 0, 0.035)
+
+.root[data-visual-status='purple']
+  --cargo-badge-text: #7d27f2
+  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 233, 255, 0.62) 0%, rgba(239, 225, 255, 0.42) 100%)
+  --cargo-badge-border: rgba(199, 157, 255, 0.64)
+  --cargo-badge-shadow: rgba(125, 39, 242, 0.035)
+
+.root[data-visual-status='cyan']
+  --cargo-badge-text: #09afd2
+  --cargo-badge-bg: linear-gradient(180deg, rgba(231, 252, 255, 0.62) 0%, rgba(220, 249, 255, 0.42) 100%)
+  --cargo-badge-border: rgba(145, 232, 244, 0.66)
+  --cargo-badge-shadow: rgba(18, 201, 232, 0.035)
+
+.root[data-visual-status='red']
+  --cargo-badge-text: #e60017
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 236, 239, 0.62) 0%, rgba(255, 227, 231, 0.42) 100%)
+  --cargo-badge-border: rgba(255, 146, 158, 0.66)
+  --cargo-badge-shadow: rgba(240, 0, 24, 0.035)
+
+.root[data-visual-status='dark']
+  --cargo-badge-text: #111827
+  --cargo-badge-bg: linear-gradient(180deg, rgba(243, 246, 251, 0.54) 0%, rgba(233, 238, 247, 0.36) 100%)
+  --cargo-badge-border: rgba(74, 82, 94, 0.4)
+  --cargo-badge-shadow: rgba(17, 24, 39, 0.024)
+// HYDRI PATCH: final-gutter-badge-restore END
+
+// HYDRI PATCH: cargo-card-glass-restore START
+// Keep the cargo card transparent and neutral so the page background reads through.
+.root
+  --cargo-card-tint: rgba(255, 255, 255, 0.058)
+  --cargo-card-tint-soft: rgba(255, 255, 255, 0.024)
+  --cargo-card-border: rgba(255, 255, 255, 0.18)
+  --cargo-left-glow: rgba(255, 255, 255, 0.055)
+  --cargo-title-color: rgba(11, 18, 34, 0.94)
+  --cargo-body-color: rgba(19, 28, 44, 0.8)
+  --cargo-muted-color: rgba(47, 60, 78, 0.64)
+  --cargo-icon-color: rgba(51, 65, 84, 0.54)
+  --cargo-badge-text: #747b89
+  --cargo-badge-bg: linear-gradient(180deg, rgba(249, 251, 253, 0.64) 0%, rgba(236, 242, 247, 0.4) 100%)
+  --cargo-badge-border: rgba(184, 193, 207, 0.52)
+  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
+
+.root[data-visual-status='orange']
+  --cargo-badge-text: #df6200
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 240, 224, 0.62) 0%, rgba(255, 230, 205, 0.42) 100%)
+  --cargo-badge-border: rgba(255, 173, 96, 0.66)
+  --cargo-badge-shadow: rgba(255, 123, 0, 0.035)
+
+.root[data-visual-status='purple']
+  --cargo-badge-text: #7d27f2
+  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 233, 255, 0.62) 0%, rgba(239, 225, 255, 0.42) 100%)
+  --cargo-badge-border: rgba(199, 157, 255, 0.64)
+  --cargo-badge-shadow: rgba(125, 39, 242, 0.035)
+
+.root[data-visual-status='cyan']
+  --cargo-badge-text: #09afd2
+  --cargo-badge-bg: linear-gradient(180deg, rgba(231, 252, 255, 0.62) 0%, rgba(220, 249, 255, 0.42) 100%)
+  --cargo-badge-border: rgba(145, 232, 244, 0.66)
+  --cargo-badge-shadow: rgba(18, 201, 232, 0.035)
+
+.root[data-visual-status='red']
+  --cargo-badge-text: #e60017
+  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 236, 239, 0.62) 0%, rgba(255, 227, 231, 0.42) 100%)
+  --cargo-badge-border: rgba(255, 146, 158, 0.66)
+  --cargo-badge-shadow: rgba(240, 0, 24, 0.035)
+
+.root[data-visual-status='dark']
+  --cargo-badge-text: #111827
+  --cargo-badge-bg: linear-gradient(180deg, rgba(243, 246, 251, 0.54) 0%, rgba(233, 238, 247, 0.36) 100%)
+  --cargo-badge-border: rgba(74, 82, 94, 0.4)
+  --cargo-badge-shadow: rgba(17, 24, 39, 0.024)
+
+.surface
+  background: linear-gradient(112deg, rgba(255, 255, 255, 0.105) 0%, rgba(245, 249, 252, 0.05) 24%, rgba(240, 246, 248, 0.028) 52%, rgba(232, 241, 245, 0.06) 100%)
+  box-shadow: 0 0.85rem 1.6rem rgba(26, 38, 52, 0.036), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.24), inset 0 0 1.2rem rgba(255, 255, 255, 0.08)
+  backdrop-filter: blur(3.1rem) saturate(180%) brightness(1.03)
+  -webkit-backdrop-filter: blur(3.1rem) saturate(180%) brightness(1.03)
+
+.surface::before
+  background: linear-gradient(108deg, transparent 0%, transparent 72%, rgba(255, 255, 255, 0.08) 72.35%, rgba(255, 255, 255, 0.02) 78%, transparent 78.4%)
+
+.surface::after
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.02) 42%, transparent 100%)
+
+.shine::before
+  background: linear-gradient(112deg, transparent 0%, transparent 74%, rgba(255, 255, 255, 0.085) 74.35%, rgba(255, 255, 255, 0.02) 80%, transparent 80.4%)
+
+.content
+  padding: clamp(0.9rem, 3.6vw, 1.05rem) clamp(0.95rem, 4vw, 1.15rem) clamp(0.9rem, 3.6vw, 1.05rem) clamp(1.1rem, 4.4vw, 1.32rem)
+// HYDRI PATCH: cargo-card-glass-restore END

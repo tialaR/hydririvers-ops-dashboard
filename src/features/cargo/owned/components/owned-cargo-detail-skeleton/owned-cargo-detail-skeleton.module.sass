@@ -1,0 +1,97 @@
+.root
+  --hy-owned-cargo-detail-bottom-safe: calc(var(--mobile-bottom-nav-height, 5.75rem) + 1.25rem + env(safe-area-inset-bottom, 0px))
+  --hy-owned-cargo-skeleton-surface: color-mix(in srgb, var(--hx-line-soft, var(--line)) 55%, transparent)
+  display: grid
+  gap: 1rem
+  padding-bottom: var(--hy-owned-cargo-detail-bottom-safe)
+
+.header
+  display: grid
+  gap: 0.55rem
+
+.backBar,
+.titleLine,
+.identityTop,
+.editorialBand,
+.contextCard,
+.mapHero,
+.previewCard,
+.actionChip
+  border-radius: 0.75rem
+  background: linear-gradient(90deg, var(--hy-owned-cargo-skeleton-surface), color-mix(in srgb, var(--hx-line-soft, var(--line)) 35%, transparent), var(--hy-owned-cargo-skeleton-surface))
+  background-size: 200% 100%
+  animation: ownedCargoDetailSkeletonPulse 1.4s ease-in-out infinite
+
+.backBar
+  width: 38%
+  height: 1.25rem
+
+.editorialBand
+  width: 100%
+  height: 5.5rem
+  border-radius: 1.125rem
+
+.identityCard
+  display: grid
+  gap: 0.45rem
+  padding: 0.2rem 0
+
+.identityTop
+  width: 55%
+  height: 1.125rem
+
+.titleLine
+  width: 100%
+  height: 1.5rem
+
+.contextGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.5rem
+
+.contextCard
+  min-height: 2.75rem
+
+.mapHero
+  width: 100%
+  aspect-ratio: 1 / 1
+  border-radius: 1.125rem
+
+.previewGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.625rem
+
+.previewCard
+  min-height: 6.75rem
+
+.actionsRow
+  display: flex
+  flex-wrap: wrap
+  gap: 0.5rem
+
+.actionChip
+  width: 6.5rem
+  height: 2rem
+  border-radius: 999px
+
+@keyframes ownedCargoDetailSkeletonPulse
+  0%
+    background-position: 100% 0
+  100%
+    background-position: -100% 0
+
+@media (prefers-reduced-motion: reduce)
+  .backBar,
+  .titleLine,
+  .identityTop,
+  .editorialBand,
+  .contextCard,
+  .mapHero,
+  .previewCard,
+  .actionChip
+    animation: none
+
+@media (min-width: 861px)
+  .root
+    padding-bottom: 0

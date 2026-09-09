@@ -1,7 +1,21 @@
 import { fileURLToPath } from 'node:url';
-import { defineConfig } from 'vitest/config';
+import { defineConfig, type Plugin } from 'vitest/config';
+
+/** Trata artefatos `.mock.geojson` como JSON importável (ADR 0031). */
+function hydrowayMockGeoJsonPlugin(): Plugin {
+  return {
+    name: 'hydroway-mock-geojson',
+    transform(code, id) {
+      if (!id.endsWith('.mock.geojson')) {
+        return null;
+      }
+      return { code: `export default ${code}`, map: null };
+    },
+  };
+}
 
 export default defineConfig({
+  plugins: [hydrowayMockGeoJsonPlugin()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -10,6 +24,57 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['tests/unit/**/*.test.ts', 'tests/integration/**/*.test.ts']
+    include: [
+      'tests/unit/**/*.test.ts',
+      'tests/unit/features/negotiations/negotiation-board-render.test.tsx',
+      'tests/unit/features/cargo/mobile-cargo-card.test.tsx',
+      'tests/unit/features/cargo/mobile-cargo-list-lab-v2.test.tsx',
+      'tests/unit/features/cargo/cargo-card.component.test.tsx',
+      'tests/unit/features/cargo/owned-cargo-card.component.test.tsx',
+      'tests/unit/features/cargo/owned-cargo-detail.component.test.tsx',
+      'tests/unit/features/cargo/derive-owned-cargo-detail.test.ts',
+      'tests/unit/features/cargo/owned-cargo-panel-search-params.test.ts',
+      'tests/unit/features/cargo/my-cargoes-list.component.test.tsx',
+      'tests/unit/app/minhas-cargas-detail-page.test.tsx',
+      'tests/unit/features/cargo/cargo-route-line.component.test.tsx',
+      'tests/unit/features/cargo/cargo-eta-block.component.test.tsx',
+      'tests/unit/features/cargo/cargo-filter-sheet-content.component.test.tsx',
+      'tests/unit/features/cargo/cargo-detail-sheet-content.component.test.tsx',
+      'tests/unit/features/cargo/mobile-cargo-empty-state.test.tsx',
+      'tests/unit/features/cargo/public-cargas-mobile-list.test.tsx',
+      'tests/unit/shared/components/bottom-sheet.component.test.tsx',
+      'tests/unit/shared/components/icon-button.component.test.tsx',
+      'tests/unit/shared/components/status-badge.component.test.tsx',
+      'tests/unit/shared/components/filter-chip.component.test.tsx',
+      'tests/unit/shared/components/button.component.test.tsx',
+      'tests/unit/shared/components/search-field.component.test.tsx',
+      'tests/unit/shared/components/bottom-nav.component.test.tsx',
+      'tests/unit/shared/components/bottom-nav-state.test.ts',
+      'tests/unit/shared/components/module-skeletons.component.test.tsx',
+      'tests/unit/shared/components/text-field.component.test.tsx',
+      'tests/unit/shared/components/otp-input.component.test.tsx',
+      'tests/unit/shared/components/inline-alert.component.test.tsx',
+      'tests/unit/shared/components/informational-card.component.test.tsx',
+      'tests/unit/shared/components/surface.component.test.tsx',
+      'tests/unit/shared/design-system/storybook-primitives.test.tsx',
+      'tests/unit/features/auth/auth-form.component.test.tsx',
+      'tests/unit/features/auth/profile-panel.component.test.tsx',
+      'tests/unit/app/mobile-cargo-list-lab-page.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-button.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-popover.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-sheet.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-tab-bar.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-segmented-control.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-switch.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-search-field.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-text-field.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-toolbar.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-window.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-progress.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-scroll-edge.test.tsx',
+      'tests/unit/shared/design-system/liquid-glass-surface.test.tsx',
+      'tests/unit/shared/design-system/hydro-design-system-boundaries.test.ts',
+      'tests/integration/**/*.test.ts'
+    ]
   }
 });

@@ -1,0 +1,298 @@
+@use '../../styles/interactions/pressable' as pressable
+
+// display:contents — external className hosts layout only; glass paints on the inner button.
+.layoutHost
+  display: contents
+
+// overflow: visible — inner glow and icon lift may extend outside the hit box.
+.button
+  margin: 0
+  padding: 0
+  font: inherit
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+  -webkit-appearance: none
+  appearance: none
+  touch-action: manipulation
+  box-sizing: border-box
+  overflow: visible
+
+  &:disabled
+    cursor: not-allowed
+    opacity: 0.5
+    pointer-events: none
+
+  &:focus:not(:focus-visible)
+    outline: none
+
+.icon
+  display: grid
+  place-items: center
+  line-height: 0
+  position: relative
+  z-index: 2
+  transform-origin: center center
+  transform: translate3d(0, 0, 0) scale(1)
+  transition: transform var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1))
+  will-change: transform
+
+  :global(svg)
+    display: block
+
+.bubbleGlow
+  position: absolute
+  inset: var(--hy-icon-button-glow-inset, -0.625rem)
+  z-index: 0
+  border-radius: inherit
+  pointer-events: none
+  opacity: 0
+  transform: scale(0.72)
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.24) 42%, transparent 68%)
+  transition: opacity var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1)), transform var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1))
+
+.badge
+  position: absolute
+  top: -0.25rem
+  right: -0.25rem
+  display: grid
+  place-items: center
+  min-width: 1.125rem
+  height: 1.125rem
+  padding: 0 0.2rem
+  border-radius: var(--hy-radius-badge, 999rem)
+  color: var(--hy-color-icon-button-badge-text, #fff)
+  background: var(--hy-color-icon-button-badge-bg, var(--hy-color-brand, #2563eb))
+  box-shadow: var(--hy-shadow-icon-button, 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12))
+  font-size: 0.625rem
+  font-weight: 800
+  line-height: 1
+  pointer-events: none
+
+@mixin v2-icon-hit-area
+  width: var(--hy-icon-button-size, var(--hy-size-icon-button, 3.25rem))
+  min-width: var(--hy-icon-button-size, var(--hy-size-icon-button, 3.25rem))
+  height: var(--hy-icon-button-size, var(--hy-size-icon-button, 3.25rem))
+  min-height: var(--hy-icon-button-size, var(--hy-size-icon-button, 3.25rem))
+
+@mixin v2-icon-svg($px: var(--hy-icon-button-icon-size, var(--hy-size-icon-button-svg, 1.3125rem)))
+  .icon :global(svg)
+    width: $px
+    height: $px
+    fill: none
+    stroke: currentColor
+    stroke-width: 2
+    stroke-linecap: round
+    stroke-linejoin: round
+
+// icon-button-glass-compact-production — approved lab middle column (~52px md).
+@mixin v2-glass-tokens
+  --hy-icon-button-size: var(--hy-size-icon-button, 3.25rem)
+  --hy-icon-button-icon-size: var(--hy-size-icon-button-svg, 1.3125rem)
+  --hy-icon-button-radius: 1.375rem
+  --hy-icon-button-glass-border: rgba(255, 255, 255, 0.2)
+  --hy-icon-button-glass-surface: rgba(255, 255, 255, 0.3)
+  --hy-icon-button-glass-blur: blur(10px)
+  --hy-icon-button-shadow: inset 0 1px #ffffff7a, inset 0 -1px #ffffff1a, 0 0.5625rem 1.5rem #0000003d
+  --hy-icon-button-press-scale: 0.945
+  --hy-icon-button-icon-press-y: -0.1875rem
+  --hy-icon-button-icon-press-scale: 1.02
+  --hy-icon-button-glow-inset: -0.625rem
+  --hy-icon-button-glow-opacity: 0.62
+  --hy-icon-button-motion-press-duration: 200ms
+  --hy-icon-button-motion-release-duration: 240ms
+  --hy-icon-button-motion-easing: cubic-bezier(0.2, 1, 0.2, 1)
+
+@mixin v2-glass-surface
+  border: 1px solid var(--hy-icon-button-glass-border, rgba(255, 255, 255, 0.2))
+  color: var(--hy-color-icon-button-icon, rgba(51, 65, 85, 0.84))
+  background-color: var(--hy-icon-button-glass-surface, rgba(255, 255, 255, 0.3))
+  box-shadow: var(--hy-icon-button-shadow, inset 0 1px #ffffff7a, inset 0 -1px #ffffff1a, 0 0.5625rem 1.5rem #0000003d)
+  -webkit-backdrop-filter: var(--hy-icon-button-glass-blur, blur(10px))
+  backdrop-filter: var(--hy-icon-button-glass-blur, blur(10px))
+
+@mixin v2-glass-rim
+  &::before
+    content: none
+
+@mixin v2-glass-highlight
+  &::after
+    content: none
+
+/* DS v2 light — glass-compact-production (header, page, field, sheet) */
+.variant_v2,
+.shell,
+.glassControl,
+.glassCompactProduction
+  @include v2-glass-tokens
+  @include v2-icon-hit-area
+  @include v2-icon-svg()
+
+  position: relative
+  isolation: isolate
+  display: grid
+  place-items: center
+  padding: 0
+  border-radius: var(--hy-icon-button-radius, 1.375rem)
+  @include v2-glass-surface
+  transform: scale(1)
+  transform-origin: center center
+  transition: transform var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1)), box-shadow var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1)), background var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1)), border-color var(--hy-icon-button-motion-press-duration, 180ms) var(--hy-icon-button-motion-easing, cubic-bezier(0.2, 0.8, 0.2, 1))
+
+  @include v2-glass-rim
+  @include v2-glass-highlight
+
+  &[data-press='pressed']
+    transform: scale(var(--hy-icon-button-press-scale, 0.945))
+
+    .icon
+      transform: translate3d(0, var(--hy-icon-button-icon-press-y, -0.1875rem), 0) scale(var(--hy-icon-button-icon-press-scale, 1.02))
+
+    .bubbleGlow
+      opacity: var(--hy-icon-button-glow-opacity, 0.62)
+      transform: scale(1)
+
+  &[data-press='release']
+    transform: scale(0.98)
+    transition-duration: var(--hy-icon-button-motion-release-duration, 240ms)
+
+    .icon
+      transform: translate3d(0, -0.0625rem, 0) scale(1.01)
+      transition-duration: var(--hy-icon-button-motion-release-duration, 240ms)
+
+    .bubbleGlow
+      opacity: 0.22
+      transform: scale(1.04)
+      transition-duration: var(--hy-icon-button-motion-release-duration, 240ms)
+
+  &[data-press='idle']
+    transform: scale(1)
+    transition-duration: var(--hy-icon-button-motion-release-duration, 200ms)
+
+  &:focus-visible
+    outline: none
+    border-color: rgba(255, 255, 255, 0.32)
+    box-shadow: var(--hy-icon-button-shadow), 0 0 0 0.14rem rgba(255, 255, 255, 0.14)
+
+  &.isActive
+    border-color: rgba(255, 255, 255, 0.34)
+    color: var(--hy-color-icon-button-icon-active, var(--hy-color-interactive-icon-strong, rgba(30, 41, 59, 0.88)))
+    background-color: rgba(255, 255, 255, 0.38)
+    box-shadow: var(--hy-icon-button-shadow), inset 0 1px rgba(255, 255, 255, 0.5)
+
+  &.isLoading .icon
+    opacity: 0.42
+
+  &:disabled
+    transform: none
+
+    .icon
+      transform: none
+
+    .bubbleGlow
+      opacity: 0
+      transform: scale(0.72)
+
+  .badge
+    z-index: 3
+
+/* Legacy dark surfaces — desktop/admin paths only */
+.variant_default,
+.variant_theme,
+.variant_map,
+.variant_alert,
+.variant_light,
+.variant_filter,
+.variant_close
+  @include pressable.pressableIconButton
+
+  position: relative
+  display: grid
+  place-items: center
+  width: 52px
+  height: 52px
+  border: 1px solid rgba(214, 228, 246, 0.14)
+  border-radius: 19px
+  color: rgba(238, 245, 252, 0.9)
+  background: radial-gradient(circle at 34% 8%, rgba(255, 255, 255, 0.1), transparent 38%), linear-gradient(180deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.018)), rgba(18, 30, 42, 0.66)
+  box-shadow: 0 13px 28px rgba(0, 0, 0, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.09)
+  -webkit-backdrop-filter: blur(24px) saturate(1.08)
+  backdrop-filter: blur(24px) saturate(1.08)
+
+  @include v2-icon-svg(21px)
+
+  &:focus-visible
+    outline: 2px solid var(--hy-color-focus-ring, #2563eb)
+    outline-offset: 2px
+
+.size_sm,
+.size_md,
+.size_lg
+  @include v2-icon-hit-area
+
+.variant_default.size_sm,
+.variant_default.size_md,
+.variant_default.size_lg,
+.variant_theme.size_sm,
+.variant_theme.size_md,
+.variant_theme.size_lg,
+.variant_map.size_sm,
+.variant_map.size_md,
+.variant_map.size_lg,
+.variant_alert.size_sm,
+.variant_alert.size_md,
+.variant_alert.size_lg,
+.variant_light.size_sm,
+.variant_light.size_md,
+.variant_light.size_lg,
+.variant_filter.size_sm,
+.variant_filter.size_md,
+.variant_filter.size_lg,
+.variant_close.size_sm,
+.variant_close.size_md,
+.variant_close.size_lg
+  width: 52px
+  min-width: 52px
+  height: 52px
+  min-height: 52px
+
+.variant_default.isActive,
+.variant_theme.isActive,
+.variant_map.isActive,
+.variant_alert.isActive,
+.variant_light.isActive,
+.variant_filter.isActive
+  border-color: rgba(104, 167, 255, 0.78)
+  color: var(--hy-color-brand, #68a7ff)
+  background: radial-gradient(circle at 34% 8%, rgba(255, 255, 255, 0.14), transparent 38%), linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03)), rgba(49, 130, 255, 0.22)
+
+@media (prefers-reduced-motion: reduce)
+  .icon
+    will-change: auto
+
+  .variant_v2,
+  .shell,
+  .glassControl,
+  .glassCompactProduction
+    transition: none
+
+    &[data-press='pressed'],
+    &[data-press='release'],
+    &[data-press='idle']
+      transform: none
+
+      .icon
+        transform: none
+
+      .bubbleGlow
+        opacity: 0
+        transform: none
+
+  .variant_default,
+  .variant_filter,
+  .variant_theme,
+  .variant_light,
+  .variant_map,
+  .variant_alert,
+  .variant_close
+    &:active
+      transform: none

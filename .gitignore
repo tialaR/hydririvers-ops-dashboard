@@ -6,6 +6,7 @@ node_modules/
 out/
 build/
 dist/
+storybook-static/
 
 # tests / coverage
 coverage/
@@ -34,3 +35,28 @@ pnpm-debug.log*
 
 # TypeScript
 tsconfig.tsbuildinfo
+
+# Mock persistence (dev only — never commit manual QA data or PII)
+.mock-data/*.json
+
+# editor / local scratch
+*.tmp
+*.bak
+*.old
+
+# capturas temporárias de revisão visual (não versionar)
+.phase-visual-check/
+output/ui-lab/
+.playwright-qa/
+
+# Vessel hero kit (material temporário — não versionar)
+hydririvers-vessel-hero-kit/
+hydririvers-vessel-hero-kit.zip
+.audit-screenshots/
+
+# Hydri local backups
+.hydri-local-backups/
+
+# Local QA artifacts
+.playwright-cli/
+output/playwright/

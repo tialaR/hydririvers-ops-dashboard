@@ -1,0 +1,30 @@
+.badge
+  display: inline-flex
+  min-height: 1.56rem
+  max-width: 8.25rem
+  flex: 0 0 auto
+  align-items: center
+  justify-content: center
+  border: 0.0625rem solid var(--cargo-badge-border)
+  border-radius: 999rem
+  padding: 0 0.64rem
+  overflow: hidden
+  background: var(--cargo-badge-bg)
+  box-shadow: inset 0 0.08rem 0.55rem rgba(255, 255, 255, 0.24), 0 0.35rem 0.8rem rgba(31, 44, 61, 0.035)
+  color: var(--cargo-badge-text)
+  font-size: clamp(0.69rem, 2.8vw, 0.75rem)
+  font-weight: 420
+  letter-spacing: -0.008em
+  line-height: 1
+  text-overflow: ellipsis
+  white-space: nowrap
+  -webkit-backdrop-filter: blur(1.6rem) saturate(165%) brightness(1.035)
+  backdrop-filter: blur(1.6rem) saturate(165%) brightness(1.035)
+// HYDRI PATCH: final-gutter-badge-restore START
+.badge
+  font-weight: 420
+  background: var(--cargo-badge-bg)
+  border-color: var(--cargo-badge-border)
+  color: var(--cargo-badge-text)
+  box-shadow: inset 0 0.08rem 0.55rem rgba(255, 255, 255, 0.3), 0 0.35rem 0.8rem var(--cargo-badge-shadow)
+// HYDRI PATCH: final-gutter-badge-restore END

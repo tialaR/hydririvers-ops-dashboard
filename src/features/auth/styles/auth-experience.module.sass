@@ -1,0 +1,116 @@
+.formTitle
+  font-weight: 650
+  margin: 0 0 var(--space-2)
+.field
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+.label
+  font-weight: 600
+.input, .select
+  min-height: var(--input-h)
+  height: var(--input-h)
+  border-radius: var(--radius-md)
+  border: 1px solid var(--hy-shipper-border)
+  background: var(--hy-shipper-surface)
+  color: var(--hy-shipper-text)
+  padding: 0 var(--space-3)
+.error
+  color: var(--hy-shipper-danger)
+  margin: 0
+  min-height: 1.25rem
+.otpRow
+  display: flex
+  gap: var(--space-2)
+  justify-content: center
+.otpInput
+  width: var(--touch-min)
+  height: var(--input-h)
+  text-align: center
+  font-size: 1.125rem
+  font-weight: 700
+  border-radius: var(--radius-sm)
+  border: 1px solid var(--hy-shipper-border)
+  background: var(--hy-shipper-surface)
+  color: var(--hy-shipper-text)
+.authHighlights
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  gap: var(--space-2)
+.authHighlight
+  font-size: 0.5625rem
+  padding: 0.125rem 0.5rem
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 22%, transparent)
+  color: var(--hy-shipper-text)
+.authScreen
+  position: relative
+  display: flex
+  flex: 1
+  flex-direction: column
+  justify-content: center
+  gap: var(--space-3)
+  min-height: 100%
+  padding: var(--space-3)
+  overflow: hidden
+.authBackdrop
+  position: absolute
+  inset: 0
+  pointer-events: none
+  background: radial-gradient(circle at top, color-mix(in srgb, var(--hy-shipper-primary) 16%, transparent), transparent 56%), linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-accent-premium) 6%, transparent), transparent 60%)
+  opacity: 0.75
+.authCard
+  position: relative
+  z-index: 1
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+  padding: var(--space-4)
+.authBrand
+  display: inline-flex
+  align-items: center
+  gap: var(--space-2)
+  align-self: flex-start
+.authBrandMark
+  padding: 0.25rem 0.5rem
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
+  color: var(--hy-shipper-primary)
+.authBrandLine
+  flex: 1
+  min-width: 1.5rem
+  height: 1px
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-border) 90%, transparent)
+.authStepBadge
+  width: fit-content
+  padding: 0.25rem 0.625rem
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 20%, transparent)
+  color: var(--hy-shipper-text)
+.authSecureBadge
+  width: fit-content
+  padding: 0.25rem 0.625rem
+  border-radius: var(--radius-pill)
+  background: color-mix(in srgb, var(--hy-shipper-success) 10%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-success) 20%, transparent)
+  color: var(--hy-shipper-text)
+.formIntro
+  margin: 0
+  color: var(--hy-shipper-muted)
+  line-height: 1.4
+.formActions
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  margin-top: var(--space-1)
+.consentRow
+  display: flex
+  align-items: flex-start
+  gap: var(--space-2)
+.consentLabel
+  color: var(--hy-shipper-text)
+  line-height: 1.35

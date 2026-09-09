@@ -1,0 +1,237 @@
+@use '../tokens/hy-v2-light' as hyV2Light;
+@use '../interactions/pressable' as pressable;
+
+/** Tokens e superfícies DS v2 light para casca mobile do produto (header + bottom nav). */
+@mixin mobile-product-v2-light-shell {
+  @include hyV2Light.hy-v2-light-tokens;
+
+  --v2-title: var(--hy-color-text-title);
+  --v2-text-body: var(--hy-color-text-primary);
+  --v2-text-secondary-muted: var(--hy-color-text-secondary);
+  --v2-blue: var(--hy-color-brand);
+  --v2-border-slate-14: rgba(71, 85, 105, 0.14);
+  --v2-surface-bottom-nav: var(--hy-color-surface-bottom-nav);
+  --v2-highlight-inset: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+}
+
+/** Canvas único DS v2 light — paridade com `/dev-v2` (`cargo-v2-light-shell`). */
+@mixin mobile-product-v2-light-page-background {
+  background:
+    radial-gradient(circle at 82% 8%, rgba(37, 99, 235, 0.16), transparent 16rem),
+    radial-gradient(circle at 8% 32%, rgba(8, 145, 178, 0.08), transparent 18rem),
+    linear-gradient(
+      180deg,
+      var(--hy-color-background-app),
+      var(--hy-color-background-mid) 46%,
+      var(--hy-color-background-bottom)
+    );
+  color: var(--hy-color-text-primary);
+}
+
+/** Camada decorativa de profundidade — paridade com `.phoneShell::before` light em `/dev-v2`. */
+@mixin mobile-product-v2-light-canvas-depth {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 78% 34% at 68% -4%, rgba(147, 197, 253, 0.24), transparent 62%),
+    radial-gradient(ellipse 52% 36% at 100% 18%, rgba(59, 130, 246, 0.12), transparent 70%),
+    radial-gradient(ellipse 72% 42% at 12% 100%, rgba(125, 211, 252, 0.12), transparent 70%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 38%),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.12), transparent 22%, transparent 76%, rgba(148, 163, 184, 0.1));
+}
+
+@mixin mobile-product-v2-light-header-icon-button {
+  @include pressable.pressableIconButton;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--v2-border-slate-14, rgba(71, 85, 105, 0.14));
+  border-radius: var(--hy-radius-cargo-icon, 0.875rem);
+  color: rgba(30, 41, 59, 0.78);
+  background:
+    radial-gradient(circle at 34% 8%, rgba(255, 255, 255, 0.84), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.68), rgba(226, 234, 246, 0.44)),
+    rgba(226, 234, 246, 0.68);
+  box-shadow:
+    0 0.875rem 1.875rem rgba(15, 23, 42, 0.1),
+    var(--v2-highlight-inset);
+
+  :global(svg) {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+}
+
+/** Phase 5R: fonte única homologada em `bottom-nav-v2-light-shell.module.scss`. Mixins mantidos para referência. */
+@mixin mobile-product-v2-light-bottom-nav-shell {
+  position: fixed;
+  z-index: 200;
+  left: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  right: max(0.75rem, calc(50vw - calc(var(--hy-size-shell-max-width, 26.875rem) / 2) + 0.75rem));
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem);
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  box-sizing: border-box;
+  height: var(--hy-size-bottom-nav-height, 4.375rem);
+  min-height: var(--hy-size-bottom-nav-height, 4.375rem);
+  padding: 0.25rem;
+  border: 1px solid rgba(51, 65, 85, 0.12);
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.62), transparent 42%),
+    radial-gradient(circle at 50% -38%, rgba(96, 165, 250, 0.14), transparent 54%),
+    linear-gradient(180deg, rgba(241, 245, 249, 0.78), rgba(226, 232, 240, 0.62)),
+    var(--v2-surface-bottom-nav, var(--hy-color-surface-bottom-nav));
+  box-shadow: var(--hy-shadow-bottom-nav);
+  -webkit-backdrop-filter: var(--hy-blur-bottom-nav, blur(1.5rem) saturate(1.08));
+  backdrop-filter: var(--hy-blur-bottom-nav, blur(1.5rem) saturate(1.08));
+}
+
+@mixin mobile-product-v2-light-bottom-nav-item {
+  @include pressable.pressableBubble;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-width: 0;
+  height: 3.125rem;
+  min-height: 3.125rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: rgba(71, 85, 105, 0.62);
+  font-size: var(--hy-font-size-nav, 0.578125rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: var(--hy-letter-spacing-nav, 0.01em);
+  text-decoration: none;
+  white-space: nowrap;
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.85;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@mixin mobile-product-v2-light-bottom-nav-item-active {
+  color: var(--hy-color-nav-active-label, rgba(15, 23, 42, 0.92));
+  font-weight: 800;
+  height: 3.875rem;
+  min-height: 3.875rem;
+}
+
+@mixin mobile-product-v2-light-bottom-nav-item-press-halo {
+  content: '';
+  position: absolute;
+  inset: 0.1875rem 0.4375rem;
+  z-index: -1;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  background:
+    radial-gradient(circle at 50% 48%, rgba(114, 184, 255, 0.1), transparent 50%),
+    rgba(93, 166, 255, 0.025);
+  opacity: 0;
+  transform: scale(0.72);
+  transition:
+    opacity 180ms cubic-bezier(0.2, 1, 0.2, 1),
+    transform 180ms cubic-bezier(0.2, 1, 0.2, 1);
+}
+
+@mixin mobile-product-v2-light-bottom-nav-icon {
+  display: grid;
+  place-items: center;
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+@mixin mobile-product-v2-light-bottom-nav-label {
+  margin-top: 0.1875rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin mobile-product-v2-light-bottom-nav-active-bubble {
+  position: relative;
+  display: flex;
+  flex: 0 0 var(--hy-size-bottom-nav-active-bubble-height, 3.625rem);
+  flex-shrink: 0;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  box-sizing: border-box;
+  width: var(--hy-size-bottom-nav-active-bubble-width, 4.5rem);
+  height: var(--hy-size-bottom-nav-active-bubble-height, 3.625rem);
+  min-height: var(--hy-size-bottom-nav-active-bubble-height, 3.625rem);
+  padding: 0.5rem 0.8125rem 0.4375rem;
+  border-radius: var(--hy-radius-bottom-nav, 999rem);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  color: #ffffff;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 36% 18%, rgba(255, 255, 255, 0.54), transparent 24%),
+    radial-gradient(circle at 50% 70%, rgba(37, 99, 235, 0.12), transparent 50%),
+    linear-gradient(145deg, rgba(219, 234, 254, 0.78), rgba(96, 165, 250, 0.42));
+  box-shadow:
+    0 0 0 1px rgba(37, 99, 235, 0.04),
+    0 0.1875rem 0.5rem var(--hy-color-status-scheduled-border),
+    inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  transform-origin: center;
+  animation: mobile-product-bottom-nav-active-enter 220ms var(--hy-motion-ease-standard, cubic-bezier(0.2, 1, 0.2, 1));
+}
+
+@keyframes mobile-product-bottom-nav-active-enter {
+  from {
+    opacity: 0.72;
+    transform: scale(0.92);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@mixin mobile-product-v2-light-bottom-nav-active-icon {
+  color: var(--hy-color-nav-active-icon, rgba(29, 78, 216, 0.94));
+
+  svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.15;
+  }
+}
+
+@mixin mobile-product-v2-light-bottom-nav-active-label {
+  color: var(--hy-color-nav-active-icon, rgba(29, 78, 216, 0.94));
+  font-weight: 800;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes mobile-product-bottom-nav-active-enter {
+    from,
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

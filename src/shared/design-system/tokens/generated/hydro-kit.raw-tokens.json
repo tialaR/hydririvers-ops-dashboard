@@ -1,0 +1,4336 @@
+{
+  "generatedAt": "2026-05-27T07:05:54.166Z",
+  "prefix": "hydro-kit",
+  "semanticPrefix": "hydro",
+  "tokens": [
+    {
+      "name": "--hydro-kit-colors-mode",
+      "key": "hydro-kit-colors-mode",
+      "collection": "Colors",
+      "path": "Mode",
+      "type": "string",
+      "mode": "dark",
+      "value": "\"Dark\""
+    },
+    {
+      "name": "--hydro-kit-colors-accents-red",
+      "key": "hydro-kit-colors-accents-red",
+      "collection": "Colors",
+      "path": "Accents / Red",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FF4245"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-orange",
+      "key": "hydro-kit-colors-accents-orange",
+      "collection": "Colors",
+      "path": "Accents / Orange",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FF9230"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-yellow",
+      "key": "hydro-kit-colors-accents-yellow",
+      "collection": "Colors",
+      "path": "Accents / Yellow",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFD600"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-green",
+      "key": "hydro-kit-colors-accents-green",
+      "collection": "Colors",
+      "path": "Accents / Green",
+      "type": "color",
+      "mode": "dark",
+      "value": "#30D158"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-mint",
+      "key": "hydro-kit-colors-accents-mint",
+      "collection": "Colors",
+      "path": "Accents / Mint",
+      "type": "color",
+      "mode": "dark",
+      "value": "#00DAC3"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-teal",
+      "key": "hydro-kit-colors-accents-teal",
+      "collection": "Colors",
+      "path": "Accents / Teal",
+      "type": "color",
+      "mode": "dark",
+      "value": "#00D2E0"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-cyan",
+      "key": "hydro-kit-colors-accents-cyan",
+      "collection": "Colors",
+      "path": "Accents / Cyan",
+      "type": "color",
+      "mode": "dark",
+      "value": "#3CD3FE"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-blue",
+      "key": "hydro-kit-colors-accents-blue",
+      "collection": "Colors",
+      "path": "Accents / Blue",
+      "type": "color",
+      "mode": "dark",
+      "value": "#0091FF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-indigo",
+      "key": "hydro-kit-colors-accents-indigo",
+      "collection": "Colors",
+      "path": "Accents / Indigo",
+      "type": "color",
+      "mode": "dark",
+      "value": "#6D7CFF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-purple",
+      "key": "hydro-kit-colors-accents-purple",
+      "collection": "Colors",
+      "path": "Accents / Purple",
+      "type": "color",
+      "mode": "dark",
+      "value": "#DB34F2"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-pink",
+      "key": "hydro-kit-colors-accents-pink",
+      "collection": "Colors",
+      "path": "Accents / Pink",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FF375F"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-brown",
+      "key": "hydro-kit-colors-accents-brown",
+      "collection": "Colors",
+      "path": "Accents / Brown",
+      "type": "color",
+      "mode": "dark",
+      "value": "#B78A66"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary",
+      "key": "hydro-kit-colors-backgrounds-primary",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary",
+      "key": "hydro-kit-colors-backgrounds-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1C1C1E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary",
+      "key": "hydro-kit-colors-backgrounds-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#2C2C2E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1C1C1E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#2C2C2E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#3A3A3C"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1C1C1E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#2C2C2E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1C1C1E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#2C2C2E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary - Elevated",
+      "type": "color",
+      "mode": "dark",
+      "value": "#3A3A3C"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-primary",
+      "key": "hydro-kit-colors-fills-primary",
+      "collection": "Colors",
+      "path": "Fills / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(120, 120, 128, 0.36)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-secondary",
+      "key": "hydro-kit-colors-fills-secondary",
+      "collection": "Colors",
+      "path": "Fills / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(120, 120, 128, 0.32)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-tertiary",
+      "key": "hydro-kit-colors-fills-tertiary",
+      "collection": "Colors",
+      "path": "Fills / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(118, 118, 128, 0.24)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-quaternary",
+      "key": "hydro-kit-colors-fills-quaternary",
+      "collection": "Colors",
+      "path": "Fills / Quaternary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(118, 118, 128, 0.18)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-primary",
+      "key": "hydro-kit-colors-fills-vibrant-primary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#333333"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-secondary",
+      "key": "hydro-kit-colors-fills-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1F1F1F"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-tertiary",
+      "key": "hydro-kit-colors-fills-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#121212"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-black",
+      "key": "hydro-kit-colors-grays-black",
+      "collection": "Colors",
+      "path": "Grays / Black",
+      "type": "color",
+      "mode": "dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-white",
+      "key": "hydro-kit-colors-grays-white",
+      "collection": "Colors",
+      "path": "Grays / White",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray",
+      "key": "hydro-kit-colors-grays-gray",
+      "collection": "Colors",
+      "path": "Grays / Gray",
+      "type": "color",
+      "mode": "dark",
+      "value": "#8E8E93"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-2",
+      "key": "hydro-kit-colors-grays-gray-2",
+      "collection": "Colors",
+      "path": "Grays / Gray 2",
+      "type": "color",
+      "mode": "dark",
+      "value": "#636366"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-3",
+      "key": "hydro-kit-colors-grays-gray-3",
+      "collection": "Colors",
+      "path": "Grays / Gray 3",
+      "type": "color",
+      "mode": "dark",
+      "value": "#48484A"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-4",
+      "key": "hydro-kit-colors-grays-gray-4",
+      "collection": "Colors",
+      "path": "Grays / Gray 4",
+      "type": "color",
+      "mode": "dark",
+      "value": "#3A3A3C"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-5",
+      "key": "hydro-kit-colors-grays-gray-5",
+      "collection": "Colors",
+      "path": "Grays / Gray 5",
+      "type": "color",
+      "mode": "dark",
+      "value": "#2C2C2E"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-6",
+      "key": "hydro-kit-colors-grays-gray-6",
+      "collection": "Colors",
+      "path": "Grays / Gray 6",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1C1C1E"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-primary",
+      "key": "hydro-kit-colors-labels-primary",
+      "collection": "Colors",
+      "path": "Labels / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-secondary",
+      "key": "hydro-kit-colors-labels-secondary",
+      "collection": "Colors",
+      "path": "Labels / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(235, 235, 245, 0.7)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-tertiary",
+      "key": "hydro-kit-colors-labels-tertiary",
+      "collection": "Colors",
+      "path": "Labels / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(235, 235, 245, 0.3)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-quaternary",
+      "key": "hydro-kit-colors-labels-quaternary",
+      "collection": "Colors",
+      "path": "Labels / Quaternary",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(235, 235, 245, 0.16)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-primary",
+      "key": "hydro-kit-colors-labels-vibrant-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#8A8A8A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#404040"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-quaternary",
+      "key": "hydro-kit-colors-labels-vibrant-quaternary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Quaternary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#262626"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-primary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#8A8A8A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Tertiary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#404040"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-default",
+      "key": "hydro-kit-colors-overlays-default",
+      "collection": "Colors",
+      "path": "Overlays / Default",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(0, 0, 0, 0.48)"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-activity-view-controller",
+      "key": "hydro-kit-colors-overlays-activity-view-controller",
+      "collection": "Colors",
+      "path": "Overlays / Activity View Controller",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(0, 0, 0, 0.29)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-opaque",
+      "key": "hydro-kit-colors-separators-opaque",
+      "collection": "Colors",
+      "path": "Separators / Opaque",
+      "type": "color",
+      "mode": "dark",
+      "value": "#38383A"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-non-opaque",
+      "key": "hydro-kit-colors-separators-non-opaque",
+      "collection": "Colors",
+      "path": "Separators / Non-opaque",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 255, 255, 0.17)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-vibrant",
+      "key": "hydro-kit-colors-separators-vibrant",
+      "collection": "Colors",
+      "path": "Separators / Vibrant",
+      "type": "color",
+      "mode": "dark",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-alert-overlay",
+      "key": "hydro-kit-colors-miscellaneous-alert-overlay",
+      "collection": "Colors",
+      "path": "Miscellaneous / Alert - Overlay",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(18, 18, 18, 0.56)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-unselected",
+      "key": "hydro-kit-colors-miscellaneous-tab-unselected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab - Unselected",
+      "type": "color",
+      "mode": "dark",
+      "value": "#7E7E7E"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-grabber",
+      "key": "hydro-kit-colors-miscellaneous-window-grabber",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Grabber",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "key": "hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "collection": "Colors",
+      "path": "Miscellaneous / Segmented Control - Selected Fill",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 255, 255, 0.27)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "key": "hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab Bar Selection",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "key": "hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / Label - Destructive - Disabled",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 66, 69, 0.5)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive - Prominent",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 66, 69, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 66, 69, 0.14)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Emoji + Mic",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 255, 255, 0.73)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Primary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#A6A6A6"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Secondary",
+      "type": "color",
+      "mode": "dark",
+      "value": "#4D4D4D"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-keys",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-keys",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Keys",
+      "type": "color",
+      "mode": "dark",
+      "value": "#454545"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Fill - Selected",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(142, 142, 147, 0.25)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Text - Selected",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Shadow - Drag Over",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(0, 0, 0, 0.9)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-bg",
+      "key": "hydro-kit-colors-miscellaneous-text-field-bg",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / BG",
+      "type": "color",
+      "mode": "dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-outline",
+      "key": "hydro-kit-colors-miscellaneous-text-field-outline",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / Outline",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(235, 235, 245, 0.3)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-close",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-close",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Close",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FF5F57"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Minimize",
+      "type": "color",
+      "mode": "dark",
+      "value": "#FEBC2F"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Maximize",
+      "type": "color",
+      "mode": "dark",
+      "value": "#27C840"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Button - Inactive",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(60, 60, 67, 0.6)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / BG - Inactive",
+      "type": "color",
+      "mode": "dark",
+      "value": "rgba(255, 255, 255, 0.05)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "key": "hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "collection": "Colors",
+      "path": "Miscellaneous / Toggle / AX Label - Off",
+      "type": "color",
+      "mode": "dark",
+      "value": "#A6A6A6"
+    },
+    {
+      "name": "--hydro-kit-colors-mode",
+      "key": "hydro-kit-colors-mode",
+      "collection": "Colors",
+      "path": "Mode",
+      "type": "string",
+      "mode": "ic-dark",
+      "value": "\"IC - Dark\""
+    },
+    {
+      "name": "--hydro-kit-colors-accents-red",
+      "key": "hydro-kit-colors-accents-red",
+      "collection": "Colors",
+      "path": "Accents / Red",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FF6165"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-orange",
+      "key": "hydro-kit-colors-accents-orange",
+      "collection": "Colors",
+      "path": "Accents / Orange",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFA056"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-yellow",
+      "key": "hydro-kit-colors-accents-yellow",
+      "collection": "Colors",
+      "path": "Accents / Yellow",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FEDF43"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-green",
+      "key": "hydro-kit-colors-accents-green",
+      "collection": "Colors",
+      "path": "Accents / Green",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#4AE968"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-mint",
+      "key": "hydro-kit-colors-accents-mint",
+      "collection": "Colors",
+      "path": "Accents / Mint",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#54DFCB"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-teal",
+      "key": "hydro-kit-colors-accents-teal",
+      "collection": "Colors",
+      "path": "Accents / Teal",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#3BDDEC"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-cyan",
+      "key": "hydro-kit-colors-accents-cyan",
+      "collection": "Colors",
+      "path": "Accents / Cyan",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#6DD9FF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-blue",
+      "key": "hydro-kit-colors-accents-blue",
+      "collection": "Colors",
+      "path": "Accents / Blue",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#5CB8FF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-indigo",
+      "key": "hydro-kit-colors-accents-indigo",
+      "collection": "Colors",
+      "path": "Accents / Indigo",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#A7AAFF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-purple",
+      "key": "hydro-kit-colors-accents-purple",
+      "collection": "Colors",
+      "path": "Accents / Purple",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#EA8DFF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-pink",
+      "key": "hydro-kit-colors-accents-pink",
+      "collection": "Colors",
+      "path": "Accents / Pink",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FF8AC4"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-brown",
+      "key": "hydro-kit-colors-accents-brown",
+      "collection": "Colors",
+      "path": "Accents / Brown",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#DBA679"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary",
+      "key": "hydro-kit-colors-backgrounds-primary",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary",
+      "key": "hydro-kit-colors-backgrounds-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#242426"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary",
+      "key": "hydro-kit-colors-backgrounds-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#363638"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#242426"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#363638"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#3A3A3C"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#242426"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#363638"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#242426"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#363638"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary - Elevated",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#3A3A3C"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-primary",
+      "key": "hydro-kit-colors-fills-primary",
+      "collection": "Colors",
+      "path": "Fills / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(120, 120, 128, 0.44)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-secondary",
+      "key": "hydro-kit-colors-fills-secondary",
+      "collection": "Colors",
+      "path": "Fills / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(120, 120, 128, 0.4)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-tertiary",
+      "key": "hydro-kit-colors-fills-tertiary",
+      "collection": "Colors",
+      "path": "Fills / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(118, 118, 128, 0.32)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-quaternary",
+      "key": "hydro-kit-colors-fills-quaternary",
+      "collection": "Colors",
+      "path": "Fills / Quaternary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(118, 118, 128, 0.26)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-primary",
+      "key": "hydro-kit-colors-fills-vibrant-primary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#333333"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-secondary",
+      "key": "hydro-kit-colors-fills-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#1F1F1F"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-tertiary",
+      "key": "hydro-kit-colors-fills-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#121212"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-black",
+      "key": "hydro-kit-colors-grays-black",
+      "collection": "Colors",
+      "path": "Grays / Black",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-white",
+      "key": "hydro-kit-colors-grays-white",
+      "collection": "Colors",
+      "path": "Grays / White",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray",
+      "key": "hydro-kit-colors-grays-gray",
+      "collection": "Colors",
+      "path": "Grays / Gray",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#AEAEB2"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-2",
+      "key": "hydro-kit-colors-grays-gray-2",
+      "collection": "Colors",
+      "path": "Grays / Gray 2",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#545456"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-3",
+      "key": "hydro-kit-colors-grays-gray-3",
+      "collection": "Colors",
+      "path": "Grays / Gray 3",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#444446"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-4",
+      "key": "hydro-kit-colors-grays-gray-4",
+      "collection": "Colors",
+      "path": "Grays / Gray 4",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#363638"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-5",
+      "key": "hydro-kit-colors-grays-gray-5",
+      "collection": "Colors",
+      "path": "Grays / Gray 5",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#242426"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-6",
+      "key": "hydro-kit-colors-grays-gray-6",
+      "collection": "Colors",
+      "path": "Grays / Gray 6",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-primary",
+      "key": "hydro-kit-colors-labels-primary",
+      "collection": "Colors",
+      "path": "Labels / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-secondary",
+      "key": "hydro-kit-colors-labels-secondary",
+      "collection": "Colors",
+      "path": "Labels / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(235, 235, 245, 0.7)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-tertiary",
+      "key": "hydro-kit-colors-labels-tertiary",
+      "collection": "Colors",
+      "path": "Labels / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(235, 235, 245, 0.55)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-quaternary",
+      "key": "hydro-kit-colors-labels-quaternary",
+      "collection": "Colors",
+      "path": "Labels / Quaternary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(235, 235, 245, 0.4)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-primary",
+      "key": "hydro-kit-colors-labels-vibrant-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#8A8A8A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#404040"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-quaternary",
+      "key": "hydro-kit-colors-labels-vibrant-quaternary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Quaternary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#262626"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-primary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#8A8A8A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Tertiary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#404040"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-default",
+      "key": "hydro-kit-colors-overlays-default",
+      "collection": "Colors",
+      "path": "Overlays / Default",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(0, 0, 0, 0.48)"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-activity-view-controller",
+      "key": "hydro-kit-colors-overlays-activity-view-controller",
+      "collection": "Colors",
+      "path": "Overlays / Activity View Controller",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(0, 0, 0, 0.29)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-opaque",
+      "key": "hydro-kit-colors-separators-opaque",
+      "collection": "Colors",
+      "path": "Separators / Opaque",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#38383A"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-non-opaque",
+      "key": "hydro-kit-colors-separators-non-opaque",
+      "collection": "Colors",
+      "path": "Separators / Non-opaque",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 255, 255, 0.17)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-vibrant",
+      "key": "hydro-kit-colors-separators-vibrant",
+      "collection": "Colors",
+      "path": "Separators / Vibrant",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-alert-overlay",
+      "key": "hydro-kit-colors-miscellaneous-alert-overlay",
+      "collection": "Colors",
+      "path": "Miscellaneous / Alert - Overlay",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(18, 18, 18, 0.56)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-unselected",
+      "key": "hydro-kit-colors-miscellaneous-tab-unselected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab - Unselected",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#7E7E7E"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-grabber",
+      "key": "hydro-kit-colors-miscellaneous-window-grabber",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Grabber",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "key": "hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "collection": "Colors",
+      "path": "Miscellaneous / Segmented Control - Selected Fill",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 255, 255, 0.27)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "key": "hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab Bar Selection",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "key": "hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / Label - Destructive - Disabled",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 97, 101, 0.5)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive - Prominent",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 97, 101, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 97, 101, 0.14)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Emoji + Mic",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 255, 255, 0.73)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Primary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#A6A6A6"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Secondary",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#4D4D4D"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-keys",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-keys",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Keys",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#454545"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Fill - Selected",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(144, 144, 153, 0.3)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Text - Selected",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Shadow - Drag Over",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(0, 0, 0, 0.9)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-bg",
+      "key": "hydro-kit-colors-miscellaneous-text-field-bg",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / BG",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-outline",
+      "key": "hydro-kit-colors-miscellaneous-text-field-outline",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / Outline",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(235, 235, 245, 0.3)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-close",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-close",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Close",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FF5F57"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Minimize",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FEBC2F"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Maximize",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#27C840"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Button - Inactive",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(60, 60, 67, 0.6)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / BG - Inactive",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "rgba(255, 255, 255, 0.05)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "key": "hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "collection": "Colors",
+      "path": "Miscellaneous / Toggle / AX Label - Off",
+      "type": "color",
+      "mode": "ic-dark",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-mode",
+      "key": "hydro-kit-colors-mode",
+      "collection": "Colors",
+      "path": "Mode",
+      "type": "string",
+      "mode": "ic-light",
+      "value": "\"IC - Light\""
+    },
+    {
+      "name": "--hydro-kit-colors-accents-red",
+      "key": "hydro-kit-colors-accents-red",
+      "collection": "Colors",
+      "path": "Accents / Red",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#E9152D"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-orange",
+      "key": "hydro-kit-colors-accents-orange",
+      "collection": "Colors",
+      "path": "Accents / Orange",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#C55300"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-yellow",
+      "key": "hydro-kit-colors-accents-yellow",
+      "collection": "Colors",
+      "path": "Accents / Yellow",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#A16A00"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-green",
+      "key": "hydro-kit-colors-accents-green",
+      "collection": "Colors",
+      "path": "Accents / Green",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#008932"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-mint",
+      "key": "hydro-kit-colors-accents-mint",
+      "collection": "Colors",
+      "path": "Accents / Mint",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#008575"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-teal",
+      "key": "hydro-kit-colors-accents-teal",
+      "collection": "Colors",
+      "path": "Accents / Teal",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#008198"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-cyan",
+      "key": "hydro-kit-colors-accents-cyan",
+      "collection": "Colors",
+      "path": "Accents / Cyan",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#007EAE"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-blue",
+      "key": "hydro-kit-colors-accents-blue",
+      "collection": "Colors",
+      "path": "Accents / Blue",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#1E6EF4"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-indigo",
+      "key": "hydro-kit-colors-accents-indigo",
+      "collection": "Colors",
+      "path": "Accents / Indigo",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#564ADE"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-purple",
+      "key": "hydro-kit-colors-accents-purple",
+      "collection": "Colors",
+      "path": "Accents / Purple",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#B02FC2"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-pink",
+      "key": "hydro-kit-colors-accents-pink",
+      "collection": "Colors",
+      "path": "Accents / Pink",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#E7124D"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-brown",
+      "key": "hydro-kit-colors-accents-brown",
+      "collection": "Colors",
+      "path": "Accents / Brown",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#956D51"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary",
+      "key": "hydro-kit-colors-backgrounds-primary",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary",
+      "key": "hydro-kit-colors-backgrounds-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary",
+      "key": "hydro-kit-colors-backgrounds-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary - Elevated",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EBEBEF"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-primary",
+      "key": "hydro-kit-colors-fills-primary",
+      "collection": "Colors",
+      "path": "Fills / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(120, 120, 120, 0.28)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-secondary",
+      "key": "hydro-kit-colors-fills-secondary",
+      "collection": "Colors",
+      "path": "Fills / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(120, 120, 128, 0.24)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-tertiary",
+      "key": "hydro-kit-colors-fills-tertiary",
+      "collection": "Colors",
+      "path": "Fills / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(118, 118, 128, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-quaternary",
+      "key": "hydro-kit-colors-fills-quaternary",
+      "collection": "Colors",
+      "path": "Fills / Quaternary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(116, 116, 128, 0.16)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-primary",
+      "key": "hydro-kit-colors-fills-vibrant-primary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#CCCCCC"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-secondary",
+      "key": "hydro-kit-colors-fills-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#E0E0E0"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-tertiary",
+      "key": "hydro-kit-colors-fills-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#EDEDED"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-black",
+      "key": "hydro-kit-colors-grays-black",
+      "collection": "Colors",
+      "path": "Grays / Black",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-white",
+      "key": "hydro-kit-colors-grays-white",
+      "collection": "Colors",
+      "path": "Grays / White",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray",
+      "key": "hydro-kit-colors-grays-gray",
+      "collection": "Colors",
+      "path": "Grays / Gray",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#6C6C70"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-2",
+      "key": "hydro-kit-colors-grays-gray-2",
+      "collection": "Colors",
+      "path": "Grays / Gray 2",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#AEAEB2"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-3",
+      "key": "hydro-kit-colors-grays-gray-3",
+      "collection": "Colors",
+      "path": "Grays / Gray 3",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#C7C7CB"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-4",
+      "key": "hydro-kit-colors-grays-gray-4",
+      "collection": "Colors",
+      "path": "Grays / Gray 4",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#D1D1D5"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-5",
+      "key": "hydro-kit-colors-grays-gray-5",
+      "collection": "Colors",
+      "path": "Grays / Gray 5",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#E5E5E9"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-6",
+      "key": "hydro-kit-colors-grays-gray-6",
+      "collection": "Colors",
+      "path": "Grays / Gray 6",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#F2F2F6"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-primary",
+      "key": "hydro-kit-colors-labels-primary",
+      "collection": "Colors",
+      "path": "Labels / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-secondary",
+      "key": "hydro-kit-colors-labels-secondary",
+      "collection": "Colors",
+      "path": "Labels / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(60, 60, 67, 0.8)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-tertiary",
+      "key": "hydro-kit-colors-labels-tertiary",
+      "collection": "Colors",
+      "path": "Labels / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(60, 60, 67, 0.7)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-quaternary",
+      "key": "hydro-kit-colors-labels-quaternary",
+      "collection": "Colors",
+      "path": "Labels / Quaternary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(60, 60, 67, 0.55)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-primary",
+      "key": "hydro-kit-colors-labels-vibrant-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#999999"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#BFBFBF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-quaternary",
+      "key": "hydro-kit-colors-labels-vibrant-quaternary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Quaternary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#D9D9D9"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-primary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#727272"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Tertiary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#BFBFBF"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-default",
+      "key": "hydro-kit-colors-overlays-default",
+      "collection": "Colors",
+      "path": "Overlays / Default",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-activity-view-controller",
+      "key": "hydro-kit-colors-overlays-activity-view-controller",
+      "collection": "Colors",
+      "path": "Overlays / Activity View Controller",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-opaque",
+      "key": "hydro-kit-colors-separators-opaque",
+      "collection": "Colors",
+      "path": "Separators / Opaque",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#C6C6C8"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-non-opaque",
+      "key": "hydro-kit-colors-separators-non-opaque",
+      "collection": "Colors",
+      "path": "Separators / Non-opaque",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-vibrant",
+      "key": "hydro-kit-colors-separators-vibrant",
+      "collection": "Colors",
+      "path": "Separators / Vibrant",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#E6E6E6"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-alert-overlay",
+      "key": "hydro-kit-colors-miscellaneous-alert-overlay",
+      "collection": "Colors",
+      "path": "Miscellaneous / Alert - Overlay",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(41, 41, 58, 0.23)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-unselected",
+      "key": "hydro-kit-colors-miscellaneous-tab-unselected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab - Unselected",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#7E7E7E"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-grabber",
+      "key": "hydro-kit-colors-miscellaneous-window-grabber",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Grabber",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "key": "hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "collection": "Colors",
+      "path": "Miscellaneous / Segmented Control - Selected Fill",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "key": "hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab Bar Selection",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#0088FF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "key": "hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / Label - Destructive - Disabled",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(233, 21, 45, 0.5)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive - Prominent",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(233, 21, 45, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(233, 21, 45, 0.14)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Emoji + Mic",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(34, 43, 89, 0.63)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Primary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#595959"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Secondary",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#B3B3B3"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-keys",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-keys",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Keys",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#141414"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Fill - Selected",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Text - Selected",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Shadow - Drag Over",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-bg",
+      "key": "hydro-kit-colors-miscellaneous-text-field-bg",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / BG",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-outline",
+      "key": "hydro-kit-colors-miscellaneous-text-field-outline",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / Outline",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(60, 60, 67, 0.29)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-close",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-close",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Close",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FF5F57"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Minimize",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FEBC2F"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Maximize",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#27C840"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Button - Inactive",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(60, 60, 67, 0.6)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / BG - Inactive",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "rgba(0, 0, 0, 0.05)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "key": "hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "collection": "Colors",
+      "path": "Miscellaneous / Toggle / AX Label - Off",
+      "type": "color",
+      "mode": "ic-light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-mode",
+      "key": "hydro-kit-colors-mode",
+      "collection": "Colors",
+      "path": "Mode",
+      "type": "string",
+      "mode": "light",
+      "value": "\"Light\""
+    },
+    {
+      "name": "--hydro-kit-colors-accents-red",
+      "key": "hydro-kit-colors-accents-red",
+      "collection": "Colors",
+      "path": "Accents / Red",
+      "type": "color",
+      "mode": "light",
+      "value": "#FF383C"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-orange",
+      "key": "hydro-kit-colors-accents-orange",
+      "collection": "Colors",
+      "path": "Accents / Orange",
+      "type": "color",
+      "mode": "light",
+      "value": "#FF8D28"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-yellow",
+      "key": "hydro-kit-colors-accents-yellow",
+      "collection": "Colors",
+      "path": "Accents / Yellow",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFCC00"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-green",
+      "key": "hydro-kit-colors-accents-green",
+      "collection": "Colors",
+      "path": "Accents / Green",
+      "type": "color",
+      "mode": "light",
+      "value": "#34C759"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-mint",
+      "key": "hydro-kit-colors-accents-mint",
+      "collection": "Colors",
+      "path": "Accents / Mint",
+      "type": "color",
+      "mode": "light",
+      "value": "#00C8B3"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-teal",
+      "key": "hydro-kit-colors-accents-teal",
+      "collection": "Colors",
+      "path": "Accents / Teal",
+      "type": "color",
+      "mode": "light",
+      "value": "#00C3D0"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-cyan",
+      "key": "hydro-kit-colors-accents-cyan",
+      "collection": "Colors",
+      "path": "Accents / Cyan",
+      "type": "color",
+      "mode": "light",
+      "value": "#00C0E8"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-blue",
+      "key": "hydro-kit-colors-accents-blue",
+      "collection": "Colors",
+      "path": "Accents / Blue",
+      "type": "color",
+      "mode": "light",
+      "value": "#0088FF"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-indigo",
+      "key": "hydro-kit-colors-accents-indigo",
+      "collection": "Colors",
+      "path": "Accents / Indigo",
+      "type": "color",
+      "mode": "light",
+      "value": "#6155F5"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-purple",
+      "key": "hydro-kit-colors-accents-purple",
+      "collection": "Colors",
+      "path": "Accents / Purple",
+      "type": "color",
+      "mode": "light",
+      "value": "#CB30E0"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-pink",
+      "key": "hydro-kit-colors-accents-pink",
+      "collection": "Colors",
+      "path": "Accents / Pink",
+      "type": "color",
+      "mode": "light",
+      "value": "#FF2D55"
+    },
+    {
+      "name": "--hydro-kit-colors-accents-brown",
+      "key": "hydro-kit-colors-accents-brown",
+      "collection": "Colors",
+      "path": "Accents / Brown",
+      "type": "color",
+      "mode": "light",
+      "value": "#AC7F5E"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary",
+      "key": "hydro-kit-colors-backgrounds-primary",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary",
+      "key": "hydro-kit-colors-backgrounds-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary",
+      "key": "hydro-kit-colors-backgrounds-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Primary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Secondary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds / Tertiary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-primary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Primary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-secondary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Secondary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "key": "hydro-kit-colors-backgrounds-grouped-tertiary-elevated",
+      "collection": "Colors",
+      "path": "Backgrounds (Grouped) / Tertiary - Elevated",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-primary",
+      "key": "hydro-kit-colors-fills-primary",
+      "collection": "Colors",
+      "path": "Fills / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(120, 120, 120, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-secondary",
+      "key": "hydro-kit-colors-fills-secondary",
+      "collection": "Colors",
+      "path": "Fills / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(120, 120, 128, 0.16)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-tertiary",
+      "key": "hydro-kit-colors-fills-tertiary",
+      "collection": "Colors",
+      "path": "Fills / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(118, 118, 128, 0.12)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-quaternary",
+      "key": "hydro-kit-colors-fills-quaternary",
+      "collection": "Colors",
+      "path": "Fills / Quaternary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(116, 116, 128, 0.08)"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-primary",
+      "key": "hydro-kit-colors-fills-vibrant-primary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#CCCCCC"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-secondary",
+      "key": "hydro-kit-colors-fills-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#E0E0E0"
+    },
+    {
+      "name": "--hydro-kit-colors-fills-vibrant-tertiary",
+      "key": "hydro-kit-colors-fills-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Fills - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "#EDEDED"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-black",
+      "key": "hydro-kit-colors-grays-black",
+      "collection": "Colors",
+      "path": "Grays / Black",
+      "type": "color",
+      "mode": "light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-white",
+      "key": "hydro-kit-colors-grays-white",
+      "collection": "Colors",
+      "path": "Grays / White",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray",
+      "key": "hydro-kit-colors-grays-gray",
+      "collection": "Colors",
+      "path": "Grays / Gray",
+      "type": "color",
+      "mode": "light",
+      "value": "#8E8E93"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-2",
+      "key": "hydro-kit-colors-grays-gray-2",
+      "collection": "Colors",
+      "path": "Grays / Gray 2",
+      "type": "color",
+      "mode": "light",
+      "value": "#AEAEB2"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-3",
+      "key": "hydro-kit-colors-grays-gray-3",
+      "collection": "Colors",
+      "path": "Grays / Gray 3",
+      "type": "color",
+      "mode": "light",
+      "value": "#C7C7CC"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-4",
+      "key": "hydro-kit-colors-grays-gray-4",
+      "collection": "Colors",
+      "path": "Grays / Gray 4",
+      "type": "color",
+      "mode": "light",
+      "value": "#D1D1D6"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-5",
+      "key": "hydro-kit-colors-grays-gray-5",
+      "collection": "Colors",
+      "path": "Grays / Gray 5",
+      "type": "color",
+      "mode": "light",
+      "value": "#E5E5EA"
+    },
+    {
+      "name": "--hydro-kit-colors-grays-gray-6",
+      "key": "hydro-kit-colors-grays-gray-6",
+      "collection": "Colors",
+      "path": "Grays / Gray 6",
+      "type": "color",
+      "mode": "light",
+      "value": "#F2F2F7"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-primary",
+      "key": "hydro-kit-colors-labels-primary",
+      "collection": "Colors",
+      "path": "Labels / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-secondary",
+      "key": "hydro-kit-colors-labels-secondary",
+      "collection": "Colors",
+      "path": "Labels / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(60, 60, 67, 0.6)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-tertiary",
+      "key": "hydro-kit-colors-labels-tertiary",
+      "collection": "Colors",
+      "path": "Labels / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(60, 60, 67, 0.3)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-quaternary",
+      "key": "hydro-kit-colors-labels-quaternary",
+      "collection": "Colors",
+      "path": "Labels / Quaternary",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(60, 60, 67, 0.18)"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-primary",
+      "key": "hydro-kit-colors-labels-vibrant-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#727272"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "#BFBFBF"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-quaternary",
+      "key": "hydro-kit-colors-labels-vibrant-quaternary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant / Quaternary",
+      "type": "color",
+      "mode": "light",
+      "value": "#D9D9D9"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-primary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-primary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#1A1A1A"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-secondary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-secondary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#727272"
+    },
+    {
+      "name": "--hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "key": "hydro-kit-colors-labels-vibrant-controls-tertiary",
+      "collection": "Colors",
+      "path": "Labels - Vibrant - Controls / Tertiary",
+      "type": "color",
+      "mode": "light",
+      "value": "#BFBFBF"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-default",
+      "key": "hydro-kit-colors-overlays-default",
+      "collection": "Colors",
+      "path": "Overlays / Default",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-overlays-activity-view-controller",
+      "key": "hydro-kit-colors-overlays-activity-view-controller",
+      "collection": "Colors",
+      "path": "Overlays / Activity View Controller",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-opaque",
+      "key": "hydro-kit-colors-separators-opaque",
+      "collection": "Colors",
+      "path": "Separators / Opaque",
+      "type": "color",
+      "mode": "light",
+      "value": "#C6C6C8"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-non-opaque",
+      "key": "hydro-kit-colors-separators-non-opaque",
+      "collection": "Colors",
+      "path": "Separators / Non-opaque",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(0, 0, 0, 0.12)"
+    },
+    {
+      "name": "--hydro-kit-colors-separators-vibrant",
+      "key": "hydro-kit-colors-separators-vibrant",
+      "collection": "Colors",
+      "path": "Separators / Vibrant",
+      "type": "color",
+      "mode": "light",
+      "value": "#E6E6E6"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-alert-overlay",
+      "key": "hydro-kit-colors-miscellaneous-alert-overlay",
+      "collection": "Colors",
+      "path": "Miscellaneous / Alert - Overlay",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(41, 41, 58, 0.23)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-unselected",
+      "key": "hydro-kit-colors-miscellaneous-tab-unselected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab - Unselected",
+      "type": "color",
+      "mode": "light",
+      "value": "#999999"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-grabber",
+      "key": "hydro-kit-colors-miscellaneous-window-grabber",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Grabber",
+      "type": "color",
+      "mode": "light",
+      "value": "#000000"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "key": "hydro-kit-colors-miscellaneous-segmented-control-selected-fill",
+      "collection": "Colors",
+      "path": "Miscellaneous / Segmented Control - Selected Fill",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "key": "hydro-kit-colors-miscellaneous-tab-bar-selection",
+      "collection": "Colors",
+      "path": "Miscellaneous / Tab Bar Selection",
+      "type": "color",
+      "mode": "light",
+      "value": "#0088FF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "key": "hydro-kit-colors-miscellaneous-buttons-label-destructive-disabled",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / Label - Destructive - Disabled",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(255, 56, 60, 0.5)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive-prominent",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive - Prominent",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(255, 56, 60, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "key": "hydro-kit-colors-miscellaneous-buttons-bg-destructive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Buttons / BG - Destructive",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(255, 56, 60, 0.14)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-emoji-mic",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Emoji + Mic",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(34, 43, 89, 0.63)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-primary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Primary",
+      "type": "color",
+      "mode": "light",
+      "value": "#595959"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-glyphs-secondary",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Glyphs - Secondary",
+      "type": "color",
+      "mode": "light",
+      "value": "#B3B3B3"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-keyboards-keys",
+      "key": "hydro-kit-colors-miscellaneous-keyboards-keys",
+      "collection": "Colors",
+      "path": "Miscellaneous / Keyboards / Keys",
+      "type": "color",
+      "mode": "light",
+      "value": "#141414"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-fill-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Fill - Selected",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-text-selected",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Text - Selected",
+      "type": "color",
+      "mode": "light",
+      "value": "#0088FF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "key": "hydro-kit-colors-miscellaneous-sidebar-shadow-drag-over",
+      "collection": "Colors",
+      "path": "Miscellaneous / Sidebar / Shadow - Drag Over",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(0, 0, 0, 0.2)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-bg",
+      "key": "hydro-kit-colors-miscellaneous-text-field-bg",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / BG",
+      "type": "color",
+      "mode": "light",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-text-field-outline",
+      "key": "hydro-kit-colors-miscellaneous-text-field-outline",
+      "collection": "Colors",
+      "path": "Miscellaneous / Text Field / Outline",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(60, 60, 67, 0.29)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-close",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-close",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Close",
+      "type": "color",
+      "mode": "light",
+      "value": "#FF5F57"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-minimize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Minimize",
+      "type": "color",
+      "mode": "light",
+      "value": "#FEBC2F"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-maximize",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Maximize",
+      "type": "color",
+      "mode": "light",
+      "value": "#27C840"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-button-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / Button - Inactive",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(60, 60, 67, 0.6)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "key": "hydro-kit-colors-miscellaneous-window-controls-bg-inactive",
+      "collection": "Colors",
+      "path": "Miscellaneous / Window Controls / BG - Inactive",
+      "type": "color",
+      "mode": "light",
+      "value": "rgba(0, 0, 0, 0.05)"
+    },
+    {
+      "name": "--hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "key": "hydro-kit-colors-miscellaneous-toggle-ax-label-off",
+      "collection": "Colors",
+      "path": "Miscellaneous / Toggle / AX Label - Off",
+      "type": "color",
+      "mode": "light",
+      "value": "#B3B3B3"
+    },
+    {
+      "name": "--hydro-kit-component-fill",
+      "key": "hydro-kit-component-fill",
+      "collection": "Kit",
+      "path": "Component Fill",
+      "type": "color",
+      "mode": "default",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "--hydro-kit-component-stroke",
+      "key": "hydro-kit-component-stroke",
+      "collection": "Kit",
+      "path": "Component Stroke",
+      "type": "color",
+      "mode": "default",
+      "value": "#6155F5"
+    },
+    {
+      "name": "--hydro-kit-subcomponent-fill",
+      "key": "hydro-kit-subcomponent-fill",
+      "collection": "Kit",
+      "path": "Subcomponent Fill",
+      "type": "color",
+      "mode": "default",
+      "value": "#AAAAAA"
+    },
+    {
+      "name": "--hydro-kit-subcomponent-stroke",
+      "key": "hydro-kit-subcomponent-stroke",
+      "collection": "Kit",
+      "path": "Subcomponent Stroke",
+      "type": "color",
+      "mode": "default",
+      "value": "rgba(0, 0, 0, 0.4)"
+    },
+    {
+      "name": "--hydro-kit-section-fill",
+      "key": "hydro-kit-section-fill",
+      "collection": "Kit",
+      "path": "Section Fill",
+      "type": "color",
+      "mode": "default",
+      "value": "#F5F5F5"
+    },
+    {
+      "name": "--hydro-kit-section-stroke",
+      "key": "hydro-kit-section-stroke",
+      "collection": "Kit",
+      "path": "Section Stroke",
+      "type": "color",
+      "mode": "default",
+      "value": "rgba(0, 0, 0, 0.4)"
+    },
+    {
+      "name": "--hydro-kit-top",
+      "key": "hydro-kit-top",
+      "collection": "Kit",
+      "path": "Top",
+      "type": "number",
+      "mode": "default",
+      "value": "27px"
+    },
+    {
+      "name": "--hydro-kit-bottom",
+      "key": "hydro-kit-bottom",
+      "collection": "Kit",
+      "path": "Bottom",
+      "type": "number",
+      "mode": "default",
+      "value": "62px"
+    },
+    {
+      "name": "--hydro-kit-scroll-edge-effect-blur-radius",
+      "key": "hydro-kit-scroll-edge-effect-blur-radius",
+      "collection": "Kit",
+      "path": "Scroll Edge Effect / Blur Radius",
+      "type": "number",
+      "mode": "default",
+      "value": "10px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-light-angle",
+      "key": "hydro-kit-liquid-glass-light-angle",
+      "collection": "Kit",
+      "path": "Liquid Glass / Light Angle",
+      "type": "number",
+      "mode": "default",
+      "value": "-45px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-opacity",
+      "key": "hydro-kit-liquid-glass-opacity",
+      "collection": "Kit",
+      "path": "Liquid Glass / Opacity",
+      "type": "number",
+      "mode": "default",
+      "value": "60px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-refraction",
+      "key": "hydro-kit-liquid-glass-refraction",
+      "collection": "Kit",
+      "path": "Liquid Glass / Refraction",
+      "type": "number",
+      "mode": "default",
+      "value": "100px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-depth-regular",
+      "key": "hydro-kit-liquid-glass-depth-regular",
+      "collection": "Kit",
+      "path": "Liquid Glass / Depth - Regular",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-depth-medium-and-large",
+      "key": "hydro-kit-liquid-glass-depth-medium-and-large",
+      "collection": "Kit",
+      "path": "Liquid Glass / Depth - Medium and Large",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-dispersion",
+      "key": "hydro-kit-liquid-glass-dispersion",
+      "collection": "Kit",
+      "path": "Liquid Glass / Dispersion",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-frost-regular",
+      "key": "hydro-kit-liquid-glass-frost-regular",
+      "collection": "Kit",
+      "path": "Liquid Glass / Frost - Regular",
+      "type": "number",
+      "mode": "default",
+      "value": "7px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-frost-medium",
+      "key": "hydro-kit-liquid-glass-frost-medium",
+      "collection": "Kit",
+      "path": "Liquid Glass / Frost - Medium",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-frost-large",
+      "key": "hydro-kit-liquid-glass-frost-large",
+      "collection": "Kit",
+      "path": "Liquid Glass / Frost - Large",
+      "type": "number",
+      "mode": "default",
+      "value": "14px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-splay-regular",
+      "key": "hydro-kit-liquid-glass-splay-regular",
+      "collection": "Kit",
+      "path": "Liquid Glass / Splay - Regular",
+      "type": "number",
+      "mode": "default",
+      "value": "6px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-splay-medium-and-large",
+      "key": "hydro-kit-liquid-glass-splay-medium-and-large",
+      "collection": "Kit",
+      "path": "Liquid Glass / Splay - Medium and Large",
+      "type": "number",
+      "mode": "default",
+      "value": "6px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-shadow-blur-bg",
+      "key": "hydro-kit-liquid-glass-shadow-blur-bg",
+      "collection": "Kit",
+      "path": "Liquid Glass / Shadow - Blur - BG",
+      "type": "number",
+      "mode": "default",
+      "value": "80px"
+    },
+    {
+      "name": "--hydro-kit-liquid-glass-shadow-blur-layer",
+      "key": "hydro-kit-liquid-glass-shadow-blur-layer",
+      "collection": "Kit",
+      "path": "Liquid Glass / Shadow - Blur - Layer",
+      "type": "number",
+      "mode": "default",
+      "value": "40px"
+    },
+    {
+      "name": "--hydro-kit-sheet-iphone-top-radius",
+      "key": "hydro-kit-sheet-iphone-top-radius",
+      "collection": "Kit",
+      "path": "Sheet / iPhone / Top Radius",
+      "type": "number",
+      "mode": "default",
+      "value": "34px"
+    },
+    {
+      "name": "--hydro-kit-sheet-iphone-bottom-radius",
+      "key": "hydro-kit-sheet-iphone-bottom-radius",
+      "collection": "Kit",
+      "path": "Sheet / iPhone / Bottom Radius",
+      "type": "number",
+      "mode": "default",
+      "value": "58px"
+    },
+    {
+      "name": "--hydro-kit-sheet-ipad-radius",
+      "key": "hydro-kit-sheet-ipad-radius",
+      "collection": "Kit",
+      "path": "Sheet / iPad / Radius",
+      "type": "number",
+      "mode": "default",
+      "value": "38px"
+    },
+    {
+      "name": "--hydro-kit-size-space-0",
+      "key": "hydro-kit-size-space-0",
+      "collection": "Size",
+      "path": "Space / 0",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-size-space-100",
+      "key": "hydro-kit-size-space-100",
+      "collection": "Size",
+      "path": "Space / 100",
+      "type": "number",
+      "mode": "default",
+      "value": "4px"
+    },
+    {
+      "name": "--hydro-kit-size-space-150",
+      "key": "hydro-kit-size-space-150",
+      "collection": "Size",
+      "path": "Space / 150",
+      "type": "number",
+      "mode": "default",
+      "value": "6px"
+    },
+    {
+      "name": "--hydro-kit-size-space-200",
+      "key": "hydro-kit-size-space-200",
+      "collection": "Size",
+      "path": "Space / 200",
+      "type": "number",
+      "mode": "default",
+      "value": "8px"
+    },
+    {
+      "name": "--hydro-kit-size-space-300",
+      "key": "hydro-kit-size-space-300",
+      "collection": "Size",
+      "path": "Space / 300",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-size-space-400",
+      "key": "hydro-kit-size-space-400",
+      "collection": "Size",
+      "path": "Space / 400",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-size-space-600",
+      "key": "hydro-kit-size-space-600",
+      "collection": "Size",
+      "path": "Space / 600",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-size-space-800",
+      "key": "hydro-kit-size-space-800",
+      "collection": "Size",
+      "path": "Space / 800",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-size-space-1200",
+      "key": "hydro-kit-size-space-1200",
+      "collection": "Size",
+      "path": "Space / 1200",
+      "type": "number",
+      "mode": "default",
+      "value": "48px"
+    },
+    {
+      "name": "--hydro-kit-size-space-1600",
+      "key": "hydro-kit-size-space-1600",
+      "collection": "Size",
+      "path": "Space / 1600",
+      "type": "number",
+      "mode": "default",
+      "value": "64px"
+    },
+    {
+      "name": "--hydro-kit-size-space-2400",
+      "key": "hydro-kit-size-space-2400",
+      "collection": "Size",
+      "path": "Space / 2400",
+      "type": "number",
+      "mode": "default",
+      "value": "96px"
+    },
+    {
+      "name": "--hydro-kit-size-space-4000",
+      "key": "hydro-kit-size-space-4000",
+      "collection": "Size",
+      "path": "Space / 4000",
+      "type": "number",
+      "mode": "default",
+      "value": "160px"
+    },
+    {
+      "name": "--hydro-kit-size-space-negative-100",
+      "key": "hydro-kit-size-space-negative-100",
+      "collection": "Size",
+      "path": "Space / Negative 100",
+      "type": "number",
+      "mode": "default",
+      "value": "-4px"
+    },
+    {
+      "name": "--hydro-kit-size-space-negative-200",
+      "key": "hydro-kit-size-space-negative-200",
+      "collection": "Size",
+      "path": "Space / Negative 200",
+      "type": "number",
+      "mode": "default",
+      "value": "-8px"
+    },
+    {
+      "name": "--hydro-kit-size-space-negative-300",
+      "key": "hydro-kit-size-space-negative-300",
+      "collection": "Size",
+      "path": "Space / Negative 300",
+      "type": "number",
+      "mode": "default",
+      "value": "-12px"
+    },
+    {
+      "name": "--hydro-kit-size-space-negative-400",
+      "key": "hydro-kit-size-space-negative-400",
+      "collection": "Size",
+      "path": "Space / Negative 400",
+      "type": "number",
+      "mode": "default",
+      "value": "-16px"
+    },
+    {
+      "name": "--hydro-kit-size-space-negative-600",
+      "key": "hydro-kit-size-space-negative-600",
+      "collection": "Size",
+      "path": "Space / Negative 600",
+      "type": "number",
+      "mode": "default",
+      "value": "-24px"
+    },
+    {
+      "name": "--hydro-kit-size-space-050",
+      "key": "hydro-kit-size-space-050",
+      "collection": "Size",
+      "path": "Space / 050",
+      "type": "number",
+      "mode": "default",
+      "value": "2px"
+    },
+    {
+      "name": "--hydro-kit-size-radius-100",
+      "key": "hydro-kit-size-radius-100",
+      "collection": "Size",
+      "path": "Radius / 100",
+      "type": "number",
+      "mode": "default",
+      "value": "4px"
+    },
+    {
+      "name": "--hydro-kit-size-radius-200",
+      "key": "hydro-kit-size-radius-200",
+      "collection": "Size",
+      "path": "Radius / 200",
+      "type": "number",
+      "mode": "default",
+      "value": "8px"
+    },
+    {
+      "name": "--hydro-kit-size-radius-400",
+      "key": "hydro-kit-size-radius-400",
+      "collection": "Size",
+      "path": "Radius / 400",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-size-radius-full",
+      "key": "hydro-kit-size-radius-full",
+      "collection": "Size",
+      "path": "Radius / Full",
+      "type": "number",
+      "mode": "default",
+      "value": "9999px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-0",
+      "key": "hydro-kit-size-depth-0",
+      "collection": "Size",
+      "path": "Depth / 0",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-100",
+      "key": "hydro-kit-size-depth-100",
+      "collection": "Size",
+      "path": "Depth / 100",
+      "type": "number",
+      "mode": "default",
+      "value": "4px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-200",
+      "key": "hydro-kit-size-depth-200",
+      "collection": "Size",
+      "path": "Depth / 200",
+      "type": "number",
+      "mode": "default",
+      "value": "8px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-400",
+      "key": "hydro-kit-size-depth-400",
+      "collection": "Size",
+      "path": "Depth / 400",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-800",
+      "key": "hydro-kit-size-depth-800",
+      "collection": "Size",
+      "path": "Depth / 800",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-1200",
+      "key": "hydro-kit-size-depth-1200",
+      "collection": "Size",
+      "path": "Depth / 1200",
+      "type": "number",
+      "mode": "default",
+      "value": "48px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-025",
+      "key": "hydro-kit-size-depth-025",
+      "collection": "Size",
+      "path": "Depth / 025",
+      "type": "number",
+      "mode": "default",
+      "value": "1px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-025",
+      "key": "hydro-kit-size-depth-negative-025",
+      "collection": "Size",
+      "path": "Depth / Negative 025",
+      "type": "number",
+      "mode": "default",
+      "value": "-1px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-100",
+      "key": "hydro-kit-size-depth-negative-100",
+      "collection": "Size",
+      "path": "Depth / Negative 100",
+      "type": "number",
+      "mode": "default",
+      "value": "-4px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-200",
+      "key": "hydro-kit-size-depth-negative-200",
+      "collection": "Size",
+      "path": "Depth / Negative 200",
+      "type": "number",
+      "mode": "default",
+      "value": "-8px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-400",
+      "key": "hydro-kit-size-depth-negative-400",
+      "collection": "Size",
+      "path": "Depth / Negative 400",
+      "type": "number",
+      "mode": "default",
+      "value": "-16px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-800",
+      "key": "hydro-kit-size-depth-negative-800",
+      "collection": "Size",
+      "path": "Depth / Negative 800",
+      "type": "number",
+      "mode": "default",
+      "value": "-32px"
+    },
+    {
+      "name": "--hydro-kit-size-depth-negative-1200",
+      "key": "hydro-kit-size-depth-negative-1200",
+      "collection": "Size",
+      "path": "Depth / Negative 1200",
+      "type": "number",
+      "mode": "default",
+      "value": "-48px"
+    },
+    {
+      "name": "--hydro-kit-size-stroke-border",
+      "key": "hydro-kit-size-stroke-border",
+      "collection": "Size",
+      "path": "Stroke / Border",
+      "type": "number",
+      "mode": "default",
+      "value": "1px"
+    },
+    {
+      "name": "--hydro-kit-size-stroke-focus-ring",
+      "key": "hydro-kit-size-stroke-focus-ring",
+      "collection": "Size",
+      "path": "Stroke / Focus Ring",
+      "type": "number",
+      "mode": "default",
+      "value": "2px"
+    },
+    {
+      "name": "--hydro-kit-size-blur-100",
+      "key": "hydro-kit-size-blur-100",
+      "collection": "Size",
+      "path": "Blur / 100",
+      "type": "number",
+      "mode": "default",
+      "value": "4px"
+    },
+    {
+      "name": "--hydro-kit-size-icon-small",
+      "key": "hydro-kit-size-icon-small",
+      "collection": "Size",
+      "path": "Icon / Small",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-size-icon-medium",
+      "key": "hydro-kit-size-icon-medium",
+      "collection": "Size",
+      "path": "Icon / Medium",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-size-icon-large",
+      "key": "hydro-kit-size-icon-large",
+      "collection": "Size",
+      "path": "Icon / Large",
+      "type": "number",
+      "mode": "default",
+      "value": "40px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-none",
+      "key": "hydro-kit-shape-corner-none",
+      "collection": "Shape",
+      "path": "Corner / None",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-extra-small",
+      "key": "hydro-kit-shape-corner-extra-small",
+      "collection": "Shape",
+      "path": "Corner / Extra-small",
+      "type": "number",
+      "mode": "default",
+      "value": "4px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-small",
+      "key": "hydro-kit-shape-corner-small",
+      "collection": "Shape",
+      "path": "Corner / Small",
+      "type": "number",
+      "mode": "default",
+      "value": "8px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-medium",
+      "key": "hydro-kit-shape-corner-medium",
+      "collection": "Shape",
+      "path": "Corner / Medium",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-large",
+      "key": "hydro-kit-shape-corner-large",
+      "collection": "Shape",
+      "path": "Corner / Large",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-extra-large",
+      "key": "hydro-kit-shape-corner-extra-large",
+      "collection": "Shape",
+      "path": "Corner / Extra-large",
+      "type": "number",
+      "mode": "default",
+      "value": "28px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-full",
+      "key": "hydro-kit-shape-corner-full",
+      "collection": "Shape",
+      "path": "Corner / Full",
+      "type": "number",
+      "mode": "default",
+      "value": "1000px"
+    },
+    {
+      "name": "--hydro-kit-shape-corner-large-increased",
+      "key": "hydro-kit-shape-corner-large-increased",
+      "collection": "Shape",
+      "path": "Corner / Large-increased",
+      "type": "number",
+      "mode": "default",
+      "value": "20px"
+    },
+    {
+      "name": "--hydro-kit-responsive-device-width",
+      "key": "hydro-kit-responsive-device-width",
+      "collection": "Responsive",
+      "path": "Device Width",
+      "type": "number",
+      "mode": "default",
+      "value": "1200px"
+    },
+    {
+      "name": "--hydro-kit-responsive-scale",
+      "key": "hydro-kit-responsive-scale",
+      "collection": "Responsive",
+      "path": "Scale",
+      "type": "number",
+      "mode": "default",
+      "value": "1px"
+    },
+    {
+      "name": "--hydro-kit-responsive-device",
+      "key": "hydro-kit-responsive-device",
+      "collection": "Responsive",
+      "path": "Device",
+      "type": "string",
+      "mode": "default",
+      "value": "\"desktop\""
+    },
+    {
+      "name": "--hydro-kit-font-theme-static-font-brand",
+      "key": "hydro-kit-font-theme-static-font-brand",
+      "collection": "Font theme",
+      "path": "Static / Font / Brand",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Roboto\""
+    },
+    {
+      "name": "--hydro-kit-font-theme-static-font-plain",
+      "key": "hydro-kit-font-theme-static-font-plain",
+      "collection": "Font theme",
+      "path": "Static / Font / Plain",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Roboto\""
+    },
+    {
+      "name": "--hydro-kit-font-theme-static-weight-regular",
+      "key": "hydro-kit-font-theme-static-weight-regular",
+      "collection": "Font theme",
+      "path": "Static / Weight / Regular",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Regular\""
+    },
+    {
+      "name": "--hydro-kit-font-theme-static-weight-medium",
+      "key": "hydro-kit-font-theme-static-weight-medium",
+      "collection": "Font theme",
+      "path": "Static / Weight / Medium",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Medium\""
+    },
+    {
+      "name": "--hydro-kit-font-theme-static-weight-bold",
+      "key": "hydro-kit-font-theme-static-weight-bold",
+      "collection": "Font theme",
+      "path": "Static / Weight / Bold",
+      "type": "string",
+      "mode": "default",
+      "value": "\"SemiBold\""
+    },
+    {
+      "name": "--hydro-kit-typography-code-size-base",
+      "key": "hydro-kit-typography-code-size-base",
+      "collection": "Typography",
+      "path": "Code / Size Base",
+      "type": "number",
+      "mode": "default",
+      "value": "var(--hydro-kit-typography-body-size-medium)"
+    },
+    {
+      "name": "--hydro-kit-typography-code-font-weight",
+      "key": "hydro-kit-typography-code-font-weight",
+      "collection": "Typography",
+      "path": "Code / Font Weight",
+      "type": "number",
+      "mode": "default",
+      "value": "var(--hydro-kit-typography-body-font-weight-regular)"
+    },
+    {
+      "name": "--hydro-kit-typography-code-size-large",
+      "key": "hydro-kit-typography-code-size-large",
+      "collection": "Typography",
+      "path": "Code / Size Large",
+      "type": "number",
+      "mode": "default",
+      "value": "var(--hydro-kit-typography-body-size-large)"
+    },
+    {
+      "name": "--hydro-kit-typography-code-size-small",
+      "key": "hydro-kit-typography-code-size-small",
+      "collection": "Typography",
+      "path": "Code / Size Small",
+      "type": "number",
+      "mode": "default",
+      "value": "var(--hydro-kit-typography-body-size-small)"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-thin",
+      "key": "hydro-kit-typography-primitives-weight-thin",
+      "collection": "Typography Primitives",
+      "path": "Weight Thin",
+      "type": "number",
+      "mode": "default",
+      "value": "100px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-extra-light",
+      "key": "hydro-kit-typography-primitives-weight-extra-light",
+      "collection": "Typography Primitives",
+      "path": "Weight Extra Light",
+      "type": "number",
+      "mode": "default",
+      "value": "200px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-light",
+      "key": "hydro-kit-typography-primitives-weight-light",
+      "collection": "Typography Primitives",
+      "path": "Weight Light",
+      "type": "number",
+      "mode": "default",
+      "value": "300px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-regular",
+      "key": "hydro-kit-typography-primitives-weight-regular",
+      "collection": "Typography Primitives",
+      "path": "Weight Regular",
+      "type": "number",
+      "mode": "default",
+      "value": "400px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-medium",
+      "key": "hydro-kit-typography-primitives-weight-medium",
+      "collection": "Typography Primitives",
+      "path": "Weight Medium",
+      "type": "number",
+      "mode": "default",
+      "value": "500px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-semibold",
+      "key": "hydro-kit-typography-primitives-weight-semibold",
+      "collection": "Typography Primitives",
+      "path": "Weight Semibold",
+      "type": "number",
+      "mode": "default",
+      "value": "600px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-bold",
+      "key": "hydro-kit-typography-primitives-weight-bold",
+      "collection": "Typography Primitives",
+      "path": "Weight Bold",
+      "type": "number",
+      "mode": "default",
+      "value": "700px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-extra-bold",
+      "key": "hydro-kit-typography-primitives-weight-extra-bold",
+      "collection": "Typography Primitives",
+      "path": "Weight Extra Bold",
+      "type": "number",
+      "mode": "default",
+      "value": "800px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-black",
+      "key": "hydro-kit-typography-primitives-weight-black",
+      "collection": "Typography Primitives",
+      "path": "Weight Black",
+      "type": "number",
+      "mode": "default",
+      "value": "900px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-10",
+      "key": "hydro-kit-typography-primitives-scale-10",
+      "collection": "Typography Primitives",
+      "path": "Scale 10",
+      "type": "number",
+      "mode": "default",
+      "value": "72px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-09",
+      "key": "hydro-kit-typography-primitives-scale-09",
+      "collection": "Typography Primitives",
+      "path": "Scale 09",
+      "type": "number",
+      "mode": "default",
+      "value": "64px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-08",
+      "key": "hydro-kit-typography-primitives-scale-08",
+      "collection": "Typography Primitives",
+      "path": "Scale 08",
+      "type": "number",
+      "mode": "default",
+      "value": "48px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-07",
+      "key": "hydro-kit-typography-primitives-scale-07",
+      "collection": "Typography Primitives",
+      "path": "Scale 07",
+      "type": "number",
+      "mode": "default",
+      "value": "40px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-06",
+      "key": "hydro-kit-typography-primitives-scale-06",
+      "collection": "Typography Primitives",
+      "path": "Scale 06",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-05",
+      "key": "hydro-kit-typography-primitives-scale-05",
+      "collection": "Typography Primitives",
+      "path": "Scale 05",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-04",
+      "key": "hydro-kit-typography-primitives-scale-04",
+      "collection": "Typography Primitives",
+      "path": "Scale 04",
+      "type": "number",
+      "mode": "default",
+      "value": "20px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-03",
+      "key": "hydro-kit-typography-primitives-scale-03",
+      "collection": "Typography Primitives",
+      "path": "Scale 03",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-02",
+      "key": "hydro-kit-typography-primitives-scale-02",
+      "collection": "Typography Primitives",
+      "path": "Scale 02",
+      "type": "number",
+      "mode": "default",
+      "value": "14px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-scale-01",
+      "key": "hydro-kit-typography-primitives-scale-01",
+      "collection": "Typography Primitives",
+      "path": "Scale 01",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-family-sans",
+      "key": "hydro-kit-typography-primitives-family-sans",
+      "collection": "Typography Primitives",
+      "path": "Family Sans",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Inter\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-family-serif",
+      "key": "hydro-kit-typography-primitives-family-serif",
+      "collection": "Typography Primitives",
+      "path": "Family Serif",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Noto Serif\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-family-mono",
+      "key": "hydro-kit-typography-primitives-family-mono",
+      "collection": "Typography Primitives",
+      "path": "Family Mono",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Roboto Mono\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-light-italic",
+      "key": "hydro-kit-typography-primitives-weight-light-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Light Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Light Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-regular-italic",
+      "key": "hydro-kit-typography-primitives-weight-regular-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Regular Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-bold-italic",
+      "key": "hydro-kit-typography-primitives-weight-bold-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Bold Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Bold Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-thin-italic",
+      "key": "hydro-kit-typography-primitives-weight-thin-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Thin Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Thin Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-extralight-italic",
+      "key": "hydro-kit-typography-primitives-weight-extralight-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Extralight Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Extra Light Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-medium-italic",
+      "key": "hydro-kit-typography-primitives-weight-medium-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Medium Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Medium Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-semibold-italic",
+      "key": "hydro-kit-typography-primitives-weight-semibold-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Semibold Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Semi Bold Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-extra-bold-italic",
+      "key": "hydro-kit-typography-primitives-weight-extra-bold-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Extra Bold Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Extra Bold Italic\""
+    },
+    {
+      "name": "--hydro-kit-typography-primitives-weight-black-italic",
+      "key": "hydro-kit-typography-primitives-weight-black-italic",
+      "collection": "Typography Primitives",
+      "path": "Weight Black Italic",
+      "type": "string",
+      "mode": "default",
+      "value": "\"Black Italic\""
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-large-size",
+      "key": "hydro-kit-typescale-static-display-large-size",
+      "collection": "Typescale",
+      "path": "Static / Display Large / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "57px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-large-tracking",
+      "key": "hydro-kit-typescale-static-display-large-tracking",
+      "collection": "Typescale",
+      "path": "Static / Display Large / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "-0.25px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-large-line-height",
+      "key": "hydro-kit-typescale-static-display-large-line-height",
+      "collection": "Typescale",
+      "path": "Static / Display Large / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "64px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-medium-size",
+      "key": "hydro-kit-typescale-static-display-medium-size",
+      "collection": "Typescale",
+      "path": "Static / Display Medium / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "45px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-medium-line-height",
+      "key": "hydro-kit-typescale-static-display-medium-line-height",
+      "collection": "Typescale",
+      "path": "Static / Display Medium / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "52px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-medium-tracking",
+      "key": "hydro-kit-typescale-static-display-medium-tracking",
+      "collection": "Typescale",
+      "path": "Static / Display Medium / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-small-size",
+      "key": "hydro-kit-typescale-static-display-small-size",
+      "collection": "Typescale",
+      "path": "Static / Display Small / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "36px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-small-tracking",
+      "key": "hydro-kit-typescale-static-display-small-tracking",
+      "collection": "Typescale",
+      "path": "Static / Display Small / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-display-small-line-height",
+      "key": "hydro-kit-typescale-static-display-small-line-height",
+      "collection": "Typescale",
+      "path": "Static / Display Small / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "44px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-large-size",
+      "key": "hydro-kit-typescale-static-headline-large-size",
+      "collection": "Typescale",
+      "path": "Static / Headline Large / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-large-tracking",
+      "key": "hydro-kit-typescale-static-headline-large-tracking",
+      "collection": "Typescale",
+      "path": "Static / Headline Large / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-large-line-height",
+      "key": "hydro-kit-typescale-static-headline-large-line-height",
+      "collection": "Typescale",
+      "path": "Static / Headline Large / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "40px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-medium-size",
+      "key": "hydro-kit-typescale-static-headline-medium-size",
+      "collection": "Typescale",
+      "path": "Static / Headline Medium / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "28px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-medium-tracking",
+      "key": "hydro-kit-typescale-static-headline-medium-tracking",
+      "collection": "Typescale",
+      "path": "Static / Headline Medium / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-medium-line-height",
+      "key": "hydro-kit-typescale-static-headline-medium-line-height",
+      "collection": "Typescale",
+      "path": "Static / Headline Medium / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "36px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-small-size",
+      "key": "hydro-kit-typescale-static-headline-small-size",
+      "collection": "Typescale",
+      "path": "Static / Headline Small / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-small-tracking",
+      "key": "hydro-kit-typescale-static-headline-small-tracking",
+      "collection": "Typescale",
+      "path": "Static / Headline Small / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-headline-small-line-height",
+      "key": "hydro-kit-typescale-static-headline-small-line-height",
+      "collection": "Typescale",
+      "path": "Static / Headline Small / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "32px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-large-size",
+      "key": "hydro-kit-typescale-static-title-large-size",
+      "collection": "Typescale",
+      "path": "Static / Title Large / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "22px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-large-tracking",
+      "key": "hydro-kit-typescale-static-title-large-tracking",
+      "collection": "Typescale",
+      "path": "Static / Title Large / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-large-line-height",
+      "key": "hydro-kit-typescale-static-title-large-line-height",
+      "collection": "Typescale",
+      "path": "Static / Title Large / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "28px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-medium-size",
+      "key": "hydro-kit-typescale-static-title-medium-size",
+      "collection": "Typescale",
+      "path": "Static / Title Medium / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-medium-tracking",
+      "key": "hydro-kit-typescale-static-title-medium-tracking",
+      "collection": "Typescale",
+      "path": "Static / Title Medium / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.15000000596046448px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-medium-line-height",
+      "key": "hydro-kit-typescale-static-title-medium-line-height",
+      "collection": "Typescale",
+      "path": "Static / Title Medium / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-small-size",
+      "key": "hydro-kit-typescale-static-title-small-size",
+      "collection": "Typescale",
+      "path": "Static / Title Small / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "14px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-small-tracking",
+      "key": "hydro-kit-typescale-static-title-small-tracking",
+      "collection": "Typescale",
+      "path": "Static / Title Small / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.10000000149011612px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-title-small-line-height",
+      "key": "hydro-kit-typescale-static-title-small-line-height",
+      "collection": "Typescale",
+      "path": "Static / Title Small / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "20px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-large-size",
+      "key": "hydro-kit-typescale-static-label-large-size",
+      "collection": "Typescale",
+      "path": "Static / Label Large / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "14px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-large-tracking",
+      "key": "hydro-kit-typescale-static-label-large-tracking",
+      "collection": "Typescale",
+      "path": "Static / Label Large / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.10000000149011612px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-large-line-height",
+      "key": "hydro-kit-typescale-static-label-large-line-height",
+      "collection": "Typescale",
+      "path": "Static / Label Large / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "20px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-medium-size",
+      "key": "hydro-kit-typescale-static-label-medium-size",
+      "collection": "Typescale",
+      "path": "Static / Label Medium / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-medium-tracking",
+      "key": "hydro-kit-typescale-static-label-medium-tracking",
+      "collection": "Typescale",
+      "path": "Static / Label Medium / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.5px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-medium-line-height",
+      "key": "hydro-kit-typescale-static-label-medium-line-height",
+      "collection": "Typescale",
+      "path": "Static / Label Medium / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-small-size",
+      "key": "hydro-kit-typescale-static-label-small-size",
+      "collection": "Typescale",
+      "path": "Static / Label Small / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "11px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-small-tracking",
+      "key": "hydro-kit-typescale-static-label-small-tracking",
+      "collection": "Typescale",
+      "path": "Static / Label Small / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.5px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-label-small-line-height",
+      "key": "hydro-kit-typescale-static-label-small-line-height",
+      "collection": "Typescale",
+      "path": "Static / Label Small / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-large-size",
+      "key": "hydro-kit-typescale-static-body-large-size",
+      "collection": "Typescale",
+      "path": "Static / Body Large / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-large-tracking",
+      "key": "hydro-kit-typescale-static-body-large-tracking",
+      "collection": "Typescale",
+      "path": "Static / Body Large / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.5px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-large-line-height",
+      "key": "hydro-kit-typescale-static-body-large-line-height",
+      "collection": "Typescale",
+      "path": "Static / Body Large / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "24px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-medium-size",
+      "key": "hydro-kit-typescale-static-body-medium-size",
+      "collection": "Typescale",
+      "path": "Static / Body Medium / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "14px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-medium-tracking",
+      "key": "hydro-kit-typescale-static-body-medium-tracking",
+      "collection": "Typescale",
+      "path": "Static / Body Medium / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.25px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-medium-line-height",
+      "key": "hydro-kit-typescale-static-body-medium-line-height",
+      "collection": "Typescale",
+      "path": "Static / Body Medium / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "20px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-small-size",
+      "key": "hydro-kit-typescale-static-body-small-size",
+      "collection": "Typescale",
+      "path": "Static / Body Small / Size",
+      "type": "number",
+      "mode": "default",
+      "value": "12px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-small-tracking",
+      "key": "hydro-kit-typescale-static-body-small-tracking",
+      "collection": "Typescale",
+      "path": "Static / Body Small / Tracking",
+      "type": "number",
+      "mode": "default",
+      "value": "0.4000000059604645px"
+    },
+    {
+      "name": "--hydro-kit-typescale-static-body-small-line-height",
+      "key": "hydro-kit-typescale-static-body-small-line-height",
+      "collection": "Typescale",
+      "path": "Static / Body Small / Line Height",
+      "type": "number",
+      "mode": "default",
+      "value": "16px"
+    },
+    {
+      "name": "--hydro-kit-icons-mode",
+      "key": "hydro-kit-icons-mode",
+      "collection": "Icons",
+      "path": "Mode",
+      "type": "string",
+      "mode": "clear-light",
+      "value": "\"Clear Light\""
+    },
+    {
+      "name": "--hydro-kit-icons-mode",
+      "key": "hydro-kit-icons-mode",
+      "collection": "Icons",
+      "path": "Mode",
+      "type": "string",
+      "mode": "dark",
+      "value": "\"Dark\""
+    },
+    {
+      "name": "--hydro-kit-icons-mode",
+      "key": "hydro-kit-icons-mode",
+      "collection": "Icons",
+      "path": "Mode",
+      "type": "string",
+      "mode": "light",
+      "value": "\"Light\""
+    }
+  ]
+}

@@ -1,16 +1,26 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { HydroIcon } from '@/shared/ui/hydro-icon/hydro-icon';
 import { MockScenarioControl } from './mock-scenario-control';
 import { MockQaHubPersonas } from './mock-qa-hub';
-import { MockQaAssistant } from './mock-qa-assistant';
 import styles from './mock-mode.module.scss';
+
+export const OPEN_MOCK_PANEL_EVENT = 'hydrorivers:open-mock-panel';
 
 export function MockMode() {
   const t = useTranslations('mockMode');
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return undefined;
+
+    const onOpen = () => setOpen(true);
+    window.addEventListener(OPEN_MOCK_PANEL_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_MOCK_PANEL_EVENT, onOpen);
+  }, []);
+
 
   return (
     <aside className={`${styles.shell} ${open ? styles.open : ''}`} aria-label={t('title')}>
@@ -27,8 +37,6 @@ export function MockMode() {
           </div>
 
           <MockScenarioControl />
-
-          <MockQaAssistant />
 
           <section className={styles.section}>
             <div className={styles.sectionTitle}>
@@ -50,7 +58,7 @@ export function MockMode() {
         aria-label={t('button')}
       >
         <span className={styles.triggerMark}>{t('triggerMark')}</span>
-        <span>{t('button')}</span>
+        <span>{t('qaAssistantShortTitle')}</span>
       </button>
     </aside>
   );

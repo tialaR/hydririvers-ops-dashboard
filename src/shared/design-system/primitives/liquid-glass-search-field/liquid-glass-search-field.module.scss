@@ -1,0 +1,365 @@
+/* Liquid Glass Search Field — Figma _Search - Top, tokenized with local fallbacks. */
+
+.field {
+  --search-height: var(--hydro-size-search-height, 44px);
+  --search-radius: var(--hydro-radius-pill, 296px);
+  --search-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --search-padding: 0 10px 0 11px;
+  --search-gap: 4px;
+  --search-font-size: 17px;
+  --search-line-height: 20px;
+  --search-font-weight: 510;
+  --search-motion-tap: var(--hydro-motion-control, 120ms);
+  --search-motion-focus: 180ms;
+  --search-easing: var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+  --search-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+  --search-accent: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #007aff)
+  );
+  --search-label: var(
+    --hydro-color-label-primary,
+    var(--hydro-kit-colors-labels-vibrant-primary, #1a1a1a)
+  );
+  --search-placeholder: var(
+    --hydro-color-label-tertiary,
+    var(--hydro-kit-colors-labels-vibrant-tertiary, #bfbfbf)
+  );
+  --search-mic: var(
+    --hydro-color-label-secondary,
+    var(--hydro-kit-colors-labels-vibrant-secondary, #727272)
+  );
+  --search-caret: #0088ff;
+  --search-icon: var(--search-label);
+  --search-icon-blend: plus-darker;
+  --search-input-blend: plus-darker;
+  --search-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --search-glass-before-blend-mode: darken, color-burn, normal;
+  --search-glass-before-opacity: 1;
+  --search-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --search-glass-after-blend-mode: normal;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--search-gap);
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: var(--search-height);
+  padding: var(--search-padding);
+  border-radius: var(--search-radius);
+  background: transparent;
+  font-family: var(--search-font-family);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    box-shadow var(--search-motion-focus) var(--search-easing),
+    transform var(--search-motion-tap) var(--search-easing);
+}
+
+.field::before,
+.field::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.field::before {
+  z-index: 0;
+  background: var(--search-glass-before-bg);
+  background-blend-mode: var(--search-glass-before-blend-mode);
+  opacity: var(--search-glass-before-opacity);
+  box-shadow: var(--search-shadow);
+}
+
+.field::after {
+  z-index: 1;
+  background: var(--search-glass-after-bg);
+  background-blend-mode: var(--search-glass-after-blend-mode);
+}
+
+.searchIcon,
+.input,
+.micButton,
+.micDecor {
+  position: relative;
+  z-index: 2;
+}
+
+.searchIcon {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  min-width: 26px;
+  height: 20px;
+  color: var(--search-icon);
+  mix-blend-mode: var(--search-icon-blend);
+}
+
+.searchGlyph {
+  width: 17px;
+  height: 17px;
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--search-font-size);
+  font-weight: var(--search-font-weight);
+  line-height: var(--search-line-height);
+  font-feature-settings: 'ss16' on;
+  font-style: normal;
+  color: var(--search-label);
+  caret-color: var(--search-caret);
+  mix-blend-mode: var(--search-input-blend);
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::placeholder {
+    color: var(--search-placeholder);
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &::-webkit-search-decoration,
+  &::-webkit-search-cancel-button {
+    appearance: none;
+    -webkit-appearance: none;
+  }
+}
+
+.micButton,
+.micDecor {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  min-width: 18px;
+  height: 20px;
+  color: var(--search-mic);
+  mix-blend-mode: var(--search-icon-blend);
+}
+
+.micButton {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--search-motion-tap) var(--search-easing);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.975);
+  }
+}
+
+.micGlyph {
+  width: 12px;
+  height: 17px;
+}
+
+/* Theme: light */
+.field[data-tone='light'] {
+  --search-label: #1a1a1a;
+  --search-placeholder: #bfbfbf;
+  --search-mic: #727272;
+  --search-caret: #0088ff;
+  --search-icon: #1a1a1a;
+  --search-icon-blend: plus-darker;
+  --search-input-blend: plus-darker;
+  --search-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --search-glass-before-blend-mode: darken, color-burn, normal;
+  --search-glass-before-opacity: 1;
+  --search-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --search-glass-after-blend-mode: normal;
+}
+
+/* Theme: dark */
+.field[data-tone='dark'] {
+  --search-label: #f5f5f5;
+  --search-placeholder: #8e8e93;
+  --search-mic: #8a8a8a;
+  --search-caret: #0091ff;
+  --search-icon: #ebebf0;
+  --search-icon-blend: plus-lighter;
+  --search-input-blend: plus-lighter;
+  --search-glass-before-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08)),
+    linear-gradient(0deg, rgba(28, 28, 30, 0.72), rgba(28, 28, 30, 0.72)),
+    rgba(120, 120, 128, 0.24);
+  --search-glass-before-blend-mode: plus-lighter, normal, color-burn;
+  --search-glass-before-opacity: 0.78;
+  --search-glass-after-bg: rgba(0, 0, 0, 0.12);
+  --search-glass-after-blend-mode: screen;
+  --search-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .field[data-tone='auto'] {
+  --search-label: #1a1a1a;
+  --search-placeholder: #bfbfbf;
+  --search-mic: #727272;
+  --search-caret: #0088ff;
+  --search-icon: #1a1a1a;
+  --search-icon-blend: plus-darker;
+  --search-input-blend: plus-darker;
+  --search-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --search-glass-before-blend-mode: darken, color-burn, normal;
+  --search-glass-before-opacity: 1;
+  --search-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --search-glass-after-blend-mode: normal;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .field[data-tone='auto'] {
+  --search-label: #f5f5f5;
+  --search-placeholder: #404040;
+  --search-mic: #8a8a8a;
+  --search-caret: #0091ff;
+  --search-icon: #f5f5f5;
+  --search-icon-blend: plus-lighter;
+  --search-input-blend: plus-lighter;
+  --search-glass-before-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    rgba(204, 204, 204, 0.5);
+  --search-glass-before-blend-mode: normal, normal, color-burn;
+  --search-glass-before-opacity: 0.67;
+  --search-glass-after-bg: rgba(0, 0, 0, 0.2);
+  --search-glass-after-blend-mode: screen;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .field[data-tone='auto'] {
+    --search-label: #1a1a1a;
+    --search-placeholder: #bfbfbf;
+    --search-mic: #727272;
+    --search-caret: #0088ff;
+    --search-icon: #1a1a1a;
+    --search-icon-blend: plus-darker;
+    --search-input-blend: plus-darker;
+    --search-glass-before-bg:
+      linear-gradient(0deg, #f7f7f7, #f7f7f7),
+      linear-gradient(0deg, #dddddd, #dddddd),
+      rgba(255, 255, 255, 0.65);
+    --search-glass-before-blend-mode: darken, color-burn, normal;
+    --search-glass-before-opacity: 1;
+    --search-glass-after-bg: rgba(0, 0, 0, 0.004);
+    --search-glass-after-blend-mode: normal;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .field[data-tone='auto'] {
+    --search-label: #f5f5f5;
+    --search-placeholder: #404040;
+    --search-mic: #8a8a8a;
+    --search-caret: #0091ff;
+    --search-icon: #f5f5f5;
+    --search-icon-blend: plus-lighter;
+    --search-input-blend: plus-lighter;
+    --search-glass-before-bg:
+      linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      rgba(204, 204, 204, 0.5);
+    --search-glass-before-blend-mode: normal, normal, color-burn;
+    --search-glass-before-opacity: 0.67;
+    --search-glass-after-bg: rgba(0, 0, 0, 0.2);
+    --search-glass-after-blend-mode: screen;
+  }
+}
+
+/* Focus-within */
+.field:focus-within {
+  transform: scale(1.012);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--search-accent) 28%, transparent);
+}
+
+.field:focus-within::before {
+  box-shadow:
+    var(--search-shadow),
+    0 0 0 1px color-mix(in srgb, var(--search-accent) 18%, transparent);
+}
+
+.field[data-tone='dark']:focus-within::before {
+  opacity: 0.88;
+  filter: brightness(1.08);
+}
+
+.field[data-tone='dark']:focus-within::after {
+  background: color-mix(in srgb, var(--search-accent) 10%, rgba(0, 0, 0, 0.2));
+}
+
+.field:active:not(.disabled) {
+  transform: scale(0.988);
+}
+
+.field:focus-within .input:focus-visible {
+  outline: none;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field,
+  .micButton {
+    transition: none;
+  }
+
+  .field:focus-within,
+  .field:active:not(.disabled) {
+    transform: none;
+  }
+
+  .micButton:active:not(:disabled) {
+    transform: none;
+  }
+}

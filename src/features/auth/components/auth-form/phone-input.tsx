@@ -4,12 +4,13 @@ import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { ChevronDown, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { AUTH_DIAL_OPTIONS, type AuthDialCode } from './auth-dial-options';
-import styles from './auth-form.module.scss';
+import styles from './auth-form.module.sass';
 
 type PhoneInputProps = {
   countryCode: AuthDialCode;
   phone: string;
   invalid?: boolean;
+  describedBy?: string;
   mode: 'login' | 'register';
   onCountryChange: (countryCode: AuthDialCode) => void;
   onPhoneChange: (phone: string) => void;
@@ -19,6 +20,7 @@ export function PhoneInput({
   countryCode,
   phone,
   invalid = false,
+  describedBy,
   mode,
   onCountryChange,
   onPhoneChange
@@ -120,6 +122,7 @@ export function PhoneInput({
             placeholder={selectedDial.placeholder}
             value={phone}
             aria-invalid={invalid}
+            aria-describedby={describedBy}
             onChange={(event) => onPhoneChange(normalizeToLocalPhone(event.target.value))}
           />
         </label>

@@ -151,6 +151,9 @@ describe('POST /api/auth/register', () => {
 
     expect(step2.status).toBe(201);
     expect(mockUpsertUser).toHaveBeenCalledTimes(1);
+    const persistedUser = mockUpsertUser.mock.calls[0]?.[0] as { persistenceKind?: string; createdAt?: string; expiresAt?: string };
+    expect(persistedUser.persistenceKind).toBe('ephemeral');
+    expect(Date.parse(persistedUser.expiresAt ?? '') - Date.parse(persistedUser.createdAt ?? '')).toBe(24 * 60 * 60 * 1000);
     expect(mockHashPassword).toHaveBeenCalledWith('12345678');
     expect(cookieStore.set).toHaveBeenCalledWith(
       cookieNames.session,

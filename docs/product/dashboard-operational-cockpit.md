@@ -6,6 +6,8 @@ O Dashboard existe para responder, em poucos segundos, a pergunta central da ope
 
 Ele não deve ser lido como marketplace nem como carteira privada. O papel dele é resumir o estado operacional, destacar o que pede atenção imediata e oferecer caminhos rápidos para as rotas certas.
 
+Nesta fase, o Dashboard tambem atua como **resumo guiado**: explica o que a pessoa esta vendo e qual proximo passo faz sentido (marketplace publico vs minhas cargas privadas), sem duplicar atalhos em varios cards.
+
 ## 2. Diferença entre Dashboard, Cargas e Minhas cargas
 
 | Área | Pergunta principal | Público | Dados | Ações | O que não deve fazer |

@@ -9,6 +9,68 @@
   -webkit-backdrop-filter: blur(8px);
   touch-action: none;
   overscroll-behavior: contain;
+  opacity: 0;
+  transition: opacity 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.overlay[data-visible='true'] {
+  opacity: 1;
+}
+
+.overlay[data-variant="light"] {
+  background: rgba(1, 7, 11, 0.24);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.overlay[data-variant="map"] {
+  background: rgba(1, 7, 11, 0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .overlay[data-variant="map"] {
+    background: rgba(1, 7, 11, 0.68);
+  }
+}
+
+.overlay[data-variant="strong"] {
+  background: rgba(1, 7, 11, 0.58);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.overlay[data-variant="fullscreen"] {
+  align-items: stretch;
+  padding: 0;
+  background: color-mix(in srgb, #010508 96%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.overlay[data-viewport-anchor='flush'] {
+  padding: 0;
+  align-items: end;
+  justify-items: stretch;
+}
+
+.overlay[data-viewport-anchor='flush'][data-variant="light"] {
+  background: rgba(1, 7, 11, 0.18);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.overlay[data-viewport-anchor='flush'][data-variant="map"] {
+  background: rgba(1, 7, 11, 0.48);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .overlay[data-viewport-anchor='flush'][data-variant="map"] {
+    background: rgba(1, 7, 11, 0.62);
+  }
 }
 
 .sheet {
@@ -23,11 +85,80 @@
     radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--hx-cyan, #14d8c4) 10%, transparent), transparent 12rem),
     linear-gradient(180deg, color-mix(in srgb, var(--hx-card-2, #10191c) 84%, transparent), color-mix(in srgb, var(--hx-card, #071015) 96%, transparent));
   box-shadow: 0 28px 70px rgba(0,0,0,.42);
-  max-height: var(--sheet-snap, 90dvh);
-  transform: translateY(var(--sheet-offset, 0));
-  transition: transform .22s ease;
+  max-height: min(var(--sheet-snap, 90dvh), 100dvh);
+  transform: translate3d(0, calc(100% + var(--sheet-offset, 0px)), 0);
+  opacity: 0;
+  transition:
+    transform 300ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 280ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
   pointer-events: auto;
+}
+
+.overlay[data-visible='true'] .sheet {
+  transform: translate3d(0, var(--sheet-offset, 0), 0);
+  opacity: 1;
+}
+
+.sheet[data-dragging='true'] {
+  transition: none;
+}
+
+.overlay[data-viewport-anchor='flush'] .sheet {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  height: var(--sheet-max-height, 95dvh);
+  max-height: var(--sheet-max-height, 95dvh);
+  min-height: 0;
+  border-radius: 1.35rem 1.35rem 0 0;
+  border-bottom: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  transform: translate3d(0, var(--sheet-translate-y, 100%), 0);
+  opacity: 1;
+  box-shadow:
+    0 -4px 24px rgba(0, 0, 0, 0.2),
+    0 28px 70px rgba(0, 0, 0, 0.38);
+}
+
+.overlay[data-viewport-anchor='flush'][data-visible='true'] .sheet {
+  transform: translate3d(0, var(--sheet-translate-y, 0), 0);
+}
+
+.sheet[data-variant="strong"] {
+  border-color: rgba(70, 108, 118, 0.28);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(20, 216, 196, 0.05), transparent 10rem),
+    linear-gradient(180deg, rgba(8, 17, 24, 0.99), rgba(4, 10, 16, 1));
+  box-shadow:
+    0 -4px 24px rgba(0, 0, 0, 0.18),
+    0 28px 70px rgba(0, 0, 0, 0.42);
+}
+
+.sheet[data-variant="strong"] .closeButton {
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(10, 20, 27, 0.94), rgba(6, 12, 18, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0.75rem 1.45rem rgba(0, 0, 0, 0.24);
+}
+
+.sheet[data-variant="light"] .closeButton {
+  margin-top: 0.125rem;
+}
+
+.sheet[data-variant="fullscreen"] {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  border-radius: 0;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  /* safe-area no rodapé fica no .footer — evita dobrar inset com padding do sheet */
+  padding-bottom: 0;
 }
 
 .handleZone {
@@ -35,6 +166,20 @@
   display: grid;
   place-items: center;
   touch-action: none;
+}
+
+.handleZone[role='slider'] {
+  cursor: grab;
+}
+
+.handleZone[role='slider']:focus-visible {
+  outline: 2px solid var(--hy-color-info, #42a5ff);
+  outline-offset: -2px;
+  border-radius: 0.75rem;
+}
+
+.handleZone[role='slider']:active {
+  cursor: grabbing;
 }
 
 .handle {
@@ -49,68 +194,79 @@
   grid-template-columns: minmax(0, 1fr) auto;
   gap: .75rem;
   align-items: start;
-  padding: 0 1rem .9rem;
+  padding: 0 1rem 1rem;
   border-bottom: 1px solid var(--hx-line-soft, rgba(255,255,255,.1));
 }
 
 .copy {
   min-width: 0;
   display: grid;
-  gap: .25rem;
+  gap: var(--hy-space-sheet-header-gap, 0.35rem);
 }
 
 .title {
   margin: 0;
   color: var(--hx-text, #eef7f6);
-  font-size: clamp(1rem, 4.2vw, 1.2rem);
-  line-height: 1.1;
+  font-size: var(--hy-font-size-sheet-header-title, var(--hy-font-size-nav-title, 1.0625rem));
+  font-weight: var(--hy-font-weight-nav-title, 760);
+  line-height: var(--hy-line-height-sheet-header-title, var(--hy-line-height-nav-title, 1.15));
+  letter-spacing: var(--hy-letter-spacing-sheet-header-title, var(--hy-letter-spacing-nav-title, -0.025em));
 }
 
 .description {
   margin: 0;
-  color: var(--hx-muted, rgba(229,239,240,.72));
-  font-size: .86rem;
+  color: var(--hy-color-sheet-description, var(--hx-muted, rgba(229, 239, 240, 0.72)));
+  font-size: var(--hy-font-size-sheet-description, 0.8125rem);
   line-height: 1.45;
 }
 
 .closeButton {
-  width: 2.7rem;
-  min-width: 2.7rem;
-  height: 2.7rem;
-  border: 1px solid var(--hx-line-soft, rgba(255,255,255,.1));
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--hx-card, #071015) 82%, transparent);
-  color: var(--hx-text, #eef7f6);
-  cursor: pointer;
-}
-
-.closeButton:focus-visible {
-  outline: 2px solid var(--hx-cyan, #14d8c4);
-  outline-offset: 2px;
+  flex-shrink: 0;
+  align-self: start;
+  margin-top: 0.125rem;
 }
 
 .body {
   min-height: 0;
   overflow: auto;
-  padding: 1rem;
+  padding:
+    var(--hy-space-sheet-body-padding-block, 1.25rem)
+    var(--hy-space-sheet-body-padding-inline, 1rem)
+    1rem;
   display: grid;
   gap: .85rem;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
 }
 
+.sheet:has(.footer) .body {
+  padding-bottom: 0.75rem;
+}
+
 .footer {
-  padding: .9rem 1rem calc(.9rem + env(safe-area-inset-bottom));
+  flex-shrink: 0;
+  padding:
+    var(--hy-space-sheet-footer-padding, 0.9rem)
+    var(--hy-space-sheet-body-padding-inline, 1rem)
+    calc(var(--hy-space-sheet-footer-padding, 0.9rem) + env(safe-area-inset-bottom));
   border-top: 1px solid var(--hx-line-soft, rgba(255,255,255,.1));
-  background: linear-gradient(180deg, color-mix(in srgb, var(--hx-card, #071015) 0%, transparent), color-mix(in srgb, var(--hx-card, #071015) 92%, transparent));
+  background: var(
+    --hy-color-sheet-footer-surface,
+    linear-gradient(180deg, color-mix(in srgb, var(--hx-card, #071015) 0%, transparent), color-mix(in srgb, var(--hx-card, #071015) 92%, transparent))
+  );
+  box-shadow: var(--hy-shadow-sheet-footer, 0 -0.5rem 1.25rem rgba(0, 0, 0, 0.28));
+}
+
+.overlay[data-viewport-anchor='flush'] .footer {
+  padding-bottom: .9rem;
 }
 
 @media (orientation: landscape) and (max-height: 600px) {
-  .overlay {
+  .overlay:not([data-viewport-anchor='flush']) {
     padding: .5rem;
   }
 
-  .sheet {
+  .overlay:not([data-viewport-anchor='flush']) .sheet {
     width: 100%;
     max-height: 100dvh;
     border-radius: 18px;
@@ -118,7 +274,21 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition: none;
+  }
+
   .sheet {
     transition: none;
   }
+
+  .overlay[data-visible='true'] .sheet {
+    transform: translate3d(0, var(--sheet-offset, 0), 0);
+    opacity: 1;
+  }
+
+  .overlay[data-viewport-anchor='flush'][data-visible='true'] .sheet {
+    transform: translate3d(0, var(--sheet-translate-y, 0), 0);
+  }
+
 }

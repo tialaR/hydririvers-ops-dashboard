@@ -62,6 +62,14 @@ describe('notifications.client', () => {
     expect(getUnreadNotificationsCount(alice)).toBe(alice.length);
   });
 
+  it('deriva o unreadCount da própria lista e mantém o estado por usuário', () => {
+    const notifications = readNotifications('user-a');
+    const unreadCount = getUnreadNotificationsCount(notifications);
+
+    expect(unreadCount).toBe(5);
+    expect(notifications.filter((notification) => !notification.read)).toHaveLength(unreadCount);
+  });
+
   it('exposes a stable server snapshot reference', () => {
     const first = getNotificationsServerSnapshot();
     const second = getNotificationsServerSnapshot();
@@ -96,6 +104,14 @@ describe('notifications.client', () => {
     expect(readNotifications('user-a')).toBe(reset);
   });
 
+  it('keeps 0 unread after marking every notification as read', () => {
+    const next = markAllNotificationsRead('user-a');
+
+    expect(getUnreadNotificationsCount(next)).toBe(0);
+    expect(next.every((notification) => notification.read)).toBe(true);
+    expect(readNotifications('user-a')).toBe(next);
+  });
+
   it('marks a single notification as read without altering the rest', () => {
     const initial = readNotifications('user-a');
     const targetId = initial[0]?.id;
@@ -106,5 +122,6 @@ describe('notifications.client', () => {
 
     expect(next.find((notification) => notification.id === targetId)?.read).toBe(true);
     expect(next.filter((notification) => notification.read)).toHaveLength(1);
+    expect(getUnreadNotificationsCount(next)).toBe(initial.length - 1);
   });
 });

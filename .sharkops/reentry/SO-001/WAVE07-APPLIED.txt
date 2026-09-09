@@ -1,0 +1,4 @@
+SO-001 Wave 07 applied
+UTC: 2026-08-25T09:21:23Z
+Mode: TSUNAMI
+Target: portable public API + Liquid Glass quarantine

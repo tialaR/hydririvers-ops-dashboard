@@ -2,7 +2,11 @@ import type { Page } from '@playwright/test';
 import { loginWithOtp, type OtpCredentials } from './auth';
 import { applyMockScenario } from './mock-scenario';
 
-const admin: OtpCredentials = { email: 'admin@hydrorivers.com', password: 'hydro123' };
+const admin: OtpCredentials = {
+  email: 'admin@hydrorivers.com',
+  password: 'hydro123',
+  phone: '91999990003',
+};
 
 /** Encerra sessão via rota dedicada (padrão estável: listener + navegação em paralelo). */
 export async function logoutViaRoute(page: Page) {

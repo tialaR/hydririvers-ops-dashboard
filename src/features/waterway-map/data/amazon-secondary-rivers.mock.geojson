@@ -1,0 +1,1133 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-negro-branch",
+        "name": "Ramo Rio Negro (mock)",
+        "kind": "tributary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "ANA/SNIRH hidrografia — schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "tributary-density",
+        "corridorId": "amazonas",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -59.2043,
+            -2.1828
+          ],
+          [
+            -59.10929,
+            -2.13783
+          ],
+          [
+            -59.01287,
+            -2.09852
+          ],
+          [
+            -58.91449,
+            -2.06704
+          ],
+          [
+            -58.8139,
+            -2.04439
+          ],
+          [
+            -58.7112,
+            -2.03021
+          ],
+          [
+            -58.60679,
+            -2.02284
+          ],
+          [
+            -58.50135,
+            -2.01961
+          ],
+          [
+            -58.40802,
+            -1.95186
+          ],
+          [
+            -58.33461,
+            -1.92985
+          ],
+          [
+            -58.25973,
+            -1.91662
+          ],
+          [
+            -58.18337,
+            -1.91227
+          ],
+          [
+            -58.10574,
+            -1.91557
+          ],
+          [
+            -58.02723,
+            -1.92412
+          ],
+          [
+            -57.94838,
+            -1.9347
+          ],
+          [
+            -57.86978,
+            -1.9438
+          ],
+          [
+            -57.8039,
+            -1.84015
+          ],
+          [
+            -57.59262,
+            -1.83163
+          ],
+          [
+            -57.3808,
+            -1.83142
+          ],
+          [
+            -57.16858,
+            -1.83746
+          ],
+          [
+            -56.95614,
+            -1.84675
+          ],
+          [
+            -56.74371,
+            -1.85577
+          ],
+          [
+            -56.53154,
+            -1.86105
+          ],
+          [
+            -56.31979,
+            -1.85971
+          ],
+          [
+            -56.1125,
+            -1.79
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-xingu-branch",
+        "name": "Ramo Xingu (mock)",
+        "kind": "tributary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "tributary-density",
+        "corridorId": "amazonas",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -52.06764,
+            -2.50205
+          ],
+          [
+            -52.11991,
+            -2.4777
+          ],
+          [
+            -52.1682,
+            -2.44837
+          ],
+          [
+            -52.21182,
+            -2.41321
+          ],
+          [
+            -52.25078,
+            -2.37222
+          ],
+          [
+            -52.28582,
+            -2.32633
+          ],
+          [
+            -52.31826,
+            -2.2772
+          ],
+          [
+            -52.34982,
+            -2.22696
+          ],
+          [
+            -52.42122,
+            -2.15756
+          ],
+          [
+            -52.3723,
+            -2.13039
+          ],
+          [
+            -52.31999,
+            -2.11002
+          ],
+          [
+            -52.26463,
+            -2.09573
+          ],
+          [
+            -52.20705,
+            -2.0859
+          ],
+          [
+            -52.14839,
+            -2.07821
+          ],
+          [
+            -52.08998,
+            -2.07004
+          ],
+          [
+            -52.03309,
+            -2.05881
+          ],
+          [
+            -52.00681,
+            -1.95318
+          ],
+          [
+            -51.79915,
+            -1.93286
+          ],
+          [
+            -51.59067,
+            -1.9182
+          ],
+          [
+            -51.38171,
+            -1.90686
+          ],
+          [
+            -51.17267,
+            -1.896
+          ],
+          [
+            -50.96399,
+            -1.8827
+          ],
+          [
+            -50.75604,
+            -1.86442
+          ],
+          [
+            -50.54907,
+            -1.83938
+          ],
+          [
+            -50.35,
+            -1.76
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-purus-branch",
+        "name": "Ramo Purus (mock)",
+        "kind": "secondary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.80705,
+            -2.36947
+          ],
+          [
+            -58.64615,
+            -2.32502
+          ],
+          [
+            -58.48394,
+            -2.28628
+          ],
+          [
+            -58.32036,
+            -2.25343
+          ],
+          [
+            -58.15559,
+            -2.22577
+          ],
+          [
+            -57.98997,
+            -2.2018
+          ],
+          [
+            -57.82397,
+            -2.17946
+          ],
+          [
+            -57.65813,
+            -2.15644
+          ],
+          [
+            -57.50838,
+            -2.0609
+          ],
+          [
+            -57.42031,
+            -2.04481
+          ],
+          [
+            -57.33105,
+            -2.03427
+          ],
+          [
+            -57.24087,
+            -2.02803
+          ],
+          [
+            -57.15017,
+            -2.02419
+          ],
+          [
+            -57.05945,
+            -2.02046
+          ],
+          [
+            -56.9692,
+            -2.01458
+          ],
+          [
+            -56.87983,
+            -2.00457
+          ],
+          [
+            -56.80733,
+            -1.9185
+          ],
+          [
+            -56.71879,
+            -1.90967
+          ],
+          [
+            -56.62954,
+            -1.90394
+          ],
+          [
+            -56.54006,
+            -1.89913
+          ],
+          [
+            -56.45091,
+            -1.89293
+          ],
+          [
+            -56.36258,
+            -1.88324
+          ],
+          [
+            -56.27542,
+            -1.86848
+          ],
+          [
+            -56.18962,
+            -1.84787
+          ],
+          [
+            -56.1125,
+            -1.79
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-juruena-branch",
+        "name": "Ramo Juruena (mock)",
+        "kind": "secondary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "tapajos-teles-pires",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -56.81667,
+            -2.46665
+          ],
+          [
+            -56.73212,
+            -2.42147
+          ],
+          [
+            -56.64403,
+            -2.38336
+          ],
+          [
+            -56.55289,
+            -2.35137
+          ],
+          [
+            -56.45975,
+            -2.32335
+          ],
+          [
+            -56.3661,
+            -2.29637
+          ],
+          [
+            -56.27351,
+            -2.26728
+          ],
+          [
+            -56.1964,
+            -2.16172
+          ],
+          [
+            -56.07577,
+            -2.1817
+          ],
+          [
+            -55.9557,
+            -2.20757
+          ],
+          [
+            -55.83592,
+            -2.23647
+          ],
+          [
+            -55.71609,
+            -2.26493
+          ],
+          [
+            -55.59591,
+            -2.28959
+          ],
+          [
+            -55.47512,
+            -2.30782
+          ],
+          [
+            -55.35,
+            -2.28
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-maica-branch",
+        "name": "Canal Maicá (mock)",
+        "kind": "secondary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "estuary-channel",
+        "corridorId": "barra-norte",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.48349,
+            -1.00605
+          ],
+          [
+            -50.43955,
+            -0.98348
+          ],
+          [
+            -50.39394,
+            -0.96757
+          ],
+          [
+            -50.34639,
+            -0.95946
+          ],
+          [
+            -50.29712,
+            -0.95819
+          ],
+          [
+            -50.24684,
+            -0.96098
+          ],
+          [
+            -50.17667,
+            -0.93567
+          ],
+          [
+            -50.11624,
+            -1.02938
+          ],
+          [
+            -50.06262,
+            -1.12728
+          ],
+          [
+            -50.01456,
+            -1.22859
+          ],
+          [
+            -49.96929,
+            -1.33161
+          ],
+          [
+            -49.92332,
+            -1.4342
+          ],
+          [
+            -49.85,
+            -1.52
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-guama-branch",
+        "name": "Ramo Guamá (mock)",
+        "kind": "secondary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "estuary-channel",
+        "corridorId": "barra-norte",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -48.52529,
+            -1.67493
+          ],
+          [
+            -48.59183,
+            -1.66972
+          ],
+          [
+            -48.65582,
+            -1.65476
+          ],
+          [
+            -48.71714,
+            -1.62959
+          ],
+          [
+            -48.77637,
+            -1.5965
+          ],
+          [
+            -48.83468,
+            -1.55988
+          ],
+          [
+            -48.90123,
+            -1.58901
+          ],
+          [
+            -49.05954,
+            -1.58316
+          ],
+          [
+            -49.21752,
+            -1.56709
+          ],
+          [
+            -49.37528,
+            -1.54376
+          ],
+          [
+            -49.53296,
+            -1.51808
+          ],
+          [
+            -49.69074,
+            -1.49559
+          ],
+          [
+            -49.85,
+            -1.52
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-capim-branch",
+        "name": "Ramo Capim (mock)",
+        "kind": "secondary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.50063,
+            -0.98333
+          ],
+          [
+            -50.43576,
+            -0.93817
+          ],
+          [
+            -50.36607,
+            -0.90158
+          ],
+          [
+            -50.29179,
+            -0.87317
+          ],
+          [
+            -50.21404,
+            -0.85092
+          ],
+          [
+            -50.13464,
+            -0.8316
+          ],
+          [
+            -50.05573,
+            -0.81139
+          ],
+          [
+            -50.01494,
+            -0.79755
+          ],
+          [
+            -50.16295,
+            -0.74406
+          ],
+          [
+            -50.30839,
+            -0.68241
+          ],
+          [
+            -50.45217,
+            -0.61547
+          ],
+          [
+            -50.59552,
+            -0.54717
+          ],
+          [
+            -50.73976,
+            -0.48169
+          ],
+          [
+            -50.88602,
+            -0.42266
+          ],
+          [
+            -51.05,
+            -0.42
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-nhamunda-branch",
+        "name": "Ramo Nhamundá (mock)",
+        "kind": "tributary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "tributary-density",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -53.39446,
+            -1.85573
+          ],
+          [
+            -53.45477,
+            -1.83221
+          ],
+          [
+            -53.51215,
+            -1.80146
+          ],
+          [
+            -53.56713,
+            -1.76476
+          ],
+          [
+            -53.6207,
+            -1.72458
+          ],
+          [
+            -53.67412,
+            -1.68405
+          ],
+          [
+            -53.72871,
+            -1.6464
+          ],
+          [
+            -53.82492,
+            -1.67757
+          ],
+          [
+            -53.89243,
+            -1.60293
+          ],
+          [
+            -53.95634,
+            -1.52431
+          ],
+          [
+            -54.01872,
+            -1.444
+          ],
+          [
+            -54.08192,
+            -1.36458
+          ],
+          [
+            -54.14813,
+            -1.28851
+          ],
+          [
+            -54.21896,
+            -1.21754
+          ],
+          [
+            -54.32,
+            -1.18
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-jutai-branch",
+        "name": "Ramo Jutaí (mock)",
+        "kind": "tributary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "tributary-density",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -53.06178,
+            -1.95812
+          ],
+          [
+            -53.13955,
+            -1.93123
+          ],
+          [
+            -53.21514,
+            -1.89731
+          ],
+          [
+            -53.28915,
+            -1.85826
+          ],
+          [
+            -53.36248,
+            -1.81701
+          ],
+          [
+            -53.43616,
+            -1.77692
+          ],
+          [
+            -53.51118,
+            -1.74111
+          ],
+          [
+            -53.58985,
+            -1.7181
+          ],
+          [
+            -53.56231,
+            -1.74031
+          ],
+          [
+            -53.536,
+            -1.76642
+          ],
+          [
+            -53.50993,
+            -1.79324
+          ],
+          [
+            -53.48302,
+            -1.81744
+          ],
+          [
+            -53.45438,
+            -1.8362
+          ],
+          [
+            -53.42345,
+            -1.84779
+          ],
+          [
+            -53.38,
+            -1.82
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-coari-branch",
+        "name": "Ramo Coari (mock)",
+        "kind": "secondary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "madeira",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -57.2067,
+            -1.9609
+          ],
+          [
+            -57.10566,
+            -1.94984
+          ],
+          [
+            -57.0035,
+            -1.94531
+          ],
+          [
+            -56.90064,
+            -1.94482
+          ],
+          [
+            -56.79766,
+            -1.94508
+          ],
+          [
+            -56.69514,
+            -1.94263
+          ],
+          [
+            -56.59358,
+            -1.93457
+          ],
+          [
+            -56.50185,
+            -1.8516
+          ],
+          [
+            -56.15088,
+            -1.84373
+          ],
+          [
+            -55.79972,
+            -1.83851
+          ],
+          [
+            -55.44863,
+            -1.83245
+          ],
+          [
+            -55.0978,
+            -1.82224
+          ],
+          [
+            -54.74741,
+            -1.80535
+          ],
+          [
+            -54.39753,
+            -1.78061
+          ],
+          [
+            -54.05,
+            -1.72
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-tefe-branch",
+        "name": "Ligação Tefé (mock)",
+        "kind": "secondary",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "amazonas",
+        "importance": "medium"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.23974,
+            -1.47381
+          ],
+          [
+            -58.18561,
+            -1.49587
+          ],
+          [
+            -58.13272,
+            -1.5235
+          ],
+          [
+            -58.08056,
+            -1.5544
+          ],
+          [
+            -58.02851,
+            -1.58578
+          ],
+          [
+            -57.97592,
+            -1.61475
+          ],
+          [
+            -57.92224,
+            -1.63882
+          ],
+          [
+            -57.86707,
+            -1.65621
+          ],
+          [
+            -57.79553,
+            -1.59248
+          ],
+          [
+            -57.69842,
+            -1.6265
+          ],
+          [
+            -57.60154,
+            -1.66201
+          ],
+          [
+            -57.50444,
+            -1.69606
+          ],
+          [
+            -57.40666,
+            -1.72597
+          ],
+          [
+            -57.30786,
+            -1.74963
+          ],
+          [
+            -57.20787,
+            -1.76593
+          ],
+          [
+            -57.10668,
+            -1.77485
+          ],
+          [
+            -57.00013,
+            -1.75292
+          ],
+          [
+            -56.89004,
+            -1.77678
+          ],
+          [
+            -56.77981,
+            -1.79732
+          ],
+          [
+            -56.66931,
+            -1.81218
+          ],
+          [
+            -56.5585,
+            -1.81986
+          ],
+          [
+            -56.44734,
+            -1.81995
+          ],
+          [
+            -56.33587,
+            -1.8132
+          ],
+          [
+            -56.22418,
+            -1.80139
+          ],
+          [
+            -56.1125,
+            -1.79
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "rio-araguari-branch",
+        "name": "Ramo Araguari (mock)",
+        "kind": "secondary",
+        "sourceType": "synthetic",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "secondary-density",
+        "corridorId": "amazonas",
+        "importance": "low"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -51.03407,
+            -0.38937
+          ],
+          [
+            -51.00398,
+            -0.41874
+          ],
+          [
+            -50.97592,
+            -0.45205
+          ],
+          [
+            -50.9484,
+            -0.48636
+          ],
+          [
+            -50.91977,
+            -0.51857
+          ],
+          [
+            -50.88864,
+            -0.54596
+          ],
+          [
+            -50.85411,
+            -0.5668
+          ],
+          [
+            -50.78738,
+            -0.54141
+          ],
+          [
+            -50.75618,
+            -0.61843
+          ],
+          [
+            -50.7246,
+            -0.6952
+          ],
+          [
+            -50.68984,
+            -0.7698
+          ],
+          [
+            -50.64975,
+            -0.84077
+          ],
+          [
+            -50.60319,
+            -0.90734
+          ],
+          [
+            -50.55034,
+            -0.96963
+          ],
+          [
+            -50.48,
+            -1.02
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+c7295be15ac57eefe71b6a28cf9c3b4c604d251cfa6a2b0d36d2e517f5378aa1  .sharkops/reentry/SO-000/BASELINE.txt
+87ee9735f55950fb173f0007ff47424feca1003e9a3f8e69450fb289049c7507  .sharkops/reentry/SO-000/STAGED.patch
+618e33e61201d057bbec4651270e0961694b2a90549e9bff6cda36c93ad175dc  .sharkops/reentry/SO-000/UNSTAGED.patch

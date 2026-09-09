@@ -1,0 +1,5 @@
+SO-001 Wave 03 applied
+UTC: 2026-08-25T08:23:12Z
+Mode: TSUNAMI
+Core primitives: Badge + Button + Surface + IconButton
+Visual CSS: untouched

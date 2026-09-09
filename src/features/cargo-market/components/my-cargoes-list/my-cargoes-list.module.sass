@@ -1,0 +1,74 @@
+.createdBanner
+  display: flex
+  gap: 0.75rem
+  align-items: flex-start
+  margin-bottom: 1.25rem
+  padding: 1rem 1.25rem
+  border-width: 3px
+
+  p
+    margin: 0
+    font-weight: 600
+
+.emptyCta
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  min-height: 2.75rem
+  margin-top: 0.45rem
+  padding: 0 1rem
+  border-radius: 999px
+  border: 1px solid color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 32%, transparent)
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 18%, transparent), color-mix(in srgb, var(--hy-color-glass-soft, white) 82%, transparent))
+  color: var(--hy-my-cargoes-label-color, var(--hx-text, var(--text)))
+  font-size: 0.86rem
+  font-weight: 800
+
+.filteredEmptyState
+  display: grid
+  justify-items: center
+  gap: 0.45rem
+  margin-top: 0.5rem
+  padding: 1.5rem 1rem 1.75rem
+  border-radius: 1rem
+  border: 1px dashed color-mix(in srgb, var(--hy-color-border-subtle, var(--hx-line-soft, var(--line))) 90%, transparent)
+  background: color-mix(in srgb, var(--hy-color-glass-strong, rgba(255, 255, 255, 0.88)) 92%, transparent)
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 72%, transparent)
+  text-align: center
+
+  h2
+    margin: 0
+    color: var(--hy-my-cargoes-label-color, var(--hx-text, var(--text)))
+    font-size: 0.98rem
+    font-weight: 820
+
+  p
+    margin: 0
+    max-width: 22rem
+    color: var(--hy-my-cargoes-muted-color, var(--hx-muted, var(--muted)))
+    font-size: 0.82rem
+    font-weight: 650
+    line-height: 1.45
+
+.filteredEmptyReset
+  margin-top: 0.35rem
+  min-height: 2.75rem
+  padding: 0 1rem
+  border-radius: 999px
+  border: 1px solid color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 32%, transparent)
+  background: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 12%, var(--hy-color-glass-soft, white))
+  color: var(--hy-my-cargoes-label-color, var(--hx-text, var(--text)))
+  font: inherit
+  font-size: 0.84rem
+  font-weight: 780
+  cursor: pointer
+  touch-action: manipulation
+  -webkit-tap-highlight-color: transparent
+
+  &:focus-visible
+    outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 72%, transparent)
+    outline-offset: 2px
+
+@media (prefers-reduced-motion: reduce)
+  .filteredEmptyReset
+    transition-duration: 1ms

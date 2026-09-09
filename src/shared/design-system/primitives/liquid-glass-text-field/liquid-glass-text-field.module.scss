@@ -1,0 +1,223 @@
+/* Liquid Glass Text Field — Figma Text Field / Field Group, tokenized with local fallbacks. */
+
+.row {
+  --text-field-row-height: 52px;
+  --text-field-padding-x: 16px;
+  --text-field-font-size: 17px;
+  --text-field-line-height: 20px;
+  --text-field-letter-spacing: -0.43px;
+  --text-field-font-weight: 510;
+  --text-field-motion-tap: var(--hydro-motion-control, 120ms);
+  --text-field-motion-focus: 180ms;
+  --text-field-easing: var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+  --text-field-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+  --text-field-label: var(
+    --hydro-color-label-primary,
+    var(--hydro-kit-colors-labels-vibrant-primary, #000000)
+  );
+  --text-field-placeholder: var(
+    --hydro-color-label-tertiary,
+    rgba(60, 60, 67, 0.3)
+  );
+  --text-field-clear: var(--text-field-placeholder);
+  --text-field-caret: var(--text-field-caret-light, #0088ff);
+  --text-field-caret-light: #0088ff;
+  --text-field-caret-dark: #0091ff;
+  --text-field-accent: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #0088ff)
+  );
+  --text-field-input-blend: plus-darker;
+
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  font-family: var(--text-field-font-family);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rowAsLabel {
+  cursor: text;
+}
+
+.label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.contents {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: var(--text-field-row-height);
+  padding: 0 var(--text-field-padding-x);
+  transition: background-color var(--text-field-motion-focus) var(--text-field-easing);
+}
+
+.input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-field-font-size);
+  font-weight: var(--text-field-font-weight);
+  line-height: var(--text-field-line-height);
+  letter-spacing: var(--text-field-letter-spacing);
+  font-style: normal;
+  color: var(--text-field-label);
+  caret-color: var(--text-field-caret);
+  mix-blend-mode: var(--text-field-input-blend);
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::placeholder {
+    color: var(--text-field-placeholder);
+    opacity: 1;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+}
+
+.clearButton {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  min-width: 20px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-field-clear);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: transform var(--text-field-motion-tap) var(--text-field-easing);
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+}
+
+.clearGlyph {
+  width: 17px;
+  height: 17px;
+}
+
+/* Theme: light */
+.row[data-tone='light'] {
+  --text-field-label: #000000;
+  --text-field-placeholder: rgba(60, 60, 67, 0.3);
+  --text-field-clear: rgba(60, 60, 67, 0.3);
+  --text-field-caret: var(--text-field-caret-light);
+  --text-field-input-blend: plus-darker;
+}
+
+/* Theme: dark */
+.row[data-tone='dark'] {
+  --text-field-label: #ffffff;
+  --text-field-placeholder: rgba(235, 235, 245, 0.3);
+  --text-field-clear: rgba(235, 235, 245, 0.3);
+  --text-field-caret: var(--text-field-caret-dark);
+  --text-field-input-blend: plus-lighter;
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .row[data-tone='auto'] {
+  --text-field-label: #000000;
+  --text-field-placeholder: rgba(60, 60, 67, 0.3);
+  --text-field-clear: rgba(60, 60, 67, 0.3);
+  --text-field-caret: var(--text-field-caret-light);
+  --text-field-input-blend: plus-darker;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .row[data-tone='auto'] {
+  --text-field-label: #ffffff;
+  --text-field-placeholder: rgba(235, 235, 245, 0.3);
+  --text-field-clear: rgba(235, 235, 245, 0.3);
+  --text-field-caret: var(--text-field-caret-dark);
+  --text-field-input-blend: plus-lighter;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .row[data-tone='auto'] {
+    --text-field-label: #000000;
+    --text-field-placeholder: rgba(60, 60, 67, 0.3);
+    --text-field-clear: rgba(60, 60, 67, 0.3);
+    --text-field-caret: var(--text-field-caret-light);
+    --text-field-input-blend: plus-darker;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .row[data-tone='auto'] {
+    --text-field-label: #ffffff;
+    --text-field-placeholder: rgba(235, 235, 245, 0.3);
+    --text-field-clear: rgba(235, 235, 245, 0.3);
+    --text-field-caret: var(--text-field-caret-dark);
+    --text-field-input-blend: plus-lighter;
+  }
+}
+
+.row:focus-within .contents {
+  background-color: color-mix(in srgb, var(--text-field-accent) 6%, transparent);
+}
+
+.row:focus-within .input:focus-visible {
+  outline: none;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contents,
+  .clearButton {
+    transition: none;
+  }
+
+  .clearButton:active:not(:disabled) {
+    transform: none;
+  }
+}

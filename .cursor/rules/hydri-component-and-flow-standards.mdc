@@ -1,0 +1,54 @@
+---
+description: Hydri component & flow standards — UI, architecture, tests, hydro context, output
+globs:
+  - "src/**/*.tsx"
+  - "src/**/*.ts"
+  - "src/**/*.sass"
+  - "src/**/*.scss"
+  - "docs/product/**"
+  - "docs/design/**"
+alwaysApply: false
+---
+
+# Hydri component & flow standards
+
+Apply when creating, refactoring, fixing, or reusing components, screens, tokens, or product flows.
+
+## UI & components
+
+- Classify as **UI / styling / component architecture** (read `hydri-ui-architecture.mdc` + `AGENTS-UI-MOBILE-STANDARDS.md`).
+- New paths: **kebab-case** only.
+- New/touched component styles: **`.module.sass`** when safe — no broad global CSS; no `src/app/globals.scss` without explicit task.
+- **Dumb components** — logic in hook/helper/domain/service inside the feature (or component folder).
+- No business rules in `src/shared/` without reuse proof (Zero Redemoinho).
+- Product tokens: **`Hy` / `hy-` / `--hy-*`** — no new `DSV2`, `dev-v2`, `lab-v2`, `legacy`, `old`, `new`, `tmp-*` in production.
+
+## Architecture
+
+- **Feature-based** — `src/app/` thin; domain/UI/hooks/mocks/tests in `src/features/`.
+- SOLID, DRY, KISS, SRP, Clean Code.
+- Preserve App Router, RSC/client boundaries, server actions per Next.js 16 + React 19 best practices.
+- Mock/repository services scoped to feature; preserve **next-intl** and `/[locale]` routes.
+
+## Tests
+
+- Touch logic, filters, permissions, mocks, critical routes, or interaction → add/update unit/integration/E2E when it makes sense.
+- Green tests ≠ pass if naming, styling, scope, or architecture are broken.
+
+## Hydro / government context
+
+- Read product & flow docs before inventing UX (`docs/product/`, `docs/product/flows/`).
+- Consider: hidrovias Norte, Arco Norte, Amazonas-Solimões, Madeira, Tapajós, Tocantins-Araguaia; portos/IP4/TUP/ETC; ANTAQ; Marinha/NORMAM; Ibama; Receita/PF/Anvisa/MAPA/Vigiagro; Conportos; fiscalização; documentos; ETA; calado; seca; sazonalidade; riscos/gargalos.
+- Reuse existing components/tokens before creating new ones.
+
+## Official docs
+
+- New Next.js/React architecture decisions → consult current official docs when online.
+- No internet → state limitation; use local ADRs/project docs — do not fake verification.
+
+## Output
+
+- **Captain closeout first** in the closing section (≤3 lines in human checkpoint); technical proof after.
+- Run mandatory `npm run hydri:gate` before closeout. **Any FAIL → 🔴 max** — never 🟢 or "Pode seguir". **Any WARN → 🟡 max**.
+- Governance-only work on a dirty branch: 🔴 with *"Governança criada, mas branch atual segue bloqueada por FAIL legítimo no gate."* when product FAILs remain.
+- Try automated preview/screenshot before asking the user; if automation fails → gate/closeout **WARN** path, not 🟢.

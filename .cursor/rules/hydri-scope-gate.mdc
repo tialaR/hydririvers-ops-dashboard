@@ -1,0 +1,68 @@
+---
+description: Hydri scope gate — block out-of-scope edits and require autopilot gate before success
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Hydri scope gate
+
+Always on for implementation, audit, refactor, UI, workflow, and validation. This rule applies even when the user does not explicitly mention "Hydri checkpoint" or "chave de ignição".
+
+Before claiming 🟢 on any implementation, run the autopilot gate with the task scope and mode.
+
+## Mandatory command
+
+```bash
+npm run hydri:gate
+```
+
+Scope and mode are **inferred from changed files** when omitted. Override when mixed or ambiguous:
+
+```bash
+npm run hydri:gate -- --scope=<scope> --mode=<mode>
+```
+
+Examples: `--scope=minhas-cargas --mode=mobile`, `--scope=workflow --mode=workflow`, `--scope=cargas --mode=mobile`.
+
+Full spec: `docs/agents/HYDRI-AUTOPILOT-GATE.md`
+
+## Scope boundaries (FAIL without allowlist)
+
+| Scope | Do not touch |
+|-------|----------------|
+| `minhas-cargas` | Public `/cargas`, `public-cargas-*`, shared marketplace card coupling |
+| `cargas` | `/minhas-cargas` owned flows without explicit scope |
+| `workflow` | Any `src/app/`, `src/features/`, `src/shared/`, `messages/` product UI |
+| `mobile` mode | Desktop-only paths (`desktop-cargo-map`, `operations-board` desktop) |
+| `desktop` mode | Mobile shell, BottomNav, `public-cargas-mobile`, owned-cargo mobile |
+
+Use `--allow=path-substring` only with documented justification in proof.
+
+## Success criteria
+
+- **FAIL** from any mandatory gate run → **🔴 Para agora** — fix before human review. **Forbidden:** 🟢, "Pode seguir", "Worked", "concluído", "sucesso", or equivalent success language in Captain closeout or proof.
+- **WARN** from any mandatory gate run → **🟡 Segue com cuidado** max — never 🟢.
+- **PASS** from **all** mandatory gate runs → still run lint, typecheck, check:i18n, build; tests alone are not enough for 🟢.
+
+## Closing protocol (mandatory)
+
+Before Captain closeout, run every gate required for the task (default: `npm run hydri:gate`; governance/workflow tasks also run `--scope=workflow --mode=workflow` when the diff is dirty or mixed).
+
+| Gate output | Max Captain closeout | Max **Result** | Forbidden phrases |
+|-------------|----------------------|----------------|-------------------|
+| Any **FAIL** | 🔴 Para agora | Did not work | "Pode seguir", 🟢, success/concluído |
+| Any **WARN**, no FAIL | 🟡 Segue com cuidado | Partial | 🟢, "Pode seguir" |
+| All **PASS** + validations | 🟢 Pode seguir (if proof sufficient) | Worked | — |
+
+**Governance-only task on a dirty branch:** when rules/docs/scripts were created correctly but the tree still has legitimate product FAILs, close with 🔴 and say: **"Governança criada, mas branch atual segue bloqueada por FAIL legítimo no gate."** Do not claim the branch is ready.
+
+Record gate command(s), scope/mode, and **STATUS FINAL** line in proof **Commands run** / **Objective evidence**.
+
+## Forbidden without explicit user task
+
+- Install dependencies
+- Commit or push
+- Mass rename legacy paths
+- Delete legacy automatically
+- Edit `src/app/globals.scss` for feature work

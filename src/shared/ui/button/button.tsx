@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
+
+import { Button as CoreButton } from '@/shared/design-system/core/button';
 import styles from './button.module.scss';
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
@@ -9,10 +11,10 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function Button({ className = '', variant = 'primary', loading = false, loadingLabel, disabled, children, ...props }: ButtonProps) {
   return (
-    <button
+    <CoreButton
       className={`${styles.button} ${styles[variant]} ${loading ? styles.loading : ''} ${className}`}
-      disabled={disabled || loading}
-      aria-busy={loading}
+      disabled={disabled}
+      busy={loading}
       {...props}
     >
       {loading ? (
@@ -21,6 +23,6 @@ export function Button({ className = '', variant = 'primary', loading = false, l
           <span>{loadingLabel ?? children}</span>
         </span>
       ) : children}
-    </button>
+    </CoreButton>
   );
 }

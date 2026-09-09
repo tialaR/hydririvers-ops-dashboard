@@ -4,7 +4,7 @@
 **Público:** pessoa desenvolvedora **front-end** (Next.js/React) que ainda não domina automação, pirâmide de testes, CI/CD ou padrões **enterprise**.  
 **Tom:** profissional, didático e conservador na afirmação: tudo que estiver **implementado no código** está separado do que é **documentado**, **em evolução** ou **roadmap (◇ futuro)**.
 
-**Última referência interna:** `package.json` **0.8.6**, Next **16.2.4**, React **19**. Números de testes e chaves i18n variam por commit — confirme com `npm run test` e `npm run check:i18n`.
+**Última referência interna:** `package.json` **0.8.7**, Next **16.2.4**, React **19**. Números de testes e chaves i18n variam por commit — confirme com `npm run test` e `npm run check:i18n`.
 
 ---
 
@@ -26,12 +26,12 @@ Corredores com **conectividade irregular**, documentação sensível e **confian
 
 ### Usuários principais (personas do MVP)
 
-| Persona | Papel no produto |
-|---------|------------------|
-| **Embarcador (shipper)** | Publica e acompanha **cargas** e **negociações**. |
-| **Transportador (carrier)** | Explora mercado e participa de **negociações** — com política de **aprovação** distinta (ver §2). |
-| **Admin** | Operação da plataforma, área restrita, cenários de **mock-mode** (ver §2). |
-| **Institucional / governo** | Audiência da rota **governo** — persona de produto; **não** equivale automaticamente a um `role` com os mesmos poderes nas APIs em todos os fluxos. |
+| Persona (produto) | Identificador no código | Papel no produto |
+|-------------------|-------------------------|------------------|
+| **Embarcador** | `role: 'shipper'` | Possui, publica ou gerencia a **carga**; acompanha negociações em que é parte. |
+| **Transportador / Operador** | `role: 'carrier'` | Transporta, opera ou oferece serviço logístico; participa de negociações com política de **aprovação** distinta (ver §2). |
+| **Admin / Plataforma** | `role: 'admin'` | Governança, suporte, auditoria, segurança e **cenários mock/demo** — não é dono da carga nem transportador no fluxo operacional típico (ver §2.3). |
+| **Institucional / governo** | (audiência de rota) | Persona de produto na rota **governo**; **não** equivale automaticamente a um `role` com os mesmos poderes nas APIs em todos os fluxos. |
 
 ### Dores de negócio atacadas (no escopo demonstrável)
 
@@ -45,54 +45,185 @@ Combina **entrega executável** (Next.js, i18n, testes, CI) com **documentação
 
 ---
 
-## 2. Regra de negócio da aplicação
+## 2. Regras de negócio e papéis (atualizado para produto + código)
 
-### Papéis
+Esta seção usa **português de produto** primeiro e indica o **identificador técnico** (`shipper`, `carrier`, `admin`) onde o código e os JSON de mock continuam em inglês — o que evita confusão em PRs e em entrevistas (“o domínio fala português; o contrato técnico é estável”).
 
-**Shipper (embarcador)** — lado da **demanda** de transporte; no cadastro atual tende a nascer **`approved: true`** para habilitar o núcleo do fluxo de publicação no MVP (**decisão de produto** — `docs/SECURITY-PRODUCT-DECISIONS.md`).
+### 2.1 Papéis de negócio (participam da carga)
 
-**Carrier (transportador)** — oferta de **frota** e participação em negociações; no cadastro tende a **`approved: false`** até fluxo futuro de moderação explícito.
+**Embarcador** (`role: 'shipper'`) — quem **possui, publica ou gerencia** a carga no fluxo comercial demonstrável. No cadastro público atual tende a **`approved: true`**, para destravar o núcleo do MVP (ver `docs/SECURITY-PRODUCT-DECISIONS.md`).
 
-**Admin** — operação e QA; **decisão documentada**: no modelo **alvo de produção**, admin **não** deve criar negociações comerciais via `POST /api/negociacoes` — cenários devem usar **`mock-mode`** e governança adequada (`SECURITY-PRODUCT-DECISIONS.md`). O comportamento atual do handler pode ainda permitir edge cases; trate como **alinhamento incremental**.
+**Transportador / Operador** (`role: 'carrier'`) — quem **transporta, opera ou oferece serviço logístico** em torno da carga. Explora mercado, envia propostas e participa de negociações; no cadastro tende a **`approved: false`** até existir moderação explícita (**◇ evolução planejada**).
 
-**Exemplo (conceitual):** shipper publica carga; carrier **não aprovado** recebe `403` ao tentar publicar carga; mensagem de UX deve refletir a política (`user-not-approved` onde aplicável).
+**Permissões parecidas, não idênticas:** o código separa ações por `role`, `approved` e recurso (ex.: `POST /api/cargas` vs `POST /api/negociacoes`). Não assuma paridade total entre embarcador e transportador sem ler `src/features/auth/domain/access-control.ts` e a matriz em `docs/API-SECURITY-AUDIT.md`.
 
-### Domínios principais
+### 2.2 Papéis de plataforma e governança (Admin / Plataforma)
 
-**Cargas** — unidades de demanda (origem, destino, tipo, status, narrativa de risco/documentação sugerida). **Publicação autenticada:** **`commitPublishCargo`** persiste **`ownerId` e `shipperId`** (`user.id`) em **`POST /api/cargas`** e na Server Action do formulário (`useActionState`). Dados só de seed podem divergir.
+**Admin / Plataforma** (`role: 'admin'`) — **não** é participante central do fluxo operacional de carga: **não** é dono da carga nem transportador no modelo mental de produto. Concentra **governança**, **suporte**, **auditoria**, **segurança** e **controle de ambiente mock/demo** (cenários via `POST /api/mock-mode`, área administrativa na UI).
 
-**Embarcações** — frota compatível com rotas/calado; ligadas às negociações quando uma proposta referencia uma embarcação.
+**Negociação (implementado hoje):** `POST /api/negociacoes` exige `role === 'carrier'` e usuário **aprovado**; o embarcador da carga entra como `shipperId` derivado de `cargo.ownerId` — não “abre” negociação por esse POST. `PATCH /api/negociacoes` só permite alteração se `user.id` for **`shipperId` ou `carrierId`** da negociação. Um admin genérico **não** passa nesse teste de participante → **403** (comportamento útil para mostrar separação negócio vs plataforma).
 
-**Negociações** — “deal” entre `shipperId` e `carrierId` com estágios/status. **PATCH** exige que o usuário seja **participante** (`shipperId` ou `carrierId` igual ao usuário da sessão) — regra **implementada** e coberta por testes de integração.
+**◇ Futuro / evolução planejada:** fluxo explícito “suporte/auditoria age com permissão registada” (carimbo, motivo, trilho) — **só documentar como entregue** quando existir rota + testes; até lá é proposta.
 
-**Rastreamento** — timeline de eventos com estados visuais e, quando presente, **`kind`** operacional; há detalhes de modelo em `docs/TRACKING-TIMELINE.md`.
+### 2.3 O que o sistema organiza (com honestidade de MVP)
 
-**Impacto** — camadas de narrativa socioambiental e páginas dedicadas; trate campos derivados como **demonstrativos** até série oficial.
+O produto digital organiza **visibilidade** e **decisão** em torno da operação hidroviária: **mercado de cargas**, **negociação**, **rastreio** (timeline), **impacto** (narrativa e evidências demonstrativas), **documentos** como campos/artefactos de UI e mock — **não** substitui ainda um TMS/ERP completo nem fechamento financeiro real.
 
-### Mock-mode
+**◇ Futuro:** custos integrados a sistemas externos, compliance documental pesado, séries oficiais de impacto — ver `docs/ENTERPRISE-ROADMAP.md` e `docs/DATABASE-PLANNING.md`.
 
-- **`GET /api/mock-mode`**: metadados do cenário ativo e lista de IDs (público no estado auditado — ver matriz em `API-SECURITY-AUDIT.md`).  
-- **`POST /api/mock-mode`**: **somente `role === 'admin'`** autenticado; sem sessão → **401**; não-admin → **403**.  
-- Objetivo: **resetar/reidratar** datasets JSON para cenários de demo e QA.
+### 2.4 Regras de negócio críticas (síntese auditável)
 
-**JSON inválido no POST `/api/mock-mode` — honestidade técnica:**  
-- **Decisão de produto** (`SECURITY-PRODUCT-DECISIONS.md`): parse inválido **não** deve causar **reset silencioso**.  
-- **Código atual** (`src/app/api/mock-mode/route.ts`): `await request.json().catch(() => null)` — se o corpo não for JSON válido, o handler **ainda chama** `resetMockScenario` com payload ausente. Portanto o comportamento **alvo** (ex.: **400** sem reset) é **◇ futuro / gap** até PR dedicado — **não** afirmar que **400** já está implementado.
+#### Regra 1 — Controlo de ambiente mock / demo (`/api/mock-mode`)
 
-### Códigos HTTP esperados (referência da auditoria)
+- **Finalidade:** ferramenta de **desenvolvimento**, **QA** e **demo** — **não** é o canal operacional final de transporte.
+- **`GET /api/mock-mode`:** metadados do cenário e lista de IDs — **público** no estado auditado (risco documentado em `API-SECURITY-AUDIT.md`).
+- **`POST /api/mock-mode`:** apenas sessão **`admin`** pode alterar cenário; `resetMockScenario` em `src/app/api/mock-mode/route.ts`.
+
+| Situação | HTTP | Notas de implementação |
+|----------|------|-------------------------|
+| Sem sessão | **401** | `unauthenticated` |
+| Usuário comum (não admin) | **403** | `forbidden` |
+| Admin, reset desactivado por configuração | **403** | `mock-mode-reset-disabled` |
+| Corpo JSON inválido / não objeto | **400** | `invalid-payload` (`invalid-json`) — `parseMockModeBody` devolve erro **sem** chamar `resetMockScenario` |
+| Admin válido + payload válido + reset permitido | **200** | Resposta com `activeScenario` e contagens |
+
+#### Regra 2 — Telefone como identificador único (mock de usuários)
+
+- **Unicidade:** o cadastro verifica colisão por **`phoneE164`** na lista de usuários mock (`src/app/api/auth/register/route.ts` + `isPhoneE164Taken`).
+- **Telefone já cadastrado:** a API devolve `phone-already-registered`; a **UI** do cadastro redireciona para **login** com `?prefill=` (mesmo número nacional) para seguir **login → OTP**, em vez de forçar novo cadastro completo (`src/features/auth/components/auth-form/auth-form.tsx`).
+- **Campos obrigatórios:** login e cadastro mantêm **todos** os campos e validações Zod existentes; esta documentação **não** os torna opcionais. Ver também `docs/features/auth.md`.
+- **OTP em mock:** o código OTP pode ser exposto na resposta quando `NODE_ENV !== 'production'` ou `HYDRORIVERS_EXPOSE_OTP_CODE=true`; a UI mostra bloco **visível e copiável** na etapa OTP em modo demo — requisito de QA e portfólio.
+
+#### Regra 3 — Negociação por participante
+
+- **`PATCH /api/negociacoes`:** só **embarcador da negociação** (`shipperId`) ou **transportador proponente** (`carrierId`) pode alterar estado.
+- **`POST /api/negociacoes`:** só **transportador / operador** autenticado e **aprovado** cria proposta; o embarcador reage no `PATCH` (aceitar / rejeitar / etc.).
+- **Admin:** não entra como participante por omissão; não há bypass no handler citado.
+
+**◇ Futuro:** papel de auditoria com permissão explícita e trilho — marcar como entregue só com código + testes.
+
+### 2.5 Domínios principais (ligação ao código)
+
+**Cargas** — unidades de demanda. Publicação autenticada: `commitPublishCargo` / `POST /api/cargas` persistem **`ownerId`** e **`shipperId`** (referem-se ao embarcador). Dados só de seed podem divergir.
+
+**Embarcações** — frota; ligadas às negociações quando a proposta referencia embarcação.
+
+**Negociações** — registo com `shipperId` e `carrierId`; regras de participação em §2.4.
+
+**Rastreio** — timeline; modelo em `docs/TRACKING-TIMELINE.md`.
+
+**Impacto** — narrativa e páginas dedicadas; valores **demonstrativos** até existir série oficial.
+
+### 2.6 Diagramas (Mermaid)
+
+#### Fluxo de negócio principal (alto nível)
+
+```mermaid
+flowchart LR
+  subgraph negocio["Negócio de carga (MVP)"]
+    E[Embarcador] -->|publica| C[Carga no mercado]
+    T[Transportador / Operador] -->|cria proposta| N[Negociação]
+    C --> N
+    E -->|aceita / rejeita / cancela| N
+  end
+```
+
+#### Papéis do sistema vs plataforma
+
+```mermaid
+flowchart TB
+  subgraph participantes["Participantes da carga"]
+    emb[Embarcador - código shipper]
+    car[Transportador - código carrier]
+  end
+  subgraph plataforma["Plataforma e governança"]
+    adm[Admin - mock / demo / área restrita]
+  end
+  SYS[App: mercado, rastreio, impacto, UI compartilhada]
+  emb --> SYS
+  car --> SYS
+  adm --> SYS
+```
+
+#### Mock-mode (decisão de autorização)
+
+```mermaid
+flowchart TD
+  A[POST /api/mock-mode] --> B{Sessão válida?}
+  B -->|Não| U401[401 unauthenticated]
+  B -->|Sim| C{role === admin?}
+  C -->|Não| F403[403 forbidden]
+  C -->|Sim| D{Reset permitido por env?}
+  D -->|Não| M403[403 mock-mode-reset-disabled]
+  D -->|Sim| E{JSON corpo válido?}
+  E -->|Não| P400[400 invalid-payload]
+  E -->|Sim| OK[200 - aplica cenário]
+```
+
+#### Telefone, cadastro e OTP (mock)
+
+```mermaid
+sequenceDiagram
+  participant U as Usuário
+  participant UI as AuthForm
+  participant API as APIs /auth/*
+  participant DB as mock users JSON
+  U->>UI: Cadastro ou login
+  UI->>API: phoneE164 + demais campos obrigatórios
+  alt Cadastro e telefone já existe
+    API-->>UI: 409 phone-already-registered
+    UI-->>U: mensagem + redirect login com prefill
+  else Cadastro novo
+    API-->>UI: OTP challenge
+  end
+  alt Ambiente não prod ou HYDRORIVERS_EXPOSE_OTP_CODE
+    API-->>UI: otpCode na resposta
+    UI-->>U: OTP visível e copiável
+  end
+```
+
+#### Autorização em negociação (PATCH)
+
+```mermaid
+flowchart TD
+  P[PATCH /api/negociacoes] --> Auth{Sessão?}
+  Auth -->|Não| E401[401]
+  Auth -->|Sim| Part{user.id == shipperId ou carrierId?}
+  Part -->|Não| E403[403 - não participante]
+  Part -->|Sim| OK[Atualiza negociação]
+```
+
+### 2.7 Códigos HTTP esperados (referência rápida)
 
 | Status | Significado típico neste MVP |
 |--------|-------------------------------|
 | **200** | Sucesso em leitura ou mutação autorizada. |
-| **201** | Criação (ex.: registro, criação de recurso). |
-| **400** | Payload inválido, validação (`invalid-payload` em várias rotas). |
+| **201** | Criação (ex.: registo, criação de recurso). |
+| **400** | Payload inválido (`invalid-payload`, validação). |
 | **401** | Sem sessão onde obrigatória (`unauthenticated`). |
 | **403** | Autenticado mas não autorizado (`forbidden`, papel, não participante, não aprovado). |
-| **404** | Recurso não encontrado (ex.: carga/embarcação inexistente na rota de negociação). |
-| **409** | Conflito (ex.: email duplicado no registro). |
-| **500** | Falha interna rara — **não** é o objetivo documentar catálogo completo; handlers tendem a mapear erros previsíveis para 4xx. |
+| **404** | Recurso não encontrado. |
+| **409** | Conflito (ex.: email ou telefone duplicado no registo). |
+| **500** | Falha interna rara — handlers tendem a mapear erros previsíveis para 4xx. |
 
-**Exemplo:** `PATCH /api/negociacoes` sem sessão → **401**; usuário que não é shipper/carrier da negociação → **403**.
+**Exemplo:** `PATCH /api/negociacoes` sem sessão → **401**; usuário que **não** é embarcador nem transportador daquela negociação → **403**.
+
+### 2.8 Auditoria desta revisão documental (changelog)
+
+| Trecho legado | O que mudou |
+|---------------|-------------|
+| Vocabulário **Shipper / Carrier** como se fosse o produto | Texto de produto em PT (**Embarcador**, **Transportador / Operador**) + coluna de **identificador no código**. |
+| **Admin** misturado com personas operacionais | Seção dedicada **§2.2 Papéis de plataforma e governança**; admin fora do fluxo central de carga. |
+| `POST /api/mock-mode` + JSON inválido descrito como **gap** | Alinhado ao **código atual** (`parseMockModeBody` → **400**, sem reset silencioso). |
+| Registo com telefone duplicado | Documentado redirect **cadastro → login** com `prefill` (comportamento de UI + API `phone-already-registered`). |
+| `messages/en-US.json` na árvore de pastas | Corrigido para **`en-US.json`** (três arquivos: `pt-BR`, `en-US`, `es`). |
+
+### 2.9 O que ainda merece validação contínua no código
+
+- Matriz completa **`docs/API-SECURITY-AUDIT.md`** vs cada novo handler (GETs públicos, risco enterprise).
+- **`approved`** e mensagens `user-not-approved` em todos os fluxos de UI.
+- **`HYDRORIVERS_EXPOSE_OTP_CODE`** em CI/E2E (já referido em `docs/E2E-PLAYWRIGHT.md`).
+- Qualquer **◇ evolução** citada acima — manter marcador até existir PR com testes.
 
 ---
 
@@ -102,7 +233,7 @@ Combina **entrega executável** (Next.js, i18n, testes, CI) com **documentação
 src/
   app/                    # App Router: páginas, layouts, route handlers
     api/                  # APIs REST (Route Handlers) — /api/*
-    [locale]/             # Rotas internacionalizadas (/pt-BR, /en, /es)
+    [locale]/             # Rotas internacionalizadas (/pt-BR, /en-US, /es)
   core/                   # i18n (routing, navegação)
   features/               # Domínios de produto (auth, marketplace, tracking…)
   shared/                 # UI compartilhada, servidor (mock-db, auth helpers…)
@@ -114,7 +245,7 @@ docs/                     # Planejamento, auditoria, roadmap, guias
 .mock-data/               # JSON persistido em dev (mock server-side)
 .github/
   workflows/              # CI (quality gates)
-messages/                 # pt-BR.json, en.json, es.json
+messages/                 # pt-BR.json, en-US.json, es.json
 ```
 
 | Pasta | Responsabilidade | O que costuma ter | Como navegar como dev novo |
@@ -176,7 +307,7 @@ O **`middleware.ts`** na raiz verifica cookie `hydrorivers_session` para paths l
 
 ### i18n e App Router
 
-`next-intl` combina com middleware de locale (`src/core/i18n/routing`) para servir `/pt-BR`, `/en`, `/es`. Trocar idioma **preserva path localizado** via `router.replace` no `LocaleSwitcher`.
+`next-intl` combina com middleware de locale (`src/core/i18n/routing`) para servir `/pt-BR`, `/en-US`, `/es`. Trocar idioma **preserva path localizado** via `router.replace` no `LocaleSwitcher`.
 
 ### Server vs Client Components
 
@@ -274,7 +405,7 @@ Documentação mestra: **`docs/API-SECURITY-AUDIT.md`** — matriz por rota com 
 
 ### Decisões documentadas
 
-Centralizadas em **`docs/SECURITY-PRODUCT-DECISIONS.md`** — incluem `approved`, `ownerId`, admin vs negociações, mock-mode.
+Centralizadas em **`docs/SECURITY-PRODUCT-DECISIONS.md`** — incluem `approved`, `ownerId`, separação **Admin / Plataforma** vs fluxo de negociação, e **mock-mode**.
 
 **Exemplo conceitual de corpo de erro:**
 
@@ -284,82 +415,197 @@ Centralizadas em **`docs/SECURITY-PRODUCT-DECISIONS.md`** — incluem `approved`
 
 ---
 
-## 9. Testes (para quem está começando)
+## 9. Testes — pirâmide e exemplos reais do HydroRivers
 
-### Teste unitário
+A pirâmide combina **rápido feedback** (unitário), **contrato HTTP** (integração) e **confiança de usuário** (E2E). No HydroRivers, os três níveis falam diretamente com o domínio hidroviário: **auth mock**, **telefone único**, **mock-mode (Admin / Plataforma)**, **negociação por participante**, **helpers de rastreio** e **i18n**.
 
-**O que é:** valida **uma unidade pequena** (função pura, helper) **isolada**, sem subir servidor HTTP completo.
+```mermaid
+flowchart TB
+  subgraph e2e["E2E — Playwright"]
+    E2[Fluxo no browser]
+  end
+  subgraph integ["Integração — Vitest + Route Handlers"]
+    INT[APIs /auth, /negociacoes, /mock-mode…]
+  end
+  subgraph unit["Unitário — Vitest"]
+    U[Helpers, schemas, access-control, tracking.helpers…]
+  end
+  E2 --> INT
+  INT --> U
+```
 
-**Quando usar:** lógica repetida, parsers, helpers de domínio — **rápido** e **barato**.
+### 9.1 Testes unitários (`tests/unit/`)
 
-**Exemplos no repo:** arquivos em `tests/unit/**` (auth helpers, mock-db, tradução de conteúdo mock, timeline helpers).
+**O que são:** funções, helpers e componentes **isolados** — sem subir servidor HTTP completo; execução em milissegundos.
 
-### Teste de integração (API)
+**Para que servem:** travar regras que, se quebrassem, gerariam bugs caros em operações (papéis, validação, inferência de eventos de rastreio).
 
-**O que é:** chama **Route Handlers** reais em Node com **requests** simulados; valida status, corpo JSON e regras como participante em `PATCH`.
+**Exemplos reais no repositório**
 
-**Por que APIs usam integração:** reproduz o contrato HTTP **sem** browser.
+| Arquivo | O que protege |
+|----------|----------------|
+| `tests/unit/features/marketplace/tracking.helpers.test.ts` | `resolveOperationalTrackingKind` e `OPERATIONAL_TRACKING_EVENT_KINDS` — mapa mental do rastreio operacional. |
+| `tests/unit/features/auth/access-control.test.ts` | Permissões por papel (`shipper` / `carrier` / `admin`) alinhadas a `access-control.ts`. |
+| `tests/unit/features/auth/auth-schemas.test.ts` | Validação de login/cadastro (campos obrigatórios). |
+| `tests/unit/shared/i18n/mock-content.test.ts` | Conteúdo mock e convenções de tradução. |
+| `tests/unit/shared/server/mock-db.test.ts` | Leitura/escrita do mock server-side. |
 
-**Exemplos:** `tests/integration/api/` — `auth.login`, `auth.profile`, `cargas.get/post`, `negociacoes.patch/post`, `mock-mode.post`, `rastreio.get`, etc.
+### 9.2 Testes de integração (`tests/integration/api/`)
 
-### Teste E2E (Playwright)
+**O que são:** pedidos HTTP simulados aos **Route Handlers** reais; validam **status**, corpo JSON e **autorização** (401/403/409).
 
-**O que é:** abre **Chrome** (no projeto: Chromium), clica e navega como usuário.
+**Por que importam:** reproduzem o contrato que o front chama com `fetch` — sem abrir o browser.
 
-**Por que Playwright:** estável, API moderna, integra com `webServer` no config.
+**Exemplos reais no repositório**
 
-**O que cobre hoje:** login OTP em modo demo, redirects de rotas privadas, sessão em `/perfil`, logout via rota, troca de idioma em home e com sessão — ver inventário em `docs/E2E-PLAYWRIGHT.md`.
+| Arquivo | Cenário de produto coberto |
+|----------|----------------------------|
+| `tests/integration/api/auth.login.post.test.ts` | Login + desafio **OTP** (incl. exposição do código em ambiente de teste quando configurado). |
+| `tests/integration/api/auth.register.post.test.ts` | Cadastro; colisão **`phone-already-registered`** (telefone como identificador único no mock). |
+| `tests/integration/api/mock-mode.post.test.ts` | **Mock-mode**: só **Admin / Plataforma** altera cenário; 401/403/400 conforme sessão e corpo. |
+| `tests/integration/api/mock-mode.login-as.post.test.ts` | Fluxo auxiliar de QA / `login-as` (ambiente controlado). |
+| `tests/integration/api/negociacoes.patch.test.ts` | **Negociação por participante** — só `shipperId` ou `carrierId` da negociação pode `PATCH`. |
+| `tests/integration/api/negociacoes.post.test.ts` | Criação de proposta por transportador (`role: 'carrier'`) com regras de aprovação. |
+| `tests/integration/api/rastreio.get.test.ts` | Leitura de timeline/rastreio na API. |
 
-**Limitações:** exige `npx playwright install`, `next build` lento no primeiro ciclo, OTP depende de `HYDRORIVERS_EXPOSE_OTP_CODE` no servidor de teste, header mobile não expõe logout da mesma forma que desktop (por isso há teste via `/logout`).
+### 9.3 Testes E2E (`tests/e2e/`)
 
-### Sobre o “número de testes” (55 → 72)
+**O que são:** Playwright (Chromium) executa fluxos como um usuário: navegação, formulários, cookies de sessão.
 
-O repositório **não obriga** histórico público “55 testes” em um artefato versionado — use o contador **`npm run test`** no seu commit (no ambiente desta documentação, a suíte Vitest agrupava **72** testes em **17** arquivos). **Por que mais testes aumentam confiança:** cada teste de integração nas APIs reduz regressões em **401/403/404** e contratos JSON sem precisar clicar na UI.
+**Exemplos reais**
 
-### Como rodar
+| Spec | Foco |
+|------|------|
+| `tests/e2e/auth.login.spec.ts` | Login e **OTP mock** visível no fluxo de demo. |
+| `tests/e2e/admin-mock-mode.spec.ts` | Superfície **mock-mode** com papel admin. |
+| `tests/e2e/negociacoes.spec.ts` | Jornada de negociações na UI. |
+| `tests/e2e/locale.switch.spec.ts` | Troca de idioma (`pt-BR` / `en-US` / `es`). |
+
+**Limitações práticas:** `npx playwright install chromium`; primeiro `next build` pode ser lento; variáveis como `HYDRORIVERS_EXPOSE_OTP_CODE` no servidor de teste — ver `docs/E2E-PLAYWRIGHT.md`.
+
+**Evolução planejada:** job dedicado no GitHub Actions a correr `npm run test:e2e` em cada PR (hoje **não** está nos workflows listados em `docs/CI-QUALITY-GATES.md`).
+
+### 9.4 Como rodar (comandos)
 
 ```bash
-npm run test                 # Vitest (unit + integration conforme vitest.config.ts)
+npm run test                 # Vitest: unit + integration (vitest.config.ts)
 npm run test:unit            # Só tests/unit
 npm run test:integration     # Só tests/integration
-npm run test:e2e             # Playwright (após playwright install)
+npm run test:mock-mode       # Subconjunto mock-mode / QA (também no CI principal)
+npx playwright install chromium
+npm run test:e2e             # Playwright
 ```
+
+Use `npm run test` no seu commit para ver a **contagem atual** de testes — não dependas de números congelados em Markdown.
 
 ---
 
-## 10. CI/CD e quality gates
+## 10. CI/CD e quality gates (GitHub Actions)
 
-### O que é CI
+**CI** aqui significa: a cada **push** ou **pull request**, o GitHub executa workflows que repetem os mesmos comandos que um humano correria antes de aprovar código — reduz regressões em **lint**, **tipos**, **i18n**, **testes** e **build**.
 
-**Integração contínua:** a cada push/PR, o repositório é verificado de forma **automática** (instalar deps, rodar checks).
+**CD (deploy)** para ambientes externos (ex.: Vercel) **não** está descrito como pipeline automática neste repositório; o foco documentado é **qualidade reproduzível** antes do merge.
 
-### O que é CD
+### 10.1 Workflows implementados
 
-**Entrega contínua / deployment** — publicar em ambiente (Vercel, etc.). Neste repositório o workflow documentado cobre **quality gates**, **não** descreve pipeline completa de deploy nem promoção entre ambientes.
+| Workflow | Arquivo | Quando corre | Destaque |
+|----------|----------|--------------|----------|
+| **CI** | `.github/workflows/ci.yml` | **Push** (qualquer branch) e **pull_request** | Inclui **`npm run build`**, **`npm run test:mock-mode`**. |
+| **PR Quality** | `.github/workflows/pr-quality.yml` | **pull_request** apenas | Corre **`npm run verify`** após onboarding e auditoria de docs (sem `build` no job). |
 
-### O implementado agora
+**Concorrência:** ambos usam `concurrency` + `cancel-in-progress` para não acumular jobs duplicados no mesmo ref.
 
-- **`.github/workflows/quality-gates.yml`** — job único em `ubuntu-latest`, Node **22**, `npm ci`, depois scripts de qualidade.  
-- **Não implementado** no mesmo arquivo: E2E, build de produção como gate obrigatório, deploy automático.
+**Node:** **22** (`ubuntu-latest`), instalação com **`npm ci`**.
 
-### Fluxo do workflow
+### 10.2 Pipeline CI principal (`ci.yml`, job `quality`)
 
-**Gatilhos:** `push`, `pull_request`.  
-**Concorrência:** cancela runs redundantes do mesmo PR/branch.
+| Ordem | Step / comando | Função |
+|------|----------------|--------|
+| 1 | `npm run check:onboarding` | Artefatos mínimos de onboarding não desapareceram. |
+| 2 | `npm run audit:docs` | `scripts/audit-docs.mjs` — documentação mínima alinhada. |
+| 3 | `npm run lint` | ESLint (`eslint.config.mjs`, Next core-web-vitals). |
+| 4 | `npm run typecheck` | `tsc --noEmit` — TypeScript sem emitir JS. |
+| 5 | `npm run check:i18n` | Paridade de chaves entre `pt-BR`, `en-US`, `es`. |
+| 6 | `npm run test` | Suíte Vitest completa (unit + integration). |
+| 7 | `npm run test:mock-mode` | Regressão **mock-mode**, cenários mock e APIs relacionadas. |
+| 8 | `npm run build` | `next build` — valida bundle de produção. |
 
-**Comandos executados (em ordem):**
+### 10.3 Pipeline PR Quality (`pr-quality.yml`, job `validate`)
 
-| Comando | Por que existe |
-|---------|----------------|
-| `npm run check:onboarding` | Garante que docs/scripts mínimos do onboarding não sumiram (`ONBOARDING-PROGRESS-CHECK.md`). |
-| `npm run lint` | Padrão de código e classes de problemas estáticos. |
-| `npm run typecheck` | TypeScript sem emit — erros de tipo antes do build. |
-| `npm run check:i18n` | **Paridade** de chaves entre `pt-BR`, `en`, `es`. |
-| `npm run test` | Regressão Vitest. |
+| Ordem | Comando | Nota |
+|------|---------|------|
+| 1–2 | `check:onboarding`, `audit:docs` | Igual ao CI. |
+| 3 | `npm run verify` | Agrega `lint` → `typecheck` → `check:i18n` → `test` → `test:mock-mode` (ver `package.json`). **Não** inclui `build`. |
 
-**Investigar falhas:** abrir **Actions** no GitHub, expandir o step que falhou, reproduzir localmente mesmo commit — `CI-QUALITY-GATES.md`.
+**Por que rodar `build` localmente antes do merge:** o job de PR **não** executa `next build`; o push ao **CI** completo sim. Para evitar surpresa, rode `npm run build` na máquina ou confie no run de CI após o push.
 
-**Valor de portfólio:** mostra que o projeto entende **gates** reproduzíveis — tópico comum em entrevistas sênior.
+### 10.4 Diagrama — CI principal (`ci.yml`)
+
+```mermaid
+flowchart LR
+  subgraph ci["ci.yml — job quality"]
+    A[npm ci] --> B[check:onboarding]
+    B --> C[audit:docs]
+    C --> D[lint]
+    D --> E[typecheck]
+    E --> F[check:i18n]
+    F --> G[test]
+    G --> H[test:mock-mode]
+    H --> I[build]
+  end
+```
+
+### 10.5 Diagrama — PR Quality (`pr-quality.yml`)
+
+```mermaid
+flowchart TB
+  subgraph prq["pr-quality.yml — job validate"]
+    P1[npm ci] --> P2[check:onboarding]
+    P2 --> P3[audit:docs]
+    P3 --> V[verify]
+    subgraph v["verify (package.json)"]
+      V1[lint] --> V2[typecheck]
+      V2 --> V3[check:i18n]
+      V3 --> V4[test]
+      V4 --> V5[test:mock-mode]
+    end
+    V --> v
+  end
+```
+
+### 10.6 Espelho local do CI (comandos)
+
+```bash
+npm ci
+npm run check:onboarding
+npm run audit:docs
+npm run lint
+npm run typecheck
+npm run check:i18n
+npm run test
+npm run test:mock-mode
+npm run build
+```
+
+### 10.7 Espelho do PR Quality (sem `build`)
+
+```bash
+npm ci
+npm run check:onboarding
+npm run audit:docs
+npm run verify
+```
+
+**Investigar falhas:** GitHub → **Actions** → workflow **CI** ou **PR Quality** → expandir o step vermelho — detalhes também em `docs/CI-QUALITY-GATES.md`.
+
+### 10.8 Legado corrigido nesta documentação (testes · CI)
+
+| Antes (legado no Deep Dive) | Depois (alinhado ao repo) |
+|-----------------------------|---------------------------|
+| Referência a `quality-gates.yml` inexistente | Workflows reais: **`ci.yml`** e **`pr-quality.yml`**. |
+| CI sem `build` / sem `test:mock-mode` | **`ci.yml`** inclui **`npm run build`** e **`npm run test:mock-mode`**. |
+| PR igual ao push | **`pr-quality.yml`** corre **`verify`** (sem build explícito no job). |
+| E2E omitido sem contexto | Clarificado como **Evolução planejada** em Actions; localmente `npm run test:e2e`. |
 
 ---
 
@@ -387,15 +633,52 @@ npm run test:e2e             # Playwright (após playwright install)
 
 ## 13. Internacionalização (i18n)
 
-**Por que três idiomas:** alcance regional e demonstração de **produto internacional** desde o MVP (`pt-BR`, `en`, `es`).
+O HydroRivers nasce **regional**: três locales ativos — **`pt-BR`**, **`en-US`**, **`es`** — definidos em `src/core/i18n/routing.ts` e refletidos nas URLs **`/pt-BR`**, **`/en-US`**, **`/es`**.
 
-**next-intl:** mensagens em `messages/*.json`; layouts carregam mensagens por locale; cliente consome via `useTranslations`.
+### 13.1 Onde vivem as traduções
 
-**`npm run check:i18n`:** falha se **qualquer locale** estiver sem uma chave presente nos outros — evita tela com fallback vazio em um idioma.
+| Locale | Arquivo de mensagens |
+|--------|----------------------|
+| `pt-BR` | `messages/pt-BR.json` |
+| `en-US` | `messages/en-US.json` |
+| `es` | `messages/es.json` |
 
-**Sobre “N keys aligned”:** o número **exato** muda quando se adicionam chaves — o script imprime algo como **“i18n ok: N keys aligned…”**. Trate **N** como valor atual do terminal, não como constante eterna (ex.: no estado recente do projeto surgiram **~528** chaves; confirme com o comando).
+O runtime usa **next-intl**: layouts carregam mensagens por locale; componentes cliente usam `useTranslations`. Há também testes de conteúdo mock relacionados a i18n (ex.: `tests/unit/shared/i18n/mock-content.test.ts`).
 
-**Adicionar chave com segurança:** editar **os três** JSON com a mesma chave; rodar **`check:i18n`** antes do PR.
+### 13.2 `npm run check:i18n` — o que o script faz
+
+O comando executa `scripts/check-i18n.mjs`, que:
+
+1. **Achatamento** de chaves aninhadas em cada JSON (ex.: `auth.loginTitle`).
+2. Usa **`pt-BR` como base** de referência.
+3. Compara **`en-US`** e **`es`** com essa base: falha se existirem chaves **em falta** (*Missing*) ou **a mais** (*Extra*) em qualquer um dos dois.
+
+Saída típica de sucesso: `i18n ok: N keys aligned in pt-BR, en-US, es` — o **N** muda com o tempo; confirme sempre no terminal.
+
+### 13.3 Por que isto protege o produto
+
+- **Evita regressão silenciosa:** um copy novo só em português não “passa” no CI — o revisor e o utilizador de `en-US` / `es` não ficam com labels vazios ou com fallback estranho.
+- **Suporta operações hidroviárias em contexto local:** termos de carga, negociação e impacto precisam ser **coerentes** entre idiomas, não só traduzidos à pressa numa língua.
+- **Integra com a pirâmide de testes:** o check é **rápido** e roda em **CI** (`ci.yml`) e dentro de **`verify`** (`pr-quality.yml`), antes de testes mais pesados.
+
+### 13.4 Fluxo recomendado ao adicionar texto de UI
+
+```mermaid
+flowchart LR
+  A[Editar pt-BR.json] --> B[Espelhar chave em en-US.json]
+  B --> C[Espelhar chave em es.json]
+  C --> D[npm run check:i18n]
+  D --> E{OK?}
+  E -->|Sim| F[Commit + PR para dev]
+  E -->|Não| G[Corrigir Missing/Extra]
+  G --> D
+```
+
+### 13.5 Boas práticas
+
+- Alterar **sempre os três** arquivos na mesma PR (a menos que a alteração seja só remoção coordenada).
+- Rodar `npm run check:i18n` **antes** do push — reproduz o mesmo gate do GitHub.
+- Para texto hardcoded na UI, ver também `npm run check:i18n:hardcoded` (script separado; **Evolução planejada:** integração opcional como gate obrigatório se o time decidir).
 
 ---
 
@@ -403,9 +686,9 @@ npm run test:e2e             # Playwright (após playwright install)
 
 ### O que foi automatizado (repositório)
 
-- **`check:onboarding`** — presença de artefatos.  
-- **CI quality gates** — lint, types, i18n, Vitest.  
-- **Scripts npm** padronizados em `package.json`.
+- **`check:onboarding`** — presença de artefatos mínimos.  
+- **GitHub Actions** — workflows **`ci.yml`** (push + PR: lint, typecheck, `check:i18n`, `test`, `test:mock-mode`, **`build`**) e **`pr-quality.yml`** (PR: onboarding, `audit:docs`, **`verify`**).  
+- **Scripts npm** padronizados em `package.json` (`verify`, `test:mock-mode`, etc.).
 
 ### Ferramentas (Cursor, Composer, Codex, GPT, Opus…)
 
@@ -437,44 +720,90 @@ Ordem sugerida e gates **A1–A10** estão no próprio `AGENTS-ROADMAP.md`.
 
 ---
 
-## 15. Branches — tabela orientativa
+## 15. Fluxo Git — `dev`, `main`, PRs e convenções
 
-Convenções típicas deste repositório (também em `docs/REPO-CLEANUP.md`): prefixos `docs/`, `feature/`, `security/`, `test/`, `refactor/`, `ci/`, `tooling/`, `chore/`; sufixos **`v2`–`v4`** para **iterações** do mesmo tema. **`main`** costuma ser a linha estável; **`dev`** aparece como integração em equipes que preferem PRs para `dev` antes de `main` — confirme a política do time no remoto.
+Este projeto assume **integração contínua em branch**: o trabalho do dia entra em **`dev`** por **pull request**; **`main`** representa a linha **mais estável** (releases ou promoção quando o time integra `dev` → `main`). Detalhes adicionais de higiene: `docs/REPO-CLEANUP.md`.
 
-A tabela abaixo é **ilustrativa** (objetivo inferido pelo nome da branch); **não** substitui `git log` nem tickets.
+### 15.1 Ramos de longa duração
 
-| Branch (exemplos reais / pedido) | Objetivo provável | Tipo | Resultado esperado ao merge |
+| Ramo | Papel típico |
+|------|----------------|
+| **`dev`** | **Branch base de integração** — aqui convergem PRs de features, fixes e docs. É o alvo **predefinido** para novos PRs. |
+| **`main`** | Histórico **estável** / release; recebe merges a partir de `dev` quando o time faz promoção de linha. |
+
+### 15.2 Pull requests e merge
+
+- **Abrir PR para `dev`** (não diretamente para `main`, salvo política explícita do time em situação excecional).  
+- **Merge preferencial:** **squash merge** — um commit único no `dev` por PR, mensagem clara (alinhada a **Conventional Commits**), histórico legível para portfólio e auditoria.  
+- **Rebase ou merge commit** só se o time documentar excecão — o padrão descrito aqui é **squash**.
+
+### 15.3 Conventional Branches (nomes de branch)
+
+Prefixo + descrição curta em **kebab-case** (espelhando os tipos de **Conventional Commits**: `feat`, `fix`, `docs`, `chore`, `test`…).
+
+| Tipo | Exemplo de branch | Uso |
+|------|-------------------|-----|
+| Feature | `feat/auth-login-prefill` | Nova capacidade de produto. |
+| Correção | `fix/api-negociacoes-403` | Bug ou regressão. |
+| Documentação | `docs/deep-dive-ci-i18n` | Só docs. |
+| Manutenção | `chore/deps-bump` | Tooling, deps sem mudança de comportamento. |
+| Testes | `test/negociacoes-patch-coverage` | Só testes. |
+
+### 15.4 Conventional Commits (mensagens)
+
+Formato [`tipo(escopo opcional): descrição`](https://www.conventionalcommits.org/) — exemplos **de estilo** (mensagens fictícias):
+
+```text
+feat(auth): redirect register to login when phone exists
+fix(i18n): add missing negotiation keys in es.json
+docs(deep-dive): document ci.yml and pr-quality.yml
+test(api): extend mock-mode POST invalid JSON case
+chore(ci): align timeout with quality job
+```
+
+### 15.5 Diagrama — fluxo Git sugerido
+
+```mermaid
+flowchart LR
+  FB[Branch feat/fix/docs a partir de dev atualizado]
+  FB --> PR[Pull Request para dev]
+  PR --> RV[Revisão + CI verde]
+  RV --> SQ[Squash merge em dev]
+  SQ --> DEV[dev atualizado]
+  DEV --> REL[Evolução planejada: promoção dev para main em release]
+```
+
+### 15.6 Tabela orientativa de branches (ilustrativa)
+
+A tabela abaixo é **ilustrativa** (objetivo inferido pelo nome); **não** substitui `git log` nem tickets.
+
+| Branch (exemplos) | Objetivo provável | Tipo | Resultado esperado ao merge |
 |----------------------------------|-------------------|------|-----------------------------|
 | `security/api-audit` | Auditoria de APIs | docs/security | Matriz em `API-SECURITY-AUDIT.md` |
-| `docs/security-product-decisions` | Decisões shipper/carrier/admin | docs | `SECURITY-PRODUCT-DECISIONS.md` |
-| `security/api-error-standards` | Padronização de erros / UX API | security | Handlers + testes (fase do PR) |
+| `docs/security-product-decisions` | Decisões embarcador / transportador / Admin plataforma | docs | `SECURITY-PRODUCT-DECISIONS.md` |
+| `feat/tracking-map-helpers` | Melhoria em helpers de rastreio | feature | Código + `tracking.helpers.test.ts` |
 | `test/authz-coverage` | Cobertura de autorização | test | Mais asserts em integração |
 | `refactor/repository-boundary` | Boundary / repositório | refactor | `GET /api/cargas` via repo (piloto) |
 | `docs/database-planning` | Modelo dados futuro | docs | `DATABASE-PLANNING.md` |
-| `docs/documents-module` | Módulo documentos ◇ | docs | Especificação |
-| `feature/tracking-timeline` | Timeline operacional | feature | UI + tipos |
-| `docs/executive-dashboard` | Dashboard executivo ◇ | docs | `EXECUTIVE-DASHBOARD.md` |
-| `docs/portfolio-case` | Case de portfólio | docs | Narrativa honesta |
-| `docs/ai-roadmap` | Princípios IA assistiva | docs | `AI-ROADMAP.md` |
-| `docs/agents-roadmap` | Agentes nomeados ◇ | docs | `AGENTS-ROADMAP.md` |
-| `docs/enterprise-roadmap` | Índice estratégico | docs | `ENTERPRISE-ROADMAP.md` |
-| `docs/developer-ai-onboarding` | Onboarding dev | docs | `DEVELOPER-AI-ONBOARDING.md` |
-| `tooling/onboarding-progress-check` | Script de progresso | tooling | `check:onboarding` |
-| `feature/onboarding-dashboard` | UI jornada | feature | Páginas/feature |
-| `ci/quality-gates-v4` | CI | ci | Workflow Actions |
-| `chore/cleanup-branches-v4` | Higiene git | chore | Sem mudança de produto necessária |
-| `docs/readme-navigation-v4` | README | docs | Entrada do repo |
-| `release/project-baseline-v4` | Baseline release docs | release | Notas / baseline |
-| `security/env-hardening-v4` | Env / secrets | security | `ENVIRONMENT.md`, `.env.example` |
-| `test/e2e-auth-flows-v4` | E2E auth | test | Specs Playwright |
+| `ci/pr-quality-timeout` | Ajuste de CI | ci | Workflows em `.github/workflows/` |
 
-**Por que fase/branch separada:** PRs pequenos revisáveis; histórico git legível; menos risco de misturar “docs” com “breaking API”.
+**Por que branch por tema:** PRs pequenos revisáveis; histórico git legível; menos risco de misturar “docs” com “breaking API”.
+
+### 15.7 Legado corrigido nesta documentação (Git · i18n)
+
+| Antes (legado) | Depois |
+|----------------|--------|
+| “Confirme política do remoto” sem nomear `dev` | **`dev`** como **branch base** explícita para PRs; **`main`** como linha estável. |
+| Sem menção a squash | **Squash merge** como preferência documentada. |
+| Sem exemplos Conventional Commits / Branches | Secções **15.3** e **15.4** com exemplos. |
+| `check:i18n` descrito só como “paridade genérica” | **§13.2** explica **pt-BR como base** e falhas *Missing* / *Extra* (fiel a `scripts/check-i18n.mjs`). |
+| Referência implícita a `en` sem `-US` | Locales e arquivos alinhados a **`en-US`** em todo o fluxo. |
 
 ---
 
 ## 16. Tags e releases
 
-**Tag Git** — marcador imutável em um commit (`v0.1.0`). Facilita **checkout** de baseline e **notas de release** (`docs/RELEASE-NOTES-v0.1.0.md` descreve **baseline documental**; **`package.json`** pode permanecer em **0.8.6** — são identificadores diferentes).
+**Tag Git** — marcador imutável em um commit (`v0.1.0`). Facilita **checkout** de baseline e **notas de release** (`docs/RELEASE-NOTES-v0.1.0.md` descreve **baseline documental**; **`package.json`** segue a linha de releases do app — ex.: **0.8.7** — são identificadores diferentes).
 
 **Portfolio:** tags mostram **marcos** e disciplina de versionamento.
 
@@ -506,7 +835,8 @@ A tabela abaixo é **ilustrativa** (objetivo inferido pelo nome da branch); **n�
 | `docs/ENVIRONMENT.md` | Variáveis / ambientes | Setup local | Todos | Segurança env |
 | `docs/REPO-CLEANUP.md` | Branches | Higiene git | Mantenedores | Dívida git |
 | `docs/RELEASE-NOTES-v0.1.0.md` | Baseline | Marco release | Comunicação | Congelar escopo |
-| **`docs/HYDRORIVERS-DEEP-DIVE.md`** (**este arquivo**) | Síntese única técnico–produto | Depois do README | Dev FE / onboarding | Mapa único até os outros docs |
+| `docs/product/HYDRORIVERS-DEEP-DIVE-VERSAO-REAL-ATUALIZADA.md` | Storytelling de produto alinhado ao código (papéis, auth mock, radar, mobile) | Portfólio / PM / entrevista | Narrativa honesta + Mermaid |
+| **`docs/HYDRORIVERS-DEEP-DIVE.md`** (**este arquivo**) | Testes (unit / integração / E2E), CI (`ci.yml`, `pr-quality`), i18n (`pt-BR` / `en-US` / `es`), Git (`dev`, squash, Conventional) | Depois do `README` | Dev FE / onboarding | Mapa único + narrativa de portfólio |
 | `docs/ARCHITECTURE.md` | Arquitetura + fluxo mock + personas estendidas | Antes de desenhar feature | Produto / arquiteto | Diagrama mental + mermaid opcional |
 | `docs/MOCK-MODE-USE-CASES.md` | Cenários globais de mock (`empty-state`, `market-active`, …) | Ao depurar dados | QA / dev | Como trocar dataset via `/api/mock-mode` |
 | `docs/QA-TEST-MATRIX.md` | Contas demo e cenários manuais de QA | Antes de release interno | QA | Checklist exploratória (não substitui automação) |
@@ -525,7 +855,7 @@ Uma ordem **racional** para um MVP com risco em **dados e segurança**:
 2. **Testes** — integração nas APIs críticas.  
 3. **Hardening** — documentar riscos antes de “polir” UI.  
 4. **Documentação** — auditoria + decisões explícitas.  
-5. **Decisões de produto** — `approved`, admin/negociação.  
+5. **Decisões de produto** — `approved`, papéis de negócio vs **Admin / Plataforma**, negociação e mock-mode.  
 6. **Onboarding** — reduzir tempo até primeiro PR bom.  
 7. **Gamificação leve** — `check:onboarding`.  
 8. **Tooling** — scripts npm consistentes.  
@@ -541,7 +871,7 @@ Uma ordem **racional** para um MVP com risco em **dados e segurança**:
 
 ### Pitch (~30 segundos)
 
-“HydroRivers é um MVP web de **operações hidroviárias** em Next.js: marketplace, negociações, rastreio e impacto, com **três idiomas** e **dados mock server-side**. O repositório inclui **auditoria de API**, **decisões de produto** escritas, **testes de integração** nas rotas sensíveis, **E2E** para login e guards de rota, e **CI** com lint, TypeScript e i18n.”
+“HydroRivers é um MVP web de **operações hidroviárias** em Next.js 16 (App Router) e React 19: marketplace, negociações, rastreio e impacto, com **`pt-BR` / `en-US` / `es`** e **dados mock server-side**. O repositório inclui **auditoria de API**, **decisões de produto**, **Vitest** (unit + integração em APIs), **E2E** Playwright para fluxos críticos, e **GitHub Actions** com lint, TypeScript, `check:i18n`, testes, `test:mock-mode` e **build**.”
 
 ### Técnica (~2 minutos)
 
@@ -565,44 +895,74 @@ Pirâmide: Vitest em integração para contratos; Playwright para fluxo humano; 
 |----------|----------------------|
 | “É produção?” | MVP demonstrável; GETs amplios são **risco documentado**. |
 | “Onde está o banco?” | `.mock-data` hoje; Postgres é **◇ planejado**. |
-| “Por que mock-mode?” | Cenários de demo/QA; **só admin** no POST. |
+| “Por que mock-mode?” | Cenários de demo/QA; **POST** só **Admin / Plataforma** (`role: 'admin'`). |
 | “IA no app?” | **Não** em runtime; roadmap com gates em `AI-ROADMAP.md`. |
 
 ---
 
 ## 20. Como um dev novo deve começar
 
-1. **Instalar:** `npm install` ou `npm ci`.  
-2. **Rodar:** `npm run dev` → `http://localhost:3000/pt-BR`.  
-3. **Testes:** `npm run test` → depois explore `test:unit` / `test:integration`.  
-4. **Ler em ordem:** `README.md` → `DEVELOPER-AI-ONBOARDING.md` → `ENTERPRISE-ROADMAP.md` → `API-SECURITY-AUDIT.md`.  
-5. **Primeira issue:** bom candidato é fechar **decisão vs código** em `POST /api/mock-mode` (JSON inválido) **ou** ampliar teste de integração na matriz da auditoria.  
-6. **Branch:** `git checkout -b fix/algo-ou-docs/algo`.  
-7. **Prompt:** respeitar `AGENTS.md` e regras do Cursor.  
-8. **Validar:** lint, typecheck, check:i18n, test; se tocar fluxo UI, considerar E2E.  
-9. **Commit:** mensagem clara (Conventional Commits se o time usar).  
-10. **Merge:** PR pequeno para `dev` ou `main` conforme política do remoto.
+1. **Instalar:** `npm install` (dia a dia) ou `npm ci` (espelhar CI).  
+2. **Rodar:** `npm run dev` → `http://localhost:3000/pt-BR` (ou `/en-US`, `/es`).  
+3. **Testes locais:** `npm run test` → depois `npm run test:unit` / `npm run test:integration` / `npm run test:mock-mode`; UI crítica: `npm run test:e2e` (após `npx playwright install chromium`).  
+4. **Ler em ordem:** `README.md` → `DEVELOPER-AI-ONBOARDING.md` → `ENTERPRISE-ROADMAP.md` → `API-SECURITY-AUDIT.md` → **`docs/CI-QUALITY-GATES.md`**.  
+5. **Primeira issue:** ampliar integração na matriz da `API-SECURITY-AUDIT.md`, cobrir um edge de auth/negociação, ou fechar gap em `SECURITY-PRODUCT-DECISIONS.md` — **um PR, um tema**.  
+6. **Sincronizar `dev`:** `git fetch origin && git checkout dev && git pull origin dev`.  
+7. **Branch (Conventional Branches):** `git checkout -b feat/minha-feature` ou `fix/api-xyz` (kebab-case).  
+8. **Commits ([Conventional Commits](https://www.conventionalcommits.org/)):** `feat(negociacoes): descrever mudança curta`.  
+9. **Validar antes do PR:** `npm run verify` (espelha PR Quality) **e** `npm run build` (espelha o job completo do `ci.yml`); com assistentes de código, seguir **`AGENTS.md`**.  
+10. **Abrir PR para `dev`** — após revisão e CI verde, **squash merge** preferencial. Promoção `dev` → `main` segue ritmo do time (**Evolução planejada:** documentar release checklist se ainda não existir no teu fork).
 
 ---
 
-## 21. Exemplos de comandos
+## 21. Exemplos de comandos (dev + CI + Git)
+
+### Qualidade e build (espelho do que o Actions corre)
 
 ```bash
 npm install
 npm run dev
+
+# Igual ao PR Quality (sem build obrigatório no workflow)
+npm run verify
+
+# Igual ao CI principal (inclui build)
+npm ci
+npm run check:onboarding
+npm run audit:docs
 npm run lint
 npm run typecheck
 npm run check:i18n
 npm run test
-npm run check:onboarding
+npm run test:mock-mode
+npm run build
+
+# E2E local (não está no CI por padrão)
 npx playwright install chromium
 npm run test:e2e
-
-git branch
-git checkout -b feature/minha-contribuicao
-git merge main
-git push -u origin feature/minha-contribuicao
 ```
+
+### Git — branch a partir de `dev` e PR
+
+```bash
+git fetch origin
+git checkout dev
+git pull origin dev
+
+git checkout -b feat/auth-otp-copy-button
+
+# … commits ...
+git commit -m "feat(auth): improve OTP mock copy affordance"
+git push -u origin feat/auth-otp-copy-button
+# Abrir PR: base = dev, compare = feat/auth-otp-copy-button → Squash merge após aprovação
+```
+
+### Resumo — pontos legados corrigidos nesta documentação
+
+- **Testes:** pirâmide com exemplos concretos de arquivos (`auth.login`, `auth.register` com telefone único, `mock-mode.post`, `negociacoes.patch`, `tracking.helpers`, E2E `auth.login` / `admin-mock-mode` / `locale.switch`).  
+- **CI:** substituição da referência fantasma `quality-gates.yml` por **`ci.yml`** + **`pr-quality.yml`**; inclusão de **`build`** e **`test:mock-mode`** no CI principal; diagrama do **`verify`** no PR Quality.  
+- **i18n:** locales e paths **`en-US`**; explicação do script com **`pt-BR` como base**; diagrama de fluxo ao adicionar chaves.  
+- **Git:** **`dev`** como branch base de PRs, **squash merge**, exemplos de **Conventional Branches** e **Conventional Commits**, diagrama de fluxo.
 
 ---
 

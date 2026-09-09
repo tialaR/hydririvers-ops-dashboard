@@ -86,8 +86,8 @@ describe('PUT /api/auth/profile', () => {
         name: 'Tiala Rocha',
         email: 'tiala@hydrorivers.com',
         company: 'Cooperativa Açaí Norte',
-        phone: '91 99999-0000',
-        city: 'Belém'
+        phone: '+55 91 99999-0001',
+        city: 'Belém, PA'
       })
     }));
     const body = await response.json();
@@ -98,8 +98,9 @@ describe('PUT /api/auth/profile', () => {
       role: 'shipper',
       approved: true,
       passwordHash: 'hash',
-      phone: '91 99999-0000',
-      city: 'Belém'
+      phone: '+5591999990001',
+      phoneE164: '+5591999990001',
+      city: 'Belém, PA'
     }));
     expect(body.user).toMatchObject({
       id: 'u-shipper-1',
@@ -134,7 +135,9 @@ describe('PUT /api/auth/profile', () => {
         approved: false,
         name: 'Tiala Rocha',
         email: 'tiala@hydrorivers.com',
-        company: 'Cooperativa Açaí Norte'
+        company: 'Cooperativa Açaí Norte',
+        phone: '+5591999990001',
+        city: 'Belém, PA'
       })
     }));
     const body = await response.json();

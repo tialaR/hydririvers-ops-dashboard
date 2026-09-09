@@ -1,0 +1,188 @@
+=== HYDRORIVERS SO-000 RECOVERY BASELINE ===
+Captured: 2026-08-25 04:37:29 -0300
+
+=== REPOSITORY ===
+/Users/tialarocha/Documents/HYDRORIVERS-WEB-APP/hydririvers-ops-dashboard
+
+=== BRANCH ===
+recover/my-cargoes-before-weather-grade
+
+=== HEAD ===
+dcf1f742530d1c047c91d5d18b9bd15890421fed
+dcf1f742 | 2026-06-24 12:52:13 -0300 | feat(shipper): implement mobile embarcadora p0 flow
+
+=== REMOTES ===
+origin	https://github.com/tialaR/hydririvers-ops-dashboard.git (fetch)
+origin	https://github.com/tialaR/hydririvers-ops-dashboard.git (push)
+
+=== STATUS ===
+M  messages/en-US.json
+M  messages/es.json
+M  messages/pt-BR.json
+M  next-env.d.ts
+MM src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
+M  src/features/shipper-mobile-flow/components/app-header/app-header.tsx
+MM src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+ M src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.module.sass
+M  src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx
+ M src/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.tsx
+A  src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.tsx
+A  src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.tsx
+A  src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.tsx
+ M src/features/shipper-mobile-flow/components/cargo-card/cargo-card.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.tsx
+A  src/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status.ts
+A  src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx
+A  src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.module.sass
+A  src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.tsx
+ M src/features/shipper-mobile-flow/components/charts/hydri-chart-card.module.sass
+ M src/features/shipper-mobile-flow/components/freshness-indicator/freshness-indicator.module.sass
+A  src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.module.sass
+A  src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.tsx
+A  src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.module.sass
+A  src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.tsx
+A  src/features/shipper-mobile-flow/components/hy-cargo-card/map-shipper-cargo-visual-category.ts
+A  src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.module.sass
+A  src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.tsx
+A  src/features/shipper-mobile-flow/components/hy-chip/hy-chip.module.sass
+A  src/features/shipper-mobile-flow/components/hy-chip/hy-chip.tsx
+A  src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass
+A  src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx
+A  src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.module.sass
+A  src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.tsx
+A  src/features/shipper-mobile-flow/components/hy-mobile-toolbar/use-hy-mobile-toolbar-scroll.ts
+A  src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.module.sass
+A  src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.tsx
+MM src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
+ M src/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell.module.sass
+MM src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
+ M src/features/shipper-mobile-flow/components/primary-button/primary-button.module.sass
+ M src/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar.module.sass
+MM src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
+ M src/features/shipper-mobile-flow/components/shipper-operation-map/shipper-operation-map.module.sass
+ M src/features/shipper-mobile-flow/components/theme-switcher/theme-switcher.module.sass
+M  src/features/shipper-mobile-flow/screens/cargo-detail-screen.tsx
+M  src/features/shipper-mobile-flow/screens/cockpit-screen.tsx
+M  src/features/shipper-mobile-flow/screens/login-screen.tsx
+A  src/features/shipper-mobile-flow/screens/my-cargoes-screen.module.sass
+M  src/features/shipper-mobile-flow/screens/my-cargoes-screen.tsx
+M  src/features/shipper-mobile-flow/screens/negotiation-screen.tsx
+M  src/features/shipper-mobile-flow/screens/notifications-screen.tsx
+M  src/features/shipper-mobile-flow/screens/profile-screen.tsx
+M  src/features/shipper-mobile-flow/screens/public-cargoes-screen.tsx
+M  src/features/shipper-mobile-flow/screens/register-screen.tsx
+M  src/features/shipper-mobile-flow/screens/verify-otp-screen.tsx
+ M src/features/shipper-mobile-flow/styles/_shipper-mixins.sass
+?? .sharkops/
+
+=== STAGED DIFF ===
+ messages/en-US.json                                |  93 ++-
+ messages/es.json                                   |  93 ++-
+ messages/pt-BR.json                                |  93 ++-
+ next-env.d.ts                                      |   2 +-
+ .../components/app-header/app-header.module.sass   |  48 +-
+ .../components/app-header/app-header.tsx           |  23 +-
+ .../avatar-menu-sheet/avatar-button.module.sass    |   5 +-
+ .../components/bottom-nav/bottom-nav.tsx           |  47 +-
+ .../cargo-card-accent.module.sass                  |  21 +
+ .../cargo-card-accent/cargo-card-accent.tsx        |  10 +
+ .../cargo-card-list/cargo-card-list.module.sass    |  44 ++
+ .../components/cargo-card-list/cargo-card-list.tsx |  54 ++
+ .../cargo-card-meta/cargo-card-meta.module.sass    |  21 +
+ .../components/cargo-card-meta/cargo-card-meta.tsx |  19 +
+ .../cargo-card-status-preview.module.sass          |  40 ++
+ .../cargo-card-status-preview.tsx                  |  45 ++
+ .../cargo-list-card/cargo-list-card.module.sass    | 276 +++++++++
+ .../components/cargo-list-card/cargo-list-card.tsx |  43 ++
+ .../map-cargo-card-visual-status.ts                | 119 ++++
+ .../cargo-status-badge.module.sass                 |  30 +
+ .../cargo-status-badge/cargo-status-badge.tsx      |  15 +
+ .../cargo-status-filter.module.sass                |  53 ++
+ .../cargo-status-filter/cargo-status-filter.tsx    |  43 ++
+ .../hy-bottom-menu/hy-bottom-menu.module.sass      | 201 +++++++
+ .../components/hy-bottom-menu/hy-bottom-menu.tsx   |  91 +++
+ .../hy-cargo-card/hy-cargo-card.module.sass        | 136 +++++
+ .../components/hy-cargo-card/hy-cargo-card.tsx     |  29 +
+ .../map-shipper-cargo-visual-category.ts           |  37 ++
+ .../hy-chip-list/hy-chip-list.module.sass          |  11 +
+ .../components/hy-chip-list/hy-chip-list.tsx       |  35 ++
+ .../components/hy-chip/hy-chip.module.sass         |  56 ++
+ .../components/hy-chip/hy-chip.tsx                 |  29 +
+ .../hy-icon-button/hy-icon-button.module.sass      | 162 ++++++
+ .../components/hy-icon-button/hy-icon-button.tsx   |  81 +++
+ .../hy-mobile-toolbar.module.sass                  | 109 ++++
+ .../hy-mobile-toolbar/hy-mobile-toolbar.tsx        |  43 ++
+ .../use-hy-mobile-toolbar-scroll.ts                |  75 +++
+ .../hy-search-bar/hy-search-bar.module.sass        | 114 ++++
+ .../components/hy-search-bar/hy-search-bar.tsx     |  46 ++
+ .../language-switcher.module.sass                  |  49 +-
+ .../notification-bell.module.sass                  |  15 +-
+ .../components/shared-ui/shared-ui.module.sass     | 628 +++++++++++++++++++++
+ .../screens/cargo-detail-screen.tsx                |  49 ++
+ .../shipper-mobile-flow/screens/cockpit-screen.tsx |  27 +
+ .../shipper-mobile-flow/screens/login-screen.tsx   | 116 ++--
+ .../screens/my-cargoes-screen.module.sass          | 119 ++++
+ .../screens/my-cargoes-screen.tsx                  |  77 ++-
+ .../screens/negotiation-screen.tsx                 |  26 +
+ .../screens/notifications-screen.tsx               |  75 ++-
+ .../shipper-mobile-flow/screens/profile-screen.tsx |  32 ++
+ .../screens/public-cargoes-screen.tsx              |  74 ++-
+ .../screens/register-screen.tsx                    |  76 ++-
+ .../screens/verify-otp-screen.tsx                  |  64 ++-
+ 53 files changed, 3741 insertions(+), 178 deletions(-)
+
+=== UNSTAGED DIFF ===
+ .../components/app-header/app-header.module.sass   |  17 +-
+ .../avatar-menu-sheet/avatar-button.module.sass    |   8 +-
+ .../components/bottom-nav/bottom-nav.module.sass   |   6 +-
+ .../bottom-sheet/bottom-sheet.module.sass          |  14 +-
+ .../components/cargo-card/cargo-card.module.sass   |  16 +-
+ .../components/charts/hydri-chart-card.module.sass |  20 +-
+ .../freshness-indicator.module.sass                |   2 +-
+ .../language-switcher.module.sass                  |  22 +-
+ .../mobile-app-shell/mobile-app-shell.module.sass  |   2 +-
+ .../notification-bell.module.sass                  |   9 +-
+ .../primary-button/primary-button.module.sass      |   8 +-
+ .../search-filter-bar.module.sass                  |  16 +-
+ .../components/shared-ui/shared-ui.module.sass     | 296 +++++++++++----------
+ .../shipper-operation-map.module.sass              |   2 +-
+ .../theme-switcher/theme-switcher.module.sass      |   6 +-
+ .../styles/_shipper-mixins.sass                    |  16 ++
+ 16 files changed, 250 insertions(+), 210 deletions(-)
+
+=== STASHES ===
+stash@{0}: On recover/my-cargoes-before-weather-grade: backup too old tag recovery state
+stash@{1}: On recover/my-cargoes-gradient-bottom-menu: backup duplicate locale route state
+stash@{2}: On feat/shipper-mobile-apple-motion-polish: backup broken partial after failed stash apply
+stash@{3}: On feat/shipper-my-cargoes-weather-grade: backup visual WIP before my-cargoes weather-grade
+stash@{4}: On feat/minhas-cargas-next-polish: wip-untracked-before-shipper-p0-merge
+stash@{5}: On feat/minhas-cargas-next-polish: wip: mixed governance and minhas-cargas before split
+stash@{6}: On refine/public-cargas-mobile-light-ui: backup antes do codex fechar cargas
+stash@{7}: On feat/hydririvers-ds-v2-catalog: wip ds-v2-catalog-visual
+stash@{8}: On feat/hydririvers-ds-catalog-route: wip: old dev design-system route
+stash@{9}: On feat/waterway-map-route-visual-polish: wip abandoned route visual polish attempt
+stash@{10}: On feat/waterway-map-route-visual-polish: wip route visual polish attempt without visible animation
+stash@{11}: On feat/waterway-map-route-visual-polish: wip broken svg route flow overlay white screen
+stash@{12}: On dev: wip animated svg markers carried onto dev
+stash@{13}: On fix-broken-last-map: wip before animated map svg identifiers branch
+stash@{14}: On fix/hydroway-maplibre-local-basemap: wip before checking dev map
+stash@{15}: On feature/stabilize-hydroway-map-controls: wip before testing hydroway known-good checkpoints
+stash@{16}: On feature/refine-hydroway-map-interactions: wip
+stash@{17}: On restore/codex-implementation: wip before trying d33c136c and 2d555ef1
+stash@{18}: On restore/codex-implementation: wip before testing restore 070fbb39 and 1892278c
+stash@{19}: On restore/codex-implementation: wip before restoring immersive map
+stash@{20}: On feat/waterway-tracking-domain-v1: wip: unrelated local changes before waterway step 3
+
+=== BASELINE GATES ALREADY CERTIFIED IN RE-ENTRY ===
+typecheck: GREEN
+lint: GREEN
+vitest: GREEN - 945/945
+production-build: GREEN
+shipper-mobile-p0: 11/12 - one touch-target contract under audit

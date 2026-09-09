@@ -1,0 +1,53 @@
+.rail
+  width: 100%
+  max-inline-size: 100%
+  display: flex
+  flex-wrap: nowrap
+  align-items: center
+  gap: 0.625rem
+  overflow-x: auto
+  overflow-y: visible
+  padding-block: 0.125rem 0.45rem
+  padding-inline: var(--page-gutter, clamp(1rem, 4vw, 1.25rem))
+  scroll-padding-inline: var(--page-gutter, clamp(1rem, 4vw, 1.25rem))
+  box-sizing: border-box
+  scrollbar-width: none
+  -webkit-overflow-scrolling: touch
+  overscroll-behavior-inline: contain
+  background: transparent
+
+.rail::-webkit-scrollbar
+  display: none
+
+.item
+  flex: 0 0 auto
+  min-inline-size: max-content
+  min-height: 2.28rem
+  padding-inline: clamp(0.74rem, 2.75vw, 0.9rem)
+  border: 0.0625rem solid rgba(255, 255, 255, 0.2)
+  border-radius: 999rem
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045))
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.28), 0 0.35rem 0.8rem rgba(31, 44, 61, 0.03)
+  color: rgba(34, 44, 58, 0.74)
+  box-sizing: border-box
+  backdrop-filter: blur(2.1rem) saturate(165%) brightness(1.03)
+  -webkit-backdrop-filter: blur(2.1rem) saturate(165%) brightness(1.03)
+
+.item[data-selected='true']
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.07))
+  color: rgba(18, 26, 38, 0.88)
+  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.34), 0 0.45rem 0.95rem rgba(31, 44, 61, 0.05)
+
+.item small
+  color: currentColor
+  font-size: 0.68rem
+  font-weight: 400
+  opacity: 0.68
+
+.item:focus-visible
+  outline: 0.1875rem solid rgba(23, 31, 42, 0.22)
+  outline-offset: 0.125rem
+
+@media (prefers-reduced-motion: reduce)
+  .item
+    transition: none

@@ -1,0 +1,93 @@
+.badge {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: var(--hy-radius-badge, 999px);
+  font-size: 12px;
+  line-height: 1.2;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+.size_sm {
+  gap: 6px;
+  min-height: 26px;
+  padding: 5px 12px;
+  font-weight: 620;
+}
+
+.size_md {
+  gap: 6px;
+  min-height: 28px;
+  padding: 7px 11px;
+  font-weight: 650;
+}
+
+.withDot::before {
+  content: '';
+  flex-shrink: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.noDot::before {
+  content: none;
+  display: none;
+}
+
+.badge[data-status-tone='open'] {
+  color: var(--hy-color-status-open-text);
+  background: var(--hy-color-status-open-bg);
+  border-color: var(--hy-color-status-open-border);
+}
+
+.badge[data-status-tone='quotation'] {
+  color: var(--hy-color-status-quotation-text);
+  background: var(--hy-color-status-quotation-bg);
+  border-color: var(--hy-color-status-quotation-border);
+}
+
+.badge[data-status-tone='contracting'] {
+  color: var(--hy-color-status-contracting-text);
+  background: var(--hy-color-status-contracting-bg);
+  border-color: var(--hy-color-status-contracting-border);
+}
+
+.badge[data-status-tone='operating'] {
+  color: var(--hy-color-status-operating-text);
+  background: var(--hy-color-status-operating-bg);
+  border-color: var(--hy-color-status-operating-border);
+}
+
+.badge[data-status-tone='inTransit'] {
+  color: var(--hy-color-status-in-transit-text);
+  background: var(--hy-color-status-in-transit-bg);
+  border-color: var(--hy-color-status-in-transit-border);
+}
+
+.badge[data-status-tone='completed'] {
+  color: var(--hy-color-status-completed-text);
+  background: var(--hy-color-status-completed-bg);
+  border-color: var(--hy-color-status-completed-border);
+}
+
+.badge[data-status-tone='delayed'] {
+  color: var(--hy-color-status-delayed-text);
+  background: var(--hy-color-status-delayed-bg);
+  border-color: var(--hy-color-status-delayed-border);
+}
+
+.badge[data-status-tone='blocked'] {
+  color: var(--hy-color-status-blocked-text);
+  background: var(--hy-color-status-blocked-bg);
+  border-color: var(--hy-color-status-blocked-border);
+}
+
+.badge[data-status-tone='unknown'] {
+  color: var(--hy-color-text-secondary, rgba(71, 85, 105, 0.82));
+  background: var(--hy-color-surface-muted, rgba(241, 245, 249, 0.82));
+  border-color: var(--hy-color-border-subtle, rgba(71, 85, 105, 0.14));
+}

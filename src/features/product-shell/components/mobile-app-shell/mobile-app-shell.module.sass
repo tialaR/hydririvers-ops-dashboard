@@ -1,0 +1,119 @@
+@use '../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.root
+  @include shipper-rem-scale-tokens
+  --hy-shipper-bg: #F2F5F4
+  --hy-shipper-surface: #FFFFFF
+  --hy-shipper-surface-secondary: #EEF2F1
+  --hy-shipper-text: #101318
+  --hy-shipper-muted: #5C6670
+  --hy-shipper-primary: #0A7F66
+  --hy-shipper-info: #0B5CAD
+  --hy-shipper-warning: #B7791F
+  --hy-shipper-danger: #B42318
+  --hy-shipper-success: #067647
+  --hy-shipper-border: rgba(16, 19, 24, 0.1)
+  --hy-shipper-border-strong: rgba(16, 19, 24, 0.16)
+  --hy-shipper-focus: #0A7F66
+  --hy-shipper-glass-bg: rgba(255, 255, 255, 0.78)
+  --hy-shipper-glass-border: rgba(16, 19, 24, 0.08)
+  --hy-shipper-glass-blur: 1.25rem
+  --hy-shipper-shadow-sm: 0 0.0625rem 0.375rem rgba(16, 19, 24, 0.06), 0 0.125rem 0.75rem rgba(16, 19, 24, 0.04)
+  --hy-shipper-shadow-md: 0 0.25rem 1rem rgba(16, 19, 24, 0.1), 0 0.5rem 1.5rem rgba(16, 19, 24, 0.06)
+  min-height: 100dvh
+  max-width: var(--screen-w)
+  margin-inline: auto
+  padding-top: env(safe-area-inset-top, 0px)
+  background: linear-gradient(180deg, var(--hy-shipper-bg) 0%, color-mix(in srgb, var(--hy-shipper-bg) 92%, var(--hy-shipper-primary)) 100%)
+  color: var(--hy-shipper-text)
+  display: flex
+  flex-direction: column
+  position: relative
+  isolation: isolate
+
+  &[data-theme='dark']
+    --hy-shipper-bg: #050607
+    --hy-shipper-surface: #111214
+    --hy-shipper-surface-secondary: #1A1B1F
+    --hy-shipper-text: #F4F6F7
+    --hy-shipper-muted: #A9B0B8
+    --hy-shipper-primary: #B7C6BE
+    --hy-shipper-info: #C8D0D9
+    --hy-shipper-warning: #D0B36E
+    --hy-shipper-danger: #E3A29D
+    --hy-shipper-success: #A6D8BB
+    --hy-shipper-border: rgba(244, 246, 247, 0.12)
+    --hy-shipper-border-strong: rgba(244, 246, 247, 0.2)
+    --hy-shipper-focus: #B7C6BE
+    --hy-shipper-glass-bg: rgba(17, 18, 20, 0.82)
+    --hy-shipper-glass-border: rgba(244, 246, 247, 0.1)
+    --hy-shipper-shadow-sm: 0 0.0625rem 0.5rem rgba(0, 0, 0, 0.32)
+    --hy-shipper-shadow-md: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.42)
+    background: linear-gradient(180deg, var(--hy-shipper-bg) 0%, color-mix(in srgb, var(--hy-shipper-bg) 94%, #000) 100%)
+
+  @media (prefers-reduced-transparency: reduce)
+    --hy-shipper-glass-bg: var(--hy-shipper-surface)
+    --hy-shipper-glass-blur: 0
+
+.main
+  flex: 1
+  display: flex
+  flex-direction: column
+  min-height: 0
+  padding-bottom: var(--hy-shipper-nav-clearance)
+
+.mainNoNav
+  flex: 1
+  display: flex
+  flex-direction: column
+  min-height: 0
+  padding-bottom: var(--hy-shipper-safe-bottom)
+
+.content
+  flex: 1
+  padding: var(--space-3) var(--space-4) var(--space-4)
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+  overflow-y: auto
+  overflow-x: hidden
+  -webkit-overflow-scrolling: touch
+  overscroll-behavior-y: contain
+  scroll-padding-bottom: var(--hy-shipper-nav-clearance)
+
+.contentBleed
+  padding: 0
+  gap: 0
+  overflow: hidden
+
+// SO-001-WAVE10:VISIBLE-SHELL
+// Product-native shell: solid/tonal content surfaces, glass reserved for chrome.
+.root
+  --shell-content-max: 90rem
+  --shell-rail-space: 0rem
+  max-width: none
+  width: 100%
+  background: radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent) 0, transparent 30rem), linear-gradient(180deg, var(--hy-shipper-bg) 0%, color-mix(in srgb, var(--hy-shipper-bg) 94%, var(--hy-shipper-primary)) 100%)
+
+.content
+  width: min(100%, var(--shell-content-max))
+  margin-inline: auto
+  padding: 1rem clamp(1rem, 4vw, 1.5rem) 1.5rem
+  gap: clamp(0.875rem, 2vw, 1.25rem)
+
+@media (min-width: 48rem)
+  .content
+    padding: 1.5rem clamp(1.5rem, 4vw, 2.5rem) 2rem
+    gap: 1.25rem
+
+@media (min-width: 80rem)
+  .root
+    --shell-rail-space: 6.5rem
+
+  .main,
+  .mainNoNav
+    padding-left: var(--shell-rail-space)
+
+  .content
+    padding: 2rem clamp(2rem, 4vw, 4rem) 3rem
+    gap: 1.5rem

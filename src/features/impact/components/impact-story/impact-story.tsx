@@ -11,17 +11,29 @@ export async function ImpactStory({ locale }: { locale: string }) {
   const cards = await Promise.all(
     impactCards.map(async (card) => {
       const t = await getTranslations({ locale, namespace: `impactCards.${card.id}` });
+      const metricSubline = t.has('metricSubline') ? t('metricSubline') : undefined;
       return {
         ...card,
         title: t('title'),
         description: t('description'),
-        metric: t('metric')
+        metric: t('metric'),
+        metricSubline,
+        kindLabel: t('kindLabel'),
+        confidenceLabel: t('confidenceLabel')
       };
     })
   );
 
   return (
     <section className={styles.grid} aria-label={page('listSectionAriaLabel')}>
+      <Card className={styles.introBox} data-testid="impact-intro">
+        <span className={styles.icon}><HydroIcon name="info" /></span>
+        <div>
+          <strong>{page('introTitle')}</strong>
+          <p>{page('intro')}</p>
+          <p className={styles.introFootnote}>{page('introFootnote')}</p>
+        </div>
+      </Card>
       {cards.map((card) => (
         <Link
           key={card.id}
@@ -33,8 +45,13 @@ export async function ImpactStory({ locale }: { locale: string }) {
           <Card className={styles.card}>
             <span className={styles.icon}><HydroIcon name={card.icon} /></span>
             <strong>{card.metric}</strong>
+            {card.metricSubline ? <span className={styles.metricSub}>{card.metricSubline}</span> : null}
             <h2>{card.title}</h2>
             <p>{card.description}</p>
+            <div className={styles.meta}>
+              <span className={styles.chip}>{card.kindLabel}</span>
+              <span className={`${styles.chip} ${styles.confidence}`}>{card.confidenceLabel}</span>
+            </div>
           </Card>
         </Link>
       ))}

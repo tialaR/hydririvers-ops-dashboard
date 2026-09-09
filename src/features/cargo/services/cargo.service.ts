@@ -1,32 +1,133 @@
 import { readMock } from '@/shared/server/mock-db';
+import { normalizeCargoIdForLookup } from '@/shared/routing/normalize-cargo-id';
+import type { HydroUser, UserRole } from '@/features/auth/domain/auth.types';
 import type { Cargo } from '@/features/marketplace/domain/marketplace.types';
+import { mergeCanonicalPublicCargo } from '@/features/cargo/constants/merge-canonical-public-cargo';
+import { PUBLIC_MARKETPLACE_CARGO_IDS } from '@/features/cargo/constants/public-marketplace-cargos';
+import { findVisualCargoById } from '@/features/cargo/data/build-visual-cargo-pool';
+import {
+  findPublicMarketplaceCargo,
+  resolvePublicMarketplaceCargoList,
+} from '@/features/cargo/data/resolve-public-marketplace-cargo-list';
 import { publicCargosMock } from '@/features/cargo/mocks/publicCargos.mock';
-import { userCargosMock } from '@/features/my-cargos/mocks/myCargos.mock';
-import { isPublicCargo } from '@/features/marketplace/services/cargo-visibility';
+import { carrier2CargosMock, carrierCargosMock, shipper2CargosMock, userCargosMock } from '@/features/cargo/mocks/owned-cargos.mock';
+import { canAccessCargoAtTier } from '@/features/cargo/domain/cargo-visibility-policy';
 
-export async function getPublicCargos(): Promise<Cargo[]> {
-  const cargoes = readMock('cargoes') as Cargo[];
-  const publicCargoes = cargoes.filter((cargo) => isPublicCargo(cargo));
-  return publicCargoes.length ? publicCargoes : publicCargosMock;
+function cloneAsShipper(cargoes: Cargo[], userId: string) {
+  return cargoes.map((cargo) => ({ ...cargo, ownerId: userId, shipperId: userId, visibility: 'private' as const }));
 }
 
-export async function getCurrentUserCargos(userId: string): Promise<Cargo[]> {
-  const cargoes = readMock('cargoes') as Cargo[];
-  const ownedCargoes = cargoes.filter((cargo) => cargo.ownerId === userId || cargo.shipperId === userId || cargo.carrierId === userId);
-  if (ownedCargoes.length) return ownedCargoes;
+function cloneAsCarrier(cargoes: Cargo[], userId: string) {
+  return cargoes.map((cargo) => ({ ...cargo, carrierId: userId, visibility: 'private' as const }));
+}
 
+function fallbackMyCargoesDeck(userId: string, role?: UserRole): Cargo[] {
   if (userId === 'u-shipper-1') return userCargosMock;
+  if (userId === 'u-shipper-2') return shipper2CargosMock;
+  if (userId === 'u-carrier-1') return carrierCargosMock;
+  if (userId === 'u-carrier-2') return carrier2CargosMock;
+  if (role === 'shipper') return cloneAsShipper(userCargosMock, userId);
+  if (role === 'carrier') return cloneAsCarrier(carrierCargosMock, userId);
   return [];
 }
 
-export async function getCurrentUserCargoById(userId: string, cargoId: string): Promise<Cargo | undefined> {
-  const cargoes = await getCurrentUserCargos(userId);
-  return cargoes.find((cargo) => cargo.id === cargoId);
+export async function getPublicCargos(): Promise<Cargo[]> {
+  const cargoes = readMock('cargoes') as Cargo[];
+  return resolvePublicMarketplaceCargoList(cargoes);
+}
+
+/** IDs exibidos na lista pública — espelha `getPublicCargos()`. */
+export { PUBLIC_MARKETPLACE_CARGO_IDS };
+
+/** Alias alinhado ao vocabulário de domínio (pt). */
+export const getPublicCargoes = getPublicCargos;
+
+export async function getPublicCargoById(id: string): Promise<Cargo | undefined> {
+  const list = await getPublicCargos();
+  return list.find((cargo) => cargo.id === id);
+}
+
+export async function getCurrentUserCargos(userId: string, role?: UserRole): Promise<Cargo[]> {
+  const cargoes = readMock('cargoes') as Cargo[];
+  const ownedCargoes = cargoes.filter((cargo) => cargo.ownerId === userId || cargo.shipperId === userId || cargo.carrierId === userId);
+  if (ownedCargoes.length > 0) {
+    return ownedCargoes;
+  }
+
+  return fallbackMyCargoesDeck(userId, role);
+}
+
+export async function getMyCargoesForUser(userId: string, role?: UserRole): Promise<Cargo[]> {
+  return getCurrentUserCargos(userId, role);
+}
+
+function findOwnedCargoById(cargoes: Cargo[], cargoId: string): Cargo | undefined {
+  const normalizedId = normalizeCargoIdForLookup(cargoId);
+  return cargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
+}
+
+export async function getMyCargoByIdForUser(cargoId: string, userId: string, role?: UserRole): Promise<Cargo | undefined> {
+  const cargoes = await getCurrentUserCargos(userId, role);
+  return findOwnedCargoById(cargoes, cargoId);
+}
+
+export async function getCurrentUserCargoById(userId: string, cargoId: string, role?: UserRole): Promise<Cargo | undefined> {
+  const cargoes = await getCurrentUserCargos(userId, role);
+  return findOwnedCargoById(cargoes, cargoId);
+}
+
+export function canUserViewPrivateCargo(user: { id: string; role?: UserRole }, cargo: Cargo): boolean {
+  return canAccessCargoAtTier(cargo, user as HydroUser, 'owner');
 }
 
 export const getMyCargos = getCurrentUserCargos;
 
 export async function getCargoById(id: string): Promise<Cargo | undefined> {
   const cargoes = readMock('cargoes') as Cargo[];
-  return cargoes.find((cargo) => cargo.id === id) ?? publicCargosMock.find((cargo) => cargo.id === id) ?? userCargosMock.find((cargo) => cargo.id === id);
+  const normalizedId = normalizeCargoIdForLookup(id);
+  const canonicalPublic = publicCargosMock.find(
+    (cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId,
+  );
+
+  const publicList = resolvePublicMarketplaceCargoList(cargoes);
+  const visualCargo = findVisualCargoById(id, publicList);
+  const marketplaceCargo = findPublicMarketplaceCargo(id, cargoes);
+
+  if (canonicalPublic) {
+    const stored = cargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
+    const merged = stored
+      ? mergeCanonicalPublicCargo(stored, canonicalPublic)
+      : { ...canonicalPublic };
+
+    if (visualCargo && normalizeCargoIdForLookup(visualCargo.id) === normalizedId) {
+      return mergeCanonicalPublicCargo(visualCargo, merged);
+    }
+
+    return merged;
+  }
+
+  if (visualCargo) {
+    const canonical = publicCargosMock.find(
+      (cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId,
+    );
+    if (canonical) {
+      return mergeCanonicalPublicCargo(visualCargo, canonical);
+    }
+    return visualCargo;
+  }
+
+  if (marketplaceCargo) {
+    return marketplaceCargo;
+  }
+
+  const allCargoes = [
+    ...cargoes,
+    ...publicCargosMock,
+    ...userCargosMock,
+    ...carrierCargosMock,
+    ...shipper2CargosMock,
+    ...carrier2CargosMock,
+  ];
+
+  return allCargoes.find((cargo) => normalizeCargoIdForLookup(cargo.id) === normalizedId);
 }

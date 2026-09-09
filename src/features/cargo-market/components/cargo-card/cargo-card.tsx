@@ -40,6 +40,7 @@ export function CargoCard({
   variant?: 'default' | 'myCargos';
 }) {
   const t = useTranslations('common');
+  const tMine = useTranslations('pages.minhasCargas.myCard');
   const locale = useLocale();
 
   const cargoType = (() => {
@@ -51,7 +52,20 @@ export function CargoCard({
       case 'Cabotagem': return t('cargoTypes.cabotage');
       case 'Reefer': return t('cargoTypes.reefer');
       case 'Granel leve': return t('cargoTypes.bulkLight');
+      case 'Sensível': return t('cargoTypes.sensitive');
+      case 'Territorial': return t('cargoTypes.territorial');
+      case 'Industrial': return t('cargoTypes.industrial');
       default: return cargo.cargoType;
+    }
+  })();
+
+  const myCtaLabel = (() => {
+    switch (cargo.myCargoesCta) {
+      case 'complete': return tMine('ctaComplete');
+      case 'proposals': return tMine('ctaProposals');
+      case 'documents': return tMine('ctaDocuments');
+      case 'track': return tMine('ctaTrack');
+      default: return tMine('ctaFallback');
     }
   })();
 
@@ -89,6 +103,15 @@ export function CargoCard({
             <small><HydroIcon name="route" size={14} /> {cargo.corridor ?? t('waterwayRoute')}</small>
             {cargo.mainRiver ? <span><HydroIcon name="waves" size={14} /> {cargo.mainRiver}</span> : null}
           </div>
+          {variant === 'myCargos' && cargo.riverRoute ? (
+            <p className={styles.riverRouteLine}>
+              <HydroIcon name="waves" size={14} aria-hidden />
+              <span>
+                <span className={styles.riverRouteLabel}>{tMine('routeWaterLabel')}</span>
+                {translateMock(locale, cargo.riverRoute)}
+              </span>
+            </p>
+          ) : null}
           <div className={`${styles.routeFlow} ${variant === 'myCargos' ? styles.routeFlowMyCargoes : ''}`}>
             <div className={`${styles.routeNode} ${variant === 'myCargos' ? styles.routeNodeOriginAligned : ''}`}>
               <span className={styles.dotOrigin}><HydroIcon name="dock" size={14} /></span>
@@ -126,6 +149,35 @@ export function CargoCard({
 
         {cargo.operationalRisks?.length ? (
           <p className={styles.risk}><HydroIcon name="shield" size={15} /> {translateMock(locale, cargo.operationalRisks[0])}</p>
+        ) : null}
+
+        {variant === 'myCargos' ? (
+          <div className={styles.myCargoesPanel}>
+            {cargo.operationalNextStep ? (
+              <p className={styles.myCargoesNext}>
+                <strong>{tMine('nextStepLabel')}</strong>
+                <span>{translateMock(locale, cargo.operationalNextStep)}</span>
+              </p>
+            ) : null}
+            {typeof cargo.proposalsCount === 'number' ? (
+              <p className={styles.myCargoesMeta} data-testid="my-cargo-proposals-line">
+                <HydroIcon name="message" size={15} aria-hidden />
+                {tMine('proposalsLine', { count: cargo.proposalsCount })}
+              </p>
+            ) : null}
+            {cargo.documentsStatusSummary ? (
+              <p className={styles.myCargoesMeta}>
+                <HydroIcon name="document" size={15} aria-hidden />
+                <span>
+                  <span className={styles.myCargoesMetaLabel}>{tMine('documentsLabel')}</span>
+                  {translateMock(locale, cargo.documentsStatusSummary)}
+                </span>
+              </p>
+            ) : null}
+            <span className={styles.myCargoesCta} aria-hidden>
+              {myCtaLabel}
+            </span>
+          </div>
         ) : null}
       </Card>
     </Link>

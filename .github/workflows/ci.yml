@@ -46,5 +46,8 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Mock mode regression tests
+        run: npm run test:mock-mode
+
       - name: Build
         run: npm run build

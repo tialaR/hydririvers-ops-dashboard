@@ -1,3 +1,5 @@
+> **Nota (2026):** para a narrativa de produto alinhada ao código atual (`pt-BR` / `en-US` / `es`, auth mock por telefone, mock-mode, dashboard e radar), use **`docs/product/HYDRORIVERS-DEEP-DIVE-VERSAO-REAL-ATUALIZADA.md`**. O texto abaixo mantém valor literário e contexto histórico.
+
 # HydroRivers Dashboard
 
 HydroRivers é uma plataforma operacional para logística hidroviária. Ela existe para tirar a operação da planilha, da conversa dispersa e da memória individual, e colocá-la em um ambiente onde cargas, embarcações, negociações, rastreio, impacto e governança convivem no mesmo painel.

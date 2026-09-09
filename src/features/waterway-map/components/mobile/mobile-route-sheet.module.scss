@@ -1,0 +1,58 @@
+.sheet {
+  border-top-left-radius: 1.35rem;
+  border-top-right-radius: 1.35rem;
+  border-bottom-left-radius: 1.1rem;
+  border-bottom-right-radius: 1.1rem;
+  border-color: rgba(47, 224, 208, 0.14);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(20, 216, 196, 0.06), transparent 11rem),
+    linear-gradient(180deg, rgba(9, 18, 26, 0.99), rgba(4, 10, 16, 1));
+  box-shadow:
+    0 -6px 28px rgba(0, 0, 0, 0.28),
+    0 28px 70px rgba(0, 0, 0, 0.42);
+}
+
+.sheet > div:first-child {
+  min-height: 1.2rem;
+  padding-top: 0.12rem;
+}
+
+.sheet > header {
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.02rem 0.8rem 0.34rem;
+  border-bottom-color: rgba(47, 224, 208, 0.1);
+}
+
+.sheet > header h2 {
+  font-size: 0.88rem;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+.sheet > header button {
+  width: 2.35rem;
+  min-width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 11px;
+}
+
+.body {
+  padding: 0.32rem 0.8rem 0.38rem;
+  overscroll-behavior: contain;
+  background: linear-gradient(180deg, rgba(6, 14, 20, 0.35), rgba(4, 10, 16, 0.92));
+  align-content: start;
+}
+
+.bodyPartial {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.bodyExpanded {
+  display: grid;
+  gap: 0.85rem;
+}

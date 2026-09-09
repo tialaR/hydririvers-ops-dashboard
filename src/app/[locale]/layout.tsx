@@ -7,18 +7,16 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 import { routing } from '@/core/i18n/routing';
 import '../globals.scss';
-import { AdminChrome } from '@/shared/layout/admin-chrome/admin-chrome';
-import { type Theme, ThemeProvider } from '@/shared/providers/theme-provider';
+import { ThemeProvider } from '@/shared/providers/theme-provider';
 import { cookieNames } from '@/shared/http/cookie-names';
+import { resolveServerTheme } from '@/shared/preferences/resolve-server-theme';
 import { ToastProvider } from '@/shared/ui/toast/toast-provider';
 import { MockMode } from '@/shared/ui/mock-mode/mock-mode';
 import { isMockQaUiEnabled } from '@/shared/qa/mock-qa-ui-env';
+import { HydroDesignSystemRoot } from '@/shared/design-system/hydro-design-system-root';
+import { ReactGrabDevScript } from '@/shared/dev/react-grab-dev-script';
 
 const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-sans' });
-
-function resolveServerTheme(themeCookieValue: string | undefined): Theme {
-  return themeCookieValue === 'light' || themeCookieValue === 'dark' ? themeCookieValue : 'dark';
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -48,6 +46,7 @@ export default async function LocaleLayout({
   const cookieStore = await cookies();
   const initialTheme = resolveServerTheme(cookieStore.get(cookieNames.theme)?.value);
   const htmlClassName = `${geist.variable}${initialTheme === 'dark' ? ' dark' : ''}`;
+  const shouldRenderAnalytics = process.env.NODE_ENV === 'production';
 
   return (
     <html
@@ -61,13 +60,16 @@ export default async function LocaleLayout({
       <body suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <ThemeProvider initialTheme={initialTheme}>
-            <ToastProvider>
-              <AdminChrome>{children}</AdminChrome>
-              {isMockQaUiEnabled() ? <MockMode /> : null}
-              <Analytics />
-            </ToastProvider>
+            <HydroDesignSystemRoot>
+              <ToastProvider>
+                {children}
+                {isMockQaUiEnabled() ? <MockMode /> : null}
+                {shouldRenderAnalytics ? <Analytics /> : null}
+              </ToastProvider>
+            </HydroDesignSystemRoot>
           </ThemeProvider>
         </NextIntlClientProvider>
+        <ReactGrabDevScript />
       </body>
     </html>
   );

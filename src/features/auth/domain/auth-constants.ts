@@ -1,6 +1,9 @@
 /** Senha demo dos usuários seed / personas QA (não é texto de UI). */
 export const demoPassword = 'hydro123';
 
+/** Persona principal usada pela entrada demonstrável do portfólio. */
+export const demoShipperEmail = 'tiala@hydrorivers.com';
+
 /** Mínimo de caracteres aceito para novas senhas no fluxo evoluído de auth. */
 export const minimumPasswordLength = 8;
 
@@ -15,6 +18,9 @@ export const publicUserRoles = ['shipper', 'carrier'] as const;
 
 /** Cookie de sessão mock (`hydrorivers_session`). */
 export const sessionMaxAgeSeconds = 60 * 60 * 24 * 7;
+
+/** TTL de usuarios criados via registro mock. Seeds/personas nunca expiram. */
+export const ephemeralRegistrationTtlSeconds = 60 * 60 * 24;
 
 export const sessionCookieOptions = {
   httpOnly: true,

@@ -6,7 +6,7 @@ import { cookieNames } from '@/shared/http/cookie-names';
 import { httpStatus } from '@/shared/http/http-status';
 import { readMock } from '@/shared/server/mock-db';
 import { toPublicUser } from '@/shared/server/auth';
-import { MOCK_QA_PERSONAS } from '@/shared/qa/mock-qa-personas';
+import { getQaDirectLoginEmails } from '@/shared/mock-data/mock-user-registry';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     return Response.json({ error: 'invalid-payload', reason: 'missing-email' }, { status: httpStatus.badRequest });
   }
 
-  const allowed = new Set(MOCK_QA_PERSONAS.map((p) => p.email.toLowerCase()));
+  const allowed = new Set(getQaDirectLoginEmails().map((email) => email.toLowerCase()));
   if (!allowed.has(rawEmail)) {
     return Response.json({ error: 'forbidden', reason: 'email-not-allowed' }, { status: httpStatus.forbidden });
   }

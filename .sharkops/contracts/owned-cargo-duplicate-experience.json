@@ -1,0 +1,11 @@
+{
+  "legacyCombinedLines": 297,
+  "allowedLegacyScreenFiles": [
+    "my-cargoes-screen.tsx",
+    "cargo-detail-screen.tsx",
+    "documents-screen.tsx",
+    "cargo-map-screen.tsx"
+  ],
+  "canonicalOwnedRoot": "src/features/cargo/owned",
+  "generatedAt": "2026-08-25T23:06:29.102Z"
+}

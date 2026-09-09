@@ -1,0 +1,92 @@
+.field {
+  display: grid;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--hy-font-size-body, 0.875rem);
+  font-weight: var(--hy-font-weight-semibold, 620);
+  color: var(--auth-text, var(--v2-title, var(--hy-color-text-title)));
+}
+
+.control {
+  min-height: var(--hy-size-control-height, 3.25rem);
+  border: 1px solid var(--auth-line, var(--v2-line, var(--hy-color-line-subtle)));
+  border-radius: var(--auth-radius-md, var(--hy-radius-button));
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(241, 245, 249, 0.48)),
+    var(--auth-surface-soft, var(--hy-color-glass-soft));
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0 0.9rem;
+  box-shadow: var(--v2-highlight-inset, inset 0 1px 0 rgba(255, 255, 255, 0.78));
+  transition:
+    border-color var(--hy-motion-press-duration, 160ms) ease,
+    box-shadow var(--hy-motion-press-duration, 160ms) ease;
+}
+
+.control:focus-within {
+  border-color: color-mix(in srgb, var(--auth-brand, var(--hy-color-brand)) 48%, var(--auth-line, var(--hy-color-line-subtle)));
+  box-shadow:
+    var(--hy-shadow-focus, 0 0 0 0.1875rem rgba(37, 99, 235, 0.28)),
+    var(--v2-highlight-inset, inset 0 1px 0 rgba(255, 255, 255, 0.78));
+}
+
+.fieldInvalid .control {
+  border-color: var(--auth-danger, var(--hy-color-danger-text));
+  box-shadow:
+    0 0 0 0.125rem color-mix(in srgb, var(--auth-danger, var(--hy-color-danger-text)) 18%, transparent),
+    var(--v2-highlight-inset, inset 0 1px 0 rgba(255, 255, 255, 0.78));
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  color: var(--auth-muted, var(--v2-muted));
+  line-height: 0;
+}
+
+.input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--auth-text, var(--v2-title));
+  font: inherit;
+  font-size: var(--hy-font-size-body, 0.875rem);
+  font-weight: var(--hy-font-weight-medium, 500);
+}
+
+.input::placeholder {
+  color: var(--auth-muted-soft, var(--hy-color-text-muted));
+}
+
+.input:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
+
+.trailing {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.hint {
+  margin: 0;
+  font-size: var(--hy-font-size-label, 0.75rem);
+  font-weight: var(--hy-font-weight-medium, 500);
+  color: var(--auth-muted, var(--v2-muted));
+  line-height: var(--hy-line-height-body, 1.35);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--hy-font-size-label, 0.75rem);
+  font-weight: var(--hy-font-weight-semibold, 620);
+  color: var(--auth-danger, var(--hy-color-danger-text));
+  line-height: var(--hy-line-height-body, 1.35);
+}

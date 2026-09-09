@@ -1,0 +1,221 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { createElement, type MouseEvent } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it, vi } from 'vitest';
+
+import {
+  ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT,
+  IconButton,
+} from '@/shared/components/icon-button';
+import { renderIconButtonIcon } from '@/shared/components/icon-button/icon-button-icons';
+
+describe('IconButton', () => {
+  it('renderiza button com aria-label e marker global v2', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Abrir filtros" icon={<span data-testid="icon">F</span>} />,
+    );
+
+    expect(html).toContain('aria-label="Abrir filtros"');
+    expect(html).toContain('type="button"');
+    expect(html).toContain('data-icon-button-global="true"');
+    expect(html).toContain(`data-icon-button-variant="${ICON_BUTTON_GLASS_COMPACT_PRODUCTION_VARIANT}"`);
+    expect(html).toContain('variant_v2');
+    expect(html).toContain('glassCompactProduction');
+    expect(html).toContain('data-testid="icon"');
+  });
+
+  it('v2 shell expõe data-press idle, glow decorativo e ícone aria-hidden', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="field" />,
+    );
+
+    expect(html).toContain('data-press="idle"');
+    expect(html).toContain('aria-hidden="true"');
+    expect(html).toMatch(/bubbleGlow/);
+    expect(html).toMatch(/glassControl/);
+  });
+
+  it('className externo no v2 fica no layout host, não no botão glass', () => {
+    const html = renderToStaticMarkup(
+      <IconButton
+        ariaLabel="Filtros"
+        iconName="filter"
+        iconButtonRole="field"
+        className="filterSquare"
+      />,
+    );
+
+    expect(html).toContain('filterSquare');
+    expect(html).toMatch(/layoutHost/);
+    expect(html).not.toMatch(/filterSquare[^<]*glassControl/);
+    expect(html).toContain('data-icon-button-global="true"');
+  });
+
+  it('dispara onClick quando habilitado', () => {
+    const onClick = vi.fn();
+    const element = createElement(IconButton, {
+      ariaLabel: 'Filtrar',
+      icon: <span>F</span>,
+      onClick,
+    });
+
+    element.props.onClick?.({} as MouseEvent<HTMLButtonElement>);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('não dispara onClick quando disabled', () => {
+    const onClick = vi.fn();
+    const element = createElement(IconButton, {
+      ariaLabel: 'Filtrar',
+      icon: <span>F</span>,
+      disabled: true,
+      onClick,
+    });
+
+    expect(element.props.disabled).toBe(true);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it('disabled mantém data-press idle no markup estático', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" disabled />,
+    );
+
+    expect(html).toContain('disabled');
+    expect(html).toContain('data-press="idle"');
+  });
+
+  it('renderiza badgeContent sem alterar shell global', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="notifications" badgeContent={3} />,
+    );
+
+    expect(html).toContain('>3<');
+    expect(html).toContain('data-icon-button-global="true"');
+    expect(html).toContain('variant_v2');
+  });
+
+  it('iconName troca apenas o ícone mantendo shell v2', () => {
+    const filterHtml = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="page" />,
+    );
+    const closeHtml = renderToStaticMarkup(
+      <IconButton ariaLabel="Fechar" iconName="close" iconButtonRole="sheet" />,
+    );
+
+    expect(filterHtml).toContain('variant_v2');
+    expect(closeHtml).toContain('variant_v2');
+    expect(filterHtml).not.toContain('variant_pageAction');
+    expect(closeHtml).not.toContain('variant_sheetClose');
+    expect(filterHtml).toContain('data-icon-button-role="page"');
+    expect(closeHtml).toContain('data-icon-button-role="sheet"');
+  });
+
+  it('aplica estado ativo com aria-pressed', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Mapa" icon={<span>M</span>} active variant="map" />,
+    );
+
+    expect(html).toContain('aria-pressed="true"');
+    expect(html).toContain('data-active="true"');
+  });
+
+  it('header, page e field usam o mesmo shell v2', () => {
+    const headerHtml = renderToStaticMarkup(
+      <IconButton ariaLabel="Idioma" icon={<span>PT</span>} iconButtonRole="header" />,
+    );
+    const pageHtml = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="page" />,
+    );
+    const fieldHtml = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="field" />,
+    );
+
+    for (const html of [headerHtml, pageHtml, fieldHtml]) {
+      expect(html).toContain('data-icon-button-global="true"');
+      expect(html).toContain('variant_v2');
+      expect(html).not.toContain('variant_chrome');
+      expect(html).not.toContain('variant_pageAction');
+      expect(html).not.toContain('variant_fieldAction');
+    }
+  });
+
+  it('sheet close usa shell v2 global com marker de fechamento', () => {
+    const html = renderToStaticMarkup(
+      <IconButton
+        ariaLabel="Fechar"
+        iconName="close"
+        iconButtonRole="sheet"
+        className="sheet-close"
+        data-bottom-sheet-close="true"
+      />,
+    );
+
+    expect(html).toContain('data-icon-button-global="true"');
+    expect(html).toContain('variant_v2');
+    expect(html).not.toContain('variant_sheetClose');
+    expect(html).toContain('data-icon-button-role="sheet"');
+    expect(html).toContain('sheet-close');
+    expect(html).toContain('data-bottom-sheet-close="true"');
+  });
+
+  it('variants semânticos legados mapeiam para shell v2 sem classe visual divergente', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Idioma" icon={<span>PT</span>} variant="chrome" iconButtonRole="header" />,
+    );
+
+    expect(html).toContain('variant_v2');
+    expect(html).not.toContain('variant_chrome');
+    expect(html).toContain('data-icon-button-role="header"');
+  });
+
+  it('tamanho padrão usa tokens de hit area no shell v2', () => {
+    const html = renderToStaticMarkup(<IconButton ariaLabel="Ação" iconName="close" />);
+
+    expect(html).toContain('size_md');
+    expect(html).toContain('variant_v2');
+  });
+
+  it('shell v2 glass usa tokens --hy-icon-button-* e backdrop-filter', () => {
+    const stylesPath = resolve(process.cwd(), 'src/shared/components/icon-button/icon-button.module.sass');
+    const tokensPath = resolve(process.cwd(), 'src/shared/styles/tokens/_hy-v2-light.scss');
+    const stylesSource = readFileSync(stylesPath, 'utf8');
+    const tokensSource = readFileSync(tokensPath, 'utf8');
+
+    expect(stylesSource).toContain('backdrop-filter');
+    expect(stylesSource).toContain('--hy-icon-button-size');
+    expect(stylesSource).toContain('--hy-icon-button-press-scale');
+    expect(stylesSource).toContain('--hy-icon-button-icon-press-y');
+    expect(stylesSource).toContain('--hy-icon-button-glow-opacity');
+    expect(stylesSource).toContain('rgba(255, 255, 255, 0.3)');
+    expect(stylesSource).toContain('rgba(255, 255, 255, 0.2)');
+    expect(stylesSource).toContain('blur(10px)');
+    expect(stylesSource).toContain('#ffffff7a');
+    expect(stylesSource).toContain('glass-compact-production');
+    expect(stylesSource).toContain('data-press');
+    expect(stylesSource).toContain('bubbleGlow');
+    expect(stylesSource).toContain('.glassControl');
+    expect(stylesSource).toContain('.glassCompactProduction');
+    expect(stylesSource).toContain('layoutHost');
+    expect(stylesSource).not.toMatch(/\.glassControl[\s\S]*rgba\(76,\s*130,\s*255/);
+    expect(tokensSource).toContain('--hy-size-icon-button: 3.25rem');
+    expect(tokensSource).toContain('--hy-shadow-icon-button: 0 0.8125rem 1.75rem rgba(15, 23, 42, 0.12)');
+  });
+
+  it('iconName="filter" renderiza sliders horizontais, não funil', () => {
+    const html = renderToStaticMarkup(
+      <IconButton ariaLabel="Filtros" iconName="filter" iconButtonRole="field" />,
+    );
+
+    expect(html).toContain('lucide-sliders-horizontal');
+    expect(html).not.toContain('lucide-filter');
+  });
+
+  it('renderIconButtonIcon filter usa SlidersHorizontal como fonte única', () => {
+    const html = renderToStaticMarkup(<>{renderIconButtonIcon('filter')}</>);
+
+    expect(html).toContain('lucide-sliders-horizontal');
+    expect(html).not.toContain('lucide-filter');
+  });
+});

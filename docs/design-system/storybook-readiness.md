@@ -1,34 +1,16 @@
 # Storybook readiness
 
-## Já prontos para histórias
+Status: **implementado e validado**.
 
-- Button
-- Badge
-- Card
-- BottomSheet
-- Tooltip
-- ThemeToggle
-- LocaleSwitcher
-- PageShell
+O catálogo vivo do HydroRivers usa Storybook com Next.js/Vite, temas Dark e Light e auditoria de acessibilidade bloqueante. A relação vigente de componentes e estados publicados está em [`STORYBOOK.md`](./STORYBOOK.md).
 
-## Ainda precisam de ajuste
+## Regras atuais
 
-- componentes que dependem de contexto de feature;
-- componentes que carregam mocks internos;
-- componentes que usam estado global implícito.
+- publicar apenas componentes reais e contratos operacionais vigentes;
+- não catalogar wrappers ou rotas com nomenclatura de lab/legado;
+- cobrir variantes relevantes, estados vazios, inválidos, desabilitados e conteúdo longo;
+- manter stories determinísticas e isoladas de estado global mutável;
+- executar `npm run build-storybook` antes do merge;
+- manter o catálogo alinhado ao inventário documentado em `STORYBOOK.md`.
 
-## Convenção sugerida
-
-```tsx
-Button.stories.tsx
-Card.stories.tsx
-BottomSheet.stories.tsx
-Dropdown.stories.tsx
-```
-
-## Boas práticas
-
-- uma história por variante importante;
-- documentar estados de foco, disabled e mobile;
-- evitar dependência de dados de produção;
-- manter stories pequenas e legíveis.
+O monorepo continua fora deste escopo e só deve ser considerado quando houver consumo real que justifique uma fronteira de pacote.

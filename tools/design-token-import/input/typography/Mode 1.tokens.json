@@ -1,0 +1,59 @@
+{
+  "Code": {
+    "Size Base": {
+      "$type": "number",
+      "$value": "{Body.Size Medium}",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:a0841af9e9065a10bf5e0224f25a6bdb3ac658cb/716:41",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-typography-code-size-base)"
+        }
+      }
+    },
+    "Font Weight": {
+      "$type": "number",
+      "$value": "{Body.Font Weight Regular}",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:97577b3e28958d7e58c27446657798ed19269eaf/716:7",
+        "com.figma.scopes": [
+          "FONT_STYLE"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-typography-code-font-weight)"
+        }
+      }
+    },
+    "Size Large": {
+      "$type": "number",
+      "$value": "{Body.Size Large}",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:8d6e5dde8d10eb3f3a702708861203dcce6f3f3b/716:35",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-typography-code-size-large)"
+        }
+      }
+    },
+    "Size Small": {
+      "$type": "number",
+      "$value": "{Body.Size Small}",
+      "$extensions": {
+        "com.figma.variableId": "VariableID:365481a542f27fa1ae18e04e272ef3593a3b4d42/3017:81",
+        "com.figma.scopes": [
+          "FONT_SIZE"
+        ],
+        "com.figma.codeSyntax": {
+          "WEB": "var(--sds-typography-code-size-small)"
+        }
+      }
+    }
+  },
+  "$extensions": {
+    "com.figma.modeName": "Mode 1"
+  }
+}

@@ -1,0 +1,412 @@
+@use '../shared/hydroway-map-floating-action.tokens' as fab;
+
+:global(html.hx-hydroway-map-mobile-immersive),
+:global(body.hx-hydroway-map-mobile-immersive) {
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hx-mobile-topbar),
+:global(body.hx-hydroway-map-mobile-immersive .hx-sidebar),
+:global(body.hx-hydroway-map-mobile-immersive .hx-mobile-bottom-nav),
+:global(body.hx-hydroway-map-mobile-immersive .hx-shell > nav) {
+  display: none;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hr-dashboard-scroll),
+:global(body.hx-hydroway-map-mobile-immersive .hx-main),
+:global(body.hx-hydroway-map-mobile-immersive .hx-content) {
+  overflow: hidden;
+  height: 100dvh;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+:global(body.hx-hydroway-map-mobile-immersive .hr-dashboard-content-root) {
+  padding-bottom: 0;
+  overflow: hidden;
+  min-height: 0;
+  height: 100%;
+  max-height: 100dvh;
+  overscroll-behavior: none;
+}
+
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+  isolation: isolate;
+  background: #04080d;
+  color: #e2f0f8;
+}
+
+.mapHost {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: none;
+}
+
+.shell .mapHost .mapStage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.shell .mapHost .mapStage :global(.maplibregl-map),
+.shell .mapHost .mapStage :global(.maplibregl-canvas) {
+  width: 100%;
+  height: 100%;
+  touch-action: pan-x pan-y pinch-zoom;
+}
+
+.shell .mapHost .mapStage :global(.maplibregl-marker.hydriRouteIdentificationMarker),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker) {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+  pointer-events: none;
+  display: grid;
+  place-items: center;
+  transform-origin: center;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerOrigin),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerDestination) {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarkerCurrentCargo) {
+  width: 2.4rem;
+  height: 2.4rem;
+  z-index: 5;
+}
+
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker img),
+.shell .mapHost .mapStage :global(.hydriRouteIdentificationMarker svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.floatingBackButton {
+  position: absolute;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  left: calc(0.75rem + env(safe-area-inset-left, 0px));
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fab.$fab-size-mobile;
+  height: fab.$fab-size-mobile;
+  min-width: fab.$fab-size-mobile;
+  min-height: fab.$fab-size-mobile;
+  border-radius: 999px;
+  border: 1px solid fab.$fab-button-border;
+  background: fab.$fab-button-background;
+  backdrop-filter: fab.$fab-button-backdrop-filter;
+  -webkit-backdrop-filter: fab.$fab-button-backdrop-filter;
+  color: fab.$fab-button-color;
+  text-decoration: none;
+  touch-action: manipulation;
+  box-shadow: fab.$fab-button-shadow;
+  transition:
+    transform 120ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 120ms ease,
+    box-shadow 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.floatingBackButton:active {
+  transform: scale(0.94);
+  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+}
+
+.floatingBackButton:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.floatingBackButton:focus-visible {
+  outline: 2px solid fab.$fab-button-focus-outline;
+  outline-offset: 2px;
+}
+
+.layerPanel {
+  position: absolute;
+  top: calc(0.75rem + env(safe-area-inset-top, 0px));
+  right: calc(4.45rem + env(safe-area-inset-right, 0px));
+  z-index: 5;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  width: min(13.75rem, calc(100vw - 5.25rem));
+  max-height: min(34rem, calc(100dvh - 1.5rem - env(safe-area-inset-bottom, 0px)));
+  overflow: hidden;
+  overscroll-behavior: contain;
+  border-radius: 1rem;
+  border: 1px solid rgba(47, 224, 208, 0.22);
+  background: rgba(6, 12, 20, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.42),
+    0 0 0 1px rgba(127, 255, 242, 0.06) inset;
+  touch-action: manipulation;
+}
+
+.layerPanelHeader {
+  display: block;
+  padding: 0.7rem 0.75rem 0.5rem;
+  border-bottom: 1px solid rgba(47, 224, 208, 0.1);
+}
+
+.layerPanelHeading {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.layerPanelTitle {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.88);
+}
+
+.layerPanelCurrent {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #e8fffb;
+}
+
+.layerPanelActiveDescription {
+  margin: 0;
+  font-size: 0.68rem;
+  line-height: 1.35;
+  color: rgba(176, 228, 222, 0.72);
+}
+
+.layerPanelLegend {
+  display: grid;
+  gap: 0.28rem;
+  margin-top: 0.15rem;
+}
+
+.layerPanelLegendTitle {
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: rgba(176, 228, 222, 0.68);
+}
+
+.layerPanelLegendList {
+  display: grid;
+  gap: 0.18rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.layerPanelLegendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.layerPanelLegendSwatch {
+  flex-shrink: 0;
+  width: 0.72rem;
+  height: 0.72rem;
+  border-width: 1.5px;
+  border-radius: 999px;
+}
+
+.layerPanelLegendLabel {
+  font-size: 0.62rem;
+  line-height: 1.25;
+  color: rgba(210, 248, 242, 0.82);
+}
+
+.layerPresetList {
+  min-height: 0;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.layerPresetItem {
+  margin: 0;
+}
+
+.layerPresetButton {
+  display: grid;
+  gap: 0.18rem;
+  width: 100%;
+  min-height: 2.55rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #d8ece8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  transform: translate3d(0, 0, 0);
+  transition:
+    transform 120ms cubic-bezier(0.32, 0.72, 0, 1),
+    background 140ms ease,
+    border-color 140ms ease,
+    box-shadow 140ms ease,
+    opacity 120ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.layerPresetButton:hover:not(:disabled):not(.layerPresetButtonActive),
+.layerPresetButton:focus-visible:not(:disabled):not(.layerPresetButtonActive) {
+  border-color: rgba(47, 224, 208, 0.2);
+  background: rgba(127, 255, 242, 0.06);
+}
+
+.layerPresetButton:active:not(:disabled) {
+  transform: scale(0.985);
+  opacity: 0.92;
+  border-color: rgba(47, 224, 208, 0.28);
+  background: rgba(127, 255, 242, 0.1);
+}
+
+.layerPresetButton:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.layerPresetButton:focus-visible {
+  outline: 2px solid rgba(127, 255, 242, 0.72);
+  outline-offset: 2px;
+}
+
+.layerPresetButtonActive {
+  border-color: rgba(47, 224, 208, 0.42);
+  background: rgba(20, 216, 196, 0.16);
+  box-shadow: 0 0 0 1px rgba(127, 255, 242, 0.12);
+  color: #e8fffb;
+}
+
+.layerPresetButtonRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.layerPresetCheck {
+  flex-shrink: 0;
+  color: #7ffff2;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.layerPresetDescription {
+  display: block;
+  font-size: 0.66rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: rgba(176, 228, 222, 0.72);
+}
+
+.layerPresetButtonActive .layerPresetDescription {
+  color: rgba(210, 248, 242, 0.82);
+}
+
+.layerPresetButton:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.layerPresetLabel {
+  display: block;
+}
+
+.loading {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #04080d;
+}
+
+.loadingPulse {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  border: 2px solid rgba(47, 224, 208, 0.18);
+  border-top-color: rgba(142, 245, 232, 0.85);
+  animation: mobileMapSpin 0.9s linear infinite;
+}
+
+@keyframes mobileMapSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loadingPulse {
+    animation: none;
+    opacity: 0.7;
+  }
+
+  .floatingBackButton {
+    transition: none;
+  }
+
+  .floatingBackButton:active {
+    transform: none;
+    opacity: 1;
+  }
+
+  .layerPresetButton {
+    transition: none;
+  }
+
+  .layerPresetButton:active:not(:disabled) {
+    transform: none;
+    opacity: 1;
+  }
+}

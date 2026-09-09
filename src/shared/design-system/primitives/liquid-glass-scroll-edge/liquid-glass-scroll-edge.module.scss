@@ -1,0 +1,246 @@
+/* Liquid Glass Scroll Edge — fade/blur layer for scrollable containers (Figma Scroll Edge). */
+
+.scrollEdge {
+  --scroll-edge-size-sm: 24px;
+  --scroll-edge-size-md: 40px;
+  --scroll-edge-size-lg: 64px;
+  --scroll-edge-size: var(--scroll-edge-size-md);
+  --scroll-edge-blur: 30px;
+  --scroll-edge-wrapper-blur: 5px;
+  --scroll-edge-opacity: 0.9;
+  --scroll-edge-z-index: 1;
+  --scroll-edge-separator-light: rgba(0, 0, 0, 0.12);
+  --scroll-edge-separator-dark: rgba(255, 255, 255, 0.17);
+  --scroll-edge-separator: var(--scroll-edge-separator-light);
+  --scroll-edge-blur-bg: #000000;
+  --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+  --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+  --scroll-edge-solid-bg: var(--hydro-color-surface, var(--hydro-color-canvas, #ffffff));
+  --scroll-edge-motion: var(--hydro-motion-control, 220ms);
+  --scroll-edge-easing: var(
+    --hydro-motion-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+
+  position: absolute;
+  pointer-events: none;
+  z-index: var(--scroll-edge-z-index);
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 0;
+  transition: opacity var(--scroll-edge-motion) var(--scroll-edge-easing);
+}
+
+.scrollEdge[data-size='sm'] {
+  --scroll-edge-size: var(--scroll-edge-size-sm);
+}
+
+.scrollEdge[data-size='md'] {
+  --scroll-edge-size: var(--scroll-edge-size-md);
+}
+
+.scrollEdge[data-size='lg'] {
+  --scroll-edge-size: var(--scroll-edge-size-lg);
+}
+
+.edge_top {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--scroll-edge-size);
+}
+
+.edge_bottom {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--scroll-edge-size);
+}
+
+.edge_leading {
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--scroll-edge-size);
+}
+
+.edge_trailing {
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: var(--scroll-edge-size);
+}
+
+.wrapper,
+.gradientMask,
+.blurLayer,
+.solidLayer {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+  pointer-events: none;
+}
+
+.wrapper {
+  backdrop-filter: blur(var(--scroll-edge-wrapper-blur));
+}
+
+.blurLayer {
+  background: var(--scroll-edge-blur-bg);
+  background-blend-mode: screen;
+  opacity: var(--scroll-edge-opacity);
+  backdrop-filter: blur(var(--scroll-edge-blur));
+}
+
+.solidLayer {
+  box-sizing: border-box;
+  background: var(--scroll-edge-solid-bg);
+  background-blend-mode: multiply;
+  backdrop-filter: blur(var(--scroll-edge-blur));
+}
+
+/* Gradient mask directions (Figma debug red removed → black mask). */
+.edge_top .gradientMask {
+  background: linear-gradient(
+    180deg,
+    var(--scroll-edge-mask-start) 0%,
+    var(--scroll-edge-mask-end) 100%
+  );
+}
+
+.edge_bottom .gradientMask {
+  background: linear-gradient(
+    0deg,
+    var(--scroll-edge-mask-start) 0%,
+    var(--scroll-edge-mask-end) 100%
+  );
+}
+
+.edge_leading .gradientMask {
+  background: linear-gradient(
+    90deg,
+    var(--scroll-edge-mask-start) 0%,
+    var(--scroll-edge-mask-end) 100%
+  );
+}
+
+.edge_trailing .gradientMask {
+  background: linear-gradient(
+    270deg,
+    var(--scroll-edge-mask-start) 0%,
+    var(--scroll-edge-mask-end) 100%
+  );
+}
+
+/* Solid separators (top/bottom from Figma; leading/trailing use inner edge). */
+.edge_top .solidLayer {
+  border-bottom: 1px solid var(--scroll-edge-separator);
+}
+
+.edge_bottom .solidLayer {
+  border-top: 1px solid var(--scroll-edge-separator);
+}
+
+.edge_leading .solidLayer {
+  border-right: 1px solid var(--scroll-edge-separator);
+}
+
+.edge_trailing .solidLayer {
+  border-left: 1px solid var(--scroll-edge-separator);
+}
+
+/* Tone: light */
+.scrollEdge[data-tone='light'] {
+  --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+  --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+  --scroll-edge-blur-bg: #000000;
+  --scroll-edge-solid-bg: var(--hydro-color-surface, var(--hydro-color-canvas, #ffffff));
+  --scroll-edge-separator: var(
+    --hydro-color-separator,
+    var(--scroll-edge-separator-light)
+  );
+}
+
+/* Tone: dark */
+.scrollEdge[data-tone='dark'] {
+  --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+  --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+  --scroll-edge-blur-bg: #000000;
+  --scroll-edge-solid-bg: var(
+    --hydro-color-surface,
+    var(--hydro-color-canvas, #1c1c1e)
+  );
+  --scroll-edge-separator: var(
+    --hydro-color-separator,
+    var(--scroll-edge-separator-dark)
+  );
+}
+
+/* Tone: auto — global light */
+:global(html[data-theme='light']) .scrollEdge[data-tone='auto'] {
+  --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+  --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+  --scroll-edge-blur-bg: #000000;
+  --scroll-edge-solid-bg: var(--hydro-color-surface, var(--hydro-color-canvas, #ffffff));
+  --scroll-edge-separator: var(
+    --hydro-color-separator,
+    var(--scroll-edge-separator-light)
+  );
+}
+
+/* Tone: auto — global dark */
+:global(html[data-theme='dark']) .scrollEdge[data-tone='auto'] {
+  --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+  --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+  --scroll-edge-blur-bg: #000000;
+  --scroll-edge-solid-bg: var(
+    --hydro-color-surface,
+    var(--hydro-color-canvas, #1c1c1e)
+  );
+  --scroll-edge-separator: var(
+    --hydro-color-separator,
+    var(--scroll-edge-separator-dark)
+  );
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .scrollEdge[data-tone='auto'] {
+    --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+    --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+    --scroll-edge-blur-bg: #000000;
+    --scroll-edge-solid-bg: var(--hydro-color-surface, var(--hydro-color-canvas, #ffffff));
+    --scroll-edge-separator: var(
+      --hydro-color-separator,
+      var(--scroll-edge-separator-light)
+    );
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .scrollEdge[data-tone='auto'] {
+    --scroll-edge-mask-start: rgba(0, 0, 0, 0.9);
+    --scroll-edge-mask-end: rgba(0, 0, 0, 0);
+    --scroll-edge-blur-bg: #000000;
+    --scroll-edge-solid-bg: var(
+      --hydro-color-surface,
+      var(--hydro-color-canvas, #1c1c1e)
+    );
+    --scroll-edge-separator: var(
+      --hydro-color-separator,
+      var(--scroll-edge-separator-dark)
+    );
+  }
+}
+
+/* Variant: solid hides blur stack via TSX; mixed keeps both layers. */
+.scrollEdge[data-variant='solid'] .solidLayer {
+  opacity: 1;
+}
+
+.scrollEdge[data-variant='mixed'] .solidLayer {
+  opacity: 1;
+}
+
+.scrollEdge[data-variant='mixed'] .blurLayer {
+  opacity: calc(var(--scroll-edge-opacity) * 0.85);
+}

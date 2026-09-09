@@ -1,0 +1,4 @@
+SO-001 Wave 02 applied
+UTC: 2026-08-25T08:16:30Z
+Extraction: Badge semantic primitive
+Compatibility: shared/ui Badge + design-system DsBadge

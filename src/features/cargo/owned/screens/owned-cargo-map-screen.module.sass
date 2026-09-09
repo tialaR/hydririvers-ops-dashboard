@@ -1,0 +1,113 @@
+.mapFullScreen
+  position: relative
+  flex: 1
+  width: 100%
+  min-height: calc(100dvh - var(--header-map-h) - env(safe-area-inset-top, 0px))
+  max-height: var(--screen-h)
+  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-info) 14%, var(--hy-shipper-surface-secondary)), var(--hy-shipper-surface-secondary))
+
+.mapControlsStack
+  position: absolute
+  right: var(--space-4)
+  bottom: calc(var(--sheet-compact-h) + var(--space-3))
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  z-index: 2
+
+.mapControl
+  width: var(--touch-min)
+  height: var(--touch-min)
+  min-width: var(--touch-min)
+  min-height: var(--touch-min)
+  border-radius: var(--radius-pill)
+  border: 0
+  cursor: pointer
+  color: var(--hy-shipper-text)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  box-shadow: var(--hy-shipper-shadow-sm)
+
+.mapStatusCard
+  position: absolute
+  left: var(--space-4)
+  right: var(--space-4)
+  bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px))
+  padding: var(--space-3)
+  border-radius: var(--radius-lg)
+  box-shadow: var(--hy-shipper-shadow-md)
+  z-index: 2
+  max-height: var(--sheet-compact-h)
+  overflow-y: auto
+
+.mapStatusHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.5rem
+  margin-bottom: 0.625rem
+
+.mapStatusCode
+  font-weight: 750
+  margin: 0
+  font-variant-numeric: tabular-nums
+
+.mapStatusCorridor
+  margin: var(--space-1) 0 0
+  color: var(--hy-shipper-muted)
+
+.mapStatusAction
+  width: 100%
+  margin-top: var(--space-2)
+  min-height: var(--button-secondary-h)
+  padding: var(--space-2) var(--space-3)
+  border: 0
+  border-radius: var(--radius-md)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
+  color: var(--hy-shipper-primary)
+  font-weight: 700
+  cursor: pointer
+  text-align: left
+  display: flex
+  align-items: center
+
+.mapContextSheet
+  display: flex
+  flex-direction: column
+  gap: var(--space-3)
+
+.contextBody
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.mapContextRow
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--space-2)
+
+.mapContextAction
+  margin: 0
+  padding: var(--space-3)
+  border-radius: var(--radius-sm)
+  background: color-mix(in srgb, var(--hy-shipper-info) 12%, transparent)
+  font-weight: 650
+
+.mapStatusGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.5rem 0.75rem
+
+.mapStatusCell
+  display: flex
+  flex-direction: column
+  gap: 0.125rem
+  min-width: 0
+
+.mapStatusLabel
+  font-size: clamp(0.625rem, 2.5vw, 0.6875rem)
+
+.mapStatusValue
+  font-weight: 650
+  line-height: 1.3

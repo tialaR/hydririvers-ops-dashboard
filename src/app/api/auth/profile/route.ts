@@ -19,12 +19,15 @@ export async function PUT(request: Request) {
     return invalidPayload('missing-required-fields');
   }
 
+  const phoneE164 = parsed.data.phone;
+
   const user: HydroUser = {
     ...current,
     name: parsed.data.name,
     email: parsed.data.email.toLowerCase(),
     company: parsed.data.company,
-    phone: parsed.data.phone,
+    phone: phoneE164,
+    phoneE164,
     city: parsed.data.city,
     avatarUrl: parsed.data.avatarUrl,
     id: current.id,

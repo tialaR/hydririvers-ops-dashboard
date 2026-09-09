@@ -1,0 +1,606 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-belem-barcarena",
+        "name": "Canal operacional Belém–Barcarena",
+        "kind": "channel",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ terminais estuário",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "barra-norte",
+        "operationalStatus": "active",
+        "importance": "high"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -48.52347,
+            -1.65364
+          ],
+          [
+            -48.54842,
+            -1.63899
+          ],
+          [
+            -48.57135,
+            -1.62278
+          ],
+          [
+            -48.59128,
+            -1.60424
+          ],
+          [
+            -48.60765,
+            -1.58297
+          ],
+          [
+            -48.62048,
+            -1.55896
+          ],
+          [
+            -48.63031,
+            -1.53263
+          ],
+          [
+            -48.63814,
+            -1.50476
+          ],
+          [
+            -48.65588,
+            -1.45824
+          ],
+          [
+            -48.61116,
+            -1.44008
+          ],
+          [
+            -48.56531,
+            -1.4261
+          ],
+          [
+            -48.51827,
+            -1.41651
+          ],
+          [
+            -48.47017,
+            -1.41089
+          ],
+          [
+            -48.42127,
+            -1.40817
+          ],
+          [
+            -48.37199,
+            -1.40687
+          ],
+          [
+            -48.32279,
+            -1.40529
+          ],
+          [
+            -48.27143,
+            -1.35133
+          ],
+          [
+            -48.23841,
+            -1.36273
+          ],
+          [
+            -48.20663,
+            -1.37829
+          ],
+          [
+            -48.17584,
+            -1.39715
+          ],
+          [
+            -48.14564,
+            -1.41797
+          ],
+          [
+            -48.11553,
+            -1.43909
+          ],
+          [
+            -48.08501,
+            -1.45884
+          ],
+          [
+            -48.05363,
+            -1.47571
+          ],
+          [
+            -48.0125,
+            -1.46
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-miritituba-santarem",
+        "name": "Canal Miritituba–Santarém",
+        "kind": "channel",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ transbordo grãos",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "tapajos-teles-pires",
+        "operationalStatus": "attention",
+        "importance": "high"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -55.05885,
+            -2.16299
+          ],
+          [
+            -55.03312,
+            -2.13611
+          ],
+          [
+            -55.00521,
+            -2.11345
+          ],
+          [
+            -54.9746,
+            -2.09597
+          ],
+          [
+            -54.9412,
+            -2.08386
+          ],
+          [
+            -54.90533,
+            -2.07649
+          ],
+          [
+            -54.8677,
+            -2.07251
+          ],
+          [
+            -54.82927,
+            -2.07005
+          ],
+          [
+            -54.80357,
+            -2.01366
+          ],
+          [
+            -54.46016,
+            -1.97646
+          ],
+          [
+            -54.11615,
+            -1.94531
+          ],
+          [
+            -53.77159,
+            -1.91982
+          ],
+          [
+            -53.4266,
+            -1.89874
+          ],
+          [
+            -53.08136,
+            -1.88013
+          ],
+          [
+            -52.73611,
+            -1.86169
+          ],
+          [
+            -52.39107,
+            -1.8411
+          ],
+          [
+            -52.03776,
+            -1.81698
+          ],
+          [
+            -52.06244,
+            -1.81836
+          ],
+          [
+            -52.08868,
+            -1.81505
+          ],
+          [
+            -52.11592,
+            -1.80868
+          ],
+          [
+            -52.14348,
+            -1.80137
+          ],
+          [
+            -52.1706,
+            -1.79538
+          ],
+          [
+            -52.19661,
+            -1.79275
+          ],
+          [
+            -52.221,
+            -1.79503
+          ],
+          [
+            -52.23125,
+            -1.84
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-maraba-estuario",
+        "name": "Canal Marabá–estuário",
+        "kind": "channel",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "BIT Tocantins + estuário PA",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "tocantins-araguaia",
+        "operationalStatus": "attention",
+        "importance": "high"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -51.7339,
+            -1.96525
+          ],
+          [
+            -51.52798,
+            -1.90247
+          ],
+          [
+            -51.3207,
+            -1.84502
+          ],
+          [
+            -51.11193,
+            -1.7934
+          ],
+          [
+            -50.90172,
+            -1.7474
+          ],
+          [
+            -50.6903,
+            -1.70613
+          ],
+          [
+            -50.47803,
+            -1.66815
+          ],
+          [
+            -50.26541,
+            -1.63159
+          ],
+          [
+            -50.05293,
+            -1.59444
+          ],
+          [
+            -49.85441,
+            -1.47056
+          ],
+          [
+            -49.67988,
+            -1.45593
+          ],
+          [
+            -49.50483,
+            -1.44716
+          ],
+          [
+            -49.32933,
+            -1.44342
+          ],
+          [
+            -49.15351,
+            -1.44328
+          ],
+          [
+            -48.97754,
+            -1.4449
+          ],
+          [
+            -48.80159,
+            -1.44619
+          ],
+          [
+            -48.62586,
+            -1.44513
+          ],
+          [
+            -48.45048,
+            -1.43996
+          ],
+          [
+            -48.28,
+            -1.38
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-obidos-calha",
+        "name": "Calha estreita Óbidos",
+        "kind": "channel",
+        "sourceType": "domain-inspired",
+        "sourceInspiration": "Domain-inspired bottleneck",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "amazonas",
+        "navigabilityRisk": "high",
+        "operationalStatus": "attention"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -50.35513,
+            -1.74397
+          ],
+          [
+            -50.31442,
+            -1.72764
+          ],
+          [
+            -50.27208,
+            -1.71641
+          ],
+          [
+            -50.22829,
+            -1.70971
+          ],
+          [
+            -50.18362,
+            -1.70577
+          ],
+          [
+            -50.13887,
+            -1.70207
+          ],
+          [
+            -50.1025,
+            -1.69978
+          ],
+          [
+            -50.3654,
+            -1.66301
+          ],
+          [
+            -50.62775,
+            -1.62186
+          ],
+          [
+            -50.8898,
+            -1.57843
+          ],
+          [
+            -51.15191,
+            -1.53542
+          ],
+          [
+            -51.4144,
+            -1.49542
+          ],
+          [
+            -51.68,
+            -1.48
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-itacoatiara-parintins",
+        "name": "Canal Itacoatiara–Parintins",
+        "kind": "channel",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "HydroRivers Arco Norte mock — source-inspired schematic",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "amazonas",
+        "operationalStatus": "active"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -54.0463,
+            -1.69228
+          ],
+          [
+            -53.98176,
+            -1.69893
+          ],
+          [
+            -53.918,
+            -1.71144
+          ],
+          [
+            -53.85492,
+            -1.72904
+          ],
+          [
+            -53.79228,
+            -1.74995
+          ],
+          [
+            -53.72975,
+            -1.77171
+          ],
+          [
+            -53.66699,
+            -1.79172
+          ],
+          [
+            -53.59484,
+            -1.75163
+          ],
+          [
+            -53.56457,
+            -1.76368
+          ],
+          [
+            -53.53508,
+            -1.7801
+          ],
+          [
+            -53.50601,
+            -1.79876
+          ],
+          [
+            -53.47688,
+            -1.8171
+          ],
+          [
+            -53.44723,
+            -1.83262
+          ],
+          [
+            -53.41672,
+            -1.84338
+          ],
+          [
+            -53.38,
+            -1.82
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "id": "channel-madeira-grain",
+        "name": "Canal graneleiro Madeira",
+        "kind": "channel",
+        "sourceType": "official-inspired",
+        "sourceInspiration": "ANTAQ Madeira grain/fuel",
+        "sourceNotes": "Geometria fictícia determinística; não substitui shapefile oficial.",
+        "confidence": "medium",
+        "mockLevel": "enriched",
+        "lastReviewed": "2026-05-19",
+        "visualPurpose": "operational-channel",
+        "corridorId": "madeira",
+        "strategicRole": "grain-fuel-corridor",
+        "cargoProfiles": "grains,fuel"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -58.97301,
+            -2.32425
+          ],
+          [
+            -58.99996,
+            -2.30821
+          ],
+          [
+            -59.02423,
+            -2.28703
+          ],
+          [
+            -59.04625,
+            -2.26151
+          ],
+          [
+            -59.06671,
+            -2.233
+          ],
+          [
+            -59.0865,
+            -2.20318
+          ],
+          [
+            -59.10657,
+            -2.17393
+          ],
+          [
+            -59.12787,
+            -2.14701
+          ],
+          [
+            -59.15116,
+            -2.12394
+          ],
+          [
+            -59.20348,
+            -2.1083
+          ],
+          [
+            -58.63027,
+            -2.07237
+          ],
+          [
+            -58.05676,
+            -2.04003
+          ],
+          [
+            -57.4831,
+            -2.00944
+          ],
+          [
+            -56.90947,
+            -1.97851
+          ],
+          [
+            -56.33604,
+            -1.94521
+          ],
+          [
+            -55.76295,
+            -1.9078
+          ],
+          [
+            -55.19031,
+            -1.86503
+          ],
+          [
+            -54.61817,
+            -1.81629
+          ],
+          [
+            -54.05,
+            -1.72
+          ]
+        ]
+      }
+    }
+  ]
+}

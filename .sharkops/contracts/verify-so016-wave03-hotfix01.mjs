@@ -1,0 +1,12 @@
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+const root = process.cwd();
+const gate = path.join(root, '.sharkops/contracts/verify-public-cargo-presentation-extraction.mjs');
+const fail = (message) => { console.error(`[so016-wave03-hotfix01] FAIL: ${message}`); process.exit(1); };
+if (!existsSync(gate)) fail('presentation gate missing');
+const raw = readFileSync(gate, 'utf8');
+if (!raw.includes('routeClients')) fail('presentation gate is not migration-aware');
+if (!raw.includes('legacy persona screens are absent but route composition clients are incomplete')) fail('route-client collapse guard missing');
+console.log('[so016-wave03-hotfix01] PASS');
+console.log(' Wave 02 presentation gate now understands both thin-adapter and Wave 03 collapsed states');
+console.log(' canonical cargo/public ownership remains mandatory');

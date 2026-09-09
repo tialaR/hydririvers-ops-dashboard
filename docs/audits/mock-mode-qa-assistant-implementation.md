@@ -4,6 +4,7 @@
 
 - O Mock Mode deixou de ser apenas uma lista de links e personas.
 - O painel agora inclui um catálogo estruturado de cenários de QA.
+- O catálogo foi reorganizado por persona e por jornada para ficar mais legível para testers humanos.
 - O controle de dataset ganhou ação de reset para a base do projeto.
 - Foram adicionados metadados de cenário: objetivo, risco coberto, persona, rota inicial, dataset sugerido, passos, resultado esperado, áreas, prioridade, status e tags.
 
@@ -19,12 +20,15 @@
 - Cargas sem resultado
 - Minhas cargas com itens
 - Minhas cargas vazias
+- Minhas cargas (transportador) com itens
+- Minhas cargas (transportador) vazias
 - Nova carga com validação
 - Rastreio com mapa e overlays
 - Rastreio com alerta operacional
 - Notificações com leitura em lote
 - Notificações zeradas
 - Uma notificação não lida
+- Quatro notificações não lidas
 - Negociações abertas e concluídas
 - Embarcações disponíveis e manutenção
 - Impacto e governo
@@ -34,6 +38,7 @@
 ## Testes criados
 
 - `tests/unit/shared/ui/mock-qa-scenarios.test.ts`
+- `tests/unit/shared/ui/mock-qa-assistant.test.tsx`
 
 ## Fluxos cobertos
 
@@ -47,6 +52,9 @@
 - Embarcações.
 - Impacto e governo.
 - Mobile-first, overlays, tema e i18n.
+- Notificações contam sempre a partir do mesmo `unreadCount` usado no badge e no texto do popover.
+- Leitura por perfil e jornada recomendada para QA humano.
+- “Minhas cargas” agora diferencia shipper vs carrier, inclusive no empty state (CTA coerente).
 
 ## Fluxos ainda descobertos
 

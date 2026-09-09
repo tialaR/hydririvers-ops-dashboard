@@ -13,12 +13,13 @@ test('theme persists in cookie/localStorage and survives reload', async ({ page,
     {
       name: 'hydrorivers.theme',
       value: 'dark',
-      domain: 'localhost',
+      domain: '127.0.0.1',
       path: '/'
     }
   ]);
 
-  await page.goto('/en-US/dashboard');
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/en-US/dashboard', { waitUntil: 'domcontentloaded' });
 
   await expect
     .poll(async () => (await readHtmlTheme(page)).dataTheme)
@@ -28,7 +29,9 @@ test('theme persists in cookie/localStorage and survives reload', async ({ page,
   expect(darkInitial.hasDarkClass).toBe(true);
   expect(darkInitial.colorScheme).toBe('dark');
 
-  await page.getByRole('button', { name: /toggle theme/i }).click();
+  const themeToggle = page.getByRole('button', { name: /switch between light and dark theme/i });
+  await expect(themeToggle).toBeVisible();
+  await themeToggle.click();
 
   await expect
     .poll(async () => (await readHtmlTheme(page)).dataTheme)

@@ -1,0 +1,458 @@
+/* Liquid Glass Button — Figma Liquid Glass recipe, tokenized with local fallbacks. */
+
+.button {
+  --liquid-glass-radius: var(--hydro-radius-pill, 1000px);
+  --liquid-glass-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --liquid-glass-height-md: var(--hydro-size-touch-target, 48px);
+  --liquid-glass-tone-accent: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #007aff)
+  );
+  --liquid-glass-tone-destructive: var(
+    --hydro-color-danger,
+    var(--hydro-kit-colors-accents-red, #ff3b30)
+  );
+  --liquid-glass-label-primary: var(--hydro-color-label-primary, #1a1a1a);
+  --liquid-glass-label-on-tone: #ffffff;
+  --liquid-glass-motion-tap: var(--hydro-motion-tap, 120ms);
+  --liquid-glass-motion-control: var(--hydro-motion-control, 220ms);
+  --liquid-glass-easing: var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+  --liquid-glass-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  --lg-label-color: var(--liquid-glass-label-primary);
+  --lg-label-blend: plus-darker;
+  --lg-filled-bg: var(--liquid-glass-tone-accent);
+  --lg-tinted-bg: color-mix(in srgb, var(--liquid-glass-tone-accent) 14%, transparent);
+  --lg-plain-color: var(--liquid-glass-tone-accent);
+  --lg-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --lg-glass-before-blend-mode: darken, color-burn, normal;
+  --lg-glass-before-opacity: 1;
+  --lg-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --lg-glass-after-blend-mode: normal;
+  --lg-surface-opacity: 1;
+
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  border: 0;
+  border-radius: var(--liquid-glass-radius);
+  background: transparent;
+  font-family: var(--liquid-glass-font-family);
+  font-style: normal;
+  font-feature-settings: 'ss16' on;
+  color: var(--lg-label-color);
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--liquid-glass-motion-tap) var(--liquid-glass-easing),
+    opacity var(--liquid-glass-motion-tap) var(--liquid-glass-easing),
+    filter var(--liquid-glass-motion-control) var(--liquid-glass-easing);
+}
+
+.button::before,
+.button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.button::before {
+  z-index: 0;
+  background: var(--lg-glass-before-bg);
+  background-blend-mode: var(--lg-glass-before-blend-mode);
+  opacity: var(--lg-glass-before-opacity);
+  box-shadow: var(--liquid-glass-shadow);
+  transition:
+    opacity var(--liquid-glass-motion-tap) var(--liquid-glass-easing),
+    box-shadow var(--liquid-glass-motion-control) var(--liquid-glass-easing);
+}
+
+.button::after {
+  z-index: 1;
+  background: var(--lg-glass-after-bg);
+  background-blend-mode: var(--lg-glass-after-blend-mode);
+  opacity: var(--lg-surface-opacity);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.label,
+.iconSlot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: inherit;
+  mix-blend-mode: var(--lg-label-blend);
+}
+
+/* Theme: light */
+.button[data-theme-tone='light'] {
+  --lg-label-color: #1a1a1a;
+  --lg-label-blend: plus-darker;
+  --lg-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --lg-glass-before-blend-mode: darken, color-burn, normal;
+  --lg-glass-before-opacity: 1;
+  --lg-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --lg-glass-after-blend-mode: normal;
+}
+
+/* Theme: dark */
+.button[data-theme-tone='dark'] {
+  --lg-label-color: #f5f5f5;
+  --lg-label-blend: plus-lighter;
+  --lg-glass-before-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    rgba(204, 204, 204, 0.5);
+  --lg-glass-before-blend-mode: normal, normal, color-burn;
+  --lg-glass-before-opacity: 0.67;
+  --lg-glass-after-bg: rgba(0, 0, 0, 0.2);
+  --lg-glass-after-blend-mode: screen;
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .button[data-theme-tone='auto'] {
+  --lg-label-color: #1a1a1a;
+  --lg-label-blend: plus-darker;
+  --lg-glass-before-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --lg-glass-before-blend-mode: darken, color-burn, normal;
+  --lg-glass-before-opacity: 1;
+  --lg-glass-after-bg: rgba(0, 0, 0, 0.004);
+  --lg-glass-after-blend-mode: normal;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .button[data-theme-tone='auto'] {
+  --lg-label-color: #f5f5f5;
+  --lg-label-blend: plus-lighter;
+  --lg-glass-before-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    rgba(204, 204, 204, 0.5);
+  --lg-glass-before-blend-mode: normal, normal, color-burn;
+  --lg-glass-before-opacity: 0.67;
+  --lg-glass-after-bg: rgba(0, 0, 0, 0.2);
+  --lg-glass-after-blend-mode: screen;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .button[data-theme-tone='auto'] {
+    --lg-label-color: #1a1a1a;
+    --lg-label-blend: plus-darker;
+    --lg-glass-before-bg:
+      linear-gradient(0deg, #f7f7f7, #f7f7f7),
+      linear-gradient(0deg, #dddddd, #dddddd),
+      rgba(255, 255, 255, 0.65);
+    --lg-glass-before-blend-mode: darken, color-burn, normal;
+    --lg-glass-before-opacity: 1;
+    --lg-glass-after-bg: rgba(0, 0, 0, 0.004);
+    --lg-glass-after-blend-mode: normal;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .button[data-theme-tone='auto'] {
+    --lg-label-color: #f5f5f5;
+    --lg-label-blend: plus-lighter;
+    --lg-glass-before-bg:
+      linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+      linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      rgba(204, 204, 204, 0.5);
+    --lg-glass-before-blend-mode: normal, normal, color-burn;
+    --lg-glass-before-opacity: 0.67;
+    --lg-glass-after-bg: rgba(0, 0, 0, 0.2);
+    --lg-glass-after-blend-mode: screen;
+  }
+}
+
+/* Tone */
+.tone_accent {
+  --lg-filled-bg: var(--liquid-glass-tone-accent);
+  --lg-tinted-bg: color-mix(in srgb, var(--liquid-glass-tone-accent) 16%, transparent);
+  --lg-plain-color: var(--liquid-glass-tone-accent);
+}
+
+.tone_destructive {
+  --lg-filled-bg: var(--liquid-glass-tone-destructive);
+  --lg-tinted-bg: color-mix(in srgb, var(--liquid-glass-tone-destructive) 16%, transparent);
+  --lg-plain-color: var(--liquid-glass-tone-destructive);
+}
+
+.tone_neutral {
+  --lg-filled-bg: var(--hydro-color-fill-primary, rgba(120, 120, 128, 0.2));
+  --lg-tinted-bg: var(--hydro-color-fill-secondary, rgba(120, 120, 128, 0.12));
+  --lg-plain-color: var(--liquid-glass-label-primary);
+}
+
+.button[data-theme-tone='dark'].tone_neutral,
+:global(html[data-theme='dark']) .button[data-theme-tone='auto'].tone_neutral {
+  --lg-plain-color: #f5f5f5;
+}
+
+.button[data-theme-tone='light'].tone_accent,
+.button[data-theme-tone='light'].tone_destructive,
+:global(html[data-theme='light']) .button[data-theme-tone='auto'].tone_accent,
+:global(html[data-theme='light']) .button[data-theme-tone='auto'].tone_destructive {
+  &.fill_glass {
+    --lg-label-color: var(--lg-plain-color);
+  }
+}
+
+.button[data-theme-tone='dark'].tone_accent,
+.button[data-theme-tone='dark'].tone_destructive,
+:global(html[data-theme='dark']) .button[data-theme-tone='auto'].tone_accent,
+:global(html[data-theme='dark']) .button[data-theme-tone='auto'].tone_destructive {
+  &.fill_glass {
+    --lg-label-color: var(--lg-plain-color);
+  }
+}
+
+/* Fill: glass (default Figma layers) */
+.fill_glass {
+  color: var(--lg-label-color);
+}
+
+/* Fill: solid */
+.fill_filled {
+  color: var(--liquid-glass-label-on-tone);
+
+  &::before {
+    background: var(--lg-filled-bg);
+    background-blend-mode: normal;
+    opacity: 1;
+    box-shadow: var(--liquid-glass-shadow);
+  }
+
+  &::after {
+    background: transparent;
+    background-blend-mode: normal;
+  }
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: normal;
+  }
+}
+
+.tone_neutral.fill_filled {
+  color: var(--lg-label-color);
+
+  &::before {
+    background: var(--hydro-color-fill-primary, rgba(120, 120, 128, 0.24));
+  }
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: var(--lg-label-blend);
+  }
+}
+
+/* Fill: tinted */
+.fill_tinted {
+  color: var(--lg-plain-color);
+
+  &::before {
+    background: var(--lg-tinted-bg);
+    background-blend-mode: normal;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  &::after {
+    background: transparent;
+    background-blend-mode: normal;
+  }
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: normal;
+  }
+}
+
+.tone_neutral.fill_tinted {
+  color: var(--lg-label-color);
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: var(--lg-label-blend);
+  }
+}
+
+/* Fill: plain / ghost */
+.fill_plain {
+  color: var(--lg-plain-color);
+
+  &::before,
+  &::after {
+    background: transparent;
+    box-shadow: none;
+    opacity: 1;
+  }
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: normal;
+  }
+}
+
+.tone_neutral.fill_plain {
+  color: var(--lg-label-color);
+
+  .label,
+  .iconSlot {
+    mix-blend-mode: var(--lg-label-blend);
+  }
+}
+
+/* Sizes — text */
+.size_sm {
+  min-height: 36px;
+  padding: 4px 14px;
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: 510;
+}
+
+.size_md {
+  min-height: var(--liquid-glass-height-md);
+  padding: 6px 20px;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 510;
+}
+
+.size_lg {
+  min-height: 56px;
+  padding: 8px 24px;
+  font-size: 19px;
+  line-height: 22px;
+  font-weight: 510;
+}
+
+/* Sizes — icon */
+.variant_icon {
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.variant_icon.size_sm {
+  width: 36px;
+  min-width: 36px;
+  height: 36px;
+  min-height: 36px;
+  font-size: 17px;
+  line-height: 20px;
+  font-weight: 590;
+}
+
+.variant_icon.size_md {
+  width: var(--liquid-glass-height-md);
+  min-width: var(--liquid-glass-height-md);
+  height: var(--liquid-glass-height-md);
+  min-height: var(--liquid-glass-height-md);
+  font-size: 19px;
+  line-height: 22px;
+  font-weight: 590;
+}
+
+.variant_icon.size_lg {
+  width: 56px;
+  min-width: 56px;
+  height: 56px;
+  min-height: 56px;
+  font-size: 21px;
+  line-height: 24px;
+  font-weight: 590;
+}
+
+.iconSlot {
+  width: 1em;
+  min-width: 1em;
+  height: 1em;
+}
+
+.iconSlot :global(svg) {
+  width: 1em;
+  height: 1em;
+}
+
+/* Selected */
+.selected {
+  filter: brightness(1.04) saturate(1.03);
+}
+
+.selected::before {
+  box-shadow:
+    var(--liquid-glass-shadow),
+    0 0 0 1px color-mix(in srgb, var(--lg-plain-color, var(--lg-label-color)) 22%, transparent);
+}
+
+.fill_plain.selected::before {
+  box-shadow: none;
+}
+
+/* Interaction */
+.button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.975);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(:disabled):not(:active) {
+    filter: brightness(1.02);
+  }
+}
+
+.button:focus {
+  outline: none;
+}
+
+.button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--liquid-glass-tone-accent) 72%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:active:not(:disabled) {
+    transform: none;
+  }
+}

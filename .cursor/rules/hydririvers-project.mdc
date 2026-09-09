@@ -1,0 +1,60 @@
+---
+description: Regras obrigatórias de stack, arquitetura e fronteiras HydroRivers
+alwaysApply: true
+---
+
+# HydroRivers — regras de projeto
+
+## Stack
+
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Sass/CSS Modules (`*.module.scss`)
+- next-intl: `pt-BR`, `en-US`, `es`
+- rotas localizadas em `/[locale]`
+
+## Arquitetura
+
+- **feature-based**: domínio, UI rica, hooks, services, utils, mocks, types e testes em `src/features/`
+- **`src/app/`**: routing, layouts, pages, RSC e server actions — páginas finas
+- **`src/shared/`**: apenas itens realmente compartilhados entre domínios — ver **Operation Zero Redemoinho** (`docs/agents/AGENTS-ZERO-REDEMOINHO.md`)
+- **mobile e desktop são experiências separadas**
+- mudança em desktop **não pode** quebrar mobile
+- mudança em mobile **não pode** quebrar desktop
+- **Zero Redemoinho Gate:** antes de criar, buscar padrão existente; reutilizar ou documentar; sem duplicata local
+
+## CSS e estilo
+
+- **não** editar `src/app/globals.scss` para UI de feature
+- **não** usar CSS global para componentes de feature
+- **não** usar `!important`
+- estilos de feature ficam em CSS Modules da própria feature
+- **preferir** `.module.sass` para estilos novos/tocados de componente
+- tokens de componente: **`--hy-<componente>-<propriedade>`** — sem valores visuais soltos recorrentes
+- **proibido** magic numbers sem nome em TS/Sass recorrentes
+
+## i18n e naming
+
+- strings de UI via next-intl — **proibido** hardcode novo (pt-BR, en-US, es)
+- arquivos/pastas novos: **kebab-case**; exports React podem ser PascalCase
+
+## Dependências e render
+
+- **não** instalar dependência sem justificativa explícita
+- **não** usar `Math.random()` ou `Date.now()` em render (risco de hidratação)
+- **não** usar `router.back()` / `window.history.back()` como fluxo principal de navegação
+
+## Preservar sem regressão
+
+- i18n e locale
+- mocks e auth
+- filtros, busca e lista de cargas existentes
+
+## Referências
+
+- `AGENTS.md`
+- `docs/agents/AGENTS-ZERO-REDEMOINHO.md`
+- `docs/workflows/codex-visual-iteration.md`
+- `docs/workflows/desktop-expanded-map-playbook.md`
+- `docs/adr/0001-desktop-expanded-map-route.md`

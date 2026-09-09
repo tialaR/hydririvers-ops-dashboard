@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none" role="img" aria-label="Ponto ciano pulsante">
+  <defs>
+    <radialGradient id="cyanCore" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#EFFFFB" stop-opacity="1"/>
+      <stop offset="45%" stop-color="#7FFFF0" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#15DABF" stop-opacity="0.92"/>
+    </radialGradient>
+    <filter id="cyanGlow" x="-80%" y="-80%" width="260%" height="260%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .hr-cyan-ring-a { transform-origin: 32px 32px; animation: hr-cyan-pulse-a 2.45s ease-out infinite; }
+      .hr-cyan-ring-b { transform-origin: 32px 32px; animation: hr-cyan-pulse-b 2.45s ease-out infinite; animation-delay: .82s; }
+      .hr-cyan-core { transform-origin: 32px 32px; animation: hr-cyan-core 1.85s ease-in-out infinite; }
+      .hr-cyan-spark { transform-origin: 32px 32px; animation: hr-cyan-spark 1.85s ease-in-out infinite; }
+      @keyframes hr-cyan-pulse-a {
+        0% { transform: scale(.52); opacity: .72; stroke-width: 2.8; }
+        62% { opacity: .24; stroke-width: 1.8; }
+        100% { transform: scale(1.18); opacity: 0; stroke-width: 1; }
+      }
+      @keyframes hr-cyan-pulse-b {
+        0% { transform: scale(.42); opacity: .58; stroke-width: 2.4; }
+        66% { opacity: .20; stroke-width: 1.6; }
+        100% { transform: scale(1.04); opacity: 0; stroke-width: .8; }
+      }
+      @keyframes hr-cyan-core {
+        0%, 100% { transform: scale(.96); opacity: .94; }
+        50% { transform: scale(1.08); opacity: 1; }
+      }
+      @keyframes hr-cyan-spark {
+        0%, 100% { opacity: .55; }
+        50% { opacity: .95; }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .hr-cyan-ring-a, .hr-cyan-ring-b, .hr-cyan-core, .hr-cyan-spark { animation: none; }
+      }
+    </style>
+  </defs>
+  <g filter="url(#cyanGlow)">
+    <circle class="hr-cyan-ring-a" cx="32" cy="32" r="20" stroke="#64FFE8" stroke-opacity=".9"/>
+    <circle class="hr-cyan-ring-b" cx="32" cy="32" r="17" stroke="#8BFFF0" stroke-opacity=".72"/>
+    <circle cx="32" cy="32" r="10.8" fill="#1EE7CC" fill-opacity=".26"/>
+    <circle class="hr-cyan-core" cx="32" cy="32" r="7.2" fill="url(#cyanCore)" stroke="#BFFFF7" stroke-width="1.4"/>
+    <circle class="hr-cyan-spark" cx="29.8" cy="29.6" r="2.2" fill="#FFFFFF" fill-opacity=".74"/>
+  </g>
+</svg>

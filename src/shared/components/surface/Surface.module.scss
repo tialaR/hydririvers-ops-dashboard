@@ -1,0 +1,20 @@
+@use '../../styles/shells/auth-v2-light-shell' as authShell;
+
+.surface {
+  @include authShell.auth-v2-light-glass-card;
+}
+
+.tone_default {
+  background: var(--auth-surface-card, var(--hy-color-surface-card));
+}
+
+.tone_glass {
+  /* mixin default */
+}
+
+.tone_elevated {
+  box-shadow: var(--auth-shadow-elevated, var(--hy-shadow-card-elevated));
+  background:
+    radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--auth-brand) 10%, transparent), transparent 11rem),
+    var(--auth-surface, var(--hy-color-glass-strong));
+}

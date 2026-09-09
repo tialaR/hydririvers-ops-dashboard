@@ -1,0 +1,86 @@
+.scope {
+  display: contents;
+}
+
+.sheet {
+  width: min(100%, 26.875rem);
+}
+
+.body {
+  padding: 0 1rem 0.25rem;
+}
+
+.actionList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.actionItem {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.72rem;
+  width: 100%;
+  padding: 0.9rem 0.1rem;
+  border: 0;
+  border-bottom: 1px solid rgba(165, 246, 238, 0.08);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.actionItem:last-child {
+  border-bottom: 0;
+}
+
+.actionItem:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.actionItem:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.actionIcon {
+  display: grid;
+  place-items: center;
+  width: 1.95rem;
+  height: 1.95rem;
+  border-radius: 999px;
+  background: rgba(103, 242, 233, 0.08);
+  color: rgba(170, 247, 240, 0.82);
+}
+
+.actionIcon svg,
+.actionArrow {
+  width: 0.94rem;
+  height: 0.94rem;
+}
+
+.actionCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+}
+
+.actionCopy strong {
+  color: rgba(248, 255, 253, 0.96);
+  font-size: 0.9rem;
+  line-height: 1.15;
+  font-weight: 650;
+}
+
+.actionCopy small {
+  color: rgba(213, 241, 238, 0.56);
+  font-size: 0.73rem;
+  line-height: 1.25;
+}
+
+.actionArrow {
+  color: rgba(183, 245, 238, 0.34);
+}

@@ -22,7 +22,7 @@ test('logout pela rota /logout encerra sessão e rota privada volta a exigir log
   await page.waitForURL(/\/pt-BR(\/)?$/);
 
   await page.goto('/pt-BR/dashboard');
-  await expect(page).toHaveURL(/\/pt-BR\/login/);
+  await expect(page).toHaveURL(/\/pt-BR\/entrar/);
 });
 
 /**

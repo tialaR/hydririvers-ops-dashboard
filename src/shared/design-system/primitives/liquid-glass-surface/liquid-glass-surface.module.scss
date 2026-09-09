@@ -1,0 +1,294 @@
+/* Liquid Glass Surface — Figma Dynamic UI Surface (Small / Medium / Large), tokenized. */
+
+@mixin lgs-tone-light-dynamic {
+  --lgs-fill-bg:
+    linear-gradient(0deg, #f7f7f7, #f7f7f7),
+    linear-gradient(0deg, #dddddd, #dddddd),
+    rgba(255, 255, 255, 0.65);
+  --lgs-fill-blend-mode: darken, color-burn, normal;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-dark-dynamic {
+  --lgs-fill-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    rgba(204, 204, 204, 0.5);
+  --lgs-fill-blend-mode: normal, normal, color-burn;
+  --lgs-fill-opacity: 0.67;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.2);
+  --lgs-glass-blend-mode: screen;
+}
+
+@mixin lgs-tone-light-medium {
+  --lgs-fill-bg:
+    linear-gradient(0deg, rgba(245, 245, 245, 0.6), rgba(245, 245, 245, 0.6)),
+    #262626;
+  --lgs-fill-blend-mode: normal, color-dodge;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-dark-medium {
+  --lgs-fill-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    #cccccc;
+  --lgs-fill-blend-mode: normal, normal, color-burn;
+  --lgs-fill-opacity: 0.67;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-light-large {
+  --lgs-fill-bg:
+    linear-gradient(0deg, rgba(250, 250, 250, 0.7), rgba(250, 250, 250, 0.7)),
+    #262626;
+  --lgs-fill-blend-mode: normal, color-dodge;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-dark-large {
+  --lgs-fill-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.06)),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+    #cccccc;
+  --lgs-fill-blend-mode: normal, normal, color-burn;
+  --lgs-fill-opacity: 0.67;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-tinted {
+  --lgs-fill-bg:
+    linear-gradient(0deg, #0091ff, #0091ff),
+    linear-gradient(0deg, #999999, #999999),
+    linear-gradient(0deg, #ffffff, #ffffff),
+    rgba(255, 255, 255, 0.75);
+  --lgs-fill-blend-mode: plus-darker, overlay, saturation, normal;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-tone-plain {
+  --lgs-fill-bg: var(
+    --hydro-color-surface,
+    var(--hydro-kit-colors-backgrounds-primary, #ffffff)
+  );
+  --lgs-fill-blend-mode: normal;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: transparent;
+  --lgs-glass-blend-mode: normal;
+}
+
+@mixin lgs-apply-size-recipe($size, $tone) {
+  @if $size == small {
+    @if $tone == light {
+      @include lgs-tone-light-dynamic;
+    } @else {
+      @include lgs-tone-dark-dynamic;
+    }
+  } @else if $size == medium {
+    @if $tone == light {
+      @include lgs-tone-light-medium;
+    } @else {
+      @include lgs-tone-dark-medium;
+    }
+  } @else if $size == large {
+    @if $tone == light {
+      @include lgs-tone-light-large;
+    } @else {
+      @include lgs-tone-dark-large;
+    }
+  }
+}
+
+@mixin lgs-dynamic-by-size($tone) {
+  &[data-size='small'] {
+    @include lgs-apply-size-recipe(small, $tone);
+  }
+
+  &[data-size='medium'] {
+    @include lgs-apply-size-recipe(medium, $tone);
+  }
+
+  &[data-size='large'] {
+    @include lgs-apply-size-recipe(large, $tone);
+  }
+}
+
+.surface {
+  --surface-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+  --surface-radius-pill: var(--hydro-radius-pill, 1000px);
+  --surface-radius-card: var(--hydro-radius-card, 34px);
+  --surface-small-min-height: 48px;
+  --surface-medium-min-height: 180px;
+  --surface-large-min-height: 300px;
+  --lgs-shadow: var(--surface-shadow);
+  --lgs-fill-bg: transparent;
+  --lgs-fill-blend-mode: normal;
+  --lgs-fill-opacity: 1;
+  --lgs-glass-bg: rgba(0, 0, 0, 0.004);
+  --lgs-glass-blend-mode: normal;
+  --lgs-accent: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #0091ff)
+  );
+  --lgs-motion: var(--hydro-motion-control, 220ms);
+  --lgs-easing: var(
+    --hydro-motion-easing-standard,
+    cubic-bezier(0.2, 0, 0, 1)
+  );
+
+  position: relative;
+  isolation: isolate;
+  display: block;
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  transition: box-shadow var(--lgs-motion) var(--lgs-easing);
+}
+
+.surface::before,
+.surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.surface::before {
+  z-index: 0;
+  background: var(--lgs-fill-bg);
+  background-blend-mode: var(--lgs-fill-blend-mode);
+  opacity: var(--lgs-fill-opacity);
+  box-shadow: var(--lgs-shadow);
+  transition:
+    opacity var(--lgs-motion) var(--lgs-easing),
+    box-shadow var(--lgs-motion) var(--lgs-easing);
+}
+
+.surface::after {
+  z-index: 1;
+  background: var(--lgs-glass-bg);
+  background-blend-mode: var(--lgs-glass-blend-mode);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: block;
+  box-sizing: border-box;
+}
+
+/* Size — min-height only (width is fluid) */
+.size_small {
+  min-height: var(--surface-small-min-height);
+}
+
+.size_medium {
+  min-height: var(--surface-medium-min-height);
+}
+
+.size_large {
+  min-height: var(--surface-large-min-height);
+}
+
+/* Radius */
+.radius_pill {
+  border-radius: var(--surface-radius-pill);
+}
+
+.radius_md {
+  border-radius: 20px;
+}
+
+.radius_lg {
+  border-radius: 28px;
+}
+
+.radius_xl {
+  border-radius: var(--surface-radius-card);
+}
+
+/* Elevation */
+.flat {
+  --lgs-shadow: none;
+}
+
+.flat::before {
+  box-shadow: none;
+}
+
+.surface[data-elevated='false'] {
+  --lgs-shadow: none;
+}
+
+.surface[data-elevated='false']::before {
+  box-shadow: none;
+}
+
+/* Variant: tinted (size-independent recipe) */
+.variant_tinted {
+  @include lgs-tone-tinted;
+}
+
+/* Variant: plain (token surface) */
+.variant_plain {
+  @include lgs-tone-plain;
+}
+
+.surface[data-variant='plain'][data-tone='dark'] {
+  --lgs-fill-bg: var(
+    --hydro-color-surface-elevated,
+    var(--hydro-kit-colors-backgrounds-secondary, #1c1c1e)
+  );
+}
+
+/* Variant: dynamic — explicit light tone */
+.surface[data-variant='dynamic'][data-tone='light'] {
+  @include lgs-dynamic-by-size(light);
+}
+
+/* Variant: dynamic — explicit dark tone */
+.surface[data-variant='dynamic'][data-tone='dark'] {
+  @include lgs-dynamic-by-size(dark);
+}
+
+/* Variant: dynamic — auto defaults to light */
+.surface[data-variant='dynamic'][data-tone='auto'] {
+  @include lgs-dynamic-by-size(light);
+}
+
+@media (prefers-color-scheme: dark) {
+  .surface[data-variant='dynamic'][data-tone='auto'] {
+    @include lgs-dynamic-by-size(dark);
+  }
+}
+
+:global([data-theme='light']) .surface[data-variant='dynamic'][data-tone='auto'] {
+  @include lgs-dynamic-by-size(light);
+}
+
+:global([data-theme='dark']) .surface[data-variant='dynamic'][data-tone='auto'] {
+  @include lgs-dynamic-by-size(dark);
+}
+
+:global([data-theme='light']) .surface[data-variant='plain'][data-tone='auto'] {
+  @include lgs-tone-plain;
+}
+
+:global([data-theme='dark']) .surface[data-variant='plain'][data-tone='auto'] {
+  --lgs-fill-bg: var(
+    --hydro-color-surface-elevated,
+    var(--hydro-kit-colors-backgrounds-secondary, #1c1c1e)
+  );
+}

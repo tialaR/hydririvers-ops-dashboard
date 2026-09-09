@@ -1,0 +1,35 @@
+@use '../../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.card
+  padding: var(--space-3)
+  display: flex
+  flex-direction: column
+  gap: var(--space-2)
+  text-decoration: none
+  color: inherit
+
+.title
+  font-weight: 650
+  margin: 0
+
+.summary
+  color: var(--hy-shipper-muted)
+  margin: 0
+
+.mapPreviewCard
+  min-height: auto
+
+.mapPreviewCanvas
+  width: 100%
+  overflow: hidden
+  border-radius: var(--radius-sm)
+  background: color-mix(in srgb, var(--hy-shipper-info) 8%, var(--hy-shipper-surface-secondary))
+
+.mapRoute
+  width: 100%
+  height: auto
+  display: block
+
+.cta
+  font-weight: 700
+  color: var(--hy-shipper-info)

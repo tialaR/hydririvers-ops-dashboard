@@ -1,0 +1,34 @@
+.pressable {
+  width: 100%;
+  text-align: inherit;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    transform var(--ds-motion-tap, 120ms) var(--ds-motion-easing-standard, ease),
+    border-color var(--ds-motion-tap, 120ms) ease,
+    box-shadow var(--ds-motion-tap, 120ms) ease;
+}
+
+.pressable:active {
+  transform: scale(0.985);
+}
+
+.pressable:focus-visible {
+  outline: 2px solid var(--ds-border-focus, rgba(43, 184, 170, 0.45));
+  outline-offset: 2px;
+}
+
+.selected {
+  border-color: var(--ds-border-focus, rgba(43, 184, 170, 0.45));
+  box-shadow: var(--ds-elevation-card, 0 4px 16px rgba(0, 0, 0, 0.12));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pressable {
+    transition: none;
+  }
+
+  .pressable:active {
+    transform: none;
+  }
+}

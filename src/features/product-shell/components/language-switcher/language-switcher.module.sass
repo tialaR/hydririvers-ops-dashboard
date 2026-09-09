@@ -1,0 +1,63 @@
+@use '../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.wrapper
+  position: relative
+
+.control
+  transition: transform 180ms ease, opacity 180ms ease
+
+  &:active
+    transform: scale(0.985)
+  // removed missing mixin: shipper-focus
+  // removed missing mixin: shipper-glass
+  min-width: var(--header-icon)
+  height: var(--header-icon)
+  padding: 0 var(--space-2)
+  border-radius: var(--radius-pill)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  // removed missing mixin: shipper-operational-label
+  font-size: 0.625rem
+  letter-spacing: 0.07em
+  color: var(--hy-shipper-text)
+  cursor: pointer
+
+.menu
+  // removed missing mixin: shipper-glass
+  position: absolute
+  top: calc(100% + var(--space-1))
+  right: 0
+  z-index: 35
+  min-width: 7rem
+  padding: var(--space-1)
+  border-radius: var(--radius-md)
+  display: flex
+  flex-direction: column
+  gap: 0.25rem
+  box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-md)
+
+.option
+  transition: transform 180ms ease, opacity 180ms ease
+
+  &:active
+    transform: scale(0.985)
+  // removed missing mixin: shipper-focus
+  min-height: var(--touch-min)
+  border: 0
+  border-radius: var(--radius-sm)
+  background: transparent
+  color: var(--hy-shipper-muted)
+  // removed missing mixin: shipper-label
+  font-weight: 620
+  cursor: pointer
+  text-align: left
+  padding: 0 var(--space-2)
+  display: flex
+  align-items: center
+  justify-content: flex-start
+
+.optionActive
+  color: var(--hy-shipper-text)
+  background: color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 26%, transparent)

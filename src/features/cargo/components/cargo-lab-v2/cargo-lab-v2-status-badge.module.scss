@@ -1,0 +1,12 @@
+.cardBadge {
+  margin-left: auto;
+}
+
+.sheetBadge {
+  margin: 0;
+  width: max-content;
+}
+
+:global(body:has([data-theme='light'])) .sheetBadge[data-status-tone='inTransit'] {
+  background: var(--v2-status-in-transit-bg-sheet, rgba(220, 252, 231, 0.82));
+}

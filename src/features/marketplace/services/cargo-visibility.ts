@@ -1,11 +1,13 @@
 import type { HydroUser } from '@/features/auth/domain/auth.types';
+import { canViewCargo } from '@/features/auth/domain/access-control';
 import type { Cargo, Negotiation } from '@/features/marketplace/domain/marketplace.types';
 import { cargoMatchesCarrier, cargoMatchesShipper } from './my-cargoes.filters';
 
 export type CargoScope = 'public' | 'mine' | 'operational';
 
 function inferCargoVisibility(cargo: Cargo): 'public' | 'private' {
-  if (cargo.visibility === 'public' || cargo.visibility === 'private') return cargo.visibility;
+  if (cargo.visibility === 'public') return 'public';
+  if (cargo.visibility === 'private' || cargo.visibility === 'restricted') return 'private';
   if (cargo.publishedAt) return 'public';
   return cargo.status === 'open' || cargo.status === 'bidding' || cargo.status === 'reserved' || cargo.status === 'boarded'
     ? 'public'
@@ -28,10 +30,7 @@ export function isCargoOwnedByUser(cargo: Cargo, currentUser: HydroUser | null |
 }
 
 export function canUserSeeCargo(cargo: Cargo, currentUser: HydroUser | null | undefined, negotiations: Negotiation[] = []) {
-  if (isPublicCargo(cargo)) return true;
-  if (!currentUser) return false;
-  if (currentUser.role === 'admin') return false;
-  return isCargoOwnedByUser(cargo, currentUser, negotiations);
+  return canViewCargo(currentUser, cargo, negotiations) || isPublicCargo(cargo);
 }
 
 export function getDashboardCargos(cargoes: Cargo[], currentUser?: HydroUser | null) {

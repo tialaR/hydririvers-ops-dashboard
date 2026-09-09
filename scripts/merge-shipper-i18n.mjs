@@ -1,0 +1,128 @@
+import { readFileSync, writeFileSync } from 'node:fs';
+
+function deepClone(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+const ptBlock = JSON.parse(readFileSync('messages/_shipper-mobile-flow.pt-BR.json', 'utf8')).shipperMobileFlow;
+
+const en = deepClone(ptBlock);
+Object.assign(en.header, { back: 'Back', avatarMenu: 'Open account menu', notifications: 'Notifications' });
+Object.assign(en.bottomNav, { label: 'Main navigation', cockpit: 'Cockpit', publicCargoes: 'Public', myCargoes: 'Mine', notifications: 'Alerts', profile: 'Profile' });
+Object.assign(en.language, { switch: 'Switch language' });
+Object.assign(en.theme, { toggle: 'Toggle light/dark theme' });
+Object.assign(en.avatarMenu, { label: 'Account menu', profile: 'Profile', company: 'Company', preferences: 'Preferences', security: 'Security', logout: 'Sign out' });
+Object.assign(en.search, { label: 'Search', placeholder: 'Search cargoes, routes or alerts', filters: 'Filters' });
+Object.assign(en.risk, { low: 'Low', medium: 'Medium', high: 'High', critical: 'Critical' });
+Object.assign(en.freshness, { fresh: 'Updated {minutes} min ago', stale: 'Stale data · {minutes} min', offline: 'Offline · last {minutes} min ago' });
+Object.assign(en.landing, { subtitle: 'River operations with trust for North Arc shippers', publicRoutesTitle: 'North Arc public routes', publicRoutesSummary: 'Less disruption and less CO₂ on Amazon corridors.', chartLegend: 'Operational trend', loginCta: 'Sign in', registerCta: 'Create account' });
+Object.assign(en.auth.login, { title: 'Sign in', country: 'Country', phone: 'Phone', phonePlaceholder: 'Area code + number', password: 'Password', submit: 'Sign in', registerLink: 'Create account' });
+en.auth.login.errors = { phone: 'Enter a valid phone number.', password: 'Password too short.' };
+Object.assign(en.auth.register, { title: 'Register shipper', company: 'Company name', responsible: 'Contact person', country: 'Country / phone', phone: 'Phone', consent: 'I agree to terms and privacy policy', submit: 'Continue' });
+en.auth.register.errors = { required: 'Fill company and contact.', consent: 'Accept terms to continue.' };
+Object.assign(en.auth.otp, { title: 'Verify OTP', subtitle: 'Enter the code sent to your phone', digit: 'Digit {index}', resendHint: 'Resend in 00:32', submit: 'Verify', changePhone: 'Change phone' });
+en.auth.otp.errors = { incomplete: 'Enter all 6 digits.', incorrect: 'Incorrect code.', expired: 'OTP expired.', blocked: 'Too many attempts. Try later.' };
+Object.assign(en.phoneCountries, { br: 'Brazil', es: 'Spain', us: 'United States' });
+Object.assign(en.cockpit, { title: 'Hello, shipper' });
+en.cockpit.filters = { all: 'All', critical: 'Critical', docs: 'Docs' };
+en.cockpit.criticalAlert = { title: 'Critical risk', body: 'HR-4821 with draft restriction on Madeira corridor. Review window and documents.' };
+en.cockpit.metrics = { cargoes: 'Cargoes', cargoesHint: '3 in transit', docs: 'Docs', docsHint: '2 pending', eta: 'Avg ETA', etaHint: '15 hours', co2: 'CO₂ avoided', co2Hint: '38% vs road' };
+Object.assign(en.publicList, { title: 'Public cargoes' });
+en.publicList.filters = { all: 'All', tapajos: 'Tapajós', madeira: 'Madeira', amazonas: 'Amazonas' };
+en.publicCargo.restrictedNotice = 'Restricted view — no contact, prices or private documents.';
+en.publicCargo.manifestInterest = 'Create account to negotiate';
+en.publicCargo.cargoTypes = { solidBulk: 'Solid bulk', general: 'General cargo', container: 'Container' };
+en.publicCargo.windows = { approxWeek31: 'Approx. week 31', approxWeek32: 'Approx. week 32', approxWeek33: 'Approx. week 33' };
+en.publicCargo.status = { openInterest: 'Open for interest', collectingOffers: 'Collecting offers', windowClosing: 'Window closing' };
+Object.assign(en.myCargoes, { title: 'My cargoes', newCargo: 'New cargo' });
+en.myCargoes.filters = { all: 'All', transit: 'In transit', attention: 'Attention' };
+en.cargoCard.view = 'View';
+Object.assign(en.newCargo, { title: 'New cargo', origin: 'Origin', destination: 'Destination', type: 'Type', window: 'Window', windowPlaceholder: 'E.g. Jun 24–28', draft: 'Min draft (m)', submit: 'Create cargo' });
+en.newCargo.types = { solid: 'Solid bulk', general: 'General cargo', container: 'Container' };
+en.newCargo.impactPreview = { title: 'Estimated impact', body: 'Up to 38% less CO₂ vs equivalent road modal.' };
+en.newCargo.errors = { window: 'Enter the operational window.' };
+en.cargoDetail.status = { open: 'Open', inTransit: 'In transit', attention: 'Attention', delivered: 'Delivered', blocked: 'Blocked' };
+en.cargoDetail.tiles = { risk: 'Risk', docs: 'Documents', window: 'Window', windowValue: 'Jun 24–28', negotiation: 'Negotiation', offers: '{count} offers' };
+Object.assign(en.map, { previewTitle: 'Operation map', openFull: 'Open full-screen map', fullTitle: 'Operational map', routeAria: 'Route for cargo {code}', layerStatus: 'Status layer', layerRiver: 'Hydrology layer', layerWeather: 'Weather layer', contextTitle: 'Operational context', contextBody: 'ETA, risk and data freshness for immediate decisions.', eta: 'Estimated ETA: {hours}h' });
+Object.assign(en.documents, { title: 'Documents', resolve: 'Resolve pending item' });
+en.documents.confirm = { title: 'Confirm resolution', body: 'This registers resolution of the blocking document.', confirm: 'Confirm', cancel: 'Cancel' };
+en.documents.status = { ok: 'OK', pending: 'Pending', blocked: 'Blocked', expiring: 'Expiring' };
+en.documents.documents = { cte: 'CT-e', environmentalLicense: 'Environmental license', manifest: 'Manifest', insurance: 'Insurance' };
+en.documents.dueToday = 'Due today';
+en.documents.blocking = 'Blocks operation';
+Object.assign(en.negotiation, { title: 'Negotiation', selectOffer: 'Select offer', eta: 'ETA {hours}h' });
+en.negotiation.criterion = { title: 'Suggested criterion', body: 'Prioritize ETA ≤ 16h with low hydrology risk.' };
+en.negotiation.confirm = { title: 'Confirm offer', body: 'Confirm selection of {offer}?', confirm: 'Confirm', cancel: 'Cancel' };
+en.negotiation.offers = { offerA: 'Offer A', offerB: 'Offer B', offerC: 'Offer C' };
+en.offers = { offerA: 'Offer A', partnerA: 'Solimões Carrier', offerB: 'Offer B', partnerB: 'Hidro Madeira', offerC: 'Offer C', partnerC: 'North Arc Log' };
+Object.assign(en.hydrology, { title: 'Hydrology' });
+en.hydrology.chart = { title: 'Madeira — available draft', summary: 'Ebb with 2.1 m draft on critical stretch.', legend: 'Level / draft (m)' };
+Object.assign(en.hydrology, { ebbTrend: 'Ebb · draft {draft} m', stableTrend: 'Stable · draft {draft} m', floodTrend: 'Flood · draft {draft} m', restrictedTrend: 'Restricted · draft {draft} m' });
+Object.assign(en.impact, { title: 'Impact', ringAria: '38 percent CO₂ avoided', co2Avoided: 'CO₂ avoided', licensing: 'Licensing', community: 'Community', esgResidue: 'ESG residue' });
+en.impact.chart = { title: 'Emissions comparison', summary: 'Waterway vs road on the same corridor.', legend: 'Relative CO₂ index' };
+Object.assign(en.notifications, { title: 'Notifications' });
+en.notifications.items.draftLow = { title: 'Low draft', body: 'Madeira restricted in next 48h.', time: '12 min ago' };
+en.notifications.items.docDue = { title: 'Doc due today', body: 'Environmental license HR-4821.', time: '1 h ago' };
+en.notifications.items.offerReceived = { title: 'Offer received', body: 'New proposal on Tapajós corridor.', time: '3 h ago' };
+Object.assign(en.profile, { title: 'Profile', menuLabel: 'Account settings' });
+en.profile.menu = { language: 'Language', theme: 'Theme', notifications: 'Notifications', security: 'Security', logout: 'Sign out' };
+en.states.offline = { title: 'Offline', body: 'Showing last known status. Sync when back online.', action: 'Try sync' };
+en.states.serviceError = { title: 'Service unavailable', body: 'Map or API temporarily down. Try again.', action: 'Try again' };
+en.states.success = { title: 'Operational action completed', body: 'Pending item resolved with audit receipt.', action: 'Back to cockpit' };
+
+const es = deepClone(ptBlock);
+Object.assign(es.header, { back: 'Volver', avatarMenu: 'Abrir menú de cuenta', notifications: 'Notificaciones' });
+Object.assign(es.bottomNav, { label: 'Navegación principal', publicCargoes: 'Públicas', myCargoes: 'Mías', notifications: 'Alertas' });
+Object.assign(es.language, { switch: 'Cambiar idioma' });
+Object.assign(es.theme, { toggle: 'Alternar tema claro/oscuro' });
+Object.assign(es.avatarMenu, { label: 'Menú de cuenta', company: 'Empresa', preferences: 'Preferencias', security: 'Seguridad', logout: 'Salir' });
+Object.assign(es.search, { label: 'Buscar', placeholder: 'Buscar cargas, rutas o alertas', filters: 'Filtros' });
+Object.assign(es.risk, { low: 'Bajo', medium: 'Medio', high: 'Alto', critical: 'Crítico' });
+Object.assign(es.freshness, { fresh: 'Actualizado hace {minutes} min', stale: 'Datos desactualizados · {minutes} min', offline: 'Sin conexión · último hace {minutes} min' });
+Object.assign(es.landing, { subtitle: 'Operación fluvial con confianza para embarcadoras del Arco Norte', publicRoutesTitle: 'Rutas públicas Arco Norte', publicRoutesSummary: 'Menos ruptura operativa y menos CO₂ en corredores amazónicos.', chartLegend: 'Tendencia operativa', loginCta: 'Entrar', registerCta: 'Crear cuenta' });
+Object.assign(es.auth.login, { title: 'Entrar', country: 'País', phone: 'Teléfono', password: 'Contraseña', submit: 'Entrar', registerLink: 'Crear cuenta' });
+es.auth.login.errors = { phone: 'Ingrese un teléfono válido.', password: 'Contraseña muy corta.' };
+Object.assign(es.auth.register, { title: 'Registrar embarcadora', company: 'Nombre de la empresa', responsible: 'Responsable', consent: 'Acepto términos y privacidad', submit: 'Continuar' });
+es.auth.register.errors = { required: 'Complete empresa y responsable.', consent: 'Acepte los términos para continuar.' };
+Object.assign(es.auth.otp, { title: 'Verificar OTP', subtitle: 'Ingrese el código enviado al teléfono', submit: 'Verificar', changePhone: 'Cambiar teléfono' });
+es.auth.otp.errors = { incomplete: 'Ingrese los 6 dígitos.', incorrect: 'Código incorrecto.', expired: 'OTP expirado.', blocked: 'Demasiados intentos.' };
+Object.assign(es.phoneCountries, { br: 'Brasil', es: 'España', us: 'Estados Unidos' });
+Object.assign(es.cockpit, { title: 'Hola, embarcadora' });
+es.cockpit.filters = { all: 'Todos', critical: 'Críticos', docs: 'Docs' };
+es.cockpit.criticalAlert = { title: 'Riesgo crítico', body: 'HR-4821 con calado restringido en corredor Madeira.' };
+es.cockpit.metrics = { cargoes: 'Cargas', cargoesHint: '3 en tránsito', docs: 'Docs', docsHint: '2 pendientes', eta: 'ETA medio', etaHint: '15 horas', co2: 'CO₂ evitado', co2Hint: '38% vs carretera' };
+Object.assign(es.publicList, { title: 'Cargas públicas' });
+es.publicCargo.restrictedNotice = 'Vista restringida — sin contacto, valores ni documentos privados.';
+es.publicCargo.manifestInterest = 'Crear cuenta para negociar';
+es.publicCargo.cargoTypes = { solidBulk: 'Granel sólido', general: 'Carga general', container: 'Contenedor' };
+Object.assign(es.myCargoes, { title: 'Mis cargas', newCargo: 'Nueva carga' });
+es.myCargoes.filters = { all: 'Todas', transit: 'En tránsito', attention: 'En atención' };
+es.cargoCard.view = 'Ver';
+Object.assign(es.newCargo, { title: 'Nueva carga', origin: 'Origen', destination: 'Destino', type: 'Tipo', window: 'Ventana', draft: 'Calado mínimo (m)', submit: 'Crear carga' });
+es.newCargo.impactPreview = { title: 'Impacto estimado', body: 'Hasta 38% menos CO₂ vs modal carretero.' };
+es.newCargo.errors = { window: 'Indique la ventana operativa.' };
+es.cargoDetail.status = { open: 'Abierta', inTransit: 'En tránsito', attention: 'En atención', delivered: 'Entregada', blocked: 'Bloqueada' };
+es.cargoDetail.tiles = { risk: 'Riesgo', docs: 'Documentos', window: 'Ventana', windowValue: '24–28 jun', negotiation: 'Negociación', offers: '{count} ofertas' };
+Object.assign(es.map, { previewTitle: 'Mapa de operación', openFull: 'Abrir mapa pantalla completa', fullTitle: 'Mapa operacional', eta: 'ETA estimado: {hours}h' });
+Object.assign(es.documents, { title: 'Documentos', resolve: 'Resolver pendencia' });
+es.documents.confirm = { title: 'Confirmar resolución', body: 'Registra la resolución del documento bloqueante.', confirm: 'Confirmar', cancel: 'Cancelar' };
+Object.assign(es.negotiation, { title: 'Negociación', selectOffer: 'Seleccionar oferta' });
+es.negotiation.criterion = { title: 'Criterio sugerido', body: 'Priorice ETA ≤ 16h con bajo riesgo hidrológico.' };
+Object.assign(es.hydrology, { title: 'Hidrología' });
+Object.assign(es.impact, { title: 'Impacto' });
+Object.assign(es.notifications, { title: 'Notificaciones' });
+Object.assign(es.profile, { title: 'Perfil', menuLabel: 'Configuración de cuenta' });
+es.profile.menu = { language: 'Idioma', theme: 'Tema', notifications: 'Notificaciones', security: 'Seguridad', logout: 'Salir' };
+es.states.offline = { title: 'Sin conexión', body: 'Mostrando último estado conocido.', action: 'Intentar sincronizar' };
+es.states.serviceError = { title: 'Servicio no disponible', body: 'Mapa o API temporalmente fuera.', action: 'Intentar de nuevo' };
+es.states.success = { title: 'Acción operativa completada', body: 'Pendencia resuelta con recibo.', action: 'Volver al cockpit' };
+
+const blocks = { 'pt-BR': ptBlock, 'en-US': en, es };
+
+for (const locale of Object.keys(blocks)) {
+  const base = JSON.parse(readFileSync(`messages/${locale}.json`, 'utf8'));
+  base.shipperMobileFlow = blocks[locale];
+  writeFileSync(`messages/${locale}.json`, `${JSON.stringify(base, null, 2)}\n`);
+}
+
+console.log('Merged shipperMobileFlow into pt-BR, en-US, es');

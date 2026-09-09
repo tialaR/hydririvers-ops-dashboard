@@ -1,0 +1,195 @@
+/* Liquid Glass Segmented Control — Apple Segmented Control recipe, tokenized with local fallbacks. */
+
+.root {
+  --segmented-height-sm: 32px;
+  --segmented-height-md: 36px;
+  --segmented-item-height-sm: 28px;
+  --segmented-item-height-md: 32px;
+  --segmented-padding: 2px;
+  --segmented-gap: 4px;
+  --segmented-radius: var(--hydro-radius-pill, 100px);
+  --segmented-item-radius: 20px;
+  --segmented-item-padding: 3px 6px;
+  --segmented-font-size: 13.333px;
+  --segmented-line-height: 18px;
+  --segmented-letter-spacing: -0.08px;
+  --segmented-font-weight-selected: 590;
+  --segmented-font-weight-inactive: 510;
+  --segmented-motion-tap: var(--hydro-motion-tap, 120ms);
+  --segmented-motion-control: var(--hydro-motion-control, 180ms);
+  --segmented-easing: var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+  --segmented-font-family: var(
+    --hydro-font-family-system,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    sans-serif
+  );
+
+  --segmented-track-bg: var(
+    --hydro-color-fill-tertiary,
+    rgba(118, 118, 128, 0.12)
+  );
+  --segmented-selected-bg: var(--hydro-color-surface, #ffffff);
+  --segmented-label-color: var(--hydro-color-label-primary, #000000);
+  --segmented-focus-color: var(
+    --hydro-color-accent,
+    var(--hydro-kit-colors-accents-blue, #0088ff)
+  );
+
+  box-sizing: border-box;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--segmented-gap);
+  padding: var(--segmented-padding);
+  border-radius: var(--segmented-radius);
+  background: var(--segmented-track-bg);
+  font-family: var(--segmented-font-family);
+}
+
+.root_sm {
+  min-height: var(--segmented-height-sm);
+}
+
+.root_md {
+  min-height: var(--segmented-height-md);
+}
+
+.rootFullWidth {
+  width: 100%;
+}
+
+.rootInline {
+  width: auto;
+  max-width: 100%;
+}
+
+/* Theme: light */
+.root[data-tone='light'] {
+  --segmented-track-bg: rgba(118, 118, 128, 0.12);
+  --segmented-selected-bg: #ffffff;
+  --segmented-label-color: #000000;
+}
+
+/* Theme: dark */
+.root[data-tone='dark'] {
+  --segmented-track-bg: rgba(118, 118, 128, 0.24);
+  --segmented-selected-bg: rgba(255, 255, 255, 0.27);
+  --segmented-label-color: #ffffff;
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .root[data-tone='auto'] {
+  --segmented-track-bg: rgba(118, 118, 128, 0.12);
+  --segmented-selected-bg: #ffffff;
+  --segmented-label-color: #000000;
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .root[data-tone='auto'] {
+  --segmented-track-bg: rgba(118, 118, 128, 0.24);
+  --segmented-selected-bg: rgba(255, 255, 255, 0.27);
+  --segmented-label-color: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .root[data-tone='auto'] {
+    --segmented-track-bg: rgba(118, 118, 128, 0.12);
+    --segmented-selected-bg: #ffffff;
+    --segmented-label-color: #000000;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .root[data-tone='auto'] {
+    --segmented-track-bg: rgba(118, 118, 128, 0.24);
+    --segmented-selected-bg: rgba(255, 255, 255, 0.27);
+    --segmented-label-color: #ffffff;
+  }
+}
+
+.segment {
+  display: inline-flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  min-width: 0;
+  margin: 0;
+  padding: var(--segmented-item-padding);
+  border: 0;
+  border-radius: var(--segmented-item-radius);
+  background: transparent;
+  color: var(--segmented-label-color);
+  font-family: inherit;
+  font-size: var(--segmented-font-size);
+  line-height: var(--segmented-line-height);
+  font-weight: var(--segmented-font-weight-inactive);
+  letter-spacing: var(--segmented-letter-spacing);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--segmented-motion-tap) var(--segmented-easing),
+    background-color var(--segmented-motion-control) var(--segmented-easing),
+    font-weight var(--segmented-motion-control) var(--segmented-easing),
+    opacity var(--segmented-motion-tap) var(--segmented-easing);
+}
+
+.rootFullWidth .segment {
+  flex: 1 1 0;
+}
+
+.root_sm .segment {
+  min-height: var(--segmented-item-height-sm);
+}
+
+.root_md .segment {
+  min-height: var(--segmented-item-height-md);
+}
+
+.segmentSelected {
+  background: var(--segmented-selected-bg);
+  font-weight: var(--segmented-font-weight-selected);
+}
+
+.label {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.segment:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.segment:active:not(:disabled) {
+  transform: scale(0.975);
+}
+
+.segment:focus {
+  outline: none;
+}
+
+.segment:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--segmented-focus-color) 72%, transparent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .segment {
+    transition: none;
+  }
+
+  .segment:active:not(:disabled) {
+    transform: none;
+  }
+}

@@ -1,0 +1,118 @@
+/* Liquid Glass Materials — iOS/iPadOS 26 Materials (_Materials / Mode Options), tokenized. */
+
+@mixin liquid-glass-material-density-active($tone) {
+  $tone-prefix: if($tone == light, light, dark);
+
+  &.materialUltrathin {
+    --hydro-material-blur-active: var(--hydro-material-blur-ultrathin);
+    --hydro-material-bg-active: var(--hydro-material-#{$tone-prefix}-ultrathin-bg);
+    --hydro-material-blend-active: var(--hydro-material-#{$tone-prefix}-ultrathin-blend);
+  }
+
+  &.materialThin {
+    --hydro-material-blur-active: var(--hydro-material-blur-thin);
+    --hydro-material-bg-active: var(--hydro-material-#{$tone-prefix}-thin-bg);
+    --hydro-material-blend-active: var(--hydro-material-#{$tone-prefix}-thin-blend);
+  }
+
+  &.materialRegular {
+    --hydro-material-blur-active: var(--hydro-material-blur-regular);
+    --hydro-material-bg-active: var(--hydro-material-#{$tone-prefix}-regular-bg);
+    --hydro-material-blend-active: var(--hydro-material-#{$tone-prefix}-regular-blend);
+  }
+
+  &.materialThick {
+    --hydro-material-blur-active: var(--hydro-material-blur-thick);
+    --hydro-material-bg-active: var(--hydro-material-#{$tone-prefix}-thick-bg);
+    --hydro-material-blend-active: var(--hydro-material-#{$tone-prefix}-thick-blend);
+  }
+
+  &.materialChrome {
+    --hydro-material-blur-active: if(
+      $tone == light,
+      var(--hydro-material-blur-chrome),
+      50px
+    );
+    --hydro-material-bg-active: var(--hydro-material-#{$tone-prefix}-chrome-bg);
+    --hydro-material-blend-active: var(--hydro-material-#{$tone-prefix}-chrome-blend);
+  }
+}
+
+.liquidGlassMaterial {
+  --hydro-material-blur-ultrathin: 50px;
+  --hydro-material-blur-thin: 50px;
+  --hydro-material-blur-regular: 50px;
+  --hydro-material-blur-thick: 50px;
+  --hydro-material-blur-chrome: 25px;
+
+  --hydro-material-light-ultrathin-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03)),
+    rgba(255, 255, 255, 0.07);
+  --hydro-material-light-thin-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+    rgba(255, 255, 255, 0.05);
+  --hydro-material-light-regular-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)),
+    rgba(255, 255, 255, 0.25);
+  --hydro-material-light-thick-bg:
+    linear-gradient(0deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.84)),
+    rgba(255, 255, 255, 0.34);
+  --hydro-material-light-chrome-bg: rgba(255, 255, 255, 0.75);
+
+  --hydro-material-dark-ultrathin-bg: rgba(0, 0, 0, 0.02);
+  --hydro-material-dark-thin-bg: rgba(0, 0, 0, 0.26);
+  --hydro-material-dark-regular-bg: rgba(0, 0, 0, 0.41);
+  --hydro-material-dark-thick-bg: rgba(0, 0, 0, 0.6);
+  --hydro-material-dark-chrome-bg:
+    linear-gradient(0deg, #7c7c7c, #7c7c7c),
+    rgba(28, 28, 28, 0.9);
+
+  --hydro-material-light-ultrathin-blend: color-dodge, normal;
+  --hydro-material-light-thin-blend: color-dodge, normal;
+  --hydro-material-light-regular-blend: color-dodge, plus-lighter;
+  --hydro-material-light-thick-blend: color-dodge, plus-lighter;
+  --hydro-material-light-chrome-blend: hard-light;
+
+  --hydro-material-dark-ultrathin-blend: normal;
+  --hydro-material-dark-thin-blend: normal;
+  --hydro-material-dark-regular-blend: normal;
+  --hydro-material-dark-thick-blend: normal;
+  --hydro-material-dark-chrome-blend: overlay, normal;
+
+  --hydro-material-blur-active: var(--hydro-material-blur-regular);
+  --hydro-material-bg-active: var(--hydro-material-light-regular-bg);
+  --hydro-material-blend-active: var(--hydro-material-light-regular-blend);
+
+  background: var(--hydro-material-bg-active);
+  background-blend-mode: var(--hydro-material-blend-active);
+  backdrop-filter: blur(var(--hydro-material-blur-active));
+  -webkit-backdrop-filter: blur(var(--hydro-material-blur-active));
+}
+
+.liquidGlassMaterial {
+  @include liquid-glass-material-density-active(light);
+}
+
+.liquidGlassMaterial[data-tone='light'] {
+  @include liquid-glass-material-density-active(light);
+}
+
+.liquidGlassMaterial[data-tone='dark'] {
+  @include liquid-glass-material-density-active(dark);
+}
+
+.liquidGlassMaterial[data-tone='auto'] {
+  @include liquid-glass-material-density-active(light);
+
+  @media (prefers-color-scheme: dark) {
+    @include liquid-glass-material-density-active(dark);
+  }
+}
+
+:global([data-theme='light']) .liquidGlassMaterial:not([data-tone='dark']) {
+  @include liquid-glass-material-density-active(light);
+}
+
+:global([data-theme='dark']) .liquidGlassMaterial:not([data-tone='light']) {
+  @include liquid-glass-material-density-active(dark);
+}

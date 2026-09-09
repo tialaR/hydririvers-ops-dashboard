@@ -1,0 +1,59 @@
+@mixin pressableBubble(
+  $scale: 1.045,
+  $duration: 150ms,
+  $easing: cubic-bezier(0.2, 0.8, 0.2, 1)
+) {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition: transform $duration $easing;
+  will-change: transform;
+
+  &:active {
+    transform: scale($scale);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 1ms;
+    will-change: auto;
+
+    &:active {
+      transform: none;
+    }
+  }
+}
+
+@mixin pressableIconButton {
+  @include pressableBubble($scale: 1.06, $duration: 140ms);
+}
+
+@mixin pressableCard {
+  @include pressableBubble($scale: 1.035, $duration: 160ms);
+}
+
+@mixin focusBubble(
+  $scale: 1.025,
+  $duration: 150ms,
+  $easing: cubic-bezier(0.2, 0.8, 0.2, 1)
+) {
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transform-origin: center;
+  transition: transform $duration $easing;
+  will-change: transform;
+
+  &:focus-visible {
+    transform: scale($scale);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition-duration: 1ms;
+    will-change: auto;
+
+    &:focus-visible {
+      transform: none;
+    }
+  }
+}

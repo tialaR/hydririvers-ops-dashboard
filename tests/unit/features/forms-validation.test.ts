@@ -41,7 +41,7 @@ describe('forms validation schemas', () => {
       name: ' Tiala Rocha ',
       email: ' TIALA@EXAMPLE.COM ',
       company: ' HydroRivers ',
-      phone: '  ',
+      phone: ' +55 91 99999-0001 ',
       city: '  Belém, PA  ',
       avatarUrl: '  '
     });
@@ -51,7 +51,7 @@ describe('forms validation schemas', () => {
 
     expect(result.data.name).toBe('Tiala Rocha');
     expect(result.data.email).toBe('tiala@example.com');
-    expect(result.data.phone).toBeUndefined();
+    expect(result.data.phone).toBe('+5591999990001');
     expect(result.data.city).toBe('Belém, PA');
     expect(result.data.avatarUrl).toBeUndefined();
   });
@@ -61,12 +61,27 @@ describe('forms validation schemas', () => {
       name: '',
       email: '',
       company: '',
-      phone: undefined,
-      city: undefined,
+      phone: '',
+      city: '',
       avatarUrl: undefined
     });
 
     expect(result.success).toBe(false);
+  });
+
+  it('rejects profile phone without country code prefix', () => {
+    const result = profileFormSchema.safeParse({
+      name: 'Tiala Rocha',
+      email: 'tiala@example.com',
+      company: 'HydroRivers',
+      phone: '91999990001',
+      city: 'Belém, PA',
+      avatarUrl: undefined
+    });
+
+    expect(result.success).toBe(false);
+    if (result.success) return;
+    expect(result.error.issues.some((i) => i.message === 'profile-phone-no-country')).toBe(true);
   });
 
   it('validates cargo proposal payloads', () => {

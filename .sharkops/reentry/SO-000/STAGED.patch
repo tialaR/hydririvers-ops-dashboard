@@ -1,0 +1,4799 @@
+diff --git a/messages/en-US.json b/messages/en-US.json
+index 973fa0b2..76046e71 100644
+--- a/messages/en-US.json
++++ b/messages/en-US.json
+@@ -3057,7 +3057,9 @@
+     "header": {
+       "back": "Back",
+       "avatarMenu": "Open account menu",
+-      "notifications": "Notifications"
++      "notifications": "Notifications",
++      "hubTitle": "Operations hub",
++      "opsMode": "Ops mode"
+     },
+     "bottomNav": {
+       "label": "Main navigation",
+@@ -3115,6 +3117,11 @@
+     "auth": {
+       "login": {
+         "title": "Sign in",
++        "subtitle": "Secure access for your waterway operations",
++        "highlightsAria": "Security and operations highlights",
++        "highlightAudit": "Auditable trail",
++        "highlightEta": "Trusted ETA",
++        "highlightSecurity": "Protected session",
+         "country": "Country",
+         "phone": "Phone",
+         "phonePlaceholder": "Area code + number",
+@@ -3128,6 +3135,12 @@
+       },
+       "register": {
+         "title": "Register shipper",
++        "subtitle": "Quick signup with OTP verification",
++        "highlightsAria": "Operational signup highlights",
++        "highlightIdentity": "Company identity",
++        "highlightOps": "Ready to operate",
++        "highlightOtp": "OTP verification",
++        "stepLabel": "Step 1 of 2 · Company details",
+         "company": "Company name",
+         "responsible": "Contact person",
+         "country": "Country / phone",
+@@ -3142,6 +3155,11 @@
+       "otp": {
+         "title": "Verify OTP",
+         "subtitle": "Enter the code sent to your phone",
++        "secureBadge": "Secure verification",
++        "highlightsAria": "OTP security highlights",
++        "highlightFraud": "Fraud protection",
++        "highlightTraceability": "Access traceability",
++        "highlightSession": "Validated session",
+         "digit": "Digit {index}",
+         "resendHint": "Resend in 00:32",
+         "submit": "Verify",
+@@ -3160,7 +3178,14 @@
+       "us": "United States"
+     },
+     "cockpit": {
+-      "title": "Hello, shipper",
++      "title": "Operational cockpit",
++      "topMetaAria": "Top operational summary",
++      "topMeta": {
++        "nextWindow": "Next window",
++        "nextWindowValue": "Today · 4:30 PM",
++        "compliance": "Compliance",
++        "complianceValue": "97% validated"
++      },
+       "filters": {
+         "all": "All",
+         "critical": "Critical",
+@@ -3197,6 +3222,15 @@
+     },
+     "publicList": {
+       "title": "Public cargoes",
++      "resultsCount": "{count} routes",
++      "emptyTitle": "No routes found",
++      "emptyBody": "Adjust filters or search another corridor.",
++      "filtersSheet": {
++        "title": "Premium filters",
++        "lead": "Adjust corridor and operational focus to refine the list.",
++        "clear": "Clear",
++        "apply": "Apply filters"
++      },
+       "filters": {
+         "all": "All",
+         "tapajos": "Tapajós",
+@@ -3239,6 +3273,23 @@
+     },
+     "myCargoes": {
+       "title": "My cargoes",
++      "resultsCount": "{count} cargoes",
++      "emptyTitle": "No cargoes in this filter",
++      "emptyBody": "Try another filter or clear the search.",
++      "summaryAria": "Operational cargo summary",
++      "summary": {
++        "inTransit": "In transit",
++        "attention": "Attention",
++        "docs": "Pending docs",
++        "eta": "Avg ETA",
++        "etaValue": "{hours}h"
++      },
++      "filtersSheet": {
++        "title": "Premium filters",
++        "lead": "Select the operational slice that needs attention.",
++        "clear": "Clear",
++        "apply": "Apply filters"
++      },
+       "newCargo": "New cargo",
+       "filters": {
+         "all": "All",
+@@ -3288,6 +3339,22 @@
+         "offers": "{count} offers",
+         "map": "Map",
+         "mapValue": "Open route"
++      },
++      "opsSectionAria": "Cargo operational modules",
++      "opsSectionTitle": "Operational modules",
++      "modules": {
++        "timeline": "Timeline",
++        "timelineValue": "4 active milestones",
++        "costs": "Costs",
++        "costsValue": "R$ 184k forecast",
++        "compliance": "Compliance",
++        "complianceValue": "2 pending checks",
++        "portWindow": "Port window",
++        "portWindowValue": "Jun 24-28",
++        "eta": "ETA",
++        "etaValue": "{hours}h estimated",
++        "risk": "Composite risk",
++        "riskValue": "Hydro + docs"
+       }
+     },
+     "map": {
+@@ -3350,12 +3417,21 @@
+     },
+     "negotiation": {
+       "title": "Negotiation",
++      "heroAria": "Negotiation summary",
++      "heroLabel": "Decision making",
++      "heroBody": "{offers} offers available for this cargo",
+       "criterion": {
+         "title": "Suggested criterion",
+         "body": "Prioritize ETA ≤ 16h with low hydrology risk."
+       },
+       "selectOffer": "Select offer",
+       "eta": "ETA {hours}h",
++      "meta": {
++        "price": "Price per ton",
++        "risk": "Risk",
++        "low": "Low",
++        "medium": "Medium"
++      },
+       "confirm": {
+         "title": "Confirm offer",
+         "body": "Confirm selection of {offer}?",
+@@ -3416,6 +3492,11 @@
+     },
+     "notifications": {
+       "title": "Notifications",
++      "heroAria": "Operational notifications summary",
++      "heroLabel": "Operations center",
++      "heroValue": "{count} active alerts",
++      "heroCritical": "{count} critical",
++      "heroWarning": "{count} warning",
+       "items": {
+         "draftLow": {
+           "title": "Low draft",
+@@ -3437,6 +3518,14 @@
+     "profile": {
+       "title": "Profile",
+       "menuLabel": "Account settings",
++      "identityAria": "Operational account identity",
++      "identity": {
++        "role": "Profile",
++        "roleValue": "Shipper",
++        "locale": "Locale",
++        "access": "Access",
++        "accessValue": "Private operations"
++      },
+       "menu": {
+         "language": "Language",
+         "theme": "Theme",
+diff --git a/messages/es.json b/messages/es.json
+index 72e03d71..92715b97 100644
+--- a/messages/es.json
++++ b/messages/es.json
+@@ -3057,7 +3057,9 @@
+     "header": {
+       "back": "Volver",
+       "avatarMenu": "Abrir menú de cuenta",
+-      "notifications": "Notificaciones"
++      "notifications": "Notificaciones",
++      "hubTitle": "Centro operativo",
++      "opsMode": "Modo operación"
+     },
+     "bottomNav": {
+       "label": "Navegación principal",
+@@ -3115,6 +3117,11 @@
+     "auth": {
+       "login": {
+         "title": "Entrar",
++        "subtitle": "Acceso seguro para su operación fluvial",
++        "highlightsAria": "Destacados de seguridad y operación",
++        "highlightAudit": "Rastro auditable",
++        "highlightEta": "ETA confiable",
++        "highlightSecurity": "Sesión protegida",
+         "country": "País",
+         "phone": "Teléfono",
+         "phonePlaceholder": "DDD + número",
+@@ -3128,6 +3135,12 @@
+       },
+       "register": {
+         "title": "Registrar embarcadora",
++        "subtitle": "Registro rápido con verificación OTP",
++        "highlightsAria": "Destacados del registro operativo",
++        "highlightIdentity": "Identidad de la empresa",
++        "highlightOps": "Lista para operar",
++        "highlightOtp": "Verificación OTP",
++        "stepLabel": "Paso 1 de 2 · Datos de la empresa",
+         "company": "Nombre de la empresa",
+         "responsible": "Responsable",
+         "country": "País / telefone",
+@@ -3142,6 +3155,11 @@
+       "otp": {
+         "title": "Verificar OTP",
+         "subtitle": "Ingrese el código enviado al teléfono",
++        "secureBadge": "Verificación segura",
++        "highlightsAria": "Destacados de seguridad del OTP",
++        "highlightFraud": "Protección antifraude",
++        "highlightTraceability": "Trazabilidad de acceso",
++        "highlightSession": "Sesión validada",
+         "digit": "Dígito {index}",
+         "resendHint": "Reenviar em 00:32",
+         "submit": "Verificar",
+@@ -3160,7 +3178,14 @@
+       "us": "Estados Unidos"
+     },
+     "cockpit": {
+-      "title": "Hola, embarcadora",
++      "title": "Cockpit operativo",
++      "topMetaAria": "Resumen operativo superior",
++      "topMeta": {
++        "nextWindow": "Próxima ventana",
++        "nextWindowValue": "Hoy · 16:30",
++        "compliance": "Compliance",
++        "complianceValue": "97% validado"
++      },
+       "filters": {
+         "all": "Todos",
+         "critical": "Críticos",
+@@ -3197,6 +3222,15 @@
+     },
+     "publicList": {
+       "title": "Cargas públicas",
++      "resultsCount": "{count} rutas",
++      "emptyTitle": "Ninguna ruta encontrada",
++      "emptyBody": "Ajuste filtros o busque otro corredor.",
++      "filtersSheet": {
++        "title": "Filtros premium",
++        "lead": "Ajuste corredor y foco operativo para refinar la lista.",
++        "clear": "Limpiar",
++        "apply": "Aplicar filtros"
++      },
+       "filters": {
+         "all": "Todas",
+         "tapajos": "Tapajós",
+@@ -3239,6 +3273,23 @@
+     },
+     "myCargoes": {
+       "title": "Mis cargas",
++      "resultsCount": "{count} cargas",
++      "emptyTitle": "Ninguna carga en este filtro",
++      "emptyBody": "Pruebe otro filtro o limpie la búsqueda.",
++      "summaryAria": "Resumen operativo de cargas",
++      "summary": {
++        "inTransit": "En tránsito",
++        "attention": "En atención",
++        "docs": "Docs pendientes",
++        "eta": "ETA medio",
++        "etaValue": "{hours}h"
++      },
++      "filtersSheet": {
++        "title": "Filtros premium",
++        "lead": "Seleccione el recorte operativo que requiere atención.",
++        "clear": "Limpiar",
++        "apply": "Aplicar filtros"
++      },
+       "newCargo": "Nueva carga",
+       "filters": {
+         "all": "Todas",
+@@ -3288,6 +3339,22 @@
+         "offers": "{count} ofertas",
+         "map": "Mapa",
+         "mapValue": "Abrir ruta"
++      },
++      "opsSectionAria": "Módulos operativos de la carga",
++      "opsSectionTitle": "Módulos operativos",
++      "modules": {
++        "timeline": "Timeline",
++        "timelineValue": "4 hitos activos",
++        "costs": "Costos",
++        "costsValue": "R$ 184 mil previstos",
++        "compliance": "Compliance",
++        "complianceValue": "2 validaciones pendientes",
++        "portWindow": "Ventana portuaria",
++        "portWindowValue": "24-28 jun",
++        "eta": "ETA",
++        "etaValue": "{hours}h estimadas",
++        "risk": "Riesgo compuesto",
++        "riskValue": "Hidro + docs"
+       }
+     },
+     "map": {
+@@ -3350,12 +3417,21 @@
+     },
+     "negotiation": {
+       "title": "Negociación",
++      "heroAria": "Resumen de negociación",
++      "heroLabel": "Toma de decisión",
++      "heroBody": "{offers} ofertas disponibles para esta carga",
+       "criterion": {
+         "title": "Criterio sugerido",
+         "body": "Priorice ETA ≤ 16h con bajo riesgo hidrológico."
+       },
+       "selectOffer": "Seleccionar oferta",
+       "eta": "ETA {hours}h",
++      "meta": {
++        "price": "Precio por tonelada",
++        "risk": "Riesgo",
++        "low": "Bajo",
++        "medium": "Medio"
++      },
+       "confirm": {
+         "title": "Confirmar oferta",
+         "body": "Confirma seleção de {offer}?",
+@@ -3416,6 +3492,11 @@
+     },
+     "notifications": {
+       "title": "Notificaciones",
++      "heroAria": "Resumen de notificaciones operativas",
++      "heroLabel": "Central operativa",
++      "heroValue": "{count} alertas activas",
++      "heroCritical": "{count} críticas",
++      "heroWarning": "{count} en atención",
+       "items": {
+         "draftLow": {
+           "title": "Calado baixo",
+@@ -3437,6 +3518,14 @@
+     "profile": {
+       "title": "Perfil",
+       "menuLabel": "Configuración de cuenta",
++      "identityAria": "Identidad operativa de la cuenta",
++      "identity": {
++        "role": "Perfil",
++        "roleValue": "Embarcadora",
++        "locale": "Idioma",
++        "access": "Acceso",
++        "accessValue": "Operación privada"
++      },
+       "menu": {
+         "language": "Idioma",
+         "theme": "Tema",
+diff --git a/messages/pt-BR.json b/messages/pt-BR.json
+index 820e29ee..dcd4ce90 100644
+--- a/messages/pt-BR.json
++++ b/messages/pt-BR.json
+@@ -3057,7 +3057,9 @@
+     "header": {
+       "back": "Voltar",
+       "avatarMenu": "Abrir menu da conta",
+-      "notifications": "Notificações"
++      "notifications": "Notificações",
++      "hubTitle": "Centro operacional",
++      "opsMode": "Modo operação"
+     },
+     "bottomNav": {
+       "label": "Navegação principal",
+@@ -3115,6 +3117,11 @@
+     "auth": {
+       "login": {
+         "title": "Entrar",
++        "subtitle": "Acesso seguro para sua operação hidroviária",
++        "highlightsAria": "Destaques de segurança e operação",
++        "highlightAudit": "Rastro auditável",
++        "highlightEta": "ETA confiável",
++        "highlightSecurity": "Sessão protegida",
+         "country": "País",
+         "phone": "Telefone",
+         "phonePlaceholder": "DDD + número",
+@@ -3128,6 +3135,12 @@
+       },
+       "register": {
+         "title": "Registrar embarcadora",
++        "subtitle": "Cadastro rápido com verificação por OTP",
++        "highlightsAria": "Destaques do cadastro operacional",
++        "highlightIdentity": "Identidade da empresa",
++        "highlightOps": "Pronto para operar",
++        "highlightOtp": "Verificação OTP",
++        "stepLabel": "Passo 1 de 2 · Dados da empresa",
+         "company": "Nome da empresa",
+         "responsible": "Responsável",
+         "country": "País / telefone",
+@@ -3142,6 +3155,11 @@
+       "otp": {
+         "title": "Verificar OTP",
+         "subtitle": "Digite o código enviado ao telefone",
++        "secureBadge": "Verificação segura",
++        "highlightsAria": "Destaques de segurança do OTP",
++        "highlightFraud": "Proteção antifraude",
++        "highlightTraceability": "Rastreabilidade de acesso",
++        "highlightSession": "Sessão validada",
+         "digit": "Dígito {index}",
+         "resendHint": "Reenviar em 00:32",
+         "submit": "Verificar",
+@@ -3160,7 +3178,14 @@
+       "us": "Estados Unidos"
+     },
+     "cockpit": {
+-      "title": "Olá, embarcadora",
++      "title": "Cockpit operacional",
++      "topMetaAria": "Resumo operacional superior",
++      "topMeta": {
++        "nextWindow": "Próxima janela",
++        "nextWindowValue": "Hoje · 16:30",
++        "compliance": "Compliance",
++        "complianceValue": "97% validado"
++      },
+       "filters": {
+         "all": "Todos",
+         "critical": "Críticos",
+@@ -3197,6 +3222,15 @@
+     },
+     "publicList": {
+       "title": "Cargas públicas",
++      "resultsCount": "{count} rotas",
++      "emptyTitle": "Nenhuma rota encontrada",
++      "emptyBody": "Ajuste filtros ou busque outro corredor.",
++      "filtersSheet": {
++        "title": "Filtros premium",
++        "lead": "Ajuste corredor e foco operacional para refinar a lista.",
++        "clear": "Limpar",
++        "apply": "Aplicar filtros"
++      },
+       "filters": {
+         "all": "Todas",
+         "tapajos": "Tapajós",
+@@ -3239,6 +3273,23 @@
+     },
+     "myCargoes": {
+       "title": "Minhas cargas",
++      "resultsCount": "{count} cargas",
++      "emptyTitle": "Nenhuma carga neste filtro",
++      "emptyBody": "Tente outro filtro ou limpe a busca.",
++      "summaryAria": "Resumo operacional das cargas",
++      "summary": {
++        "inTransit": "Em trânsito",
++        "attention": "Em atenção",
++        "docs": "Docs pendentes",
++        "eta": "ETA médio",
++        "etaValue": "{hours}h"
++      },
++      "filtersSheet": {
++        "title": "Filtros premium",
++        "lead": "Selecione o recorte da operação que precisa de atenção.",
++        "clear": "Limpar",
++        "apply": "Aplicar filtros"
++      },
+       "newCargo": "Nova carga",
+       "filters": {
+         "all": "Todas",
+@@ -3288,6 +3339,22 @@
+         "offers": "{count} ofertas",
+         "map": "Mapa",
+         "mapValue": "Abrir rota"
++      },
++      "opsSectionAria": "Módulos operacionais da carga",
++      "opsSectionTitle": "Módulos operacionais",
++      "modules": {
++        "timeline": "Timeline",
++        "timelineValue": "4 marcos ativos",
++        "costs": "Custos",
++        "costsValue": "R$ 184 mil previstos",
++        "compliance": "Compliance",
++        "complianceValue": "2 validações pendentes",
++        "portWindow": "Janela portuária",
++        "portWindowValue": "24-28 jun",
++        "eta": "ETA",
++        "etaValue": "{hours}h estimadas",
++        "risk": "Risco composto",
++        "riskValue": "Hidro + docs"
+       }
+     },
+     "map": {
+@@ -3350,12 +3417,21 @@
+     },
+     "negotiation": {
+       "title": "Negociação",
++      "heroAria": "Resumo de negociação",
++      "heroLabel": "Tomada de decisão",
++      "heroBody": "{offers} ofertas disponíveis para esta carga",
+       "criterion": {
+         "title": "Critério sugerido",
+         "body": "Priorize ETA ≤ 16h com risco hidrológico baixo."
+       },
+       "selectOffer": "Selecionar oferta",
+       "eta": "ETA {hours}h",
++      "meta": {
++        "price": "Preço por tonelada",
++        "risk": "Risco",
++        "low": "Baixo",
++        "medium": "Médio"
++      },
+       "confirm": {
+         "title": "Confirmar oferta",
+         "body": "Confirma seleção de {offer}?",
+@@ -3416,6 +3492,11 @@
+     },
+     "notifications": {
+       "title": "Notificações",
++      "heroAria": "Resumo de notificações operacionais",
++      "heroLabel": "Central operacional",
++      "heroValue": "{count} alertas ativos",
++      "heroCritical": "{count} críticos",
++      "heroWarning": "{count} em atenção",
+       "items": {
+         "draftLow": {
+           "title": "Calado baixo",
+@@ -3437,6 +3518,14 @@
+     "profile": {
+       "title": "Perfil",
+       "menuLabel": "Configurações da conta",
++      "identityAria": "Identidade operacional da conta",
++      "identity": {
++        "role": "Perfil",
++        "roleValue": "Embarcadora",
++        "locale": "Idioma",
++        "access": "Acesso",
++        "accessValue": "Operação privada"
++      },
+       "menu": {
+         "language": "Idioma",
+         "theme": "Tema",
+diff --git a/next-env.d.ts b/next-env.d.ts
+index c4b7818f..9edff1c7 100644
+--- a/next-env.d.ts
++++ b/next-env.d.ts
+@@ -1,6 +1,6 @@
+ /// <reference types="next" />
+ /// <reference types="next/image-types/global" />
+-import "./.next/dev/types/routes.d.ts";
++import "./.next/types/routes.d.ts";
+ 
+ // NOTE: This file should not be edited
+ // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+diff --git a/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass b/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
+index 40384cf0..afefd0c6 100644
+--- a/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
++++ b/src/features/shipper-mobile-flow/components/app-header/app-header.module.sass
+@@ -5,37 +5,66 @@
+   position: sticky
+   top: 0
+   z-index: 20
+-  height: var(--header-h)
+   min-height: var(--header-h)
+   display: flex
+-  align-items: center
++  align-items: flex-start
+   justify-content: space-between
+-  gap: var(--space-2)
+-  padding: var(--space-2) var(--space-4)
+-  border-bottom: 1px solid var(--hy-shipper-glass-border)
++  gap: var(--space-3)
++  padding: var(--space-2) var(--space-4) var(--space-3)
++  border-bottom: 1px solid color-mix(in srgb, var(--hy-shipper-glass-border) 80%, transparent)
++  box-shadow: 0 0.0625rem 0 rgba(5, 6, 7, 0.04), 0 0.5rem 1.125rem color-mix(in srgb, var(--hy-shipper-text) 4%, transparent)
+ 
+ .headerMap
+   height: var(--header-map-h)
+   min-height: var(--header-map-h)
+ 
++.leftBlock
++  min-width: 0
++  flex: 1
++  display: flex
++  flex-direction: column
++  gap: var(--space-1)
++
+ .left
+   display: flex
+   align-items: center
+   gap: var(--space-2)
+   min-width: 0
+-  flex: 1
+ 
+ .title
+   @include shipper-body
+-  font-weight: 700
++  font-weight: 750
+   font-size: clamp(1rem, 3.5vw, 1.125rem)
+   margin: 0
+   white-space: nowrap
+   overflow: hidden
+   text-overflow: ellipsis
++  letter-spacing: -0.02em
++
++.metaRow
++  display: inline-flex
++  align-items: center
++  gap: var(--space-2)
++  min-height: var(--touch-min)
++
++.metaCompany
++  @include shipper-label
++  color: var(--hy-shipper-muted)
++  max-width: 12rem
++  overflow: hidden
++  text-overflow: ellipsis
++  white-space: nowrap
++
++.metaBadge
++  @include shipper-operational-label
++  padding: 0.125rem 0.5rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-accent-premium) 11%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 20%, transparent)
++  color: color-mix(in srgb, var(--hy-shipper-accent-operational) 72%, var(--hy-shipper-text))
+ 
+ .back
+-  @include shipper-pressable
++  @include shipper-pressable-subtle
+   @include shipper-focus
+   @include shipper-glass
+   width: var(--header-icon)
+@@ -49,10 +78,11 @@
+   color: var(--hy-shipper-text)
+   text-decoration: none
+   flex-shrink: 0
+-  box-shadow: var(--hy-shipper-shadow-sm)
++  box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-sm)
+ 
+ .actions
+   display: flex
+   align-items: center
+   gap: var(--space-1)
+   flex-shrink: 0
++  padding-top: 0.125rem
+diff --git a/src/features/shipper-mobile-flow/components/app-header/app-header.tsx b/src/features/shipper-mobile-flow/components/app-header/app-header.tsx
+index 7d023fd9..0e5a5db6 100644
+--- a/src/features/shipper-mobile-flow/components/app-header/app-header.tsx
++++ b/src/features/shipper-mobile-flow/components/app-header/app-header.tsx
+@@ -7,6 +7,7 @@ import { LanguageSwitcher } from '@/features/shipper-mobile-flow/components/lang
+ import { ThemeSwitcher } from '@/features/shipper-mobile-flow/components/theme-switcher/theme-switcher';
+ import { NotificationBell } from '@/features/shipper-mobile-flow/components/notification-bell/notification-bell';
+ import { AvatarButton } from '@/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button';
++import { useShipperFlow } from '@/features/shipper-mobile-flow/providers/shipper-flow-provider';
+ 
+ import styles from './app-header.module.sass';
+ 
+@@ -19,16 +20,26 @@ type AppHeaderProps = {
+ 
+ export function AppHeader({ title, mode, backHref, onAvatarClick }: AppHeaderProps) {
+   const t = useTranslations('shipperMobileFlow.header');
++  const { currentUser } = useShipperFlow();
++  const resolvedTitle = title ?? t('hubTitle');
+ 
+   return (
+     <header className={`${styles.header} ${mode === 'minimal' ? styles.headerMap : ''}`}>
+-      <div className={styles.left}>
+-        {backHref ? (
+-          <Link href={backHref} className={styles.back} aria-label={t('back')}>
+-            <ArrowLeft size={18} aria-hidden />
+-          </Link>
++      <div className={styles.leftBlock}>
++        <div className={styles.left}>
++          {backHref ? (
++            <Link href={backHref} className={styles.back} aria-label={t('back')}>
++              <ArrowLeft size={18} aria-hidden />
++            </Link>
++          ) : null}
++          <h1 className={styles.title}>{resolvedTitle}</h1>
++        </div>
++        {mode === 'authenticated' ? (
++          <div className={styles.metaRow}>
++            <span className={styles.metaCompany}>{currentUser.company}</span>
++            <span className={styles.metaBadge}>{t('opsMode')}</span>
++          </div>
+         ) : null}
+-        {title ? <h1 className={styles.title}>{title}</h1> : null}
+       </div>
+       {mode === 'authenticated' ? (
+         <div className={styles.actions}>
+diff --git a/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass b/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+index ba3a105f..c9c09496 100644
+--- a/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
++++ b/src/features/shipper-mobile-flow/components/avatar-menu-sheet/avatar-button.module.sass
+@@ -13,14 +13,17 @@
+   color: var(--hy-shipper-text)
+   cursor: pointer
+   text-decoration: none
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 20%, var(--hy-shipper-glass-border))
++  box-shadow: var(--hy-shipper-glass-inner-glow), 0 0.5rem 1.25rem color-mix(in srgb, var(--hy-shipper-text) 8%, transparent)
+ 
+ .avatar
+   width: var(--avatar)
+   height: var(--avatar)
+   border-radius: var(--radius-pill)
+-  background: var(--hy-shipper-surface-secondary)
++  background: linear-gradient(145deg, color-mix(in srgb, var(--hy-shipper-surface) 84%, var(--hy-shipper-accent-premium)) 0%, color-mix(in srgb, var(--hy-shipper-glass-bg) 92%, var(--hy-shipper-surface-secondary)) 100%)
+   display: inline-flex
+   align-items: center
+   justify-content: center
+   @include shipper-label
+   font-weight: 700
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 22%, transparent)
+diff --git a/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx b/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx
+index 1a1c4d2e..ccbf9fb0 100644
+--- a/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx
++++ b/src/features/shipper-mobile-flow/components/bottom-nav/bottom-nav.tsx
+@@ -2,42 +2,37 @@
+ 
+ import { Bell, Globe, Home, Package, User } from 'lucide-react';
+ import { useTranslations } from 'next-intl';
+-import { Link, usePathname } from '@/core/i18n/navigation';
++import { usePathname } from '@/core/i18n/navigation';
+ import { bottomNavHref, resolveBottomNavId } from '@/features/shipper-mobile-flow/domain/shipper-nav-domain';
+ import type { ShipperBottomNavId } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++import { BottomNav as SharedBottomNav, type BottomNavItem } from '@/shared/components/bottom-nav';
+ 
+-import styles from './bottom-nav.module.sass';
++const NAV_ITEMS: ShipperBottomNavId[] = ['cockpit', 'publicCargoes', 'myCargoes', 'notifications', 'profile'];
+ 
+-const NAV_ITEMS: { id: ShipperBottomNavId; icon: typeof Home }[] = [
+-  { id: 'cockpit', icon: Home },
+-  { id: 'publicCargoes', icon: Globe },
+-  { id: 'myCargoes', icon: Package },
+-  { id: 'notifications', icon: Bell },
+-  { id: 'profile', icon: User }
+-];
++function resolveIcon(navId: ShipperBottomNavId) {
++  if (navId === 'cockpit') return <Home size={20} aria-hidden />;
++  if (navId === 'publicCargoes') return <Globe size={20} aria-hidden />;
++  if (navId === 'myCargoes') return <Package size={20} aria-hidden />;
++  if (navId === 'notifications') return <Bell size={20} aria-hidden />;
++  return <User size={20} aria-hidden />;
++}
+ 
+ export function BottomNav() {
+   const t = useTranslations('shipperMobileFlow.bottomNav');
+   const pathname = usePathname();
+   const activeId = resolveBottomNavId(pathname);
++  const items: BottomNavItem[] = NAV_ITEMS.map((id) => ({
++    id,
++    label: t(id),
++    iconOutlined: resolveIcon(id),
++    href: bottomNavHref(id),
++  }));
+ 
+   return (
+-    <nav className={styles.nav} aria-label={t('label')}>
+-      {NAV_ITEMS.map(({ id, icon: Icon }) => {
+-        const href = bottomNavHref(id);
+-        const active = activeId === id;
+-        return (
+-          <Link
+-            key={id}
+-            href={href}
+-            className={`${styles.item} ${active ? styles.itemActive : ''}`}
+-            aria-current={active ? 'page' : undefined}
+-          >
+-            <Icon className={styles.icon} aria-hidden />
+-            <span className={styles.label}>{t(id)}</span>
+-          </Link>
+-        );
+-      })}
+-    </nav>
++    <SharedBottomNav
++      items={items}
++      activeId={activeId ?? 'cockpit'}
++      ariaLabel={t('label')}
++    />
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.module.sass b/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.module.sass
+new file mode 100644
+index 00000000..27dc5928
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.module.sass
+@@ -0,0 +1,21 @@
++.backPrimary,
++.backSecondary
++  position: absolute
++  z-index: 0
++  pointer-events: none
++
++.backPrimary
++  inset-block: 0.15rem
++  left: 0
++  width: 1.9rem
++  border-radius: 1.5rem 0 0 1.5rem
++  background: linear-gradient(90deg, var(--cargo-accent-strong) 0%, var(--cargo-accent-mid) 38%, var(--cargo-accent-soft) 70%, var(--cargo-accent-fade) 100%)
++  box-shadow: 0 0 0 0.0625rem rgba(255, 255, 255, 0.45), 0 0.62rem 1.6rem rgba(31, 44, 61, 0.055)
++
++.backSecondary
++  inset-block: 0.15rem
++  left: 0.45rem
++  width: 1.45rem
++  border-radius: 1.42rem 0 0 1.42rem
++  background: linear-gradient(90deg, var(--cargo-accent-strong) 0%, var(--cargo-accent-mid) 36%, rgba(255, 255, 255, 0.08) 76%, rgba(255, 255, 255, 0) 100%)
++  box-shadow: inset 0.2rem 0 0.62rem rgba(255, 255, 255, 0.28), 0 0.46rem 1.2rem rgba(31, 44, 61, 0.038)
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.tsx b/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.tsx
+new file mode 100644
+index 00000000..5a2eadad
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent.tsx
+@@ -0,0 +1,10 @@
++import styles from './cargo-card-accent.module.sass';
++
++export function CargoCardAccent() {
++  return (
++    <>
++      <span className={styles.backPrimary} aria-hidden />
++      <span className={styles.backSecondary} aria-hidden />
++    </>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.module.sass b/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.module.sass
+new file mode 100644
+index 00000000..932b355b
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.module.sass
+@@ -0,0 +1,44 @@
++.list
++  display: grid
++  gap: clamp(0.78rem, 3.5vw, 1rem)
++  padding-block: 0.125rem 0.625rem
++  background: transparent
++
++.emptyState
++  display: grid
++  gap: 0.45rem
++  border: 0.0625rem solid rgba(255, 255, 255, 0.22)
++  border-radius: 1.5rem
++  padding: 1rem
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.28), 0 0.75rem 1.5rem rgba(31, 57, 84, 0.045)
++  color: #263448
++  -webkit-backdrop-filter: blur(2.4rem) saturate(170%) brightness(1.04)
++  backdrop-filter: blur(2.4rem) saturate(170%) brightness(1.04)
++
++.emptyState h2
++  margin: 0
++  font-size: 1rem
++  font-weight: 560
++  letter-spacing: -0.02em
++
++.emptyState p
++  margin: 0
++  color: rgba(54, 69, 88, 0.72)
++  font-size: 0.875rem
++  line-height: 1.35
++
++// HYDRI PATCH: list-container-zero-gutter START
++// The list wrapper must not add a second horizontal gutter.
++.list
++  inline-size: 100%
++  max-inline-size: 100%
++  margin-inline: 0
++  padding-inline: 0
++  box-sizing: border-box
++  overflow: visible
++
++.emptyState
++  margin-inline: 0
++  box-sizing: border-box
++// HYDRI PATCH: list-container-zero-gutter END
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.tsx b/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.tsx
+new file mode 100644
+index 00000000..dfcf0cfb
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-list/cargo-card-list.tsx
+@@ -0,0 +1,54 @@
++import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++import { CargoListCard } from '@/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card';
++import { mapCargoCardVisualStatus, type CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++import styles from './cargo-card-list.module.sass';
++
++export type CargoCardListProps = {
++  cargoes: ShipperOwnedCargo[];
++  getHref: (cargo: ShipperOwnedCargo) => string;
++  getTitle: (cargo: ShipperOwnedCargo) => string;
++  getStatusLabel: (cargo: ShipperOwnedCargo) => string;
++  getRouteLabel: (cargo: ShipperOwnedCargo) => string;
++  getMetaLabel: (cargo: ShipperOwnedCargo) => string;
++  getVisualStatus?: (cargo: ShipperOwnedCargo) => CargoCardVisualStatus;
++  emptyTitle: string;
++  emptyDescription: string;
++};
++
++export function CargoCardList({
++  cargoes,
++  getHref,
++  getTitle,
++  getStatusLabel,
++  getRouteLabel,
++  getMetaLabel,
++  getVisualStatus = mapCargoCardVisualStatus,
++  emptyTitle,
++  emptyDescription,
++}: CargoCardListProps) {
++  if (cargoes.length === 0) {
++    return (
++      <section className={styles.emptyState} aria-live="polite">
++        <h2>{emptyTitle}</h2>
++        <p>{emptyDescription}</p>
++      </section>
++    );
++  }
++
++  return (
++    <section className={styles.list} aria-label={emptyTitle}>
++      {cargoes.map((cargo) => (
++        <CargoListCard
++          key={String((cargo as unknown as { id?: string }).id ?? getHref(cargo))}
++          cargo={cargo}
++          href={getHref(cargo)}
++          title={getTitle(cargo)}
++          statusLabel={getStatusLabel(cargo)}
++          routeLabel={getRouteLabel(cargo)}
++          metaLabel={getMetaLabel(cargo)}
++          visualStatus={getVisualStatus(cargo)}
++        />
++      ))}
++    </section>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.module.sass b/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.module.sass
+new file mode 100644
+index 00000000..b690047d
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.module.sass
+@@ -0,0 +1,21 @@
++.meta
++  display: inline-flex
++  min-width: 0
++  align-items: center
++  gap: 0.42rem
++  color: var(--cargo-body-color)
++  font-size: clamp(0.78rem, 3.2vw, 0.86rem)
++  font-weight: 430
++  letter-spacing: -0.012em
++  line-height: 1.16
++
++.clock
++  width: 0.98rem
++  height: 0.98rem
++  flex: 0 0 auto
++  color: var(--cargo-icon-color)
++
++.label
++  min-width: 0
++  overflow: hidden
++  text-overflow: ellipsis
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.tsx b/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.tsx
+new file mode 100644
+index 00000000..78f80244
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta.tsx
+@@ -0,0 +1,19 @@
++import styles from './cargo-card-meta.module.sass';
++import type { CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++
++export type CargoCardMetaProps = {
++  label: string;
++  visualStatus: CargoCardVisualStatus;
++};
++
++export function CargoCardMeta({ label, visualStatus }: CargoCardMetaProps) {
++  return (
++    <span className={styles.meta} data-visual-status={visualStatus}>
++      <svg className={styles.clock} viewBox="0 0 52 52" fill="none" aria-hidden="true">
++        <circle cx="26" cy="26" r="21" stroke="currentColor" strokeWidth="4.2" />
++        <path d="M26 13.5V26.8L34.5 32.1" stroke="currentColor" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
++      </svg>
++      <span className={styles.label}>{label}</span>
++    </span>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.module.sass b/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.module.sass
+new file mode 100644
+index 00000000..93ae1e24
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.module.sass
+@@ -0,0 +1,40 @@
++.preview
++  display: grid
++  gap: 0.75rem
++  padding: 0.75rem
++
++.group
++  display: grid
++  gap: 0.5rem
++
++.group h2
++  margin: 0
++  color: #263448
++  font-size: 0.875rem
++  font-weight: 820
++  letter-spacing: -0.02em
++
++.visualItem
++  position: relative
++  display: flex
++  min-height: 3.25rem
++  align-items: center
++  border: 0.0625rem solid rgba(255, 255, 255, 0.72)
++  border-radius: 1rem
++  padding-inline: 1.5rem 0.75rem
++  background: rgba(255, 255, 255, 0.52)
++  overflow: hidden
++
++.matrixRow
++  display: flex
++  align-items: center
++  justify-content: space-between
++  border: 0.0625rem solid rgba(255, 255, 255, 0.6)
++  border-radius: 0.875rem
++  padding: 0.5rem 0.75rem
++  background: rgba(255, 255, 255, 0.38)
++  color: #36465c
++  font-size: 0.8125rem
++
++.matrixRow strong
++  color: var(--cargo-accent-icon, #607084)
+diff --git a/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.tsx b/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.tsx
+new file mode 100644
+index 00000000..4a6990e7
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-card-status-preview/cargo-card-status-preview.tsx
+@@ -0,0 +1,45 @@
++import { CargoCardAccent } from '@/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent';
++import { CargoStatusBadge } from '@/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge';
++import { CARGO_CARD_STATUS_MATRIX, CARGO_CARD_VISUAL_STATUSES, type CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++import styles from './cargo-card-status-preview.module.sass';
++
++const ENABLE_STATUS_PREVIEW = false;
++
++const VISUAL_LABELS: Record<CargoCardVisualStatus, string> = {
++  gray: 'gray',
++  orange: 'orange',
++  red: 'red',
++  purple: 'purple',
++  cyan: 'cyan',
++  dark: 'dark',
++};
++
++export function CargoCardStatusPreview() {
++  if (process.env.NODE_ENV !== 'development' || !ENABLE_STATUS_PREVIEW) {
++    return null;
++  }
++
++  return (
++    <section className={styles.preview} aria-label="Cargo card visual status matrix">
++      <div className={styles.group}>
++        <h2>Visual statuses</h2>
++        {CARGO_CARD_VISUAL_STATUSES.map((visualStatus) => (
++          <div className={styles.visualItem} key={visualStatus} data-visual-status={visualStatus}>
++            <CargoCardAccent />
++            <CargoStatusBadge label={VISUAL_LABELS[visualStatus]} visualStatus={visualStatus} />
++          </div>
++        ))}
++      </div>
++
++      <div className={styles.group}>
++        <h2>Status map</h2>
++        {CARGO_CARD_STATUS_MATRIX.map((row) => (
++          <div className={styles.matrixRow} key={`${row.sourceStatus}-${row.visualStatus}`} data-visual-status={row.visualStatus}>
++            <span>{row.sourceStatus}</span>
++            <strong>{row.visualStatus}</strong>
++          </div>
++        ))}
++      </div>
++    </section>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.module.sass b/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.module.sass
+new file mode 100644
+index 00000000..8548d4d1
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.module.sass
+@@ -0,0 +1,276 @@
++.root
++  --cargo-accent-strong: rgba(82, 94, 112, 0.42)
++  --cargo-accent-mid: rgba(120, 132, 150, 0.22)
++  --cargo-accent-soft: rgba(255, 255, 255, 0.14)
++  --cargo-accent-fade: rgba(255, 255, 255, 0)
++  --cargo-left-glow: rgba(255, 255, 255, 0.07)
++  --cargo-card-tint: rgba(255, 255, 255, 0.076)
++  --cargo-card-tint-soft: rgba(255, 255, 255, 0.032)
++  --cargo-card-border: rgba(255, 255, 255, 0.22)
++  --cargo-title-color: rgba(11, 18, 34, 0.92)
++  --cargo-body-color: rgba(19, 28, 44, 0.82)
++  --cargo-muted-color: rgba(47, 60, 78, 0.66)
++  --cargo-icon-color: rgba(51, 65, 84, 0.58)
++  --cargo-badge-text: rgba(42, 52, 67, 0.72)
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.064))
++  --cargo-badge-border: rgba(255, 255, 255, 0.28)
++  position: relative
++  display: block
++  width: 100%
++  min-height: clamp(6.62rem, 27.5vw, 7.32rem)
++  isolation: isolate
++  color: var(--cargo-title-color)
++  text-decoration: none
++  transform: translateZ(0)
++  transition: transform 150ms ease, filter 150ms ease
++
++.root[data-visual-status='orange'],
++.root[data-visual-status='purple'],
++.root[data-visual-status='cyan'],
++.root[data-visual-status='red'],
++.root[data-visual-status='dark'],
++.root[data-visual-status='gray']
++  --cargo-card-tint: rgba(255, 255, 255, 0.078)
++  --cargo-card-tint-soft: rgba(255, 255, 255, 0.034)
++  --cargo-accent-soft: rgba(255, 255, 255, 0.16)
++  --cargo-left-glow: rgba(255, 255, 255, 0.08)
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.07))
++  --cargo-badge-border: rgba(255, 255, 255, 0.3)
++  --cargo-badge-text: rgba(38, 48, 63, 0.76)
++
++.root[data-visual-status='orange']
++  --cargo-accent-strong: rgba(255, 123, 0, 0.54)
++  --cargo-accent-mid: rgba(255, 143, 31, 0.26)
++  --cargo-icon-color: rgba(255, 123, 0, 0.6)
++
++.root[data-visual-status='purple']
++  --cargo-accent-strong: rgba(125, 39, 242, 0.54)
++  --cargo-accent-mid: rgba(139, 53, 255, 0.25)
++  --cargo-icon-color: rgba(125, 39, 242, 0.6)
++
++.root[data-visual-status='cyan']
++  --cargo-accent-strong: rgba(18, 201, 232, 0.5)
++  --cargo-accent-mid: rgba(35, 212, 238, 0.23)
++  --cargo-icon-color: rgba(9, 154, 185, 0.55)
++
++.root[data-visual-status='red']
++  --cargo-accent-strong: rgba(240, 0, 24, 0.54)
++  --cargo-accent-mid: rgba(255, 25, 48, 0.25)
++  --cargo-icon-color: rgba(224, 0, 23, 0.6)
++
++.root[data-visual-status='dark']
++  --cargo-accent-strong: rgba(18, 25, 35, 0.46)
++  --cargo-accent-mid: rgba(39, 48, 61, 0.22)
++  --cargo-icon-color: rgba(43, 52, 66, 0.6)
++
++.root:active
++  transform: scale(0.99)
++
++.root:focus-visible
++  outline: 0.1875rem solid rgba(23, 31, 42, 0.22)
++  outline-offset: 0.1875rem
++  border-radius: 1.65rem
++
++.surface
++  position: absolute
++  z-index: 1
++  inset: 0 0 0 0.56rem
++  border: 0.0625rem solid var(--cargo-card-border)
++  border-radius: clamp(1.45rem, 5.9vw, 1.86rem)
++  overflow: hidden
++  background: linear-gradient(112deg, var(--cargo-card-tint) 0%, rgba(255, 255, 255, 0.052) 24%, rgba(255, 255, 255, 0.032) 52%, rgba(255, 255, 255, 0.07) 100%)
++  box-shadow: 0 0.95rem 1.8rem rgba(26, 38, 52, 0.045), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.26), inset 0 0 1.4rem rgba(255, 255, 255, 0.11)
++  -webkit-backdrop-filter: blur(3.2rem) saturate(185%) brightness(1.045)
++  backdrop-filter: blur(3.2rem) saturate(185%) brightness(1.045)
++
++.surface::before
++  content: ''
++  position: absolute
++  inset: 0
++  background: linear-gradient(108deg, transparent 0%, transparent 70%, rgba(255, 255, 255, 0.095) 70.45%, rgba(255, 255, 255, 0.024) 76%, transparent 76.5%)
++  pointer-events: none
++
++.surface::after
++  content: ''
++  position: absolute
++  left: -0.28rem
++  inset-block: 0
++  width: 1.75rem
++  background: linear-gradient(90deg, var(--cargo-left-glow) 0%, var(--cargo-card-tint-soft) 42%, transparent 100%)
++  pointer-events: none
++
++.card
++  position: relative
++  z-index: 2
++  display: flex
++  min-height: inherit
++  margin-left: 0.56rem
++  align-items: stretch
++  border-radius: clamp(1.45rem, 5.9vw, 1.86rem)
++
++.shine
++  position: absolute
++  inset: 0
++  z-index: 0
++  border-radius: inherit
++  overflow: hidden
++  pointer-events: none
++
++.shine::before
++  content: ''
++  position: absolute
++  inset: 0
++  background: linear-gradient(112deg, transparent 0%, transparent 72%, rgba(255, 255, 255, 0.12) 72.35%, rgba(255, 255, 255, 0.03) 78%, transparent 78.4%)
++
++.content
++  position: relative
++  z-index: 1
++  display: grid
++  width: 100%
++  align-content: center
++  gap: clamp(0.48rem, 2vw, 0.6rem)
++  padding: clamp(0.9rem, 3.6vw, 1.05rem) clamp(0.95rem, 4vw, 1.15rem) clamp(0.9rem, 3.6vw, 1.05rem) clamp(1.1rem, 4.4vw, 1.32rem)
++
++.headerRow
++  display: grid
++  grid-template-columns: minmax(0, 1fr) auto
++  align-items: start
++  gap: 0.7rem
++
++.title
++  min-width: 0
++  overflow: hidden
++  color: var(--cargo-title-color)
++  font-size: clamp(1.02rem, 4.55vw, 1.22rem)
++  font-weight: 640
++  letter-spacing: -0.03em
++  line-height: 1.05
++  text-overflow: ellipsis
++  white-space: nowrap
++
++.route
++  min-width: 0
++  overflow: hidden
++  color: var(--cargo-muted-color)
++  font-size: clamp(0.84rem, 3.4vw, 0.95rem)
++  font-weight: 430
++  letter-spacing: -0.018em
++  line-height: 1.18
++  text-overflow: ellipsis
++  white-space: nowrap
++
++@media (prefers-reduced-motion: reduce)
++  .root
++    transition: none
++
++  .root:active
++    transform: none
++// HYDRI PATCH: final-gutter-badge-restore START
++// Restore semantic badge color tokens while keeping softened liquid-glass cards.
++.root
++  --cargo-badge-text: #747b89
++  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 247, 251, 0.62) 0%, rgba(232, 237, 246, 0.42) 100%)
++  --cargo-badge-border: rgba(184, 193, 207, 0.58)
++  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
++
++.root[data-visual-status='gray']
++  --cargo-badge-text: #747b89
++  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 247, 251, 0.62) 0%, rgba(232, 237, 246, 0.42) 100%)
++  --cargo-badge-border: rgba(184, 193, 207, 0.58)
++  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
++
++.root[data-visual-status='orange']
++  --cargo-badge-text: #df6200
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 240, 224, 0.62) 0%, rgba(255, 230, 205, 0.42) 100%)
++  --cargo-badge-border: rgba(255, 173, 96, 0.66)
++  --cargo-badge-shadow: rgba(255, 123, 0, 0.035)
++
++.root[data-visual-status='purple']
++  --cargo-badge-text: #7d27f2
++  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 233, 255, 0.62) 0%, rgba(239, 225, 255, 0.42) 100%)
++  --cargo-badge-border: rgba(199, 157, 255, 0.64)
++  --cargo-badge-shadow: rgba(125, 39, 242, 0.035)
++
++.root[data-visual-status='cyan']
++  --cargo-badge-text: #09afd2
++  --cargo-badge-bg: linear-gradient(180deg, rgba(231, 252, 255, 0.62) 0%, rgba(220, 249, 255, 0.42) 100%)
++  --cargo-badge-border: rgba(145, 232, 244, 0.66)
++  --cargo-badge-shadow: rgba(18, 201, 232, 0.035)
++
++.root[data-visual-status='red']
++  --cargo-badge-text: #e60017
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 236, 239, 0.62) 0%, rgba(255, 227, 231, 0.42) 100%)
++  --cargo-badge-border: rgba(255, 146, 158, 0.66)
++  --cargo-badge-shadow: rgba(240, 0, 24, 0.035)
++
++.root[data-visual-status='dark']
++  --cargo-badge-text: #111827
++  --cargo-badge-bg: linear-gradient(180deg, rgba(243, 246, 251, 0.54) 0%, rgba(233, 238, 247, 0.36) 100%)
++  --cargo-badge-border: rgba(74, 82, 94, 0.4)
++  --cargo-badge-shadow: rgba(17, 24, 39, 0.024)
++// HYDRI PATCH: final-gutter-badge-restore END
++
++// HYDRI PATCH: cargo-card-glass-restore START
++// Keep the cargo card transparent and neutral so the page background reads through.
++.root
++  --cargo-card-tint: rgba(255, 255, 255, 0.058)
++  --cargo-card-tint-soft: rgba(255, 255, 255, 0.024)
++  --cargo-card-border: rgba(255, 255, 255, 0.18)
++  --cargo-left-glow: rgba(255, 255, 255, 0.055)
++  --cargo-title-color: rgba(11, 18, 34, 0.94)
++  --cargo-body-color: rgba(19, 28, 44, 0.8)
++  --cargo-muted-color: rgba(47, 60, 78, 0.64)
++  --cargo-icon-color: rgba(51, 65, 84, 0.54)
++  --cargo-badge-text: #747b89
++  --cargo-badge-bg: linear-gradient(180deg, rgba(249, 251, 253, 0.64) 0%, rgba(236, 242, 247, 0.4) 100%)
++  --cargo-badge-border: rgba(184, 193, 207, 0.52)
++  --cargo-badge-shadow: rgba(91, 105, 130, 0.025)
++
++.root[data-visual-status='orange']
++  --cargo-badge-text: #df6200
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 240, 224, 0.62) 0%, rgba(255, 230, 205, 0.42) 100%)
++  --cargo-badge-border: rgba(255, 173, 96, 0.66)
++  --cargo-badge-shadow: rgba(255, 123, 0, 0.035)
++
++.root[data-visual-status='purple']
++  --cargo-badge-text: #7d27f2
++  --cargo-badge-bg: linear-gradient(180deg, rgba(244, 233, 255, 0.62) 0%, rgba(239, 225, 255, 0.42) 100%)
++  --cargo-badge-border: rgba(199, 157, 255, 0.64)
++  --cargo-badge-shadow: rgba(125, 39, 242, 0.035)
++
++.root[data-visual-status='cyan']
++  --cargo-badge-text: #09afd2
++  --cargo-badge-bg: linear-gradient(180deg, rgba(231, 252, 255, 0.62) 0%, rgba(220, 249, 255, 0.42) 100%)
++  --cargo-badge-border: rgba(145, 232, 244, 0.66)
++  --cargo-badge-shadow: rgba(18, 201, 232, 0.035)
++
++.root[data-visual-status='red']
++  --cargo-badge-text: #e60017
++  --cargo-badge-bg: linear-gradient(180deg, rgba(255, 236, 239, 0.62) 0%, rgba(255, 227, 231, 0.42) 100%)
++  --cargo-badge-border: rgba(255, 146, 158, 0.66)
++  --cargo-badge-shadow: rgba(240, 0, 24, 0.035)
++
++.root[data-visual-status='dark']
++  --cargo-badge-text: #111827
++  --cargo-badge-bg: linear-gradient(180deg, rgba(243, 246, 251, 0.54) 0%, rgba(233, 238, 247, 0.36) 100%)
++  --cargo-badge-border: rgba(74, 82, 94, 0.4)
++  --cargo-badge-shadow: rgba(17, 24, 39, 0.024)
++
++.surface
++  background: linear-gradient(112deg, rgba(255, 255, 255, 0.105) 0%, rgba(245, 249, 252, 0.05) 24%, rgba(240, 246, 248, 0.028) 52%, rgba(232, 241, 245, 0.06) 100%)
++  box-shadow: 0 0.85rem 1.6rem rgba(26, 38, 52, 0.036), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.24), inset 0 0 1.2rem rgba(255, 255, 255, 0.08)
++  backdrop-filter: blur(3.1rem) saturate(180%) brightness(1.03)
++  -webkit-backdrop-filter: blur(3.1rem) saturate(180%) brightness(1.03)
++
++.surface::before
++  background: linear-gradient(108deg, transparent 0%, transparent 72%, rgba(255, 255, 255, 0.08) 72.35%, rgba(255, 255, 255, 0.02) 78%, transparent 78.4%)
++
++.surface::after
++  background: linear-gradient(90deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0.02) 42%, transparent 100%)
++
++.shine::before
++  background: linear-gradient(112deg, transparent 0%, transparent 74%, rgba(255, 255, 255, 0.085) 74.35%, rgba(255, 255, 255, 0.02) 80%, transparent 80.4%)
++
++.content
++  padding: clamp(0.9rem, 3.6vw, 1.05rem) clamp(0.95rem, 4vw, 1.15rem) clamp(0.9rem, 3.6vw, 1.05rem) clamp(1.1rem, 4.4vw, 1.32rem)
++// HYDRI PATCH: cargo-card-glass-restore END
+diff --git a/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.tsx b/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.tsx
+new file mode 100644
+index 00000000..921cd3c0
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card.tsx
+@@ -0,0 +1,43 @@
++import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++import { CargoCardAccent } from '@/features/shipper-mobile-flow/components/cargo-card-accent/cargo-card-accent';
++import { CargoCardMeta } from '@/features/shipper-mobile-flow/components/cargo-card-meta/cargo-card-meta';
++import { CargoStatusBadge } from '@/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge';
++import type { CargoCardVisualStatus } from './map-cargo-card-visual-status';
++import styles from './cargo-list-card.module.sass';
++
++export type CargoListCardProps = {
++  cargo: ShipperOwnedCargo;
++  href: string;
++  title: string;
++  statusLabel: string;
++  routeLabel: string;
++  metaLabel: string;
++  visualStatus: CargoCardVisualStatus;
++  onPress?: () => void;
++};
++
++export function CargoListCard({ href, title, statusLabel, routeLabel, metaLabel, visualStatus, onPress }: CargoListCardProps) {
++  return (
++    <a
++      className={styles.root}
++      href={href}
++      data-visual-status={visualStatus}
++      aria-label={`${title} · ${statusLabel}`}
++      onClick={onPress}
++    >
++      <CargoCardAccent />
++      <span className={styles.surface} aria-hidden="true" />
++      <span className={styles.card}>
++        <span className={styles.shine} aria-hidden="true" />
++        <span className={styles.content}>
++          <span className={styles.headerRow}>
++            <span className={styles.title}>{title}</span>
++            <CargoStatusBadge label={statusLabel} visualStatus={visualStatus} />
++          </span>
++          <span className={styles.route}>{routeLabel}</span>
++          <CargoCardMeta label={metaLabel} visualStatus={visualStatus} />
++        </span>
++      </span>
++    </a>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status.ts b/src/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status.ts
+new file mode 100644
+index 00000000..03d21a04
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status.ts
+@@ -0,0 +1,119 @@
++import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++
++export type CargoCardVisualStatus = 'gray' | 'orange' | 'red' | 'purple' | 'cyan' | 'dark';
++
++export type CargoCardStatusMatrixRow = {
++  sourceStatus: string;
++  visualStatus: CargoCardVisualStatus;
++  reason: string;
++};
++
++export const CARGO_CARD_VISUAL_STATUSES: CargoCardVisualStatus[] = [
++  'gray',
++  'orange',
++  'red',
++  'purple',
++  'cyan',
++  'dark',
++];
++
++export const CARGO_CARD_STATUS_MATRIX: CargoCardStatusMatrixRow[] = [
++  { sourceStatus: 'open', visualStatus: 'gray', reason: 'open cargo without stronger operational signal' },
++  { sourceStatus: 'scheduled', visualStatus: 'gray', reason: 'scheduled or waiting state' },
++  { sourceStatus: 'waiting', visualStatus: 'gray', reason: 'waiting state' },
++  { sourceStatus: 'draft', visualStatus: 'gray', reason: 'draft/inactive state' },
++  { sourceStatus: 'inTransit', visualStatus: 'orange', reason: 'active movement / normal operation' },
++  { sourceStatus: 'in_transit', visualStatus: 'orange', reason: 'normalized active movement' },
++  { sourceStatus: 'transit', visualStatus: 'orange', reason: 'active movement' },
++  { sourceStatus: 'attention', visualStatus: 'orange', reason: 'attention without high/critical risk' },
++  { sourceStatus: 'blocked', visualStatus: 'red', reason: 'blocked cargo or corridor' },
++  { sourceStatus: 'delayed', visualStatus: 'red', reason: 'delay signal' },
++  { sourceStatus: 'critical', visualStatus: 'red', reason: 'critical risk signal' },
++  { sourceStatus: 'risk', visualStatus: 'red', reason: 'risk-led state when no finer status exists' },
++  { sourceStatus: 'pending', visualStatus: 'purple', reason: 'pending action' },
++  { sourceStatus: 'documents', visualStatus: 'purple', reason: 'documents pending' },
++  { sourceStatus: 'negotiation', visualStatus: 'purple', reason: 'negotiation/action needed' },
++  { sourceStatus: 'proposal', visualStatus: 'purple', reason: 'proposal/action state' },
++  { sourceStatus: 'stable', visualStatus: 'cyan', reason: 'stable/tracked signal' },
++  { sourceStatus: 'tracked', visualStatus: 'cyan', reason: 'tracked signal' },
++  { sourceStatus: 'fresh', visualStatus: 'cyan', reason: 'fresh telemetry signal' },
++  { sourceStatus: 'active', visualStatus: 'cyan', reason: 'active stable state' },
++  { sourceStatus: 'delivered', visualStatus: 'dark', reason: 'delivered cargo' },
++  { sourceStatus: 'completed', visualStatus: 'dark', reason: 'completed cargo' },
++  { sourceStatus: 'closed', visualStatus: 'dark', reason: 'closed cargo' },
++  { sourceStatus: 'fallback', visualStatus: 'gray', reason: 'safe default' },
++];
++
++const STATUS_VISUAL_MAP = CARGO_CARD_STATUS_MATRIX.reduce<Record<string, CargoCardVisualStatus>>(
++  (accumulator, row) => {
++    accumulator[normalize(row.sourceStatus)] = row.visualStatus;
++    return accumulator;
++  },
++  {},
++);
++
++function normalize(value: unknown): string {
++  return String(value ?? '')
++    .trim()
++    .normalize('NFD')
++    .replace(/[\u0300-\u036f]/g, '')
++    .replace(/([a-z])([A-Z])/g, '$1_$2')
++    .replace(/[\s-]+/g, '_')
++    .toLowerCase();
++}
++
++function readNormalized(record: Record<string, unknown>, key: string): string {
++  return normalize(record[key]);
++}
++
++function readNumber(record: Record<string, unknown>, keys: string[]): number {
++  for (const key of keys) {
++    const value = Number(record[key] ?? 0);
++    if (Number.isFinite(value) && value > 0) {
++      return value;
++    }
++  }
++
++  return 0;
++}
++
++export function mapCargoCardVisualStatus(cargo: ShipperOwnedCargo): CargoCardVisualStatus {
++  const record = cargo as unknown as Record<string, unknown>;
++  const visualStatus = readNormalized(record, 'visualStatus');
++  const status = readNormalized(record, 'status');
++  const riskLevel = readNormalized(record, 'riskLevel');
++  const freshnessState = readNormalized(record, 'freshnessState');
++  const pendingDocsCount = readNumber(record, [
++    'pendingDocsCount',
++    'documentsPendingCount',
++    'documentPendencyCount',
++    'requiredDocumentsCount',
++  ]);
++  const offersCount = readNumber(record, ['offersCount', 'proposalsCount', 'bidsCount']);
++
++  if (CARGO_CARD_VISUAL_STATUSES.includes(visualStatus as CargoCardVisualStatus)) {
++    return visualStatus as CargoCardVisualStatus;
++  }
++
++  if (['blocked', 'delayed', 'critical', 'risk', 'high_risk'].includes(status)) {
++    return 'red';
++  }
++
++  if (['attention'].includes(status) && ['high', 'critical', 'blocked'].includes(riskLevel)) {
++    return 'red';
++  }
++
++  if (['documents', 'document', 'docs', 'pending_documents'].includes(status) || pendingDocsCount > 0) {
++    return 'purple';
++  }
++
++  if (['negotiation', 'negotiating', 'proposal', 'proposals'].includes(status) || offersCount > 0) {
++    return 'purple';
++  }
++
++  if (['in_transit', 'intransit', 'transit', 'underway'].includes(status) && ['fresh', 'stable', 'tracked'].includes(freshnessState)) {
++    return 'cyan';
++  }
++
++  return STATUS_VISUAL_MAP[status] ?? 'gray';
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass b/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass
+new file mode 100644
+index 00000000..428fc383
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.module.sass
+@@ -0,0 +1,30 @@
++.badge
++  display: inline-flex
++  min-height: 1.56rem
++  max-width: 8.25rem
++  flex: 0 0 auto
++  align-items: center
++  justify-content: center
++  border: 0.0625rem solid var(--cargo-badge-border)
++  border-radius: 999rem
++  padding: 0 0.64rem
++  overflow: hidden
++  background: var(--cargo-badge-bg)
++  box-shadow: inset 0 0.08rem 0.55rem rgba(255, 255, 255, 0.24), 0 0.35rem 0.8rem rgba(31, 44, 61, 0.035)
++  color: var(--cargo-badge-text)
++  font-size: clamp(0.69rem, 2.8vw, 0.75rem)
++  font-weight: 420
++  letter-spacing: -0.008em
++  line-height: 1
++  text-overflow: ellipsis
++  white-space: nowrap
++  -webkit-backdrop-filter: blur(1.6rem) saturate(165%) brightness(1.035)
++  backdrop-filter: blur(1.6rem) saturate(165%) brightness(1.035)
++// HYDRI PATCH: final-gutter-badge-restore START
++.badge
++  font-weight: 420
++  background: var(--cargo-badge-bg)
++  border-color: var(--cargo-badge-border)
++  color: var(--cargo-badge-text)
++  box-shadow: inset 0 0.08rem 0.55rem rgba(255, 255, 255, 0.3), 0 0.35rem 0.8rem var(--cargo-badge-shadow)
++// HYDRI PATCH: final-gutter-badge-restore END
+diff --git a/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx b/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx
+new file mode 100644
+index 00000000..fab31106
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-status-badge/cargo-status-badge.tsx
+@@ -0,0 +1,15 @@
++import styles from './cargo-status-badge.module.sass';
++import type { CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++
++export type CargoStatusBadgeProps = {
++  label: string;
++  visualStatus: CargoCardVisualStatus;
++};
++
++export function CargoStatusBadge({ label, visualStatus }: CargoStatusBadgeProps) {
++  return (
++    <span className={styles.badge} data-visual-status={visualStatus}>
++      {label}
++    </span>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.module.sass b/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.module.sass
+new file mode 100644
+index 00000000..e78ae10e
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.module.sass
+@@ -0,0 +1,53 @@
++.rail
++  width: 100%
++  max-inline-size: 100%
++  display: flex
++  flex-wrap: nowrap
++  align-items: center
++  gap: 0.625rem
++  overflow-x: auto
++  overflow-y: visible
++  padding-block: 0.125rem 0.45rem
++  padding-inline: var(--page-gutter, clamp(1rem, 4vw, 1.25rem))
++  scroll-padding-inline: var(--page-gutter, clamp(1rem, 4vw, 1.25rem))
++  box-sizing: border-box
++  scrollbar-width: none
++  -webkit-overflow-scrolling: touch
++  overscroll-behavior-inline: contain
++  background: transparent
++
++.rail::-webkit-scrollbar
++  display: none
++
++.item
++  flex: 0 0 auto
++  min-inline-size: max-content
++  min-height: 2.28rem
++  padding-inline: clamp(0.74rem, 2.75vw, 0.9rem)
++  border: 0.0625rem solid rgba(255, 255, 255, 0.2)
++  border-radius: 999rem
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.045))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.28), 0 0.35rem 0.8rem rgba(31, 44, 61, 0.03)
++  color: rgba(34, 44, 58, 0.74)
++  box-sizing: border-box
++  backdrop-filter: blur(2.1rem) saturate(165%) brightness(1.03)
++  -webkit-backdrop-filter: blur(2.1rem) saturate(165%) brightness(1.03)
++
++.item[data-selected='true']
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.07))
++  color: rgba(18, 26, 38, 0.88)
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.34), 0 0.45rem 0.95rem rgba(31, 44, 61, 0.05)
++
++.item small
++  color: currentColor
++  font-size: 0.68rem
++  font-weight: 400
++  opacity: 0.68
++
++.item:focus-visible
++  outline: 0.1875rem solid rgba(23, 31, 42, 0.22)
++  outline-offset: 0.125rem
++
++@media (prefers-reduced-motion: reduce)
++  .item
++    transition: none
+diff --git a/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.tsx b/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.tsx
+new file mode 100644
+index 00000000..e14fa48e
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/cargo-status-filter/cargo-status-filter.tsx
+@@ -0,0 +1,43 @@
++import type { CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++import styles from './cargo-status-filter.module.sass';
++
++export type CargoStatusFilterId = 'all' | CargoCardVisualStatus;
++
++export type CargoStatusFilterOption = {
++  id: CargoStatusFilterId;
++  label: string;
++  count: number;
++};
++
++export type CargoStatusFilterProps = {
++  options: CargoStatusFilterOption[];
++  activeId: CargoStatusFilterId;
++  onChange: (id: CargoStatusFilterId) => void;
++  ariaLabel: string;
++};
++
++export function CargoStatusFilter({ options, activeId, onChange, ariaLabel }: CargoStatusFilterProps) {
++  return (
++    <div className={styles.rail} role="tablist" aria-label={ariaLabel}>
++      {options.map((option) => {
++        const selected = option.id === activeId;
++
++        return (
++          <button
++            className={styles.item}
++            data-selected={selected ? 'true' : 'false'}
++            data-filter-id={option.id}
++            key={option.id}
++            type="button"
++            role="tab"
++            aria-selected={selected}
++            onClick={() => onChange(option.id)}
++          >
++            <span>{option.label}</span>
++            <small>{option.count}</small>
++          </button>
++        );
++      })}
++    </div>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.module.sass b/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.module.sass
+new file mode 100644
+index 00000000..4699fd28
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.module.sass
+@@ -0,0 +1,201 @@
++.root
++  --bottom-menu-active: rgba(21, 28, 38, 0.86)
++  --bottom-menu-muted: rgba(31, 43, 58, 0.58)
++  --bottom-menu-safe-area: env(safe-area-inset-bottom, 0rem)
++  position: fixed
++  z-index: 80
++  left: 50%
++  bottom: calc(var(--bottom-menu-safe-area) + 0.54rem)
++  width: min(calc(100vw - 1.05rem), 23rem)
++  min-height: calc(3.54rem + var(--bottom-menu-safe-area))
++  padding: 0.12rem 0.16rem calc(0.12rem + var(--bottom-menu-safe-area))
++  transform: translateX(-50%)
++  border: 0.0625rem solid rgba(255, 255, 255, 0.22)
++  border-radius: 999rem
++  isolation: isolate
++  overflow: hidden
++  color: var(--bottom-menu-muted)
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.105) 0%, rgba(255, 255, 255, 0.058) 50%, rgba(255, 255, 255, 0.035) 100%)
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.32), inset 0 -0.5rem 1rem rgba(255, 255, 255, 0.052), 0 0.9rem 2rem rgba(26, 38, 52, 0.055)
++  -webkit-backdrop-filter: blur(3.45rem) saturate(185%) brightness(1.045)
++  backdrop-filter: blur(3.45rem) saturate(185%) brightness(1.045)
++
++.root::before
++  content: ''
++  position: absolute
++  inset: 0
++  z-index: -1
++  border-radius: inherit
++  pointer-events: none
++  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.24), transparent 56%), radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.09), transparent 62%)
++  box-shadow: inset 0 0.52rem 1.15rem rgba(20, 31, 43, 0.035), inset 0 -0.5rem 1rem rgba(255, 255, 255, 0.12)
++  opacity: 0.72
++
++.root::after
++  content: ''
++  position: absolute
++  left: 1.45rem
++  right: 1.45rem
++  top: 0.11rem
++  z-index: 1
++  height: 0.3rem
++  border-radius: 999rem
++  pointer-events: none
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.035), transparent)
++  opacity: 0.28
++  filter: blur(0.04rem)
++
++.track
++  position: relative
++  z-index: 2
++  display: grid
++  grid-template-columns: repeat(4, minmax(0, 1fr))
++  align-items: center
++  min-height: 3.04rem
++  border-radius: inherit
++
++.item
++  position: relative
++  display: grid
++  min-width: 0
++  min-height: 2.92rem
++  place-items: center
++  border: 0
++  border-radius: 999rem
++  appearance: none
++  background: transparent
++  color: var(--bottom-menu-muted)
++  font: inherit
++  text-decoration: none
++  -webkit-tap-highlight-color: transparent
++  transition: color 160ms ease, transform 150ms ease
++
++.item::before
++  content: ''
++  position: absolute
++  inset: 0.12rem 0.2rem
++  z-index: -1
++  border: 0.0625rem solid rgba(255, 255, 255, 0.22)
++  border-radius: inherit
++  pointer-events: none
++  opacity: 0
++  transform: scale(0.96)
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.062))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.35), inset 0 -0.34rem 0.75rem rgba(255, 255, 255, 0.055), 0 0.35rem 0.85rem rgba(26, 38, 52, 0.05)
++  -webkit-backdrop-filter: blur(3rem) saturate(175%) brightness(1.05)
++  backdrop-filter: blur(3rem) saturate(175%) brightness(1.05)
++  transition: opacity 180ms ease, transform 200ms cubic-bezier(0.2, 1, 0.2, 1)
++
++.item::after
++  content: ''
++  position: absolute
++  left: 0.9rem
++  right: 0.9rem
++  top: 0.22rem
++  z-index: 0
++  height: 0.24rem
++  border-radius: 999rem
++  pointer-events: none
++  opacity: 0
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0.035), transparent)
++  transition: opacity 180ms ease
++
++.item:active
++  transform: scale(0.986)
++
++.item:focus-visible
++  outline: 0.125rem solid rgba(23, 31, 42, 0.22)
++  outline-offset: 0.125rem
++
++.active
++  color: var(--bottom-menu-active)
++
++.active::before
++  opacity: 0.92
++  transform: scale(1)
++
++.active::after
++  opacity: 0.34
++
++.itemContent
++  position: relative
++  z-index: 2
++  display: flex
++  min-width: 0
++  flex-direction: column
++  align-items: center
++  justify-content: center
++  gap: 0.12rem
++  line-height: 1
++
++.icon
++  display: grid
++  width: 1.08rem
++  height: 1.08rem
++  place-items: center
++  color: currentColor
++
++.icon svg
++  width: 1.02rem
++  height: 1.02rem
++  stroke: currentColor
++  fill: none
++  stroke-width: 1.72
++  stroke-linecap: round
++  stroke-linejoin: round
++
++.label
++  display: block
++  max-width: 100%
++  overflow: hidden
++  color: currentColor
++  font-size: clamp(0.56rem, 2.35vw, 0.65rem)
++  font-weight: 450
++  letter-spacing: -0.012em
++  line-height: 1.08
++  text-align: center
++  text-overflow: ellipsis
++  white-space: nowrap
++
++.active .label
++  font-weight: 480
++
++@media (prefers-reduced-motion: reduce)
++  .item,
++  .item::before,
++  .item::after
++    transition: none
++
++  .item:active
++    transform: none
++
++// HYDRI PATCH: bottom-menu-screen-gutter-restore START
++// Keep the menu aligned to the same screen gutter and let the page show through.
++.root
++  left: var(--screen-gutter, clamp(1rem, 4vw, 1.25rem))
++  right: var(--screen-gutter, clamp(1rem, 4vw, 1.25rem))
++  width: auto
++  max-inline-size: 23rem
++  margin-inline: auto
++  transform: none
++  border: 0.0625rem solid rgba(255, 255, 255, 0.18)
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0.045) 50%, rgba(255, 255, 255, 0.028) 100%)
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.3), inset 0 -0.45rem 0.9rem rgba(255, 255, 255, 0.035), 0 0.85rem 1.75rem rgba(26, 38, 52, 0.045)
++  backdrop-filter: blur(3.25rem) saturate(180%) brightness(1.035)
++  -webkit-backdrop-filter: blur(3.25rem) saturate(180%) brightness(1.035)
++
++.root::before
++  opacity: 0.56
++  background: radial-gradient(ellipse at 50% 0%, rgba(255, 255, 255, 0.2), transparent 58%), radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.08), transparent 64%)
++
++.root::after
++  left: 1.35rem
++  right: 1.35rem
++  height: 0.24rem
++  opacity: 0.2
++
++.item::before
++  border: 0.0625rem solid rgba(255, 255, 255, 0.15)
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.05))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.3), inset 0 -0.32rem 0.7rem rgba(255, 255, 255, 0.04), 0 0.3rem 0.75rem rgba(26, 38, 52, 0.04)
++// HYDRI PATCH: bottom-menu-screen-gutter-restore END
+diff --git a/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.tsx b/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.tsx
+new file mode 100644
+index 00000000..7c38e01f
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-bottom-menu/hy-bottom-menu.tsx
+@@ -0,0 +1,91 @@
++import type { CSSProperties, ReactNode } from 'react';
++
++import { Link } from '@/core/i18n/navigation';
++
++import styles from './hy-bottom-menu.module.sass';
++
++export type HyBottomMenuItem = {
++  id: string;
++  href?: string;
++  label: string;
++  icon: ReactNode;
++  onClick?: () => void;
++};
++
++export type HyBottomMenuProps = {
++  items: HyBottomMenuItem[];
++  activeId: string;
++  suppressed?: boolean;
++  ariaLabel: string;
++  onSelect?: (id: string) => void;
++};
++
++function joinClassNames(...classNames: Array<string | false | null | undefined>) {
++  return classNames.filter(Boolean).join(' ');
++}
++
++function renderItemContent(item: HyBottomMenuItem) {
++  return (
++    <span className={styles.itemContent}>
++      <span className={styles.icon} aria-hidden="true">
++        {item.icon}
++      </span>
++      <span className={styles.label}>{item.label}</span>
++    </span>
++  );
++}
++
++export function HyBottomMenu({ items, activeId, suppressed = false, ariaLabel, onSelect }: HyBottomMenuProps) {
++  if (suppressed || items.length === 0) {
++    return null;
++  }
++
++  const rootStyle = {
++    '--bottom-menu-count': String(items.length),
++  } as CSSProperties;
++
++  return (
++    <nav className={styles.root} aria-label={ariaLabel} style={rootStyle}>
++      <div className={styles.track}>
++        {items.map((item) => {
++          const active = item.id === activeId;
++          const className = joinClassNames(styles.item, active && styles.active);
++
++          const handlePress = () => {
++            item.onClick?.();
++            onSelect?.(item.id);
++          };
++
++          if (item.href) {
++            return (
++              <Link
++                key={item.id}
++                href={item.href as never}
++                className={className}
++                data-active={active ? 'true' : 'false'}
++                aria-current={active ? 'page' : undefined}
++                onClick={handlePress}
++              >
++                {renderItemContent(item)}
++              </Link>
++            );
++          }
++
++          return (
++            <button
++              key={item.id}
++              type="button"
++              className={className}
++              data-active={active ? 'true' : 'false'}
++              aria-current={active ? 'page' : undefined}
++              aria-label={item.label}
++              onClick={handlePress}
++            >
++              {renderItemContent(item)}
++            </button>
++          );
++        })}
++      </div>
++    </nav>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.module.sass b/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.module.sass
+new file mode 100644
+index 00000000..b3dfb0f3
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.module.sass
+@@ -0,0 +1,136 @@
++@use '../../styles/shipper-mixins' as *
++
++.card
++  @include shipper-pressable
++  @include shipper-focus
++  --hy-cargo-card-accent: #ff8b0a
++  --hy-cargo-card-badge-bg: rgba(255, 239, 227, 0.91)
++  --hy-cargo-card-badge-text: #ff6900
++  --hy-cargo-card-badge-border: rgba(255, 206, 177, 0.86)
++  position: relative
++  display: block
++  width: 100%
++  min-height: 7.25rem
++  padding: 0.875rem 0.875rem 0.875rem 1.125rem
++  border-radius: 1.5rem
++  border: 1px solid rgba(255, 255, 255, 0.64)
++  background: radial-gradient(ellipse at 10% 11%, rgba(255, 255, 255, 0.68), transparent 44%), linear-gradient(111deg, rgba(255, 255, 255, 0.54) 0%, rgba(244, 247, 252, 0.48) 43%, rgba(237, 243, 250, 0.46) 100%)
++  box-shadow: 0 1.125rem 2.5rem rgba(69, 99, 130, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.78), inset 0 -1px 1px rgba(255, 255, 255, 0.2)
++  backdrop-filter: blur(1.5rem) saturate(1.2)
++  -webkit-backdrop-filter: blur(1.5rem) saturate(1.2)
++  color: rgba(17, 25, 37, 0.92)
++  text-decoration: none
++  text-align: left
++  overflow: hidden
++  -webkit-tap-highlight-color: transparent
++  isolation: isolate
++  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1)
++
++  &::before
++    content: ''
++    position: absolute
++    inset: 0.75rem auto 0.75rem 0.5rem
++    width: 0.1875rem
++    border-radius: var(--radius-pill, 999rem)
++    background: linear-gradient(180deg, color-mix(in srgb, var(--hy-cargo-card-accent) 92%, #fff), var(--hy-cargo-card-accent))
++    box-shadow: 0 0 0.5625rem color-mix(in srgb, var(--hy-cargo-card-accent) 32%, transparent)
++
++  &[data-category='orange']
++    --hy-cargo-card-accent: #ff8b0a
++    --hy-cargo-card-badge-bg: rgba(255, 239, 227, 0.91)
++    --hy-cargo-card-badge-text: #ff6900
++    --hy-cargo-card-badge-border: rgba(255, 206, 177, 0.86)
++
++  &[data-category='red']
++    --hy-cargo-card-accent: #e2554a
++    --hy-cargo-card-badge-bg: rgba(255, 232, 228, 0.94)
++    --hy-cargo-card-badge-text: #c93428
++    --hy-cargo-card-badge-border: rgba(255, 180, 170, 0.88)
++
++  &[data-category='cyan']
++    --hy-cargo-card-accent: #2aa8c9
++    --hy-cargo-card-badge-bg: rgba(226, 246, 252, 0.94)
++    --hy-cargo-card-badge-text: #0b7f9c
++    --hy-cargo-card-badge-border: rgba(154, 220, 236, 0.88)
++
++  &[data-category='purple']
++    --hy-cargo-card-accent: #8b5cf6
++    --hy-cargo-card-badge-bg: rgba(241, 235, 255, 0.94)
++    --hy-cargo-card-badge-text: #6d3fd4
++    --hy-cargo-card-badge-border: rgba(205, 186, 255, 0.88)
++
++  &[data-category='gray']
++    --hy-cargo-card-accent: #8a94a6
++    --hy-cargo-card-badge-bg: rgba(244, 246, 248, 0.96)
++    --hy-cargo-card-badge-text: #5c6670
++    --hy-cargo-card-badge-border: rgba(208, 214, 222, 0.9)
++
++  &[data-category='dark']
++    --hy-cargo-card-accent: #3f4654
++    --hy-cargo-card-badge-bg: rgba(236, 238, 242, 0.96)
++    --hy-cargo-card-badge-text: #2f3642
++    --hy-cargo-card-badge-border: rgba(190, 196, 206, 0.9)
++
++.header
++  display: flex
++  align-items: flex-start
++  justify-content: space-between
++  gap: 0.375rem
++
++.title
++  margin: 0
++  font-size: 1.0625rem
++  font-weight: 760
++  line-height: 1.08
++  letter-spacing: -0.03em
++  color: rgba(17, 25, 37, 0.92)
++
++.badge
++  flex-shrink: 0
++  min-height: 1.375rem
++  padding: 0.1875rem 0.5rem
++  border-radius: var(--radius-pill, 999rem)
++  border: 1px solid var(--hy-cargo-card-badge-border)
++  background: var(--hy-cargo-card-badge-bg)
++  color: var(--hy-cargo-card-badge-text)
++  font-size: 0.6875rem
++  font-weight: 700
++  line-height: 1.1
++  backdrop-filter: blur(0.375rem)
++  -webkit-backdrop-filter: blur(0.375rem)
++
++.route
++  margin: 0.1875rem 0 0
++  font-size: 0.8125rem
++  font-weight: 500
++  color: rgba(17, 25, 37, 0.64)
++  line-height: 1.28
++
++.meta
++  display: flex
++  align-items: center
++  gap: 0.3125rem
++  margin-top: 0.625rem
++  font-size: 0.75rem
++  font-weight: 520
++  color: rgba(17, 25, 37, 0.58)
++  line-height: 1.25
++
++.metaIcon
++  flex-shrink: 0
++  color: var(--hy-cargo-card-accent)
++
++  svg
++    display: block
++    width: 0.8125rem
++    height: 0.8125rem
++
++@media (prefers-reduced-transparency: reduce)
++  .card
++    backdrop-filter: none
++    -webkit-backdrop-filter: none
++    background: var(--hy-shipper-surface, #fff)
++
++@media (prefers-reduced-motion: reduce)
++  .card
++    transition: none
+diff --git a/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.tsx b/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.tsx
+new file mode 100644
+index 00000000..8191e2fc
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-cargo-card/hy-cargo-card.tsx
+@@ -0,0 +1,29 @@
++import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++import { CargoListCard } from '@/features/shipper-mobile-flow/components/cargo-list-card/cargo-list-card';
++import { mapCargoCardVisualStatus, type CargoCardVisualStatus } from '@/features/shipper-mobile-flow/components/cargo-list-card/map-cargo-card-visual-status';
++
++export type HyCargoCardVisualCategory = CargoCardVisualStatus;
++
++export type HyCargoCardProps = {
++  cargo: ShipperOwnedCargo;
++  category?: HyCargoCardVisualCategory;
++  visualStatus?: CargoCardVisualStatus;
++  href: string;
++  title: string;
++  statusLabel: string;
++  routeLabel: string;
++  metaLabel: string;
++  onPress?: () => void;
++};
++
++export function HyCargoCard({ category, visualStatus, cargo, ...props }: HyCargoCardProps) {
++  return (
++    <CargoListCard
++      {...props}
++      cargo={cargo}
++      visualStatus={visualStatus ?? category ?? mapCargoCardVisualStatus(cargo)}
++    />
++  );
++}
++
++export default HyCargoCard;
+diff --git a/src/features/shipper-mobile-flow/components/hy-cargo-card/map-shipper-cargo-visual-category.ts b/src/features/shipper-mobile-flow/components/hy-cargo-card/map-shipper-cargo-visual-category.ts
+new file mode 100644
+index 00000000..8336a50e
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-cargo-card/map-shipper-cargo-visual-category.ts
+@@ -0,0 +1,37 @@
++import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
++
++export type HyCargoCardVisualCategory = 'orange' | 'red' | 'cyan' | 'purple' | 'gray' | 'dark';
++
++function isHighRisk(riskLevel: ShipperOwnedCargo['riskLevel']) {
++  return riskLevel === 'high' || riskLevel === 'critical';
++}
++
++function hasOpenPendingSignals(cargo: ShipperOwnedCargo) {
++  return cargo.pendingDocsCount > 0 || cargo.offersCount > 0;
++}
++
++export function mapShipperCargoToVisualCategory(cargo: ShipperOwnedCargo): HyCargoCardVisualCategory {
++  const { status } = cargo;
++
++  if (status === 'delivered') {
++    return 'dark';
++  }
++
++  if (status === 'blocked') {
++    return 'red';
++  }
++
++  if (status === 'inTransit') {
++    return 'orange';
++  }
++
++  if (status === 'attention') {
++    return isHighRisk(cargo.riskLevel) ? 'red' : 'orange';
++  }
++
++  if (status === 'open') {
++    return hasOpenPendingSignals(cargo) ? 'purple' : 'gray';
++  }
++
++  return 'gray';
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.module.sass b/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.module.sass
+new file mode 100644
+index 00000000..76e0cfc9
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.module.sass
+@@ -0,0 +1,11 @@
++.list
++  display: flex
++  gap: 0.5rem
++  overflow-x: auto
++  padding: 0.125rem 1.125rem 0.25rem
++  margin: 0 -1.125rem
++  -webkit-overflow-scrolling: touch
++  scrollbar-width: none
++
++  &::-webkit-scrollbar
++    display: none
+diff --git a/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.tsx b/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.tsx
+new file mode 100644
+index 00000000..27f916f3
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-chip-list/hy-chip-list.tsx
+@@ -0,0 +1,35 @@
++'use client';
++
++import { HyChip } from '@/features/shipper-mobile-flow/components/hy-chip/hy-chip';
++
++import styles from './hy-chip-list.module.sass';
++
++export type HyChipOption = {
++  id: string;
++  label: string;
++  count?: number;
++};
++
++export type HyChipListProps = {
++  options: HyChipOption[];
++  activeId: string;
++  onChange: (id: string) => void;
++  ariaLabel: string;
++};
++
++export function HyChipList({ options, activeId, onChange, ariaLabel }: HyChipListProps) {
++  return (
++    <div className={styles.list} role="tablist" aria-label={ariaLabel}>
++      {options.map((option) => (
++        <HyChip
++          key={option.id}
++          id={option.id}
++          label={option.label}
++          count={option.count}
++          selected={activeId === option.id}
++          onSelect={onChange}
++        />
++      ))}
++    </div>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.module.sass b/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.module.sass
+new file mode 100644
+index 00000000..32e9acb1
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.module.sass
+@@ -0,0 +1,56 @@
++@use '../../styles/shipper-mixins' as *
++
++.chip
++  @include shipper-pressable
++  @include shipper-focus
++  --hy-chip-height: 2.375rem
++  --hy-chip-pad-x: 0.875rem
++  --hy-chip-glass-surface: rgba(255, 255, 255, 0.22)
++  --hy-chip-glass-border: rgba(255, 255, 255, 0.45)
++  flex-shrink: 0
++  min-height: var(--hy-chip-height)
++  height: var(--hy-chip-height)
++  padding: 0 var(--hy-chip-pad-x)
++  border-radius: var(--radius-pill, 999rem)
++  border: 1px solid var(--hy-chip-glass-border)
++  background: var(--hy-chip-glass-surface)
++  backdrop-filter: blur(1.125rem) saturate(1.2)
++  -webkit-backdrop-filter: blur(1.125rem) saturate(1.2)
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.38)
++  color: rgba(17, 25, 37, 0.62)
++  font-size: 0.875rem
++  font-weight: 560
++  line-height: 1.15
++  cursor: pointer
++  display: inline-flex
++  align-items: center
++  gap: 0.375rem
++  white-space: nowrap
++  -webkit-tap-highlight-color: transparent
++  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), background 0.18s ease, box-shadow 0.18s ease
++
++  &:disabled
++    cursor: not-allowed
++    opacity: 0.5
++
++.selected
++  color: rgba(17, 25, 37, 0.92)
++  font-weight: 700
++  background: rgba(255, 255, 255, 0.52)
++  border-color: rgba(255, 255, 255, 0.72)
++  box-shadow: 0 1.625rem 5rem rgba(69, 99, 130, 0.16), inset 0 1px 0 rgba(255, 255, 255, 0.72), inset 0 -1px 1px rgba(255, 255, 255, 0.26)
++
++.count
++  font-variant-numeric: tabular-nums
++  font-weight: inherit
++
++@media (prefers-reduced-transparency: reduce)
++  .chip
++    backdrop-filter: none
++    -webkit-backdrop-filter: none
++
++  .chip:not(.selected)
++    background: var(--hy-shipper-surface-secondary, #eef2f1)
++
++  .selected
++    background: var(--hy-shipper-surface, #fff)
+diff --git a/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.tsx b/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.tsx
+new file mode 100644
+index 00000000..4f9033b8
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-chip/hy-chip.tsx
+@@ -0,0 +1,29 @@
++'use client';
++
++import styles from './hy-chip.module.sass';
++
++export type HyChipProps = {
++  id: string;
++  label: string;
++  selected: boolean;
++  onSelect: (id: string) => void;
++  count?: number;
++  disabled?: boolean;
++};
++
++export function HyChip({ id, label, selected, onSelect, count, disabled = false }: HyChipProps) {
++  const chipLabel = typeof count === 'number' ? `${label} (${count})` : label;
++
++  return (
++    <button
++      type="button"
++      role="tab"
++      aria-selected={selected}
++      className={`${styles.chip} ${selected ? styles.selected : ''}`}
++      disabled={disabled}
++      onClick={() => onSelect(id)}
++    >
++      <span className={styles.count}>{chipLabel}</span>
++    </button>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass b/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass
+new file mode 100644
+index 00000000..9204442a
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.module.sass
+@@ -0,0 +1,162 @@
++@use '../../styles/shipper-mixins' as *
++
++.root
++  --hy-icon-button-size: var(--touch-comfort, 3rem)
++  --hy-icon-button-radius: var(--radius-pill, 999rem)
++  --hy-icon-button-glass-surface: rgba(255, 255, 255, 0.38)
++  --hy-icon-button-glass-border: rgba(255, 255, 255, 0.74)
++  --hy-icon-button-glass-blur: blur(1.5rem) saturate(1.35)
++  --hy-icon-button-solid-surface: var(--hy-shipper-info, #0b5cad)
++  --hy-icon-button-solid-color: #fff
++  --hy-icon-button-icon-color: rgba(17, 25, 37, 0.92)
++  --hy-icon-button-shadow: 0 1.25rem 3.25rem rgba(69, 99, 130, 0.14), inset 0 1px 0 rgba(255, 255, 255, 0.78), inset 0 -1px 1px rgba(255, 255, 255, 0.22)
++  --hy-icon-button-press-scale: 0.972
++  position: relative
++  display: inline-flex
++  flex-shrink: 0
++
++.button
++  @include shipper-pressable
++  @include shipper-focus
++  position: relative
++  margin: 0
++  padding: 0
++  width: var(--hy-icon-button-size)
++  min-width: var(--hy-icon-button-size)
++  height: var(--hy-icon-button-size)
++  min-height: var(--hy-icon-button-size)
++  border-radius: var(--hy-icon-button-radius)
++  border: 1px solid var(--hy-icon-button-glass-border)
++  background: var(--hy-icon-button-glass-surface)
++  box-shadow: var(--hy-icon-button-shadow)
++  backdrop-filter: var(--hy-icon-button-glass-blur)
++  -webkit-backdrop-filter: var(--hy-icon-button-glass-blur)
++  color: var(--hy-icon-button-icon-color)
++  display: inline-grid
++  place-items: center
++  cursor: pointer
++  text-decoration: none
++  -webkit-tap-highlight-color: transparent
++  touch-action: manipulation
++  overflow: visible
++  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1), opacity 0.18s ease
++
++  &[data-size='sm']
++    --hy-icon-button-size: 2.75rem
++
++  &[data-size='md']
++    --hy-icon-button-size: 3rem
++
++  &[data-size='lg']
++    --hy-icon-button-size: 3.3125rem
++
++  &:disabled
++    cursor: not-allowed
++    opacity: 0.48
++    pointer-events: none
++
++  &:focus:not(:focus-visible)
++    outline: none
++
++  &[data-variant='solid']
++    border-color: color-mix(in srgb, var(--hy-icon-button-solid-surface) 82%, #fff)
++    background: var(--hy-icon-button-solid-surface)
++    color: var(--hy-icon-button-solid-color)
++    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28), 0 0.5rem 1.25rem color-mix(in srgb, var(--hy-icon-button-solid-surface) 34%, transparent)
++
++  &::before
++    content: ''
++    position: absolute
++    inset: 0.25rem
++    border-radius: inherit
++    background: radial-gradient(circle at 35% 18%, rgba(255, 255, 255, 0.45), transparent 42%)
++    opacity: 0.72
++    pointer-events: none
++
++.icon
++  display: grid
++  place-items: center
++  line-height: 0
++  transform-origin: center center
++  transition: transform 0.18s cubic-bezier(0.2, 0, 0, 1)
++
++  svg
++    display: block
++    width: 1.3125rem
++    height: 1.3125rem
++
++.textIcon
++  font-size: 0.8125rem
++  font-weight: 590
++  letter-spacing: 0.04em
++  line-height: 1
++
++.avatarIcon
++  width: 1.75rem
++  height: 1.75rem
++  border-radius: var(--radius-pill, 999rem)
++  background: linear-gradient(145deg, rgba(79, 143, 200, 0.92), rgba(46, 159, 123, 0.88))
++  color: #fff
++  font-size: 0.6875rem
++  font-weight: 700
++  display: grid
++  place-items: center
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.36)
++
++.badge
++  position: absolute
++  top: -0.125rem
++  right: -0.125rem
++  z-index: 1
++  min-width: 1.125rem
++  height: 1.125rem
++  padding: 0 0.25rem
++  border-radius: var(--radius-pill, 999rem)
++  background: var(--hy-shipper-danger, #b42318)
++  color: #fff
++  font-size: 0.625rem
++  font-weight: 750
++  line-height: 1.125rem
++  text-align: center
++  pointer-events: none
++  box-shadow: 0 0.125rem 0.375rem rgba(16, 19, 24, 0.18)
++
++.indicator
++  position: absolute
++  top: 0.375rem
++  right: 0.375rem
++  z-index: 1
++  width: 0.5rem
++  height: 0.5rem
++  border-radius: var(--radius-pill, 999rem)
++  background: var(--hy-shipper-danger, #b42318)
++  border: 2px solid rgba(255, 255, 255, 0.92)
++  pointer-events: none
++
++.button:hover:not(:disabled),
++.button:focus-visible
++  .icon
++    transform: translateY(-0.03125rem)
++
++@media (prefers-reduced-transparency: reduce)
++  .button
++    backdrop-filter: none
++    -webkit-backdrop-filter: none
++    background: var(--hy-shipper-surface, #fff)
++
++// HYDRI PATCH: icon-button-glass-restore START
++// Make the glass controls lighter and more transparent over the new page background.
++.root
++  --hy-icon-button-glass-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.28), rgba(244, 249, 252, 0.14))
++  --hy-icon-button-glass-border: rgba(255, 255, 255, 0.5)
++  --hy-icon-button-glass-blur: blur(1.35rem) saturate(1.28)
++  --hy-icon-button-shadow: 0 0.85rem 2.1rem rgba(69, 99, 130, 0.1), inset 0 0.0625rem 0 rgba(255, 255, 255, 0.7), inset 0 -0.0625rem 0.0625rem rgba(255, 255, 255, 0.16)
++  --hy-icon-button-icon-color: rgba(17, 25, 37, 0.9)
++
++.button
++  border: 0.0625rem solid var(--hy-icon-button-glass-border)
++  background: var(--hy-icon-button-glass-surface)
++  box-shadow: var(--hy-icon-button-shadow)
++  backdrop-filter: var(--hy-icon-button-glass-blur)
++  -webkit-backdrop-filter: var(--hy-icon-button-glass-blur)
++// HYDRI PATCH: icon-button-glass-restore END
+diff --git a/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx b/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx
+new file mode 100644
+index 00000000..772f4597
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-icon-button/hy-icon-button.tsx
+@@ -0,0 +1,81 @@
++'use client';
++
++import type { ButtonHTMLAttributes, ReactNode } from 'react';
++
++import { Link } from '@/core/i18n/navigation';
++
++import styles from './hy-icon-button.module.sass';
++
++export type HyIconButtonVariant = 'glass' | 'solid';
++export type HyIconButtonSize = 'sm' | 'md' | 'lg';
++
++export type HyIconButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'> & {
++  ariaLabel: string;
++  icon: ReactNode;
++  onClick?: () => void;
++  href?: string;
++  variant?: HyIconButtonVariant;
++  size?: HyIconButtonSize;
++  disabled?: boolean;
++  badgeCount?: number;
++  hasIndicator?: boolean;
++  type?: 'button' | 'submit';
++};
++
++export function HyIconButton({
++  ariaLabel,
++  icon,
++  onClick,
++  href,
++  variant = 'glass',
++  size = 'md',
++  disabled = false,
++  badgeCount,
++  hasIndicator = false,
++  type = 'button',
++  className,
++  ...rest
++}: HyIconButtonProps) {
++  const showBadge = typeof badgeCount === 'number' && badgeCount > 0;
++  const rootClassName = [styles.root, className].filter(Boolean).join(' ');
++  const controlClassName = styles.button;
++
++  const inner = (
++    <span className={styles.icon} aria-hidden>
++      {icon}
++    </span>
++  );
++
++  const controlProps = {
++    'data-variant': variant,
++    'data-size': size,
++    'aria-label': ariaLabel,
++    className: controlClassName,
++  };
++
++  return (
++    <span className={rootClassName}>
++      {href ? (
++        <Link href={href} {...controlProps}>
++          {inner}
++        </Link>
++      ) : (
++        <button
++          type={type}
++          disabled={disabled}
++          onClick={onClick}
++          {...controlProps}
++          {...rest}
++        >
++          {inner}
++        </button>
++      )}
++      {showBadge ? (
++        <span className={styles.badge} aria-hidden>
++          {badgeCount > 99 ? '99+' : badgeCount}
++        </span>
++      ) : null}
++      {hasIndicator && !showBadge ? <span className={styles.indicator} aria-hidden /> : null}
++    </span>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.module.sass b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.module.sass
+new file mode 100644
+index 00000000..6d4c21c0
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.module.sass
+@@ -0,0 +1,109 @@
++@use '../../styles/shipper-mixins' as *
++
++.root
++  --hy-mobile-toolbar-pad-x: 1.125rem
++  --hy-mobile-toolbar-pad-top: calc(env(safe-area-inset-top, 0px) + 0.875rem)
++  --hy-mobile-toolbar-pad-bottom: 0.75rem
++  --hy-mobile-toolbar-blur: blur(1.625rem) saturate(1.2)
++  --hy-mobile-toolbar-glass: linear-gradient(180deg, rgba(255, 255, 255, 0.46), rgba(255, 255, 255, 0.13))
++  position: sticky
++  top: 0
++  z-index: 20
++  padding: var(--hy-mobile-toolbar-pad-top) var(--hy-mobile-toolbar-pad-x) var(--hy-mobile-toolbar-pad-bottom)
++  backdrop-filter: var(--hy-mobile-toolbar-blur)
++  -webkit-backdrop-filter: var(--hy-mobile-toolbar-blur)
++  background: var(--hy-mobile-toolbar-glass)
++  border-bottom: none
++  contain: layout style
++
++.compactRow
++  display: grid
++  grid-template-columns: minmax(3rem, auto) 1fr minmax(3rem, auto)
++  align-items: center
++  gap: 0.75rem
++  min-height: 3rem
++
++.leading
++  display: flex
++  align-items: center
++  justify-content: flex-start
++  min-width: 3rem
++
++.trailing
++  display: flex
++  align-items: center
++  justify-content: flex-end
++  gap: 0.5rem
++  min-width: 3rem
++
++.compactTitle
++  margin: 0
++  text-align: center
++  font-size: 1.0625rem
++  font-weight: 590
++  line-height: 1.2
++  letter-spacing: -0.02em
++  color: rgba(17, 25, 37, 0.92)
++  overflow: hidden
++  text-overflow: ellipsis
++  white-space: nowrap
++
++.largeBlock
++  overflow: hidden
++  max-height: 7.5rem
++  opacity: 1
++  transform: translate3d(0, 0, 0)
++  transition: max-height 0.28s cubic-bezier(0.2, 0, 0, 1), opacity 0.22s ease, transform 0.28s cubic-bezier(0.2, 0, 0, 1)
++  padding: 0.875rem 0.125rem 0.25rem
++
++.subtitle
++  display: block
++  margin: 0
++  color: rgba(17, 25, 37, 0.62)
++  font-size: 0.75rem
++  font-weight: 620
++  letter-spacing: 0.08em
++  text-transform: uppercase
++  line-height: 1.2
++
++.largeTitle
++  margin: 0.1875rem 0 0
++  font-size: clamp(2.125rem, 10vw, 2.875rem)
++  line-height: 0.96
++  letter-spacing: -0.06em
++  font-weight: 720
++  color: rgba(17, 25, 37, 0.92)
++
++.compact .largeBlock
++  max-height: 0
++  opacity: 0
++  transform: translate3d(0, -0.375rem, 0)
++  padding-top: 0
++  pointer-events: none
++
++.compact .compactTitle
++  opacity: 1
++
++.large .compactTitle
++  position: absolute
++  width: 1px
++  height: 1px
++  padding: 0
++  margin: -1px
++  overflow: hidden
++  clip: rect(0, 0, 0, 0)
++  white-space: nowrap
++  border: 0
++
++@media (prefers-reduced-motion: reduce)
++  .largeBlock
++    transition: none
++
++  .compact .largeBlock
++    transform: none
++
++@media (prefers-reduced-transparency: reduce)
++  .root
++    backdrop-filter: none
++    -webkit-backdrop-filter: none
++    background: color-mix(in srgb, var(--hy-shipper-surface, #fff) 92%, transparent)
+diff --git a/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.tsx b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.tsx
+new file mode 100644
+index 00000000..477052fe
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/hy-mobile-toolbar.tsx
+@@ -0,0 +1,43 @@
++'use client';
++
++import type { ReactNode, RefObject } from 'react';
++
++import styles from './hy-mobile-toolbar.module.sass';
++import type { HyMobileToolbarSize } from './use-hy-mobile-toolbar-scroll';
++
++export type { HyMobileToolbarSize };
++
++export type HyMobileToolbarProps = {
++  size: HyMobileToolbarSize;
++  title: string;
++  largeTitle: string;
++  subtitle?: string;
++  leadingSlot?: ReactNode;
++  trailingSlot?: ReactNode;
++  scrollTargetRef?: RefObject<HTMLElement | null>;
++};
++
++export function HyMobileToolbar({
++  size,
++  title,
++  largeTitle,
++  subtitle,
++  leadingSlot,
++  trailingSlot,
++}: HyMobileToolbarProps) {
++  const rootClassName = `${styles.root} ${size === 'compact' ? styles.compact : styles.large}`;
++
++  return (
++    <header className={rootClassName}>
++      <div className={styles.compactRow}>
++        <div className={styles.leading}>{leadingSlot}</div>
++        <h1 className={styles.compactTitle}>{title}</h1>
++        <div className={styles.trailing}>{trailingSlot}</div>
++      </div>
++      <div className={styles.largeBlock} aria-hidden={size === 'compact'}>
++        {subtitle ? <p className={styles.subtitle}>{subtitle}</p> : null}
++        <h2 className={styles.largeTitle}>{largeTitle}</h2>
++      </div>
++    </header>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/use-hy-mobile-toolbar-scroll.ts b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/use-hy-mobile-toolbar-scroll.ts
+new file mode 100644
+index 00000000..4e0063d4
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-mobile-toolbar/use-hy-mobile-toolbar-scroll.ts
+@@ -0,0 +1,75 @@
++'use client';
++
++import { useEffect, useState, type RefObject } from 'react';
++
++export const HY_MOBILE_TOOLBAR_COMPACT_SCROLL_Y = 24;
++export const HY_MOBILE_TOOLBAR_EXPAND_SCROLL_Y = 8;
++
++export type HyMobileToolbarSize = 'large' | 'compact';
++
++function resolveToolbarSize(scrollOffset: number, isCurrentlyCompact: boolean): HyMobileToolbarSize {
++  if (isCurrentlyCompact) {
++    return scrollOffset > HY_MOBILE_TOOLBAR_EXPAND_SCROLL_Y ? 'compact' : 'large';
++  }
++
++  return scrollOffset > HY_MOBILE_TOOLBAR_COMPACT_SCROLL_Y ? 'compact' : 'large';
++}
++
++export function useHyMobileToolbarScroll(
++  scrollTargetRef: RefObject<HTMLElement | null>,
++): HyMobileToolbarSize {
++  const [size, setSize] = useState<HyMobileToolbarSize>('large');
++
++  useEffect(() => {
++    let frame = 0;
++    let scrollEl: HTMLElement | null = null;
++    let bootstrapFrame = 0;
++
++    const update = () => {
++      window.cancelAnimationFrame(frame);
++      frame = window.requestAnimationFrame(() => {
++        const target = scrollTargetRef.current;
++        if (!target) {
++          return;
++        }
++
++        setSize((prev) => resolveToolbarSize(target.scrollTop, prev === 'compact'));
++      });
++    };
++
++    const onScroll = () => {
++      update();
++    };
++
++    const attach = () => {
++      const next = scrollTargetRef.current;
++      if (next === scrollEl) {
++        return Boolean(scrollEl);
++      }
++
++      scrollEl?.removeEventListener('scroll', onScroll);
++      scrollEl = next;
++      scrollEl?.addEventListener('scroll', onScroll, { passive: true });
++      update();
++      return Boolean(scrollEl);
++    };
++
++    const bootstrap = () => {
++      if (attach()) {
++        return;
++      }
++
++      bootstrapFrame = window.requestAnimationFrame(bootstrap);
++    };
++
++    bootstrap();
++
++    return () => {
++      window.cancelAnimationFrame(frame);
++      window.cancelAnimationFrame(bootstrapFrame);
++      scrollEl?.removeEventListener('scroll', onScroll);
++    };
++  }, [scrollTargetRef]);
++
++  return size;
++}
+diff --git a/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.module.sass b/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.module.sass
+new file mode 100644
+index 00000000..981f2e64
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.module.sass
+@@ -0,0 +1,114 @@
++@use '../../styles/shipper-mixins' as *
++
++.root
++  --hy-search-bar-height: 3.3125rem
++  --hy-search-bar-radius: var(--radius-pill, 999rem)
++  --hy-search-bar-gap: 0.5rem
++  --hy-search-bar-pad-x: 1rem
++  --hy-search-bar-glass-surface: rgba(255, 255, 255, 0.38)
++  --hy-search-bar-glass-border: rgba(255, 255, 255, 0.72)
++  --hy-search-bar-inner-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), inset 0 -1px 1px rgba(255, 255, 255, 0.22)
++  --hy-search-bar-outer-shadow: 0 1.25rem 3.25rem rgba(69, 99, 130, 0.12)
++  display: grid
++  grid-template-columns: 1fr auto
++  align-items: center
++  gap: 0.5rem
++
++.field
++  display: flex
++  align-items: center
++  gap: var(--hy-search-bar-gap)
++  min-height: var(--hy-search-bar-height)
++  height: var(--hy-search-bar-height)
++  padding: 0 0.9375rem
++  border-radius: var(--hy-search-bar-radius)
++  border: 1px solid var(--hy-search-bar-glass-border)
++  background: radial-gradient(ellipse at 10% 11%, rgba(255, 255, 255, 0.82), transparent 44%), linear-gradient(180deg, rgba(255, 255, 255, 0.64) 0%, rgba(250, 252, 255, 0.48) 42%, rgba(239, 244, 251, 0.46) 100%)
++  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 1px rgba(255, 255, 255, 0.22), 0 1.125rem 2.75rem rgba(69, 99, 130, 0.12)
++  backdrop-filter: blur(1.375rem) saturate(1.35)
++  -webkit-backdrop-filter: blur(1.375rem) saturate(1.35)
++
++.leadingIcon
++  flex-shrink: 0
++  display: inline-flex
++  align-items: center
++  justify-content: center
++  color: rgba(17, 25, 37, 0.56)
++
++  svg
++    display: block
++    width: 1.1875rem
++    height: 1.1875rem
++
++.input
++  flex: 1
++  min-width: 0
++  border: 0
++  outline: none
++  background: transparent
++  color: rgba(17, 25, 37, 0.92)
++  font: inherit
++  font-size: 0.921875rem
++  line-height: 1.25
++
++  &::placeholder
++    color: rgba(17, 25, 37, 0.38)
++
++  &:disabled
++    cursor: not-allowed
++    opacity: 0.56
++
++  &:focus-visible
++    outline: none
++
++.field:focus-within
++  outline: 2px solid color-mix(in srgb, var(--hy-shipper-focus, #0a7f66) 68%, transparent)
++  outline-offset: 0.0625rem
++
++.trailing
++  flex-shrink: 0
++  display: inline-flex
++  align-items: center
++
++@media (prefers-reduced-transparency: reduce)
++  .field
++    backdrop-filter: none
++    -webkit-backdrop-filter: none
++    background: var(--hy-shipper-surface, #fff)
++
++// HYDRI PATCH: search-bar-screen-gutter-restore START
++// Final pass: keep the search row on the same axis as the rest of the screen.
++.root
++  width: 100%
++  min-inline-size: 0
++  display: grid
++  grid-template-columns: minmax(0, 1fr) auto
++  align-items: center
++  gap: 0.625rem
++  box-sizing: border-box
++
++.field
++  min-height: var(--hy-search-bar-height)
++  height: var(--hy-search-bar-height)
++  padding: 0 1rem
++  border-radius: var(--hy-search-bar-radius)
++  border: 0.0625rem solid rgba(255, 255, 255, 0.56)
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.34), rgba(244, 249, 251, 0.18))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.72), inset 0 -0.0625rem 0.0625rem rgba(255, 255, 255, 0.18), 0 1rem 2.5rem rgba(69, 99, 130, 0.09)
++  backdrop-filter: blur(1.35rem) saturate(1.3)
++  -webkit-backdrop-filter: blur(1.35rem) saturate(1.3)
++
++.leadingIcon
++  color: rgba(17, 25, 37, 0.5)
++
++.input
++  color: rgba(17, 25, 37, 0.92)
++
++  &::placeholder
++    color: rgba(17, 25, 37, 0.38)
++
++.trailing
++  flex-shrink: 0
++  display: inline-flex
++  align-items: center
++// HYDRI PATCH: search-bar-screen-gutter-restore END
+diff --git a/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.tsx b/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.tsx
+new file mode 100644
+index 00000000..85c931a9
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/components/hy-search-bar/hy-search-bar.tsx
+@@ -0,0 +1,46 @@
++'use client';
++
++import { Search } from 'lucide-react';
++import type { ReactNode } from 'react';
++
++import styles from './hy-search-bar.module.sass';
++
++export type HySearchBarProps = {
++  value: string;
++  onChange: (value: string) => void;
++  placeholder: string;
++  ariaLabel: string;
++  trailingSlot?: ReactNode;
++  disabled?: boolean;
++};
++
++export function HySearchBar({
++  value,
++  onChange,
++  placeholder,
++  ariaLabel,
++  trailingSlot,
++  disabled = false,
++}: HySearchBarProps) {
++  return (
++    <div className={styles.root}>
++      <label className={styles.field}>
++        <span className={styles.leadingIcon}>
++          <Search aria-hidden />
++        </span>
++        <input
++          className={styles.input}
++          type="search"
++          value={value}
++          onChange={(event) => onChange(event.target.value)}
++          placeholder={placeholder}
++          aria-label={ariaLabel}
++          disabled={disabled}
++          enterKeyHint="search"
++          autoComplete="off"
++        />
++      </label>
++      {trailingSlot ? <span className={styles.trailing}>{trailingSlot}</span> : null}
++    </div>
++  );
++}
+diff --git a/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass b/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
+index af09da61..82e6efa4 100644
+--- a/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
++++ b/src/features/shipper-mobile-flow/components/language-switcher/language-switcher.module.sass
+@@ -1,14 +1,57 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+-.button
+-  @include shipper-pressable
++.wrapper
++  position: relative
++
++.control
++  @include shipper-pressable-subtle
+   @include shipper-focus
+   @include shipper-glass
+-  width: var(--header-icon)
++  min-width: var(--header-icon)
+   height: var(--header-icon)
++  padding: 0 var(--space-2)
+   border-radius: var(--radius-pill)
+   display: inline-flex
+   align-items: center
+   justify-content: center
++  @include shipper-operational-label
++  font-size: 0.625rem
++  letter-spacing: 0.07em
+   color: var(--hy-shipper-text)
+   cursor: pointer
++
++.menu
++  @include shipper-glass
++  position: absolute
++  top: calc(100% + var(--space-1))
++  right: 0
++  z-index: 35
++  min-width: 7rem
++  padding: var(--space-1)
++  border-radius: var(--radius-md)
++  display: flex
++  flex-direction: column
++  gap: 0.25rem
++  box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-md)
++
++.option
++  @include shipper-pressable-subtle
++  @include shipper-focus
++  min-height: var(--touch-min)
++  border: 0
++  border-radius: var(--radius-sm)
++  background: transparent
++  color: var(--hy-shipper-muted)
++  @include shipper-label
++  font-weight: 620
++  cursor: pointer
++  text-align: left
++  padding: 0 var(--space-2)
++  display: flex
++  align-items: center
++  justify-content: flex-start
++
++.optionActive
++  color: var(--hy-shipper-text)
++  background: color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 26%, transparent)
+diff --git a/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass b/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
+index 8bd1fbcd..f47cebe2 100644
+--- a/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
++++ b/src/features/shipper-mobile-flow/components/notification-bell/notification-bell.module.sass
+@@ -1,7 +1,7 @@
+ @use '../../styles/shipper-mixins' as *
+ 
+-.button
+-  @include shipper-pressable
++.link
++  @include shipper-pressable-subtle
+   @include shipper-focus
+   @include shipper-glass
+   width: var(--header-icon)
+@@ -13,3 +13,14 @@
+   color: var(--hy-shipper-text)
+   cursor: pointer
+   text-decoration: none
++  position: relative
++
++.badge
++  position: absolute
++  top: 0.3125rem
++  right: 0.3125rem
++  width: 0.45rem
++  height: 0.45rem
++  border-radius: var(--radius-pill)
++  background: linear-gradient(180deg, var(--hy-shipper-accent-operational), color-mix(in srgb, var(--hy-shipper-accent-operational) 65%, var(--hy-shipper-warning)))
++  box-shadow: 0 0 0 2px color-mix(in srgb, var(--hy-shipper-glass-bg) 92%, transparent), 0 0.25rem 0.75rem color-mix(in srgb, var(--hy-shipper-accent-operational) 35%, transparent)
+diff --git a/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass b/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
+index b4480f22..d63a9506 100644
+--- a/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
++++ b/src/features/shipper-mobile-flow/components/shared-ui/shared-ui.module.sass
+@@ -520,6 +520,12 @@
+   align-items: center
+   gap: var(--space-3)
+ 
++.profileContextLine
++  @include shipper-label
++  margin: 0.15rem 0 0
++  color: var(--hy-shipper-muted)
++  font-weight: 560
++
+ .profileAvatar
+   width: var(--avatar)
+   height: var(--avatar)
+@@ -547,6 +553,55 @@
+   display: flex
+   align-items: center
+ 
++.profileIdentityGrid
++  display: grid
++  grid-template-columns: repeat(3, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.profileIdentityCard
++  @include shipper-module-card
++  padding: var(--space-3) var(--space-2)
++  min-height: 4.25rem
++  display: flex
++  flex-direction: column
++  gap: 0.25rem
++  justify-content: center
++
++.profileIdentityLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.profileIdentityValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
++
++.profileQuickGrid
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.profileQuickCard
++  @include shipper-module-card
++  min-height: 4rem
++  padding: var(--space-3)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.2rem
++
++.profileQuickLabel
++  @include shipper-operational-label
++  margin: 0
++
++.profileQuickValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 680
++
+ .detailGrid
+   display: grid
+   grid-template-columns: repeat(2, minmax(0, 1fr))
+@@ -609,6 +664,101 @@
+   color: var(--hy-shipper-muted)
+   margin: 0
+ 
++.detailOpsSection
++  @include shipper-module-card
++  padding: var(--space-3)
++  display: flex
++  flex-direction: column
++  gap: var(--space-3)
++
++.detailOpsTitle
++  @include shipper-body
++  margin: 0
++  font-weight: 700
++
++.detailOpsGrid
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.detailOpsCard
++  @include shipper-glass
++  border-radius: var(--radius-md)
++  padding: var(--space-2)
++  min-height: 4rem
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.25rem
++
++.detailOpsLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.detailOpsValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 680
++
++.detailFactsStrip
++  display: grid
++  grid-template-columns: repeat(3, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.detailFactCard
++  @include shipper-module-card
++  min-height: 4.25rem
++  padding: var(--space-2)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.2rem
++
++.detailFactLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.detailFactValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
++
++.detailTimelineSection
++  @include shipper-module-card
++  padding: var(--space-3)
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++
++.detailTimelineList
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++
++.detailTimelineItem
++  @include shipper-glass
++  border-radius: var(--radius-sm)
++  min-height: 3.5rem
++  padding: var(--space-2) var(--space-3)
++  display: flex
++  align-items: center
++  justify-content: space-between
++  gap: var(--space-2)
++
++.detailTimelineLabel
++  @include shipper-operational-label
++  margin: 0
++
++.detailTimelineValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
++
+ .notification
+   @include shipper-solid-card
+   display: flex
+@@ -626,6 +776,67 @@
+ .notificationLow
+   border-left-color: var(--hy-shipper-success)
+ 
++.notificationSection
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++
++.notificationSectionHeader
++  @include shipper-list-section-header
++  @include shipper-glass
++  border-radius: var(--radius-md)
++  padding: var(--space-2) var(--space-3)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 14%, var(--hy-shipper-glass-border))
++
++.notificationSectionTitle
++  @include shipper-operational-label
++  margin: 0
++
++.notificationSectionCount
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-variant-numeric: tabular-nums
++  padding: 0.25rem 0.5rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
++
++.notificationRail
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++
++.notificationsHero
++  @include shipper-module-card
++  padding: var(--space-4) var(--space-3)
++  min-height: var(--hy-shipper-hero-min-h)
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 18%, var(--hy-shipper-glass-border))
++
++.notificationsHeroLabel
++  @include shipper-operational-label
++  margin: 0
++
++.notificationsHeroValue
++  @include shipper-title
++  margin: 0
++  font-weight: 760
++
++.notificationsHeroMeta
++  display: flex
++  flex-wrap: wrap
++  gap: var(--space-2)
++
++  span
++    @include shipper-label
++    padding: 0.25rem 0.625rem
++    border-radius: var(--radius-pill)
++    border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 22%, transparent)
++    background: color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, transparent)
++
+ .basinGrid
+   display: grid
+   grid-template-columns: repeat(2, minmax(0, 1fr))
+@@ -639,6 +850,59 @@
+   flex-direction: column
+   gap: var(--space-1)
+ 
++.cockpitTopMeta
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.cockpitTopMetaCard
++  @include shipper-module-card
++  padding: var(--space-3)
++  min-height: 4.75rem
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.25rem
++
++.cockpitTopMetaLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.cockpitTopMetaValue
++  @include shipper-body
++  margin: 0
++  font-weight: 680
++
++.cockpitOpsGrid
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.cockpitOpsCard
++  @include shipper-module-card
++  min-height: 5.25rem
++  padding: var(--space-3)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.2rem
++
++.cockpitOpsLabel
++  @include shipper-operational-label
++  margin: 0
++
++.cockpitOpsValue
++  @include shipper-body
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 730
++
++.cockpitOpsHint
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-muted)
++
+ .impactHighlight
+   @include shipper-module-card
+   padding: var(--space-3)
+@@ -683,6 +947,249 @@
+   flex-direction: column
+   gap: var(--space-3)
+ 
++.listSectionHeader
++  @include shipper-list-section-header
++  @include shipper-glass
++  padding: var(--space-2) var(--space-3)
++  border-radius: var(--radius-md)
++  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 14%, var(--hy-shipper-glass-border))
++  box-shadow: var(--hy-shipper-glass-inner-glow), var(--hy-shipper-shadow-sm)
++
++.listSectionTitle
++  @include shipper-operational-label
++  margin: 0
++
++.listSectionCount
++  @include shipper-label
++  color: var(--hy-shipper-text)
++  margin: 0
++  font-variant-numeric: tabular-nums
++  padding: 0.25rem 0.5rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-primary) 12%, transparent)
++
++.listHeroCard
++  @include shipper-module-card
++  min-height: var(--hy-shipper-hero-min-h)
++  padding: var(--space-4) var(--space-3)
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 18%, var(--hy-shipper-glass-border))
++  background: linear-gradient(150deg, color-mix(in srgb, var(--hy-shipper-surface) 94%, var(--hy-shipper-accent-premium)) 0%, color-mix(in srgb, var(--hy-shipper-glass-bg) 88%, var(--hy-shipper-surface)) 100%)
++  box-shadow: var(--hy-shipper-glass-inner-glow), 0 0.625rem 1.75rem color-mix(in srgb, var(--hy-shipper-text) 7%, transparent)
++
++.listHeroLabel
++  @include shipper-operational-label
++  margin: 0
++
++.listHeroValue
++  @include shipper-title
++  margin: 0
++  font-weight: 760
++  letter-spacing: -0.02em
++
++.listHeroBody
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-muted)
++  line-height: 1.4
++
++.corridorMiniGrid
++  display: grid
++  grid-template-columns: repeat(3, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.corridorMiniCard
++  @include shipper-module-card
++  min-height: 4.25rem
++  padding: var(--space-2)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.2rem
++
++.corridorMiniLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.corridorMiniValue
++  @include shipper-body
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
++
++.operationalStrip
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.operationalMiniCard
++  @include shipper-module-card
++  padding: var(--space-3)
++  min-height: 4.5rem
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.2rem
++
++.operationalMiniLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.operationalMiniValue
++  @include shipper-body
++  margin: 0
++  font-weight: 700
++  color: var(--hy-shipper-text)
++
++.sheetLead
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-muted)
++  padding-bottom: var(--space-2)
++
++.sheetChipList
++  display: flex
++  flex-wrap: wrap
++  gap: var(--space-2)
++
++.sheetChip
++  @include shipper-pressable-subtle
++  @include shipper-focus
++  min-height: var(--chip-h)
++  border-radius: var(--radius-pill)
++  border: 1px solid var(--hy-shipper-glass-border)
++  background: color-mix(in srgb, var(--hy-shipper-glass-bg) 82%, transparent)
++  color: var(--hy-shipper-muted)
++  @include shipper-label
++  font-weight: 620
++  padding: 0 var(--space-3)
++  cursor: pointer
++
++.sheetChipActive
++  color: var(--hy-shipper-text)
++  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 26%, transparent)
++  background: color-mix(in srgb, var(--hy-shipper-primary) 10%, transparent)
++
++.sheetActions
++  display: flex
++  gap: var(--space-2)
++  margin-top: var(--space-3)
++
++.sheetPrimaryAction, .sheetSecondaryAction
++  @include shipper-pressable-subtle
++  @include shipper-focus
++  min-height: var(--button-secondary-h)
++  border-radius: var(--radius-pill)
++  border: 1px solid var(--hy-shipper-glass-border)
++  cursor: pointer
++  @include shipper-label
++  font-weight: 680
++  padding: 0 var(--space-3)
++  display: inline-flex
++  align-items: center
++  justify-content: center
++
++.sheetPrimaryAction
++  flex: 1
++  color: var(--hy-shipper-text)
++  background: linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-primary) 14%, var(--hy-shipper-surface)) 0%, color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, var(--hy-shipper-glass-bg)) 100%)
++  border-color: color-mix(in srgb, var(--hy-shipper-accent-operational) 22%, transparent)
++
++.sheetSecondaryAction
++  color: var(--hy-shipper-muted)
++  background: color-mix(in srgb, var(--hy-shipper-glass-bg) 88%, transparent)
++
++.authHighlights
++  display: flex
++  flex-wrap: wrap
++  justify-content: center
++  gap: var(--space-2)
++
++.authHighlight
++  @include shipper-operational-label
++  font-size: 0.5625rem
++  padding: 0.125rem 0.5rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 22%, transparent)
++  color: var(--hy-shipper-text)
++
++.negotiationHero
++  @include shipper-module-card
++  padding: var(--space-4) var(--space-3)
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++  min-height: var(--hy-shipper-hero-min-h)
++
++.negotiationHeroLabel
++  @include shipper-operational-label
++  margin: 0
++
++.negotiationHeroTitle
++  @include shipper-title
++  margin: 0
++
++.negotiationHeroBody
++  @include shipper-label
++  color: var(--hy-shipper-muted)
++  margin: 0
++
++.negotiationFactsGrid
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.negotiationFactCard
++  @include shipper-module-card
++  min-height: 4.5rem
++  padding: var(--space-3)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.15rem
++
++.negotiationFactLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.negotiationFactValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
++
++.offerMetaGrid
++  display: grid
++  grid-template-columns: repeat(2, minmax(0, 1fr))
++  gap: var(--space-2)
++
++.offerMetaCell
++  @include shipper-glass
++  border-radius: var(--radius-sm)
++  min-height: 3.5rem
++  padding: var(--space-2)
++  display: flex
++  flex-direction: column
++  justify-content: center
++  gap: 0.15rem
++
++.offerMetaLabel
++  @include shipper-operational-label
++  margin: 0
++  font-size: 0.5625rem
++
++.offerMetaValue
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-text)
++  font-weight: 700
+ .publicDetailHero
+   @include shipper-module-card
+   padding: var(--space-3)
+@@ -741,6 +1248,127 @@
+   gap: 0.5rem
+   margin-top: auto
+ 
++.authScreen
++  position: relative
++  display: flex
++  flex: 1
++  flex-direction: column
++  justify-content: center
++  gap: var(--space-3)
++  min-height: 100%
++  padding: var(--space-3)
++  overflow: hidden
++
++.authBackdrop
++  position: absolute
++  inset: 0
++  pointer-events: none
++  background: radial-gradient(circle at top, color-mix(in srgb, var(--hy-shipper-primary) 16%, transparent), transparent 56%), linear-gradient(180deg, color-mix(in srgb, var(--hy-shipper-accent-premium) 6%, transparent), transparent 60%)
++  opacity: 0.75
++
++.authCard
++  @include shipper-module-card
++  position: relative
++  z-index: 1
++  display: flex
++  flex-direction: column
++  gap: var(--space-3)
++  padding: var(--space-4)
++
++.authBrand
++  display: inline-flex
++  align-items: center
++  gap: var(--space-2)
++  align-self: flex-start
++
++.authBrandMark
++  @include shipper-operational-label
++  padding: 0.25rem 0.5rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-primary) 14%, transparent)
++  color: var(--hy-shipper-primary)
++
++.authBrandLine
++  flex: 1
++  min-width: 1.5rem
++  height: 1px
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-border) 90%, transparent)
++
++.authStepBadge
++  @include shipper-operational-label
++  width: fit-content
++  padding: 0.25rem 0.625rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-accent-premium) 10%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 20%, transparent)
++  color: var(--hy-shipper-text)
++
++.authSecureBadge
++  @include shipper-operational-label
++  width: fit-content
++  padding: 0.25rem 0.625rem
++  border-radius: var(--radius-pill)
++  background: color-mix(in srgb, var(--hy-shipper-success) 10%, transparent)
++  border: 1px solid color-mix(in srgb, var(--hy-shipper-success) 20%, transparent)
++  color: var(--hy-shipper-text)
++
++.formIntro
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-muted)
++  line-height: 1.4
++
++.formActions
++  display: flex
++  flex-direction: column
++  gap: var(--space-2)
++  margin-top: var(--space-1)
++
++.consentRow
++  display: flex
++  align-items: flex-start
++  gap: var(--space-2)
++
++.consentLabel
++  @include shipper-label
++  color: var(--hy-shipper-text)
++  line-height: 1.35
++
++.screenHero
++  @include shipper-module-card
++  position: relative
++  z-index: 1
++  display: flex
++  flex-direction: column
++  gap: var(--space-1)
++  padding: var(--space-3)
++
++.screenHeroLabel
++  @include shipper-operational-label
++  margin: 0
++
++.screenHeroValue
++  @include shipper-title
++  margin: 0
++  font-weight: 760
++
++.screenHeroMeta
++  @include shipper-label
++  margin: 0
++  color: var(--hy-shipper-muted)
++
++@media (max-width: 22.5rem)
++  .detailFactsStrip,
++  .corridorMiniGrid
++    grid-template-columns: repeat(2, minmax(0, 1fr))
++
++  .profileIdentityGrid
++    grid-template-columns: repeat(2, minmax(0, 1fr))
++
++  .profileQuickGrid
++    grid-template-columns: 1fr
++
+ @media (prefers-reduced-motion: reduce)
+   .chartLine polyline,
+   .chartLine circle,
+diff --git a/src/features/shipper-mobile-flow/screens/cargo-detail-screen.tsx b/src/features/shipper-mobile-flow/screens/cargo-detail-screen.tsx
+index e3872572..bb3b2d72 100644
+--- a/src/features/shipper-mobile-flow/screens/cargo-detail-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/cargo-detail-screen.tsx
+@@ -17,6 +17,19 @@ type CargoDetailScreenProps = {
+ export function CargoDetailScreen({ cargo }: CargoDetailScreenProps) {
+   const t = useTranslations('shipperMobileFlow.cargoDetail');
+   const tStatus = useTranslations('shipperMobileFlow.cargoDetail.status');
++  const detailFacts = [
++    { key: 'eta', label: t('modules.eta'), value: t('modules.etaValue', { hours: cargo.etaHours }) },
++    { key: 'docs', label: t('tiles.docs'), value: String(cargo.pendingDocsCount) },
++    { key: 'offers', label: t('tiles.negotiation'), value: t('tiles.offers', { count: cargo.offersCount }) }
++  ];
++  const operationCards = [
++    { key: 'timeline', label: t('modules.timeline'), value: t('modules.timelineValue') },
++    { key: 'costs', label: t('modules.costs'), value: t('modules.costsValue') },
++    { key: 'compliance', label: t('modules.compliance'), value: t('modules.complianceValue') },
++    { key: 'portWindow', label: t('modules.portWindow'), value: t('modules.portWindowValue') },
++    { key: 'eta', label: t('modules.eta'), value: t('modules.etaValue', { hours: cargo.etaHours }) },
++    { key: 'risk', label: t('modules.risk'), value: t('modules.riskValue') },
++  ];
+ 
+   return (
+     <MobileAppShell title={cargo.code} backHref="/minhas-cargas">
+@@ -39,6 +52,14 @@ export function CargoDetailScreen({ cargo }: CargoDetailScreenProps) {
+         origin={cargo.origin}
+         destination={cargo.destination}
+       />
++      <section className={styles.detailFactsStrip} aria-label={t('opsSectionAria')}>
++        {detailFacts.map((fact) => (
++          <article key={fact.key} className={styles.detailFactCard}>
++            <p className={styles.detailFactLabel}>{fact.label}</p>
++            <p className={styles.detailFactValue}>{fact.value}</p>
++          </article>
++        ))}
++      </section>
+       <div className={styles.detailGrid}>
+         <Link href={`/minhas-cargas/${cargo.id}/mapa`} className={`${styles.detailTile} ${styles.detailTileAccent}`}>
+           <span className={styles.tileLabel}>{t('tiles.map')}</span>
+@@ -57,6 +78,34 @@ export function CargoDetailScreen({ cargo }: CargoDetailScreenProps) {
+           <span className={styles.tileValue}>{t('tiles.offers', { count: cargo.offersCount })}</span>
+         </Link>
+       </div>
++      <section className={styles.detailOpsSection} aria-label={t('opsSectionAria')}>
++        <h2 className={styles.detailOpsTitle}>{t('opsSectionTitle')}</h2>
++        <div className={styles.detailOpsGrid}>
++          {operationCards.map((module) => (
++            <article key={module.key} className={styles.detailOpsCard}>
++              <p className={styles.detailOpsLabel}>{module.label}</p>
++              <p className={styles.detailOpsValue}>{module.value}</p>
++            </article>
++          ))}
++        </div>
++      </section>
++      <section className={styles.detailTimelineSection} aria-label={t('modules.timeline')}>
++        <h2 className={styles.detailOpsTitle}>{t('modules.timeline')}</h2>
++        <div className={styles.detailTimelineList}>
++          <article className={styles.detailTimelineItem}>
++            <p className={styles.detailTimelineLabel}>{t('modules.timeline')}</p>
++            <p className={styles.detailTimelineValue}>{t('modules.timelineValue')}</p>
++          </article>
++          <article className={styles.detailTimelineItem}>
++            <p className={styles.detailTimelineLabel}>{t('modules.compliance')}</p>
++            <p className={styles.detailTimelineValue}>{t('modules.complianceValue')}</p>
++          </article>
++          <article className={styles.detailTimelineItem}>
++            <p className={styles.detailTimelineLabel}>{t('modules.costs')}</p>
++            <p className={styles.detailTimelineValue}>{t('modules.costsValue')}</p>
++          </article>
++        </div>
++      </section>
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/cockpit-screen.tsx b/src/features/shipper-mobile-flow/screens/cockpit-screen.tsx
+index 634d2dfb..79b1a49d 100644
+--- a/src/features/shipper-mobile-flow/screens/cockpit-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/cockpit-screen.tsx
+@@ -31,6 +31,7 @@ export function CockpitScreen({ metrics, trend, defaultCargoId }: CockpitScreenP
+     ],
+     [t]
+   );
++  const heroMetric = metrics[0] ?? null;
+ 
+   return (
+     <MobileAppShell title={t('title')}>
+@@ -41,6 +42,23 @@ export function CockpitScreen({ metrics, trend, defaultCargoId }: CockpitScreenP
+         activeChip={chip}
+         onChipChange={setChip}
+       />
++      <section className={styles.cockpitTopMeta} aria-label={t('topMetaAria')}>
++        <article className={styles.cockpitTopMetaCard}>
++          <p className={styles.cockpitTopMetaLabel}>{t('topMeta.nextWindow')}</p>
++          <p className={styles.cockpitTopMetaValue}>{t('topMeta.nextWindowValue')}</p>
++        </article>
++        <article className={styles.cockpitTopMetaCard}>
++          <p className={styles.cockpitTopMetaLabel}>{t('topMeta.compliance')}</p>
++          <p className={styles.cockpitTopMetaValue}>{t('topMeta.complianceValue')}</p>
++        </article>
++      </section>
++      {heroMetric ? (
++        <article className={styles.screenHero}>
++          <p className={styles.screenHeroLabel}>{t(heroMetric.labelKey)}</p>
++          <p className={styles.screenHeroValue}>{heroMetric.value}</p>
++          <p className={styles.screenHeroMeta}>{t(heroMetric.hintKey)}</p>
++        </article>
++      ) : null}
+       <Link href={`/minhas-cargas/${defaultCargoId}`} className={styles.primaryDecision}>
+         <div>
+           <p className={styles.primaryDecisionLabel}>{t('primaryAction.title')}</p>
+@@ -69,6 +87,15 @@ export function CockpitScreen({ metrics, trend, defaultCargoId }: CockpitScreenP
+         ctaHref="/hidrologia"
+         ctaLabel={t('trend.cta')}
+       />
++      <section className={styles.cockpitOpsGrid} aria-label={t('title')}>
++        {metrics.slice(0, 4).map((metric) => (
++          <article key={`${metric.id}-ops`} className={styles.cockpitOpsCard}>
++            <p className={styles.cockpitOpsLabel}>{t(metric.labelKey)}</p>
++            <p className={styles.cockpitOpsValue}>{metric.value}</p>
++            <p className={styles.cockpitOpsHint}>{t(metric.hintKey)}</p>
++          </article>
++        ))}
++      </section>
+       <div className={styles.grid}>
+         {metrics.map((metric) => (
+           <article key={metric.id} className={styles.metric}>
+diff --git a/src/features/shipper-mobile-flow/screens/login-screen.tsx b/src/features/shipper-mobile-flow/screens/login-screen.tsx
+index ae237a8f..bd39f54e 100644
+--- a/src/features/shipper-mobile-flow/screens/login-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/login-screen.tsx
+@@ -22,6 +22,9 @@ export function LoginScreen({ phoneCountries }: LoginScreenProps) {
+   const [password, setPassword] = useState('');
+   const [error, setError] = useState('');
+   const [ctaState, setCtaState] = useState<ShipperCtaState>('idle');
++  const authCardClass = styles.authCard;
++  const inputClass = styles.input;
++  const selectClass = styles.select;
+ 
+   const handleSubmit = (event: React.FormEvent) => {
+     event.preventDefault();
+@@ -43,55 +46,70 @@ export function LoginScreen({ phoneCountries }: LoginScreenProps) {
+ 
+   return (
+     <MobileAppShell>
+-      <form className={styles.form} onSubmit={handleSubmit}>
+-        <h2 className={styles.formTitle}>{t('title')}</h2>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="country">
+-            {t('country')}
+-          </label>
+-          <select
+-            id="country"
+-            className={styles.select}
+-            value={country}
+-            onChange={(event) => setCountry(event.target.value)}
+-          >
+-            {phoneCountries.map((item) => (
+-              <option key={item.code} value={item.code}>
+-                {item.code}{' '}
+-                {tCountries(item.code === '+55' ? 'br' : item.code === '+34' ? 'es' : 'us')}
+-              </option>
+-            ))}
+-          </select>
+-        </div>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="phone">
+-            {t('phone')}
+-          </label>
+-          <input
+-            id="phone"
+-            className={styles.input}
+-            inputMode="tel"
+-            value={phone}
+-            onChange={(event) => setPhone(event.target.value)}
+-            placeholder={t('phonePlaceholder')}
+-          />
+-        </div>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="password">
+-            {t('password')}
+-          </label>
+-          <input
+-            id="password"
+-            type="password"
+-            className={styles.input}
+-            value={password}
+-            onChange={(event) => setPassword(event.target.value)}
+-          />
+-        </div>
+-        {error ? <p className={styles.error} role="alert">{error}</p> : null}
+-        <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
+-        <PrimaryButton label={t('registerLink')} href="/registrar" variant="ghost" />
+-      </form>
++      <div className={styles.authScreen}>
++        <div className={styles.authBackdrop} aria-hidden />
++        <form className={authCardClass} onSubmit={handleSubmit}>
++          <div className={styles.authBrand} aria-hidden>
++            <span className={styles.authBrandMark}>HY</span>
++            <span className={styles.authBrandLine} />
++          </div>
++          <h2 className={styles.formTitle}>{t('title')}</h2>
++          <p className={styles.formIntro}>{t('subtitle')}</p>
++          <div className={styles.authHighlights} aria-label={t('highlightsAria')}>
++            <span className={styles.authHighlight}>{t('highlightAudit')}</span>
++            <span className={styles.authHighlight}>{t('highlightEta')}</span>
++            <span className={styles.authHighlight}>{t('highlightSecurity')}</span>
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="country">
++              {t('country')}
++            </label>
++            <select
++              id="country"
++              className={selectClass}
++              value={country}
++              onChange={(event) => setCountry(event.target.value)}
++            >
++              {phoneCountries.map((item) => (
++                <option key={item.code} value={item.code}>
++                  {item.code}{' '}
++                  {tCountries(item.code === '+55' ? 'br' : item.code === '+34' ? 'es' : 'us')}
++                </option>
++              ))}
++            </select>
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="phone">
++              {t('phone')}
++            </label>
++            <input
++              id="phone"
++              className={inputClass}
++              inputMode="tel"
++              value={phone}
++              onChange={(event) => setPhone(event.target.value)}
++              placeholder={t('phonePlaceholder')}
++            />
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="password">
++              {t('password')}
++            </label>
++            <input
++              id="password"
++              type="password"
++              className={inputClass}
++              value={password}
++              onChange={(event) => setPassword(event.target.value)}
++            />
++          </div>
++          {error ? <p className={styles.error} role="alert">{error}</p> : null}
++          <div className={styles.formActions}>
++            <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
++            <PrimaryButton label={t('registerLink')} href="/registrar" variant="ghost" />
++          </div>
++        </form>
++      </div>
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/my-cargoes-screen.module.sass b/src/features/shipper-mobile-flow/screens/my-cargoes-screen.module.sass
+new file mode 100644
+index 00000000..49306989
+--- /dev/null
++++ b/src/features/shipper-mobile-flow/screens/my-cargoes-screen.module.sass
+@@ -0,0 +1,119 @@
++.screen
++  --page-gutter: clamp(1rem, 4vw, 1.25rem)
++  position: relative
++  min-height: 100dvh
++  isolation: isolate
++  overflow: visible
++  background: transparent
++  color: #172033
++
++.screen::before
++  content: ''
++  position: fixed
++  inset: 0
++  z-index: -2
++  pointer-events: none
++  background: radial-gradient(circle at 18% 10%, rgba(88, 182, 198, 0.24), transparent 18rem), radial-gradient(circle at 82% 14%, rgba(56, 118, 184, 0.18), transparent 17rem), radial-gradient(circle at 50% 88%, rgba(18, 164, 146, 0.12), transparent 15rem), linear-gradient(180deg, #f8fcfd 0%, #eef6f8 38%, #e4eff1 100%)
++  transform: translateZ(0)
++
++.screen::after
++  content: ''
++  position: fixed
++  inset: 0
++  z-index: -1
++  pointer-events: none
++  background: linear-gradient(120deg, rgba(255, 255, 255, 0.28) 0%, transparent 36%, rgba(65, 145, 173, 0.06) 66%, transparent 100%), linear-gradient(180deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0))
++  transform: translateZ(0)
++
++.scroller
++  position: relative
++  z-index: 1
++  min-height: 100dvh
++  overflow-x: visible
++  overflow-y: auto
++  padding-block: calc(env(safe-area-inset-top, 0rem) + 0.8rem) calc(7.2rem + env(safe-area-inset-bottom, 0rem))
++  padding-inline: 0
++  background: transparent
++  scrollbar-width: none
++  -webkit-overflow-scrolling: touch
++
++.scroller::-webkit-scrollbar
++  display: none
++
++.hero
++  display: grid
++  gap: clamp(0.78rem, 3.1vw, 0.98rem)
++  width: 100%
++  background: transparent
++
++.section
++  box-sizing: border-box
++  width: 100%
++  padding-inline: var(--page-gutter)
++
++.toolbarActions
++  display: inline-flex
++  align-items: center
++  gap: 0.48rem
++
++.toolbarActions svg
++  width: 1.08rem
++  height: 1.08rem
++
++.searchRow
++  display: grid
++  grid-template-columns: minmax(0, 1fr) auto
++  align-items: center
++  gap: 0.75rem
++  background: transparent
++  overflow: visible
++
++.summary
++  display: grid
++  grid-template-columns: repeat(3, minmax(0, 1fr))
++  gap: 0.0625rem
++  border: 0.0625rem solid rgba(255, 255, 255, 0.22)
++  border-radius: 1.35rem
++  background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05))
++  box-shadow: inset 0 0.0625rem 0 rgba(255, 255, 255, 0.28), 0 0.55rem 1.3rem rgba(43, 72, 101, 0.04)
++  -webkit-backdrop-filter: blur(2.4rem) saturate(165%) brightness(1.035)
++  backdrop-filter: blur(2.4rem) saturate(165%) brightness(1.035)
++  overflow: hidden
++
++.summaryPill
++  display: grid
++  min-height: 3.1rem
++  place-items: center
++  gap: 0.08rem
++  padding: 0.44rem 0.3rem
++  background: rgba(255, 255, 255, 0.035)
++
++.summaryPill strong
++  color: #172033
++  font-size: 1.02rem
++  font-weight: 580
++  letter-spacing: -0.028em
++  line-height: 1
++
++.summaryPill span
++  max-width: 100%
++  overflow: hidden
++  color: rgba(48, 61, 80, 0.6)
++  font-size: 0.66rem
++  font-weight: 430
++  letter-spacing: -0.012em
++  line-height: 1.1
++  text-overflow: ellipsis
++  white-space: nowrap
++
++.listSection
++  padding-block: clamp(0.85rem, 3.4vw, 1rem) 0
++  background: transparent
++
++@media (min-width: 27rem)
++  .summary
++    grid-template-columns: repeat(6, minmax(0, 1fr))
++
++@media (prefers-reduced-motion: reduce)
++  .scroller
++    scroll-behavior: auto
+diff --git a/src/features/shipper-mobile-flow/screens/my-cargoes-screen.tsx b/src/features/shipper-mobile-flow/screens/my-cargoes-screen.tsx
+index 2da88286..516b1618 100644
+--- a/src/features/shipper-mobile-flow/screens/my-cargoes-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/my-cargoes-screen.tsx
+@@ -3,10 +3,14 @@
+ import { useMemo, useState } from 'react';
+ import { useTranslations } from 'next-intl';
+ import { MobileAppShell } from '@/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell';
++import { BottomSheet } from '@/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet';
++import { EmptyState } from '@/features/shipper-mobile-flow/components/error-state/error-state';
+ import { SearchFilterStack } from '@/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar';
+ import { CargoCardList } from '@/features/shipper-mobile-flow/components/cargo-card/cargo-card';
+ import type { ShipperOwnedCargo } from '@/features/shipper-mobile-flow/types/shipper-flow-types';
+ 
++import styles from '../components/shared-ui/shared-ui.module.sass';
++
+ type MyCargoesScreenProps = {
+   initialCargoes: ShipperOwnedCargo[];
+ };
+@@ -15,6 +19,7 @@ export function MyCargoesScreen({ initialCargoes }: MyCargoesScreenProps) {
+   const t = useTranslations('shipperMobileFlow.myCargoes');
+   const [query, setQuery] = useState('');
+   const [chip, setChip] = useState('all');
++  const [filtersOpen, setFiltersOpen] = useState(false);
+ 
+   const chips = useMemo(
+     () => [
+@@ -34,10 +39,78 @@ export function MyCargoesScreen({ initialCargoes }: MyCargoesScreenProps) {
+     return matchesChip && haystack.includes(query.toLowerCase());
+   });
+ 
++  const inTransitCount = initialCargoes.filter((cargo) => cargo.status === 'inTransit').length;
++  const attentionCount = initialCargoes.filter((cargo) => cargo.status === 'attention').length;
++  const pendingDocsTotal = initialCargoes.reduce((acc, cargo) => acc + cargo.pendingDocsCount, 0);
++  const avgEta = initialCargoes.length
++    ? Math.round(initialCargoes.reduce((acc, cargo) => acc + cargo.etaHours, 0) / initialCargoes.length)
++    : 0;
++
+   return (
+     <MobileAppShell title={t('title')}>
+-      <SearchFilterStack value={query} onChange={setQuery} chips={chips} activeChip={chip} onChipChange={setChip} />
+-      <CargoCardList cargoes={filtered} />
++      <SearchFilterStack
++        value={query}
++        onChange={setQuery}
++        chips={chips}
++        activeChip={chip}
++        onChipChange={setChip}
++        onFilterClick={() => setFiltersOpen(true)}
++      />
++      <section className={styles.listHeroCard} aria-label={t('summaryAria')}>
++        <p className={styles.listHeroLabel}>{t('title')}</p>
++        <p className={styles.listHeroValue}>{t('resultsCount', { count: filtered.length })}</p>
++        <p className={styles.listHeroBody}>{t('filtersSheet.lead')}</p>
++      </section>
++      <section className={styles.operationalStrip} aria-label={t('summaryAria')}>
++        <article className={styles.operationalMiniCard}>
++          <p className={styles.operationalMiniLabel}>{t('summary.inTransit')}</p>
++          <p className={styles.operationalMiniValue}>{inTransitCount}</p>
++        </article>
++        <article className={styles.operationalMiniCard}>
++          <p className={styles.operationalMiniLabel}>{t('summary.attention')}</p>
++          <p className={styles.operationalMiniValue}>{attentionCount}</p>
++        </article>
++        <article className={styles.operationalMiniCard}>
++          <p className={styles.operationalMiniLabel}>{t('summary.docs')}</p>
++          <p className={styles.operationalMiniValue}>{pendingDocsTotal}</p>
++        </article>
++        <article className={styles.operationalMiniCard}>
++          <p className={styles.operationalMiniLabel}>{t('summary.eta')}</p>
++          <p className={styles.operationalMiniValue}>{t('summary.etaValue', { hours: avgEta })}</p>
++        </article>
++      </section>
++      <div className={styles.listSectionHeader}>
++        <p className={styles.listSectionTitle}>{t('title')}</p>
++        <p className={styles.listSectionCount}>{t('resultsCount', { count: filtered.length })}</p>
++      </div>
++      {filtered.length === 0 ? (
++        <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
++      ) : (
++        <CargoCardList cargoes={filtered} />
++      )}
++      <BottomSheet open={filtersOpen} onClose={() => setFiltersOpen(false)} title={t('filtersSheet.title')} size="medium">
++        <p className={styles.sheetLead}>{t('filtersSheet.lead')}</p>
++        <div className={styles.sheetChipList}>
++          {chips.map((item) => (
++            <button
++              key={item.id}
++              type="button"
++              className={`${styles.sheetChip} ${chip === item.id ? styles.sheetChipActive : ''}`}
++              onClick={() => setChip(item.id)}
++            >
++              {item.label}
++            </button>
++          ))}
++        </div>
++        <div className={styles.sheetActions}>
++          <button type="button" className={styles.sheetSecondaryAction} onClick={() => setChip('all')}>
++            {t('filtersSheet.clear')}
++          </button>
++          <button type="button" className={styles.sheetPrimaryAction} onClick={() => setFiltersOpen(false)}>
++            {t('filtersSheet.apply')}
++          </button>
++        </div>
++      </BottomSheet>
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/negotiation-screen.tsx b/src/features/shipper-mobile-flow/screens/negotiation-screen.tsx
+index a9874a3c..71ed7511 100644
+--- a/src/features/shipper-mobile-flow/screens/negotiation-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/negotiation-screen.tsx
+@@ -19,6 +19,7 @@ export function NegotiationScreen({ cargo, offers }: NegotiationScreenProps) {
+   const tOffers = useTranslations('shipperMobileFlow.offers');
+   const router = useRouter();
+   const { openConfirmation } = useShipperFlow();
++  const bestEta = offers.reduce((min, offer) => Math.min(min, offer.etaHours), offers[0]?.etaHours ?? 0);
+ 
+   const selectOffer = (offer: ShipperOffer) => {
+     openConfirmation({
+@@ -32,6 +33,21 @@ export function NegotiationScreen({ cargo, offers }: NegotiationScreenProps) {
+ 
+   return (
+     <MobileAppShell title={t('title')} backHref={`/minhas-cargas/${cargo.id}`}>
++      <section className={styles.negotiationHero} aria-label={t('heroAria')}>
++        <p className={styles.negotiationHeroLabel}>{t('heroLabel')}</p>
++        <h2 className={styles.negotiationHeroTitle}>{cargo.code}</h2>
++        <p className={styles.negotiationHeroBody}>{t('heroBody', { offers: offers.length })}</p>
++      </section>
++      <section className={styles.negotiationFactsGrid} aria-label={t('heroAria')}>
++        <article className={styles.negotiationFactCard}>
++          <p className={styles.negotiationFactLabel}>{t('meta.price')}</p>
++          <p className={styles.negotiationFactValue}>{offers[0]?.pricePerTonLabel ?? '-'}</p>
++        </article>
++        <article className={styles.negotiationFactCard}>
++          <p className={styles.negotiationFactLabel}>{t('eta', { hours: bestEta })}</p>
++          <p className={styles.negotiationFactValue}>{t('meta.low')}</p>
++        </article>
++      </section>
+       <article className={styles.alert}>
+         <h2 className={styles.alertTitle}>{t('criterion.title')}</h2>
+         <p className={styles.alertBody}>{t('criterion.body')}</p>
+@@ -42,6 +58,16 @@ export function NegotiationScreen({ cargo, offers }: NegotiationScreenProps) {
+             <h3 className={styles.title}>{tOffers(offer.labelKey)}</h3>
+             <p className={styles.summary}>{tOffers(offer.partnerKey)}</p>
+             <p className={styles.summary}>{t('eta', { hours: offer.etaHours })}</p>
++            <div className={styles.offerMetaGrid}>
++              <div className={styles.offerMetaCell}>
++                <span className={styles.offerMetaLabel}>{t('meta.price')}</span>
++                <strong className={styles.offerMetaValue}>{offer.pricePerTonLabel}</strong>
++              </div>
++              <div className={styles.offerMetaCell}>
++                <span className={styles.offerMetaLabel}>{t('meta.risk')}</span>
++                <strong className={styles.offerMetaValue}>{offer.recommended ? t('meta.low') : t('meta.medium')}</strong>
++              </div>
++            </div>
+             <PrimaryButton label={t('selectOffer')} onClick={() => selectOffer(offer)} variant="secondary" />
+           </article>
+         ))}
+diff --git a/src/features/shipper-mobile-flow/screens/notifications-screen.tsx b/src/features/shipper-mobile-flow/screens/notifications-screen.tsx
+index 3ed40112..704c6f53 100644
+--- a/src/features/shipper-mobile-flow/screens/notifications-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/notifications-screen.tsx
+@@ -12,29 +12,64 @@ type NotificationsScreenProps = {
+ 
+ export function NotificationsScreen({ notifications }: NotificationsScreenProps) {
+   const t = useTranslations('shipperMobileFlow.notifications');
++  const tRisk = useTranslations('shipperMobileFlow.risk');
++  const criticalCount = notifications.filter((item) => item.severity === 'high').length;
++  const warningCount = notifications.filter((item) => item.severity === 'medium').length;
++  const groupedNotifications = [
++    {
++      id: 'high',
++      label: tRisk('critical'),
++      items: notifications.filter((item) => item.severity === 'high')
++    },
++    {
++      id: 'medium',
++      label: tRisk('medium'),
++      items: notifications.filter((item) => item.severity === 'medium')
++    },
++    {
++      id: 'low',
++      label: tRisk('low'),
++      items: notifications.filter((item) => item.severity === 'low')
++    }
++  ].filter((group) => group.items.length > 0);
++  const resolveNotificationClass = (severity: ShipperNotification['severity']) =>
++    severity === 'high'
++      ? styles.notificationHigh
++      : severity === 'medium'
++        ? styles.notificationMedium
++        : styles.notificationLow;
+ 
+   return (
+     <MobileAppShell title={t('title')}>
+-      <div className={styles.list}>
+-        {notifications.map((item) => (
+-          <article
+-            key={item.id}
+-            className={`${styles.notification} ${
+-              item.severity === 'high'
+-                ? styles.notificationHigh
+-                : item.severity === 'medium'
+-                  ? styles.notificationMedium
+-                  : styles.notificationLow
+-            }`}
+-          >
+-            <div>
+-              <h3 className={styles.title}>{t(`items.${item.titleKey}`)}</h3>
+-              <p className={styles.summary}>{t(`items.${item.bodyKey}`)}</p>
+-              <p className={styles.summary}>{t(`items.${item.timeLabelKey}`)}</p>
+-            </div>
+-          </article>
+-        ))}
+-      </div>
++      <section className={styles.notificationsHero} aria-label={t('heroAria')}>
++        <div>
++          <p className={styles.notificationsHeroLabel}>{t('heroLabel')}</p>
++          <p className={styles.notificationsHeroValue}>{t('heroValue', { count: notifications.length })}</p>
++        </div>
++        <div className={styles.notificationsHeroMeta}>
++          <span>{t('heroCritical', { count: criticalCount })}</span>
++          <span>{t('heroWarning', { count: warningCount })}</span>
++        </div>
++      </section>
++      {groupedNotifications.map((group) => (
++        <section key={group.id} className={styles.notificationSection}>
++          <header className={styles.notificationSectionHeader}>
++            <h2 className={styles.notificationSectionTitle}>{group.label}</h2>
++            <span className={styles.notificationSectionCount}>{group.items.length}</span>
++          </header>
++          <div className={styles.notificationRail}>
++            {group.items.map((item) => (
++              <article key={item.id} className={`${styles.notification} ${resolveNotificationClass(item.severity)}`}>
++                <div>
++                  <h3 className={styles.title}>{t(`items.${item.titleKey}`)}</h3>
++                  <p className={styles.summary}>{t(`items.${item.bodyKey}`)}</p>
++                  <p className={styles.summary}>{t(`items.${item.timeLabelKey}`)}</p>
++                </div>
++              </article>
++            ))}
++          </div>
++        </section>
++      ))}
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/profile-screen.tsx b/src/features/shipper-mobile-flow/screens/profile-screen.tsx
+index 98d25efb..0a34edd6 100644
+--- a/src/features/shipper-mobile-flow/screens/profile-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/profile-screen.tsx
+@@ -12,6 +12,13 @@ const MENU = ['language', 'theme', 'notifications', 'security', 'logout'] as con
+ export function ProfileScreen() {
+   const t = useTranslations('shipperMobileFlow.profile');
+   const { currentUser } = useShipperFlow();
++  const quickMenu = MENU.filter((item) => item !== 'logout');
++  const resolveQuickValue = (key: (typeof MENU)[number]) => {
++    if (key === 'language') return currentUser.locale;
++    if (key === 'theme') return t('menu.theme');
++    if (key === 'notifications') return t('menu.notifications');
++    return t('identity.accessValue');
++  };
+ 
+   return (
+     <MobileAppShell title={t('title')}>
+@@ -22,8 +29,33 @@ export function ProfileScreen() {
+         <div>
+           <h2 className={styles.title}>{currentUser.name}</h2>
+           <p className={styles.summary}>{currentUser.company}</p>
++          <p className={styles.profileContextLine}>
++            {t('identity.roleValue')} · {currentUser.locale}
++          </p>
+         </div>
+       </div>
++      <section className={styles.profileIdentityGrid} aria-label={t('identityAria')}>
++        <article className={styles.profileIdentityCard}>
++          <p className={styles.profileIdentityLabel}>{t('identity.role')}</p>
++          <p className={styles.profileIdentityValue}>{t('identity.roleValue')}</p>
++        </article>
++        <article className={styles.profileIdentityCard}>
++          <p className={styles.profileIdentityLabel}>{t('identity.locale')}</p>
++          <p className={styles.profileIdentityValue}>{currentUser.locale}</p>
++        </article>
++        <article className={styles.profileIdentityCard}>
++          <p className={styles.profileIdentityLabel}>{t('identity.access')}</p>
++          <p className={styles.profileIdentityValue}>{t('identity.accessValue')}</p>
++        </article>
++      </section>
++      <section className={styles.profileQuickGrid} aria-label={t('menuLabel')}>
++        {quickMenu.map((key) => (
++          <article key={key} className={styles.profileQuickCard}>
++            <p className={styles.profileQuickLabel}>{t(`menu.${key}`)}</p>
++            <p className={styles.profileQuickValue}>{resolveQuickValue(key)}</p>
++          </article>
++        ))}
++      </section>
+       <nav className={styles.menuList} aria-label={t('menuLabel')}>
+         {MENU.map((key) => (
+           <Link
+diff --git a/src/features/shipper-mobile-flow/screens/public-cargoes-screen.tsx b/src/features/shipper-mobile-flow/screens/public-cargoes-screen.tsx
+index 41ea8925..3e17d089 100644
+--- a/src/features/shipper-mobile-flow/screens/public-cargoes-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/public-cargoes-screen.tsx
+@@ -3,6 +3,8 @@
+ import { useMemo, useState } from 'react';
+ import { useTranslations } from 'next-intl';
+ import { MobileAppShell } from '@/features/shipper-mobile-flow/components/mobile-app-shell/mobile-app-shell';
++import { BottomSheet } from '@/features/shipper-mobile-flow/components/bottom-sheet/bottom-sheet';
++import { EmptyState } from '@/features/shipper-mobile-flow/components/error-state/error-state';
+ import { SearchFilterStack } from '@/features/shipper-mobile-flow/components/search-filter-bar/search-filter-bar';
+ import { PublicCargoCardRestricted } from '@/features/shipper-mobile-flow/components/public-cargo-card-restricted/public-cargo-card-restricted';
+ import type { PublicCargoSafeView } from '@/features/shipper-mobile-flow/domain/public-cargo-privacy-domain';
+@@ -17,6 +19,7 @@ export function PublicCargoesScreen({ initialCargoes }: PublicCargoesScreenProps
+   const t = useTranslations('shipperMobileFlow.publicList');
+   const [query, setQuery] = useState('');
+   const [chip, setChip] = useState('all');
++  const [filtersOpen, setFiltersOpen] = useState(false);
+ 
+   const chips = useMemo(
+     () => [
+@@ -27,6 +30,14 @@ export function PublicCargoesScreen({ initialCargoes }: PublicCargoesScreenProps
+     ],
+     [t]
+   );
++  const corridorHighlights = useMemo(
++    () => [
++      { id: 'tapajos', label: t('filters.tapajos') },
++      { id: 'madeira', label: t('filters.madeira') },
++      { id: 'amazonas', label: t('filters.amazonas') }
++    ],
++    [t]
++  );
+ 
+   const filtered = initialCargoes.filter((cargo) => {
+     const matchesChip = chip === 'all' || cargo.corridorId.startsWith(chip);
+@@ -36,12 +47,67 @@ export function PublicCargoesScreen({ initialCargoes }: PublicCargoesScreenProps
+ 
+   return (
+     <MobileAppShell title={t('title')}>
+-      <SearchFilterStack value={query} onChange={setQuery} chips={chips} activeChip={chip} onChipChange={setChip} />
+-      <div className={styles.list}>
+-        {filtered.map((cargo) => (
+-          <PublicCargoCardRestricted key={cargo.id} cargo={cargo} />
++      <SearchFilterStack
++        value={query}
++        onChange={setQuery}
++        chips={chips}
++        activeChip={chip}
++        onChipChange={setChip}
++        onFilterClick={() => setFiltersOpen(true)}
++      />
++      <section className={styles.listHeroCard} aria-label={t('title')}>
++        <p className={styles.listHeroLabel}>{t('title')}</p>
++        <p className={styles.listHeroValue}>{t('resultsCount', { count: filtered.length })}</p>
++        <p className={styles.listHeroBody}>{t('filtersSheet.lead')}</p>
++      </section>
++      <section className={styles.corridorMiniGrid} aria-label={t('title')}>
++        {corridorHighlights.map((item) => (
++          <article key={item.id} className={styles.corridorMiniCard}>
++            <p className={styles.corridorMiniLabel}>{item.label}</p>
++            <p className={styles.corridorMiniValue}>
++              {
++                initialCargoes.filter((cargo) => cargo.corridorId.startsWith(item.id)).length
++              }
++            </p>
++          </article>
+         ))}
++      </section>
++      <div className={styles.listSectionHeader}>
++        <p className={styles.listSectionTitle}>{t('title')}</p>
++        <p className={styles.listSectionCount}>{t('resultsCount', { count: filtered.length })}</p>
+       </div>
++      {filtered.length === 0 ? (
++        <EmptyState title={t('emptyTitle')} description={t('emptyBody')} />
++      ) : (
++        <div className={styles.list}>
++          {filtered.map((cargo) => (
++            <PublicCargoCardRestricted key={cargo.id} cargo={cargo} />
++          ))}
++        </div>
++      )}
++      <BottomSheet open={filtersOpen} onClose={() => setFiltersOpen(false)} title={t('filtersSheet.title')} size="medium">
++        <p className={styles.sheetLead}>{t('filtersSheet.lead')}</p>
++        <div className={styles.sheetChipList}>
++          {chips.map((item) => (
++            <button
++              key={item.id}
++              type="button"
++              className={`${styles.sheetChip} ${chip === item.id ? styles.sheetChipActive : ''}`}
++              onClick={() => setChip(item.id)}
++            >
++              {item.label}
++            </button>
++          ))}
++        </div>
++        <div className={styles.sheetActions}>
++          <button type="button" className={styles.sheetSecondaryAction} onClick={() => setChip('all')}>
++            {t('filtersSheet.clear')}
++          </button>
++          <button type="button" className={styles.sheetPrimaryAction} onClick={() => setFiltersOpen(false)}>
++            {t('filtersSheet.apply')}
++          </button>
++        </div>
++      </BottomSheet>
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/register-screen.tsx b/src/features/shipper-mobile-flow/screens/register-screen.tsx
+index cda610cb..10630f6d 100644
+--- a/src/features/shipper-mobile-flow/screens/register-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/register-screen.tsx
+@@ -23,6 +23,9 @@ export function RegisterScreen({ phoneCountries }: RegisterScreenProps) {
+   const [consent, setConsent] = useState(false);
+   const [error, setError] = useState('');
+   const [ctaState, setCtaState] = useState<ShipperCtaState>('idle');
++  const authCardClass = styles.authCard;
++  const fieldClass = styles.input;
++  const selectClass = styles.select;
+ 
+   const handleSubmit = (event: React.FormEvent) => {
+     event.preventDefault();
+@@ -44,34 +47,51 @@ export function RegisterScreen({ phoneCountries }: RegisterScreenProps) {
+ 
+   return (
+     <MobileAppShell>
+-      <form className={styles.form} onSubmit={handleSubmit}>
+-        <h2 className={styles.formTitle}>{t('title')}</h2>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="company">{t('company')}</label>
+-          <input id="company" className={styles.input} value={company} onChange={(e) => setCompany(e.target.value)} />
+-        </div>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="responsible">{t('responsible')}</label>
+-          <input id="responsible" className={styles.input} value={responsible} onChange={(e) => setResponsible(e.target.value)} />
+-        </div>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="reg-country">{t('country')}</label>
+-          <select id="reg-country" className={styles.select} value={country} onChange={(e) => setCountry(e.target.value)}>
+-            {phoneCountries.map((item) => (
+-              <option key={item.code} value={item.code}>{item.code}</option>
+-            ))}
+-          </select>
+-        </div>
+-        <div className={styles.field}>
+-          <label className={styles.label} htmlFor="reg-phone">{t('phone')}</label>
+-          <input id="reg-phone" className={styles.input} inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
+-        </div>
+-        <label className={styles.label}>
+-          <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} /> {t('consent')}
+-        </label>
+-        {error ? <p className={styles.error} role="alert">{error}</p> : null}
+-        <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
+-      </form>
++      <div className={styles.authScreen}>
++        <div className={styles.authBackdrop} aria-hidden />
++        <form className={authCardClass} onSubmit={handleSubmit}>
++          <div className={styles.authBrand} aria-hidden>
++            <span className={styles.authBrandMark}>HY</span>
++            <span className={styles.authBrandLine} />
++          </div>
++          <span className={styles.authStepBadge}>{t('stepLabel')}</span>
++          <h2 className={styles.formTitle}>{t('title')}</h2>
++          <p className={styles.formIntro}>{t('subtitle')}</p>
++          <div className={styles.authHighlights} aria-label={t('highlightsAria')}>
++            <span className={styles.authHighlight}>{t('highlightIdentity')}</span>
++            <span className={styles.authHighlight}>{t('highlightOps')}</span>
++            <span className={styles.authHighlight}>{t('highlightOtp')}</span>
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="company">{t('company')}</label>
++            <input id="company" className={fieldClass} value={company} onChange={(e) => setCompany(e.target.value)} />
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="responsible">{t('responsible')}</label>
++            <input id="responsible" className={fieldClass} value={responsible} onChange={(e) => setResponsible(e.target.value)} />
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="reg-country">{t('country')}</label>
++            <select id="reg-country" className={selectClass} value={country} onChange={(e) => setCountry(e.target.value)}>
++              {phoneCountries.map((item) => (
++                <option key={item.code} value={item.code}>{item.code}</option>
++              ))}
++            </select>
++          </div>
++          <div className={styles.field}>
++            <label className={styles.label} htmlFor="reg-phone">{t('phone')}</label>
++            <input id="reg-phone" className={fieldClass} inputMode="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
++          </div>
++          <label className={styles.consentRow}>
++            <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
++            <span className={styles.consentLabel}>{t('consent')}</span>
++          </label>
++          {error ? <p className={styles.error} role="alert">{error}</p> : null}
++          <div className={styles.formActions}>
++            <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
++          </div>
++        </form>
++      </div>
+     </MobileAppShell>
+   );
+ }
+diff --git a/src/features/shipper-mobile-flow/screens/verify-otp-screen.tsx b/src/features/shipper-mobile-flow/screens/verify-otp-screen.tsx
+index a6026be4..be8f7c1f 100644
+--- a/src/features/shipper-mobile-flow/screens/verify-otp-screen.tsx
++++ b/src/features/shipper-mobile-flow/screens/verify-otp-screen.tsx
+@@ -24,7 +24,14 @@ export function VerifyOtpScreen({ mockOtp }: VerifyOtpScreenProps) {
+   const [error, setError] = useState('');
+   const [attempts, setAttempts] = useState(0);
+   const [ctaState, setCtaState] = useState<ShipperCtaState>('idle');
++  const authCardClass = styles.authCard;
++  const hasError = Boolean(error);
+   const code = useMemo(() => digits.join(''), [digits]);
++  const resolveOtpInputClass = (digit: string, inputHasError: boolean) => {
++    void digit;
++    void inputHasError;
++    return styles.otpInput;
++  };
+ 
+   const handleChange = (index: number, value: string) => {
+     if (!/^\d?$/.test(value)) return;
+@@ -62,27 +69,42 @@ export function VerifyOtpScreen({ mockOtp }: VerifyOtpScreenProps) {
+ 
+   return (
+     <MobileAppShell>
+-      <form className={styles.form} onSubmit={handleSubmit}>
+-        <h2 className={styles.formTitle}>{t('title')}</h2>
+-        <p className={styles.summary}>{t('subtitle')}</p>
+-        <div className={styles.otpRow} role="group" aria-label={t('title')}>
+-          {digits.map((digit, index) => (
+-            <input
+-              key={index}
+-              className={styles.otpInput}
+-              inputMode="numeric"
+-              maxLength={1}
+-              value={digit}
+-              onChange={(event) => handleChange(index, event.target.value)}
+-              aria-label={t('digit', { index: index + 1 })}
+-            />
+-          ))}
+-        </div>
+-        <p className={styles.summary}>{t('resendHint')}</p>
+-        {error ? <p className={styles.error} role="alert">{error}</p> : null}
+-        <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
+-        <PrimaryButton label={t('changePhone')} href="/entrar" variant="ghost" />
+-      </form>
++      <div className={styles.authScreen}>
++        <div className={styles.authBackdrop} aria-hidden />
++        <form className={authCardClass} onSubmit={handleSubmit}>
++          <div className={styles.authBrand} aria-hidden>
++            <span className={styles.authBrandMark}>HY</span>
++            <span className={styles.authBrandLine} />
++          </div>
++          <span className={styles.authSecureBadge}>{t('secureBadge')}</span>
++          <h2 className={styles.formTitle}>{t('title')}</h2>
++          <p className={styles.formIntro}>{t('subtitle')}</p>
++          <div className={styles.authHighlights} aria-label={t('highlightsAria')}>
++            <span className={styles.authHighlight}>{t('highlightFraud')}</span>
++            <span className={styles.authHighlight}>{t('highlightTraceability')}</span>
++            <span className={styles.authHighlight}>{t('highlightSession')}</span>
++          </div>
++          <div className={styles.otpRow} role="group" aria-label={t('title')}>
++            {digits.map((digit, index) => (
++              <input
++                key={index}
++                className={resolveOtpInputClass(digit, hasError)}
++                inputMode="numeric"
++                maxLength={1}
++                value={digit}
++                onChange={(event) => handleChange(index, event.target.value)}
++                aria-label={t('digit', { index: index + 1 })}
++              />
++            ))}
++          </div>
++          <p className={styles.formIntro}>{t('resendHint')}</p>
++          {error ? <p className={styles.error} role="alert">{error}</p> : null}
++          <div className={styles.formActions}>
++            <PrimaryButton label={t('submit')} type="submit" state={ctaState} />
++            <PrimaryButton label={t('changePhone')} href="/entrar" variant="ghost" />
++          </div>
++        </form>
++      </div>
+     </MobileAppShell>
+   );
+ }

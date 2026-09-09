@@ -1,0 +1,299 @@
+@use '../../styles/owned-cargo-premium-surfaces' as premium
+
+.miniCard
+  --hy-owned-mini-label-color: var(--hy-color-text-primary, var(--hx-text, var(--text)))
+  --hy-owned-mini-muted-color: var(--hy-color-text-secondary, color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted))))
+  display: grid
+  grid-template-rows: auto 1fr auto
+  gap: 0.35rem
+  min-height: 6.25rem
+  width: 100%
+  padding: 0.65rem 0.7rem 0.6rem
+  border-radius: var(--hy-owned-mini-preview-radius, 1rem)
+  text-align: left
+  cursor: pointer
+  -webkit-tap-highlight-color: transparent
+
+  @include premium.owned-cargo-premium-card
+
+  &[data-panel='timeline']
+    border-color: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 18%, transparent)
+
+  &[data-panel='documents']
+    border-color: color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 18%, transparent)
+
+  &[data-panel='risks']
+    border-color: color-mix(in srgb, var(--hx-red, var(--danger)) 16%, transparent)
+
+  &[data-panel='tracking']
+    border-color: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 18%, transparent)
+
+  &[data-panel='process']
+    border-color: color-mix(in srgb, var(--hy-color-brand, var(--hx-blue, var(--brand))) 18%, transparent)
+
+  &:focus-visible
+    outline: 2px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 72%, transparent)
+    outline-offset: 2px
+
+  @media (prefers-reduced-motion: no-preference)
+    transition: transform 120ms ease
+
+    &:active
+      transform: scale(0.985)
+
+.header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.35rem
+  min-width: 0
+
+.titleRow
+  display: flex
+  align-items: center
+  gap: 0.35rem
+  min-width: 0
+
+.iconWrap
+  display: grid
+  place-items: center
+  flex: 0 0 auto
+  width: 1.5rem
+  height: 1.5rem
+  border-radius: 0.5rem
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 88%, var(--hx-text, var(--text)))
+  background: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 10%, transparent)
+
+.title
+  margin: 0
+  font-size: 0.6875rem
+  font-weight: 620
+  letter-spacing: 0.02em
+  text-transform: uppercase
+  color: var(--hy-owned-mini-muted-color)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.chevron
+  flex: 0 0 auto
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 78%, var(--hx-text, var(--text)))
+  opacity: 0.72
+
+.metric
+  margin: 0
+  font-size: 0.8125rem
+  font-weight: 640
+  line-height: 1.25
+  color: var(--hy-owned-mini-label-color)
+  overflow: hidden
+  text-overflow: ellipsis
+  display: -webkit-box
+  -webkit-line-clamp: 2
+  -webkit-box-orient: vertical
+
+.footer
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.35rem
+  min-width: 0
+
+.status
+  font-size: 0.6875rem
+  font-weight: 620
+  color: var(--hy-owned-mini-muted-color)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+  &[data-tone='attention']
+    color: color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 92%, var(--hx-text, var(--text)))
+
+  &[data-tone='success']
+    color: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 88%, var(--hx-text, var(--text)))
+
+  &[data-tone='live']
+    color: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 90%, var(--hx-text, var(--text)))
+
+.cta
+  flex: 0 0 auto
+  font-size: 0.6875rem
+  font-weight: 650
+  color: color-mix(in srgb, var(--hy-color-brand, var(--hx-cyan, var(--brand))) 90%, var(--hx-text, var(--text)))
+
+.timelineVisual
+  display: grid
+  gap: 0.25rem
+
+.timelineNext
+  font-size: 0.625rem
+  font-weight: 580
+  line-height: 1.25
+  color: var(--hy-owned-mini-muted-color)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.processSteps
+  position: relative
+  display: flex
+  align-items: center
+  gap: 0.35rem
+  min-height: 1rem
+  padding-top: 0.125rem
+
+.processStep
+  position: relative
+  z-index: 1
+  width: 0.4375rem
+  height: 0.4375rem
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 78%, transparent)
+
+  &[data-step='done']
+    background: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 82%, white)
+
+  &[data-step='current']
+    background: color-mix(in srgb, var(--hy-color-brand, var(--hx-blue, var(--brand))) 88%, white)
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hy-color-brand, var(--hx-blue, var(--brand))) 16%, transparent)
+
+.processFill
+  position: absolute
+  left: 0
+  bottom: 0
+  height: 2px
+  border-radius: 999px
+  background: linear-gradient(90deg, color-mix(in srgb, var(--hy-color-brand, var(--hx-blue, var(--brand))) 72%, white), color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 68%, white))
+
+.timelineDots
+  display: flex
+  align-items: center
+  gap: 0.35rem
+  min-height: 1rem
+
+.dot
+  width: 0.5rem
+  height: 0.5rem
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 78%, transparent)
+
+  &[data-phase='done']
+    background: color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 82%, white)
+
+  &[data-phase='current']
+    background: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 88%, white)
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 18%, transparent)
+
+    @media (prefers-reduced-motion: no-preference)
+      animation: hy-owned-mini-current-pulse 2.4s ease-in-out infinite
+
+  &[data-phase='upcoming']
+    opacity: 0.55
+
+.connector
+  flex: 1 1 auto
+  height: 1px
+  min-width: 0.35rem
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 72%, transparent)
+
+.donutWrap
+  display: flex
+  align-items: center
+  gap: 0.55rem
+
+.donut
+  --hy-owned-doc-ready-percent: 0
+  width: 2rem
+  height: 2rem
+  border-radius: 999px
+  background: conic-gradient(color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 78%, white) calc(var(--hy-owned-doc-ready-percent) * 1%), color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 72%, white) 0)
+  display: grid
+  place-items: center
+  position: relative
+
+  &::after
+    content: ''
+    width: 1.25rem
+    height: 1.25rem
+    border-radius: 999px
+    background: var(--hy-color-glass-strong, var(--hx-card, var(--surface)))
+
+.donutValue
+  position: absolute
+  font-size: 0.625rem
+  font-weight: 820
+  color: var(--hy-owned-mini-label-color)
+
+.severity
+  display: inline-flex
+  align-items: center
+  gap: 0.3rem
+  min-height: 1.25rem
+  padding: 0 0.45rem
+  border-radius: 999px
+  font-size: 0.6875rem
+  font-weight: 780
+  color: color-mix(in srgb, var(--hx-red, var(--danger)) 92%, var(--hx-text, var(--text)))
+  background: color-mix(in srgb, var(--hx-red, var(--danger)) 12%, transparent)
+
+  &[data-severity='medium']
+    color: color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 92%, var(--hx-text, var(--text)))
+    background: color-mix(in srgb, var(--hy-color-warning, var(--hx-yellow, var(--warning))) 12%, transparent)
+
+  &[data-severity='low']
+    color: var(--hy-owned-mini-muted-color)
+    background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 28%, transparent)
+
+.severityPulse
+  width: 0.375rem
+  height: 0.375rem
+  border-radius: 999px
+  background: currentColor
+
+  @media (prefers-reduced-motion: no-preference)
+    animation: hy-owned-mini-alert-pulse 2s ease-in-out infinite
+
+.trackBar
+  position: relative
+  height: 0.3125rem
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 72%, transparent)
+  overflow: visible
+
+.trackFill
+  display: block
+  height: 100%
+  border-radius: inherit
+  background: linear-gradient(90deg, color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 82%, white), color-mix(in srgb, var(--hy-color-success, var(--hx-green, var(--success))) 78%, white))
+
+.trackBoat
+  position: absolute
+  top: 50%
+  width: 0.875rem
+  height: 0.875rem
+  transform: translate(-50%, -50%)
+  color: color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 92%, var(--hx-text, var(--text)))
+
+@keyframes hy-owned-mini-current-pulse
+  0%, 100%
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 18%, transparent)
+  50%
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--hy-color-cyan, var(--hx-cyan, var(--brand))) 8%, transparent)
+
+@keyframes hy-owned-mini-alert-pulse
+  0%, 100%
+    opacity: 1
+  50%
+    opacity: 0.45
+
+@media (prefers-reduced-motion: reduce)
+  .dot[data-phase='current'],
+  .severityPulse
+    animation: none
+
+  .miniCard
+    transition: none
+
+    &:active
+      transform: none

@@ -1,0 +1,229 @@
+/* Liquid Glass Progress — Figma Progress indicator / Progress bar, tokenized. */
+
+@import '../../tokens/generated/hydro.semantic.module.scss';
+
+/* Shared custom properties */
+.progressBar,
+.spinner {
+  --progress-track-height: 6px;
+  --progress-track-radius: 3px;
+  --progress-bar-height: 36px;
+  --progress-track-inset: 16px;
+  --progress-fill-color: #0088ff;
+  --progress-track-color: rgba(120, 120, 120, 0.2);
+  --spinner-size: 30px;
+  --spinner-segment-width: 4px;
+  --spinner-segment-height: 10px;
+  --spinner-segment-radius: 4px;
+  --spinner-segment-color: rgba(60, 60, 67, 0.6);
+  --spinner-duration: 800ms;
+  --spinner-easing: linear;
+  --progress-label-color: var(--hydro-color-label-secondary, rgba(60, 60, 67, 0.6));
+  --progress-font-family: var(--hydro-font-family-system, system-ui, sans-serif);
+}
+
+/* -------------------------------------------------------------------------- */
+/* Progress bar                                                               */
+/* -------------------------------------------------------------------------- */
+
+.progressBar {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  height: var(--progress-bar-height);
+  font-family: var(--progress-font-family);
+}
+
+.progressBar[data-size='sm'] {
+  --progress-bar-height: 24px;
+  --progress-track-height: 4px;
+  --progress-track-radius: 2px;
+  --progress-track-inset: 12px;
+}
+
+.track {
+  position: absolute;
+  left: var(--progress-track-inset);
+  right: var(--progress-track-inset);
+  top: 50%;
+  height: var(--progress-track-height);
+  margin-top: calc(var(--progress-track-height) / -2);
+  border-radius: var(--progress-track-radius);
+  background: var(--progress-track-color);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: var(--progress-track-radius);
+  background: var(--progress-fill-color);
+  transition: width var(--hydro-motion-control, 220ms)
+    var(--hydro-motion-easing-standard, cubic-bezier(0.2, 0, 0, 1));
+}
+
+.progressLabel {
+  position: absolute;
+  right: var(--progress-track-inset);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+  color: var(--progress-label-color);
+  white-space: nowrap;
+}
+
+/* Theme: light */
+.progressBar[data-tone='light'],
+.spinner[data-tone='light'] {
+  --progress-fill-color: var(--hydro-color-accent, #0088ff);
+  --progress-track-color: var(
+    --hydro-color-fill-secondary,
+    rgba(120, 120, 120, 0.2)
+  );
+  --spinner-segment-color: var(
+    --hydro-color-label-secondary,
+    rgba(60, 60, 67, 0.6)
+  );
+  --progress-label-color: var(--hydro-color-label-secondary, rgba(60, 60, 67, 0.6));
+}
+
+/* Theme: dark */
+.progressBar[data-tone='dark'],
+.spinner[data-tone='dark'] {
+  --progress-fill-color: var(--hydro-color-accent, #0091ff);
+  --progress-track-color: rgba(120, 120, 128, 0.36);
+  --spinner-segment-color: rgba(235, 235, 245, 0.7);
+  --progress-label-color: rgba(235, 235, 245, 0.7);
+}
+
+/* Theme: auto — global light */
+:global(html[data-theme='light']) .progressBar[data-tone='auto'],
+:global(html[data-theme='light']) .spinner[data-tone='auto'] {
+  --progress-fill-color: var(--hydro-color-accent, #0088ff);
+  --progress-track-color: var(
+    --hydro-color-fill-secondary,
+    rgba(120, 120, 120, 0.2)
+  );
+  --spinner-segment-color: var(
+    --hydro-color-label-secondary,
+    rgba(60, 60, 67, 0.6)
+  );
+}
+
+/* Theme: auto — global dark */
+:global(html[data-theme='dark']) .progressBar[data-tone='auto'],
+:global(html[data-theme='dark']) .spinner[data-tone='auto'] {
+  --progress-fill-color: var(--hydro-color-accent, #0091ff);
+  --progress-track-color: rgba(120, 120, 128, 0.36);
+  --spinner-segment-color: rgba(235, 235, 245, 0.7);
+}
+
+@media (prefers-color-scheme: light) {
+  :global(html:not([data-theme='dark'])) .progressBar[data-tone='auto'],
+  :global(html:not([data-theme='dark'])) .spinner[data-tone='auto'] {
+    --progress-fill-color: var(--hydro-color-accent, #0088ff);
+    --progress-track-color: var(
+      --hydro-color-fill-secondary,
+      rgba(120, 120, 120, 0.2)
+    );
+    --spinner-segment-color: var(
+      --hydro-color-label-secondary,
+      rgba(60, 60, 67, 0.6)
+    );
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme='light'])) .progressBar[data-tone='auto'],
+  :global(html:not([data-theme='light'])) .spinner[data-tone='auto'] {
+    --progress-fill-color: var(--hydro-color-accent, #0091ff);
+    --progress-track-color: rgba(120, 120, 128, 0.36);
+    --spinner-segment-color: rgba(235, 235, 245, 0.7);
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Spinner                                                                    */
+/* -------------------------------------------------------------------------- */
+
+.spinner {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  font-family: var(--progress-font-family);
+}
+
+.spinner[data-size='sm'] {
+  --spinner-size: 20px;
+  --spinner-segment-width: 3px;
+  --spinner-segment-height: 7px;
+}
+
+.spinner[data-size='md'] {
+  --spinner-size: 30px;
+  --spinner-segment-width: 4px;
+  --spinner-segment-height: 10px;
+}
+
+.spinner[data-size='lg'] {
+  --spinner-size: 40px;
+  --spinner-segment-width: 5px;
+  --spinner-segment-height: 13px;
+}
+
+.spinnerWheel {
+  position: relative;
+  flex: none;
+  width: var(--spinner-size);
+  height: var(--spinner-size);
+  animation: liquidGlassSpinnerRotate var(--spinner-duration) var(--spinner-easing)
+    infinite;
+}
+
+.spinnerSegment {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--spinner-segment-width);
+  height: var(--spinner-segment-height);
+  margin-left: calc(var(--spinner-segment-width) / -2);
+  border-radius: var(--spinner-segment-radius);
+  background: var(--spinner-segment-color);
+  transform-origin: center calc(var(--spinner-size) / 2);
+}
+
+.spinnerLabel {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: -0.43px;
+  color: var(--progress-label-color);
+  white-space: nowrap;
+}
+
+@keyframes liquidGlassSpinnerRotate {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinnerWheel {
+    animation: none;
+  }
+}

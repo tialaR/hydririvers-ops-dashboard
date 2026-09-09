@@ -38,12 +38,706 @@
   gap: 1rem;
 }
 
-.heroHeader {
+.heroCard > .cargoOverviewHero:first-child {
+  margin-top: calc(clamp(1rem, 2vw, 1.55rem) * -1);
+  margin-inline: calc(clamp(1rem, 2vw, 1.55rem) * -1);
+  width: auto;
+  max-width: none;
+  border-radius: var(--radius-lg) var(--radius-lg) 16px 16px;
+}
+
+.cargoOverviewHero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-width: 0;
+  min-height: clamp(300px, 36vw, 430px);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto;
+  border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  background:
+    radial-gradient(ellipse 90% 70% at 78% 28%, color-mix(in srgb, var(--brand) 14%, transparent), transparent 46%),
+    radial-gradient(ellipse 120% 80% at 0% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 52%),
+    linear-gradient(145deg, #040a0e 0%, #061219 38%, #020508 100%);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, #fff 6%, transparent);
+}
+
+/* Atmosfera cinematográfica sobre a mídia, abaixo do texto e do percurso */
+.cargoOverviewHero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 74% 36%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 38%),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #020508 38%, transparent) 0%,
+      transparent 40%,
+      color-mix(in srgb, #010406 55%, transparent) 100%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+}
+
+.cargoOverviewHero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.22;
+  background: repeating-linear-gradient(
+    -6deg,
+    transparent 0,
+    transparent 7px,
+    color-mix(in srgb, #fff 2.8%, transparent) 7px,
+    color-mix(in srgb, #fff 2.8%, transparent) 8px
+  );
+  mix-blend-mode: soft-light;
+}
+
+.cargoHeroInfo {
+  grid-column: 1;
+  grid-row: 1;
+  position: relative;
+  z-index: 2;
+  align-self: stretch;
   display: flex;
-  justify-content: space-between;
-  gap: .75rem;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: min(34rem, 56%);
+  padding: 1.15rem 1rem 1rem 1.2rem;
+  min-width: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, #030a0c 97%, transparent) 0%,
+    color-mix(in srgb, #030a0c 82%, transparent) 38%,
+    color-mix(in srgb, #030a0c 38%, transparent) 72%,
+    transparent 100%
+  );
+}
+
+.cargoHeroKickRow {
+  display: flex;
   flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 0.45rem;
+  margin-bottom: 0.45rem;
+  min-width: 0;
+}
+
+.cargoHeroKick {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.62rem;
+  font-weight: 760;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, #fff 78%, transparent);
+  border: 1px solid color-mix(in srgb, var(--brand) 42%, transparent);
+  background: color-mix(in srgb, #030a0c 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, #000 35%, transparent);
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cargoHeroIdRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  min-width: 0;
+}
+
+.cargoHeroIdRow > :not(.cargoHeroId) {
+  flex-shrink: 0;
+}
+
+.cargoHeroId {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: clamp(1.28rem, 2.5vw, 1.82rem);
+  font-weight: 750;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  color: color-mix(in srgb, #fff 98%, transparent);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cargoHeroLead {
+  margin: 0.35rem 0 0;
+  font-size: 0.96rem;
+  font-weight: 560;
+  line-height: 1.45;
+  color: color-mix(in srgb, #fff 72%, transparent);
+  max-width: 38rem;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.heroMetaRow {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 0;
+  margin-top: 0.55rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid color-mix(in srgb, #fff 10%, transparent);
+  min-width: 0;
+}
+
+.heroMetaItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.42rem;
+  min-width: 0;
+  flex: 1 1 0;
+}
+
+.heroMetaIcon {
+  flex-shrink: 0;
+  margin-top: 0.12rem;
+  color: color-mix(in srgb, var(--brand) 82%, #b8e8dc);
+  opacity: 0.92;
+}
+
+.heroMetaCopy {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.heroMetaDivider {
+  flex: 0 0 auto;
+  width: 1px;
+  align-self: stretch;
+  min-height: 2.35rem;
+  margin: 0 0.55rem;
+  background: color-mix(in srgb, #fff 14%, transparent);
+}
+
+.heroMetaLbl {
+  font-size: 0.65rem;
+  font-weight: 720;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, #fff 48%, transparent);
+}
+
+.heroMetaStrong {
+  font-size: 0.9rem;
+  font-weight: 760;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: color-mix(in srgb, #fff 96%, transparent);
+}
+
+.cargoHeroMedia {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: transparent;
+  box-shadow:
+    inset 0 0 100px color-mix(in srgb, #000 42%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, #fff 3.5%, transparent);
+}
+
+.cargoHeroMediaImg {
+  object-fit: cover;
+  transform: scale(1.06);
+  transform-origin: center right;
+  opacity: 0.56;
+  filter: brightness(0.58) contrast(1.12) saturate(0.88);
+}
+
+.cargoHeroMediaBlend {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, #030a0c 99%, transparent) 0%,
+      color-mix(in srgb, #030a0c 88%, transparent) 24%,
+      color-mix(in srgb, #030a0c 52%, transparent) 44%,
+      color-mix(in srgb, #020508 26%, transparent) 62%,
+      color-mix(in srgb, #020508 48%, transparent) 82%,
+      color-mix(in srgb, #010305 78%, transparent) 100%
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, #030a0c 36%, transparent) 0%,
+      transparent 36%,
+      color-mix(in srgb, #010305 68%, transparent) 100%
+    );
+}
+
+.cargoHeroMediaVignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 100% 88% at 70% 40%,
+    transparent 26%,
+    color-mix(in srgb, #000 62%, transparent) 100%
+  );
+}
+
+.cargoHeroMediaTone {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.48;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, #022a2c 78%, transparent) 0%,
+    color-mix(in srgb, #020508 55%, transparent) 38%,
+    transparent 52%,
+    color-mix(in srgb, #000 58%, transparent) 100%
+  );
+}
+
+/* Treatments: apenas opacidade, filtros e camadas — mesmo layout */
+.cargoHeroMedia[data-treatment="real-water-dark"] .cargoHeroMediaTone {
+  opacity: 0.58;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, #032a32 88%, transparent) 0%,
+    color-mix(in srgb, #021018 70%, transparent) 36%,
+    transparent 48%,
+    color-mix(in srgb, #000 65%, transparent) 100%
+  );
+}
+
+.cargoHeroMedia[data-treatment="real-water-dark"] .cargoHeroMediaImg {
+  opacity: 0.5;
+  filter: brightness(0.48) contrast(1.1) saturate(0.8);
+}
+
+.cargoHeroMedia[data-treatment="port-sunset"] .cargoHeroMediaTone {
+  opacity: 0.44;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, #1a0a04 78%, transparent) 0%,
+    color-mix(in srgb, #0a0604 55%, transparent) 42%,
+    transparent 50%,
+    color-mix(in srgb, #000 52%, transparent) 100%
+  );
+}
+
+.cargoHeroMedia[data-treatment="port-sunset"] .cargoHeroMediaImg {
+  opacity: 0.54;
+  filter: brightness(0.6) contrast(1.04) saturate(1.02);
+}
+
+.cargoHeroMedia[data-treatment="foggy-cinematic"] .cargoHeroMediaTone {
+  opacity: 0.58;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, #050a12 92%, transparent) 0%,
+    color-mix(in srgb, #040810 65%, transparent) 34%,
+    transparent 42%,
+    color-mix(in srgb, #000 68%, transparent) 100%
+  );
+}
+
+.cargoHeroMedia[data-treatment="foggy-cinematic"] .cargoHeroMediaImg {
+  opacity: 0.46;
+  filter: brightness(0.52) contrast(0.96) saturate(0.68);
+}
+
+.cargoHeroMedia[data-treatment="foggy-cinematic"] .cargoHeroMediaVignette {
+  background: radial-gradient(
+    ellipse 100% 90% at 68% 38%,
+    transparent 18%,
+    color-mix(in srgb, #000 70%, transparent) 100%
+  );
+}
+
+.cargoHeroMedia[data-treatment="studio-treated"] .cargoHeroMediaTone {
+  opacity: 0.62;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, #020508 94%, transparent) 0%,
+    color-mix(in srgb, #010204 78%, transparent) 32%,
+    transparent 44%,
+    color-mix(in srgb, #000 72%, transparent) 100%
+  );
+}
+
+.cargoHeroMedia[data-treatment="studio-treated"] .cargoHeroMediaImg {
+  opacity: 0.4;
+  filter: brightness(0.44) contrast(1.08) saturate(0.82);
+}
+
+.cargoHeroMedia[data-treatment="studio-treated"] .cargoHeroMediaVignette {
+  background: radial-gradient(
+    ellipse 86% 74% at 72% 36%,
+    transparent 14%,
+    color-mix(in srgb, #000 76%, transparent) 100%
+  );
+}
+
+.cargoHeroRoute {
+  grid-column: 1;
+  grid-row: 2;
+  position: relative;
+  z-index: 2;
+  padding: 0.75rem 1.15rem 1.05rem;
+  border-top: 1px solid color-mix(in srgb, #fff 6%, transparent);
+  min-width: 0;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, #020508 94%, transparent) 0%,
+    color-mix(in srgb, #010406 97%, transparent) 100%
+  );
+}
+
+.routeHeroHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.5rem 0.75rem;
+  align-items: start;
+  min-width: 0;
+  margin-bottom: 0.45rem;
+}
+
+.routeHeroEndpoint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.28rem;
+  min-width: 0;
+  text-align: center;
+}
+
+.routeHeroEndpointOrigin {
+  justify-self: start;
+  align-items: center;
+  text-align: center;
+}
+
+.routeHeroEndpointDest {
+  justify-self: end;
+  align-items: center;
+  text-align: center;
+}
+
+.routeHeroPlace {
+  display: block;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 760;
+  line-height: 1.2;
+  color: color-mix(in srgb, #fff 96%, transparent);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.routeHeroMarker {
+  width: 0.72rem;
+  height: 0.72rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+  border: 2px solid color-mix(in srgb, var(--brand) 68%, transparent);
+  background: color-mix(in srgb, var(--brand) 32%, #061a16);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--brand) 58%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+
+.routeHeroMarkerDest {
+  border-color: color-mix(in srgb, var(--river) 72%, transparent);
+  background: color-mix(in srgb, var(--river) 34%, #061a16);
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--river) 48%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--river) 22%, transparent);
+}
+
+.routeHeroRole {
+  font-size: 0.68rem;
+  font-weight: 720;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: color-mix(in srgb, #fff 52%, transparent);
+}
+
+.routeHeroCenter {
+  justify-self: center;
+  align-self: start;
+  padding-top: 0.15rem;
+  text-align: center;
+  min-width: 0;
+}
+
+.routeHeroProgressText {
+  display: block;
+  font-size: 0.84rem;
+  font-weight: 760;
+  letter-spacing: 0.02em;
+  color: color-mix(in srgb, #fff 90%, transparent);
+  white-space: nowrap;
+}
+
+.routeHeroTrack {
+  min-width: 0;
+  padding: 0.2rem 0 0.35rem;
+}
+
+.routeHeroTrack .routeBarWrap {
+  min-width: 0;
+}
+
+.cargoHeroCorridorLine {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.55rem;
+  font-size: 0.82rem;
+  font-weight: 640;
+  color: color-mix(in srgb, #fff 58%, transparent);
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+
+.cargoHeroCorridorLine svg {
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.cargoHeroRoute .routeBar {
+  background: color-mix(in srgb, #fff 12%, transparent);
+}
+
+.cargoHeroRoute .routeDistance {
+  margin-top: 0.35rem;
+  color: color-mix(in srgb, #fff 62%, transparent);
+  font-size: 0.82rem;
+  font-weight: 640;
+  text-align: center;
+}
+
+.cargoHeroRoute .routeKnob {
+  background: color-mix(in srgb, #0f1f1c 90%, transparent);
+  border-color: color-mix(in srgb, var(--brand) 70%, transparent);
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--brand) 45%, transparent),
+    0 4px 10px color-mix(in srgb, #000 45%, transparent);
+}
+
+.corridorStrip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 0.85rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-strong) 86%, transparent);
+  min-width: 0;
+
+  strong,
+  span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.42rem;
+    min-width: 0;
+  }
+
+  strong {
+    font-size: 0.98rem;
+    font-weight: 740;
+    color: var(--text);
+  }
+
+  strong svg {
+    flex: 0 0 auto;
+    width: 1.4rem;
+    height: 1.4rem;
+    color: var(--blue);
+  }
+
+  span {
+    color: var(--muted);
+    font-weight: 650;
+    font-size: 0.9rem;
+  }
+
+  span svg {
+    flex: 0 0 auto;
+    color: var(--leaf);
+  }
+}
+
+.routeEditorial {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem 1.05rem 1.05rem;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  min-width: 0;
+}
+
+.routeEditorialHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  gap: 0.65rem 0.85rem;
+  align-items: start;
+  min-width: 0;
+}
+
+.routeEndpoint {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+
+  small {
+    color: var(--muted);
+    font-weight: 650;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  strong {
+    font-size: 1rem;
+    font-weight: 760;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+}
+
+.routeEndpointOrigin {
+  justify-self: start;
+  text-align: left;
+}
+
+.routeEndpointDest {
+  justify-self: end;
+  text-align: right;
+}
+
+.routeEditorialCenter {
+  justify-self: center;
+  align-self: center;
+  text-align: center;
+}
+
+.routeProgressPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 760;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--brand) 35%, var(--line));
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--brand) 8%, transparent);
+}
+
+.routeTrack {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.45rem 0.55rem;
+  align-items: center;
+  min-width: 0;
+  padding: 0.15rem 0;
+}
+
+.routeBarWrap {
+  min-width: 0;
+}
+
+.routeBar {
+  position: relative;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 10%, var(--surface-strong));
+  box-shadow: inset 0 1px 2px color-mix(in srgb, #000 22%, transparent);
+}
+
+.routeBarFill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--brand) 88%, transparent),
+    color-mix(in srgb, var(--river) 90%, transparent)
+  );
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--brand) 22%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
+}
+
+.routeKnob {
+  position: absolute;
+  top: 50%;
+  width: 0.95rem;
+  height: 0.95rem;
+  margin-left: -0.475rem;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  border: 2px solid color-mix(in srgb, var(--brand) 55%, var(--line));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--brand) 12%, transparent),
+    0 6px 14px color-mix(in srgb, #000 28%, transparent);
+}
+
+.routeNode {
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 999px;
+  flex-shrink: 0;
+  border: 2px solid color-mix(in srgb, var(--brand) 45%, var(--line));
+  background: color-mix(in srgb, var(--surface-strong) 95%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand) 10%, transparent);
+}
+
+.routeNodeDest {
+  border-color: color-mix(in srgb, var(--river) 50%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--river) 12%, transparent);
+}
+
+.routeDistance {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 650;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.45;
 }
 
 .kicker {
@@ -52,14 +746,6 @@
   gap: .45rem;
   color: var(--brand);
   font-weight: 640;
-}
-
-.heroCard h2 {
-  margin: .25rem 0 0;
-  font-size: clamp(2rem, 5vw, 4rem);
-  letter-spacing: -.07em;
-  line-height: .95;
-  overflow-wrap: anywhere;
 }
 
 .subtitle,
@@ -75,165 +761,11 @@
   max-width: 65ch;
 }
 
-.routeSpotlight {
-  display: grid;
-  gap: .9rem;
-  padding: 1.1rem 1.15rem 1rem;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface-strong) 82%, transparent);
-}
-
-.routeTopline {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: .7rem .9rem;
-  align-items: center;
-}
-
-.routeTopline strong,
-.routeTopline span,
-.serviceNote,
-.node small {
+.serviceNote {
   display: inline-flex;
   align-items: center;
-  gap: .42rem;
-}
-
-.routeTopline strong {
-  font-size: 1.02rem;
-  font-weight: 740;
-  color: var(--text);
-  min-width: 0;
-}
-
-.routeTopline strong svg {
-  width: 1.45rem;
-  height: 1.45rem;
-  flex: 0 0 auto;
-  color: var(--blue);
-}
-
-.routeTopline span,
-.serviceNote,
-.node small {
-  color: var(--muted);
-  font-weight: 650;
-}
-
-.routeTopline span {
-  justify-self: end;
-}
-
-.routeTopline span svg {
-  color: var(--leaf);
-}
-
-.routeFlow {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(10.5rem, 1.35fr) minmax(0, 1fr);
-  gap: clamp(.9rem, 2.8vw, 1.8rem);
-  align-items: center;
-  justify-items: stretch;
-}
-
-.node {
-  display: flex;
-  align-items: center;
-  gap: .8rem;
-  min-width: 0;
-  padding: .15rem 0;
-}
-
-.node:first-child {
-  justify-self: start;
-}
-
-.node:last-child {
-  justify-self: end;
-  text-align: right;
-}
-
-.nodeIcon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: 999px;
-  display: inline-grid;
-  place-items: center;
-  background: color-mix(in srgb, var(--brand) 82%, white);
-  color: #07110e;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 16%, transparent);
-  flex: 0 0 auto;
-}
-
-.nodeIcon svg {
-  width: 1.28rem;
-  height: 1.28rem;
-}
-
-.nodeDestination {
-  background: color-mix(in srgb, var(--river) 88%, white);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--river) 18%, transparent);
-}
-
-.node > div { min-width: 0; }
-.node > div {
-  display: grid;
-  gap: .12rem;
-}
-
-.node:last-child > div {
-  justify-items: end;
-}
-
-.node strong {
-  display: block;
-  overflow-wrap: anywhere;
-  font-size: 1.04rem;
-  line-height: 1.18;
-}
-
-.flowLine {
-  width: 100%;
-  max-width: min(20rem, 100%);
-  justify-self: center;
-  display: grid;
-  grid-template-rows: auto auto;
-  justify-items: center;
-  align-items: center;
-  gap: .22rem;
-  color: var(--brand-strong);
-  align-self: center;
-  padding: .1rem 0;
-  position: relative;
-}
-
-.flowLine > svg {
-  width: 1.9rem;
-  height: 1.9rem;
-  justify-self: center;
-  z-index: 1;
-  color: var(--brand-strong);
-  padding: .44rem;
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 92%, transparent);
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--line) 88%, transparent),
-    0 10px 22px color-mix(in srgb, var(--brand) 10%, transparent);
-}
-
-.flowLine span {
-  width: 100%;
-  height: 4px;
-  align-self: center;
-  border-radius: 999px;
-  background: linear-gradient(90deg, var(--brand), var(--river));
-  box-shadow:
-    0 0 0 1px color-mix(in srgb, var(--brand) 16%, transparent),
-    0 0 0 6px color-mix(in srgb, var(--river-soft) 16%, transparent);
-}
-
-.serviceNote {
+  gap: 0.42rem;
+  max-width: 100%;
   min-height: 2.35rem;
   width: fit-content;
   padding: .42rem .65rem;
@@ -331,42 +863,127 @@
 .riskBox ul { margin: 0; padding-left: 1.1rem; color: var(--muted); }
 
 @media (max-width: 920px) {
-  .layout { grid-template-columns: 1fr; }
+  .layout {
+    grid-template-columns: 1fr;
+    padding-bottom: calc(var(--mobile-bottom-nav-height, 88px) + 20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cargoOverviewHero {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    grid-template-columns: unset;
+    grid-template-rows: unset;
+  }
+
+  .cargoOverviewHero::before,
+  .cargoOverviewHero::after {
+    opacity: 0.28;
+  }
+
+  .cargoHeroInfo,
+  .cargoHeroMedia,
+  .cargoHeroRoute {
+    grid-column: unset;
+    grid-row: unset;
+  }
+
+  .cargoHeroInfo {
+    order: 1;
+    max-width: 100%;
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, #030a0c 92%, transparent) 0%,
+      color-mix(in srgb, #030a0c 55%, transparent) 55%,
+      transparent 100%
+    );
+  }
+
+  .cargoHeroMedia {
+    position: relative;
+    inset: auto;
+    order: 2;
+    width: 100%;
+    flex: 0 0 auto;
+    aspect-ratio: 16 / 9;
+    min-height: 13rem;
+    max-height: min(42vh, 22rem);
+    z-index: 0;
+    box-shadow:
+      inset 0 0 60px color-mix(in srgb, #000 35%, transparent),
+      inset 0 0 0 1px color-mix(in srgb, #fff 3%, transparent);
+  }
+
+  .cargoHeroMediaImg {
+    transform: scale(1.03);
+    transform-origin: center center;
+  }
+
+  .cargoHeroRoute {
+    order: 3;
+    z-index: 2;
+    flex-shrink: 0;
+    padding-bottom: 1.1rem;
+  }
+}
+
+@media (max-width: 720px) {
+  .routeHeroHeader {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    gap: 0.35rem 0.45rem;
+  }
+
+  .routeHeroProgressText {
+    font-size: 0.78rem;
+  }
+
+  .routeHeroPlace {
+    font-size: 0.86rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .routeHeroHeader {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+
+  .routeHeroEndpointOrigin,
+  .routeHeroEndpointDest {
+    justify-self: center;
+  }
+
+  .routeHeroCenter {
+    order: -1;
+  }
 }
 
 @media (max-width: 620px) {
-  .routeTopline {
-    grid-template-columns: 1fr;
+  .cargoHeroIdRow {
+    flex-wrap: wrap;
+    align-items: flex-start;
   }
 
-  .routeTopline span {
-    justify-self: start;
+  .heroMetaRow {
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: 0.45rem;
   }
 
-  .routeFlow { grid-template-columns: 1fr; }
-  .node:last-child {
-    justify-self: start;
-    text-align: left;
-  }
-
-  .node:last-child > div {
-    justify-items: start;
-  }
-
-  .flowLine {
+  .heroMetaItem {
+    flex: 1 1 auto;
+    min-width: 0;
     width: 100%;
-    max-width: none;
-    grid-auto-flow: column;
-    grid-template-rows: none;
-    justify-content: flex-start;
-    justify-items: center;
-    align-items: center;
-    gap: .45rem;
-    padding: .15rem 0;
   }
 
-  .flowLine span {
-    align-self: center;
+  .heroMetaDivider {
+    width: 100%;
+    height: 1px;
+    min-height: 0;
+    margin: 0.1rem 0;
+    align-self: stretch;
   }
 
   .specs,
@@ -381,9 +998,12 @@
   .subtitle,
   .docHeader p,
   .description,
-  .routeTopline span,
+  .overviewDescription,
+  .corridorStrip span,
+  .routeEditorial .routeEndpoint small,
+  .routeEditorial .routeDistance,
+  .cargoCode small,
   .serviceNote,
-  .node small,
   .impact small,
   .contextGrid small,
   .docMeta small,
@@ -391,7 +1011,88 @@
     color: var(--muted-soft);
   }
 
-  .routeSpotlight,
+  /* Hero da Visão geral: mantém tratamento cinematográfico escuro em ambos os temas. */
+  .cargoOverviewHero {
+    border-color: color-mix(in srgb, var(--line-strong) 55%, #0a1218);
+    background:
+      radial-gradient(ellipse 90% 70% at 78% 28%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 46%),
+      radial-gradient(ellipse 120% 80% at 0% 0%, color-mix(in srgb, var(--brand) 16%, transparent), transparent 52%),
+      linear-gradient(145deg, #040a0e 0%, #061219 38%, #020508 100%);
+  }
+
+  .cargoHeroInfo {
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, #030a0c 97%, transparent) 0%,
+      color-mix(in srgb, #030a0c 82%, transparent) 38%,
+      color-mix(in srgb, #030a0c 38%, transparent) 72%,
+      transparent 100%
+    );
+  }
+
+  .cargoHeroId {
+    color: color-mix(in srgb, #fff 98%, transparent);
+  }
+
+  .cargoHeroLead {
+    color: color-mix(in srgb, #fff 72%, transparent);
+  }
+
+  .heroMetaLbl {
+    color: color-mix(in srgb, #fff 48%, transparent);
+  }
+
+  .heroMetaStrong {
+    color: color-mix(in srgb, #fff 96%, transparent);
+  }
+
+  .heroMetaIcon {
+    color: color-mix(in srgb, var(--brand) 82%, #b8e8dc);
+  }
+
+  .heroMetaRow {
+    border-top-color: color-mix(in srgb, #fff 10%, transparent);
+  }
+
+  .heroMetaDivider {
+    background: color-mix(in srgb, #fff 14%, transparent);
+  }
+
+  .cargoHeroRoute {
+    background: linear-gradient(
+      180deg,
+      color-mix(in srgb, #020508 94%, transparent) 0%,
+      color-mix(in srgb, #010406 97%, transparent) 100%
+    );
+    border-top-color: color-mix(in srgb, #fff 6%, transparent);
+  }
+
+  .cargoHeroCorridorLine {
+    color: color-mix(in srgb, #fff 58%, transparent);
+  }
+
+  .routeHeroPlace {
+    color: color-mix(in srgb, #fff 96%, transparent);
+  }
+
+  .routeHeroRole {
+    color: color-mix(in srgb, #fff 52%, transparent);
+  }
+
+  .routeHeroProgressText {
+    color: color-mix(in srgb, #fff 90%, transparent);
+  }
+
+  .cargoHeroRoute .routeDistance {
+    color: color-mix(in srgb, #fff 62%, transparent);
+  }
+
+  .cargoHeroRoute .routeBar {
+    background: color-mix(in srgb, #fff 12%, transparent);
+  }
+
+  .cargoOverviewHero,
+  .corridorStrip,
   .specs span,
   .form input,
   .form textarea,

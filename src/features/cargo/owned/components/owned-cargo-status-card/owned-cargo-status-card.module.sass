@@ -1,0 +1,115 @@
+.root
+  --hy-owned-cargo-surface: color-mix(in srgb, var(--hx-card, var(--surface)) 94%, var(--hx-text, var(--text)) 6%)
+  --hy-owned-cargo-surface-strong: color-mix(in srgb, var(--hx-card, var(--surface)) 88%, var(--hx-text, var(--text)) 12%)
+  --hy-owned-cargo-border: color-mix(in srgb, var(--hx-line-soft, var(--line)) 90%, transparent)
+  --hy-owned-cargo-radius: 1rem
+  --hy-owned-cargo-shadow: 0 1px 0 color-mix(in srgb, var(--hx-text, var(--text)) 4%, transparent)
+  --hy-owned-cargo-gap: 0.625rem
+  --hy-owned-cargo-label-color: var(--hx-text, var(--text))
+  --hy-owned-cargo-muted-color: color-mix(in srgb, var(--hx-text, var(--text)) 72%, var(--hx-muted, var(--muted)))
+  --hy-owned-cargo-progress-track-height: 0.375rem
+  display: grid
+  gap: var(--hy-owned-cargo-gap)
+  padding: 0.85rem 0.9rem
+  border-radius: var(--hy-owned-cargo-radius)
+  border: 1px solid var(--hy-owned-cargo-border)
+  background: var(--hy-owned-cargo-surface-strong)
+  box-shadow: var(--hy-owned-cargo-shadow)
+
+.header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 0.5rem
+
+.badge
+  display: inline-flex
+  align-items: center
+  min-height: 1.5rem
+  padding: 0 0.625rem
+  border-radius: 999px
+  font-size: 0.75rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+  background: color-mix(in srgb, var(--hx-cyan, var(--brand)) 12%, transparent)
+  border: 1px solid color-mix(in srgb, var(--hx-cyan, var(--brand)) 24%, transparent)
+
+.progressLabel
+  font-size: 0.75rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.progressTrack
+  position: relative
+  height: var(--hy-owned-cargo-progress-track-height)
+  border-radius: 999px
+  background: color-mix(in srgb, var(--hx-line-soft, var(--line)) 72%, transparent)
+  overflow: hidden
+
+.progressFill
+  display: block
+  height: 100%
+  border-radius: inherit
+  background: linear-gradient(90deg, color-mix(in srgb, var(--hx-cyan, var(--brand)) 82%, white), color-mix(in srgb, var(--hx-green, var(--success)) 78%, white))
+
+.stepBlock
+  display: grid
+  gap: 0.15rem
+
+.stepLabel
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.stepText
+  margin: 0
+  font-size: 0.8125rem
+  font-weight: 650
+  line-height: 1.4
+  color: var(--hy-owned-cargo-label-color)
+
+.alert
+  margin: 0
+  font-size: 0.75rem
+  font-weight: 650
+  line-height: 1.35
+
+  &[data-tone='attention']
+    color: color-mix(in srgb, var(--hx-yellow, var(--warning)) 92%, var(--hx-text, var(--text)))
+
+  &[data-tone='clear']
+    color: color-mix(in srgb, var(--hx-green, var(--success)) 88%, var(--hx-text, var(--text)))
+
+.alertLabel
+  display: block
+  font-size: 0.6875rem
+  font-weight: 760
+  margin-bottom: 0.1rem
+  color: var(--hy-owned-cargo-muted-color)
+
+.metaRow
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0.5rem
+
+.metaItem
+  display: grid
+  gap: 0.1rem
+  min-width: 0
+
+.metaLabel
+  font-size: 0.6875rem
+  font-weight: 760
+  color: var(--hy-owned-cargo-muted-color)
+
+.metaValue
+  font-size: 0.75rem
+  font-weight: 780
+  color: var(--hy-owned-cargo-label-color)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+@media (prefers-reduced-motion: reduce)
+  .progressFill
+    transition: none

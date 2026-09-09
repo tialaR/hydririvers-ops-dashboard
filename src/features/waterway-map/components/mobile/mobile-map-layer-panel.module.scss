@@ -1,0 +1,80 @@
+/* Shell do painel mobile — posição e animação reveal ancorada (conteúdo em mobile-hydroway-map.module.scss). */
+
+$layer-panel-motion-duration: 300ms;
+$layer-panel-motion-easing: cubic-bezier(0.22, 1, 0.36, 1);
+$layer-panel-clip-radius: 1.35rem;
+$layer-panel-motion-offset-x: 0.65rem;
+$layer-panel-motion-offset-y: -0.35rem;
+$layer-panel-motion-scale: 0.92;
+$layer-panel-clip-collapsed-bottom: 88%;
+$layer-panel-clip-collapsed-left: 68%;
+$layer-panel-content-motion-duration: 200ms;
+$layer-panel-content-open-delay: 55ms;
+
+.layerPanelShell {
+  right: calc(5.45rem + env(safe-area-inset-right, 0px));
+  width: min(13.75rem, calc(100vw - 6.45rem));
+  transform-origin: top right;
+  overflow: hidden;
+  will-change: transform, opacity, clip-path;
+  pointer-events: none;
+  clip-path: inset(
+    0 0 $layer-panel-clip-collapsed-bottom $layer-panel-clip-collapsed-left round
+      $layer-panel-clip-radius
+  );
+  transition:
+    opacity $layer-panel-motion-duration $layer-panel-motion-easing,
+    transform $layer-panel-motion-duration $layer-panel-motion-easing,
+    clip-path $layer-panel-motion-duration $layer-panel-motion-easing;
+
+  > * {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    transition:
+      opacity $layer-panel-content-motion-duration $layer-panel-motion-easing,
+      transform $layer-panel-content-motion-duration $layer-panel-motion-easing;
+    transition-delay: 0ms;
+  }
+}
+
+.layerPanelShell[data-panel-state='open'] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+  clip-path: inset(0 0 0 0 round $layer-panel-clip-radius);
+  pointer-events: auto;
+
+  > * {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: $layer-panel-content-open-delay;
+  }
+}
+
+.layerPanelShell[data-panel-state='closed'],
+.layerPanelShell[data-panel-state='closing'] {
+  opacity: 0;
+  transform: translate3d($layer-panel-motion-offset-x, $layer-panel-motion-offset-y, 0)
+    scale($layer-panel-motion-scale);
+  clip-path: inset(
+    0 0 $layer-panel-clip-collapsed-bottom $layer-panel-clip-collapsed-left round
+      $layer-panel-clip-radius
+  );
+  pointer-events: none;
+
+  > * {
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    transition-delay: 0ms;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layerPanelShell {
+    transition-duration: 1ms;
+
+    > * {
+      transition-duration: 1ms;
+      transition-delay: 0ms;
+    }
+  }
+}

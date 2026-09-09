@@ -147,6 +147,15 @@ export function MockScenarioControl() {
             </option>
           ))}
         </select>
+        <div className={styles.scenarioCatalogCopy} data-testid="mock-scenario-catalog-copy">
+          <p>
+            <strong>{t('scenarioCatalogHeading')}</strong>{' '}
+            {t(`scenarioCatalog.${selectedScenario}.summary` as never)}
+          </p>
+          <p className={styles.scenarioCatalogExplanation}>
+            {t(`scenarioCatalog.${selectedScenario}.explanation` as never)}
+          </p>
+        </div>
         <div className={styles.scenarioActions}>
           <button type="button" data-testid="mock-scenario-apply" disabled={pending} onClick={() => void apply()}>
             {pending ? t('scenarioApplying') : t('applyScenario')}

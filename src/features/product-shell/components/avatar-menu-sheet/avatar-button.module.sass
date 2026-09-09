@@ -1,0 +1,29 @@
+@use '../../../../shared/design-system/foundations/mobile-product-mixins' as *
+
+.button
+  // removed missing mixin: shipper-pressable
+  // removed missing mixin: shipper-focus
+  // removed missing mixin: shipper-glass
+  width: var(--header-icon)
+  height: var(--header-icon)
+  border-radius: var(--radius-pill)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  color: var(--hy-shipper-text)
+  cursor: pointer
+  text-decoration: none
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-premium) 20%, var(--hy-shipper-glass-border))
+  box-shadow: var(--hy-shipper-glass-inner-glow), 0 0.5rem 1.25rem color-mix(in srgb, var(--hy-shipper-text) 8%, transparent)
+
+.avatar
+  width: var(--avatar)
+  height: var(--avatar)
+  border-radius: var(--radius-pill)
+  background: linear-gradient(145deg, color-mix(in srgb, var(--hy-shipper-surface) 84%, var(--hy-shipper-accent-premium)) 0%, color-mix(in srgb, var(--hy-shipper-glass-bg) 92%, var(--hy-shipper-surface-secondary)) 100%)
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  // removed missing mixin: shipper-label
+  font-weight: 700
+  border: 1px solid color-mix(in srgb, var(--hy-shipper-accent-operational) 22%, transparent)

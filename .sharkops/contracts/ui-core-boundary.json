@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "canonicalRoot": "src/shared/design-system",
+  "coreRoot": "src/shared/design-system/core",
+  "themeRoot": "src/shared/design-system/themes/hydrorivers",
+  "patternsRoot": "src/shared/design-system/patterns",
+  "legacyRoots": [
+    "src/shared/components",
+    "src/shared/ui"
+  ],
+  "legacyTopLevelAllowlist": {
+    "src/shared/components": [
+      "bottom-nav",
+      "bottom-sheet",
+      "button",
+      "filter-chip",
+      "icon-button",
+      "informational-card",
+      "inline-alert",
+      "otp-input",
+      "search-field",
+      "status-badge",
+      "surface",
+      "text-field"
+    ],
+    "src/shared/ui": [
+      "badge",
+      "bottom-sheet",
+      "breadcrumb",
+      "button",
+      "card",
+      "hydro-icon",
+      "locale-switcher",
+      "mock-mode",
+      "page-shell",
+      "screen-transition",
+      "theme-toggle",
+      "toast",
+      "tooltip"
+    ]
+  },
+  "genericCoreForbiddenNamePrefixes": [
+    "hy-",
+    "hydri-",
+    "hydro-",
+    "shipper-",
+    "cargo-"
+  ],
+  "genericCoreForbiddenTokens": [
+    "--hy-",
+    "--hydri-",
+    "--hydro-",
+    "--shipper-",
+    "--cargo-"
+  ]
+}
