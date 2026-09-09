@@ -1,7 +1,6 @@
 import { expect, test, type Page, type TestInfo } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
-import { loginWithOtp } from './e2e/support/auth';
 
 const evidenceRoot = path.resolve('reports/portfolio-visual-evidence');
 const themes = ['light', 'dark'] as const;
@@ -9,6 +8,11 @@ const locales = ['pt-BR', 'en-US', 'es'] as const;
 
 async function setTheme(page: Page, theme: (typeof themes)[number]) {
   await page.context().addCookies([{ name: 'hydrorivers.theme', value: theme, domain: '127.0.0.1', path: '/' }]);
+}
+
+async function authenticateShipper(page: Page) {
+  const response = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-shipper-1' } });
+  expect(response.status()).toBe(200);
 }
 
 async function openPrivateRoute(page: Page, route: string, theme: (typeof themes)[number]) {
@@ -47,7 +51,15 @@ async function capture(page: Page, testInfo: TestInfo, name: string, fullPage = 
 test.describe('Portfolio-ready visual proof — Embarcadora', () => {
   test.beforeEach(async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await loginWithOtp(page);
+    await authenticateShipper(page);
+  });
+
+  test('entry and unauthenticated redirect remain demonstrable', async ({ page }, testInfo) => {
+    await page.context().clearCookies();
+    await page.goto('/pt-BR/minhas-cargas', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\/pt-BR\/entrar\?next=/);
+    await assertVisualIntegrity(page, '/pt-BR/entrar');
+    await capture(page, testInfo, 'login-redirect-light');
   });
 
   test('core journey renders in light and dark without overflow', async ({ page }, testInfo) => {
