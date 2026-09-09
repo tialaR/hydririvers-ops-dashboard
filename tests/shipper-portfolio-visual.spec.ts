@@ -13,7 +13,7 @@ async function setTheme(page: Page, theme: (typeof themes)[number]) {
 async function authenticateShipper(page: Page) {
   const adminLogin = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-admin-1' } });
   expect(adminLogin.status()).toBe(200);
-  const reset = await page.request.post('/api/mock-mode', { data: { scenario: 'market-active' } });
+  const reset = await page.request.post('/api/mock-mode', { data: { scenario: 'in-transit' } });
   expect(reset.status()).toBe(200);
   const shipperLogin = await page.request.post('/api/mock-mode/login-as', { data: { userId: 'u-shipper-1' } });
   expect(shipperLogin.status()).toBe(200);
@@ -108,7 +108,7 @@ test.describe('Portfolio-ready visual proof — Embarcadora', () => {
     await page.getByRole('button', { name: /filtros/i }).click();
     await expect(page.getByRole('dialog')).toBeVisible();
     await capture(page, testInfo, 'filters-open-light');
-    await page.getByRole('button', { name: /atenção/i }).last().click();
+    await page.getByRole('button', { name: /em trânsito/i }).last().click();
     await page.getByRole('button', { name: /aplicar/i }).click();
     await assertVisualIntegrity(page, '/pt-BR/minhas-cargas?filter=attention');
     await capture(page, testInfo, 'filters-applied-light');
