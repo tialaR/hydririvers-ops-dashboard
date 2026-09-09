@@ -26,13 +26,23 @@ type ProductShellContextValue = {
 
 const ProductShellContext = createContext<ProductShellContextValue | null>(null);
 
+const anonymousUser: AuthExperienceUser = {
+  id: 'anonymous',
+  name: 'Visitante',
+  company: 'HydroRivers',
+  role: 'shipper',
+  avatarInitials: '?',
+  locale: 'pt-BR',
+};
+
 export function ProductShellProvider({
   children,
   currentUser
 }: {
   children: ReactNode;
-  currentUser: AuthExperienceUser;
+  currentUser: AuthExperienceUser | null;
 }) {
+  const presentedUser = currentUser ?? anonymousUser;
   useEffect(() => {
     document.documentElement.dataset.shipperMobileFlow = 'true';
     return () => {
@@ -54,7 +64,7 @@ export function ProductShellProvider({
 
   const value = useMemo(
     () => ({
-      currentUser,
+      currentUser: presentedUser,
       confirmation,
       openConfirmation,
       closeConfirmation,
@@ -64,7 +74,7 @@ export function ProductShellProvider({
       setActiveFilter
     }),
     [
-      currentUser,
+      presentedUser,
       confirmation,
       openConfirmation,
       closeConfirmation,

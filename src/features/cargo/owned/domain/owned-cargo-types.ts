@@ -22,6 +22,7 @@ export type OwnedCargo = {
 export type CargoDocument = {
   id: string;
   nameKey: string;
+  name?: string;
   status: CargoDocumentStatus;
   dueLabelKey?: string;
 };

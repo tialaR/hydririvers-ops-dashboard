@@ -36,7 +36,7 @@ export function AppHeader({ title, mode, backHref, onAvatarClick }: AppHeaderPro
         </div>
         {mode === 'authenticated' ? (
           <div className={styles.metaRow}>
-            <span className={styles.metaCompany}>{currentUser.company}</span>
+            {currentUser ? <span className={styles.metaCompany}>{currentUser.company}</span> : null}
             <span className={styles.metaBadge}>{t('opsMode')}</span>
           </div>
         ) : null}

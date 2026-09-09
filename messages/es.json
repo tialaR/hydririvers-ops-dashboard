@@ -3319,7 +3319,8 @@
         "body": "Hasta 38% menos CO₂ vs modal carretero."
       },
       "errors": {
-        "window": "Indique la ventana operativa."
+        "window": "Indique la ventana operativa.",
+        "submit": "No fue posible crear la carga. Revise los datos o vuelva a iniciar sesión."
       }
     },
     "cargoDetail": {

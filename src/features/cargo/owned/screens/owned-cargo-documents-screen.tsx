@@ -33,7 +33,7 @@ export function OwnedCargoDocumentsScreen({
         {documents.map((document) => (
           <div key={document.id} className={styles.docRow}>
             <div>
-              <p className={styles.title}>{t(`documents.${document.nameKey}`)}</p>
+              <p className={styles.title}>{document.name ?? t(`documents.${document.nameKey}`)}</p>
               {document.dueLabelKey ? <p className={styles.summary}>{t(document.dueLabelKey)}</p> : null}
             </div>
             <span className={styles.tileValue}>{t(`status.${document.status}`)}</span>

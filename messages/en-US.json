@@ -3319,7 +3319,8 @@
         "body": "Up to 38% less CO₂ vs equivalent road modal."
       },
       "errors": {
-        "window": "Enter the operational window."
+        "window": "Enter the operational window.",
+        "submit": "We could not create the cargo. Review the data or sign in again."
       }
     },
     "cargoDetail": {

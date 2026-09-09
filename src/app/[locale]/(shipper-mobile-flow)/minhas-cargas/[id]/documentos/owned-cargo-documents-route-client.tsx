@@ -1,5 +1,6 @@
 'use client';
 
+import { useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useRouter } from '@/core/i18n/navigation';
@@ -11,6 +12,7 @@ import {
 import { MobileAppShell } from '@/features/product-shell/components/mobile-app-shell/mobile-app-shell';
 import { PrimaryButton } from '@/features/product-shell/components/primary-button/primary-button';
 import { useProductShell } from '@/features/product-shell/providers/product-shell-provider';
+import { resolveOwnedCargoDocumentsAction } from '@/features/cargo/owned/actions/resolve-owned-cargo-documents-action';
 
 type OwnedCargoDocumentsRouteClientProps = {
   cargo: OwnedCargo;
@@ -23,13 +25,17 @@ export function OwnedCargoDocumentsRouteClient({ cargo, documents }: OwnedCargoD
   const t = useTranslations('shipperMobileFlow.documents');
   const router = useRouter();
   const { openConfirmation } = useProductShell();
+  const [, startTransition] = useTransition();
 
   const resolveBlocker = () => openConfirmation({
     title: t('confirm.title'),
     description: t('confirm.body'),
     confirmLabel: t('confirm.confirm'),
     cancelLabel: t('confirm.cancel'),
-    onConfirm: () => router.push('/sucesso/acao-operacional'),
+    onConfirm: () => startTransition(async () => {
+      const result = await resolveOwnedCargoDocumentsAction(cargo.id);
+      if (result.ok) router.refresh();
+    }),
   });
 
   return (

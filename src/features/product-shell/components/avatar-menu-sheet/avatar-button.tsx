@@ -16,7 +16,7 @@ export function AvatarButton({ onClick }: AvatarButtonProps) {
   return (
     <button type="button" className={styles.button} onClick={onClick} aria-label={t('avatarMenu')}>
       <span className={styles.avatar} aria-hidden>
-        {currentUser.avatarInitials}
+        {currentUser?.avatarInitials ?? '?'}
       </span>
     </button>
   );

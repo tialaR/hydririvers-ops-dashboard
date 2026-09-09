@@ -3,11 +3,11 @@ import type { CargoDocument, CargoOffer, OwnedCargo, OwnedCargoChartPoint, Owned
 export type OwnedCargoMapData = OwnedCargo;
 
 export type OwnedCargoRepository = {
-  listOwnedCargoes(): Promise<OwnedCargo[]>;
-  getOwnedCargoById(id: string): Promise<OwnedCargo | undefined>;
-  getOwnedCargoMapData(id: string): Promise<OwnedCargoMapData | undefined>;
-  getDocumentsForCargo(cargoId: string): Promise<CargoDocument[]>;
-  getOffersForCargo(cargoId: string): Promise<CargoOffer[]>;
+  listOwnedCargoes(ownerId: string): Promise<OwnedCargo[]>;
+  getOwnedCargoById(id: string, ownerId: string): Promise<OwnedCargo | undefined>;
+  getOwnedCargoMapData(id: string, ownerId: string): Promise<OwnedCargoMapData | undefined>;
+  getDocumentsForCargo(cargoId: string, ownerId: string): Promise<CargoDocument[]>;
+  getOffersForCargo(cargoId: string, ownerId: string): Promise<CargoOffer[]>;
   getCockpitMetrics(): Promise<OwnedCargoCockpitMetric[]>;
   getCockpitTrend(): Promise<OwnedCargoChartPoint[]>;
   getDefaultCargoId(): Promise<string>;

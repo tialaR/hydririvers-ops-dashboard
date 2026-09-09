@@ -2,6 +2,7 @@ import { mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { expect, test, type Page } from '@playwright/test';
+import { loginWithOtp } from './e2e/support/auth';
 
 const SCREENSHOT_DIR = join(process.cwd(), 'reports', 'shipper-mobile-p0-screenshots');
 
@@ -20,10 +21,10 @@ const PT_BR_SCREENSHOT_ROUTES = [
   '/pt-BR/cargas-publicas',
   '/pt-BR/cargas-publicas/pub-001',
   '/pt-BR/minhas-cargas',
-  '/pt-BR/minhas-cargas/hr-4821',
-  '/pt-BR/minhas-cargas/hr-4821/mapa',
-  '/pt-BR/minhas-cargas/hr-4821/documentos',
-  '/pt-BR/minhas-cargas/hr-4821/negociacao',
+  '/pt-BR/minhas-cargas/cargo-001',
+  '/pt-BR/minhas-cargas/cargo-001/mapa',
+  '/pt-BR/minhas-cargas/cargo-001/documentos',
+  '/pt-BR/minhas-cargas/cargo-001/negociacao',
   '/pt-BR/hidrologia',
   '/pt-BR/impacto',
   '/pt-BR/notificacoes',
@@ -52,10 +53,10 @@ const PT_BR_SCREENSHOT_ROUTE_BATCHES = [
   {
     name: 'cargo detail and hydro',
     routes: [
-      '/pt-BR/minhas-cargas/hr-4821',
-      '/pt-BR/minhas-cargas/hr-4821/mapa',
-      '/pt-BR/minhas-cargas/hr-4821/documentos',
-      '/pt-BR/minhas-cargas/hr-4821/negociacao',
+      '/pt-BR/minhas-cargas/cargo-001',
+      '/pt-BR/minhas-cargas/cargo-001/mapa',
+      '/pt-BR/minhas-cargas/cargo-001/documentos',
+      '/pt-BR/minhas-cargas/cargo-001/negociacao',
       '/pt-BR/hidrologia',
       '/pt-BR/impacto'
     ] as const
@@ -90,13 +91,13 @@ const ROUTES_WITHOUT_BOTTOM_NAV = [
   '/pt-BR/entrar',
   '/pt-BR/registrar',
   '/pt-BR/verificar-otp',
-  '/pt-BR/minhas-cargas/hr-4821/mapa',
+  '/pt-BR/minhas-cargas/cargo-001/mapa',
   '/pt-BR/offline',
   '/pt-BR/erro/servico',
   '/pt-BR/sucesso/acao-operacional'
 ] as const;
 
-const MAP_ROUTE = '/pt-BR/minhas-cargas/hr-4821/mapa';
+const MAP_ROUTE = '/pt-BR/minhas-cargas/cargo-001/mapa';
 
 const PUBLIC_CARGO_ROUTES = ['/pt-BR/cargas-publicas', PUBLIC_CARGO_DETAIL_ROUTE] as const;
 
@@ -281,6 +282,9 @@ async function assertPublicRoutePrivacy(page: Page, route: string) {
 }
 
 async function captureRoutesWithThemes(page: Page, routes: readonly string[], viewport: ViewportSpec) {
+  if (routes.some((route) => route.includes('/minhas-cargas') || route.endsWith('/cockpit') || route.endsWith('/perfil'))) {
+    await loginWithOtp(page);
+  }
   for (const route of routes) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     const response = await gotoRoute(page, route);
@@ -321,12 +325,13 @@ test.describe('Shipper mobile P0 — visual & functional QA', () => {
   });
 
   test('pt-BR P0 routes — three mobile viewports (standard capture set)', async ({ page }) => {
+    await loginWithOtp(page);
     const keyRoutes = [
       '/pt-BR/cockpit',
       '/pt-BR/cargas-publicas',
       PUBLIC_CARGO_DETAIL_ROUTE,
       '/pt-BR/minhas-cargas',
-      '/pt-BR/minhas-cargas/hr-4821/mapa'
+      '/pt-BR/minhas-cargas/cargo-001/mapa'
     ] as const;
 
     for (const viewport of VIEWPORTS) {
@@ -340,6 +345,7 @@ test.describe('Shipper mobile P0 — visual & functional QA', () => {
   });
 
   test('i18n key routes render localized shell', async ({ page }) => {
+    await loginWithOtp(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
     for (const route of I18N_ROUTES) {
@@ -360,6 +366,7 @@ test.describe('Shipper mobile P0 — visual & functional QA', () => {
   });
 
   test('full-screen map hides bottom nav', async ({ page }) => {
+    await loginWithOtp(page);
     await page.setViewportSize({ width: 390, height: 844 });
     await gotoRoute(page, MAP_ROUTE);
     await expect(shipperBottomNav(page)).toHaveCount(0);
@@ -367,6 +374,7 @@ test.describe('Shipper mobile P0 — visual & functional QA', () => {
   });
 
   test('authenticated shell chrome — header and bottom nav contracts', async ({ page }) => {
+    await loginWithOtp(page);
     await page.setViewportSize({ width: 390, height: 844 });
 
     for (const route of ROUTES_WITH_AUTHENTICATED_HEADER) {
