@@ -3297,6 +3297,13 @@
         "all": "Todas",
         "transit": "En tránsito",
         "attention": "En atención"
+      },
+      "desktop": {
+        "newOperation": "Nueva operación", "navigation": "Navegación principal", "cockpit": "Cockpit", "market": "Mercado de cargas", "negotiations": "Negociaciones", "tracking": "Rastreo", "privateArea": "Área privada", "privateHint": "Datos protegidos", "settings": "Configuración", "workspace": "Espacio operativo", "search": "Buscar", "masterAria": "Lista maestra de cargas", "detailAria": "Vista de la carga seleccionada", "searchPlaceholder": "Buscar carga, origen o destino", "moreActions": "Más acciones", "attentionSummary": "{count} cargas requieren atención operativa", "zoomIn": "Acercar mapa", "zoomOut": "Alejar mapa", "centerMap": "Centrar ruta",
+        "filter": { "all": "Todas", "attention": "Atención", "inTransit": "En tránsito" },
+        "origin": "Origen", "destination": "Destino", "eta": "{hours}h", "risk": { "low": "Riesgo bajo", "medium": "Riesgo medio", "high": "Riesgo alto", "critical": "Riesgo crítico" }, "docs": "{count} docs", "estimatedArrival": "Llegada estimada",
+        "tabs": { "overview": "Vista general", "journey": "Jornada", "documents": "Documentos", "costs": "Costes" },
+        "selectedCargo": "Carga seleccionada", "openCockpit": "Abrir cockpit", "route": "Ruta", "status": "Estado", "cargo": "Carga", "volume": "Peso total", "vessel": "Embarcación", "updated": "Actualizado hace {minutes} min", "etaLabel": "ETA operativo", "forecast": "Pronóstico actualizado", "corridor": "Corredor operativo", "freshness": { "fresh": "Actualizado", "stale": "Desactualizado", "offline": "Sin conexión" }, "openRoute": "Abrir carga", "offersLabel": "Negociación", "offers": "{count} ofertas", "freshnessLabel": "Frescura de datos", "docsLabel": "Documentación", "attentionTitle": "Atención operativa", "attentionBody": "Hay pendientes que requieren revisión antes del próximo hito.", "review": "Revisar ahora", "intelligence": "Inteligencia operativa", "riskLabel": "Lectura de riesgo", "riskHint": "Composición basada en corredor, frescura y documentos.", "nextMilestone": "Próximo hito", "checkpoint": "Checkpoint fluvial", "checkpointHint": "Seguimiento activo en la ruta seleccionada.", "recommendedAction": "Acción recomendada", "reviewDocs": "Revisar documentos", "recommendedHint": "Resuelva pendientes antes de la ventana operativa."
       }
     },
     "cargoCard": {

@@ -3297,6 +3297,13 @@
         "all": "Todas",
         "transit": "Em trânsito",
         "attention": "Em atenção"
+      },
+      "desktop": {
+        "newOperation": "Nova operação", "navigation": "Navegação principal", "cockpit": "Cockpit", "market": "Mercado de cargas", "negotiations": "Negociações", "tracking": "Rastreamento", "privateArea": "Área privada", "privateHint": "Dados protegidos", "settings": "Configurações", "workspace": "Workspace operacional", "search": "Buscar", "masterAria": "Lista mestre de cargas", "detailAria": "Visão da carga selecionada", "searchPlaceholder": "Buscar carga, origem ou destino", "moreActions": "Mais ações", "attentionSummary": "{count} cargas exigem atenção operacional", "zoomIn": "Aproximar mapa", "zoomOut": "Afastar mapa", "centerMap": "Centralizar rota",
+        "filter": { "all": "Todas", "attention": "Atenção", "inTransit": "Em trânsito" },
+        "origin": "Origem", "destination": "Destino", "eta": "{hours}h", "risk": { "low": "Risco baixo", "medium": "Risco médio", "high": "Risco alto", "critical": "Risco crítico" }, "docs": "{count} docs", "estimatedArrival": "Chegada estimada",
+        "tabs": { "overview": "Visão geral", "journey": "Jornada", "documents": "Documentos", "costs": "Custos" },
+        "selectedCargo": "Carga selecionada", "openCockpit": "Abrir cockpit", "route": "Rota", "status": "Status", "cargo": "Carga", "volume": "Peso total", "vessel": "Embarcação", "updated": "Atualizado há {minutes} min", "etaLabel": "ETA operacional", "forecast": "Previsão atualizada", "corridor": "Corredor operacional", "freshness": { "fresh": "Atualizado", "stale": "Desatualizado", "offline": "Offline" }, "openRoute": "Abrir carga", "offersLabel": "Negociação", "offers": "{count} ofertas", "freshnessLabel": "Frescor dos dados", "docsLabel": "Documentação", "attentionTitle": "Atenção operacional", "attentionBody": "Há pendências que exigem revisão antes do próximo marco.", "review": "Revisar agora", "intelligence": "Inteligência operacional", "riskLabel": "Leitura de risco", "riskHint": "Composição baseada em corredor, frescor e documentação.", "nextMilestone": "Próximo marco", "checkpoint": "Checkpoint fluvial", "checkpointHint": "Acompanhamento ativo na rota selecionada.", "recommendedAction": "Ação recomendada", "reviewDocs": "Revisar documentos", "recommendedHint": "Resolva pendências antes da janela operacional."
       }
     },
     "cargoCard": {

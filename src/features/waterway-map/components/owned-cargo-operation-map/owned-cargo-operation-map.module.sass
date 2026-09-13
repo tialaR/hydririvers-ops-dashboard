@@ -30,6 +30,26 @@
   height: 100%
   display: block
 
+.mapFallbackDesktop
+  background: #202529
+
+.mapFallbackDesktop .mapFallbackSvg
+  padding: 0
+
+.mapContext path
+  fill: #111416
+  stroke: #7d8489
+  stroke-width: .45
+
+.mapContext .mapRiver
+  fill: none
+  stroke: #536573
+  stroke-width: 1.2
+  opacity: .9
+
+.mapFallbackDesktop .mapFallbackSvg > path:not(.mapRiver)
+  stroke: #f4f5f4
+
 .mapFallbackHint
   position: absolute
   left: var(--space-4)

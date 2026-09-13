@@ -29,6 +29,7 @@ type ShipperOperationMapProps = {
   routeData: ShipperMapRouteData;
   ariaLabel: string;
   fallbackHintLabel?: string;
+  presentation?: 'default' | 'desktop-foundation' | 'page-61-219-254';
 };
 
 function prefersReducedMotion(): boolean {
@@ -134,7 +135,7 @@ function applyRouteToMap(map: Map, routeData: ShipperMapRouteData): void {
   fitRouteBounds(map, routeData);
 }
 
-export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel }: ShipperOperationMapProps) {
+export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel, presentation = 'default' }: ShipperOperationMapProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
   const routeDataRef = useRef(routeData);
@@ -205,7 +206,7 @@ export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel }:
 
   if (hasMapFailed) {
     return (
-      <ShipperOperationMapFallback routeData={routeData} ariaLabel={ariaLabel} hintLabel={fallbackHintLabel} />
+      <ShipperOperationMapFallback routeData={routeData} ariaLabel={ariaLabel} hintLabel={fallbackHintLabel} presentation={presentation} />
     );
   }
 

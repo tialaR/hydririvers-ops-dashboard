@@ -3297,6 +3297,13 @@
         "all": "All",
         "transit": "In transit",
         "attention": "Attention"
+      },
+      "desktop": {
+        "newOperation": "New operation", "navigation": "Main navigation", "cockpit": "Cockpit", "market": "Cargo market", "negotiations": "Negotiations", "tracking": "Tracking", "privateArea": "Private area", "privateHint": "Protected data", "settings": "Settings", "workspace": "Operational workspace", "search": "Search", "masterAria": "Cargo master list", "detailAria": "Selected cargo view", "searchPlaceholder": "Search cargo, origin or destination", "moreActions": "More actions", "attentionSummary": "{count} cargoes require operational attention", "zoomIn": "Zoom in", "zoomOut": "Zoom out", "centerMap": "Center route",
+        "filter": { "all": "All", "attention": "Attention", "inTransit": "In transit" },
+        "origin": "Origin", "destination": "Destination", "eta": "{hours}h", "risk": { "low": "Low risk", "medium": "Medium risk", "high": "High risk", "critical": "Critical risk" }, "docs": "{count} docs", "estimatedArrival": "Estimated arrival",
+        "tabs": { "overview": "Overview", "journey": "Journey", "documents": "Documents", "costs": "Costs" },
+        "selectedCargo": "Selected cargo", "openCockpit": "Open cockpit", "route": "Route", "status": "Status", "cargo": "Cargo", "volume": "Total weight", "vessel": "Vessel", "updated": "Updated {minutes} min ago", "etaLabel": "Operational ETA", "forecast": "Updated forecast", "corridor": "Operational corridor", "freshness": { "fresh": "Updated", "stale": "Stale", "offline": "Offline" }, "openRoute": "Open cargo", "offersLabel": "Negotiation", "offers": "{count} offers", "freshnessLabel": "Data freshness", "docsLabel": "Documentation", "attentionTitle": "Operational attention", "attentionBody": "Pending items require review before the next milestone.", "review": "Review now", "intelligence": "Operational intelligence", "riskLabel": "Risk reading", "riskHint": "Composite based on corridor, freshness and documents.", "nextMilestone": "Next milestone", "checkpoint": "Waterway checkpoint", "checkpointHint": "Active tracking on the selected route.", "recommendedAction": "Recommended action", "reviewDocs": "Review documents", "recommendedHint": "Resolve pending items before the operational window."
       }
     },
     "cargoCard": {
