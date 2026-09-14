@@ -1,4 +1,4 @@
-name: Visual Quality
+name: SHARKLOCK Visual Page 61
 
 on:
   push:
@@ -9,17 +9,17 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: visual-quality-${{ github.ref }}
+  group: sharklock-visual-page-61-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  shipper-visual-proof:
-    name: Shipper visual proof
+  page-61-visual-certification:
+    name: Page 61 / 219:254 / Chromium
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
 
     steps:
-      - name: Checkout
+      - name: Checkout candidate SHA
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -28,23 +28,144 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Prepare evidence directory
+        run: mkdir -p reports/sharklock-evidence/page-61/logs
 
-      - name: Install Chromium and Linux dependencies
-        run: npx playwright install --with-deps chromium
+      - name: Install locked dependencies
+        id: dependencies
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npm ci 2>&1 | tee reports/sharklock-evidence/page-61/logs/npm-ci.log
 
-      - name: Run portfolio visual proof
-        run: npm run test:portfolio-visual
+      - name: Install supported Chromium
+        id: chromium
+        if: steps.dependencies.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npx playwright install --with-deps chromium 2>&1 | tee reports/sharklock-evidence/page-61/logs/chromium-install.log
 
-      - name: Upload visual evidence
+      - name: Build candidate runtime
+        id: build
+        if: steps.chromium.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee reports/sharklock-evidence/page-61/logs/build.log
+
+      - name: Capture Page 61 at 1440x1024
+        id: capture
+        if: steps.build.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        env:
+          HYDRORIVERS_EXPOSE_OTP_CODE: 'true'
+          HYDRORIVERS_ALLOW_MOCK_MODE_RESET: 'true'
+          HYDRORIVERS_FORCE_MOCK_QA_UI: 'true'
+          HYDRORIVERS_FORCE_QA_DIRECT_LOGIN: 'true'
+        run: |
+          set -o pipefail
+          npm run start -- --hostname 127.0.0.1 --port 3100 > reports/sharklock-evidence/page-61/logs/runtime.log 2>&1 &
+          runtime_pid=$!
+          trap 'kill "$runtime_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 60); do
+            if curl --fail --silent --show-error http://127.0.0.1:3100/pt-BR/login >/dev/null; then
+              break
+            fi
+            if ! kill -0 "$runtime_pid" 2>/dev/null; then
+              cat reports/sharklock-evidence/page-61/logs/runtime.log
+              exit 1
+            fi
+            if [ "$attempt" -eq 60 ]; then
+              cat reports/sharklock-evidence/page-61/logs/runtime.log
+              exit 1
+            fi
+            sleep 2
+          done
+          npx playwright test tests/e2e/page-61-visual-ci.spec.ts \
+            --config=playwright.page-61-visual-ci.config.ts \
+            --project=chromium \
+            --reporter=line 2>&1 | tee reports/sharklock-evidence/page-61/logs/capture.log
+
+      - name: Compute canonical diff and SHARKLOCK evidence
+        id: visual
+        if: always() && steps.dependencies.outcome == 'success' && steps.chromium.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        env:
+          SHARKLOCK_CANDIDATE_SHA: ${{ github.sha }}
+          SHARKLOCK_CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+        run: |
+          set -o pipefail
+          node scripts/governance/certify-page-61-visual.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/visual-certification.log
+
+      - name: Record incomplete evidence chain
+        if: always()
+        shell: bash
+        env:
+          SHARKLOCK_CANDIDATE_SHA: ${{ github.sha }}
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          CHROMIUM_OUTCOME: ${{ steps.chromium.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          VISUAL_OUTCOME: ${{ steps.visual.outcome }}
+        run: |
+          node --input-type=module <<'NODE'
+          import { access, writeFile } from 'node:fs/promises';
+          const target = 'reports/sharklock-evidence/page-61/sharklock-result.json';
+          try {
+            await access(target);
+          } catch {
+            const outcomes = {
+              dependencies: process.env.DEPENDENCIES_OUTCOME,
+              chromium: process.env.CHROMIUM_OUTCOME,
+              build: process.env.BUILD_OUTCOME,
+              capture: process.env.CAPTURE_OUTCOME,
+              visual: process.env.VISUAL_OUTCOME,
+            };
+            await writeFile(target, `${JSON.stringify({
+              gate: 'SHARKLOCK-v1.0',
+              requirementId: 'HY-VIS-61-DESKTOP-FOUNDATION',
+              candidateSha: process.env.SHARKLOCK_CANDIDATE_SHA,
+              chromiumStatus: outcomes.chromium === 'success' ? 'PASS' : 'FAIL',
+              captureStatus: outcomes.capture === 'success' ? 'PASS' : 'FAIL',
+              visualStatus: 'NÃO PROVADO',
+              evidenceChainStatus: 'FAIL',
+              certificationStatus: 'FAIL',
+              outcomes,
+              blockers: ['mandatory CI evidence chain is incomplete'],
+            }, null, 2)}\n`);
+          }
+          NODE
+
+      - name: Upload SHARKLOCK visual evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-visual-evidence
+          name: sharklock-page-61-${{ github.sha }}
           path: |
-            reports/portfolio-visual-evidence
-            reports/portfolio-visual-html
-            test-results/portfolio-visual
-          if-no-files-found: warn
-          retention-days: 14
+            reports/sharklock-evidence/page-61
+            test-results/page-61-visual-ci
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Enforce complete evidence chain
+        if: always()
+        shell: bash
+        env:
+          DEPENDENCIES_OUTCOME: ${{ steps.dependencies.outcome }}
+          CHROMIUM_OUTCOME: ${{ steps.chromium.outcome }}
+          BUILD_OUTCOME: ${{ steps.build.outcome }}
+          CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
+          VISUAL_OUTCOME: ${{ steps.visual.outcome }}
+        run: |
+          test "$DEPENDENCIES_OUTCOME" = success
+          test "$CHROMIUM_OUTCOME" = success
+          test "$BUILD_OUTCOME" = success
+          test "$CAPTURE_OUTCOME" = success
+          test "$VISUAL_OUTCOME" = success
+          node -e "const r=require('./reports/sharklock-evidence/page-61/sharklock-result.json'); if(r.certificationStatus!=='PASS'||r.evidenceChainStatus!=='PASS') process.exit(1)"
