@@ -34,13 +34,13 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
     </div>
     <div className={styles.route}>
       <strong>{visualFixtureEnabled ? <><em data-flag="us"/><span><b>{page61219254SelectedVisualFacts.originRegion}</b><small>{page61219254SelectedVisualFacts.originCity}</small></span></> : cargo.origin}</strong>
-      <i><span aria-hidden="true">⚓</span></i>
       <strong>{visualFixtureEnabled ? <><span><b>{page61219254SelectedVisualFacts.destinationRegion}</b><small>{page61219254SelectedVisualFacts.destinationCity}</small></span><em data-flag="pa"/></> : cargo.destination}</strong>
     </div>
     {!visualFixtureEnabled ? <div className={styles.routeLabels}><small>{t('myCargoes.desktop.origin')}</small><small>{t('myCargoes.desktop.destination')}</small></div> : null}
+    {visualFixtureEnabled ? <div className={styles.cardTransit}><span aria-hidden="true">⚓</span></div> : null}
     {visualFixtureEnabled ? <div className={styles.fixtureCardFacts}>
       <div><small>{t('myCargoes.desktop.cargo')}</small><strong>{page61219254SelectedVisualFacts.cargoType}</strong></div>
-      <div><small>ETA</small><strong>{cargo.etaHours === 0 ? t('cargoDetail.status.delivered') : t('myCargoes.desktop.eta', { hours: cargo.etaHours })}</strong></div>
+      <div><small>ETA</small><strong>{page61219254SelectedVisualFacts.cardEta} <span>{page61219254SelectedVisualFacts.cardEtaDay}</span></strong></div>
     </div> : <>
       <div className={styles.metrics}>
         <span><Clock3 size={13}/>{t('myCargoes.desktop.eta', { hours: cargo.etaHours })}</span>

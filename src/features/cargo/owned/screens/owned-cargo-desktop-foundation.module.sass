@@ -249,15 +249,14 @@
   color: var(--hy-m01-muted)
 .route
   display: grid
-  grid-template-columns: 1fr 70px 1fr
+  grid-template-columns: minmax(0,1fr) minmax(0,1fr)
   align-items: center
-  gap: 10px
+  gap: 18px
   margin-top: 23px
 .route strong
-  overflow: hidden
+  min-width: 0
   font-size: 12px
-  text-overflow: ellipsis
-  white-space: nowrap
+  white-space: normal
 .route strong:last-child
   text-align: right
 .route strong
@@ -286,14 +285,22 @@
   box-shadow: inset 21px 0 0 #24497f
 .route em[data-flag='pa']
   background: linear-gradient(145deg,#d82545 0 52%,#f5f5f0 52% 100%)
-.route i
+.cardTransit
+  position: relative
   display: flex
   align-items: center
   justify-content: center
+  margin-top: 28px
   height: 1px
   border-top: 1px dashed #b8bdc0
   color: #e9ebea
   font-size: 13px
+.cardTransit span
+  position: absolute
+  display: grid
+  place-items: center
+  width: 28px
+  background: var(--hy-m01-soft)
 .routeLabels
   display: flex
   justify-content: space-between
@@ -323,9 +330,7 @@
   display: grid
   grid-template-columns: 1fr auto
   gap: 16px
-  margin-top: 28px
-  padding-top: 13px
-  border-top: 1px dashed #b8bdc0
+  margin-top: 20px
 .fixtureCardFacts>div
   display: grid
   gap: 6px
@@ -336,6 +341,10 @@
   font-size: 9px
 .fixtureCardFacts strong
   font-size: 11px
+.fixtureCardFacts strong span
+  margin-left: 5px
+  color: var(--hy-m01-muted)
+  font-weight: 400
 
 .fixtureRoot .cardTop
   grid-template-columns: 1fr auto
@@ -364,6 +373,8 @@
   display: none
 .fixtureRoot .routeLabels
   display: none
+.fixtureRoot .route
+  margin-top: 13px
 .detail
   position: absolute
   inset: 56px 0 0 672px
@@ -444,20 +455,23 @@
 .tabs
   display: flex
   height: 43px
-  padding: 0 20px
+  padding: 0 18px
   border-bottom: 1px solid var(--hy-m01-line)
   background: var(--hy-m01-bg)
 .tabs button,.tabs a
   display: grid
   place-items: center
-  min-width: 92px
-  padding: 0 12px
+  min-width: 0
+  padding: 0 30px 0 0
   border: 0
   border-bottom: 2px solid transparent
   background: transparent
   color: var(--hy-m01-muted)
   font-size: 9px
+  font-weight: 400
   text-decoration: none
+.tabs button:last-child
+  padding-right: 0
 .tabs button
   border-bottom-color: #f4f5f4
   color: var(--hy-m01-text)
@@ -546,18 +560,16 @@
 .grid
   display: grid
   grid-template-columns: repeat(4,1fr)
-  gap: 1px
   margin-top: 17px
   overflow: hidden
-  border: 1px solid var(--hy-m01-line)
-  border-radius: 8px
-  background: var(--hy-m01-line)
 .grid section
   display: grid
   gap: 6px
   min-height: 84px
   padding: 13px
-  background: var(--hy-m01-bg)
+  border-left: 1px solid var(--hy-m01-line)
+.grid section:first-child
+  border-left: 0
 .grid span,.alert span,.intelligence span
   color: var(--hy-m01-muted)
   font-size: 9px
@@ -656,16 +668,23 @@
   display: none
 
 .fixtureRoot .overview
+  padding-top: 22px
+  padding-left: 18px
   padding-right: 18px
 
 .fixtureRoot .grid
-  min-height: 72px
+  min-height: 53px
 
 .fixtureRoot .grid section
-  min-height: 72px
+  min-height: 53px
+  padding: 7px 16px
 
 .fixtureRoot .fixtureCarrier
   margin-top: 21px
+
+.fixtureRoot .title
+  padding-bottom: 17px
+  border-bottom: 1px solid var(--hy-m01-line)
 
 .fixtureRoot .title>div small
   display: none
@@ -674,14 +693,17 @@
   margin-top: 0
 
 .fixtureRoot .grid
-  margin-top: 11px
+  margin-top: 14px
+
+.fixtureRoot .cargoDetails
+  margin-top: 32px
 
 .fixtureRoot .carrier
   display: none
 
 .fixtureRoot .facts
   min-height: 58px
-  margin-top: 12px
+  margin-top: 22px
   padding: 10px 12px
   border: 1px solid var(--hy-m01-line)
   border-radius: 8px
@@ -690,6 +712,26 @@
   font-size: 8px
 
 .fixtureRoot .alert
-  margin-top: 12px
+  box-sizing: border-box
+  height: 84px
   min-height: 84px
-  padding: 16px
+  margin-top: 62px
+  padding: 12px 16px
+  border-color: #c15a18
+  background: #8a2e0c
+.fixtureRoot .alertCopy
+  gap: 2px
+.fixtureRoot .alertCopy strong
+  font-size: 13px
+.fixtureRoot .alertCopy span
+  color: #e8c4a8
+  font-size: 8px
+.fixtureRoot .alertContext
+  margin-top: 0
+.fixtureRoot .alert>a
+  align-self: end
+  min-width: 134px
+  padding: 5px 14px
+  border-color: #d47b24
+  border-radius: 99px
+  text-align: center

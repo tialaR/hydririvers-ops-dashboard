@@ -32,7 +32,7 @@ export function OwnedCargoDetailSummary({ cargo, visualFixtureEnabled }: OwnedCa
       <section className={styles.fixtureCarrier}>
         <span>NA</span>
         <div><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.carrier : t(`map.corridors.${corridorTranslationKey[cargo.corridorId]}`)}</strong><small>{visualFixtureEnabled ? `${page61219254SelectedVisualFacts.vessel} · ${page61219254SelectedVisualFacts.carrierReference}` : `${cargo.origin} → ${cargo.destination}`}</small></div>
-        <i>{t('myCargoes.desktop.corridor')}</i>
+        <i>{visualFixtureEnabled ? page61219254SelectedVisualFacts.carrierRole : t('myCargoes.desktop.corridor')}</i>
         <Link href={intlAppPaths.cargos.myCargoDetail(cargo.id)}>{t('myCargoes.desktop.openCockpit')}</Link>
       </section>
 
@@ -52,7 +52,7 @@ export function OwnedCargoDetailSummary({ cargo, visualFixtureEnabled }: OwnedCa
         <div><small>{t('myCargoes.desktop.nextMilestone')}</small><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.nextMilestone : t('myCargoes.desktop.checkpoint')}</strong><span>{visualFixtureEnabled ? page61219254SelectedVisualFacts.nextMilestoneTime : t('myCargoes.desktop.checkpointHint')}</span></div>
       </section>
 
-      <OwnedCargoAttentionPanel cargo={cargo}/>
+      <OwnedCargoAttentionPanel cargo={cargo} visualFixtureEnabled={visualFixtureEnabled}/>
     </article>
 
     {!visualFixtureEnabled ? <aside className={styles.intelligence}>

@@ -23,5 +23,15 @@ export const page61219254SelectedVisualFacts = {
   signal: 'Estável',
   river: 'Normal',
   nextMilestone: 'Santarém',
-  nextMilestoneTime: '18:40'
+  nextMilestoneTime: '18:40',
+  tabs: ['Overview', 'Rota', 'Carga', 'Documentos', 'Atividade'],
+  carrierRole: 'Transportador',
+  cardEta: '08:45',
+  cardEtaDay: 'Hoje',
+  attentionEyebrow: 'Atenção operacional',
+  attentionTitle: 'Manifesto de carga precisa ser validado antes da chegada.',
+  attentionBody: 'Sem a validação, a operação pode perder a janela de atracação prevista para 18:40.',
+  attentionDocument: 'Documento pendente',
+  attentionDeadline: 'Ação até 16:30',
+  attentionAction: 'Abrir documentos'
 } as const;
