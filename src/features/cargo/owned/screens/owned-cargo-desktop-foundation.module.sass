@@ -467,6 +467,7 @@
   color: #f3f5f4
 .tabs
   display: flex
+  gap: 20px
   height: 43px
   padding: 0 18px
   border-bottom: 1px solid var(--hy-m01-line)
@@ -475,7 +476,7 @@
   display: grid
   place-items: center
   min-width: 0
-  padding: 0 30px 0 0
+  padding: 0 15px
   border: 0
   border-bottom: 2px solid transparent
   background: transparent
@@ -483,9 +484,7 @@
   font-size: 9px
   font-weight: 400
   text-decoration: none
-.tabs button:last-child
-  padding-right: 0
-.tabs button
+.tabs button[aria-current='page']
   border-bottom-color: #f4f5f4
   color: var(--hy-m01-text)
 .body
