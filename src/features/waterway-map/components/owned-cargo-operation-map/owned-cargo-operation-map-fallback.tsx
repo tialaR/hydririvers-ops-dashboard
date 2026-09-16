@@ -20,17 +20,19 @@ export function ShipperOperationMapFallback({
 }: ShipperOperationMapFallbackProps) {
   const projection = projectShipperMapToSvg(routeData);
   const isDesktopFoundation = presentation !== 'default';
+  const isCanonicalPage61Fixture = presentation === 'page-61-219-254';
   const isPage61Fixture = presentation === 'desktop-foundation' || presentation === 'page-61-219-254';
   const routePath = isPage61Fixture
     ? 'M138 42 C151 68 163 92 178 111 C191 128 207 141 222 149'
     : projection.routePath;
 
   return (
-    <div className={`${styles.mapFallback} ${isDesktopFoundation ? styles.mapFallbackDesktop : ''}`}>
+    <div className={`${styles.mapFallback} ${isDesktopFoundation ? styles.mapFallbackDesktop : ''} ${isCanonicalPage61Fixture ? styles.mapFallbackPage61 : ''}`}>
       {hintLabel ? <p className={styles.mapFallbackHint}>{hintLabel}</p> : null}
       <svg
         className={styles.mapFallbackSvg}
         viewBox={projection.viewBox}
+        preserveAspectRatio={isCanonicalPage61Fixture ? 'none' : undefined}
         role="img"
         aria-label={ariaLabel}
       >
