@@ -37,9 +37,11 @@
     "hydri:gate": "node scripts/hydri-autopilot-gate.mjs",
     "agentic:task": "node scripts/governance/create-task-contract.mjs",
     "agentic:scope": "node scripts/governance/task-contract-lock.mjs",
-    "agentic:preflight": "npm run hydri:agent:check && npm run agentic:scope && npm run hydri:verify",
+    "agentic:preflight": "npm run hydri:agent:check && npm run agentic:scope && npm run agentic:static",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build"
+    "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build",
+    "agentic:architecture": "node scripts/governance/architecture-ratchet.mjs",
+    "agentic:static": "node scripts/governance/staticlock.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",

@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "snapshotSha": "4fcde6092c94952d6a978aedc4d0cb3033e404b3",
+  "rationale": "Thresholds are the measured p95 byte sizes of non-test, non-generated TSX, TS and Sass/SCSS files at the Page 61 SHARKLOCK #42 code state. This is a regression ratchet, not a style target.",
+  "metrics": {
+    "tsx": {
+      "count": 334,
+      "median": 1613,
+      "p75": 3406,
+      "p90": 6819,
+      "p95": 13423,
+      "p99": 36299,
+      "max": 112273
+    },
+    "ts": {
+      "count": 405,
+      "median": 599,
+      "p75": 2290,
+      "p90": 5890,
+      "p95": 7885,
+      "p99": 23262,
+      "max": 59218
+    },
+    "style": {
+      "count": 182,
+      "median": 2870,
+      "p75": 7596,
+      "p90": 13289,
+      "p95": 17341,
+      "p99": 125182,
+      "max": 286614
+    }
+  },
+  "thresholds": {
+    "tsx": 13423,
+    "ts": 7885,
+    "style": 17341
+  },
+  "includeExtensions": [
+    ".tsx",
+    ".ts",
+    ".sass",
+    ".scss"
+  ],
+  "excludePrefixes": [
+    "tests/",
+    "node_modules/",
+    ".next/",
+    "dist/",
+    "build/",
+    "storybook-static/"
+  ],
+  "excludeContains": [
+    "/generated/"
+  ],
+  "policy": {
+    "newFileMayNotExceedP95": true,
+    "existingFileAboveP95MayNotGrow": true,
+    "existingFileAtOrBelowP95MayNotCrossP95": true
+  }
+}

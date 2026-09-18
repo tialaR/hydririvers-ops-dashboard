@@ -12,6 +12,7 @@ const REQUIRED_DOCS = [
   'docs/agents/AGENTS-WORKFLOW.md',
   'docs/agents/AGENTS-ZERO-REDEMOINHO.md',
   'docs/agents/HYDRI-AUTOPILOT-GATE.md',
+  'docs/agents/AGENTIC-INTEGRITY-FOUNDATION.md',
 ];
 
 const REQUIRED_RULES = [
@@ -22,12 +23,19 @@ const REQUIRED_RULES = [
   '.cursor/rules/hydri-component-and-flow-standards.mdc',
   '.cursor/rules/hydri-scope-gate.mdc',
   '.cursor/rules/hydri-mobile-ui.mdc',
+  '.cursor/rules/agentic-execution-contract.mdc',
 ];
 
 const REQUIRED_SCRIPTS = [
   'scripts/hydri-autopilot-gate.mjs',
   'scripts/hydri-verify.mjs',
   'scripts/hydri-audit.mjs',
+  'scripts/governance/architecture-ratchet.mjs',
+  'scripts/governance/task-contract-lock.mjs',
+  'config/agentic/architecture-ratchet.json',
+  '.cursor/hooks.json',
+  '.cursor/permissions.json',
+  '.cursor/sandbox.json',
 ];
 
 const missing = [];

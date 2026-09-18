@@ -1,0 +1,34 @@
+---
+description: Human-issued bite contract and no-self-certification law for AI executors
+globs:
+  - "**/*"
+alwaysApply: true
+---
+
+# Agentic execution contract
+
+The agent is an executor, never the certifier.
+
+Before implementation:
+1. Read `docs/agents/AGENTIC-INTEGRITY-FOUNDATION.md`.
+2. Confirm `.agentic/current-task.json` exists.
+3. If mode is `observe`, do not edit files.
+4. If mode is `implement`, edit only `allowedPaths`.
+5. Never expand scope silently. Stop and report the blocker.
+
+Hard prohibitions unless the task contract explicitly authorizes them:
+- canonical Figma freeze or visual baseline mutation;
+- Git history mutation, commit, push, merge, rebase or tag;
+- dependency install/update/removal;
+- deploy, release or publish;
+- changes to agent security/governance configuration.
+
+Proof law:
+- agent prose is not evidence;
+- build green is not product green;
+- tests green are not visual green;
+- browser inspection is not SHARKLOCK;
+- partial improvement is not PASS;
+- untouched owners must remain unchanged when the task contract requires it.
+
+Run the gates required by the task contract. Never claim PASS for a gate that did not actually run.
