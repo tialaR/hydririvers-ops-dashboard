@@ -60,3 +60,7 @@ hydririvers-vessel-hero-kit.zip
 # Local QA artifacts
 .playwright-cli/
 output/playwright/
+
+# Human-issued local agent task contract and local guard evidence
+.agentic/current-task.json
+.agentic/audit/

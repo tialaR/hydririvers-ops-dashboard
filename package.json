@@ -35,6 +35,9 @@
     "hydri:audit": "node scripts/hydri-audit.mjs",
     "hydri:agent:check": "node scripts/hydri-agent-check.mjs",
     "hydri:gate": "node scripts/hydri-autopilot-gate.mjs",
+    "agentic:task": "node scripts/governance/create-task-contract.mjs",
+    "agentic:scope": "node scripts/governance/task-contract-lock.mjs",
+    "agentic:preflight": "npm run hydri:agent:check && npm run agentic:scope && npm run hydri:verify",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build"
   },

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "taskId": "EXAMPLE-001",
+  "mode": "implement",
+  "owner": "example-owner",
+  "allowedPaths": [
+    "src/features/example/",
+    "tests/unit/example/"
+  ],
+  "forbiddenPaths": [
+    "docs/governance/figma-freeze/",
+    "tests/visual-baselines/"
+  ],
+  "allowProtectedWrites": false,
+  "allowBaselineMutation": false,
+  "allowDependencyChanges": false,
+  "allowGitMutation": false,
+  "allowDeploy": false,
+  "requiredGates": [
+    "STATICLOCK",
+    "FLOWLOCK"
+  ],
+  "untouchedOwners": [],
+  "notes": "Replace this example with a local .agentic/current-task.json created for one bite."
+}

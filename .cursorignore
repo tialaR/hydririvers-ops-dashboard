@@ -1,0 +1,25 @@
+# Additional Cursor context exclusions.
+# .gitignore and Cursor defaults already exclude dependencies/build output.
+
+# Secrets and credentials
+**/.env
+**/.env.*
+**/*.pem
+**/*.key
+**/credentials.json
+**/secrets.json
+
+# Generated evidence and local QA noise
+reports/
+coverage/
+test-results/
+playwright-report/
+output/
+.phase-visual-check/
+.audit-screenshots/
+.playwright-cli/
+.playwright-qa/
+
+# Local archives and patches
+*.zip
+*.patch

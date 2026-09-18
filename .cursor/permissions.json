@@ -1,0 +1,34 @@
+{
+  "terminalAllowlist": [
+    "git status",
+    "git diff",
+    "git log",
+    "git show",
+    "git branch --show-current",
+    "git rev-parse",
+    "git ls-files",
+    "git grep",
+    "npm run lint",
+    "npm run typecheck",
+    "npm run check:i18n",
+    "npm run hydri:verify",
+    "npm run hydri:gate",
+    "npm run agentic:scope",
+    "npm run test:unit",
+    "npm run test:integration",
+    "npm run build"
+  ],
+  "autoRun": {
+    "allow_instructions": [
+      "Read-only git inspection and repository searches may run automatically.",
+      "Existing lint, typecheck, i18n, test, build, Hydri gate, and scope-lock scripts may run automatically."
+    ],
+    "block_instructions": [
+      "Ask before any git command that mutates history, branches, commits, tags, or remotes.",
+      "Ask before installing, upgrading, removing, or changing dependencies.",
+      "Ask before deploy, release, publish, or production-affecting commands.",
+      "Do not mutate canonical Figma freeze files or visual baselines unless the current human-issued task contract explicitly authorizes baseline mutation.",
+      "Do not modify Cursor security configuration, GitHub workflows, VS Code tasks, or agentic policy files unless the current task contract explicitly authorizes protected writes."
+    ]
+  }
+}

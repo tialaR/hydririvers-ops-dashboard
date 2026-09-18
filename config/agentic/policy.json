@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "protectedPaths": [
+    ".cursor/hooks.json",
+    ".cursor/permissions.json",
+    ".cursor/sandbox.json",
+    ".cursorignore",
+    ".vscode/",
+    ".github/workflows/",
+    "config/agentic/",
+    "docs/governance/figma-freeze/",
+    "tests/visual-baselines/"
+  ],
+  "baselinePaths": [
+    "docs/governance/figma-freeze/",
+    "tests/visual-baselines/"
+  ],
+  "dangerousGitPattern": "(^|\\s|&&|;)(git\\s+(commit|push|merge|rebase|reset|clean|cherry-pick|am|tag|checkout|switch)\\b)",
+  "dependencyMutationPattern": "(^|\\s|&&|;)((npm|pnpm|yarn)\\s+(install|add|update|upgrade|remove|uninstall)\\b)",
+  "deploymentPattern": "(^|\\s|&&|;)((vercel\\b.*(--prod|deploy)|npm\\s+publish\\b|gh\\s+release\\b))"
+}

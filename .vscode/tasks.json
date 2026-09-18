@@ -1,0 +1,42 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Hydri: Agentic Preflight",
+      "type": "shell",
+      "command": "npm run agentic:preflight",
+      "problemMatcher": []
+    },
+    {
+      "label": "Hydri: ScopeLock",
+      "type": "shell",
+      "command": "npm run agentic:scope",
+      "problemMatcher": []
+    },
+    {
+      "label": "Hydri: Verify",
+      "type": "shell",
+      "command": "npm run hydri:verify",
+      "problemMatcher": []
+    },
+    {
+      "label": "Hydri: Gate",
+      "type": "shell",
+      "command": "npm run hydri:gate",
+      "problemMatcher": []
+    },
+    {
+      "label": "Hydri: Build",
+      "type": "shell",
+      "command": "npm run build",
+      "problemMatcher": []
+    },
+    {
+      "label": "Hydri: Dev",
+      "type": "shell",
+      "command": "npm run dev",
+      "isBackground": true,
+      "problemMatcher": []
+    }
+  ]
+}
