@@ -14,9 +14,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  staticlock:
+  releaselock:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 35
 
     steps:
       - name: Checkout full history
@@ -33,19 +33,14 @@ jobs:
       - name: Install locked dependencies
         run: npm ci
 
-      - name: Resolve comparison base
-        id: base
-        shell: bash
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            echo "sha=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
-          elif [ -n "${{ github.event.before }}" ] && [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-            echo "sha=${{ github.event.before }}" >> "$GITHUB_OUTPUT"
-          else
-            echo "sha=HEAD^" >> "$GITHUB_OUTPUT"
-          fi
+      - name: RELEASELOCK agentic foundation
+        run: npm run agentic:release -- --manifest=agentic-foundation
 
-      - name: STATICLOCK
-        env:
-          AGENTIC_BASE_SHA: ${{ steps.base.outputs.sha }}
-        run: npm run agentic:static
+      - name: Upload agentic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agentic-evidence-${{ github.sha }}
+          path: reports/agentic-evidence
+          if-no-files-found: warn
+          retention-days: 30

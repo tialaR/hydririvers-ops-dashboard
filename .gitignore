@@ -64,3 +64,6 @@ output/playwright/
 # Human-issued local agent task contract and local guard evidence
 .agentic/current-task.json
 .agentic/audit/
+
+# Deterministic agentic gate evidence (generated locally/CI)
+reports/agentic-evidence/

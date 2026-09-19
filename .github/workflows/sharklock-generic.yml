@@ -1,0 +1,45 @@
+name: SHARKLOCK Generic
+
+on:
+  workflow_dispatch:
+    inputs:
+      manifest:
+        description: Visual gate manifest name from config/visual-gates
+        required: true
+        default: page-61
+        type: string
+
+jobs:
+  certify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout candidate SHA
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install supported Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run generic SHARKLOCK
+        env:
+          SHARKLOCK_CANDIDATE_SHA: ${{ github.sha }}
+        run: npm run agentic:shark -- --manifest=${{ inputs.manifest }}
+
+      - name: Upload SHARKLOCK evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sharklock-${{ inputs.manifest }}-${{ github.sha }}
+          path: reports/sharklock-evidence
+          if-no-files-found: error
+          retention-days: 30

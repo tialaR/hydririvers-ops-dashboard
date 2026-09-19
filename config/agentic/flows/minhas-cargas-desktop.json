@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "id": "minhas-cargas-desktop",
+  "description": "Critical authenticated shipper flow and M01 desktop foundation behavior.",
+  "commands": [
+    {
+      "name": "M01 + shipper critical journey",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "test",
+        "tests/e2e/m01-desktop-foundation.spec.ts",
+        "tests/e2e/shipper-demonstrable-flow.spec.ts",
+        "--project=chromium"
+      ]
+    }
+  ]
+}

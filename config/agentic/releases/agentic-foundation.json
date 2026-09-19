@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "id": "agentic-foundation",
+  "requiredGates": [
+    "STATICLOCK",
+    "FLOWLOCK"
+  ],
+  "flowProfile": "agentic-integrity",
+  "notes": "Governance-only release. No product visual surface changed, so SHARKLOCK is intentionally not required."
+}

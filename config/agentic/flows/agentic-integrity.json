@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "id": "agentic-integrity",
+  "description": "Red-team behavior checks for repository guardrails without touching product UI.",
+  "commands": [
+    {
+      "name": "Agentic policy red-team",
+      "command": "npm",
+      "args": [
+        "run",
+        "agentic:redteam"
+      ]
+    }
+  ]
+}

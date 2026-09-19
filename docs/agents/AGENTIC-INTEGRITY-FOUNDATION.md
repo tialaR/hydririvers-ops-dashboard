@@ -1,6 +1,6 @@
 # HydroRivers Agentic Integrity Foundation
 
-**Status:** foundation v1 — portable core + Cursor/VS Code adapters  
+**Status:** foundation v2 — portable core + Cursor/VS Code adapters + deterministic release gates  
 **Goal:** make AI executors replaceable while contracts, deterministic gates, and evidence remain authoritative.
 
 ## 1. Prime directive
@@ -85,13 +85,13 @@ Cursor receives an adapter. VS Code receives tasks. Future agents can receive th
 
 ## 7. Gate model
 
-Planned convergence:
+Implemented convergence:
 
 - **SCOPELOCK** — changed files must match the human-issued bite.
 - **STATICLOCK** — lint, TypeScript, i18n, naming, tokens, architecture boundaries, anti-GOD ratchet.
-- **FLOWLOCK** — relevant unit/integration/E2E, runtime errors, critical journey.
-- **SHARKLOCK** — frozen visual source, deterministic browser capture, global + owner-region comparison, external-regression detection.
-- **RELEASELOCK** — can only pass when every gate required by the task contract has objective PASS evidence.
+- **FLOWLOCK** — manifest-driven behavior profiles execute the exact unit/integration/E2E checks required by the release.
+- **SHARKLOCK** — manifest-driven frozen visual source, deterministic browser capture, strict reference hash, global + owner-region metrics. Current certification threshold remains exact zero for Page 61.
+- **RELEASELOCK** — executes every gate required by a release manifest and fails closed on the first missing/failing gate.
 
 Build green is not FlowLock green. FlowLock green is not SharkLock green. Partial improvement is not global PASS.
 
@@ -136,3 +136,14 @@ When one executor reaches a usage limit, another executor may continue from the 
 Primary implementation decisions were checked against current Cursor documentation for Rules, Hooks, permissions.json, sandbox.json, Run Modes, Plan Mode, Agent Review, Browser, Agent Skills, and ignore files, plus current OpenAI Business pricing/usage documentation.
 
 Community reports are treated as operational anecdotes only. They do not define gate behavior.
+
+
+## 12. Executable profiles
+
+- `config/agentic/flows/agentic-integrity.json` — red-team checks for the fences themselves.
+- `config/agentic/flows/minhas-cargas-desktop.json` — M01 desktop + shipper critical journey.
+- `config/agentic/releases/agentic-foundation.json` — STATICLOCK + FLOWLOCK; no visual surface changed.
+- `config/agentic/releases/minhas-cargas-page61.json` — STATICLOCK + FLOWLOCK + SHARKLOCK.
+- `config/visual-gates/page-61.json` — first manifest for the generic SHARKLOCK engine.
+
+The legacy Page 61 SHARKLOCK workflow remains untouched while visual Mordida 05 is in flight. The generic engine is additive until equivalence is proven.

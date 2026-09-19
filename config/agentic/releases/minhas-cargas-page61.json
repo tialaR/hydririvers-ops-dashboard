@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "id": "minhas-cargas-page61",
+  "requiredGates": [
+    "STATICLOCK",
+    "FLOWLOCK",
+    "SHARKLOCK"
+  ],
+  "flowProfile": "minhas-cargas-desktop",
+  "visualManifest": "page-61",
+  "notes": "Product visual release. RELEASELOCK cannot pass unless strict Page 61 SHARKLOCK also passes."
+}

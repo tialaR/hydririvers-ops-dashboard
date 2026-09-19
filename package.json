@@ -41,7 +41,11 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build",
     "agentic:architecture": "node scripts/governance/architecture-ratchet.mjs",
-    "agentic:static": "node scripts/governance/staticlock.mjs"
+    "agentic:static": "node scripts/governance/staticlock.mjs",
+    "agentic:flow": "node scripts/governance/flowlock.mjs",
+    "agentic:shark": "node scripts/governance/sharklock-run.mjs",
+    "agentic:release": "node scripts/governance/releaselock.mjs",
+    "agentic:redteam": "vitest run tests/unit/governance/agentic-policy.test.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",

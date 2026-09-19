@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "id": "page-61",
+  "requirementId": "HY-VIS-61-DESKTOP-FOUNDATION",
+  "source": {
+    "type": "FIGMA_CANONICAL",
+    "fileKey": "hQA6rajAQLYVUVSR47YSws",
+    "page": "61",
+    "frame": "M01 · Desktop Foundation · Parity Review",
+    "node": "219:254"
+  },
+  "persona": "shipper",
+  "theme": "dark",
+  "viewport": {
+    "width": 1440,
+    "height": 1024
+  },
+  "baseUrl": "http://127.0.0.1:3100",
+  "healthPath": "/pt-BR/login",
+  "route": "/pt-BR/minhas-cargas?visualFixture=page61-219-254",
+  "waitUntil": "networkidle",
+  "auth": {
+    "type": "mock-user-id",
+    "endpoint": "/api/mock-mode/login-as",
+    "userId": "u-shipper-1"
+  },
+  "cookies": [
+    {
+      "name": "hydrorivers.theme",
+      "value": "dark"
+    }
+  ],
+  "assertVisibleSelectors": [
+    "[data-testid=\"m01-desktop-foundation\"]"
+  ],
+  "denySelectors": [
+    "[data-nextjs-dialog]"
+  ],
+  "referenceArtifact": "docs/governance/figma-freeze/page-61/m01-desktop-foundation-parity-review.png",
+  "referenceSha256": "066177797caac3f5349f6a2d9c3f154c82e7bd4e315413dc669e50b09d772066",
+  "runtimeArtifact": "reports/sharklock-evidence/page-61/runtime-219-254-1440x1024.png",
+  "diffArtifact": "reports/sharklock-evidence/page-61/visual-diff-219-254-v2.png",
+  "metricsArtifact": "reports/sharklock-evidence/page-61/metrics-v2.json",
+  "resultArtifact": "reports/sharklock-evidence/page-61/sharklock-result-v2.json",
+  "thresholds": {
+    "maxDivergentPixels": 0,
+    "maxRmse": 0
+  },
+  "regions": [
+    {
+      "owner": "OwnedCargoShipmentCard",
+      "x": 279,
+      "y": 267,
+      "width": 386,
+      "height": 737
+    },
+    {
+      "owner": "OwnedCargoDetailTabs",
+      "x": 672,
+      "y": 504,
+      "width": 768,
+      "height": 44
+    },
+    {
+      "owner": "OwnedCargoDetailSummary",
+      "x": 672,
+      "y": 548,
+      "width": 768,
+      "height": 382
+    },
+    {
+      "owner": "OwnedCargoAttentionPanel",
+      "x": 690,
+      "y": 930,
+      "width": 732,
+      "height": 84
+    }
+  ]
+}
