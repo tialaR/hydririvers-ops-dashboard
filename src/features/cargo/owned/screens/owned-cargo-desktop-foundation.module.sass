@@ -612,26 +612,33 @@
   font-size: 9px
 .tabs
   display: flex
-  gap: 20px
+  gap: 40px
   height: 43px
   padding: 0 18px
   border-bottom: 1px solid var(--hy-m01-line)
   background: var(--hy-m01-bg)
 .tabs button,.tabs a
+  position: relative
   display: grid
   place-items: center
   min-width: 0
-  padding: 0 15px
+  padding: 0
   border: 0
-  border-bottom: 2px solid transparent
   background: transparent
   color: var(--hy-m01-muted)
-  font-size: 9px
+  font-size: 10px
   font-weight: 400
   text-decoration: none
 .tabs button[aria-current='page']
-  border-bottom-color: #f4f5f4
   color: var(--hy-m01-text)
+.tabs button[aria-current='page']::after
+  position: absolute
+  bottom: 0
+  left: 0
+  width: 70px
+  height: 2px
+  background: #f4f5f4
+  content: ''
 .body
   display: grid
   grid-template-columns: minmax(0,1fr) 226px
