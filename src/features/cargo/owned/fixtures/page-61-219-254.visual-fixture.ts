@@ -35,3 +35,13 @@ export const page61219254SelectedVisualFacts = {
   attentionDeadline: 'Ação até 16:30',
   attentionAction: 'Abrir documentos'
 } as const;
+
+export const page61219254MapVisualFacts = {
+  operation: 'HY-247-819 · Em trânsito',
+  risk: 'Risco moderado',
+  signal: 'Sinal ao vivo',
+  signalDetail: 'GPS + AIS · atualizado há 4 min',
+  river: 'Rio Madeira',
+  riverDetail: 'faixa operacional normal',
+  fitRoute: 'Enquadrar rota'
+} as const;
