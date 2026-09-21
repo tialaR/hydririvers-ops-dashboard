@@ -37,12 +37,12 @@ export function OwnedCargoDetailSummary({ cargo, visualFixtureEnabled }: OwnedCa
       </section>
 
       <section className={styles.cargoDetails} aria-label={t('cargoDetail.opsSectionAria')}>
-        <h3>{t('myCargoes.desktop.selectedCargo')}</h3>
+        <h3>{visualFixtureEnabled ? 'Detalhes da carga' : t('myCargoes.desktop.selectedCargo')}</h3>
         <div className={styles.grid}>
           <section><small>{t('myCargoes.desktop.cargo')}</small><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.cargoType : cargo.origin}</strong></section>
           <section><small>{t('myCargoes.desktop.volume')}</small><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.totalWeight : t('myCargoes.desktop.offers', { count: cargo.offersCount })}</strong></section>
           <section><small>{t('myCargoes.desktop.vessel')}</small><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.vessel : t(`map.corridors.${corridorTranslationKey[cargo.corridorId]}`)}</strong></section>
-          <section><small>{t('myCargoes.desktop.status')}</small><strong>{visualFixtureEnabled ? page61219254SelectedVisualFacts.progress : status}</strong></section>
+          <section><small>{t('myCargoes.desktop.status')}</small><strong>{visualFixtureEnabled ? `${page61219254SelectedVisualFacts.progress} concluído` : status}</strong></section>
         </div>
       </section>
 

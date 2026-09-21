@@ -838,6 +838,7 @@
   box-sizing: border-box
   min-height: 0
   padding: 7px 19px
+  border-left-color: #343434
 
 .fixtureRoot .grid section:first-child
   padding-left: 0
@@ -845,8 +846,12 @@
 .fixtureRoot .grid strong
   overflow: hidden
   font-size: 10px
+  font-weight: 400
   text-overflow: ellipsis
   white-space: nowrap
+
+.fixtureRoot .grid small
+  text-transform: none
 
 .fixtureRoot .fixtureCarrier
   grid-template-columns: 34px minmax(0,1fr) 91px 115px
@@ -897,6 +902,9 @@
 
 .fixtureRoot .cargoDetails
   margin-top: 21px
+
+.fixtureRoot .cargoDetails h3
+  font-weight: 600
 
 .fixtureRoot .carrier
   display: none
