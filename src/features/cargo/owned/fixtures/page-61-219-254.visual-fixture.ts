@@ -9,6 +9,16 @@ export const page61219254VisualCargoes: OwnedCargo[] = [
   { id: 'visual-hy-247-822', code: 'HY-247-822', corridorId: 'tocantins-araguaia', origin: 'Belém, PA', destination: 'Vila do Conde, PA', status: 'open', riskLevel: 'medium', freshnessMinutes: 6, freshnessState: 'fresh', etaHours: 16, offersCount: 1, pendingDocsCount: 0 }
 ];
 
+export const page61219254ShipmentCardPresentationByCargoId: Readonly<Record<string, {
+  displayCode: string;
+  displayStatus: string;
+}>> = {
+  'visual-hy-247-819': { displayCode: 'HY-000-000', displayStatus: 'Atrasada' },
+  'visual-hy-247-820': { displayCode: 'HY-000-000', displayStatus: 'Em trânsito' },
+  'visual-hy-247-821': { displayCode: 'HY-000-000', displayStatus: 'Entregue' },
+  'visual-hy-247-822': { displayCode: 'HY-000-000', displayStatus: 'Em trânsito' }
+};
+
 export const page61219254SelectedVisualFacts = {
   originRegion: 'Amazonas,',
   originCity: 'Manaus',
