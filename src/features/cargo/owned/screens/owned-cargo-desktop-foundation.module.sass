@@ -849,12 +849,42 @@
   white-space: nowrap
 
 .fixtureRoot .fixtureCarrier
-  margin-top: 8px
-  padding-bottom: 15px
+  grid-template-columns: 34px minmax(0,1fr) 91px 115px
+  gap: 0
+  margin-top: 6px
+  padding-bottom: 16px
+  border-bottom-color: #2e2e2e
+
+.fixtureRoot .fixtureCarrier>span
+  border-color: #3a3a3a
+  background: #1e1e1e
+
+.fixtureRoot .fixtureCarrier>div
+  margin-left: 12px
+
+.fixtureRoot .fixtureCarrier>div strong
+  color: #f5f5f5
+  font-weight: 400
+
+.fixtureRoot .fixtureCarrier i
+  z-index: 1
+  box-sizing: border-box
+  width: 94px
+  border-color: #343434
+  background: #151515
+  font-style: normal
+  text-align: center
+
+.fixtureRoot .fixtureCarrier a
+  box-sizing: border-box
+  width: 115px
+  border-color: #3a3a3a
+  background: #171717
+  text-align: center
 
 .fixtureRoot .title
-  padding-bottom: 30px
-  border-bottom: 1px solid var(--hy-m01-line)
+  padding-bottom: 31px
+  border-bottom: 1px solid #2e2e2e
 
 .fixtureRoot .title>div small
   display: none
