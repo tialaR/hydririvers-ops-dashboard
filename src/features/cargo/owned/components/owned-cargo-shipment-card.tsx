@@ -4,10 +4,7 @@ import { Clock3, FileText, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import type { OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
-import {
-  page61219254SelectedVisualFacts,
-  page61219254ShipmentCardDisplayCodeByCargoId
-} from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
+import { page61219254SelectedVisualFacts } from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
 import { getShipperMapRouteForCargo } from '@/features/waterway-map/domain/owned-cargo-operation-route';
 import styles from '@/features/cargo/owned/screens/owned-cargo-desktop-foundation.module.sass';
 
@@ -20,9 +17,6 @@ type OwnedCargoShipmentCardProps = {
 
 export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, onSelect }: OwnedCargoShipmentCardProps) {
   const t = useTranslations('shipperMobileFlow');
-  const displayCode = visualFixtureEnabled
-    ? page61219254ShipmentCardDisplayCodeByCargoId[cargo.id] ?? cargo.code
-    : cargo.code;
 
   return <button
     type="button"
@@ -34,7 +28,7 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
     onClick={onSelect}
   >
     <div className={styles.cardTop}>
-      <small>{visualFixtureEnabled ? `#${displayCode}` : displayCode}</small>
+      <small>{visualFixtureEnabled ? `#${cargo.code}` : cargo.code}</small>
       <span data-tone={cargo.status}>{t(`cargoDetail.status.${cargo.status}`)}</span>
       {!visualFixtureEnabled ? <b>•••</b> : null}
     </div>
