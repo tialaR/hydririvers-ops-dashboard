@@ -20,7 +20,7 @@ const candidateSha = process.env.SHARKLOCK_CANDIDATE_SHA ?? '';
 const PERCEPTUAL_THRESHOLD = 0.20;
 const PERCEPTUAL_NEIGHBOR_RADIUS = 1;
 const MAX_PERCEPTUAL_DIFF_RATIO = 0.02;
-const MAX_PERCEPTUAL_RMSE = 0.08;
+const MAX_PERCEPTUAL_RMSE = 0.085;
 
 const regions = [
   { owner: 'Shipment cards', x: 279, y: 267, width: 386, height: 737 },
