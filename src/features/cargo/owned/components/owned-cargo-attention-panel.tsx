@@ -19,7 +19,7 @@ export function OwnedCargoAttentionPanel({ cargo, visualFixtureEnabled }: OwnedC
   const deadline = visualFixtureEnabled ? page61219254SelectedVisualFacts.attentionDeadline : t('myCargoes.desktop.eta', { hours: cargo.etaHours });
   const action = visualFixtureEnabled ? page61219254SelectedVisualFacts.attentionAction : t('myCargoes.desktop.review');
 
-  return <section className={styles.alert} aria-label={t('myCargoes.desktop.attentionTitle')}>
+  return <section className={styles.alert} data-testid="page61-attention-panel" aria-label={t('myCargoes.desktop.attentionTitle')}>
     <div className={styles.alertCopy}>
       <small>{eyebrow}</small>
       <strong>{title}</strong>
