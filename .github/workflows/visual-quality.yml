@@ -145,7 +145,7 @@ jobs:
               visual: process.env.VISUAL_OUTCOME,
             };
             await writeFile(target, `${JSON.stringify({
-              gate: 'SHARKLOCK-v1.0',
+              gate: 'SHARKLOCK-v2.0',
               requirementId: 'HY-VIS-61-DESKTOP-FOUNDATION',
               candidateSha: process.env.SHARKLOCK_CANDIDATE_SHA,
               chromiumStatus: outcomes.chromium === 'success' ? 'PASS' : 'FAIL',
@@ -182,6 +182,7 @@ jobs:
             let description = 'SHARKLOCK evidence unavailable';
             let pixels = '?';
             let rmse = '?';
+            let perceptualRatio = '?';
             let pass = false;
             try {
               const result = JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -190,7 +191,7 @@ jobs:
               const perceptual = metrics.perceptual || {};
               pixels = Number.isFinite(raw.divergentPixels) ? raw.divergentPixels : '?';
               rmse = Number.isFinite(raw.rmse) ? Number(raw.rmse).toFixed(6) : '?';
-              const perceptualRatio = Number.isFinite(perceptual.diffRatio)
+              perceptualRatio = Number.isFinite(perceptual.diffRatio)
                 ? `${(Number(perceptual.diffRatio) * 100).toFixed(3)}%`
                 : '?';
               pass = result.certificationStatus === 'PASS' && result.evidenceChainStatus === 'PASS';
