@@ -1104,3 +1104,129 @@
   margin-left: -2px
   border-radius: 50%
   background: #f4f4f4
+
+
+/* Page 61 residual sweep: sidebar fine alignment + canonical master content */
+.fixtureRoot .sidebar nav > a
+  transform: translateY(-8px)
+
+.fixtureRoot .sidebar .navGroup:not(:first-child)
+  transform: translateY(-14px)
+
+.fixtureRoot .sidebar .navGroup:not(:first-child) ~ a
+  transform: translateY(-22px)
+
+.fixtureRoot .masterTitle
+  position: relative
+
+.fixtureRoot .fixtureAttentionSummary
+  position: absolute
+  left: 282px
+  top: 39px
+  color: #f2a900
+  font-size: 9px
+  font-weight: 400
+  line-height: 12px
+  white-space: nowrap
+
+.fixtureRoot .fixtureFilterButton
+  position: absolute
+  left: 350px
+  top: 9px
+  display: grid
+  place-items: center
+  width: 32px
+  height: 32px
+  border: 1px solid #343434
+  border-radius: 7px
+  background: #1c1c1c
+
+.fixtureRoot .fixtureFilterButton i
+  position: relative
+  display: block
+  width: 16px
+  height: 1px
+  background: #f4f4f4
+
+.fixtureRoot .fixtureFilterButton i::after
+  position: absolute
+  top: -2px
+  width: 5px
+  height: 5px
+  border-radius: 50%
+  background: #f4f4f4
+  content: ''
+
+.fixtureRoot .fixtureFilterButton i:nth-child(1)::after
+  left: 3px
+
+.fixtureRoot .fixtureFilterButton i:nth-child(2)::after
+  right: 1px
+
+.fixtureRoot .fixtureFilterButton i:nth-child(3)::after
+  left: 5px
+
+.fixtureRoot .filters
+  position: relative
+  display: block
+  gap: 0
+
+.fixtureRoot .filters button
+  position: absolute
+  top: 0
+  height: 29px
+  padding: 0
+  border-bottom-width: 2px
+  font-size: 9px
+  white-space: nowrap
+
+.fixtureRoot .filters button:nth-child(1)
+  left: 18px
+
+.fixtureRoot .filters button:nth-child(2)
+  left: 106px
+
+.fixtureRoot .filters button:nth-child(3)
+  left: 228px
+
+.fixtureRoot .filters button:nth-child(4)
+  left: 333px
+
+.fixtureRoot .search input::placeholder
+  color: transparent
+
+.fixtureRoot .masterAlert
+  justify-content: stretch
+  gap: 0
+  transform: translate(2px, -12px)
+
+.fixtureRoot .masterAlert > b
+  width: 22px
+  color: #f2a900
+  font-size: 15px
+  font-weight: 500
+  text-align: center
+
+.fixtureRoot .masterAlert > span
+  display: grid
+  gap: 1px
+  min-width: 0
+
+.fixtureRoot .masterAlert > span strong
+  color: #f2a900
+  font-size: 9px
+  font-weight: 600
+  line-height: 12px
+
+.fixtureRoot .masterAlert > span small
+  color: #b08c67
+  font-size: 8px
+  line-height: 11px
+
+.fixtureRoot .masterAlert > em
+  margin-left: auto
+  padding-right: 4px
+  color: #f2a900
+  font-size: 18px
+  font-style: normal
+  line-height: 1
