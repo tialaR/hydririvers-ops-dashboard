@@ -25,7 +25,7 @@ test('captures canonical Page 61 / node 219:254', async ({ page }) => {
   const geometry = await page.evaluate(() => {
     const root = document.querySelector('[data-testid="m01-desktop-foundation"]');
     if (!root) return null;
-    const rect = (el) => {
+    const rect = (el: Element | null) => {
       if (!(el instanceof Element)) return null;
       const r = el.getBoundingClientRect();
       const cs = getComputedStyle(el);
@@ -54,7 +54,7 @@ test('captures canonical Page 61 / node 219:254', async ({ page }) => {
     const map = detail?.querySelector(':scope > div');
     const mapDirect = map ? [...map.children].map(rect) : [];
     const svg = map?.querySelector('svg');
-    const svgPaths = svg ? [...svg.querySelectorAll('path')].map((el) => {
+    const svgPaths = svg ? [...svg.querySelectorAll('path')].map((el: SVGPathElement) => {
       const r = el.getBoundingClientRect();
       let bbox = null;
       try {
