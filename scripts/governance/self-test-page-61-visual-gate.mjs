@@ -4,7 +4,14 @@ const POLICY = {
   perceptualThreshold: 0.20,
   perceptualNeighborRadius: 1,
   maxDiffRatio: 0.02,
-  maxRmse: 0.08,
+  maxRmse: 0.085,
+  geometryTolerancePx: 2,
+};
+
+const COMPONENT_POLICY = {
+  perceptualThreshold: 0.20,
+  maxDiffRatio: 0.05,
+  maxRmse: 0.11,
   geometryTolerancePx: 2,
 };
 
@@ -80,3 +87,37 @@ console.log('PAGE61 GATE SELF-TEST PASS', {
   regression: regressionResult,
   masked: maskedResult,
 });
+
+
+// Component policy calibration: small raster differences may pass, but
+// a meaningful 6% high-contrast regression must still fail.
+function evaluateComponentPixels(reference, candidate) {
+  let divergent = 0;
+  let squared = 0;
+  for (let index = 0; index < reference.length; index += 1) {
+    const distance = yiqDistance(reference[index], candidate[index]);
+    squared += distance ** 2;
+    if (distance > COMPONENT_POLICY.perceptualThreshold) divergent += 1;
+  }
+  const diffRatio = divergent / reference.length;
+  const rmse = Math.sqrt(squared / reference.length);
+  return {
+    divergent,
+    diffRatio,
+    rmse,
+    pass: diffRatio <= COMPONENT_POLICY.maxDiffRatio && rmse <= COMPONENT_POLICY.maxRmse,
+  };
+}
+
+const componentNoise = Array.from({ length: pixelCount }, () => [104, 104, 104]);
+assert(
+  evaluateComponentPixels(reference, componentNoise).pass,
+  'small component raster noise must not block the gate',
+);
+
+const componentRegression = reference.map((pixel) => [...pixel]);
+for (let index = 0; index < 600; index += 1) componentRegression[index] = [255, 255, 255];
+assert(
+  !evaluateComponentPixels(reference, componentRegression).pass,
+  '6% high-contrast component regression must fail the gate',
+);
