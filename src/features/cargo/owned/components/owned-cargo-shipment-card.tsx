@@ -1,6 +1,6 @@
 'use client';
 
-import { Clock3, FileText, ShieldAlert, Ship } from 'lucide-react';
+import { Clock3, FileText, ShieldAlert } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 import type { OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
@@ -37,7 +37,7 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
       <strong>{visualFixtureEnabled ? <><span><b>{page61219254SelectedVisualFacts.destinationRegion}</b><small>{page61219254SelectedVisualFacts.destinationCity}</small></span><em data-flag="pa"/></> : cargo.destination}</strong>
     </div>
     {!visualFixtureEnabled ? <div className={styles.routeLabels}><small>{t('myCargoes.desktop.origin')}</small><small>{t('myCargoes.desktop.destination')}</small></div> : null}
-    {visualFixtureEnabled ? <div className={styles.cardTransit}><span aria-hidden="true"><Ship size={26} strokeWidth={1.4}/></span></div> : null}
+    {visualFixtureEnabled ? <div className={styles.cardTransit}><span aria-hidden="true">⚓</span></div> : null}
     {visualFixtureEnabled ? <div className={styles.fixtureCardFacts}>
       <div><small>{t('myCargoes.desktop.cargo')}</small><strong>{page61219254SelectedVisualFacts.cargoType}</strong></div>
       <div><small>ETA</small><strong>{page61219254SelectedVisualFacts.cardEta} <span>{page61219254SelectedVisualFacts.cardEtaDay}</span></strong></div>
