@@ -25,7 +25,7 @@ export function OwnedCargoDetailSummary({ cargo, visualFixtureEnabled }: OwnedCa
       <header className={styles.title}>
         <div><small>{t('myCargoes.desktop.selectedCargo')}</small><h2>#{cargo.code}</h2></div>
         <div className={styles.operationState}>
-          <span>{status}</span><b>{visualFixtureEnabled ? page61219254SelectedVisualFacts.progress : t('myCargoes.desktop.updated', { minutes: cargo.freshnessMinutes })}</b><strong>{t('myCargoes.desktop.eta', { hours: cargo.etaHours })}</strong>
+          <span>{visualFixtureEnabled ? 'Em trânsito' : status}</span><b>{visualFixtureEnabled ? `${page61219254SelectedVisualFacts.progress} concluído` : t('myCargoes.desktop.updated', { minutes: cargo.freshnessMinutes })}</b><strong>{visualFixtureEnabled ? 'ETA 18:40 · Hoje' : t('myCargoes.desktop.eta', { hours: cargo.etaHours })}</strong>
         </div>
       </header>
 
