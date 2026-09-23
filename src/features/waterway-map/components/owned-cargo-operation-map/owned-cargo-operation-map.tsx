@@ -29,7 +29,7 @@ type ShipperOperationMapProps = {
   routeData: ShipperMapRouteData;
   ariaLabel: string;
   fallbackHintLabel?: string;
-  presentation?: 'default' | 'desktop-foundation' | 'page-61-219-254';
+  presentation?: 'default' | 'desktop-foundation';
 };
 
 function prefersReducedMotion(): boolean {
@@ -141,7 +141,6 @@ export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel, p
   const routeDataRef = useRef(routeData);
   const [hasMapFailed, setHasMapFailed] = useState(false);
   const routeKey = `${routeData.corridorId}:${routeData.progressRatio}`;
-  const usesCanonicalPage61Composition = presentation === 'page-61-219-254';
 
   useEffect(() => {
     routeDataRef.current = routeData;
@@ -158,7 +157,7 @@ export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel, p
 
   useEffect(() => {
     const container = containerRef.current;
-    if (!container || hasMapFailed || usesCanonicalPage61Composition) {
+    if (!container || hasMapFailed) {
       return undefined;
     }
 
@@ -203,17 +202,7 @@ export function ShipperOperationMap({ routeData, ariaLabel, fallbackHintLabel, p
     }
 
     return undefined;
-  }, [hasMapFailed, routeKey, usesCanonicalPage61Composition]);
-
-  if (usesCanonicalPage61Composition) {
-    return (
-      <ShipperOperationMapFallback
-        routeData={routeData}
-        ariaLabel={ariaLabel}
-        presentation={presentation}
-      />
-    );
-  }
+  }, [hasMapFailed, routeKey]);
 
   if (hasMapFailed) {
     return (
