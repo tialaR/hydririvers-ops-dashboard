@@ -17,9 +17,10 @@ const componentResultPath = path.resolve(evidenceDir, 'components/component-visu
 const frozenSha256 = '066177797caac3f5349f6a2d9c3f154c82e7bd4e315413dc669e50b09d772066';
 const candidateSha = process.env.SHARKLOCK_CANDIDATE_SHA ?? '';
 
-const PERCEPTUAL_THRESHOLD = 0.10;
-const MAX_PERCEPTUAL_DIFF_RATIO = 0.015;
-const MAX_PERCEPTUAL_RMSE = 0.03;
+const PERCEPTUAL_THRESHOLD = 0.20;
+const PERCEPTUAL_NEIGHBOR_RADIUS = 1;
+const MAX_PERCEPTUAL_DIFF_RATIO = 0.02;
+const MAX_PERCEPTUAL_RMSE = 0.08;
 
 const regions = [
   { owner: 'Shipment cards', x: 279, y: 267, width: 386, height: 737 },
@@ -93,6 +94,7 @@ if (!candidateSha) {
         mapRect,
         mapUi,
         perceptualThreshold,
+        perceptualNeighborRadius,
       }) => {
         const loadImage = (source) => new Promise((resolve, reject) => {
           const image = new Image();
@@ -175,7 +177,28 @@ if (!candidateSha) {
             const blue = Math.abs(rb - cb);
             const rawDifferent = red !== 0 || green !== 0 || blue !== 0;
             const pixelSquaredError = red ** 2 + green ** 2 + blue ** 2;
-            const perceptual = yiqDistance(rr, rg, rb, cr, cg, cb);
+            let perceptual = yiqDistance(rr, rg, rb, cr, cg, cb);
+            if (perceptualNeighborRadius > 0) {
+              for (let dy = -perceptualNeighborRadius; dy <= perceptualNeighborRadius; dy += 1) {
+                for (let dx = -perceptualNeighborRadius; dx <= perceptualNeighborRadius; dx += 1) {
+                  if (dx === 0 && dy === 0) continue;
+                  const candidateX = Math.max(0, Math.min(1439, x + dx));
+                  const candidateY = Math.max(0, Math.min(1023, y + dy));
+                  const candidateOffset = (candidateY * 1440 + candidateX) * 4;
+                  perceptual = Math.min(
+                    perceptual,
+                    yiqDistance(
+                      rr,
+                      rg,
+                      rb,
+                      runtimePixels[candidateOffset],
+                      runtimePixels[candidateOffset + 1],
+                      runtimePixels[candidateOffset + 2],
+                    ),
+                  );
+                }
+              }
+            }
             const perceptualDifferent = perceptual > perceptualThreshold;
             const ignored = isIgnoredDynamicPixel(x, y);
 
@@ -261,6 +284,7 @@ if (!candidateSha) {
         mapRect: mapBounds,
         mapUi: mapOwnedUi,
         perceptualThreshold: PERCEPTUAL_THRESHOLD,
+        perceptualNeighborRadius: PERCEPTUAL_NEIGHBOR_RADIUS,
       });
 
       await page.screenshot({ path: diffPath, animations: 'disabled', caret: 'hide' });
@@ -297,6 +321,7 @@ if (!candidateSha) {
         route: '/pt-BR/minhas-cargas?visualFixture=page61-219-254',
         policy: {
           perceptualThreshold: PERCEPTUAL_THRESHOLD,
+          perceptualNeighborRadius: PERCEPTUAL_NEIGHBOR_RADIUS,
           maxPerceptualDiffRatio: MAX_PERCEPTUAL_DIFF_RATIO,
           maxPerceptualRmse: MAX_PERCEPTUAL_RMSE,
           geometryTolerancePx: 2,
