@@ -179,12 +179,15 @@ jobs:
             const path = 'reports/sharklock-evidence/page-61/sharklock-result.json';
             let state = 'failure';
             let description = 'SHARKLOCK evidence unavailable';
+            let pixels = '?';
+            let rmse = '?';
+            let pass = false;
             try {
               const result = JSON.parse(fs.readFileSync(path, 'utf8'));
               const metrics = result.metrics || {};
-              const pixels = Number.isFinite(metrics.divergentPixels) ? metrics.divergentPixels : '?';
-              const rmse = Number.isFinite(metrics.rmse) ? Number(metrics.rmse).toFixed(6) : '?';
-              const pass = result.certificationStatus === 'PASS' && result.evidenceChainStatus === 'PASS';
+              pixels = Number.isFinite(metrics.divergentPixels) ? metrics.divergentPixels : '?';
+              rmse = Number.isFinite(metrics.rmse) ? Number(metrics.rmse).toFixed(6) : '?';
+              pass = result.certificationStatus === 'PASS' && result.evidenceChainStatus === 'PASS';
               state = pass ? 'success' : 'failure';
               description = `${pixels} px | RMSE ${rmse} | ${pass ? 'PASS' : 'FAIL'}`;
             } catch (error) {
