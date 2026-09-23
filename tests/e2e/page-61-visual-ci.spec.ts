@@ -6,9 +6,6 @@ const runtimeArtifact = path.resolve(
   'reports/sharklock-evidence/page-61/runtime-219-254-1440x1024.png',
 );
 
-const expectBox = async (
-  locator: ReturnType<Parameters<typeof test>[1]> extends never ? never : never,
-) => locator;
 
 function assertNear(actual: number, expected: number, tolerance = 2): void {
   expect(Math.abs(actual - expected)).toBeLessThanOrEqual(tolerance);
