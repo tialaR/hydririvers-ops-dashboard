@@ -197,6 +197,7 @@ jobs:
               state,
               context: 'SHARKLOCK / Page 61',
               description: description.slice(0, 140),
+              target_url: `https://github.com/${context.repo.owner}/${context.repo.repo}/commit/${context.sha}?sharklock_pixels=${encodeURIComponent(String(pixels))}&sharklock_rmse=${encodeURIComponent(String(rmse))}&sharklock_result=${pass ? 'PASS' : 'FAIL'}`,
             });
             await github.rest.repos.createCommitStatus({
               owner: context.repo.owner,
