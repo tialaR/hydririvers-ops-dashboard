@@ -28,8 +28,8 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
     onClick={onSelect}
   >
     <div className={styles.cardTop}>
-      <small>{visualFixtureEnabled ? '#HY-000-000' : cargo.code}</small>
-      <span data-tone={cargo.status}>{visualFixtureEnabled ? (cargo.status === 'attention' ? 'Atrasada' : cargo.status === 'inTransit' ? 'Em trânsito' : cargo.status === 'delivered' ? 'Entregue' : t(`cargoDetail.status.${cargo.status}`)) : t(`cargoDetail.status.${cargo.status}`)}</span>
+      <small>{visualFixtureEnabled ? `#${cargo.code}` : cargo.code}</small>
+      <span data-tone={cargo.status}>{t(`cargoDetail.status.${cargo.status}`)}</span>
       {!visualFixtureEnabled ? <b>•••</b> : null}
     </div>
     <div className={styles.route}>
