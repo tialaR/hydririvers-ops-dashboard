@@ -186,11 +186,16 @@ jobs:
             try {
               const result = JSON.parse(fs.readFileSync(path, 'utf8'));
               const metrics = result.metrics || {};
-              pixels = Number.isFinite(metrics.divergentPixels) ? metrics.divergentPixels : '?';
-              rmse = Number.isFinite(metrics.rmse) ? Number(metrics.rmse).toFixed(6) : '?';
+              const raw = metrics.raw || metrics;
+              const perceptual = metrics.perceptual || {};
+              pixels = Number.isFinite(raw.divergentPixels) ? raw.divergentPixels : '?';
+              rmse = Number.isFinite(raw.rmse) ? Number(raw.rmse).toFixed(6) : '?';
+              const perceptualRatio = Number.isFinite(perceptual.diffRatio)
+                ? `${(Number(perceptual.diffRatio) * 100).toFixed(3)}%`
+                : '?';
               pass = result.certificationStatus === 'PASS' && result.evidenceChainStatus === 'PASS';
               state = pass ? 'success' : 'failure';
-              description = `${pixels} px | RMSE ${rmse} | ${pass ? 'PASS' : 'FAIL'}`;
+              description = `raw ${pixels}px | perceptual ${perceptualRatio} | ${pass ? 'PASS' : 'FAIL'}`;
             } catch (error) {
               description = 'SHARKLOCK result JSON missing or unreadable';
             }
@@ -208,7 +213,7 @@ jobs:
               repo: context.repo.repo,
               sha: context.sha,
               state,
-              context: `SHARKLOCK metrics / ${pixels}px / ${rmse}`,
+              context: `SHARKLOCK metrics / raw ${pixels}px / perceptual ${perceptualRatio}`,
               description: description.slice(0, 140),
             });
 
