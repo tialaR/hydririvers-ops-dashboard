@@ -66,6 +66,9 @@ jobs:
       - name: Mock mode regression tests
         run: npm run test:mock-mode
 
+      - name: Self-test Page 61 visual gate
+        run: node scripts/governance/self-test-page-61-visual-gate.mjs
+
       - name: Build Storybook
         run: npm run build-storybook
 
