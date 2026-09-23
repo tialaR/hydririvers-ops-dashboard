@@ -38,12 +38,12 @@ export function ShipperOperationMapFallback({
       >
         <rect width={isPage61Fixture ? '768' : '320'} height={isPage61Fixture ? '448' : '200'} fill="transparent" />
         {isPage61Fixture ? <g className={styles.mapContext} aria-hidden="true">
-          <path d="M250 45 L356 0 L452 37 L492 112 L466 181 L550 230 L518 276 L423 280 L327 215 L286 151 Z" />
-          <path d="M545 39 L717 16 L789 52 L777 116 L800 133 L746 162 L667 260 L580 254 L520 158 Z" />
-          <path d="M370 301 L471 250 L573 273 L620 357 L582 430 L478 415 L404 368 Z" />
-          <path className={styles.mapRiverMinor} d="M385 142 C432 179 459 205 470 240" />
-          <path className={styles.mapRiverMinor} d="M210 205 C257 242 284 267 310 290" />
-          <path className={styles.mapRiver} d="M150 335 C234 302 286 307 351 272 C431 229 503 229 575 199 C644 171 699 171 760 145" />
+          <path d="M250 43 L356 0 L452 35 L492 107 L466 173 L550 219 L518 263 L423 267 L327 205 L286 144 Z" />
+          <path d="M542 38 L694 16 L758 51 L748 113 L768 129 L720 157 L650 252 L573 246 L520 153 Z" />
+          <path d="M370 301 L471 249 L573 273 L620 357 L582 430 L478 415 L404 368 Z" />
+          <path className={styles.mapRiverMinor} d="M385 142 C432 179 459 205 470 239" />
+          <path className={styles.mapRiverMinor} d="M209 205 C257 242 284 267 310 291" />
+          <path className={styles.mapRiver} d="M149 335 C235 302 288 307 354 272 C435 229 508 229 581 199 C650 171 706 171 768 145" />
           <path className={styles.portTick} d="M420 98 H440 M455 137 H476 M490 176 H511 M526 213 H547 M560 251 H581 M595 289 H615 M629 327 H650" />
           <g className={styles.mapPort}>
             <circle cx="420" cy="98" r="5" />
@@ -62,7 +62,7 @@ export function ShipperOperationMapFallback({
           <path className={styles.mapRiver} d="M58 146 C98 126 123 132 153 113 C185 92 212 104 239 84 C269 62 294 67 326 48" />
         </g> : null}
         <path
-          d={isPage61Fixture ? 'M330 95 C362 147 387 200 425 245 C455 279 489 307 530 330' : routePath}
+          d={isPage61Fixture ? 'M330 94 C362 147 387 200 425 245 C455 279 489 307 531 331' : routePath}
           fill="none"
           stroke="var(--hy-shipper-info)"
           strokeWidth={isPage61Fixture ? '2.2' : isDesktopFoundation ? '1.4' : '3'}
