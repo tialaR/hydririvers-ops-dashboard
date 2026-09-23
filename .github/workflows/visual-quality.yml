@@ -167,6 +167,7 @@ jobs:
           path: |
             reports/sharklock-evidence/page-61
             test-results/page-61-visual-ci
+            docs/governance/figma-freeze/page-61/m01-desktop-foundation-parity-review.png
           if-no-files-found: error
           retention-days: 30
 
