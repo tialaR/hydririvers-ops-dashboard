@@ -13,6 +13,7 @@ const runtimePath = path.resolve(evidenceDir, 'runtime-219-254-1440x1024.png');
 const diffPath = path.resolve(evidenceDir, 'visual-diff-219-254.png');
 const metricsPath = path.resolve(evidenceDir, 'metrics.json');
 const resultPath = path.resolve(evidenceDir, 'sharklock-result.json');
+const componentResultPath = path.resolve(evidenceDir, 'components/component-visual-result.json');
 const frozenSha256 = '066177797caac3f5349f6a2d9c3f154c82e7bd4e315413dc669e50b09d772066';
 const candidateSha = process.env.SHARKLOCK_CANDIDATE_SHA ?? '';
 
@@ -271,6 +272,13 @@ if (!candidateSha) {
         metrics.raw.divergentPixels === 0 && metrics.raw.rmse === 0 ? 'PASS' : 'FAIL';
       const visualStatus = perceptualPass ? 'PASS' : 'FAIL';
       const contractStatus = process.env.SHARKLOCK_CAPTURE_OUTCOME === 'success' ? 'PASS' : 'FAIL';
+      let componentReport = null;
+      if (await fileExists(componentResultPath)) {
+        componentReport = JSON.parse(await readFile(componentResultPath, 'utf8'));
+      }
+      const componentStatus = componentReport?.status === 'PASS' ? 'PASS' : 'FAIL';
+      const certificationPass =
+        contractStatus === 'PASS' && visualStatus === 'PASS' && componentStatus === 'PASS';
 
       const evidence = {
         gate: 'SHARKLOCK-v2.0',
@@ -297,6 +305,9 @@ if (!candidateSha) {
         chromiumStatus: 'PASS',
         captureStatus: 'PASS',
         contractStatus,
+        componentStatus,
+        componentVisualArtifact: componentReport ? path.relative(root, componentResultPath) : null,
+        componentVisual: componentReport,
         referenceArtifact: path.relative(root, referencePath),
         referenceSha256,
         runtimeArtifact: path.relative(root, runtimePath),
@@ -306,11 +317,12 @@ if (!candidateSha) {
         metrics,
         strictPixelPerfectStatus,
         visualStatus,
-        evidenceChainStatus: contractStatus === 'PASS' && visualStatus === 'PASS' ? 'PASS' : 'FAIL',
-        certificationStatus: contractStatus === 'PASS' && visualStatus === 'PASS' ? 'PASS' : 'FAIL',
+        evidenceChainStatus: certificationPass ? 'PASS' : 'FAIL',
+        certificationStatus: certificationPass ? 'PASS' : 'FAIL',
         blockers: [
           ...(contractStatus === 'PASS' ? [] : ['hard structural contract failed']),
           ...(visualStatus === 'PASS' ? [] : ['perceptual visual diff exceeds calibrated Page 61 threshold']),
+          ...(componentStatus === 'PASS' ? [] : ['Storybook component visual contract failed or is missing']),
         ],
       };
 
