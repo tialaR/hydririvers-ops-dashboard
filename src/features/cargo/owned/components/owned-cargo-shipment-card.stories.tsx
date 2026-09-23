@@ -39,7 +39,7 @@ const meta = {
     },
   },
   decorators: [
-    (Story) => <Page61StoryFrame width={387}><Story /></Page61StoryFrame>,
+    (Story) => <Page61StoryFrame width={385}><Story /></Page61StoryFrame>,
   ],
   parameters: {
     docs: {
