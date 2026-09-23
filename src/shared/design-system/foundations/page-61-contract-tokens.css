@@ -1,0 +1,56 @@
+:root,
+[data-hy-theme='dark'] {
+  --hy-page61-color-canvas: #0a0a0a;
+  --hy-page61-color-panel: #18181a;
+  --hy-page61-color-list: #1e1e1e;
+  --hy-page61-color-sidebar: #262626;
+  --hy-page61-color-surface: #151515;
+  --hy-page61-color-text: #f3f5f4;
+  --hy-page61-color-muted: #9da4a9;
+  --hy-page61-color-line: rgba(255, 255, 255, 0.09);
+  --hy-page61-color-attention: #f2bf35;
+  --hy-page61-color-danger: #ff3b4d;
+  --hy-page61-color-success: #46c77b;
+
+  --hy-page61-space-1: 0.25rem;
+  --hy-page61-space-2: 0.5rem;
+  --hy-page61-space-3: 0.75rem;
+  --hy-page61-space-4: 1rem;
+  --hy-page61-space-5: 1.25rem;
+  --hy-page61-space-6: 1.5rem;
+  --hy-page61-space-8: 2rem;
+
+  --hy-page61-radius-control: 0.4375rem;
+  --hy-page61-radius-panel: 0.5rem;
+  --hy-page61-radius-card: 1.25rem;
+  --hy-page61-radius-pill: 999px;
+
+  --hy-page61-font-2xs: 0.5rem;
+  --hy-page61-font-xs: 0.5625rem;
+  --hy-page61-font-sm: 0.625rem;
+  --hy-page61-font-md: 0.6875rem;
+  --hy-page61-font-body: 0.8125rem;
+  --hy-page61-font-label: 0.875rem;
+  --hy-page61-font-card-title: 1rem;
+  --hy-page61-font-heading: 1.1875rem;
+
+  --hy-page61-shell-sidebar: 17rem;
+  --hy-page61-shell-header: 3.5rem;
+  --hy-page61-master-width: 25rem;
+  --hy-page61-map-height: 28rem;
+  --hy-page61-card-width: 24.125rem;
+}
+
+[data-hy-theme='light'] {
+  --hy-page61-color-canvas: var(--hy-color-canvas);
+  --hy-page61-color-panel: var(--hy-color-surface);
+  --hy-page61-color-list: var(--hy-color-surface-raised);
+  --hy-page61-color-sidebar: var(--hy-color-surface);
+  --hy-page61-color-surface: var(--hy-color-surface-raised);
+  --hy-page61-color-text: var(--hy-color-text-primary);
+  --hy-page61-color-muted: var(--hy-color-text-secondary);
+  --hy-page61-color-line: var(--hy-color-border-subtle);
+  --hy-page61-color-attention: var(--hy-color-warning);
+  --hy-page61-color-danger: var(--hy-color-critical);
+  --hy-page61-color-success: var(--hy-color-success);
+}
