@@ -1,10 +1,10 @@
 .root
-  --hy-m01-bg: #0a0a0a
-  --hy-m01-panel: #18181a
-  --hy-m01-soft: #18181a
-  --hy-m01-line: rgba(255,255,255,.09)
-  --hy-m01-text: #f3f5f4
-  --hy-m01-muted: #9da4a9
+  --hy-m01-bg: var(--hy-page61-color-canvas, #0a0a0a)
+  --hy-m01-panel: var(--hy-page61-color-panel, #18181a)
+  --hy-m01-soft: var(--hy-page61-color-panel, #18181a)
+  --hy-m01-line: var(--hy-page61-color-line, rgba(255,255,255,.09))
+  --hy-m01-text: var(--hy-page61-color-text, #f3f5f4)
+  --hy-m01-muted: var(--hy-page61-color-muted, #9da4a9)
   --hy-shipper-bg: #111315
   --hy-shipper-surface-secondary: #1d2124
   --hy-shipper-primary: #f3f5f4
@@ -28,10 +28,10 @@
   z-index: 5
   display: flex
   flex-direction: column
-  width: 272px
+  width: var(--hy-page61-shell-sidebar, 17rem)
   padding: 22px 16px 16px
   border-right: 1px solid var(--hy-m01-line)
-  background: #262626
+  background: var(--hy-page61-color-sidebar, #262626)
   color: #f7f8f8
 .brand
   display: flex
@@ -212,12 +212,12 @@
   font-size: 10px
 .header
   position: absolute
-  inset: 0 0 auto 272px
+  inset: 0 0 auto var(--hy-page61-shell-sidebar, 17rem)
   z-index: 4
   display: flex
   align-items: center
   justify-content: space-between
-  height: 56px
+  height: var(--hy-page61-shell-header, 3.5rem)
   padding: 0 22px
   border-bottom: 1px solid var(--hy-m01-line)
   background: #0a0a0a
@@ -229,8 +229,8 @@
   color: var(--hy-m01-muted)
 .master
   position: absolute
-  inset: 56px auto 0 272px
-  width: 400px
+  inset: var(--hy-page61-shell-header, 3.5rem) auto 0 var(--hy-page61-shell-sidebar, 17rem)
+  width: var(--hy-page61-master-width, 25rem)
   border-right: 1px solid var(--hy-m01-line)
   background: var(--hy-m01-panel)
 .masterTitle
@@ -428,7 +428,7 @@
   font-weight: 400
 
 .fixtureRoot .list
-  background: #1e1e1e
+  background: var(--hy-page61-color-list, #1e1e1e)
 
 .fixtureRoot .cardSelected
   border-color: var(--hy-m01-line)
@@ -438,7 +438,7 @@
   grid-template-columns: 1fr auto
   transform: translateY(-14px)
 .fixtureRoot .card
-  border-radius: 20px
+  border-radius: var(--hy-page61-radius-card, 1.25rem)
   padding-inline: 21px
 .fixtureRoot .cardTop small
   grid-column: 1
@@ -522,12 +522,12 @@
   font-weight: 400
 .detail
   position: absolute
-  inset: 56px 0 0 672px
+  inset: var(--hy-page61-shell-header, 3.5rem) 0 0 calc(var(--hy-page61-shell-sidebar, 17rem) + var(--hy-page61-master-width, 25rem))
   overflow-y: auto
   background: var(--hy-m01-bg)
 .map
   position: relative
-  height: 448px
+  height: var(--hy-page61-map-height, 28rem)
   overflow: hidden
   border-bottom: 1px solid var(--hy-m01-line)
 .map>div:first-child
