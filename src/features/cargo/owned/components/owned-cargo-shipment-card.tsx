@@ -23,6 +23,7 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
     data-cargo-id={cargo.id}
     data-cargo-code={cargo.code}
     data-status={cargo.status}
+    data-testid="page61-shipment-card"
     aria-pressed={selected}
     className={`${styles.card} ${selected ? styles.cardSelected : ''}`}
     onClick={onSelect}
