@@ -65,6 +65,37 @@ jobs:
           set -o pipefail
           npx playwright install --with-deps chromium 2>&1 | tee reports/sharklock-evidence/page-61/logs/chromium-install.log
 
+      - name: Build Storybook component contract
+        id: storybook
+        if: steps.chromium.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          npm run build-storybook 2>&1 | tee reports/sharklock-evidence/page-61/logs/storybook-build.log
+
+      - name: Certify Page 61 Storybook components
+        id: components
+        if: steps.storybook.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -m http.server 6106 --directory storybook-static > reports/sharklock-evidence/page-61/logs/storybook-server.log 2>&1 &
+          storybook_pid=$!
+          trap 'kill "$storybook_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:6106/iframe.html >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              cat reports/sharklock-evidence/page-61/logs/storybook-server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-page-61-storybook-components.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/storybook-components.log
+
       - name: Build candidate runtime
         id: build
         if: steps.chromium.outcome == 'success'
@@ -130,6 +161,7 @@ jobs:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
           VISUAL_OUTCOME: ${{ steps.visual.outcome }}
+          COMPONENTS_OUTCOME: ${{ steps.components.outcome }}
         run: |
           node --input-type=module <<'NODE'
           import { access, writeFile } from 'node:fs/promises';
@@ -143,6 +175,7 @@ jobs:
               build: process.env.BUILD_OUTCOME,
               capture: process.env.CAPTURE_OUTCOME,
               visual: process.env.VISUAL_OUTCOME,
+              components: process.env.COMPONENTS_OUTCOME,
             };
             await writeFile(target, `${JSON.stringify({
               gate: 'SHARKLOCK-v2.0',
