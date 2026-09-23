@@ -198,6 +198,14 @@ jobs:
               context: 'SHARKLOCK / Page 61',
               description: description.slice(0, 140),
             });
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state,
+              context: `SHARKLOCK metrics / ${pixels}px / ${rmse}`,
+              description: description.slice(0, 140),
+            });
 
       - name: Enforce complete evidence chain
         if: always()
