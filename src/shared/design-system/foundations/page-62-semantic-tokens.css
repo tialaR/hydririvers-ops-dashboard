@@ -31,14 +31,14 @@
   --hy-p62-radius-card: 0.875rem;
   --hy-p62-radius-pill: 999rem;
 
-  --hy-p62-font-2xs: 0.55rem;
-  --hy-p62-font-xs: 0.625rem;
-  --hy-p62-font-sm: 0.6875rem;
-  --hy-p62-font-md: 0.75rem;
-  --hy-p62-font-body: 0.8125rem;
-  --hy-p62-font-label: 0.875rem;
-  --hy-p62-font-title: 1rem;
-  --hy-p62-font-heading: 1.25rem;
+  --hy-p62-font-2xs: 0.625rem;
+  --hy-p62-font-xs: 0.6875rem;
+  --hy-p62-font-sm: 0.75rem;
+  --hy-p62-font-md: 0.8125rem;
+  --hy-p62-font-body: 0.875rem;
+  --hy-p62-font-label: 1rem;
+  --hy-p62-font-title: 1.125rem;
+  --hy-p62-font-heading: 1.5rem;
 
   --hy-p62-master-width: 25rem;
   --hy-p62-canvas-width: 87rem;
