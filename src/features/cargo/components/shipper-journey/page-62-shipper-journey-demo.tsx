@@ -30,7 +30,7 @@ const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
   { id: 'monitoring', label: 'D13 · Monitoramento' },
 ];
 
-export function Page62ShipperJourneyDemo({ initial = 'negotiation' }: { initial?: ShipperJourneyExperience }) {
+export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: ShipperJourneyExperience }) {
   const reduceMotion = useReducedMotion();
   const [experience, setExperience] = useState<ShipperJourneyExperience>(initial);
   const snapshot = PAGE62_SHIPPER_JOURNEY_DEMO;
@@ -45,7 +45,13 @@ export function Page62ShipperJourneyDemo({ initial = 'negotiation' }: { initial?
       return <Page62OverviewSurface onOpenCockpit={() => setExperience(resolveShipperJourneyTransition('discovery', { type: 'cargoSelected' }))} />;
     }
     if (experience === 'cockpit') {
-      return <Page62CargoCockpitPreview initialMode="cockpit" />;
+      return (
+        <Page62CargoCockpitPreview
+          initialMode="cockpit"
+          onOverview={() => setExperience('discovery')}
+          onDocuments={() => setExperience('documentsRisk')}
+        />
+      );
     }
     if (experience === 'documentsRisk') {
       return (
