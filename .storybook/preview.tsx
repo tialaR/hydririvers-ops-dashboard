@@ -4,6 +4,7 @@ import React from 'react';
 
 import ptBRMessages from '../messages/pt-BR.json';
 import '../src/shared/design-system/foundations/semantic-tokens.css';
+import '../src/shared/design-system/foundations/dashboard-visual-tokens.css';
 import '../src/shared/design-system/foundations/page-61-contract-tokens.css';
 import '../src/shared/design-system/foundations/page-62-semantic-tokens.css';
 import './storybook.css';
