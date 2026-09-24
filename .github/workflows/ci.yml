@@ -63,6 +63,9 @@ jobs:
       - name: Shipment Card design contract
         run: npm run check:shipment-card-contract
 
+      - name: Page 62 cockpit contract
+        run: npm run check:page62-cockpit
+
       - name: Check i18n
         run: npm run check:i18n
 
