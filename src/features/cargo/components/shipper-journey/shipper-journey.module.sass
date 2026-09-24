@@ -823,3 +823,196 @@
     right: var(--hy-p62-space-4)
     align-items: stretch
     flex-direction: column
+
+
+.decisionVisualGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.35fr) minmax(15rem, .65fr)
+  gap: var(--hy-p62-space-3)
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.visualPanel
+  min-width: 0
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.visualPanelHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+
+.visualPanelHeader > span
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+
+.visualPanelHeader svg
+  color: var(--hy-p62-accent)
+
+.visualPanelHeader small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.visualSummary
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--hy-p62-space-2)
+
+.visualSummary > span
+  display: grid
+  align-content: center
+  gap: var(--hy-p62-space-1)
+  min-height: 6.6rem
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.visualSummary svg
+  color: var(--hy-p62-accent)
+
+.visualSummary small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  letter-spacing: .05em
+
+.visualSummary strong
+  font-size: var(--hy-p62-font-label)
+
+.visualSummary em
+  color: var(--hy-p62-success)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+
+.reviewSignalGrid
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: var(--hy-p62-space-2)
+  margin-top: var(--hy-p62-space-4)
+
+.reviewSignalGrid > span
+  display: grid
+  grid-template-columns: auto 1fr
+  gap: var(--hy-p62-space-1) var(--hy-p62-space-2)
+  align-items: center
+  min-height: 4.75rem
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.reviewSignalGrid svg
+  grid-row: 1 / 3
+  color: var(--hy-p62-accent)
+
+.reviewSignalGrid small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.reviewSignalGrid strong
+  font-size: var(--hy-p62-font-body)
+
+.feedbackBodyGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.6fr) minmax(18rem, .6fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.feedbackBodyGrid .changeGrid
+  margin-top: 0
+
+.readinessCard
+  display: grid
+  grid-template-columns: auto minmax(0,1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-success) 35%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-success) 8%, var(--hy-p62-surface))
+
+.readinessCard > div
+  display: grid
+  gap: var(--hy-p62-space-1)
+
+.readinessCard small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+
+.readinessCard strong
+  font-size: 1.35rem
+
+.readinessCard p
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.45
+
+.correctionVisualGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.35fr) minmax(22rem, .65fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.correctionChartCard
+  min-width: 0
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.correctionVisualGrid .compareGrid
+  grid-template-columns: 1fr
+  margin-top: 0
+
+.followUpChartWrap
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0
+
+.recentSignals
+  display: grid
+  grid-template-columns: repeat(3, minmax(0,1fr))
+  gap: var(--hy-p62-space-2)
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.recentSignals > span
+  display: grid
+  grid-template-columns: auto 1fr
+  gap: var(--hy-p62-space-1) var(--hy-p62-space-2)
+  align-items: center
+  min-height: 3.75rem
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.recentSignals svg
+  grid-row: 1 / 3
+  color: var(--hy-p62-success)
+
+.recentSignals small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.recentSignals strong
+  font-size: var(--hy-p62-font-sm)
+
+@media (max-width: 68rem)
+  .decisionVisualGrid,
+  .feedbackBodyGrid,
+  .correctionVisualGrid
+    grid-template-columns: 1fr
+
+  .reviewSignalGrid,
+  .recentSignals
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+@media (max-width: 42rem)
+  .visualSummary,
+  .reviewSignalGrid,
+  .recentSignals
+    grid-template-columns: 1fr
