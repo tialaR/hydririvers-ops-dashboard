@@ -1,11 +1,12 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import type { ECharts, EChartsCoreOption } from 'echarts/core';
+import type { EChartsCoreOption } from 'echarts/core';
 import * as echarts from 'echarts/core';
 import { BarChart, GaugeChart, LineChart } from 'echarts/charts';
 import {
   DatasetComponent,
+  GraphicComponent,
   GridComponent,
   LegendComponent,
   TooltipComponent,
@@ -17,6 +18,7 @@ echarts.use([
   GaugeChart,
   LineChart,
   DatasetComponent,
+  GraphicComponent,
   GridComponent,
   LegendComponent,
   TooltipComponent,
@@ -61,4 +63,4 @@ export function OperationalEChart({
   return <div ref={ref} role="img" aria-label={ariaLabel} className={className} />;
 }
 
-export type { ECharts, EChartsCoreOption };
+export type { EChartsCoreOption };
