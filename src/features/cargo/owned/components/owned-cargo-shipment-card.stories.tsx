@@ -1,37 +1,30 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { page61219254VisualCargoes } from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
+import { page61StoryViewModels } from '@/features/cargo/owned/stories/page-61-story-data';
 import { Page61StoryFrame } from '@/features/cargo/owned/stories/page-61-story-frame';
 
 import { OwnedCargoShipmentCard } from './owned-cargo-shipment-card';
 
-const [attentionCargo, inTransitCargo, deliveredCargo] = page61219254VisualCargoes;
+const [attentionCargo, inTransitCargo, deliveredCargo] = page61StoryViewModels;
 
 const meta = {
   title: 'Page 61/Shipment Card',
   component: OwnedCargoShipmentCard,
   tags: ['autodocs'],
   args: {
-    cargo: attentionCargo!,
+    viewModel: attentionCargo!,
     selected: true,
-    visualFixtureEnabled: true,
-    onSelect: () => undefined,
+        onSelect: () => undefined,
   },
   argTypes: {
-    visualFixtureEnabled: {
-      control: false,
-      table: {
-        category: 'Internal visual contract',
-        disable: true,
-      },
     },
     selected: {
       control: 'boolean',
       description: 'Selected state used by the master/detail list.',
     },
-    cargo: {
+    viewModel: {
       control: 'object',
-      description: 'Real OwnedCargo domain object consumed by the application.',
+      description: 'Canonical Page 61 view-model built from the real cargo contract plus deterministic story data.',
     },
     onSelect: {
       action: 'select',
@@ -57,14 +50,14 @@ export const SelectedAttention: Story = {};
 
 export const InTransit: Story = {
   args: {
-    cargo: inTransitCargo!,
+    viewModel: inTransitCargo!,
     selected: false,
   },
 };
 
 export const Delivered: Story = {
   args: {
-    cargo: deliveredCargo!,
+    viewModel: deliveredCargo!,
     selected: false,
   },
 };
