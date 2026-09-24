@@ -12,3 +12,5 @@ export {
 } from './materials/glass';
 export * from './components/bottom-navigation';
 export * from './components/bottom-sheet';
+
+export * from './patterns/segmented-goal-meter';
