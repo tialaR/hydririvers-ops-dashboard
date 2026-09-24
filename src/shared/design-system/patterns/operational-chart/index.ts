@@ -1,6 +1,9 @@
 export { OperationalChartCard } from './operational-chart-card';
 export { OperationalLineChart } from './operational-line-chart';
 export { OperationalBarChart } from './operational-bar-chart';
+export { OperationalGaugeChart } from './operational-gauge-chart';
+export { OperationalTelemetryChart } from './operational-telemetry-chart';
+export type { OperationalTelemetryMetric } from './operational-telemetry-chart';
 export type {
   OperationalChartCopy,
   OperationalChartPoint,
