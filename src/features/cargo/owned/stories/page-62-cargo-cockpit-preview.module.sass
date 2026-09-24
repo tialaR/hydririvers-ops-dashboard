@@ -1,10 +1,10 @@
 .root
   display: grid
-  grid-template-columns: 25rem minmax(0,1fr)
+  grid-template-columns: 25rem minmax(0, 1fr)
   width: 87rem
   min-height: 56.25rem
   overflow: hidden
-  border: 1px solid #2c3036
+  border: 0.0625rem solid #2c3036
   border-radius: 0.875rem
   background: #080a0d
   color: #f4f5f7
@@ -12,7 +12,7 @@
 
 .master
   padding: 1.125rem
-  border-right: 1px solid #2c3036
+  border-right: 0.0625rem solid #2c3036
   background: #111317
 
 .masterHeader
@@ -26,27 +26,28 @@
 .workspaceHeader small,
 .metricGrid small,
 .timeline small,
-.attention small
+.attention small,
+.routeContext small
   color: #7f8793
   font-size: 0.625rem
   font-weight: 650
-  letter-spacing: .08em
+  letter-spacing: 0.08em
 
 .masterHeader h2
-  margin: .25rem 0 0
+  margin: 0.25rem 0 0
   font-size: 1.25rem
 
 .masterHeader > span
   color: #f59e0b
-  font-size: .6875rem
+  font-size: 0.6875rem
 
 .cardList
   display: grid
-  gap: .75rem
+  gap: 0.75rem
 
 .workspace
   padding: 1.25rem 1.5rem 1.5rem
-  background: linear-gradient(180deg,#0b0d10,#090a0c)
+  background: radial-gradient(circle at 72% 4%, rgba(34,211,238,.06), transparent 24rem), linear-gradient(180deg,#0b0d10,#090a0c)
 
 .workspaceHeader
   display: flex
@@ -54,42 +55,56 @@
   justify-content: space-between
   gap: 1rem
   padding-bottom: 1rem
-  border-bottom: 1px solid #252a30
+  border-bottom: 0.0625rem solid #252a30
 
-.workspaceHeader > div
+.selectedCargo
   display: grid
-  gap: .25rem
+  gap: 0.2rem
 
-.workspaceHeader > div strong
+.selectedCargo strong
   font-size: 1rem
+
+.selectedCargo span
+  color: #8b939e
+  font-size: 0.6875rem
 
 .workspaceHeader nav
   display: flex
   gap: 1.5rem
   color: #868e99
-  font-size: .75rem
+  font-size: 0.75rem
 
 .workspaceHeader nav span
-  padding-bottom: .5rem
+  padding-bottom: 0.5rem
 
 .activeTab
-  border-bottom: 2px solid #22d3ee
+  border-bottom: 0.125rem solid #22d3ee
   color: #f4f5f7
 
 .metricGrid
   display: grid
-  grid-template-columns: repeat(4,minmax(0,1fr))
-  gap: .75rem
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: 0.75rem
   margin-top: 1rem
 
 .metricGrid article
   display: grid
-  gap: .35rem
-  min-height: 5.75rem
-  padding: .9rem 1rem
-  border: 1px solid #2b3036
-  border-radius: .75rem
-  background: #11151a
+  align-content: start
+  gap: 0.45rem
+  min-height: 7.25rem
+  padding: 0.95rem 1rem
+  border: 0.0625rem solid #2b3036
+  border-radius: 0.875rem
+  background: linear-gradient(145deg,#13181d,#101318)
+
+.metricHeading
+  display: flex
+  align-items: center
+  gap: 0.45rem
+  color: #89939e
+
+.metricHeading svg
+  color: #22d3ee
 
 .metricGrid strong
   font-size: 1.15rem
@@ -97,7 +112,75 @@
 
 .metricGrid span
   color: #8b939e
-  font-size: .6875rem
+  font-size: 0.6875rem
+
+.progressBody
+  display: flex
+  align-items: center
+  gap: 0.9rem
+
+.progressBody > div:last-child
+  display: grid
+  gap: 0.2rem
+
+.progressBody > div:last-child strong
+  font-size: 0.875rem
+
+.progressRing
+  display: grid
+  width: 3.75rem
+  height: 3.75rem
+  flex: 0 0 3.75rem
+  place-items: center
+  border-radius: 50%
+  background: radial-gradient(circle at center,#12161b 0 55%,transparent 56%), conic-gradient(#22d3ee 0 65%,#252b31 65% 100%)
+
+.progressRing strong
+  font-size: 0.8rem
+
+.etaMetric > strong
+  margin-top: 0.1rem
+  font-size: 1.55rem
+
+.etaDelta
+  width: fit-content
+  padding: 0.2rem 0.45rem
+  border-radius: 999rem
+  background: rgba(245,158,11,.12)
+  color: #f59e0b !important
+
+.signalLine
+  display: flex
+  align-items: center
+  gap: 0.45rem
+  margin-top: 0.35rem
+
+.signalLine i
+  width: 0.55rem
+  height: 0.55rem
+  border-radius: 50%
+  background: #10b981
+  box-shadow: 0 0 0 0.25rem rgba(16,185,129,.1)
+
+.riskScale
+  display: grid
+  grid-template-columns: repeat(4, 1fr)
+  gap: 0.25rem
+  margin-top: 0.45rem
+
+.riskScale span
+  height: 0.32rem
+  border-radius: 999rem
+  background: #293038
+
+.riskScale span:nth-child(1)
+  background: #10b981
+
+.riskScale span:nth-child(2)
+  background: #3b82f6
+
+.riskScaleActive
+  background: #f59e0b !important
 
 .contentGrid
   display: grid
@@ -105,77 +188,196 @@
   gap: 1rem
   margin-top: 1rem
 
+.routeContext,
 .timeline
   padding: 1rem
-  border: 1px solid #2b3036
-  border-radius: .75rem
+  border: 0.0625rem solid #2b3036
+  border-radius: 0.875rem
   background: #11151a
 
+.routeContext header,
 .timeline header
   display: grid
-  gap: .3rem
+  gap: 0.35rem
+
+.routeContext header > strong,
+.timeline header > strong
+  font-size: 0.82rem
+  font-weight: 580
+
+.routeTrack
+  position: relative
+  height: 0.35rem
+  margin-top: 1.5rem
+  border-radius: 999rem
+  background: #252c33
+
+.routeTrackDone
+  display: block
+  width: 65%
+  height: 100%
+  border-radius: inherit
+  background: linear-gradient(90deg,#0ea5e9,#22d3ee)
+
+.routeTrack i
+  position: absolute
+  top: 50%
+  left: 65%
+  width: 0.8rem
+  height: 0.8rem
+  border: 0.16rem solid #0f1317
+  border-radius: 50%
+  background: #22d3ee
+  box-shadow: 0 0 0 0.16rem rgba(34,211,238,.25)
+  transform: translate(-50%,-50%)
+
+.routeLabels
+  display: grid
+  grid-template-columns: 1fr auto 1fr
+  margin-top: 0.55rem
+  color: #79838e
+  font-size: 0.6rem
+
+.routeLabels strong
+  color: #c8d0d8
+  font-size: 0.6rem
+  text-align: center
+
+.routeLabels span:last-child
+  text-align: right
+
+.routeFacts
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 0.75rem
+  margin-top: 1.25rem
+
+.routeFacts > div
+  display: grid
+  gap: 0.18rem
+  padding: 0.7rem
+  border: 0.0625rem solid #252b31
+  border-radius: 0.65rem
+  background: #0d1014
+
+.routeFacts strong
+  font-size: 0.75rem
+  font-weight: 560
+
+.routeFacts span
+  color: #7f8793
+  font-size: 0.62rem
+
+.lowerGrid
+  display: grid
+  grid-template-columns: minmax(17rem,.72fr) minmax(0,1.28fr)
+  gap: 1rem
+  margin-top: 1rem
 
 .timeline ol
   display: grid
-  gap: 1rem
-  margin: 1.15rem 0 0
+  gap: 0
+  margin: 1rem 0 0
   padding: 0
   list-style: none
 
 .timeline li
+  position: relative
   display: grid
-  grid-template-columns: .75rem 1fr
-  gap: .75rem
+  grid-template-columns: 0.75rem 1fr
+  gap: 0.75rem
+  min-height: 2.8rem
   align-items: start
 
+.timeline li::after
+  position: absolute
+  top: 0.8rem
+  bottom: 0
+  left: 0.255rem
+  width: 0.0625rem
+  background: #303841
+  content: ''
+
+.timeline li:last-child::after
+  display: none
+
 .timeline li i
-  width: .55rem
-  height: .55rem
-  margin-top: .2rem
-  border: 2px solid #22d3ee
+  z-index: 1
+  width: 0.55rem
+  height: 0.55rem
+  margin-top: 0.2rem
+  border: 0.125rem solid #59636f
   border-radius: 50%
+  background: #11151a
+
+.timeline li[data-state='done'] i
+  border-color: #10b981
+
+.timeline li[data-state='current'] i
+  border-color: #22d3ee
+  box-shadow: 0 0 0 0.2rem rgba(34,211,238,.1)
 
 .timeline li div
   display: grid
-  gap: .2rem
+  gap: 0.2rem
 
 .timeline li strong
-  font-size: .75rem
+  font-size: 0.75rem
   font-weight: 560
 
 .timeline li span
   color: #7f8793
-  font-size: .6875rem
+  font-size: 0.6875rem
 
 .attention
-  display: flex
-  align-items: center
-  justify-content: space-between
-  gap: 1rem
-  margin-top: 1rem
-  padding: 1rem
-  border: 1px solid #8a4f13
-  border-radius: .75rem
-  background: #3a210c
-
-.attention > div
   display: grid
-  gap: .25rem
+  grid-template-columns: auto minmax(0,1fr) auto
+  align-items: center
+  gap: 0.85rem
+  padding: 1rem
+  border: 0.0625rem solid rgba(245,158,11,.45)
+  border-radius: 0.875rem
+  background: linear-gradient(135deg,rgba(245,158,11,.14),rgba(58,33,12,.5))
+
+.attentionIcon
+  display: grid
+  width: 2.25rem
+  height: 2.25rem
+  place-items: center
+  border-radius: 0.65rem
+  background: rgba(245,158,11,.14)
+  color: #f59e0b
+
+.attention > div:nth-child(2)
+  display: grid
+  gap: 0.25rem
 
 .attention strong
   color: #fff2df
-  font-size: .82rem
+  font-size: 0.82rem
   font-weight: 560
 
 .attention span
   color: #d8b594
-  font-size: .7rem
+  font-size: 0.7rem
 
 .attention button
   min-height: 2rem
-  padding: 0 .9rem
-  border: 1px solid #a8641c
-  border-radius: 999px
+  padding: 0 0.9rem
+  border: 0.0625rem solid #a8641c
+  border-radius: 999rem
   background: #231406
   color: #f4d7b1
-  font-size: .7rem
+  font-size: 0.7rem
+
+@media (max-width: 75rem)
+  .root
+    grid-template-columns: 22rem minmax(0,1fr)
+    width: 100%
+
+  .metricGrid
+    grid-template-columns: repeat(2,minmax(0,1fr))
+
+  .contentGrid,
+  .lowerGrid
+    grid-template-columns: 1fr
