@@ -1,0 +1,65 @@
+:root,
+[data-hy-theme='dark'] {
+  --hy-p62-canvas: var(--hy-color-canvas);
+  --hy-p62-surface: var(--hy-color-surface);
+  --hy-p62-surface-raised: var(--hy-color-surface-raised);
+  --hy-p62-border: var(--hy-color-border);
+  --hy-p62-text: var(--hy-color-text-primary);
+  --hy-p62-muted: var(--hy-color-text-secondary);
+  --hy-p62-accent: var(--hy-color-accent);
+  --hy-p62-info: var(--hy-color-info);
+  --hy-p62-success: var(--hy-color-success);
+  --hy-p62-warning: var(--hy-color-warning);
+  --hy-p62-critical: var(--hy-color-critical);
+
+  --hy-p62-status-open: #6b7280;
+  --hy-p62-status-in-transit: #3b82f6;
+  --hy-p62-status-delivered: #10b981;
+  --hy-p62-status-attention: #f59e0b;
+  --hy-p62-status-blocked: #ef4444;
+
+  --hy-p62-space-1: 0.25rem;
+  --hy-p62-space-2: 0.5rem;
+  --hy-p62-space-3: 0.75rem;
+  --hy-p62-space-4: 1rem;
+  --hy-p62-space-5: 1.25rem;
+  --hy-p62-space-6: 1.5rem;
+  --hy-p62-space-8: 2rem;
+
+  --hy-p62-radius-control: 0.4375rem;
+  --hy-p62-radius-panel: 0.75rem;
+  --hy-p62-radius-card: 0.875rem;
+  --hy-p62-radius-pill: 999rem;
+
+  --hy-p62-font-2xs: 0.55rem;
+  --hy-p62-font-xs: 0.625rem;
+  --hy-p62-font-sm: 0.6875rem;
+  --hy-p62-font-md: 0.75rem;
+  --hy-p62-font-body: 0.8125rem;
+  --hy-p62-font-label: 0.875rem;
+  --hy-p62-font-title: 1rem;
+  --hy-p62-font-heading: 1.25rem;
+
+  --hy-p62-master-width: 25rem;
+  --hy-p62-canvas-width: 87rem;
+  --hy-p62-desktop-min-height: 56.25rem;
+  --hy-p62-chart-min-height: 12rem;
+
+  --hy-p62-motion-fast: 0.12s;
+  --hy-p62-motion-standard: 0.22s;
+  --hy-p62-motion-slow: 0.32s;
+}
+
+[data-hy-theme='light'] {
+  --hy-p62-canvas: var(--hy-color-canvas);
+  --hy-p62-surface: var(--hy-color-surface);
+  --hy-p62-surface-raised: var(--hy-color-surface-raised);
+  --hy-p62-border: var(--hy-color-border);
+  --hy-p62-text: var(--hy-color-text-primary);
+  --hy-p62-muted: var(--hy-color-text-secondary);
+  --hy-p62-accent: var(--hy-color-accent);
+  --hy-p62-info: var(--hy-color-info);
+  --hy-p62-success: var(--hy-color-success);
+  --hy-p62-warning: var(--hy-color-warning);
+  --hy-p62-critical: var(--hy-color-critical);
+}
