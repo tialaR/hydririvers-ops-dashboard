@@ -41,7 +41,16 @@ const meta = {
   },
   decorators: [
     (Story) => (
-      <div style={{ width: 386, padding: 24, background: '#1e1e1e' }}>
+      <div
+        style={{
+          width: '100%',
+          maxWidth: '27.125rem',
+          boxSizing: 'border-box',
+          padding: '1.5rem',
+          marginInline: 'auto',
+          background: '#1e1e1e',
+        }}
+      >
         <Story />
       </div>
     ),
@@ -80,7 +89,7 @@ export const Blocked: Story = {
 
 export const AllOperationalVariants: Story = {
   render: () => (
-    <div style={{ display: 'grid', gap: 16, width: 386 }}>
+    <div style={{ display: 'grid', gap: '1rem', width: '100%', maxWidth: '24.125rem', marginInline: 'auto' }}>
       <ShipmentCard {...base} statusLabel="Atrasada" statusTone="delayed" selected />
       <ShipmentCard {...base} statusLabel="Em trânsito" statusTone="inTransit" />
       <ShipmentCard {...base} statusLabel="Entregue" statusTone="completed" />
