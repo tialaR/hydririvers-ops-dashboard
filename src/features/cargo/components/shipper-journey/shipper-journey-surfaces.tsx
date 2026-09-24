@@ -83,9 +83,9 @@ export function ProposalNegotiationSurface({
               <span>{money(alternative.priceBRL)}</span>
             </div>
             <div className={styles.tradeRow}>
-              <small>Demurrage</small><span>{currentDemurrage ? money(currentDemurrage) + '/dia' : 'não informado'}</span>
+              <small>Demurrage</small><span>{currentDemurrage ? money(currentDemurrage) + '/h' : 'não informado'}</span>
               <strong>{alternativeDemurrage && currentDemurrage ? money(Math.abs(alternativeDemurrage - currentDemurrage)) : 'contratual'}</strong>
-              <span>{alternativeDemurrage ? money(alternativeDemurrage) + '/dia' : 'não informado'}</span>
+              <span>{alternativeDemurrage ? money(alternativeDemurrage) + '/h' : 'não informado'}</span>
             </div>
             <div className={styles.tradeRow}>
               <small>Calado</small><span>{current.compatibility.draft}</span><strong>→</strong><span>{alternative.compatibility.draft}</span>
@@ -140,6 +140,10 @@ export function DecisionActionReviewSurface({
   onConfirm?: () => void;
   onCancel?: () => void;
 }) {
+  const etaDeltaMinutes = Math.round(
+    (new Date(current.arrivalAt).getTime() - new Date(alternative.arrivalAt).getTime()) / 60000,
+  );
+
   return (
     <section className={styles.surface} data-testid="page62-d10-review">
       <header className={styles.header}>
