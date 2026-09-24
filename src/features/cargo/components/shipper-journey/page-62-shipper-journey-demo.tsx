@@ -5,6 +5,7 @@ import { useMemo, useState } from 'react';
 
 import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-62-shipper-journey.mock';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
+import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
 import {
   ActionFeedbackSurface,
   CorrectionResubmitSurface,
@@ -38,21 +39,21 @@ export function Page62ShipperJourneyDemo({ initial = 'negotiation' }: { initial?
         <DecisionActionReviewSurface
           current={proposals[0]}
           alternative={proposals[1]}
-          onCancel={() => setExperience('negotiation')}
-          onConfirm={() => setExperience('feedback')}
+          onCancel={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewCancelled' }))}
+          onConfirm={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewConfirmed' }))}
         />
       );
     }
     if (experience === 'feedback') {
-      return <ActionFeedbackSurface onMonitor={() => setExperience('monitoring')} />;
+      return <ActionFeedbackSurface onMonitor={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'monitoringOpened' }))} />;
     }
     if (experience === 'correction' && divergentDocument) {
-      return <CorrectionResubmitSurface document={divergentDocument} onSubmit={() => setExperience('monitoring')} />;
+      return <CorrectionResubmitSurface document={divergentDocument} onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))} />;
     }
     if (experience === 'monitoring') {
-      return <FollowUpMonitoringSurface onReviewHydro={() => setExperience('cockpit')} />;
+      return <FollowUpMonitoringSurface onReviewHydro={() => setExperience(resolveShipperJourneyTransition('monitoring', { type: 'hydroConstraintRaised' }))} />;
     }
-    return <ProposalNegotiationSurface proposals={proposals} onReview={() => setExperience('review')} />;
+    return <ProposalNegotiationSurface proposals={proposals} onReview={() => setExperience(resolveShipperJourneyTransition('negotiation', { type: 'proposalSelected' }))} />;
   })();
 
   return (
