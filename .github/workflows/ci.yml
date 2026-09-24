@@ -66,6 +66,9 @@ jobs:
       - name: Page 62 cockpit contract
         run: npm run check:page62-cockpit
 
+      - name: Page 62 journey contract
+        run: npm run check:page62-journey
+
       - name: Check i18n
         run: npm run check:i18n
 
