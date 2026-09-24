@@ -5,11 +5,26 @@ import { useMemo } from 'react';
 import type { EChartsCoreOption } from './operational-echart';
 import { OperationalEChart } from './operational-echart';
 import styles from './operational-decision-charts.module.sass';
+import { buildOperationalTooltip, operationalTooltipShell } from './operational-tooltip';
 
 export function ProposalTradeoffRadar() {
   const option = useMemo<EChartsCoreOption>(() => ({
     animation: false,
-    tooltip: { trigger: 'item' },
+    tooltip: {
+      ...operationalTooltipShell,
+      trigger: 'item',
+      formatter: (raw: unknown) => {
+        const item = raw as { name?: string; value?: number[] };
+        const values = item.value ?? [];
+        const labels = ['Custo', 'ETA', 'Calado', 'Docs', 'Risco'];
+        return buildOperationalTooltip({
+          eyebrow: 'COMPARATIVO',
+          title: item.name ?? 'Proposta',
+          rows: labels.map((label, index) => ({ label, value: String(values[index] ?? '—') + '/100' })),
+          footer: 'Quanto maior, melhor adequação relativa naquele eixo.',
+        });
+      },
+    },
     legend: {
       bottom: 0,
       textStyle: { color: '#8b949f', fontSize: 10 },
@@ -40,16 +55,16 @@ export function ProposalTradeoffRadar() {
         {
           value: [92, 62, 54, 68, 58],
           name: 'Navega Amazônia',
-          lineStyle: { color: '#6b7280', width: 1.5 },
-          itemStyle: { color: '#9ca3af' },
-          areaStyle: { color: 'rgba(156,163,175,.08)' },
+          lineStyle: { color: '#71717a', width: 1.5 },
+          itemStyle: { color: '#a1a1aa' },
+          areaStyle: { color: 'rgba(161,161,170,.08)' },
         },
         {
           value: [78, 88, 92, 96, 84],
           name: 'Rio Norte',
-          lineStyle: { color: '#10b981', width: 2 },
+          lineStyle: { color: '#d4d4d8', width: 2 },
           itemStyle: { color: '#10b981' },
-          areaStyle: { color: 'rgba(16,185,129,.12)' },
+          areaStyle: { color: 'rgba(212,212,216,.10)' },
         },
       ],
     }],
@@ -75,9 +90,18 @@ export function DocumentWeightComparisonChart({
     animation: false,
     grid: { left: 72, right: 36, top: 12, bottom: 18 },
     tooltip: {
+      ...operationalTooltipShell,
       trigger: 'axis',
-      axisPointer: { type: 'line', lineStyle: { color: '#475569', type: 'dashed' } },
-      valueFormatter: (value: unknown) => String(value) + ' t',
+      axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ axisValue?: string; value?: number }> : [];
+        const row = items[0];
+        return buildOperationalTooltip({
+          eyebrow: 'EVIDÊNCIA',
+          title: row?.axisValue ?? 'Peso',
+          rows: [{ label: 'Valor', value: String(row?.value ?? '—') + ' t', tone: row?.axisValue === 'Enviado' ? 'critical' : 'success' }],
+        });
+      },
     },
     xAxis: {
       type: 'value',
@@ -125,9 +149,17 @@ export function FollowUpHealthChart() {
     animation: false,
     grid: { left: 38, right: 18, top: 30, bottom: 26 },
     tooltip: {
+      ...operationalTooltipShell,
       trigger: 'axis',
-      axisPointer: { type: 'line', lineStyle: { color: '#475569', type: 'dashed' } },
-      valueFormatter: (value: unknown) => String(value) + '%',
+      axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
+        return buildOperationalTooltip({
+          eyebrow: 'SAÚDE PÓS-AÇÃO',
+          title: items[0]?.axisValue ?? 'Agora',
+          rows: items.map((item) => ({ label: item.seriesName ?? 'Métrica', value: String(item.value ?? '—') + '%' })),
+        });
+      },
     },
     legend: {
       top: 0,
@@ -195,9 +227,22 @@ export function HydroLevelTrendChart() {
     animation: false,
     grid: { left: 42, right: 16, top: 18, bottom: 28 },
     tooltip: {
+      ...operationalTooltipShell,
       trigger: 'axis',
-      axisPointer: { type: 'line', lineStyle: { color: '#475569', type: 'dashed' } },
-      valueFormatter: (value: unknown) => String(value) + ' m',
+      axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
+        return buildOperationalTooltip({
+          eyebrow: 'CONTEXTO HIDROVIÁRIO',
+          title: items[0]?.axisValue ?? 'Período',
+          rows: items.map((item) => ({
+            label: item.seriesName ?? 'Nível',
+            value: String(item.value ?? '—') + ' m',
+            tone: item.seriesName?.includes('atenção') ? 'warning' : 'info',
+          })),
+          footer: 'DEMO: faixa de atenção deve vir de fonte oficial/adapter em produção.',
+        });
+      },
     },
     xAxis: {
       type: 'category',
