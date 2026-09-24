@@ -32,12 +32,12 @@ export function OperationalGaugeChart({
           show: true,
           roundCap: true,
           width: 8,
-          itemStyle: { color: '#22d3ee' },
+          itemStyle: { color: '#d4d4d8' },
         },
         axisLine: {
           lineStyle: {
             width: 8,
-            color: [[1, '#273038']],
+            color: [[1, '#2d2d31']],
           },
         },
         axisTick: { show: false },
@@ -47,14 +47,14 @@ export function OperationalGaugeChart({
         title: {
           show: true,
           offsetCenter: [0, '34%'],
-          color: '#7f8994',
+          color: '#a1a1aa',
           fontSize: 9,
           fontWeight: 500,
         },
         detail: {
           valueAnimation: false,
           offsetCenter: [0, '-6%'],
-          color: '#f4f5f7',
+          color: '#f4f4f5',
           fontSize: 18,
           fontWeight: 650,
           formatter: '{value}%',
