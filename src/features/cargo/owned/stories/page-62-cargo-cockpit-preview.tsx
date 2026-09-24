@@ -27,6 +27,8 @@ type WorkspaceMode = 'cockpit' | 'timeline';
 
 type Page62CargoCockpitPreviewProps = {
   initialMode?: WorkspaceMode;
+  onOverview?: () => void;
+  onDocuments?: () => void;
 };
 
 const telemetryLabels = ['08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'];
@@ -80,6 +82,8 @@ const tabs: Array<{ id: WorkspaceMode | 'overview' | 'documents' | 'activity'; l
 
 export function Page62CargoCockpitPreview({
   initialMode = 'cockpit',
+  onOverview,
+  onDocuments,
 }: Page62CargoCockpitPreviewProps) {
   const [mode, setMode] = useState<WorkspaceMode>(initialMode);
 
@@ -127,7 +131,11 @@ export function Page62CargoCockpitPreview({
 
             <nav aria-label="Navegação da carga">
               {tabs.map((tab) => {
-                const interactive = tab.id === 'cockpit' || tab.id === 'timeline';
+                const interactive =
+                  tab.id === 'cockpit' ||
+                  tab.id === 'timeline' ||
+                  (tab.id === 'overview' && Boolean(onOverview)) ||
+                  (tab.id === 'documents' && Boolean(onDocuments));
                 const active = tab.id === mode;
 
                 return (
@@ -137,6 +145,14 @@ export function Page62CargoCockpitPreview({
                     className={active ? styles.activeTab : ''}
                     disabled={!interactive}
                     onClick={() => {
+                      if (tab.id === 'overview') {
+                        onOverview?.();
+                        return;
+                      }
+                      if (tab.id === 'documents') {
+                        onDocuments?.();
+                        return;
+                      }
                       if (tab.id === 'cockpit' || tab.id === 'timeline') setMode(tab.id);
                     }}
                   >
