@@ -3,7 +3,7 @@
 import { Bell, CirclePlus, FileText, LayoutDashboard, Route, Search, Settings } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from '@/core/i18n/navigation';
 import {
@@ -98,21 +98,18 @@ export function OwnedCargoDesktopFoundation({ cargoes }: Props) {
     updated: (minutes) => t('myCargoes.desktop.updated', { minutes }),
   };
 
-  const viewModels = useMemo(
-    () => renderedCargoes.map((cargo) =>
-      buildOwnedCargoDesktopViewModel(
-        cargo,
-        copy,
-        usesDeterministicFixtureData ? getPage61219254DesktopFacts(cargo) : undefined,
-      )),
-    [renderedCargoes, usesDeterministicFixtureData, copy],
-  );
+  const viewModels = renderedCargoes.map((cargo) =>
+    buildOwnedCargoDesktopViewModel(
+      cargo,
+      copy,
+      usesDeterministicFixtureData ? getPage61219254DesktopFacts(cargo) : undefined,
+    ));
 
-  const visible = useMemo(() => viewModels.filter(({ cargo }) => {
+  const visible = viewModels.filter(({ cargo }) => {
     const statusMatches = filter === 'all' || cargo.status === filter;
     return statusMatches &&
       `${cargo.code} ${cargo.origin} ${cargo.destination}`.toLowerCase().includes(query.toLowerCase());
-  }), [viewModels, filter, query]);
+  });
 
   const selected =
     viewModels.find(({ cargo }) => cargo.id === selectedId) ??
