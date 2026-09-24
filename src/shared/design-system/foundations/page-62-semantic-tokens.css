@@ -4,6 +4,7 @@
   --hy-p62-surface: var(--hy-dash-surface);
   --hy-p62-surface-raised: var(--hy-dash-surface-raised);
   --hy-p62-border: var(--hy-dash-border);
+  --hy-p62-border-strong: var(--hy-dash-border-strong);
   --hy-p62-text: var(--hy-dash-text-strong);
   --hy-p62-muted: var(--hy-dash-text-muted);
   --hy-p62-accent: var(--hy-dash-accent);
@@ -39,6 +40,12 @@
   --hy-p62-font-label: 1rem;
   --hy-p62-font-title: 1.125rem;
   --hy-p62-font-heading: 1.5rem;
+  --hy-p62-font-display: 2rem;
+
+  --hy-p62-weight-regular: var(--hy-dash-weight-regular);
+  --hy-p62-weight-medium: var(--hy-dash-weight-medium);
+  --hy-p62-weight-semibold: var(--hy-dash-weight-semibold);
+  --hy-p62-weight-bold: var(--hy-dash-weight-bold);
 
   --hy-p62-master-width: 25rem;
   --hy-p62-canvas-width: 87rem;
