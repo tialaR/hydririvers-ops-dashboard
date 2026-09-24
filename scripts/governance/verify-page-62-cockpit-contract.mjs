@@ -25,6 +25,10 @@ const preview = await read('src/features/cargo/owned/stories/page-62-cargo-cockp
 const stories = await read('src/features/cargo/owned/stories/page-62-cargo-cockpit.stories.tsx');
 const chartIndex = await read('src/shared/design-system/patterns/operational-chart/index.ts');
 const chartCore = await read('src/shared/design-system/patterns/operational-chart/operational-echart.tsx');
+const documents = await read('src/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel.tsx');
+const occurrence = await read('src/features/cargo/components/documents-occurrence/cargo-occurrence-summary.tsx');
+const d06Stories = await read('src/features/cargo/components/documents-occurrence/page-62-d06.stories.tsx');
+const d07Stories = await read('src/features/cargo/components/documents-occurrence/page-62-d07.stories.tsx');
 const packageJson = JSON.parse(await read('package.json'));
 
 for (const required of [
@@ -43,6 +47,15 @@ for (const required of ['CockpitReference', 'TimelineReference']) {
     failures.push(`Page 62 Storybook missing state: ${required}`);
   }
 }
+
+for (const required of ['CargoDocumentsEvidencePanel', 'Pré-visualizar evidência', 'Corrigir manifesto']) {
+  if (!documents.includes(required)) failures.push(`D06 Documents contract missing anchor: ${required}`);
+}
+for (const required of ['CargoOccurrenceSummary', 'Divergência no manifesto', 'Plano de mitigação']) {
+  if (!occurrence.includes(required)) failures.push(`D07 Occurrence contract missing anchor: ${required}`);
+}
+if (!d06Stories.includes('export const Reference')) failures.push('D06 Storybook reference missing');
+if (!d07Stories.includes('export const Reference')) failures.push('D07 Storybook reference missing');
 
 for (const required of ['OperationalGaugeChart', 'OperationalTelemetryChart']) {
   if (!chartIndex.includes(required)) failures.push(`operational chart DS missing export: ${required}`);
@@ -78,7 +91,7 @@ if (failures.length) {
 console.log('PAGE 62 COCKPIT CONTRACT PASS', {
   chartStack: 'Apache ECharts 6 + CanvasRenderer',
   interactionStack: 'Motion for React',
-  states: ['CockpitReference', 'TimelineReference'],
+  states: ['CockpitReference', 'TimelineReference', 'D06 Reference', 'D07 Reference'],
   shipmentCardReuse: true,
   legacyChartImports: false,
   duplicateMotionPackage: false,
