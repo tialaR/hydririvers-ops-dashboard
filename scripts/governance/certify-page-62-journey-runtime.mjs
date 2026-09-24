@@ -10,51 +10,51 @@ const evidenceDir = path.resolve(root, 'reports/sharklock-evidence/page-62/journ
 const states = [
   {
     name: 'Overview',
-    storyId: 'page-62-shipper-journey--overview',
+    storyKey: 'page-62-shipper-journey--overview',
     selector: '[data-testid="page62-overview"]',
     minCharts: 1,
     map: true,
   },
   {
     name: 'D04-D05 Cockpit',
-    storyId: 'page-62-shipper-journey--d04-d05-cockpit',
+    storyKey: 'page-62-shipper-journey--d04-d05-cockpit',
     selector: '[data-testid="page62-cargo-cockpit"]',
     minCharts: 2,
   },
   {
     name: 'D06-D07 Documents Risk',
-    storyId: 'page-62-shipper-journey--d06-d07-documents-risk',
+    storyKey: 'page-62-shipper-journey--d06-d07-documents-risk',
     selector: '[data-testid="page62-d06-documents"]',
     secondarySelector: '[data-testid="page62-d07-occurrence"]',
     minCharts: 0,
   },
   {
     name: 'D08-D09 Negotiation',
-    storyId: 'page-62-shipper-journey--d08-d09-negotiation',
+    storyKey: 'page-62-shipper-journey--d08-d09-negotiation',
     selector: '[data-testid="page62-d08-d09-negotiation"]',
     minCharts: 1,
   },
   {
     name: 'D10 Action Review',
-    storyId: 'page-62-shipper-journey--d10-action-review',
+    storyKey: 'page-62-shipper-journey--d10-action-review',
     selector: '[data-testid="page62-d10-review"]',
     minCharts: 0,
   },
   {
     name: 'D11 Action Feedback',
-    storyId: 'page-62-shipper-journey--d11-action-feedback',
+    storyKey: 'page-62-shipper-journey--d11-action-feedback',
     selector: '[data-testid="page62-d11-feedback"]',
     minCharts: 1,
   },
   {
     name: 'D12 Correction Resubmit',
-    storyId: 'page-62-shipper-journey--d12-correction-resubmit',
+    storyKey: 'page-62-shipper-journey--d12-correction-resubmit',
     selector: '[data-testid="page62-d12-correction"]',
     minCharts: 1,
   },
   {
     name: 'D13 Monitoring',
-    storyId: 'page-62-shipper-journey--d13-monitoring',
+    storyKey: 'page-62-shipper-journey--d13-monitoring',
     selector: '[data-testid="page62-d13-monitoring"]',
     minCharts: 1,
   },
@@ -64,8 +64,26 @@ await mkdir(evidenceDir, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 const results = [];
 
+const normalizeStoryName = (value) => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g, '');
+const indexResponse = await fetch(`${baseUrl}/index.json`);
+if (!indexResponse.ok) throw new Error(`Storybook index unavailable: ${indexResponse.status}`);
+const storyIndex = await indexResponse.json();
+const storyEntries = Object.values(storyIndex.entries || {}).filter(
+  (entry) => entry.type === 'story' && entry.title === 'Page 62/Shipper Journey',
+);
+
+function resolveStoryId(storyKey) {
+  const normalized = normalizeStoryName(storyKey);
+  const entry = storyEntries.find((candidate) => normalizeStoryName(candidate.name) === normalized);
+  if (!entry) {
+    throw new Error(`Storybook journey story not found: ${storyKey}. Available: ${storyEntries.map((item) => item.name).join(', ')}`);
+  }
+  return entry.id;
+}
+
 try {
   for (const state of states) {
+    const storyId = resolveStoryId(state.storyKey);
     const page = await browser.newPage({
       viewport: { width: 1440, height: 1024 },
       deviceScaleFactor: 1,
@@ -77,7 +95,7 @@ try {
     });
     page.on('pageerror', (error) => consoleErrors.push(error.message));
 
-    await page.goto(`${baseUrl}/iframe.html?id=${state.storyId}&viewMode=story`, {
+    await page.goto(`${baseUrl}/iframe.html?id=${storyId}&viewMode=story`, {
       waitUntil: 'domcontentloaded',
       timeout: 30000,
     });
@@ -138,13 +156,13 @@ try {
     );
     if (relevantConsoleErrors.length) failures.push(`runtime console errors: ${relevantConsoleErrors.length}`);
 
-    const slug = state.storyId.replace(/[^a-z0-9-]+/gi, '-');
+    const slug = storyId.replace(/[^a-z0-9-]+/gi, '-');
     const screenshotPath = path.resolve(evidenceDir, `${slug}.png`);
     await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled', caret: 'hide' });
 
     results.push({
       name: state.name,
-      storyId: state.storyId,
+      storyKey: state.storyId,
       pass: failures.length === 0,
       failures,
       metrics,
