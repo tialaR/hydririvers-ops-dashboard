@@ -36,7 +36,8 @@
     "hydri:agent:check": "node scripts/hydri-agent-check.mjs",
     "hydri:gate": "node scripts/hydri-autopilot-gate.mjs",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build"
+    "build-storybook": "node scripts/clean-storybook-static.mjs && storybook build",
+    "check:page61-architecture": "node scripts/governance/verify-page-61-architecture-contract.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
