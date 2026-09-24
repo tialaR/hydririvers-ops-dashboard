@@ -60,6 +60,9 @@ jobs:
       - name: Page 61 architecture contract
         run: npm run check:page61-architecture
 
+      - name: Shipment Card design contract
+        run: npm run check:shipment-card-contract
+
       - name: Check i18n
         run: npm run check:i18n
 
