@@ -23,9 +23,9 @@ export function OperationalTelemetryChart({
   ariaLabel,
 }: OperationalTelemetryChartProps) {
   const option = useMemo<EChartsCoreOption>(() => {
-    const rowHeight = 30;
-    const rowGap = 17;
-    const gridTop = 8;
+    const rowHeight = 44;
+    const rowGap = 22;
+    const gridTop = 14;
 
     return {
       animation: false,
@@ -37,8 +37,8 @@ export function OperationalTelemetryChart({
         textStyle: { color: '#f4f5f7', fontSize: 11 },
       },
       grid: metrics.map((_, index) => ({
-        left: 96,
-        right: 14,
+        left: 92,
+        right: 58,
         top: gridTop + index * (rowHeight + rowGap),
         height: rowHeight,
       })),
@@ -60,18 +60,11 @@ export function OperationalTelemetryChart({
           interval: Math.max(0, Math.floor(labels.length / 5) - 1),
         },
       })),
-      yAxis: metrics.map((metric, index) => ({
+      yAxis: metrics.map((_, index) => ({
         type: 'value',
         gridIndex: index,
         scale: true,
-        axisTick: { show: false },
-        axisLine: { show: false },
-        splitLine: { show: false },
-        axisLabel: {
-          color: '#7f8994',
-          fontSize: 9,
-          formatter: (value: number) => `${value}${metric.unit}`,
-        },
+        show: false,
       })),
       series: metrics.map((metric, index) => ({
         name: metric.name,
@@ -91,16 +84,33 @@ export function OperationalTelemetryChart({
           color: index === 0 ? '#22d3ee' : index === 1 ? '#38bdf8' : '#67e8f9',
         },
       })),
-      graphic: metrics.map((metric, index) => ({
-        type: 'text',
-        left: 8,
-        top: gridTop + index * (rowHeight + rowGap) + 8,
-        style: {
-          text: metric.name,
-          fill: '#8b949f',
-          font: '500 10px Inter, system-ui, sans-serif',
-        },
-      })),
+      graphic: metrics.flatMap((metric, index) => {
+        const top = gridTop + index * (rowHeight + rowGap);
+        const lastValue = metric.values.at(-1);
+        return [
+          {
+            type: 'text',
+            left: 8,
+            top: top + 8,
+            style: {
+              text: metric.name,
+              fill: '#8b949f',
+              font: '500 10px Inter, system-ui, sans-serif',
+            },
+          },
+          {
+            type: 'text',
+            right: 6,
+            top: top + 8,
+            style: {
+              text: lastValue == null ? '—' : String(lastValue) + metric.unit,
+              fill: '#c8d0d8',
+              font: '600 10px Inter, system-ui, sans-serif',
+              textAlign: 'right',
+            },
+          },
+        ];
+      }),
     };
   }, [labels, metrics]);
 
