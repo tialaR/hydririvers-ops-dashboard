@@ -7,6 +7,7 @@ import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-6
 import { Page62CargoCockpitPreview } from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
 import { CargoDocumentsEvidencePanel } from '@/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel';
 import { CargoOccurrenceSummary } from '@/features/cargo/components/documents-occurrence/cargo-occurrence-summary';
+import { Page62OverviewSurface } from './page-62-overview-surface';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
 import {
@@ -19,6 +20,7 @@ import {
 import styles from './shipper-journey.module.sass';
 
 const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
+  { id: 'discovery', label: 'Visão geral' },
   { id: 'cockpit', label: 'D04–D05 · Cockpit' },
   { id: 'documentsRisk', label: 'D06–D07 · Evidências' },
   { id: 'negotiation', label: 'D08–D09 · Negociação' },
@@ -39,6 +41,9 @@ export function Page62ShipperJourneyDemo({ initial = 'negotiation' }: { initial?
   );
 
   const content = (() => {
+    if (experience === 'discovery') {
+      return <Page62OverviewSurface onOpenCockpit={() => setExperience(resolveShipperJourneyTransition('discovery', { type: 'cargoSelected' }))} />;
+    }
     if (experience === 'cockpit') {
       return <Page62CargoCockpitPreview initialMode="cockpit" />;
     }
