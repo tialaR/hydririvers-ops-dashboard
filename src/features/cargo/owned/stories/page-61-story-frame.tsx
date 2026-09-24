@@ -24,7 +24,7 @@ export function Page61StoryFrame({
   };
 
   return (
-    <div className={`${styles.root} ${styles.fixtureRoot}`} style={style}>
+    <div className={`${styles.root} ${styles.canonicalRoot}`} style={style}>
       {children}
     </div>
   );
