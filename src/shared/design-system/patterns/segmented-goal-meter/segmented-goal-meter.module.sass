@@ -1,0 +1,40 @@
+.root
+  display: grid
+  gap: var(--hy-dash-space-2)
+  min-width: 0
+
+.header,
+.footer
+  display: flex
+  align-items: baseline
+  justify-content: space-between
+  gap: var(--hy-dash-space-3)
+
+.header span,
+.footer
+  color: var(--hy-dash-text-muted)
+  font-size: var(--hy-dash-font-caption)
+
+.header strong
+  color: var(--hy-dash-text-strong)
+  font-size: var(--hy-dash-font-title)
+  font-weight: var(--hy-dash-weight-semibold)
+
+.track
+  display: grid
+  grid-template-columns: repeat(18, minmax(0, 1fr))
+  gap: 0.1875rem
+
+.track i
+  height: 1.8rem
+  border-radius: 0.1875rem
+  background: color-mix(in srgb, var(--hy-dash-text-subtle) 28%, transparent)
+
+.track i[data-filled='true']
+  background: var(--hy-dash-data-primary)
+
+.root[data-tone='success'] .track i[data-filled='true']
+  background: var(--hy-dash-success)
+
+.root[data-tone='warning'] .track i[data-filled='true']
+  background: var(--hy-dash-warning)
