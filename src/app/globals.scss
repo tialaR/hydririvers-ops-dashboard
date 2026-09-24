@@ -12612,3 +12612,73 @@ html[data-theme="light"] .hx-overview.hx-overview--split .hx-overview-main-card 
     -webkit-backdrop-filter: blur(1.25rem);
   }
 }
+
+
+/* =========================================================
+   DASHBOARD VISUAL LANGUAGE — neutral-first chrome
+   ========================================================= */
+@media (min-width: 1281px) {
+  .hx-sidebar.hr-sidebar,
+  .hr-sidebar {
+    background: var(--hy-dash-canvas) !important;
+    border-right: 0.0625rem solid var(--hy-dash-border) !important;
+  }
+
+  .hx-sidebar-brand span {
+    background: var(--hy-dash-surface-raised) !important;
+    border-color: var(--hy-dash-border) !important;
+    color: var(--hy-dash-text-strong) !important;
+    box-shadow: none !important;
+  }
+
+  .hx-sidebar-brand strong {
+    color: var(--hy-dash-text-strong) !important;
+    font-weight: 650 !important;
+  }
+
+  .hx-sidebar-link {
+    min-height: 2.75rem !important;
+    border-radius: var(--hy-dash-radius-control) !important;
+    color: var(--hy-dash-text-muted) !important;
+    font-weight: 560 !important;
+  }
+
+  .hx-sidebar-link:hover,
+  .hx-sidebar-link:focus-visible {
+    color: var(--hy-dash-text-strong) !important;
+    background: var(--hy-dash-surface) !important;
+  }
+
+  .hx-sidebar-link.is-active {
+    color: var(--hy-dash-text-strong) !important;
+    background: var(--hy-dash-surface-raised) !important;
+    box-shadow: inset 0 0 0 0.0625rem var(--hy-dash-border) !important;
+  }
+
+  .hx-sidebar-link.is-active::before {
+    width: 0.1875rem !important;
+    background: var(--hy-dash-text-strong) !important;
+    box-shadow: none !important;
+  }
+
+  .hx-sidebar-link svg {
+    color: currentColor !important;
+  }
+
+  .hx-sidebar-toggle-zone {
+    border-bottom-color: var(--hy-dash-border) !important;
+  }
+
+  .hx-sidebar-toggle-zone .hx-collapse-button,
+  .hx-sidebar-setting-row {
+    border-color: var(--hy-dash-border) !important;
+    background: var(--hy-dash-surface) !important;
+    color: var(--hy-dash-text-muted) !important;
+  }
+
+  .hx-sidebar-toggle-zone .hx-collapse-button:hover,
+  .hx-sidebar-setting-row:hover {
+    background: var(--hy-dash-surface-raised) !important;
+    color: var(--hy-dash-text-strong) !important;
+  }
+}
