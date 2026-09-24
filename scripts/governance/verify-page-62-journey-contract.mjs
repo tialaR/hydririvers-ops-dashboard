@@ -22,6 +22,9 @@ const [
   documentsCss,
   journeyCss,
   chartCss,
+  overview,
+  echartCore,
+  decisionCharts,
 ] = await Promise.all([
   read('docs/governance/figma-freeze/page-62/screen-delivery-manifest.json'),
   read('docs/product/PAGE-62-SHIPPER-DOMAIN-RESEARCH-AND-JOURNEY-v1.0.md'),
@@ -38,6 +41,9 @@ const [
   read('src/features/cargo/components/documents-occurrence/documents-occurrence.module.sass'),
   read('src/features/cargo/components/shipper-journey/shipper-journey.module.sass'),
   read('src/shared/design-system/patterns/operational-chart/operational-chart-card.module.sass'),
+  read('src/features/cargo/components/shipper-journey/page-62-overview-surface.tsx'),
+  read('src/shared/design-system/patterns/operational-chart/operational-echart.tsx'),
+  read('src/shared/design-system/patterns/operational-chart/operational-decision-charts.tsx'),
 ]);
 
 const manifest = JSON.parse(manifestRaw);
@@ -121,6 +127,7 @@ if (!mock.includes('arrivalAt')) failures.push('proposal arrivalAt must be expli
 if (!mock.includes('valueBRLPerHour')) failures.push('demurrage unit must be explicit and hourly for the reference scenario');
 
 for (const required of [
+  'Overview',
   'D08D09Negotiation',
   'D10ActionReview',
   'D11ActionFeedback',
@@ -151,6 +158,20 @@ for (const required of [
   '--hy-p62-status-in-transit',
 ]) {
   if (!tokens.includes(required)) failures.push(`Page 62 semantic token missing: ${required}`);
+}
+
+for (const required of ['ShipperOperationMap', 'HydroLevelTrendChart', 'OperationalGaugeChart', 'page62-overview']) {
+  if (!overview.includes(required)) failures.push(`overview intelligence missing: ${required}`);
+}
+
+if (!echartCore.includes('useDirtyRect: false')) failures.push('ECharts dirty-rect must remain disabled to avoid hover repaint artifacts');
+
+for (const required of ['ProposalTradeoffRadar', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'HydroLevelTrendChart']) {
+  if (!decisionCharts.includes(`export function ${required}`)) failures.push(`decision visualization missing: ${required}`);
+}
+
+for (const required of ['ProposalTradeoffRadar', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'OperationalGaugeChart']) {
+  if (!surfaces.includes(required)) failures.push(`journey surface is not using visualization: ${required}`);
 }
 
 if (!preview.includes("page-62-semantic-tokens.css")) {
