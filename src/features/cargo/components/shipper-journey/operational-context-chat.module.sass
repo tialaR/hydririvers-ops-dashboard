@@ -1,0 +1,199 @@
+.root
+  display: flex
+  min-height: 34rem
+  flex-direction: column
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-text)
+
+.header
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+  min-height: 4.75rem
+  padding: var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.identity
+  display: flex
+  align-items: center
+  gap: var(--hy-p62-space-3)
+
+.identity > span:last-child
+  display: grid
+  gap: var(--hy-p62-space-1)
+
+.identity strong
+  font-size: var(--hy-p62-font-label)
+
+.identity small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.avatar,
+.botAvatar
+  display: grid
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: 50%
+  background: var(--hy-p62-surface-raised)
+
+.avatar
+  width: 2.5rem
+  height: 2.5rem
+  color: var(--hy-p62-text)
+
+.botAvatar
+  width: 2rem
+  height: 2rem
+  color: var(--hy-p62-muted)
+
+.contextBadge
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-1)
+  min-height: 1.875rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.body
+  display: grid
+  gap: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+
+.systemMessage,
+.answer
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  gap: var(--hy-p62-space-3)
+  align-items: start
+
+.systemMessage > div,
+.answer > div
+  max-width: 90%
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-radius: 0.25rem var(--hy-p62-radius-panel) var(--hy-p62-radius-panel) var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.systemMessage strong
+  font-size: var(--hy-p62-font-sm)
+
+.systemMessage p,
+.answer p
+  margin: var(--hy-p62-space-1) 0 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-body)
+  line-height: 1.55
+
+.suggestions
+  display: flex
+  flex-wrap: wrap
+  gap: var(--hy-p62-space-2)
+  padding-left: 2.75rem
+
+.suggestions button
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  min-height: 2.25rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  background: transparent
+  color: var(--hy-p62-muted)
+  font: inherit
+  font-size: var(--hy-p62-font-xs)
+  cursor: pointer
+
+.suggestions button:hover,
+.suggestions button[aria-pressed='true']
+  border-color: var(--hy-p62-border-strong, var(--hy-p62-border))
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+
+.userMessage
+  display: flex
+  justify-content: flex-end
+  padding-left: 15%
+
+.userMessage span
+  max-width: 82%
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-radius: var(--hy-p62-radius-panel) 0.25rem var(--hy-p62-radius-panel) var(--hy-p62-radius-panel)
+  background: var(--hy-p62-text)
+  color: var(--hy-p62-canvas)
+  font-size: var(--hy-p62-font-body)
+  line-height: 1.45
+
+.answerEvidence
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-1)
+  margin-top: var(--hy-p62-space-3)
+  color: var(--hy-p62-success)
+  font-size: var(--hy-p62-font-xs)
+
+.footer
+  display: grid
+  gap: var(--hy-p62-space-3)
+  margin-top: auto
+  padding: var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.composer
+  display: flex
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 3.25rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-canvas)
+
+.composer span
+  flex: 1
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.composer button
+  display: grid
+  width: 2.25rem
+  height: 2.25rem
+  place-items: center
+  border: 0
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.reviewButton
+  justify-self: end
+  min-height: 2.5rem
+  padding: 0 var(--hy-p62-space-4)
+  border: 0
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-text)
+  color: var(--hy-p62-canvas)
+  font: inherit
+  font-size: var(--hy-p62-font-sm)
+  font-weight: 700
+  cursor: pointer
+
+@media (max-width: 42rem)
+  .header
+    align-items: flex-start
+    flex-direction: column
+
+  .suggestions
+    padding-left: 0
+
+  .systemMessage > div,
+  .answer > div,
+  .userMessage span
+    max-width: 100%
