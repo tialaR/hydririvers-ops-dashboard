@@ -8,6 +8,7 @@ import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-co
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
 import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
 import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
+import { OperationalScheduleList } from '@/shared/design-system/patterns/operational-schedule-list';
 import { OperationalContextChat } from './operational-context-chat';
 import styles from './shipper-journey.module.sass';
 
@@ -348,9 +349,13 @@ export function FollowUpMonitoringSurface({ onReviewHydro }: { onReviewHydro?: (
             <FollowUpHealthChart />
           </div>
           <div className={styles.recentSignals}>
-            <span><CheckCircle2 size={17}/><strong>MDF-e validado</strong><small>16:26</small></span>
-            <span><Radio size={17}/><strong>Posição atualizada</strong><small>17:10 · AIS + GPS</small></span>
-            <span><Clock3 size={17}/><strong>Próximo marco</strong><small>18:30 · chegada estimada</small></span>
+            <OperationalScheduleList
+              items={[
+                { id: 'mdfe', time: '16:26', title: 'MDF-e validado', subtitle: 'Prontidão documental restaurada', status: 'Concluído', tone: 'success', icon: 'check' },
+                { id: 'position', time: '17:10', title: 'Posição atualizada', subtitle: 'AIS + GPS · freshness recente', status: 'Recente', tone: 'info', icon: 'radio' },
+                { id: 'arrival', time: '18:30', title: 'Chegada estimada', subtitle: 'Santarém · próximo marco', status: 'Próximo', tone: 'warning', icon: 'calendar' },
+              ]}
+            />
           </div>
         </article>
 
