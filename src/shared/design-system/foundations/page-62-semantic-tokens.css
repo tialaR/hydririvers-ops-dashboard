@@ -1,16 +1,16 @@
 :root,
 [data-hy-theme='dark'] {
-  --hy-p62-canvas: var(--hy-color-canvas);
-  --hy-p62-surface: var(--hy-color-surface);
-  --hy-p62-surface-raised: var(--hy-color-surface-raised);
-  --hy-p62-border: var(--hy-color-border);
-  --hy-p62-text: var(--hy-color-text-primary);
-  --hy-p62-muted: var(--hy-color-text-secondary);
-  --hy-p62-accent: var(--hy-color-accent);
-  --hy-p62-info: var(--hy-color-info);
-  --hy-p62-success: var(--hy-color-success);
-  --hy-p62-warning: var(--hy-color-warning);
-  --hy-p62-critical: var(--hy-color-critical);
+  --hy-p62-canvas: var(--hy-dash-canvas);
+  --hy-p62-surface: var(--hy-dash-surface);
+  --hy-p62-surface-raised: var(--hy-dash-surface-raised);
+  --hy-p62-border: var(--hy-dash-border);
+  --hy-p62-text: var(--hy-dash-text-strong);
+  --hy-p62-muted: var(--hy-dash-text-muted);
+  --hy-p62-accent: var(--hy-dash-accent);
+  --hy-p62-info: var(--hy-dash-info);
+  --hy-p62-success: var(--hy-dash-success);
+  --hy-p62-warning: var(--hy-dash-warning);
+  --hy-p62-critical: var(--hy-dash-critical);
 
   --hy-p62-status-open: #6b7280;
   --hy-p62-status-in-transit: #3b82f6;
