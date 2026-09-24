@@ -17,7 +17,7 @@ export function CargoDocumentsEvidencePanel() {
         {documents.map((document) => (
           <div className={styles.documentRow} data-tone={document.tone} key={document.label}>
             <span className={styles.documentIcon} aria-hidden>
-              {document.tone === 'warning' ? <AlertTriangle size={16} /> : <FileText size={14} />}
+              {document.tone === 'warning' ? <AlertTriangle size={20} /> : <FileText size={18} />}
             </span>
             <span className={styles.documentCopy}>
               <strong>{document.label}</strong>
