@@ -8,6 +8,7 @@ import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-co
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
 import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
 import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
+import { OperationalContextChat } from './operational-context-chat';
 import styles from './shipper-journey.module.sass';
 
 function money(value: number) {
@@ -123,7 +124,7 @@ export function ProposalNegotiationSurface({
           </div>
         </article>
 
-        <OperationalCommunicationPanel onReview={onReview} />
+        <OperationalContextChat onReview={onReview} />
       </div>
     </section>
   );
