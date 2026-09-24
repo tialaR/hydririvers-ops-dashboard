@@ -542,3 +542,15 @@
   .recommendation
     align-items: flex-start
     flex-direction: column
+
+
+.documentsRiskGrid
+  display: grid
+  grid-template-columns: minmax(0, 37.5rem) minmax(0, 41.25rem)
+  gap: var(--hy-p62-space-4)
+  width: min(100%, 79.75rem)
+  align-items: start
+
+@media (max-width: 68rem)
+  .documentsRiskGrid
+    grid-template-columns: 1fr
