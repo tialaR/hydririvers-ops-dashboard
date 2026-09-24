@@ -2,7 +2,7 @@
   display: grid
   grid-template-columns: 24rem minmax(0, 1fr)
   width: min(100%, 96rem)
-  min-height: 56.25rem
+  min-height: 60rem
   overflow: hidden
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: 0.875rem
@@ -50,8 +50,8 @@
 
 .workspace
   min-width: 0
-  padding: 1.25rem 1.5rem 1.5rem
-  background: radial-gradient(circle at 72% 0%, color-mix(in srgb, var(--hy-p62-accent) 5.5%, transparent), transparent 23rem), var(--hy-p62-canvas)
+  padding: 1.5rem 1.75rem 2rem
+  background: var(--hy-p62-canvas)
 
 .workspaceHeader
   display: flex
@@ -110,15 +110,15 @@
 .metricGrid
   display: grid
   grid-template-columns: 1.25fr 1fr 1fr 1fr
-  gap: 0.75rem
-  margin-top: 1rem
+  gap: 1rem
+  margin-top: 1.25rem
 
 .metricGrid article
   display: grid
   align-content: start
   gap: 0.45rem
-  min-height: 7.5rem
-  padding: 0.95rem 1rem
+  min-height: 8.75rem
+  padding: 1.15rem 1.2rem
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: 0.875rem
   background: var(--hy-p62-surface)
@@ -131,10 +131,10 @@
   color: var(--hy-p62-muted)
 
 .metricHeading svg
-  color: var(--hy-p62-accent)
+  color: var(--hy-p62-muted)
 
 .metricGrid strong
-  font-size: 1.15rem
+  font-size: 1.3rem
   font-weight: 620
 
 .metricGrid span
@@ -209,7 +209,7 @@
   display: grid
   grid-template-columns: minmax(0,1fr)
   gap: 1rem
-  margin-top: 1rem
+  margin-top: 1.25rem
 
 .telemetryCard,
 .routeContext,
@@ -222,7 +222,7 @@
 
 .telemetryCard
   min-width: 0
-  padding: 1rem 1rem 0.85rem
+  padding: 1.25rem 1.35rem 1rem
 
 .telemetryCard > header
   display: flex
@@ -235,8 +235,13 @@
   gap: 0.25rem
 
 .telemetryCard > header strong
-  font-size: 0.82rem
-  font-weight: 580
+  font-size: 1.05rem
+  font-weight: 600
+
+.telemetryCard > header span:not(.liveBadge)
+  color: var(--hy-p62-muted)
+  font-size: 0.75rem
+  font-weight: 400
 
 .liveBadge
   display: inline-flex
@@ -333,19 +338,92 @@
 
 .cockpitLowerGrid
   display: grid
-  grid-template-columns: minmax(0,1.45fr) minmax(19rem,.55fr)
+  grid-template-columns: minmax(0, 1.45fr) minmax(19rem, .55fr)
   gap: 1rem
   margin-top: 1rem
+
+.routeContextCompact
+  grid-column: 1 / -1
+  display: grid
+  grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr)
+  align-items: center
+  gap: 2rem
+  min-height: 7.5rem
+  padding: 1.1rem 1.25rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: 0.875rem
+  background: var(--hy-p62-surface)
+
+.routeContextCompact > div:first-child
+  display: grid
+  gap: .3rem
+
+.routeContextCompact > div:first-child > strong
+  font-size: .9rem
+  font-weight: 600
+
+.routeContextCompact > div:first-child > span
+  color: var(--hy-p62-muted)
+  font-size: .72rem
+
+.routeProgressCompact
+  display: grid
+  gap: .7rem
+
+.routeProgressCompact > span
+  position: relative
+  display: block
+  height: .38rem
+  border-radius: 999rem
+  background: var(--hy-p62-border)
+
+.routeProgressCompact > span::before
+  display: block
+  width: 68%
+  height: 100%
+  border-radius: inherit
+  background: var(--hy-p62-info)
+  content: ''
+
+.routeProgressCompact > span i
+  position: absolute
+  top: 50%
+  left: 68%
+  width: .85rem
+  height: .85rem
+  border: .16rem solid var(--hy-p62-surface)
+  border-radius: 50%
+  background: var(--hy-p62-text)
+  box-shadow: 0 0 0 .12rem var(--hy-p62-border-strong)
+  transform: translate(-50%, -50%)
+
+.routeProgressCompact > div
+  display: grid
+  grid-template-columns: 1fr auto 1fr
+  align-items: center
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+
+.routeProgressCompact > div strong
+  color: var(--hy-p62-text)
+  font-size: .7rem
+  font-weight: 600
+  text-align: center
+
+.routeProgressCompact > div small:last-child
+  text-align: right
 
 .attention
   display: grid
   grid-template-columns: auto minmax(0,1fr) auto
   align-items: center
   gap: 0.85rem
-  padding: 1rem
-  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 42%, transparent)
+  min-height: 7.5rem
+  padding: 1rem 1.15rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-left: 0.1875rem solid var(--hy-p62-warning)
   border-radius: 0.875rem
-  background: color-mix(in srgb, var(--hy-p62-warning) 10%, var(--hy-p62-surface))
+  background: var(--hy-p62-surface)
 
 .attentionIcon
   display: grid
@@ -353,7 +431,7 @@
   height: 2.25rem
   place-items: center
   border-radius: 0.65rem
-  background: color-mix(in srgb, var(--hy-p62-warning) 14%, transparent)
+  background: var(--hy-p62-surface-raised)
   color: var(--hy-p62-warning)
 
 .attention > div:nth-child(2)
@@ -374,13 +452,14 @@
   padding: 0 0.9rem
   border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 45%, var(--hy-p62-border))
   border-radius: 999rem
-  background: color-mix(in srgb, var(--hy-p62-warning) 8%, var(--hy-p62-surface))
+  background: var(--hy-p62-surface-raised)
   color: var(--hy-p62-warning)
   font-size: 0.7rem
   cursor: pointer
 
 .evidenceCard
-  padding: 0.9rem 1rem
+  min-height: 7.5rem
+  padding: 1rem 1.1rem
 
 .evidenceCard > header
   display: flex
@@ -556,7 +635,8 @@
 
   .cockpitGrid,
   .cockpitLowerGrid,
-  .timelineLayout
+  .timelineLayout,
+  .routeContextCompact
     grid-template-columns: 1fr
 
 
