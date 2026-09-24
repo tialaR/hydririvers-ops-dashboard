@@ -33,7 +33,7 @@ const packageJson = JSON.parse(await read('package.json'));
 
 for (const required of [
   'OperationalGaugeChart',
-  'OperationalTelemetryChart',
+  'OperationalTelemetryOverviewChart',
   'MotionConfig',
   'AnimatePresence',
   'ShipmentCard',
@@ -57,7 +57,7 @@ for (const required of ['CargoOccurrenceSummary', 'Divergência no manifesto', '
 if (!d06Stories.includes('export const Reference')) failures.push('D06 Storybook reference missing');
 if (!d07Stories.includes('export const Reference')) failures.push('D07 Storybook reference missing');
 
-for (const required of ['OperationalGaugeChart', 'OperationalTelemetryChart']) {
+for (const required of ['OperationalGaugeChart', 'OperationalTelemetryChart', 'OperationalTelemetryOverviewChart']) {
   if (!chartIndex.includes(required)) failures.push(`operational chart DS missing export: ${required}`);
 }
 
@@ -72,6 +72,22 @@ for (const required of [
 
 if (!packageJson.dependencies?.echarts) failures.push('ECharts must be a runtime dependency');
 if (!packageJson.dependencies?.motion) failures.push('Motion must be a runtime dependency');
+
+const cockpitCss = await read('src/features/cargo/owned/stories/page-62-cargo-cockpit-preview.module.sass');
+const overviewChart = await read('src/shared/design-system/patterns/operational-chart/operational-telemetry-overview-chart.tsx');
+
+for (const forbidden of [
+  'radial-gradient(circle at 72%',
+  'grid-template-columns: minmax(0,1.45fr) minmax(19rem,.55fr)',
+]) {
+  if (cockpitCss.includes(forbidden)) failures.push(`Cockpit regression anchor remains: ${forbidden}`);
+}
+for (const required of ['routeContextCompact', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
+  if (!cockpitCss.includes(required)) failures.push(`Cockpit hierarchy anchor missing: ${required}`);
+}
+for (const required of ['legend:', 'OperationalTelemetryOverviewChart', 'areaStyle']) {
+  if (!overviewChart.includes(required)) failures.push(`Telemetry overview hierarchy missing: ${required}`);
+}
 if (packageJson.dependencies?.recharts) failures.push('Recharts must not remain after Page 62 chart migration');
 if (packageJson.dependencies?.['framer-motion']) failures.push('framer-motion duplicate must not remain; use motion/react');
 
