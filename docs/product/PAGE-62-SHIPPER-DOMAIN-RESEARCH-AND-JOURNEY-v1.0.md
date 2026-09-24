@@ -342,3 +342,53 @@ The smaller `PLAY-D08.png` and `PLAY-D09.png` are byte-identical in the delivere
 ### Consequence
 
 The flow is implemented as **state progression over reusable components**, not thirteen independent pages. This is the fastest path to production parity and the safest path to a future API because data state, action state and visual state remain separate.
+
+
+## 13. Visão Geral — information architecture contract
+
+The selected-cargo overview is now the entry state of the navigable Page 62 journey.
+
+It must answer four questions before the user opens a deeper context:
+
+1. **Onde a carga está?**  
+   Large operational map, current position, route progress, corridor and next milestone.
+
+2. **Existe alguma exceção que muda a decisão?**  
+   Risk segment, hydro condition, document divergence and freshness are visible without opening another screen.
+
+3. **Qual é o impacto agora?**  
+   ETA/window, route progress and the specific operational deadline are exposed as numbers, not hidden in prose.
+
+4. **Qual é a próxima ação?**  
+   The screen names the action, deadline and why it matters, then links into Cockpit / Evidence context.
+
+### Geospatial rule
+
+The map is not a decorative background.
+
+The product already models:
+- route geometry;
+- checkpoints;
+- origin/destination/current position;
+- route progress;
+- risk segment.
+
+MapLibre is therefore a product surface and should receive meaningful desktop area. When the viewport narrows, surrounding intelligence stacks; the map itself is not compressed until labels or interactions become unusable.
+
+### Hydrographic rule
+
+Hydrological values in the current implementation remain DEMO until a real adapter is connected.
+
+Production-facing hydrography must expose:
+- source authority;
+- observation timestamp;
+- retrieval timestamp;
+- freshness state;
+- segment/corridor affected;
+- operational interpretation.
+
+The overview uses a trend chart because direction of change is more actionable than an isolated river-level number. Thresholds shown in DEMO are illustrative and must not be presented as official navigability limits.
+
+### Logistics-visibility pattern
+
+The overview follows a common control-tower pattern used by modern logistics visibility products: map + shipment state + exception signal + ETA/arrival confidence + actionable context. HydroRivers adapts that pattern to the Amazon waterway domain by elevating river condition, navigability evidence and document readiness instead of treating the map as generic vehicle tracking.
