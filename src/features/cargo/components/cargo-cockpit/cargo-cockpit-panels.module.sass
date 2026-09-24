@@ -2,10 +2,10 @@
 .evidencePanel,
 .timelinePanel
   width: 100%
-  border: 0.0625rem solid #34383f
+  border: 0.0625rem solid var(--hy-p62-border)
   border-radius: 0.75rem
-  background: #18191c
-  color: #f4f5f7
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-text)
   font-family: Inter, system-ui, sans-serif
   box-sizing: border-box
 
@@ -31,7 +31,7 @@
 
 .metric small,
 .footer
-  color: #7f8793
+  color: var(--hy-p62-muted)
   font-size: 0.55rem
   font-weight: 560
   letter-spacing: 0.05em
@@ -70,7 +70,7 @@
   align-items: center
   gap: 0.75rem
   min-height: 2.55rem
-  border-top: 0.0625rem solid #35383e
+  border-top: 0.0625rem solid var(--hy-p62-border)
   font-size: 0.67rem
 
 .evidenceRow:first-child
@@ -83,26 +83,26 @@
   gap: 0.45rem
   min-height: 1.55rem
   padding: 0 0.65rem
-  border: 0.0625rem solid #35383e
+  border: 0.0625rem solid var(--hy-p62-border)
   border-radius: 999rem
-  color: #d8dadd
+  color: var(--hy-p62-text)
   font-size: 0.6rem
 
 .status::before
   width: 0.38rem
   height: 0.38rem
   border-radius: 50%
-  background: #6b7280
+  background: var(--hy-p62-status-open)
   content: ''
 
 .status[data-tone='success']::before
-  background: #10b981
+  background: var(--hy-p62-success)
 
 .status[data-tone='warning']::before
-  background: #f59e0b
+  background: var(--hy-p62-warning)
 
 .status[data-tone='danger']::before
-  background: #ef4444
+  background: var(--hy-p62-critical)
 
 .timelinePanel
   min-height: 25.875rem
@@ -122,7 +122,7 @@
   bottom: 1.75rem
   left: 0.37rem
   width: 0.0625rem
-  background: #323840
+  background: var(--hy-p62-border)
   content: ''
 
 .timelineItem
@@ -139,25 +139,25 @@
   height: 0.6rem
   margin-top: 0.15rem
   border-radius: 50%
-  background: #6b7280
+  background: var(--hy-p62-status-open)
 
 .dot[data-tone='success']
-  background: #34d399
+  background: var(--hy-p62-success)
 
 .dot[data-tone='info']
-  background: #3b82f6
+  background: var(--hy-p62-info)
 
 .dot[data-tone='warning']
-  background: #f59e0b
+  background: var(--hy-p62-warning)
 
 .dot[data-tone='danger']
-  background: #fb6672
+  background: var(--hy-p62-critical)
 
 .dot[data-tone='next']
-  background: #32c8d5
+  background: var(--hy-p62-accent)
 
 .time
-  color: #7e8791
+  color: var(--hy-p62-muted)
   font-size: 0.58rem
   line-height: 1.35
 
@@ -170,7 +170,7 @@
   font-weight: 610
 
 .event span
-  color: #7f8793
+  color: var(--hy-p62-muted)
   font-size: 0.58rem
 
 @media (prefers-reduced-motion: reduce)
