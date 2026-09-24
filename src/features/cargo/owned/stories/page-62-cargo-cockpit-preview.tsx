@@ -16,7 +16,7 @@ import { useState } from 'react';
 
 import {
   OperationalGaugeChart,
-  OperationalTelemetryChart,
+  OperationalTelemetryOverviewChart,
   type OperationalTelemetryMetric,
 } from '@/shared/design-system/patterns/operational-chart';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
@@ -238,42 +238,37 @@ export function Page62CargoCockpitPreview({
                       <div>
                         <small>TELEMETRIA OPERACIONAL</small>
                         <strong>Ritmo e condição da viagem</strong>
+                        <span>Velocidade, combustível e temperatura nas últimas 14 horas</span>
                       </div>
                       <span className={styles.liveBadge}><i /> AO VIVO</span>
                     </header>
 
-                    <OperationalTelemetryChart
+                    <OperationalTelemetryOverviewChart
                       labels={telemetryLabels}
                       metrics={telemetryMetrics}
                       ariaLabel="Telemetria da carga com velocidade, combustível e temperatura"
                     />
                   </article>
 
-                  <article className={styles.routeContext}>
-                    <header>
-                      <div className={styles.metricHeading}>
-                        <Navigation size={15} />
-                        <small>CONTEXTO DE ROTA</small>
-                      </div>
-                      <strong>Rio Madeira · trecho ativo</strong>
-                    </header>
-                    <div className={styles.routeTrack} aria-label="Posição atual na rota">
-                      <span className={styles.routeTrackDone} />
-                      <i aria-hidden />
-                    </div>
-                    <div className={styles.routeLabels}>
-                      <span>Manaus</span>
-                      <strong>Posição atual</strong>
-                      <span>Santarém</span>
-                    </div>
-                    <div className={styles.routeFacts}>
-                      <div><small>PRÓXIMO MARCO</small><strong>Parintins</strong><span>94 km</span></div>
-                      <div><small>CONDIÇÃO</small><strong>Operacional</strong><span>sem restrição crítica</span></div>
-                    </div>
-                  </article>
+
                 </div>
 
                 <div className={styles.cockpitLowerGrid}>
+                  <article className={styles.routeContextCompact}>
+                    <div>
+                      <div className={styles.metricHeading}>
+                        <Navigation size={17} />
+                        <small>CONTEXTO DE ROTA</small>
+                      </div>
+                      <strong>Rio Madeira · trecho ativo</strong>
+                      <span>Próximo marco: Parintins · 94 km</span>
+                    </div>
+                    <div className={styles.routeProgressCompact} aria-label="68% da rota concluída">
+                      <span><i /></span>
+                      <div><small>Manaus</small><strong>68% · posição atual</strong><small>Santarém</small></div>
+                    </div>
+                  </article>
+
                   <article className={styles.attention}>
                     <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
                     <div>
