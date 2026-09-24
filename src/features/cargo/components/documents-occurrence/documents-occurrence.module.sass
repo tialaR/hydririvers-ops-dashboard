@@ -4,8 +4,8 @@
   width: 100%
   height: 100%
   border-radius: 0.75rem
-  background: #11151a
-  color: #f4f5f7
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-text)
   font-family: Inter, system-ui, sans-serif
 
 .panelTitle
@@ -29,7 +29,7 @@
   align-items: center
   gap: 0.85rem
   min-height: 4.85rem
-  border-top: 0.0625rem solid #2f353c
+  border-top: 0.0625rem solid var(--hy-p62-border)
 
 .documentRow:first-child
   border-top: 0
@@ -39,13 +39,13 @@
   width: 1rem
   height: 1rem
   place-items: center
-  color: #39d98a
+  color: var(--hy-p62-success)
 
 .documentRow[data-tone='warning'] .documentIcon
-  color: #f59e0b
+  color: var(--hy-p62-warning)
 
 .documentRow[data-tone='demo'] .documentIcon
-  color: #22d3ee
+  color: var(--hy-p62-accent)
 
 .documentCopy
   display: grid
@@ -56,7 +56,7 @@
   font-weight: 600
 
 .documentCopy span
-  color: #7f8994
+  color: var(--hy-p62-muted)
   font-size: 0.58rem
 
 .documentStatus
@@ -65,13 +65,13 @@
   font-weight: 560
 
 .documentStatus[data-tone='success']
-  color: #10b981
+  color: var(--hy-p62-success)
 
 .documentStatus[data-tone='warning']
-  color: #ef4444
+  color: var(--hy-p62-critical)
 
 .documentStatus[data-tone='demo']
-  color: #facc15
+  color: var(--hy-p62-warning)
 
 .documentActions
   display: flex
@@ -84,7 +84,7 @@
   border: 0
   padding: 0
   background: transparent
-  color: #22d3ee
+  color: var(--hy-p62-accent)
   font: inherit
   font-size: 0.62rem
   cursor: pointer
@@ -97,7 +97,7 @@
 .severity
   display: inline-block
   margin-top: 0.9rem
-  color: #facc15
+  color: var(--hy-p62-warning)
   font-size: 0.56rem
   font-weight: 700
   text-transform: uppercase
@@ -109,7 +109,7 @@
 
 .occurrenceLead
   margin: 0.55rem 0 0
-  color: #7f8994
+  color: var(--hy-p62-muted)
   font-size: 0.65rem
 
 .impactChain
@@ -121,7 +121,7 @@
   padding: 0.85rem
   min-height: 6.6rem
   border-radius: 0.65rem
-  background: #171c22
+  background: var(--hy-p62-surface-raised)
 
 .impactCell
   display: grid
@@ -130,7 +130,7 @@
 .impactCell small,
 .metaBlock small,
 .mitigation small
-  color: #7f8994
+  color: var(--hy-p62-muted)
   font-size: 0.55rem
   font-weight: 560
   text-transform: uppercase
@@ -140,16 +140,16 @@
   font-weight: 650
 
 .impactCell[data-tone='danger'] strong
-  color: #fb6672
+  color: var(--hy-p62-critical)
 
 .impactCell[data-tone='info'] strong
-  color: #22d3ee
+  color: var(--hy-p62-accent)
 
 .impactCell[data-tone='warning'] strong
-  color: #facc15
+  color: var(--hy-p62-warning)
 
 .impactArrow
-  color: #85909a
+  color: var(--hy-p62-muted)
   font-size: 1rem
 
 .occurrenceMeta
@@ -169,10 +169,10 @@
   margin-top: 1.55rem
   padding: 0.8rem 0.85rem
   border-radius: 0.65rem
-  background: #10281d
+  background: color-mix(in srgb, var(--hy-p62-success) 10%, var(--hy-p62-surface))
 
 .mitigation small
-  color: #39d98a
+  color: var(--hy-p62-success)
 
 .mitigation p
   margin: 0.65rem 0 0
@@ -182,7 +182,7 @@
   height: 0.3rem
   margin-top: 0.75rem
   border-radius: 999rem
-  background: #29313a
+  background: var(--hy-p62-border)
 
 .mitigationTrack > span
   display: block
@@ -198,9 +198,9 @@
 .d06Surface
   width: 37.5rem
   height: 34.25rem
-  background: #09090b
+  background: var(--hy-p62-canvas)
 
 .d07Surface
   width: 41.25rem
   height: 34.25rem
-  background: #09090b
+  background: var(--hy-p62-canvas)
