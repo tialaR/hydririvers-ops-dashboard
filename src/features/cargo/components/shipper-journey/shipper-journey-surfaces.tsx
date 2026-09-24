@@ -29,10 +29,10 @@ export function ProposalNegotiationSurface({
   const alternative = proposals[1];
   if (!current || !alternative) return null;
 
-  const etaDelta = current.etaHours - alternative.etaHours;
+  const etaDeltaMinutes = Math.round((new Date(current.arrivalAt).getTime() - new Date(alternative.arrivalAt).getTime()) / 60000);
   const priceDelta = alternative.priceBRL - current.priceBRL;
-  const currentDemurrage = current.demurrage?.valueBRLPerDay;
-  const alternativeDemurrage = alternative.demurrage?.valueBRLPerDay;
+  const currentDemurrage = current.demurrage?.valueBRLPerHour;
+  const alternativeDemurrage = alternative.demurrage?.valueBRLPerHour;
 
   return (
     <section className={styles.surface} data-testid="page62-d08-d09-negotiation">
@@ -63,7 +63,7 @@ export function ProposalNegotiationSurface({
                 <small>{proposal.counterparty}</small>
                 <strong>{money(proposal.priceBRL)}</strong>
                 <span className={styles.proposalMeta}>
-                  <span>ETA {proposal.etaHours} h</span>
+                  <span>Chegada {time(proposal.arrivalAt)}</span>
                   <span>{proposal.vesselLabel}</span>
                   <span>validade {time(proposal.validityAt)}</span>
                 </span>
@@ -73,9 +73,9 @@ export function ProposalNegotiationSurface({
 
           <div className={styles.tradeTable}>
             <div className={styles.tradeRow}>
-              <small>Chegada</small><span>{current.etaHours} h</span>
-              <strong className={etaDelta > 0 ? styles.deltaGood : styles.deltaWarn}>{etaDelta > 0 ? '−' + etaDelta + ' h' : '+' + Math.abs(etaDelta) + ' h'}</strong>
-              <span>{alternative.etaHours} h</span>
+              <small>Chegada</small><span>{time(current.arrivalAt)}</span>
+              <strong className={etaDeltaMinutes > 0 ? styles.deltaGood : styles.deltaWarn}>{etaDeltaMinutes > 0 ? '−' + etaDeltaMinutes + ' min' : '+' + Math.abs(etaDeltaMinutes) + ' min'}</strong>
+              <span>{time(alternative.arrivalAt)}</span>
             </div>
             <div className={styles.tradeRow}>
               <small>Preço</small><span>{money(current.priceBRL)}</span>
@@ -156,17 +156,17 @@ export function DecisionActionReviewSurface({
         <div className={styles.reviewGrid}>
           <div className={styles.reviewBlock}>
             <small>ANTES</small><strong>{current.counterparty}</strong><strong>{money(current.priceBRL)}</strong>
-            <span>ETA {current.etaHours} h</span><span>Demurrage {current.demurrage ? money(current.demurrage.valueBRLPerDay) + '/dia' : 'não informado'}</span>
+            <span>Chegada {time(current.arrivalAt)}</span><span>Demurrage {current.demurrage ? money(current.demurrage.valueBRLPerHour) + '/h' : 'não informado'}</span>
           </div>
           <div className={styles.reviewBlock + ' ' + styles.deltaBlock}>
             <small>EFEITO OPERACIONAL</small>
-            <strong>{alternative.etaHours - current.etaHours} h ETA</strong>
+            <strong>{etaDeltaMinutes > 0 ? '−' + etaDeltaMinutes + ' min' : '+' + Math.abs(etaDeltaMinutes) + ' min'} chegada</strong>
             <span>{money(alternative.priceBRL - current.priceBRL)} custo</span>
             <span>calado: {alternative.compatibility.draft}</span>
           </div>
           <div className={styles.reviewBlock} data-after="true">
             <small>DEPOIS</small><strong>{alternative.counterparty}</strong><strong>{money(alternative.priceBRL)}</strong>
-            <span>ETA {alternative.etaHours} h</span><span>Demurrage {alternative.demurrage ? money(alternative.demurrage.valueBRLPerDay) + '/dia' : 'não informado'}</span>
+            <span>Chegada {time(alternative.arrivalAt)}</span><span>Demurrage {alternative.demurrage ? money(alternative.demurrage.valueBRLPerHour) + '/h' : 'não informado'}</span>
           </div>
         </div>
 
