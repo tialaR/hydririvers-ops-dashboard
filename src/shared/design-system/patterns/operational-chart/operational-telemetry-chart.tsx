@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import type { EChartsCoreOption } from './operational-echart';
 import { OperationalEChart } from './operational-echart';
 import styles from './operational-chart-card.module.sass';
+import { buildOperationalTooltip, operationalTooltipShell } from './operational-tooltip';
 
 export type OperationalTelemetryMetric = {
   name: string;
@@ -30,16 +31,27 @@ export function OperationalTelemetryChart({
     return {
       animation: false,
       tooltip: {
+        ...operationalTooltipShell,
         trigger: 'axis',
         axisPointer: {
           type: 'line',
           snap: true,
-          lineStyle: { color: '#44515d', width: 1, type: 'dashed' },
+          lineStyle: { color: '#52525b', width: 1, type: 'dashed' },
         },
-        backgroundColor: '#12161b',
-        borderColor: '#2c333a',
-        borderWidth: 1,
-        textStyle: { color: '#f4f5f7', fontSize: 11 },
+        formatter: (raw: unknown) => {
+          const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
+          const period = items[0]?.axisValue ?? 'Agora';
+          return buildOperationalTooltip({
+            eyebrow: 'TELEMETRIA',
+            title: period,
+            rows: items.map((item) => ({
+              label: item.seriesName ?? 'Métrica',
+              value: String(item.value ?? '—'),
+              tone: item.seriesName === 'Combustível' ? 'warning' : 'info',
+            })),
+            footer: 'Valores demonstrativos do snapshot operacional atual.',
+          });
+        },
       },
       grid: metrics.map((_, index) => ({
         left: 92,
@@ -82,11 +94,11 @@ export function OperationalTelemetryChart({
         symbol: 'none',
         lineStyle: {
           width: 1.8,
-          color: index === 0 ? '#22d3ee' : index === 1 ? '#38bdf8' : '#67e8f9',
+          color: index === 0 ? '#d4d4d8' : index === 1 ? '#71717a' : '#a1a1aa',
         },
         areaStyle: {
           opacity: 0.08,
-          color: index === 0 ? '#22d3ee' : index === 1 ? '#38bdf8' : '#67e8f9',
+          color: index === 0 ? 'rgba(212,212,216,.10)' : index === 1 ? 'rgba(113,113,122,.08)' : 'rgba(161,161,170,.07)',
         },
       })),
       graphic: metrics.flatMap((metric, index) => {
