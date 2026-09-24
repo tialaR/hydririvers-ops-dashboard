@@ -54,7 +54,7 @@
   content: ''
 
 .status[data-tone='open']
-  --shipment-status-color: #6b7280
+  --shipment-status-color: var(--hy-p62-status-open, #6b7280)
 
 .status[data-tone='quotation']
   --shipment-status-color: #a855f7
@@ -66,16 +66,16 @@
   --shipment-status-color: #14b8a6
 
 .status[data-tone='inTransit']
-  --shipment-status-color: #3b82f6
+  --shipment-status-color: var(--hy-p62-status-in-transit, #3b82f6)
 
 .status[data-tone='completed']
-  --shipment-status-color: #10b981
+  --shipment-status-color: var(--hy-p62-status-delivered, #10b981)
 
 .status[data-tone='delayed']
-  --shipment-status-color: #f59e0b
+  --shipment-status-color: var(--hy-p62-status-attention, #f59e0b)
 
 .status[data-tone='blocked']
-  --shipment-status-color: #ef4444
+  --shipment-status-color: var(--hy-p62-status-blocked, #ef4444)
 
 .route
   display: grid
