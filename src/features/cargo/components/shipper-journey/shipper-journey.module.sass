@@ -1016,3 +1016,14 @@
   .reviewSignalGrid,
   .recentSignals
     grid-template-columns: 1fr
+
+
+.monitoringCompactGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.35fr) minmax(18rem, .65fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+@media (max-width: 68rem)
+  .monitoringCompactGrid
+    grid-template-columns: 1fr
