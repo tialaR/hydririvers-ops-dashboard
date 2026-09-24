@@ -1,0 +1,206 @@
+.documentsPanel,
+.occurrencePanel
+  box-sizing: border-box
+  width: 100%
+  height: 100%
+  border-radius: 0.75rem
+  background: #11151a
+  color: #f4f5f7
+  font-family: Inter, system-ui, sans-serif
+
+.panelTitle
+  margin: 0
+  font-size: 0.75rem
+  font-weight: 650
+  line-height: 1.25
+
+.documentsPanel
+  display: flex
+  flex-direction: column
+  padding: 0.9375rem
+
+.documentList
+  display: grid
+  margin-top: 0.7rem
+
+.documentRow
+  display: grid
+  grid-template-columns: auto minmax(0,1fr) 8rem
+  align-items: center
+  gap: 0.85rem
+  min-height: 4.85rem
+  border-top: 0.0625rem solid #2f353c
+
+.documentRow:first-child
+  border-top: 0
+
+.documentIcon
+  display: grid
+  width: 1rem
+  height: 1rem
+  place-items: center
+  color: #39d98a
+
+.documentRow[data-tone='warning'] .documentIcon
+  color: #f59e0b
+
+.documentRow[data-tone='demo'] .documentIcon
+  color: #22d3ee
+
+.documentCopy
+  display: grid
+  gap: 0.26rem
+
+.documentCopy strong
+  font-size: 0.66rem
+  font-weight: 600
+
+.documentCopy span
+  color: #7f8994
+  font-size: 0.58rem
+
+.documentStatus
+  justify-self: start
+  font-size: 0.6rem
+  font-weight: 560
+
+.documentStatus[data-tone='success']
+  color: #10b981
+
+.documentStatus[data-tone='warning']
+  color: #ef4444
+
+.documentStatus[data-tone='demo']
+  color: #facc15
+
+.documentActions
+  display: flex
+  gap: 0.9rem
+  margin-top: auto
+  padding-bottom: 0.3rem
+
+.documentActions button,
+.correctionAction
+  border: 0
+  padding: 0
+  background: transparent
+  color: #22d3ee
+  font: inherit
+  font-size: 0.62rem
+  cursor: pointer
+
+.occurrencePanel
+  display: flex
+  flex-direction: column
+  padding: 0.9375rem
+
+.severity
+  display: inline-block
+  margin-top: 0.9rem
+  color: #facc15
+  font-size: 0.56rem
+  font-weight: 700
+  text-transform: uppercase
+
+.occurrenceTitle
+  margin: 1.55rem 0 0
+  font-size: 1.15rem
+  font-weight: 650
+
+.occurrenceLead
+  margin: 0.55rem 0 0
+  color: #7f8994
+  font-size: 0.65rem
+
+.impactChain
+  display: grid
+  grid-template-columns: 1fr auto 1fr auto 1fr
+  align-items: center
+  gap: 0.6rem
+  margin-top: 1.55rem
+  padding: 0.85rem
+  min-height: 6.6rem
+  border-radius: 0.65rem
+  background: #171c22
+
+.impactCell
+  display: grid
+  gap: 0.55rem
+
+.impactCell small,
+.metaBlock small,
+.mitigation small
+  color: #7f8994
+  font-size: 0.55rem
+  font-weight: 560
+  text-transform: uppercase
+
+.impactCell strong
+  font-size: 0.68rem
+  font-weight: 650
+
+.impactCell[data-tone='danger'] strong
+  color: #fb6672
+
+.impactCell[data-tone='info'] strong
+  color: #22d3ee
+
+.impactCell[data-tone='warning'] strong
+  color: #facc15
+
+.impactArrow
+  color: #85909a
+  font-size: 1rem
+
+.occurrenceMeta
+  display: grid
+  gap: 1.2rem
+  margin-top: 1.75rem
+
+.metaBlock
+  display: grid
+  gap: 0.55rem
+
+.metaBlock strong
+  font-size: 0.7rem
+  font-weight: 520
+
+.mitigation
+  margin-top: 1.55rem
+  padding: 0.8rem 0.85rem
+  border-radius: 0.65rem
+  background: #10281d
+
+.mitigation small
+  color: #39d98a
+
+.mitigation p
+  margin: 0.65rem 0 0
+  font-size: 0.65rem
+
+.mitigationTrack
+  height: 0.3rem
+  margin-top: 0.75rem
+  border-radius: 999rem
+  background: #29313a
+
+.mitigationTrack > span
+  display: block
+  width: 50%
+  height: 100%
+  border-radius: inherit
+  background: #39d98a
+
+.correctionAction
+  align-self: flex-end
+  margin-top: auto
+
+.d06Surface
+  width: 37.5rem
+  height: 34.25rem
+  background: #09090b
+
+.d07Surface
+  width: 41.25rem
+  height: 34.25rem
+  background: #09090b
