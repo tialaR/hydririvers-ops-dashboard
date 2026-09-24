@@ -33,7 +33,7 @@ for (const required of [
   'MotionConfig',
   'AnimatePresence',
   'ShipmentCard',
-  "reducedMotion="user"",
+  'reducedMotion="user"',
 ]) {
   if (!preview.includes(required)) failures.push(`Page 62 preview missing contract anchor: ${required}`);
 }
