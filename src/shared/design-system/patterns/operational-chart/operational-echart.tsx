@@ -3,12 +3,13 @@
 import { useEffect, useRef } from 'react';
 import type { EChartsCoreOption } from 'echarts/core';
 import * as echarts from 'echarts/core';
-import { BarChart, GaugeChart, LineChart } from 'echarts/charts';
+import { BarChart, GaugeChart, LineChart, RadarChart } from 'echarts/charts';
 import {
   DatasetComponent,
   GraphicComponent,
   GridComponent,
   LegendComponent,
+  RadarComponent,
   TooltipComponent,
 } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
@@ -17,10 +18,12 @@ echarts.use([
   BarChart,
   GaugeChart,
   LineChart,
+  RadarChart,
   DatasetComponent,
   GraphicComponent,
   GridComponent,
   LegendComponent,
+  RadarComponent,
   TooltipComponent,
   CanvasRenderer,
 ]);
@@ -43,7 +46,7 @@ export function OperationalEChart({
 
     const chart = echarts.init(ref.current, undefined, {
       renderer: 'canvas',
-      useDirtyRect: true,
+      useDirtyRect: false,
     });
 
     chart.setOption(option, {
