@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo } from 'react';
-import { CartesianGrid, LabelList, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import type { EChartsCoreOption } from './operational-echart';
+import { OperationalEChart } from './operational-echart';
 import type { OperationalChartPoint } from './operational-chart-types';
 import styles from './operational-chart-card.module.sass';
 
@@ -12,42 +13,113 @@ export type OperationalLineChartProps = {
   ariaLabel: string;
 };
 
-type ChartRow = { name: string; value: number };
+export function OperationalLineChart({
+  points,
+  unit,
+  size = 'main',
+  ariaLabel,
+}: OperationalLineChartProps) {
+  const option = useMemo<EChartsCoreOption>(() => {
+    const values = points.map((point) => point.value);
+    const min = values.length ? Math.min(...values) : 0;
+    const max = values.length ? Math.max(...values) : 0;
+    const padding = Math.max((max - min) * 0.18, 1);
 
-function formatValueLabel(value: unknown, unit?: string) {
-  const numeric = typeof value === 'number' ? value : Number(value);
-  if (Number.isNaN(numeric)) return '';
-  return unit ? `${numeric} ${unit}` : String(numeric);
-}
+    return {
+      animation: false,
+      grid: {
+        left: size === 'micro' ? 8 : 34,
+        right: 12,
+        top: size === 'micro' ? 12 : 18,
+        bottom: 24,
+        containLabel: false,
+      },
+      tooltip: {
+        trigger: 'axis',
+        backgroundColor: '#12161b',
+        borderColor: '#2c333a',
+        borderWidth: 1,
+        textStyle: { color: '#f4f5f7', fontSize: 11 },
+        valueFormatter: (value: unknown) => `${value}${unit ? ` ${unit}` : ''}`,
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: points.map((point) => point.label),
+        axisTick: { show: false },
+        axisLine: { lineStyle: { color: '#2d343b' } },
+        axisLabel: {
+          color: '#747f8b',
+          fontSize: 10,
+          hideOverlap: true,
+        },
+      },
+      yAxis: {
+        type: 'value',
+        show: size !== 'micro',
+        min: min - padding,
+        max: max + padding,
+        splitNumber: 3,
+        axisLabel: {
+          color: '#747f8b',
+          fontSize: 10,
+          formatter: (value: number) => unit ? `${value}${unit}` : String(value),
+        },
+        splitLine: {
+          lineStyle: { color: '#22292f', type: 'dashed' },
+        },
+      },
+      series: [
+        {
+          type: 'line',
+          data: values,
+          smooth: 0.35,
+          symbol: 'circle',
+          symbolSize: size === 'micro' ? 4 : 6,
+          showSymbol: size !== 'micro',
+          lineStyle: {
+            width: 2,
+            color: '#22d3ee',
+          },
+          itemStyle: {
+            color: '#22d3ee',
+            borderColor: '#0b0f13',
+            borderWidth: 2,
+          },
+          areaStyle: size === 'main'
+            ? {
+                color: {
+                  type: 'linear',
+                  x: 0,
+                  y: 0,
+                  x2: 0,
+                  y2: 1,
+                  colorStops: [
+                    { offset: 0, color: 'rgba(34,211,238,.22)' },
+                    { offset: 1, color: 'rgba(34,211,238,0)' },
+                  ],
+                },
+              }
+            : undefined,
+          emphasis: {
+            focus: 'series',
+            lineStyle: { width: 3 },
+          },
+        },
+      ],
+    };
+  }, [points, size, unit]);
 
-const INITIAL_DIMENSION = {
-  micro: { width: 360, height: 88 },
-  main: { width: 360, height: 144 }
-} as const;
-
-const MIN_HEIGHT = { micro: '5.5rem', main: '9rem' } as const;
-
-export function OperationalLineChart({ points, unit, size = 'main', ariaLabel }: OperationalLineChartProps) {
-  const data = useMemo<ChartRow[]>(() => points.map((point) => ({ name: point.label, value: point.value })), [points]);
-  const viewportClass = size === 'micro' ? `${styles.chartViewport} ${styles.chartViewportMicro}` : `${styles.chartViewport} ${styles.chartViewportMain}`;
-  const showValueLabels = size === 'main';
-  const yPadding = size === 'micro' ? 0.05 : 0.1;
-  const values = points.map((point) => point.value);
-  const minValue = values.length ? Math.min(...values) : 0;
-  const maxValue = values.length ? Math.max(...values) : 0;
+  const viewportClass =
+    size === 'micro'
+      ? `${styles.chartViewport} ${styles.chartViewportMicro}`
+      : `${styles.chartViewport} ${styles.chartViewportMain}`;
 
   return (
-    <div className={viewportClass} role="img" aria-label={ariaLabel}>
-      <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={MIN_HEIGHT[size]} initialDimension={INITIAL_DIMENSION[size]}>
-        <LineChart data={data} margin={{ top: showValueLabels ? 14 : 6, right: 4, left: size === 'micro' ? -8 : -12, bottom: 0 }}>
-          <CartesianGrid stroke="var(--hy-chart-grid)" strokeDasharray="2 4" vertical={false} />
-          <XAxis dataKey="name" tick={{ fill: 'var(--hy-chart-axis)', fontSize: 10 }} axisLine={{ stroke: 'var(--hy-chart-axis-line)' }} tickLine={false} interval="preserveStartEnd" />
-          <YAxis hide={size === 'micro'} tick={{ fill: 'var(--hy-chart-axis)', fontSize: 10 }} width={size === 'micro' ? 0 : 28} axisLine={false} tickLine={false} domain={[minValue - yPadding, maxValue + yPadding]} />
-          <Line type="monotone" dataKey="value" stroke="var(--hy-chart-series-primary)" strokeWidth={2} dot={{ fill: 'var(--hy-chart-series-primary)', r: 3, strokeWidth: 0 }} activeDot={false} isAnimationActive={false}>
-            {showValueLabels ? <LabelList dataKey="value" position="top" formatter={(value) => formatValueLabel(value, unit)} className={styles.chartValueLabel} /> : null}
-          </Line>
-        </LineChart>
-      </ResponsiveContainer>
-    </div>
+    <OperationalEChart
+      option={option}
+      ariaLabel={ariaLabel}
+      className={viewportClass}
+    />
   );
 }
