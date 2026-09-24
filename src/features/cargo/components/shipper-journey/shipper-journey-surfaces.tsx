@@ -45,6 +45,11 @@ export function ProposalNegotiationSurface({
         <span className={styles.demoBadge}>DEMO</span>
       </header>
 
+      <div className={styles.contextBar}>
+        <span><strong>#HY-247-819 · proposta #PN-184</strong><small>Manaus → Santarém · janela operacional 18:40</small></span>
+        <span className={styles.statusBadge}>Em negociação</span>
+      </div>
+
       <div className={styles.negotiationGrid}>
         <article className={styles.panel}>
           <div className={styles.panelHeader}>
@@ -89,7 +94,12 @@ export function ProposalNegotiationSurface({
 
           <div className={styles.decisionRead}>
             <small className={styles.miniLabel}>LEITURA PARA DECISÃO</small>
-            <strong>A alternativa custa mais, mas reduz exposição de calado e chega com documentos prontos. A escolha continua humana.</strong>
+            <strong>A alternativa custa R$ 550 a mais, chega 50 min antes e reduz a demurrage contratual em R$ 130/h.</strong>
+          </div>
+
+          <div className={styles.recommendation}>
+            <div><small className={styles.miniLabel}>POR QUE ESTA PROPOSTA?</small><strong>Chega 50 min antes e reduz demurrage em R$ 130/h</strong></div>
+            <span className={styles.recommendationMetrics}><span>ETA −50 min</span><span>−R$ 130/h</span></span>
           </div>
         </article>
 
@@ -107,11 +117,12 @@ export function OperationalCommunicationPanel({ onReview }: { onReview?: () => v
         <span className={styles.statusBadge}><Radio size={12} /> contexto ativo</span>
       </div>
       <div className={styles.chatBody}>
-        <div className={styles.message}>Conseguimos antecipar a chegada se a janela de 18:30 for mantida.<small>Operador · 15:47</small></div>
-        <div className={styles.message} data-own="true">Confirma demurrage contratual e validade da proposta?<small>Você · 15:48</small></div>
-        <div className={styles.message}>Confirmado. Validade até 16:45. Condição de calado segue compatível no snapshot atual.<small>Operador · 15:51</small></div>
+        <div className={styles.message}>Conseguimos antecipar a chegada para 18:30.<small>Rio Norte · 15:42</small></div>
+        <div className={styles.message} data-own="true">Confirma demurrage e validade da proposta?<small>Você · 15:47</small></div>
+        <div className={styles.message}>R$ 820/h. Validade até 16:45.<small>Rio Norte · 15:51</small></div>
       </div>
-      <div className={styles.chatComposer}>
+      <div className={styles.chatFooter}>
+        <p><strong>Proposta + Trade-off + Conversa = Decisão.</strong> A conversa confirma os termos que sustentam a escolha.</p>
         <button className={styles.primaryAction} type="button" onClick={onReview}>Revisar aceite</button>
       </div>
     </aside>
