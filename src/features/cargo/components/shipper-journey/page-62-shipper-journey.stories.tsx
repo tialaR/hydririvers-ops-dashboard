@@ -19,6 +19,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const Overview: Story = { args: { initial: 'discovery' } };
 export const D04D05Cockpit: Story = { args: { initial: 'cockpit' } };
 export const D06D07DocumentsRisk: Story = { args: { initial: 'documentsRisk' } };
 export const D08D09Negotiation: Story = { args: { initial: 'negotiation' } };
