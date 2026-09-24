@@ -29,7 +29,7 @@
 
 .top > strong
   overflow: hidden
-  font-size: 1.0625rem
+  font-size: 1.125rem
   font-weight: 500
   line-height: 1.2
   text-overflow: ellipsis
@@ -41,7 +41,7 @@
   align-items: center
   gap: 0.375rem
   color: var(--shipment-muted)
-  font-size: 0.6875rem
+  font-size: 0.75rem
   font-weight: 400
   line-height: 1
   white-space: nowrap
@@ -54,28 +54,28 @@
   content: ''
 
 .status[data-tone='open']
-  --shipment-status-color: var(--hy-color-status-open-text, #9ca3af)
+  --shipment-status-color: #9ca3af
 
 .status[data-tone='quotation']
-  --shipment-status-color: var(--hy-color-status-quotation-text, #a855f7)
+  --shipment-status-color: #a855f7
 
 .status[data-tone='contracting']
-  --shipment-status-color: var(--hy-color-status-contracting-text, #f59e0b)
+  --shipment-status-color: #f59e0b
 
 .status[data-tone='operating']
-  --shipment-status-color: var(--hy-color-status-operating-text, #14b8a6)
+  --shipment-status-color: #14b8a6
 
 .status[data-tone='inTransit']
-  --shipment-status-color: var(--hy-color-status-in-transit-text, #38bdf8)
+  --shipment-status-color: #38bdf8
 
 .status[data-tone='completed']
-  --shipment-status-color: var(--hy-color-status-completed-text, #34d399)
+  --shipment-status-color: #34d399
 
 .status[data-tone='delayed']
-  --shipment-status-color: var(--hy-color-status-delayed-text, #ff3b4d)
+  --shipment-status-color: #ff3b4d
 
 .status[data-tone='blocked']
-  --shipment-status-color: var(--hy-color-status-blocked-text, #ef4444)
+  --shipment-status-color: #ef4444
 
 .route
   display: grid
@@ -107,11 +107,11 @@
   white-space: nowrap
 
 .locationCopy strong
-  font-size: 0.875rem
+  font-size: 1rem
 
 .locationCopy small
   color: var(--shipment-muted)
-  font-size: 0.8125rem
+  font-size: 0.875rem
 
 .locationDestination .locationCopy
   text-align: right
@@ -184,7 +184,8 @@
   justify-content: center
   margin-top: 1.875rem
   margin-right: 1rem
-  border-top: 1px dashed #b8bdc0
+  border-top: 0
+  background: repeating-linear-gradient(90deg,#b8bdc0 0 0.25rem,transparent 0.25rem 0.5rem)
   color: #e9ebea
 
 .transit span
@@ -210,11 +211,11 @@
 
 .facts small
   color: var(--shipment-muted)
-  font-size: 0.5625rem
+  font-size: 0.75rem
 
 .facts strong
   overflow: hidden
-  font-size: 0.6875rem
+  font-size: 0.875rem
   font-weight: 400
   text-overflow: ellipsis
   white-space: nowrap
