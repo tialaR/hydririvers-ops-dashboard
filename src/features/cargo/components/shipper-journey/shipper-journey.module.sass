@@ -974,32 +974,8 @@
   padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0
 
 .recentSignals
-  display: grid
-  grid-template-columns: repeat(3, minmax(0,1fr))
-  gap: var(--hy-p62-space-2)
+  display: block
   padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
-
-.recentSignals > span
-  display: grid
-  grid-template-columns: auto 1fr
-  gap: var(--hy-p62-space-1) var(--hy-p62-space-2)
-  align-items: center
-  min-height: 3.75rem
-  padding: var(--hy-p62-space-3)
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-panel)
-  background: var(--hy-p62-surface-raised)
-
-.recentSignals svg
-  grid-row: 1 / 3
-  color: var(--hy-p62-success)
-
-.recentSignals small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-
-.recentSignals strong
-  font-size: var(--hy-p62-font-sm)
 
 @media (max-width: 68rem)
   .decisionVisualGrid,
@@ -1007,14 +983,12 @@
   .correctionVisualGrid
     grid-template-columns: 1fr
 
-  .reviewSignalGrid,
-  .recentSignals
+  .reviewSignalGrid
     grid-template-columns: repeat(2, minmax(0, 1fr))
 
 @media (max-width: 42rem)
   .visualSummary,
-  .reviewSignalGrid,
-  .recentSignals
+  .reviewSignalGrid
     grid-template-columns: 1fr
 
 
