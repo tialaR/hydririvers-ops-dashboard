@@ -70,8 +70,10 @@ export type OwnedCargoDesktopViewModel = {
   statusLabel: string;
   originRegion: string;
   originCity: string;
+  originStateCode: string;
   destinationRegion: string;
   destinationCity: string;
+  destinationStateCode: string;
   cargoType: string;
   totalWeight: string;
   vessel: string;
@@ -107,12 +109,13 @@ export type OwnedCargoDesktopViewModel = {
   };
 };
 
-function splitPlace(place: string): { region: string; city: string } {
+function splitPlace(place: string): { region: string; city: string; stateCode: string } {
   const [cityPart, ...regionParts] = place.split(',').map((part) => part.trim()).filter(Boolean);
   if (regionParts.length === 0) {
-    return { region: '', city: cityPart ?? place };
+    return { region: '', city: cityPart ?? place, stateCode: '' };
   }
-  return { region: `${regionParts.join(', ')},`, city: cityPart ?? place };
+  const stateCode = regionParts.at(-1) ?? '';
+  return { region: `${regionParts.join(', ')},`, city: cityPart ?? place, stateCode };
 }
 
 export function buildOwnedCargoDesktopViewModel(
@@ -135,8 +138,10 @@ export function buildOwnedCargoDesktopViewModel(
     statusLabel,
     originRegion: facts.originRegion ?? origin.region,
     originCity: facts.originCity ?? origin.city,
+    originStateCode: origin.stateCode,
     destinationRegion: facts.destinationRegion ?? destination.region,
     destinationCity: facts.destinationCity ?? destination.city,
+    destinationStateCode: destination.stateCode,
     cargoType: facts.cargoType ?? copy.cargoLabel,
     totalWeight: facts.totalWeight ?? '—',
     vessel: facts.vessel ?? copy.vesselLabel,
