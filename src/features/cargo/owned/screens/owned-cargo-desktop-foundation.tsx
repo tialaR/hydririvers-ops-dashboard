@@ -14,12 +14,7 @@ import { OwnedCargoDetailSummary } from '@/features/cargo/owned/components/owned
 import { OwnedCargoDetailTabs } from '@/features/cargo/owned/components/owned-cargo-detail-tabs';
 import { OwnedCargoShipmentCard } from '@/features/cargo/owned/components/owned-cargo-shipment-card';
 import type { CargoCorridorId, OwnedCargo, OwnedCargoFreshnessState, OwnedCargoRiskLevel, OwnedCargoStatus } from '@/features/cargo/owned/domain/owned-cargo-types';
-import {
-  PAGE_61_219_254_VISUAL_FIXTURE_ID,
-  getPage61219254DesktopFacts,
-  page61219254SelectedVisualFacts,
-  page61219254VisualCargoes,
-} from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
+import { resolveOwnedCargoDesktopDataset } from '@/features/cargo/owned/application/resolve-owned-cargo-desktop-dataset';
 import { useProductShell } from '@/features/product-shell/providers/product-shell-provider';
 import { ShipperOperationMap } from '@/features/waterway-map/components/owned-cargo-operation-map/owned-cargo-operation-map';
 import { getShipperMapRouteForCargo } from '@/features/waterway-map/domain/owned-cargo-operation-route';
@@ -62,10 +57,11 @@ export function OwnedCargoDesktopFoundation({ cargoes }: Props) {
   const t = useTranslations('shipperMobileFlow');
   const searchParams = useSearchParams();
   const { currentUser } = useProductShell();
-  const usesDeterministicFixtureData =
-    searchParams.get('visualFixture') === PAGE_61_219_254_VISUAL_FIXTURE_ID;
-
-  const renderedCargoes = usesDeterministicFixtureData ? page61219254VisualCargoes : cargoes;
+  const dataset = resolveOwnedCargoDesktopDataset(
+    cargoes,
+    searchParams.get('visualFixture'),
+  );
+  const renderedCargoes = dataset.cargoes;
   const [selectedId, setSelectedId] = useState(renderedCargoes[0]?.id ?? '');
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
@@ -186,7 +182,7 @@ export function OwnedCargoDesktopFoundation({ cargoes }: Props) {
         <button type="button" className={styles.fitRoute}>{selected.map.fitRoute}</button>
         <div className={styles.mapControls} data-testid="page61-map-controls"><button type="button" aria-label={t('myCargoes.desktop.zoomIn')}>⊖</button><button type="button" aria-label={t('myCargoes.desktop.zoomOut')}>◴</button><button type="button" aria-label={t('myCargoes.desktop.centerMap')}>◎</button></div>
       </div>
-      <OwnedCargoDetailTabs cargoId={selected.cargo.id} labels={usesDeterministicFixtureData ? page61219254SelectedVisualFacts.tabs : undefined}/>
+      <OwnedCargoDetailTabs cargoId={selected.cargo.id} labels={dataset.detailTabLabels}/>
       <OwnedCargoDetailSummary viewModel={selected}/>
     </section>
   </main>;
