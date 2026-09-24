@@ -14,3 +14,4 @@ export * from './components/bottom-navigation';
 export * from './components/bottom-sheet';
 
 export * from './patterns/segmented-goal-meter';
+export * from './patterns/operational-schedule-list';
