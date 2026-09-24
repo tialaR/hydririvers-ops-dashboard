@@ -7,6 +7,7 @@ import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server
 import { notFound } from 'next/navigation';
 import { routing } from '@/core/i18n/routing';
 import '../globals.scss';
+import '@/shared/design-system/foundations/dashboard-visual-tokens.css';
 import { ThemeProvider } from '@/shared/providers/theme-provider';
 import { cookieNames } from '@/shared/http/cookie-names';
 import { resolveServerTheme } from '@/shared/preferences/resolve-server-theme';
