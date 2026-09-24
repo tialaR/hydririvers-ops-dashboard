@@ -1,0 +1,137 @@
+{
+  "version": "1.0",
+  "generatedAt": "2026-09-24",
+  "sourceBundle": "FIGMA-SCREENS.zip",
+  "fileKey": "hQA6rajAQLYVUVSR47YSws",
+  "accessNote": "Figma MCP Starter limit reached; implementation uses supplied exports as visual authority.",
+  "screens": [
+    {
+      "id": "D01",
+      "file": "PLAY-D01.svg",
+      "sha256": "75d28403277be092cec77d460c173bcf8f6fcae24adac83239bc51509c968120",
+      "group": "discovery"
+    },
+    {
+      "id": "D02",
+      "file": "PLAY-D02.png",
+      "sha256": "f786cfa43532b3fd9924a78bfd753059cb2339727e6b0ca644303b06f6f386c9",
+      "group": "discovery"
+    },
+    {
+      "id": "D03",
+      "file": "PLAY-D03.svg",
+      "sha256": "4a73f115f8d7cae3e4c2ebc486c03d226afee3c0faff1d69427b5eb1bd0890c0",
+      "group": "discovery"
+    },
+    {
+      "id": "D04",
+      "file": "PLAY-D04.svg",
+      "sha256": "aa63385157d894126cc7d8b81cb2bb94e3380cd4bf9e32a557184b27b2842641",
+      "group": "cockpit"
+    },
+    {
+      "id": "D05",
+      "file": "PLAY-D05.svg",
+      "sha256": "a4a4897c0e3f3b01744c042816722bb4e3f187149e231fb4cb8790d8d5a83465",
+      "group": "cockpit"
+    },
+    {
+      "id": "D06",
+      "file": "PLAY-D06.svg",
+      "sha256": "b0b9b80cf4c3912dbe12d2965f77a42e8d7a6eb1c124ab97604f734949bfc3f5",
+      "group": "documentsRisk"
+    },
+    {
+      "id": "D07",
+      "file": "PLAY-D07.svg",
+      "sha256": "ed9fda8602b212187ea06b1e6c900b9dee728f5f37c896b4a5b94f63efd5b017",
+      "group": "documentsRisk"
+    },
+    {
+      "id": "D08",
+      "file": "PLAY-D08.svg",
+      "sha256": "a483642e1e9de5d4e40efce83fc26b1fbe997d33c6e2d7d792bbc1990784da35",
+      "group": "negotiation"
+    },
+    {
+      "id": "D09",
+      "file": "PLAY-D09.svg",
+      "sha256": "809835e5fcd71ab134d1e0479e7aba158ccb7a60d03146a4a2e8beb2694117cd",
+      "group": "negotiation"
+    },
+    {
+      "id": "D10",
+      "file": "PLAY-D10.svg",
+      "sha256": "5b1f1a95ffd463d78a1338d30c446e9350dc809adfec8f72255143208add3784",
+      "group": "review"
+    },
+    {
+      "id": "D11",
+      "file": "PLAY-D11.svg",
+      "sha256": "ecd1632449ed1d585708116947854d5b960c8119cb2e8626fea18d027c56311c",
+      "group": "feedback"
+    },
+    {
+      "id": "D12",
+      "file": "PLAY-D12.svg",
+      "sha256": "df8d409b00c3986b11c6dd7a1b346a219317199eb246afa8009aef2e9728e740",
+      "group": "correction"
+    },
+    {
+      "id": "D13",
+      "file": "PLAY-D13.svg",
+      "sha256": "2b11503268d0ef7b01b3771b305b5998ef71308b5e937ed447e823488aa51c1d",
+      "group": "monitoring"
+    }
+  ],
+  "supplemental": [
+    {
+      "file": "Action Review.png",
+      "sha256": "e9a36630e484d5c93bd6e489c8578f16fcaf01cbd7a4f7af640ab2da91970dd9",
+      "mapsTo": "D10"
+    },
+    {
+      "file": "D11 · Action Feedback.png",
+      "sha256": "baa64fcf12ff1cec658ec98e05944463c459390620e9752c661840e227703772",
+      "mapsTo": "D11"
+    },
+    {
+      "file": "Monitoring.png",
+      "sha256": "53967ea0e1a2ad62e06a6b71fe9f9ffbbf111e44f02124e4637027bb30e705b1",
+      "mapsTo": "D13"
+    },
+    {
+      "file": "Resubmit.svg",
+      "sha256": "2a75a076b8c3ca2fa913f5b32b4050c56e4aff3e64da8ff4d8c120000085638f",
+      "mapsTo": "D12"
+    },
+    {
+      "file": "D06–D07 · Documents & Evidence + Risk.svg",
+      "sha256": "92d97182763dcdccac10c46e630d62da6c2f8ac137dc7bd32772fcb976085e0c",
+      "mapsTo": "D06-D07"
+    }
+  ],
+  "duplicateVisualPairs": [
+    {
+      "a": "D01",
+      "b": "D03",
+      "evidence": "rendered RMSE = 0"
+    },
+    {
+      "a": "D04",
+      "b": "D05",
+      "evidence": "rendered RMSE = 0"
+    },
+    {
+      "a": "D06",
+      "b": "D07",
+      "evidence": "rendered RMSE = 0"
+    },
+    {
+      "a": "D08",
+      "b": "D09",
+      "evidence": "rendered RMSE = 0"
+    }
+  ],
+  "decision": "Treat duplicate pairs as one composition with different journey/state semantics; do not duplicate layouts."
+}
