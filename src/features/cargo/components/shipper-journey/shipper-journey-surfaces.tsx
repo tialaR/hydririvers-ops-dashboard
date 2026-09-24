@@ -7,6 +7,7 @@ import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/
 import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
 import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
+import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
 import styles from './shipper-journey.module.sass';
 
 function money(value: number) {
@@ -248,6 +249,17 @@ export function ActionFeedbackSurface({ onMonitor }: { onMonitor?: () => void })
           <span className={styles.iconBubble}><CheckCircle2 size={24}/></span>
           <div><small>PRONTIDÃO OPERACIONAL</small><strong>86%</strong><p>Decisão aplicada; validação documental é o único item ainda em curso.</p></div>
           <OperationalGaugeChart value={86} label="Prontidão" ariaLabel="Prontidão operacional de 86%" />
+          <div className={styles.segmentedReadiness}>
+            <SegmentedGoalMeter
+              value={3}
+              max={4}
+              segments={12}
+              label="Etapas concluídas"
+              valueLabel="3/4"
+              targetLabel="ação completa"
+              tone="success"
+            />
+          </div>
         </article>
       </div>
 
