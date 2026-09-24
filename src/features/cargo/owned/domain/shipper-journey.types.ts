@@ -88,9 +88,10 @@ export type ShipperProposal = {
   vesselLabel: string;
   priceBRL: number;
   etaHours: number;
+  arrivalAt: string;
   validityAt: string;
   demurrage?: {
-    valueBRLPerDay: number;
+    valueBRLPerHour: number;
     contractual: boolean;
   };
   compatibility: {
