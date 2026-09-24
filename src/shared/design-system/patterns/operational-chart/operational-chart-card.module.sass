@@ -172,3 +172,18 @@
 @media (prefers-reduced-motion: reduce)
   .cta
     transition: opacity 0.12s ease
+
+
+.gaugeViewport
+  inline-size: 4.75rem
+  block-size: 4.75rem
+  flex: 0 0 4.75rem
+
+.telemetryViewport
+  inline-size: 100%
+  block-size: 10.75rem
+  min-block-size: 10.75rem
+
+@media (max-width: 75rem)
+  .telemetryViewport
+    block-size: 12rem
