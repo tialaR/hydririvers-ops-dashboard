@@ -5,6 +5,7 @@ import type { EChartsCoreOption } from './operational-echart';
 import { OperationalEChart } from './operational-echart';
 import type { OperationalChartPoint } from './operational-chart-types';
 import styles from './operational-chart-card.module.sass';
+import { buildOperationalTooltip, operationalTooltipShell } from './operational-tooltip';
 
 export type OperationalLineChartProps = {
   points: OperationalChartPoint[];
@@ -35,12 +36,18 @@ export function OperationalLineChart({
         containLabel: false,
       },
       tooltip: {
+        ...operationalTooltipShell,
         trigger: 'axis',
-        backgroundColor: '#12161b',
-        borderColor: '#2c333a',
-        borderWidth: 1,
-        textStyle: { color: '#f4f5f7', fontSize: 11 },
-        valueFormatter: (value: unknown) => `${value}${unit ? ` ${unit}` : ''}`,
+        axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+        formatter: (raw: unknown) => {
+          const items = Array.isArray(raw) ? raw as Array<{ axisValue?: string; value?: number }> : [];
+          const item = items[0];
+          return buildOperationalTooltip({
+            eyebrow: 'SÉRIE OPERACIONAL',
+            title: item?.axisValue ?? 'Período',
+            rows: [{ label: 'Valor', value: String(item?.value ?? '—') + (unit ? ' ' + unit : '') }],
+          });
+        },
       },
       xAxis: {
         type: 'category',
@@ -79,11 +86,11 @@ export function OperationalLineChart({
           showSymbol: size !== 'micro',
           lineStyle: {
             width: 2,
-            color: '#22d3ee',
+            color: '#d4d4d8',
           },
           itemStyle: {
-            color: '#22d3ee',
-            borderColor: '#0b0f13',
+            color: '#d4d4d8',
+            borderColor: '#18181b',
             borderWidth: 2,
           },
           areaStyle: size === 'main'
@@ -95,8 +102,8 @@ export function OperationalLineChart({
                   x2: 0,
                   y2: 1,
                   colorStops: [
-                    { offset: 0, color: 'rgba(34,211,238,.22)' },
-                    { offset: 1, color: 'rgba(34,211,238,0)' },
+                    { offset: 0, color: 'rgba(212,212,216,.16)' },
+                    { offset: 1, color: 'rgba(212,212,216,0)' },
                   ],
                 },
               }
