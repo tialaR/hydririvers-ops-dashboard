@@ -14,10 +14,9 @@ const meta = {
   args: {
     viewModel: attentionCargo!,
     selected: true,
-        onSelect: () => undefined,
+    onSelect: () => undefined,
   },
   argTypes: {
-    },
     selected: {
       control: 'boolean',
       description: 'Selected state used by the master/detail list.',
