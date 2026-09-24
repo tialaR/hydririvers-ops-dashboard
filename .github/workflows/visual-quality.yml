@@ -97,6 +97,7 @@ jobs:
             sleep 1
           done
           PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-page-61-storybook-components.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/storybook-components.log
+          PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-shipment-card-storybook-variants.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/shipment-card-variants.log
 
       - name: Build candidate runtime
         id: build
