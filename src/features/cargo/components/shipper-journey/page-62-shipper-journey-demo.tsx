@@ -4,6 +4,8 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useMemo, useState } from 'react';
 
 import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-62-shipper-journey.mock';
+import { Page62CargoCockpitPreview } from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
+import { Page62D06ContractSurface, Page62D07ContractSurface } from '@/features/cargo/components/documents-occurrence/page-62-d06-d07-contract-surfaces';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
 import {
@@ -16,6 +18,8 @@ import {
 import styles from './shipper-journey.module.sass';
 
 const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
+  { id: 'cockpit', label: 'D04–D05 · Cockpit' },
+  { id: 'documentsRisk', label: 'D06–D07 · Evidências' },
   { id: 'negotiation', label: 'D08–D09 · Negociação' },
   { id: 'review', label: 'D10 · Revisão' },
   { id: 'feedback', label: 'D11 · Feedback' },
@@ -34,6 +38,17 @@ export function Page62ShipperJourneyDemo({ initial = 'negotiation' }: { initial?
   );
 
   const content = (() => {
+    if (experience === 'cockpit') {
+      return <Page62CargoCockpitPreview initialMode="cockpit" />;
+    }
+    if (experience === 'documentsRisk') {
+      return (
+        <div className={styles.documentsRiskGrid}>
+          <Page62D06ContractSurface />
+          <Page62D07ContractSurface />
+        </div>
+      );
+    }
     if (experience === 'review' && proposals[0] && proposals[1]) {
       return (
         <DecisionActionReviewSurface
