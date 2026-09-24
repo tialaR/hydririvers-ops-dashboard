@@ -130,8 +130,28 @@
     {
       "a": "D08",
       "b": "D09",
-      "evidence": "rendered RMSE = 0"
+      "evidence": "PLAY-D08.png and PLAY-D09.png are byte-identical; Negotiation + Communication.svg confirms they are one parent composition with two semantic responsibilities."
     }
   ],
-  "decision": "Treat duplicate pairs as one composition with different journey/state semantics; do not duplicate layouts."
+  "decision": "Treat duplicate pairs as one composition with different journey/state semantics; do not duplicate layouts.",
+  "flowBlueprint": {
+    "file": "M01 · BLUEPRINT DESKTOP FLOW.svg",
+    "sha256": "fa54c14618aff4bff3c3b6f52a7745cdbf99fe355a58092b0ca4c31344a8e871",
+    "interpretation": "Vertical journey reference. Confirms the sequence discovery → cockpit → documents/risk → negotiation → review → feedback/rejection → correction → monitoring."
+  },
+  "compositeReferences": [
+    {
+      "file": "Negotiation + Communication.svg",
+      "sha256": "2e285c2df656d172dce0db18a4b9f015bfc2017c6e4335fa31cb05e9b3ca7e6a",
+      "dimensions": {
+        "width": 1440,
+        "height": 980
+      },
+      "mapsTo": [
+        "D08",
+        "D09"
+      ],
+      "interpretation": "High-resolution parent composition of proposal comparison + operational conversation. Not an additional journey state."
+    }
+  ]
 }
