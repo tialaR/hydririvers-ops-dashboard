@@ -31,6 +31,11 @@ export function OperationalTelemetryChart({
       animation: false,
       tooltip: {
         trigger: 'axis',
+        axisPointer: {
+          type: 'line',
+          snap: true,
+          lineStyle: { color: '#44515d', width: 1, type: 'dashed' },
+        },
         backgroundColor: '#12161b',
         borderColor: '#2c333a',
         borderWidth: 1,
