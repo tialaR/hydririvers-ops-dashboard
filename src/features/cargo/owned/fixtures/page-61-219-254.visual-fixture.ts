@@ -1,4 +1,5 @@
 import type { OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
+import type { OwnedCargoDesktopFacts } from '@/features/cargo/owned/application/owned-cargo-desktop-view-model';
 
 export const PAGE_61_219_254_VISUAL_FIXTURE_ID = 'page61-219-254';
 
@@ -45,3 +46,56 @@ export const page61219254MapVisualFacts = {
   riverDetail: 'faixa operacional normal',
   fitRoute: 'Enquadrar rota'
 } as const;
+
+
+export function getPage61219254DesktopFacts(cargo: OwnedCargo): OwnedCargoDesktopFacts {
+  const base: OwnedCargoDesktopFacts = {
+    codeLabel: '#HY-000-000',
+    statusLabel:
+      cargo.status === 'attention'
+        ? 'Atrasada'
+        : cargo.status === 'inTransit'
+          ? 'Em trânsito'
+          : cargo.status === 'delivered'
+            ? 'Entregue'
+            : 'Aberta',
+    originRegion: page61219254SelectedVisualFacts.originRegion,
+    originCity: page61219254SelectedVisualFacts.originCity,
+    destinationRegion: page61219254SelectedVisualFacts.destinationRegion,
+    destinationCity: page61219254SelectedVisualFacts.destinationCity,
+    cargoType: page61219254SelectedVisualFacts.cargoType,
+    cardEta: page61219254SelectedVisualFacts.cardEta,
+    cardEtaDay: page61219254SelectedVisualFacts.cardEtaDay,
+  };
+
+  if (cargo.id !== page61219254VisualCargoes[0]?.id) return base;
+
+  return {
+    ...base,
+    totalWeight: page61219254SelectedVisualFacts.totalWeight,
+    vessel: page61219254SelectedVisualFacts.vessel,
+    carrier: page61219254SelectedVisualFacts.carrier,
+    carrierReference: page61219254SelectedVisualFacts.carrierReference,
+    carrierRole: page61219254SelectedVisualFacts.carrierRole,
+    progressLabel: page61219254SelectedVisualFacts.progress,
+    signal: page61219254SelectedVisualFacts.signal,
+    signalDetail: page61219254MapVisualFacts.signalDetail,
+    river: page61219254SelectedVisualFacts.river,
+    riverDetail: page61219254MapVisualFacts.riverDetail,
+    nextMilestone: page61219254SelectedVisualFacts.nextMilestone,
+    nextMilestoneTime: page61219254SelectedVisualFacts.nextMilestoneTime,
+    attentionEyebrow: page61219254SelectedVisualFacts.attentionEyebrow,
+    attentionTitle: page61219254SelectedVisualFacts.attentionTitle,
+    attentionBody: page61219254SelectedVisualFacts.attentionBody,
+    attentionDocument: page61219254SelectedVisualFacts.attentionDocument,
+    attentionDeadline: page61219254SelectedVisualFacts.attentionDeadline,
+    attentionAction: page61219254SelectedVisualFacts.attentionAction,
+    mapOperation: page61219254MapVisualFacts.operation,
+    mapRisk: page61219254MapVisualFacts.risk,
+    mapSignal: page61219254MapVisualFacts.signal,
+    mapSignalDetail: page61219254MapVisualFacts.signalDetail,
+    mapRiver: page61219254MapVisualFacts.river,
+    mapRiverDetail: page61219254MapVisualFacts.riverDetail,
+    mapFitRoute: page61219254MapVisualFacts.fitRoute,
+  };
+}
