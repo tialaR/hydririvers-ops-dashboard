@@ -317,3 +317,28 @@ Page 62 só pode ser chamado de pronto quando:
 - os componentes usam tokens semânticos;
 - D01–D13 estão cobertos pelos oito estados visuais reais;
 - Storybook, lint, typecheck, testes e gates passam.
+
+
+## 12. Visual evidence reconciliation — delivered exports
+
+The supplied `M01 · BLUEPRINT DESKTOP FLOW.svg` (SHA-256 `fa54c14618aff4bff3c3b6f52a7745cdbf99fe355a58092b0ca4c31344a8e871`) confirms the business journey already inferred from the smaller D01–D13 exports:
+
+1. portfolio / map context;
+2. operational cockpit;
+3. documents + risk;
+4. proposal comparison + communication;
+5. action review;
+6. action feedback;
+7. rejection / correction when required;
+8. post-action monitoring.
+
+The supplied `Negotiation + Communication.svg` (SHA-256 `2e285c2df656d172dce0db18a4b9f015bfc2017c6e4335fa31cb05e9b3ca7e6a`) is **not a new screen**. It is the 1440×980 parent composition for the D08/D09 pair:
+- left: proposal comparison / trade-offs / rationale;
+- right: contextual operational communication;
+- footer: explicit transition into review.
+
+The smaller `PLAY-D08.png` and `PLAY-D09.png` are byte-identical in the delivered material. The implementation therefore keeps one reusable composition and assigns D08/D09 as semantic responsibilities instead of cloning markup.
+
+### Consequence
+
+The flow is implemented as **state progression over reusable components**, not thirteen independent pages. This is the fastest path to production parity and the safest path to a future API because data state, action state and visual state remain separate.
