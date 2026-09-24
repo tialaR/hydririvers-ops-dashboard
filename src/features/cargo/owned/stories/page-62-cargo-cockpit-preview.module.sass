@@ -1,7 +1,7 @@
 .root
   display: grid
-  grid-template-columns: 25rem minmax(0, 1fr)
-  width: 87rem
+  grid-template-columns: 24rem minmax(0, 1fr)
+  width: min(100%, 96rem)
   min-height: 56.25rem
   overflow: hidden
   border: 0.0625rem solid var(--hy-p62-border)
@@ -32,13 +32,13 @@
 .evidenceCard small,
 .timelineEvidence small
   color: var(--hy-p62-muted)
-  font-size: 0.625rem
+  font-size: 0.8125rem
   font-weight: 650
   letter-spacing: 0.08em
 
 .masterHeader h2
   margin: 0.25rem 0 0
-  font-size: 1.25rem
+  font-size: 1.5rem
 
 .masterHeader > span
   color: var(--hy-p62-warning)
@@ -85,7 +85,7 @@
   background: transparent
   color: var(--hy-p62-muted)
   font: inherit
-  font-size: 0.72rem
+  font-size: 0.8125rem
   cursor: pointer
 
 .workspaceHeader nav button:disabled
@@ -152,7 +152,7 @@
   gap: 0.17rem
 
 .progressBody > div:last-child strong
-  font-size: 0.82rem
+  font-size: 0.9375rem
 
 .progressBody > div:last-child small
   letter-spacing: 0
@@ -207,7 +207,7 @@
 
 .cockpitGrid
   display: grid
-  grid-template-columns: minmax(0,1.7fr) minmax(17.5rem,.75fr)
+  grid-template-columns: minmax(0,1fr)
   gap: 1rem
   margin-top: 1rem
 
@@ -247,7 +247,7 @@
   border-radius: 999rem
   background: color-mix(in srgb, var(--hy-p62-success) 8%, transparent)
   color: var(--hy-p62-success)
-  font-size: 0.58rem
+  font-size: 0.6875rem
   font-weight: 700
   letter-spacing: 0.06em
 
@@ -299,7 +299,7 @@
   grid-template-columns: 1fr auto 1fr
   margin-top: 0.55rem
   color: var(--hy-p62-muted)
-  font-size: 0.6rem
+  font-size: 0.6875rem
 
 .routeLabels strong
   color: var(--hy-p62-text)
@@ -333,7 +333,7 @@
 
 .cockpitLowerGrid
   display: grid
-  grid-template-columns: minmax(0,1.25fr) minmax(17rem,.75fr)
+  grid-template-columns: minmax(0,1.45fr) minmax(19rem,.55fr)
   gap: 1rem
   margin-top: 1rem
 
@@ -367,7 +367,7 @@
 
 .attention span
   color: var(--hy-p62-muted)
-  font-size: 0.7rem
+  font-size: 0.8125rem
 
 .attention button
   min-height: 2rem
@@ -395,7 +395,7 @@
   gap: 0.15rem
 
 .evidenceCard > header strong
-  font-size: 0.78rem
+  font-size: 0.875rem
   font-weight: 570
 
 .evidenceList
@@ -424,7 +424,7 @@
   gap: 0.08rem
 
 .evidenceList > div strong
-  font-size: 0.68rem
+  font-size: 0.75rem
   font-weight: 560
 
 .evidenceList > div small
@@ -558,3 +558,29 @@
   .cockpitLowerGrid,
   .timelineLayout
     grid-template-columns: 1fr
+
+
+.routeContext
+  display: grid
+  grid-template-columns: minmax(14rem, .8fr) minmax(0, 1.8fr) minmax(18rem, .9fr)
+  align-items: center
+  gap: 1.25rem
+
+.routeContext header
+  align-self: center
+
+.routeContext .routeTrack
+  margin-top: 0
+
+.routeContext .routeLabels
+  margin-top: 0.65rem
+
+.routeContext .routeFacts
+  margin-top: 0
+
+@media (max-width: 78rem)
+  .routeContext
+    grid-template-columns: 1fr
+
+  .routeContext .routeTrack
+    margin-top: 1.2rem
