@@ -1,22 +1,20 @@
 'use client';
 
-import { Clock3, FileText, ShieldAlert, Ship } from 'lucide-react';
+import { Ship } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
-import type { OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
-import { page61219254SelectedVisualFacts } from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
-import { getShipperMapRouteForCargo } from '@/features/waterway-map/domain/owned-cargo-operation-route';
+import type { OwnedCargoDesktopViewModel } from '@/features/cargo/owned/application/owned-cargo-desktop-view-model';
 import styles from '@/features/cargo/owned/screens/owned-cargo-desktop-foundation.module.sass';
 
 type OwnedCargoShipmentCardProps = {
-  cargo: OwnedCargo;
+  viewModel: OwnedCargoDesktopViewModel;
   selected: boolean;
-  visualFixtureEnabled: boolean;
   onSelect: () => void;
 };
 
-export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, onSelect }: OwnedCargoShipmentCardProps) {
+export function OwnedCargoShipmentCard({ viewModel, selected, onSelect }: OwnedCargoShipmentCardProps) {
   const t = useTranslations('shipperMobileFlow');
+  const { cargo } = viewModel;
 
   return <button
     type="button"
@@ -29,26 +27,17 @@ export function OwnedCargoShipmentCard({ cargo, selected, visualFixtureEnabled, 
     onClick={onSelect}
   >
     <div className={styles.cardTop}>
-      <small>{visualFixtureEnabled ? '#HY-000-000' : cargo.code}</small>
-      <span data-tone={cargo.status}>{visualFixtureEnabled ? (cargo.status === 'attention' ? 'Atrasada' : cargo.status === 'inTransit' ? 'Em trânsito' : cargo.status === 'delivered' ? 'Entregue' : t(`cargoDetail.status.${cargo.status}`)) : t(`cargoDetail.status.${cargo.status}`)}</span>
-      {!visualFixtureEnabled ? <b>•••</b> : null}
+      <small>{viewModel.codeLabel}</small>
+      <span data-tone={cargo.status}>{viewModel.statusLabel}</span>
     </div>
     <div className={styles.route}>
-      <strong>{visualFixtureEnabled ? <><em data-flag="us"/><span><b>{page61219254SelectedVisualFacts.originRegion}</b><small>{page61219254SelectedVisualFacts.originCity}</small></span></> : cargo.origin}</strong>
-      <strong>{visualFixtureEnabled ? <><span><b>{page61219254SelectedVisualFacts.destinationRegion}</b><small>{page61219254SelectedVisualFacts.destinationCity}</small></span><em data-flag="pa"/></> : cargo.destination}</strong>
+      <strong><em data-flag="us"/><span><b>{viewModel.originRegion}</b><small>{viewModel.originCity}</small></span></strong>
+      <strong><span><b>{viewModel.destinationRegion}</b><small>{viewModel.destinationCity}</small></span><em data-flag="pa"/></strong>
     </div>
-    {!visualFixtureEnabled ? <div className={styles.routeLabels}><small>{t('myCargoes.desktop.origin')}</small><small>{t('myCargoes.desktop.destination')}</small></div> : null}
-    {visualFixtureEnabled ? <div className={styles.cardTransit}><span aria-hidden="true"><Ship size={22} strokeWidth={1.4}/></span></div> : null}
-    {visualFixtureEnabled ? <div className={styles.fixtureCardFacts}>
-      <div><small>{t('myCargoes.desktop.cargo')}</small><strong>{page61219254SelectedVisualFacts.cargoType}</strong></div>
-      <div><small>ETA</small><strong>{page61219254SelectedVisualFacts.cardEta} <span>{page61219254SelectedVisualFacts.cardEtaDay}</span></strong></div>
-    </div> : <>
-      <div className={styles.metrics}>
-        <span><Clock3 size={13}/>{t('myCargoes.desktop.eta', { hours: cargo.etaHours })}</span>
-        <span><ShieldAlert size={13}/>{t(`myCargoes.desktop.risk.${cargo.riskLevel}`)}</span>
-        <span><FileText size={13}/>{t('myCargoes.desktop.docs', { count: cargo.pendingDocsCount })}</span>
-      </div>
-      <div className={styles.progress}><i style={{ width: `${Math.round(getShipperMapRouteForCargo(cargo).progressRatio * 100)}%` }}/></div>
-    </>}
+    <div className={styles.cardTransit}><span aria-hidden="true"><Ship size={22} strokeWidth={1.4}/></span></div>
+    <div className={styles.canonicalCardFacts}>
+      <div><small>{t('myCargoes.desktop.cargo')}</small><strong>{viewModel.cargoType}</strong></div>
+      <div><small>ETA</small><strong>{viewModel.cardEta} {viewModel.cardEtaDay ? <span>{viewModel.cardEtaDay}</span> : null}</strong></div>
+    </div>
   </button>;
 }
