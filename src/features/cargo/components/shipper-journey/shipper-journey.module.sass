@@ -1,0 +1,467 @@
+.surface
+  box-sizing: border-box
+  width: min(100%, 75rem)
+  min-height: 44rem
+  padding: var(--hy-p62-space-6)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-canvas)
+  color: var(--hy-p62-text)
+  font-family: Inter, system-ui, sans-serif
+
+.header
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  padding-bottom: var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.eyebrow
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  letter-spacing: 0.08em
+  text-transform: uppercase
+
+.title
+  margin: var(--hy-p62-space-1) 0 0
+  font-size: var(--hy-p62-font-heading)
+  line-height: 1.2
+
+.subtitle
+  margin: var(--hy-p62-space-2) 0 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-body)
+
+.demoBadge,.statusBadge
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-1)
+  min-height: 1.75rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.demoBadge
+  color: var(--hy-p62-warning)
+
+.negotiationGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.7fr) minmax(20rem, 0.8fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.panel
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.panelHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.panelHeader h3
+  margin: 0
+  font-size: var(--hy-p62-font-label)
+
+.proposalGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+
+.proposalCard
+  display: grid
+  gap: var(--hy-p62-space-2)
+  min-height: 8.75rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.proposalCard[data-selected='true']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 45%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-success) 8%, var(--hy-p62-surface-raised))
+
+.proposalCard small,.tradeRow small,.miniLabel
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.proposalCard strong
+  font-size: 1.45rem
+
+.proposalMeta
+  display: flex
+  flex-wrap: wrap
+  gap: var(--hy-p62-space-2)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.tradeTable
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.tradeRow
+  display: grid
+  grid-template-columns: minmax(7rem, .8fr) minmax(0, 1fr) auto minmax(0, 1fr)
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 3rem
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  font-size: var(--hy-p62-font-sm)
+
+.deltaGood
+  color: var(--hy-p62-success)
+
+.deltaWarn
+  color: var(--hy-p62-warning)
+
+.decisionRead
+  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-success) 35%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-success) 9%, var(--hy-p62-surface))
+
+.decisionRead strong
+  display: block
+  margin-top: var(--hy-p62-space-1)
+  font-size: var(--hy-p62-font-body)
+
+.chat
+  display: flex
+  min-height: 29rem
+  flex-direction: column
+
+.chatBody
+  display: grid
+  gap: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+
+.message
+  max-width: 88%
+  padding: var(--hy-p62-space-3)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.45
+
+.message[data-own='true']
+  justify-self: end
+  background: color-mix(in srgb, var(--hy-p62-info) 18%, var(--hy-p62-surface-raised))
+  color: var(--hy-p62-text)
+
+.message small
+  display: block
+  margin-top: var(--hy-p62-space-2)
+  color: var(--hy-p62-muted)
+
+.chatComposer
+  margin-top: auto
+  padding: var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.chatComposer button,.primaryAction,.secondaryAction
+  min-height: 2.5rem
+  padding: 0 var(--hy-p62-space-4)
+  border-radius: var(--hy-p62-radius-control)
+  font: inherit
+  font-size: var(--hy-p62-font-sm)
+  font-weight: 700
+  cursor: pointer
+
+.primaryAction
+  border: 0
+  background: var(--hy-p62-text)
+  color: var(--hy-p62-canvas)
+
+.secondaryAction
+  border: 0.0625rem solid var(--hy-p62-border)
+  background: transparent
+  color: var(--hy-p62-text)
+
+.reviewCard
+  margin-top: var(--hy-p62-space-6)
+  padding: var(--hy-p62-space-5)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.reviewGrid
+  display: grid
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, .8fr) minmax(0, 1fr)
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.reviewBlock
+  display: grid
+  gap: var(--hy-p62-space-2)
+  min-height: 11rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.reviewBlock[data-after='true']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 40%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-success) 7%, var(--hy-p62-surface-raised))
+
+.deltaBlock
+  display: grid
+  place-content: center
+  gap: var(--hy-p62-space-2)
+  text-align: center
+
+.deltaBlock strong
+  color: var(--hy-p62-success)
+  font-size: 1.4rem
+
+.consequence
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.actionBar
+  display: flex
+  justify-content: flex-end
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.feedbackHero
+  display: grid
+  grid-template-columns: minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-6)
+  padding: var(--hy-p62-space-5)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-success) 42%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-success) 11%, var(--hy-p62-surface))
+
+.feedbackIcon
+  display: grid
+  width: 4.5rem
+  height: 4.5rem
+  place-items: center
+  border: 0.18rem solid var(--hy-p62-success)
+  border-radius: 50%
+  color: var(--hy-p62-success)
+  font-size: 1.75rem
+
+.changeGrid
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  overflow: hidden
+
+.changeCell
+  min-height: 7rem
+  padding: var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.changeCell:first-child
+  border-left: 0
+
+.changeCell strong
+  display: block
+  margin-top: var(--hy-p62-space-2)
+
+.changeCell span
+  display: inline-flex
+  margin-top: var(--hy-p62-space-3)
+  color: var(--hy-p62-success)
+  font-size: var(--hy-p62-font-xs)
+
+.errorHero
+  margin-top: var(--hy-p62-space-6)
+  padding: var(--hy-p62-space-5)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-critical) 45%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-critical) 10%, var(--hy-p62-surface))
+
+.errorHero strong
+  color: var(--hy-p62-critical)
+  font-size: 1.6rem
+
+.compareGrid
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.compareCard
+  min-height: 8.5rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.compareCard[data-tone='bad']
+  border-color: color-mix(in srgb, var(--hy-p62-critical) 35%, var(--hy-p62-border))
+
+.compareCard[data-tone='warn']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 35%, var(--hy-p62-border))
+
+.compareCard[data-tone='good']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 35%, var(--hy-p62-border))
+
+.compareCard strong
+  display: block
+  margin-top: var(--hy-p62-space-2)
+  font-size: 1.55rem
+
+.stepper
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.step
+  min-height: 4rem
+  padding-top: var(--hy-p62-space-3)
+  border-top: 0.18rem solid var(--hy-p62-border)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-sm)
+
+.step[data-active='true']
+  border-color: var(--hy-p62-accent)
+  color: var(--hy-p62-text)
+
+.monitoringMetrics
+  display: grid
+  grid-template-columns: repeat(5, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.metric
+  min-height: 6.25rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.metric strong
+  display: block
+  margin-top: var(--hy-p62-space-2)
+  font-size: 1.25rem
+
+.metricLine
+  height: 0.22rem
+  margin-top: var(--hy-p62-space-3)
+  border-radius: var(--hy-p62-radius-pill)
+  background: color-mix(in srgb, var(--hy-p62-muted) 28%, transparent)
+
+.metricLine span
+  display: block
+  height: 100%
+  border-radius: inherit
+  background: var(--hy-p62-accent)
+
+.monitoringGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.6fr) minmax(20rem, .8fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.eventRail
+  display: grid
+  gap: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-5)
+
+.event
+  display: grid
+  grid-template-columns: 4rem .8rem minmax(0, 1fr) auto
+  gap: var(--hy-p62-space-3)
+  align-items: center
+  min-height: 2.5rem
+
+.event i
+  width: 0.55rem
+  height: 0.55rem
+  border-radius: 50%
+  background: var(--hy-p62-success)
+
+.event[data-next='true'] i
+  background: var(--hy-p62-info)
+
+.nextDecision
+  padding: var(--hy-p62-space-5)
+
+.nextDecision strong
+  display: block
+  margin-top: var(--hy-p62-space-2)
+  font-size: 1.55rem
+
+.sourceBox
+  display: flex
+  gap: var(--hy-p62-space-2)
+  margin-top: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-info) 8%, var(--hy-p62-surface-raised))
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.45
+
+.journeyToolbar
+  display: flex
+  flex-wrap: wrap
+  gap: var(--hy-p62-space-2)
+  margin-bottom: var(--hy-p62-space-3)
+
+.journeyToolbar button
+  min-height: 2rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-muted)
+  font: inherit
+  font-size: var(--hy-p62-font-xs)
+  cursor: pointer
+
+.journeyToolbar button[aria-pressed='true']
+  border-color: var(--hy-p62-accent)
+  color: var(--hy-p62-text)
+
+@media (max-width: 68rem)
+  .negotiationGrid,.monitoringGrid
+    grid-template-columns: 1fr
+  .proposalGrid,.reviewGrid,.compareGrid
+    grid-template-columns: 1fr
+  .changeGrid,.monitoringMetrics
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+  .changeCell
+    border-left: 0
+    border-top: 0.0625rem solid var(--hy-p62-border)
+  .stepper
+    grid-template-columns: 1fr
+
+@media (max-width: 42rem)
+  .surface
+    padding: var(--hy-p62-space-4)
+  .changeGrid,.monitoringMetrics
+    grid-template-columns: 1fr
+  .tradeRow
+    grid-template-columns: 1fr
