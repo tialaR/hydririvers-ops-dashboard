@@ -98,7 +98,7 @@ export function OwnedCargoDesktopFoundation({ cargoes }: Props) {
     buildOwnedCargoDesktopViewModel(
       cargo,
       copy,
-      usesDeterministicFixtureData ? getPage61219254DesktopFacts(cargo) : undefined,
+      dataset.factsForCargo(cargo),
     ));
 
   const visible = viewModels.filter(({ cargo }) => {
