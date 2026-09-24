@@ -1,78 +1,196 @@
 'use client';
 
-import { Bell, Boxes, CirclePlus, FileText, LayoutDashboard, Map, MessageSquare, PackagePlus, Route, Search, Settings, ShieldAlert, Ship, WalletCards } from 'lucide-react';
+import { Bell, CirclePlus, FileText, LayoutDashboard, Route, Search, Settings } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
+
 import { Link } from '@/core/i18n/navigation';
+import {
+  buildOwnedCargoDesktopViewModel,
+  type OwnedCargoDesktopCopy,
+} from '@/features/cargo/owned/application/owned-cargo-desktop-view-model';
 import { OwnedCargoDetailSummary } from '@/features/cargo/owned/components/owned-cargo-detail-summary';
 import { OwnedCargoDetailTabs } from '@/features/cargo/owned/components/owned-cargo-detail-tabs';
 import { OwnedCargoShipmentCard } from '@/features/cargo/owned/components/owned-cargo-shipment-card';
-import type { CargoCorridorId, OwnedCargo } from '@/features/cargo/owned/domain/owned-cargo-types';
-import { PAGE_61_219_254_VISUAL_FIXTURE_ID, page61219254MapVisualFacts, page61219254SelectedVisualFacts, page61219254VisualCargoes } from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
+import type { CargoCorridorId, OwnedCargo, OwnedCargoFreshnessState, OwnedCargoRiskLevel, OwnedCargoStatus } from '@/features/cargo/owned/domain/owned-cargo-types';
+import {
+  PAGE_61_219_254_VISUAL_FIXTURE_ID,
+  getPage61219254DesktopFacts,
+  page61219254SelectedVisualFacts,
+  page61219254VisualCargoes,
+} from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
 import { useProductShell } from '@/features/product-shell/providers/product-shell-provider';
 import { ShipperOperationMap } from '@/features/waterway-map/components/owned-cargo-operation-map/owned-cargo-operation-map';
 import { getShipperMapRouteForCargo } from '@/features/waterway-map/domain/owned-cargo-operation-route';
 import { intlAppPaths } from '@/shared/routing/app-routes';
+
 import styles from './owned-cargo-desktop-foundation.module.sass';
 
 type Props = { cargoes: OwnedCargo[] };
-type Filter = 'all' | 'attention' | 'inTransit';
+type Filter = 'all' | 'attention' | 'inTransit' | 'delivered';
 
-const corridorTranslationKey: Record<CargoCorridorId, 'amazonasSolimoes' | 'madeira' | 'tapajos' | 'tocantinsAraguaia'> = {
+const statusKeys: Record<OwnedCargoStatus, 'open' | 'inTransit' | 'attention' | 'delivered' | 'blocked'> = {
+  open: 'open',
+  inTransit: 'inTransit',
+  attention: 'attention',
+  delivered: 'delivered',
+  blocked: 'blocked',
+};
+
+const corridorKeys: Record<CargoCorridorId, 'amazonasSolimoes' | 'madeira' | 'tapajos' | 'tocantinsAraguaia'> = {
   'amazonas-solimoes': 'amazonasSolimoes',
   madeira: 'madeira',
   tapajos: 'tapajos',
-  'tocantins-araguaia': 'tocantinsAraguaia'
+  'tocantins-araguaia': 'tocantinsAraguaia',
+};
+
+const riskKeys: Record<OwnedCargoRiskLevel, 'low' | 'medium' | 'high' | 'critical'> = {
+  low: 'low',
+  medium: 'medium',
+  high: 'high',
+  critical: 'critical',
+};
+
+const freshnessKeys: Record<OwnedCargoFreshnessState, 'fresh' | 'stale' | 'offline'> = {
+  fresh: 'fresh',
+  stale: 'stale',
+  offline: 'offline',
 };
 
 export function OwnedCargoDesktopFoundation({ cargoes }: Props) {
   const t = useTranslations('shipperMobileFlow');
   const searchParams = useSearchParams();
   const { currentUser } = useProductShell();
-  const visualFixtureEnabled = searchParams.get('visualFixture') === PAGE_61_219_254_VISUAL_FIXTURE_ID;
-  const renderedCargoes = visualFixtureEnabled ? page61219254VisualCargoes : cargoes;
+  const usesDeterministicFixtureData =
+    searchParams.get('visualFixture') === PAGE_61_219_254_VISUAL_FIXTURE_ID;
+
+  const renderedCargoes = usesDeterministicFixtureData ? page61219254VisualCargoes : cargoes;
   const [selectedId, setSelectedId] = useState(renderedCargoes[0]?.id ?? '');
   const [filter, setFilter] = useState<Filter>('all');
   const [query, setQuery] = useState('');
-  const visible = useMemo(() => renderedCargoes.filter((cargo) => {
-    const statusMatches = filter === 'all' || cargo.status === filter;
-    return statusMatches && `${cargo.code} ${cargo.origin} ${cargo.destination}`.toLowerCase().includes(query.toLowerCase());
-  }), [renderedCargoes, filter, query]);
-  const selected = renderedCargoes.find((cargo) => cargo.id === selectedId) ?? visible[0] ?? renderedCargoes[0];
-  if (!selected) return null;
-  const initials = currentUser.avatarInitials || currentUser.name.slice(0, 2).toUpperCase();
-  const selectedRoute = getShipperMapRouteForCargo(selected);
-  const cargoesRequiringAttention = renderedCargoes.filter((cargo) => cargo.pendingDocsCount > 0 || cargo.status === 'attention').length;
 
-  return <main className={`${styles.root} ${visualFixtureEnabled ? styles.fixtureRoot : ''}`} data-testid="m01-desktop-foundation">
+  const copy: OwnedCargoDesktopCopy = {
+    status: Object.fromEntries(
+      Object.entries(statusKeys).map(([status, key]) => [status, t(`cargoDetail.status.${key}`)]),
+    ) as Record<OwnedCargoStatus, string>,
+    corridor: Object.fromEntries(
+      Object.entries(corridorKeys).map(([corridor, key]) => [corridor, t(`map.corridors.${key}`)]),
+    ) as Record<CargoCorridorId, string>,
+    risk: Object.fromEntries(
+      Object.entries(riskKeys).map(([risk, key]) => [risk, t(`myCargoes.desktop.risk.${key}`)]),
+    ) as Record<OwnedCargoRiskLevel, string>,
+    freshness: Object.fromEntries(
+      Object.entries(freshnessKeys).map(([freshness, key]) => [freshness, t(`myCargoes.desktop.freshness.${key}`)]),
+    ) as Record<OwnedCargoFreshnessState, string>,
+    cargoLabel: t('myCargoes.desktop.cargo'),
+    vesselLabel: t('myCargoes.desktop.vessel'),
+    corridorLabel: t('myCargoes.desktop.corridor'),
+    attentionEyebrow: t('myCargoes.desktop.attentionTitle'),
+    attentionTitle: t('myCargoes.desktop.attentionBody'),
+    attentionBody: t('myCargoes.desktop.recommendedHint'),
+    attentionAction: t('myCargoes.desktop.review'),
+    fitRoute: t('myCargoes.desktop.centerMap'),
+    liveSignal: t('myCargoes.desktop.freshness.fresh'),
+    normalRiver: t('myCargoes.desktop.risk.low'),
+    docs: (count) => t('myCargoes.desktop.docs', { count }),
+    eta: (hours) => t('myCargoes.desktop.eta', { hours }),
+    updated: (minutes) => t('myCargoes.desktop.updated', { minutes }),
+  };
+
+  const viewModels = useMemo(
+    () => renderedCargoes.map((cargo) =>
+      buildOwnedCargoDesktopViewModel(
+        cargo,
+        copy,
+        usesDeterministicFixtureData ? getPage61219254DesktopFacts(cargo) : undefined,
+      )),
+    [renderedCargoes, usesDeterministicFixtureData, copy],
+  );
+
+  const visible = useMemo(() => viewModels.filter(({ cargo }) => {
+    const statusMatches = filter === 'all' || cargo.status === filter;
+    return statusMatches &&
+      `${cargo.code} ${cargo.origin} ${cargo.destination}`.toLowerCase().includes(query.toLowerCase());
+  }), [viewModels, filter, query]);
+
+  const selected =
+    viewModels.find(({ cargo }) => cargo.id === selectedId) ??
+    visible[0] ??
+    viewModels[0];
+
+  if (!selected) return null;
+
+  const initials = currentUser.avatarInitials || currentUser.name.slice(0, 2).toUpperCase();
+  const selectedRoute = getShipperMapRouteForCargo(selected.cargo);
+  const counts = {
+    all: viewModels.length,
+    inTransit: viewModels.filter(({ cargo }) => cargo.status === 'inTransit').length,
+    delivered: viewModels.filter(({ cargo }) => cargo.status === 'delivered').length,
+    attention: viewModels.filter(({ cargo }) => cargo.status === 'attention' || cargo.pendingDocsCount > 0).length,
+  };
+
+  return <main className={`${styles.root} ${styles.canonicalRoot}`} data-testid="m01-desktop-foundation">
     <aside className={styles.sidebar} data-testid="page61-sidebar">
-      <div className={styles.brand}>{visualFixtureEnabled ? <><strong>HydroRivers</strong><span className={styles.fixtureBrandSearch}><LayoutDashboard size={16}/><span>Buscar</span></span></> : <><b>H</b><strong>HydroRivers</strong></>}</div>
-      <Link className={styles.primary} href={intlAppPaths.cargos.publishCargo}>{visualFixtureEnabled ? <CirclePlus size={16}/> : <PackagePlus size={16}/>}<span>{t('myCargoes.desktop.newOperation')}</span></Link>
+      <div className={styles.brand}><strong>HydroRivers</strong><span className={styles.canonicalBrandSearch}><LayoutDashboard size={16}/><span>{t('myCargoes.desktop.search')}</span></span></div>
+      <Link className={styles.primary} href={intlAppPaths.cargos.publishCargo}><CirclePlus size={16}/><span>{t('myCargoes.desktop.newOperation')}</span></Link>
       <nav aria-label={t('myCargoes.desktop.navigation')}>
-        {visualFixtureEnabled ? <><small className={styles.navGroup}>OPERAÇÕES</small><Link className={styles.active} href={intlAppPaths.cargos.myCargos}><LayoutDashboard size={16}/>Minhas Cargas</Link><Link href={intlAppPaths.tracking.home}><Route size={16}/>Mapa operacional</Link><Link href={`${intlAppPaths.cargos.myCargoDetail(selected.id)}/documentos`}><FileText size={16}/>Documentos</Link><Link href={intlAppPaths.dashboard.home}><Bell size={16}/>Alertas</Link><small className={styles.navGroup}>ANÁLISE</small><Link href={intlAppPaths.tracking.home}><Route size={16}/>Corredores</Link><Link href={intlAppPaths.dashboard.home}><LayoutDashboard size={16}/>Performance</Link></> : <><Link href={intlAppPaths.dashboard.home}><LayoutDashboard size={16}/>{t('myCargoes.desktop.cockpit')}</Link><Link href={intlAppPaths.cargos.marketplace}><Boxes size={16}/>{t('myCargoes.desktop.market')}</Link><Link className={styles.active} href={intlAppPaths.cargos.myCargos}><Ship size={16}/>{t('myCargoes.title')}</Link><Link href={intlAppPaths.negotiations.home}><MessageSquare size={16}/>{t('myCargoes.desktop.negotiations')}</Link><Link href={intlAppPaths.tracking.home}><Map size={16}/>{t('myCargoes.desktop.tracking')}</Link></>}
+        <small className={styles.navGroup}>OPERAÇÕES</small>
+        <Link className={styles.active} href={intlAppPaths.cargos.myCargos}><LayoutDashboard size={16}/>{t('myCargoes.title')}</Link>
+        <Link href={intlAppPaths.tracking.home}><Route size={16}/>Mapa operacional</Link>
+        <Link href={`${intlAppPaths.cargos.myCargoDetail(selected.cargo.id)}/documentos`}><FileText size={16}/>{t('myCargoes.desktop.tabs.documents')}</Link>
+        <Link href={intlAppPaths.dashboard.home}><Bell size={16}/>Alertas</Link>
+        <small className={styles.navGroup}>ANÁLISE</small>
+        <Link href={intlAppPaths.tracking.home}><Route size={16}/>Corredores</Link>
+        <Link href={intlAppPaths.dashboard.home}><LayoutDashboard size={16}/>Performance</Link>
       </nav>
-      <section className={styles.wallet}>{visualFixtureEnabled ? <div><strong>Carteira privada</strong><small>7 cargas ativas</small><em>2 exigem atenção</em></div> : <><WalletCards size={20}/><div><strong>{t('myCargoes.desktop.privateArea')}</strong><small>{t('myCargoes.desktop.privateHint')}</small></div><b>R$ —</b></>}</section>
-      <footer><button type="button"><Settings size={15}/>{t('myCargoes.desktop.settings')}</button><div className={styles.user}><span>{initials}</span><div><strong>{currentUser.name}</strong><small>{visualFixtureEnabled ? 'Embarcadora' : currentUser.company}</small></div></div></footer>
+      <section className={styles.wallet}><div><strong>Carteira privada</strong><small>{counts.all} cargas ativas</small><em>{counts.attention} exigem atenção</em></div></section>
+      <footer><button type="button"><Settings size={15}/>{t('myCargoes.desktop.settings')}</button><div className={styles.user}><span>{initials}</span><div><strong>{currentUser.name}</strong><small>{currentUser.company || 'Embarcadora'}</small></div></div></footer>
     </aside>
-    <header className={styles.header} data-testid="page61-header">{visualFixtureEnabled ? <><div/><div className={styles.fixtureHeaderControls}><span/><span/><span/><i/></div></> : <><div><strong>{t('myCargoes.title')}</strong><small>{t('myCargoes.desktop.workspace')}</small></div><div><Search size={17}/><Bell size={17}/><span className={styles.avatar}>{initials}</span></div></>}</header>
+
+    <header className={styles.header} data-testid="page61-header"><div/><div className={styles.canonicalHeaderControls}><span/><span/><span/><i/></div></header>
+
     <section className={styles.master} data-testid="page61-master" aria-label={t('myCargoes.desktop.masterAria')}>
-      <div className={styles.masterTitle}>{visualFixtureEnabled ? <><div><h1>Minhas Cargas</h1><small className={styles.fixtureTitleSpacer} aria-hidden="true">7 cargas</small></div><small className={styles.fixtureAttentionSummary}>2 exigem atenção</small><span className={styles.fixtureFilterButton} aria-hidden="true"><i/><i/><i/></span></> : <><div><h1>{t('myCargoes.title')}</h1><small>{t('myCargoes.resultsCount',{count:visible.length})}</small></div><button type="button" aria-label={t('myCargoes.desktop.moreActions')}>•••</button></>}</div>
-      <div className={styles.filters}>{visualFixtureEnabled ? <><button type="button" className={styles.filterActive}>Todas (7)</button><button type="button">Em trânsito (3)</button><button type="button">Entregues (2)</button><button type="button">Atrasadas (2)</button></> : (['all','attention','inTransit'] as Filter[]).map((id)=><button type="button" key={id} className={filter===id?styles.filterActive:''} onClick={()=>setFilter(id)}>{t(`myCargoes.desktop.filter.${id}`)}</button>)}</div>
-      <label className={styles.search}><Search size={15}/><input aria-label={t('myCargoes.desktop.search')} placeholder={visualFixtureEnabled ? '' : t('myCargoes.desktop.searchPlaceholder')} value={query} onChange={(event)=>setQuery(event.target.value)}/></label>
-      <div className={styles.masterAlert}>{visualFixtureEnabled ? <><b aria-hidden="true">!</b><span><strong>Manifesto pendente · ação até 16:30</strong><small>Janela de atracação sob risco operacional</small></span><em aria-hidden="true">›</em></> : <><ShieldAlert size={14}/><span>{t('myCargoes.desktop.attentionSummary', {count: cargoesRequiringAttention})}</span></>}</div>
-      <div className={styles.list}>{visible.map((cargo) => <OwnedCargoShipmentCard
-        key={cargo.id}
-        cargo={cargo}
-        selected={cargo.id === selected.id}
-        visualFixtureEnabled={visualFixtureEnabled}
-        onSelect={() => setSelectedId(cargo.id)}
+      <div className={styles.masterTitle}>
+        <div><h1>{t('myCargoes.title')}</h1><small className={styles.canonicalTitleSpacer} aria-hidden="true">{counts.all} cargas</small></div>
+        <small className={styles.canonicalAttentionSummary}>{counts.attention} exigem atenção</small>
+        <span className={styles.canonicalFilterButton} aria-hidden="true"><i/><i/><i/></span>
+      </div>
+
+      <div className={styles.filters}>
+        <button type="button" className={filter === 'all' ? styles.filterActive : ''} onClick={() => setFilter('all')}>Todas ({counts.all})</button>
+        <button type="button" className={filter === 'inTransit' ? styles.filterActive : ''} onClick={() => setFilter('inTransit')}>Em trânsito ({counts.inTransit})</button>
+        <button type="button" className={filter === 'delivered' ? styles.filterActive : ''} onClick={() => setFilter('delivered')}>Entregues ({counts.delivered})</button>
+        <button type="button" className={filter === 'attention' ? styles.filterActive : ''} onClick={() => setFilter('attention')}>Atrasadas ({counts.attention})</button>
+      </div>
+
+      <label className={styles.search}><Search size={15}/><input aria-label={t('myCargoes.desktop.search')} placeholder={t('myCargoes.desktop.searchPlaceholder')} value={query} onChange={(event)=>setQuery(event.target.value)}/></label>
+
+      <div className={styles.masterAlert}>
+        <b aria-hidden="true">!</b>
+        <span><strong>{selected.attention.title}</strong><small>{selected.attention.body}</small></span>
+        <em aria-hidden="true">›</em>
+      </div>
+
+      <div className={styles.list}>{visible.map((viewModel) => <OwnedCargoShipmentCard
+        key={viewModel.cargo.id}
+        viewModel={viewModel}
+        selected={viewModel.cargo.id === selected.cargo.id}
+        onSelect={() => setSelectedId(viewModel.cargo.id)}
       />)}</div>
     </section>
+
     <section className={styles.detail} data-testid="page61-detail" aria-label={t('myCargoes.desktop.detailAria')}>
-      <div className={styles.map} data-testid="page61-map-surface"><ShipperOperationMap routeData={selectedRoute} ariaLabel={t('map.previewTitle')} fallbackHintLabel={t('map.fallbackHint')} presentation="desktop-foundation"/>{visualFixtureEnabled ? <><div className={styles.mapLabel}><strong>{page61219254MapVisualFacts.operation}</strong></div><div className={styles.eta}><strong>{page61219254MapVisualFacts.risk}</strong></div><div className={styles.signal}><i/><div><strong>{page61219254MapVisualFacts.signal}</strong><small>{page61219254MapVisualFacts.signalDetail}</small></div><div><strong>{page61219254MapVisualFacts.river}</strong><small>{page61219254MapVisualFacts.riverDetail}</small></div></div><button type="button" className={styles.fitRoute}>{page61219254MapVisualFacts.fitRoute}</button><div className={styles.mapControls} data-testid="page61-map-controls"><button type="button" aria-label={t('myCargoes.desktop.zoomIn')}>⊖</button><button type="button" aria-label={t('myCargoes.desktop.zoomOut')}>◴</button><button type="button" aria-label={t('myCargoes.desktop.centerMap')}>◎</button></div></> : <><div className={styles.mapLabel}><i/><div><strong>{selected.code}</strong><small>{selected.origin} → {selected.destination}</small></div></div><div className={styles.eta}><small>{t('myCargoes.desktop.estimatedArrival')}</small><strong>{t('myCargoes.desktop.eta',{hours:selected.etaHours})}</strong></div><div className={styles.signal}><i/><div><strong>{t(`myCargoes.desktop.freshness.${selected.freshnessState}`)}</strong><small>{t('myCargoes.desktop.updated',{minutes:selected.freshnessMinutes})}</small></div><div><strong>{t(`map.corridors.${corridorTranslationKey[selected.corridorId]}`)}</strong><small>{t(`myCargoes.desktop.risk.${selected.riskLevel}`)}</small></div></div><div className={styles.mapControls}><button type="button" aria-label={t('myCargoes.desktop.zoomIn')}>+</button><button type="button" aria-label={t('myCargoes.desktop.zoomOut')}>−</button><button type="button" aria-label={t('myCargoes.desktop.centerMap')}>◎</button></div></>}</div>
-      <OwnedCargoDetailTabs cargoId={selected.id} labels={visualFixtureEnabled ? page61219254SelectedVisualFacts.tabs : undefined}/>
-      <OwnedCargoDetailSummary cargo={selected} visualFixtureEnabled={visualFixtureEnabled}/>
+      <div className={styles.map} data-testid="page61-map-surface">
+        <ShipperOperationMap routeData={selectedRoute} ariaLabel={t('map.previewTitle')} fallbackHintLabel={t('map.fallbackHint')} presentation="desktop-foundation"/>
+        <div className={styles.mapLabel}><strong>{selected.map.operation}</strong></div>
+        <div className={styles.eta}><strong>{selected.map.risk}</strong></div>
+        <div className={styles.signal}><i/><div><strong>{selected.map.signal}</strong><small>{selected.map.signalDetail}</small></div><div><strong>{selected.map.river}</strong><small>{selected.map.riverDetail}</small></div></div>
+        <button type="button" className={styles.fitRoute}>{selected.map.fitRoute}</button>
+        <div className={styles.mapControls} data-testid="page61-map-controls"><button type="button" aria-label={t('myCargoes.desktop.zoomIn')}>⊖</button><button type="button" aria-label={t('myCargoes.desktop.zoomOut')}>◴</button><button type="button" aria-label={t('myCargoes.desktop.centerMap')}>◎</button></div>
+      </div>
+      <OwnedCargoDetailTabs cargoId={selected.cargo.id} labels={usesDeterministicFixtureData ? page61219254SelectedVisualFacts.tabs : undefined}/>
+      <OwnedCargoDetailSummary viewModel={selected}/>
     </section>
   </main>;
 }
