@@ -1,0 +1,106 @@
+.root
+  display: grid
+  gap: var(--hy-dash-space-3)
+
+.root h4
+  margin: 0
+  color: var(--hy-dash-text-strong)
+  font-size: var(--hy-dash-font-label)
+  font-weight: var(--hy-dash-weight-semibold)
+
+.list
+  display: grid
+
+.item
+  position: relative
+  display: grid
+  grid-template-columns: auto 4.5rem minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-dash-space-3)
+  min-height: 4.25rem
+  padding: var(--hy-dash-space-3) var(--hy-dash-space-4)
+  border-top: 0.0625rem solid var(--hy-dash-border)
+  background: transparent
+
+.item::before
+  position: absolute
+  inset: 0 auto 0 0
+  width: 0.1875rem
+  border-radius: var(--hy-dash-radius-pill)
+  background: var(--hy-dash-border-strong)
+  content: ''
+
+.item[data-tone='success']::before
+  background: var(--hy-dash-success)
+
+.item[data-tone='warning']::before
+  background: var(--hy-dash-warning)
+
+.item[data-tone='info']::before
+  background: var(--hy-dash-info)
+
+.icon
+  display: grid
+  width: 2.25rem
+  height: 2.25rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-dash-border)
+  border-radius: var(--hy-dash-radius-control)
+  background: var(--hy-dash-surface-raised)
+  color: var(--hy-dash-text-muted)
+
+.item[data-tone='success'] .icon
+  color: var(--hy-dash-success)
+
+.item[data-tone='warning'] .icon
+  color: var(--hy-dash-warning)
+
+.item[data-tone='info'] .icon
+  color: var(--hy-dash-info)
+
+.time
+  color: var(--hy-dash-text-muted)
+  font-size: var(--hy-dash-font-caption)
+  font-variant-numeric: tabular-nums
+
+.copy
+  display: grid
+  gap: var(--hy-dash-space-1)
+
+.copy strong
+  color: var(--hy-dash-text-strong)
+  font-size: var(--hy-dash-font-body)
+  font-weight: var(--hy-dash-weight-semibold)
+
+.copy small
+  color: var(--hy-dash-text-muted)
+  font-size: var(--hy-dash-font-caption)
+
+.status
+  min-height: 1.75rem
+  display: inline-flex
+  align-items: center
+  padding: 0 var(--hy-dash-space-3)
+  border: 0.0625rem solid var(--hy-dash-border)
+  border-radius: var(--hy-dash-radius-pill)
+  color: var(--hy-dash-text-muted)
+  font-size: var(--hy-dash-font-caption)
+
+.item[data-tone='success'] .status
+  border-color: color-mix(in srgb, var(--hy-dash-success) 30%, var(--hy-dash-border))
+  color: var(--hy-dash-success)
+
+.item[data-tone='warning'] .status
+  border-color: color-mix(in srgb, var(--hy-dash-warning) 30%, var(--hy-dash-border))
+  color: var(--hy-dash-warning)
+
+.item[data-tone='info'] .status
+  border-color: color-mix(in srgb, var(--hy-dash-info) 30%, var(--hy-dash-border))
+  color: var(--hy-dash-info)
+
+@media (max-width: 42rem)
+  .item
+    grid-template-columns: auto minmax(0, 1fr) auto
+
+  .time
+    display: none
