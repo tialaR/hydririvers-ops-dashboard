@@ -45,8 +45,8 @@ jobs:
               repo: context.repo.repo,
               sha: context.sha,
               state: 'pending',
-              context: 'SHARKLOCK / Page 62 D04-D05',
-              description: 'Page 62 D04-D05 visual certification running',
+              context: 'SHARKLOCK / Page 62 D04-D07',
+              description: 'Page 62 D04-D07 visual certification running',
             });
 
       - name: Setup Node.js
@@ -107,7 +107,7 @@ jobs:
           PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-page-61-storybook-components.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/storybook-components.log
           PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-shipment-card-storybook-variants.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/shipment-card-variants.log
 
-      - name: Certify Page 62 D04-D05 Storybook surfaces
+      - name: Certify Page 62 D04-D07 Storybook surfaces
         id: page62
         if: steps.storybook.outcome == 'success'
         continue-on-error: true
@@ -128,7 +128,7 @@ jobs:
             fi
             sleep 1
           done
-          PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-d04-d05-visual 2>&1 | tee reports/sharklock-evidence/page-62/logs/d04-d05-visual.log
+          PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-visual-contract 2>&1 | tee reports/sharklock-evidence/page-62/logs/d04-d07-visual.log
 
       - name: Build candidate runtime
         id: build
@@ -239,6 +239,8 @@ jobs:
             docs/governance/figma-freeze/page-61/m01-desktop-foundation-parity-review.png
             docs/governance/figma-freeze/page-62/d04-cargo-cockpit-reference.webp
             docs/governance/figma-freeze/page-62/d05-operational-timeline-reference.webp
+            docs/governance/figma-freeze/page-62/d06-documents-reference.webp
+            docs/governance/figma-freeze/page-62/d07-occurrence-reference.webp
           if-no-files-found: error
           retention-days: 30
 
@@ -291,7 +293,7 @@ jobs:
               description: description.slice(0, 140),
             });
 
-      - name: Publish Page 62 D04-D05 commit status
+      - name: Publish Page 62 D04-D07 commit status
         if: always()
         continue-on-error: true
         uses: actions/github-script@v7
@@ -299,9 +301,9 @@ jobs:
           retries: 3
           script: |
             const fs = require('fs');
-            const path = 'reports/sharklock-evidence/page-62/d04-d05/page62-d04-d05-visual-result.json';
+            const path = 'reports/sharklock-evidence/page-62/d04-d05/page62-d04-d07-visual-result.json';
             let state = 'failure';
-            let description = 'Page 62 D04-D05 evidence unavailable';
+            let description = 'Page 62 D04-D07 evidence unavailable';
             try {
               const result = JSON.parse(fs.readFileSync(path, 'utf8'));
               const rows = result.results || [];
@@ -317,7 +319,7 @@ jobs:
               repo: context.repo.repo,
               sha: context.sha,
               state,
-              context: 'SHARKLOCK / Page 62 D04-D05',
+              context: 'SHARKLOCK / Page 62 D04-D07',
               description,
             });
 
@@ -330,6 +332,7 @@ jobs:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
           VISUAL_OUTCOME: ${{ steps.visual.outcome }}
+          PAGE62_OUTCOME: ${{ steps.page62.outcome }}
         run: |
           test "$DEPENDENCIES_OUTCOME" = success
           test "$CHROMIUM_OUTCOME" = success
