@@ -1,0 +1,83 @@
+:root,
+[data-hy-theme='dark'],
+[data-theme='dark'] {
+  --hy-dash-canvas: #09090b;
+  --hy-dash-surface: #141416;
+  --hy-dash-surface-raised: #1b1b1e;
+  --hy-dash-surface-strong: #222226;
+  --hy-dash-border: #2d2d31;
+  --hy-dash-border-strong: #3b3b40;
+
+  --hy-dash-text-strong: #f4f4f5;
+  --hy-dash-text: #d4d4d8;
+  --hy-dash-text-muted: #a1a1aa;
+  --hy-dash-text-subtle: #71717a;
+
+  --hy-dash-data-primary: #d4d4d8;
+  --hy-dash-data-secondary: #71717a;
+  --hy-dash-info: #60a5fa;
+  --hy-dash-success: #34d399;
+  --hy-dash-warning: #fbbf24;
+  --hy-dash-critical: #fb7185;
+  --hy-dash-accent: #e4e4e7;
+
+  --hy-dash-font-kicker: 0.6875rem;
+  --hy-dash-font-caption: 0.75rem;
+  --hy-dash-font-body: 0.875rem;
+  --hy-dash-font-label: 0.9375rem;
+  --hy-dash-font-title: 1.125rem;
+  --hy-dash-font-heading: 1.5rem;
+  --hy-dash-font-display: 2rem;
+
+  --hy-dash-weight-regular: 450;
+  --hy-dash-weight-medium: 560;
+  --hy-dash-weight-semibold: 640;
+  --hy-dash-weight-bold: 720;
+
+  --hy-dash-space-1: 0.25rem;
+  --hy-dash-space-2: 0.5rem;
+  --hy-dash-space-3: 0.75rem;
+  --hy-dash-space-4: 1rem;
+  --hy-dash-space-5: 1.25rem;
+  --hy-dash-space-6: 1.5rem;
+  --hy-dash-space-8: 2rem;
+  --hy-dash-space-10: 2.5rem;
+
+  --hy-dash-radius-control: 0.625rem;
+  --hy-dash-radius-panel: 0.875rem;
+  --hy-dash-radius-card: 1rem;
+  --hy-dash-radius-pill: 999rem;
+
+  --hy-dash-shadow-panel: 0 1.25rem 3.5rem rgba(0, 0, 0, 0.18);
+  --hy-dash-shadow-float: 0 1rem 2.5rem rgba(0, 0, 0, 0.34);
+
+  --hy-dash-motion-fast: 120ms;
+  --hy-dash-motion-standard: 220ms;
+  --hy-dash-motion-slow: 320ms;
+}
+
+[data-hy-theme='light'],
+[data-theme='light'] {
+  --hy-dash-canvas: #f4f4f5;
+  --hy-dash-surface: #ffffff;
+  --hy-dash-surface-raised: #f7f7f8;
+  --hy-dash-surface-strong: #eeeeef;
+  --hy-dash-border: #dedee1;
+  --hy-dash-border-strong: #c8c8cd;
+
+  --hy-dash-text-strong: #18181b;
+  --hy-dash-text: #3f3f46;
+  --hy-dash-text-muted: #71717a;
+  --hy-dash-text-subtle: #a1a1aa;
+
+  --hy-dash-data-primary: #27272a;
+  --hy-dash-data-secondary: #a1a1aa;
+  --hy-dash-info: #2563eb;
+  --hy-dash-success: #059669;
+  --hy-dash-warning: #d97706;
+  --hy-dash-critical: #e11d48;
+  --hy-dash-accent: #18181b;
+
+  --hy-dash-shadow-panel: 0 1.25rem 3.5rem rgba(24, 24, 27, 0.08);
+  --hy-dash-shadow-float: 0 1rem 2.5rem rgba(24, 24, 27, 0.14);
+}
