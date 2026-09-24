@@ -4,6 +4,8 @@ import { BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileWarning, 
 import { motion, useReducedMotion } from 'motion/react';
 
 import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
+import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
+import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
 import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
 import styles from './shipper-journey.module.sass';
 
@@ -341,10 +343,15 @@ export function FollowUpMonitoringSurface({ onReviewHydro }: { onReviewHydro?: (
 
         <aside className={styles.panel + ' ' + styles.nextDecision}>
           <small>PRÓXIMA DECISÃO</small><strong>Chegada em Santarém</strong><p className={styles.deltaGood}>18:30 · sem ação imediata</p>
-          <div className={styles.sourceBox}><ShieldCheck size={14} /> Nível atual DEMO: deve ser substituído por fonte hidrológica com timestamp antes de produção.</div>
-          <div className={styles.sourceBox}><FileWarning size={14} /> Avisos e condições de navegabilidade precisam mostrar fonte, vigência e trecho afetado.</div>
+          <div className={styles.sourceBox}><ShieldCheck size={16} /> Nível atual DEMO: deve ser substituído por fonte hidrológica com timestamp antes de produção.</div>
+          <div className={styles.sourceBox}><FileWarning size={16} /> Avisos e condições de navegabilidade precisam mostrar fonte, vigência e trecho afetado.</div>
           <div className={styles.actionBar}><button className={styles.secondaryAction} type="button" onClick={onReviewHydro}>Revisar contexto hidroviário</button></div>
         </aside>
+      </div>
+
+      <div className={styles.monitoringCompactGrid}>
+        <CargoTelemetryContextPanel />
+        <CargoQuickEvidencePanel />
       </div>
     </section>
   );
