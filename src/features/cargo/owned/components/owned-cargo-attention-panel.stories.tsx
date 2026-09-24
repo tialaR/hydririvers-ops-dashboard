@@ -11,9 +11,8 @@ const meta = {
   tags: ['autodocs'],
   args: {
     viewModel: page61StoryViewModels[0]!,
-      },
+  },
   argTypes: {
-    },
     viewModel: {
       control: 'object',
       description: 'Canonical Page 61 view-model used by the real attention surface.',
@@ -35,4 +34,3 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const CanonicalAttention: Story = {};
-
