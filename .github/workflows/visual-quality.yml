@@ -40,6 +40,14 @@ jobs:
               context: 'SHARKLOCK / Page 61',
               description: 'SHARKLOCK Page 61 running',
             });
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state: 'pending',
+              context: 'SHARKLOCK / Page 62 D04-D05',
+              description: 'Page 62 D04-D05 visual certification running',
+            });
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -98,6 +106,29 @@ jobs:
           done
           PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-page-61-storybook-components.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/storybook-components.log
           PAGE61_STORYBOOK_URL=http://127.0.0.1:6106 node scripts/governance/certify-shipment-card-storybook-variants.mjs 2>&1 | tee reports/sharklock-evidence/page-61/logs/shipment-card-variants.log
+
+      - name: Certify Page 62 D04-D05 Storybook surfaces
+        id: page62
+        if: steps.storybook.outcome == 'success'
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p reports/sharklock-evidence/page-62/logs
+          python3 -m http.server 6106 --directory storybook-static > reports/sharklock-evidence/page-62/logs/storybook-server.log 2>&1 &
+          storybook_pid=$!
+          trap 'kill "$storybook_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:6106/iframe.html >/dev/null; then
+              break
+            fi
+            if [ "$attempt" -eq 30 ]; then
+              cat reports/sharklock-evidence/page-62/logs/storybook-server.log
+              exit 1
+            fi
+            sleep 1
+          done
+          PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-d04-d05-visual 2>&1 | tee reports/sharklock-evidence/page-62/logs/d04-d05-visual.log
 
       - name: Build candidate runtime
         id: build
@@ -164,6 +195,7 @@ jobs:
           BUILD_OUTCOME: ${{ steps.build.outcome }}
           CAPTURE_OUTCOME: ${{ steps.capture.outcome }}
           VISUAL_OUTCOME: ${{ steps.visual.outcome }}
+          PAGE62_OUTCOME: ${{ steps.page62.outcome }}
           COMPONENTS_OUTCOME: ${{ steps.components.outcome }}
         run: |
           node --input-type=module <<'NODE'
@@ -202,8 +234,11 @@ jobs:
           name: sharklock-page-61-${{ github.sha }}
           path: |
             reports/sharklock-evidence/page-61
+            reports/sharklock-evidence/page-62
             test-results/page-61-visual-ci
             docs/governance/figma-freeze/page-61/m01-desktop-foundation-parity-review.png
+            docs/governance/figma-freeze/page-62/d04-cargo-cockpit-reference.webp
+            docs/governance/figma-freeze/page-62/d05-operational-timeline-reference.webp
           if-no-files-found: error
           retention-days: 30
 
@@ -256,6 +291,36 @@ jobs:
               description: description.slice(0, 140),
             });
 
+      - name: Publish Page 62 D04-D05 commit status
+        if: always()
+        continue-on-error: true
+        uses: actions/github-script@v7
+        with:
+          retries: 3
+          script: |
+            const fs = require('fs');
+            const path = 'reports/sharklock-evidence/page-62/d04-d05/page62-d04-d05-visual-result.json';
+            let state = 'failure';
+            let description = 'Page 62 D04-D05 evidence unavailable';
+            try {
+              const result = JSON.parse(fs.readFileSync(path, 'utf8'));
+              const rows = result.results || [];
+              const summary = rows
+                .map((row) => `${row.name.replace(/^D0[45] /, '')} ${(Number(row.metrics?.perceptualDiffRatio || 0) * 100).toFixed(2)}%`)
+                .join(' | ');
+              const pass = result.status === 'PASS';
+              state = pass ? 'success' : 'failure';
+              description = `${summary} | ${pass ? 'PASS' : 'FAIL'}`.slice(0, 140);
+            } catch (error) {}
+            await github.rest.repos.createCommitStatus({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              sha: context.sha,
+              state,
+              context: 'SHARKLOCK / Page 62 D04-D05',
+              description,
+            });
+
       - name: Enforce complete evidence chain
         if: always()
         shell: bash
@@ -271,4 +336,5 @@ jobs:
           test "$BUILD_OUTCOME" = success
           test "$CAPTURE_OUTCOME" = success
           test "$VISUAL_OUTCOME" = success
+          test "$PAGE62_OUTCOME" = success
           node -e "const r=require('./reports/sharklock-evidence/page-61/sharklock-result.json'); if(r.certificationStatus!=='PASS'||r.evidenceChainStatus!=='PASS') process.exit(1)"
