@@ -41,7 +41,8 @@
     "check:shipment-card-contract": "node scripts/governance/verify-shipment-card-design-contract.mjs",
     "check:shipment-card-variants": "node scripts/governance/certify-shipment-card-storybook-variants.mjs",
     "check:page62-cockpit": "node scripts/governance/verify-page-62-cockpit-contract.mjs",
-    "check:page62-d04-d05-visual": "node scripts/governance/certify-page-62-d04-d05-storybook.mjs"
+    "check:page62-d04-d05-visual": "node scripts/governance/certify-page-62-d04-d05-storybook.mjs",
+    "check:page62-visual-contract": "node scripts/governance/certify-page-62-d04-d05-storybook.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
