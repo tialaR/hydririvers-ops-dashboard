@@ -214,5 +214,33 @@
       "width": 1392,
       "height": 900
     }
-  ]
+  ],
+  "d04d05Reference": {
+    "sourceSvg": "D04–D05 · Cargo Cockpit + Timeline.svg",
+    "sourceSvgSha256": "dd3371bcdcb43273d9e6307a04b2a32dd947ba1245be42d0081f8e7dfe21b132",
+    "canvas": {
+      "width": 1440,
+      "height": 980
+    },
+    "crops": {
+      "d04": {
+        "x": 654,
+        "y": 314,
+        "width": 380,
+        "height": 414,
+        "reference": "d04-cargo-cockpit-reference.webp",
+        "referenceWidth": 190,
+        "referenceHeight": 207
+      },
+      "d05": {
+        "x": 1050,
+        "y": 314,
+        "width": 354,
+        "height": 414,
+        "reference": "d05-operational-timeline-reference.webp",
+        "referenceWidth": 177,
+        "referenceHeight": 207
+      }
+    }
+  }
 }
