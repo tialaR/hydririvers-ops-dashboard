@@ -73,3 +73,34 @@ The CI contract `check:page62-cockpit` fails if:
 
 This ADR does not promote every future HydroRivers visualization to ECharts automatically.
 Choose the simplest semantic representation that communicates the operational decision clearly.
+
+
+## 2026-09-24 re-evaluation after full desktop journey review
+
+The visualization stack was re-evaluated after the full Page 62 exports, Storybook journey and map-first overview were reviewed.
+
+Decision: **do not add another chart library yet**.
+
+Why:
+- ECharts 6 already covers the product needs now present in the journey: line/area, bar, gauge, radar, tooltips, multi-grid telemetry and Canvas rendering;
+- the new D08–D13 work now uses radar comparison, document-vs-evidence bars and post-action multi-series health instead of repeating timelines;
+- MapLibre GL remains the correct geospatial engine because the product already owns GeoJSON route, checkpoint, current-position and risk-segment adapters and can grow with source/layer composition;
+- adding Visx/Nivo/uPlot in the same surface today would duplicate axes, tooltip, interaction and accessibility contracts without a measured gap.
+
+A second chart engine is still allowed if a future requirement proves a real gap:
+- uPlot for measured high-frequency/dense telemetry where ECharts fails the performance budget;
+- Visx for a highly bespoke visualization that cannot be expressed cleanly with ECharts;
+- a geospatial overlay library only if MapLibre source/layer APIs become insufficient for the required spatial analysis.
+
+Product rule: **no dependency is protected because it is already installed, and no dependency is added merely to appear sophisticated**.
+
+### Hover artifact correction
+
+The black repaint blocks observed while hovering telemetry were treated as a rendering defect, not accepted as visual noise.
+
+For the operational ECharts renderer:
+- Canvas dirty-rectangle rendering is disabled;
+- telemetry uses a stable line axis pointer instead of a shadow-style interaction;
+- ResizeObserver remains responsible for container resizing.
+
+This trades a micro-optimization for deterministic interactive rendering at the current dashboard scale. Re-enable dirty-rect only after a reproducible browser-level benchmark proves it safe.
