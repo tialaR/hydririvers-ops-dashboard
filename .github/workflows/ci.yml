@@ -57,6 +57,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      - name: Page 61 architecture contract
+        run: npm run check:page61-architecture
+
       - name: Check i18n
         run: npm run check:i18n
 
