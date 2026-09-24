@@ -10,8 +10,8 @@ const evidenceDir = path.resolve(root, 'reports/sharklock-evidence/page-62/d04-d
 const policy = {
   perceptualThreshold: 0.20,
   perceptualNeighborRadius: 1,
-  maxDiffRatio: 0.18,
-  maxRmse: 0.17,
+  maxDiffRatio: 0.05,
+  maxRmse: 0.11,
   geometryTolerancePx: 2,
 };
 
@@ -29,6 +29,20 @@ const surfaces = [
     selector: '[data-testid="page62-d05-contract"]',
     referencePath: 'docs/governance/figma-freeze/page-62/d05-operational-timeline-reference.webp',
     geometry: { width: 354, height: 414 },
+  },
+  {
+    name: 'D06 Documents & Evidence',
+    storyId: 'page-62-d06-documents-evidence--reference',
+    selector: '[data-testid="page62-d06-contract"]',
+    referencePath: 'docs/governance/figma-freeze/page-62/d06-documents-reference.webp',
+    geometry: { width: 600, height: 548 },
+  },
+  {
+    name: 'D07 Risk & Occurrence',
+    storyId: 'page-62-d07-risk-occurrence--reference',
+    selector: '[data-testid="page62-d07-contract"]',
+    referencePath: 'docs/governance/figma-freeze/page-62/d07-occurrence-reference.webp',
+    geometry: { width: 660, height: 548 },
   },
 ];
 
@@ -219,7 +233,7 @@ try {
   }
 
   const report = {
-    gate: 'PAGE62-D04-D05-STORYBOOK-VISUAL-v1',
+    gate: 'PAGE62-D04-D07-STORYBOOK-VISUAL-v2',
     referenceSourceSha256: 'dd3371bcdcb43273d9e6307a04b2a32dd947ba1245be42d0081f8e7dfe21b132',
     policy,
     status: results.every((result) => result.pass) ? 'PASS' : 'FAIL',
@@ -227,7 +241,7 @@ try {
   };
 
   await writeFile(
-    path.resolve(evidenceDir, 'page62-d04-d05-visual-result.json'),
+    path.resolve(evidenceDir, 'page62-d04-d07-visual-result.json'),
     JSON.stringify(report, null, 2) + '\n',
   );
 
