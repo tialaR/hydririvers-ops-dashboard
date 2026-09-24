@@ -1,6 +1,19 @@
 'use client';
 
-import { OperationalBarChart, OperationalChartCard } from '@/shared/design-system/patterns/operational-chart';
+import {
+  Activity,
+  AlertTriangle,
+  Clock3,
+  Navigation,
+  Radio,
+  Route,
+  ShieldAlert,
+} from 'lucide-react';
+
+import {
+  OperationalChartCard,
+  OperationalLineChart,
+} from '@/shared/design-system/patterns/operational-chart';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
 
 import styles from './page-62-cargo-cockpit-preview.module.sass';
@@ -21,12 +34,19 @@ const telemetry = [
   { label: '12:00', value: 65 },
   { label: '14:00', value: 73 },
   { label: '16:00', value: 70 },
+  { label: '18:00', value: 76 },
 ];
 
 const cargoes = [
-  { code: '#HY-000-000', label: 'Atrasada', tone: 'delayed' as const, selected: true },
+  { code: '#HY-000-000', label: 'Atenção', tone: 'delayed' as const, selected: true },
   { code: '#HY-000-000', label: 'Em trânsito', tone: 'inTransit' as const, selected: false },
   { code: '#HY-000-000', label: 'Entregue', tone: 'completed' as const, selected: false },
+];
+
+const milestones = [
+  { label: 'Saída confirmada', meta: 'Manaus · 08:10', state: 'done' },
+  { label: 'Posição atual', meta: 'Rio Madeira · agora', state: 'current' },
+  { label: 'Janela de atracação', meta: 'Santarém · 18:40', state: 'next' },
 ];
 
 export function Page62CargoCockpitPreview() {
@@ -62,11 +82,12 @@ export function Page62CargoCockpitPreview() {
 
       <section className={styles.workspace}>
         <header className={styles.workspaceHeader}>
-          <div>
+          <div className={styles.selectedCargo}>
             <small>CARGA SELECIONADA</small>
             <strong>#HY-000-000</strong>
+            <span>Manaus → Santarém</span>
           </div>
-          <nav>
+          <nav aria-label="Navegação da carga">
             <span>Visão geral</span>
             <span className={styles.activeTab}>Cockpit</span>
             <span>Timeline</span>
@@ -76,17 +97,66 @@ export function Page62CargoCockpitPreview() {
         </header>
 
         <div className={styles.metricGrid}>
-          <article><small>PROGRESSO</small><strong>65%</strong><span>rota concluída</span></article>
-          <article><small>ETA</small><strong>18:40</strong><span>hoje</span></article>
-          <article><small>SINAL</small><strong>Estável</strong><span>GPS + AIS</span></article>
-          <article><small>RISCO</small><strong>Moderado</strong><span>1 atenção ativa</span></article>
+          <article className={styles.progressMetric}>
+            <div className={styles.metricHeading}>
+              <Route size={15} />
+              <small>PROGRESSO</small>
+            </div>
+            <div className={styles.progressBody}>
+              <div className={styles.progressRing} aria-label="65% da rota concluída">
+                <strong>65%</strong>
+              </div>
+              <div>
+                <strong>642 km</strong>
+                <span>de 988 km percorridos</span>
+              </div>
+            </div>
+          </article>
+
+          <article className={styles.etaMetric}>
+            <div className={styles.metricHeading}>
+              <Clock3 size={15} />
+              <small>ETA</small>
+            </div>
+            <strong>18:40</strong>
+            <span className={styles.etaDelta}>+ 22 min vs. plano</span>
+            <small>janela prevista hoje</small>
+          </article>
+
+          <article className={styles.signalMetric}>
+            <div className={styles.metricHeading}>
+              <Radio size={15} />
+              <small>SINAL</small>
+            </div>
+            <div className={styles.signalLine}>
+              <i aria-hidden />
+              <strong>Estável</strong>
+            </div>
+            <span>GPS + AIS · 4 min</span>
+            <small>telemetria recente</small>
+          </article>
+
+          <article className={styles.riskMetric}>
+            <div className={styles.metricHeading}>
+              <ShieldAlert size={15} />
+              <small>RISCO</small>
+            </div>
+            <div className={styles.riskScale} aria-label="Risco moderado">
+              <span />
+              <span />
+              <span className={styles.riskScaleActive} />
+              <span />
+            </div>
+            <strong>Moderado</strong>
+            <span>1 atenção ativa</span>
+          </article>
         </div>
 
         <div className={styles.contentGrid}>
           <OperationalChartCard
             title="Telemetria operacional"
-            changeInsight="Ritmo estável nas últimas horas."
-            actionHint="Acompanhar até a janela de atracação."
+            changeInsight="Ritmo estável, com recuperação no trecho mais recente."
+            actionHint="Acompanhar a tendência até a janela de atracação."
             legendLabel="Índice operacional"
             unit="%"
             points={telemetry}
@@ -97,27 +167,69 @@ export function Page62CargoCockpitPreview() {
             size="main"
             copy={copy}
           >
-            <OperationalBarChart points={telemetry} unit="%" ariaLabel="Barras de telemetria operacional" />
+            <OperationalLineChart
+              points={telemetry}
+              unit="%"
+              ariaLabel="Série temporal da telemetria operacional"
+            />
           </OperationalChartCard>
 
-          <article className={styles.timeline}>
-            <header><small>LINHA OPERACIONAL</small><strong>Próximos marcos</strong></header>
-            <ol>
-              <li><i/><div><strong>Saída confirmada</strong><span>Manaus · 08:10</span></div></li>
-              <li><i/><div><strong>Posição atual</strong><span>Rio Madeira · agora</span></div></li>
-              <li><i/><div><strong>Janela de atracação</strong><span>Santarém · 18:40</span></div></li>
-            </ol>
+          <article className={styles.routeContext}>
+            <header>
+              <div className={styles.metricHeading}>
+                <Navigation size={15} />
+                <small>CONTEXTO DE ROTA</small>
+              </div>
+              <strong>Rio Madeira · trecho ativo</strong>
+            </header>
+            <div className={styles.routeTrack} aria-label="Posição atual na rota">
+              <span className={styles.routeTrackDone} />
+              <i aria-hidden />
+            </div>
+            <div className={styles.routeLabels}>
+              <span>Manaus</span>
+              <strong>Posição atual</strong>
+              <span>Santarém</span>
+            </div>
+            <div className={styles.routeFacts}>
+              <div><small>PRÓXIMO MARCO</small><strong>Parintins</strong><span>94 km</span></div>
+              <div><small>CONDIÇÃO</small><strong>Operacional</strong><span>sem restrição crítica</span></div>
+            </div>
           </article>
         </div>
 
-        <article className={styles.attention}>
-          <div>
-            <small>ATENÇÃO OPERACIONAL</small>
-            <strong>Manifesto de carga precisa ser validado antes da chegada.</strong>
-            <span>Sem validação, a operação pode perder a janela prevista.</span>
-          </div>
-          <button type="button">Abrir documentos</button>
-        </article>
+        <div className={styles.lowerGrid}>
+          <article className={styles.timeline}>
+            <header>
+              <div className={styles.metricHeading}>
+                <Activity size={15} />
+                <small>LINHA OPERACIONAL</small>
+              </div>
+              <strong>Próximos marcos</strong>
+            </header>
+            <ol>
+              {milestones.map((milestone) => (
+                <li key={milestone.label} data-state={milestone.state}>
+                  <i aria-hidden />
+                  <div>
+                    <strong>{milestone.label}</strong>
+                    <span>{milestone.meta}</span>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </article>
+
+          <article className={styles.attention}>
+            <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
+            <div>
+              <small>ATENÇÃO OPERACIONAL</small>
+              <strong>Manifesto de carga precisa ser validado antes da chegada.</strong>
+              <span>Sem validação, a operação pode perder a janela prevista.</span>
+            </div>
+            <button type="button">Abrir documentos</button>
+          </article>
+        </div>
       </section>
     </div>
   );
