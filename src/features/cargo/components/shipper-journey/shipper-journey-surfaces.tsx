@@ -1,9 +1,10 @@
 'use client';
 
-import { Check, FileWarning, Radio, ShieldCheck } from 'lucide-react';
+import { BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileWarning, Gauge, Radio, Route, Scale, ShieldCheck, TrendingUp } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 
 import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
+import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
 import styles from './shipper-journey.module.sass';
 
 function money(value: number) {
@@ -69,6 +70,22 @@ export function ProposalNegotiationSurface({
                 </span>
               </div>
             ))}
+          </div>
+
+          <div className={styles.decisionVisualGrid}>
+            <div className={styles.visualPanel}>
+              <div className={styles.visualPanelHeader}>
+                <span><Gauge size={18}/><strong>Trade-off operacional</strong></span>
+                <small>interativo · custo × ETA × calado × docs × risco</small>
+              </div>
+              <ProposalTradeoffRadar />
+            </div>
+            <div className={styles.visualSummary}>
+              <span><Clock3 size={20}/><small>CHEGADA</small><strong>18:30</strong><em>−50 min</em></span>
+              <span><BadgeDollarSign size={20}/><small>PREÇO</small><strong>R$ 19.450</strong><em>+R$ 550</em></span>
+              <span><Route size={20}/><small>CALADO</small><strong>Compatível</strong><em>menor exposição</em></span>
+              <span><FileCheck2 size={20}/><small>DOCUMENTOS</small><strong>Prontos</strong><em>sem bloqueio</em></span>
+            </div>
           </div>
 
           <div className={styles.tradeTable}>
@@ -174,6 +191,13 @@ export function DecisionActionReviewSurface({
           </div>
         </div>
 
+        <div className={styles.reviewSignalGrid}>
+          <span><Clock3 size={21}/><small>ETA</small><strong>−50 min</strong></span>
+          <span><BadgeDollarSign size={21}/><small>CUSTO</small><strong>+R$ 550</strong></span>
+          <span><Route size={21}/><small>CALADO</small><strong>compatível</strong></span>
+          <span><FileCheck2 size={21}/><small>DOCS</small><strong>prontos</strong></span>
+        </div>
+
         <div className={styles.consequence}>
           <span><small className={styles.miniLabel}>DECISÃO EXPIRA</small><strong> A proposta precisa ser confirmada antes da validade indicada.</strong></span>
           <span className={styles.statusBadge}>{time(alternative.validityAt)}</span>
@@ -211,11 +235,18 @@ export function ActionFeedbackSurface({ onMonitor }: { onMonitor?: () => void })
         <motion.span className={styles.feedbackIcon} initial={reduceMotion ? false : { scale: 0.7 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 250, damping: 20 }}><Check /></motion.span>
       </motion.div>
 
-      <div className={styles.changeGrid}>
-        <div className={styles.changeCell}><small>Contraparte</small><strong>Operador B · DEMO</strong><span>alterada</span></div>
-        <div className={styles.changeCell}><small>Chegada</small><strong>19:20 → 18:30</strong><span>−50 min</span></div>
-        <div className={styles.changeCell}><small>Demurrage</small><strong>R$ 950/h → R$ 820/h</strong><span>−R$ 130/h</span></div>
-        <div className={styles.changeCell}><small>MDF-e</small><strong>Revalidando</strong><span>em curso</span></div>
+      <div className={styles.feedbackBodyGrid}>
+        <div className={styles.changeGrid}>
+          <div className={styles.changeCell}><small>Contraparte</small><strong>Rio Norte · DEMO</strong><span>alterada</span></div>
+          <div className={styles.changeCell}><small>Chegada</small><strong>19:20 → 18:30</strong><span>−50 min</span></div>
+          <div className={styles.changeCell}><small>Demurrage</small><strong>R$ 950/h → R$ 820/h</strong><span>−R$ 130/h</span></div>
+          <div className={styles.changeCell}><small>MDF-e</small><strong>Revalidando</strong><span>em curso</span></div>
+        </div>
+        <article className={styles.readinessCard}>
+          <span className={styles.iconBubble}><CheckCircle2 size={24}/></span>
+          <div><small>PRONTIDÃO OPERACIONAL</small><strong>86%</strong><p>Decisão aplicada; validação documental é o único item ainda em curso.</p></div>
+          <OperationalGaugeChart value={86} label="Prontidão" ariaLabel="Prontidão operacional de 86%" />
+        </article>
       </div>
 
       <div className={styles.consequence}>
@@ -245,10 +276,19 @@ export function CorrectionResubmitSurface({
         <p>{document.label} informa <strong>{document.observedValue}</strong>, enquanto a evidência operacional confirma <strong>{document.expectedValue}</strong>.</p>
       </div>
 
-      <div className={styles.compareGrid}>
-        <article className={styles.compareCard} data-tone="bad"><small>VALOR ENVIADO</small><strong>{document.observedValue}</strong><p className={styles.subtitle}>documento atual</p></article>
-        <article className={styles.compareCard} data-tone="warn"><small>DIFERENÇA</small><strong>1,6 t</strong><p className={styles.subtitle}>corrigir antes da revalidação</p></article>
-        <article className={styles.compareCard} data-tone="good"><small>EVIDÊNCIA</small><strong>{document.expectedValue}</strong><p className={styles.subtitle}>pesagem vinculada</p></article>
+      <div className={styles.correctionVisualGrid}>
+        <article className={styles.correctionChartCard}>
+          <div className={styles.visualPanelHeader}>
+            <span><Scale size={18}/><strong>Documento × evidência</strong></span>
+            <small>a diferença precisa ser visível, não lida em parágrafo</small>
+          </div>
+          <DocumentWeightComparisonChart submitted={18.4} evidence={16.8} />
+        </article>
+        <div className={styles.compareGrid}>
+          <article className={styles.compareCard} data-tone="bad"><small>VALOR ENVIADO</small><strong>{document.observedValue}</strong><p className={styles.subtitle}>documento atual</p></article>
+          <article className={styles.compareCard} data-tone="warn"><small>DIFERENÇA</small><strong>1,6 t</strong><p className={styles.subtitle}>corrigir antes da revalidação</p></article>
+          <article className={styles.compareCard} data-tone="good"><small>EVIDÊNCIA</small><strong>{document.expectedValue}</strong><p className={styles.subtitle}>pesagem vinculada</p></article>
+        </div>
       </div>
 
       <div className={styles.stepper}>
@@ -288,17 +328,14 @@ export function FollowUpMonitoringSurface({ onReviewHydro }: { onReviewHydro?: (
 
       <div className={styles.monitoringGrid}>
         <article className={styles.panel}>
-          <div className={styles.panelHeader}><h3>Eventos após a ação</h3><span className={styles.statusBadge}>5 eventos</span></div>
-          <div className={styles.eventRail}>
-            {[
-              ['16:12', 'Aceite registrado', 'concluído', false],
-              ['16:18', 'Contraparte confirmou', 'concluído', false],
-              ['16:26', 'MDF-e validado', 'concluído', false],
-              ['17:10', 'Posição atualizada', 'AIS + GPS', false],
-              ['18:30', 'Próximo marco', 'chegada estimada', true],
-            ].map(([eventTime, title, state, next]) => (
-              <div className={styles.event} data-next={String(next)} key={String(eventTime)}><small>{eventTime}</small><i /><strong>{title}</strong><span className={styles.subtitle}>{state}</span></div>
-            ))}
+          <div className={styles.panelHeader}><h3>Saúde pós-ação</h3><span className={styles.statusBadge}><TrendingUp size={14}/> melhorando</span></div>
+          <div className={styles.followUpChartWrap}>
+            <FollowUpHealthChart />
+          </div>
+          <div className={styles.recentSignals}>
+            <span><CheckCircle2 size={17}/><strong>MDF-e validado</strong><small>16:26</small></span>
+            <span><Radio size={17}/><strong>Posição atualizada</strong><small>17:10 · AIS + GPS</small></span>
+            <span><Clock3 size={17}/><strong>Próximo marco</strong><small>18:30 · chegada estimada</small></span>
           </div>
         </article>
 
