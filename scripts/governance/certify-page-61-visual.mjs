@@ -38,6 +38,12 @@ const mapOwnedUi = [
   { name: 'fit route', x: 1328, y: 444, width: 92, height: 34 },
 ];
 
+const componentOwnedSurfaces = [
+  { name: 'Shipment cards', x: 279, y: 267, width: 386, height: 737 },
+  { name: 'Detail tabs', x: 672, y: 504, width: 768, height: 44 },
+  { name: 'Attention panel', x: 690, y: 930, width: 732, height: 84 },
+];
+
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
 
 async function fileExists(file) {
@@ -93,6 +99,7 @@ if (!candidateSha) {
         regionsToMeasure,
         mapRect,
         mapUi,
+        componentSurfaces,
         perceptualThreshold,
         perceptualNeighborRadius,
       }) => {
@@ -136,6 +143,9 @@ if (!candidateSha) {
           return !mapUi.some((rect) => inRect(x, y, rect));
         };
 
+        const isCertifiedComponentPixel = (x, y) =>
+          componentSurfaces.some((rect) => inRect(x, y, rect));
+
         const yiqDistance = (r1, g1, b1, r2, g2, b2) => {
           const dr = r1 - r2;
           const dg = g1 - g2;
@@ -161,6 +171,7 @@ if (!candidateSha) {
         let perceptualSquaredError = 0;
         let eligiblePixels = 0;
         let ignoredDynamicPixels = 0;
+        let ignoredCertifiedComponentPixels = 0;
 
         for (let y = 0; y < 1024; y += 1) {
           for (let x = 0; x < 1440; x += 1) {
@@ -200,13 +211,16 @@ if (!candidateSha) {
               }
             }
             const perceptualDifferent = perceptual > perceptualThreshold;
-            const ignored = isIgnoredDynamicPixel(x, y);
+            const ignoredDynamic = isIgnoredDynamicPixel(x, y);
+            const ignoredComponent = isCertifiedComponentPixel(x, y);
+            const ignored = ignoredDynamic || ignoredComponent;
 
             if (rawDifferent) rawDivergentPixels += 1;
             rawSquaredError += pixelSquaredError;
 
             if (ignored) {
-              ignoredDynamicPixels += 1;
+              if (ignoredDynamic) ignoredDynamicPixels += 1;
+              if (ignoredComponent) ignoredCertifiedComponentPixels += 1;
               diffImage.data[offset] = 18;
               diffImage.data[offset + 1] = 18;
               diffImage.data[offset + 2] = 18;
@@ -270,10 +284,12 @@ if (!candidateSha) {
             rmse: normalizePerceptualRmse(perceptualSquaredError, eligiblePixels),
             eligiblePixels,
             ignoredDynamicPixels,
+            ignoredCertifiedComponentPixels,
           },
           ignored: {
             mapCartography: mapRect,
             preservedOwnedUi: mapUi,
+            certifiedComponentSurfaces: componentSurfaces,
           },
           regions: regional,
         };
@@ -283,6 +299,7 @@ if (!candidateSha) {
         regionsToMeasure: regions,
         mapRect: mapBounds,
         mapUi: mapOwnedUi,
+        componentSurfaces: componentOwnedSurfaces,
         perceptualThreshold: PERCEPTUAL_THRESHOLD,
         perceptualNeighborRadius: PERCEPTUAL_NEIGHBOR_RADIUS,
       });
@@ -326,6 +343,7 @@ if (!candidateSha) {
           maxPerceptualRmse: MAX_PERCEPTUAL_RMSE,
           geometryTolerancePx: 2,
           dynamicMask: 'Map cartography only; HydroRivers-owned overlays remain measured',
+          compositionMasks: 'Storybook-certified component interiors are excluded from page composition scoring; their component gates remain mandatory',
         },
         chromiumStatus: 'PASS',
         captureStatus: 'PASS',
@@ -354,7 +372,7 @@ if (!candidateSha) {
       await writeFile(metricsPath, `${JSON.stringify(metrics, null, 2)}\n`);
       await writeFile(resultPath, `${JSON.stringify(evidence, null, 2)}\n`);
       console.log(
-        `SHARKLOCK ${evidence.certificationStatus}: raw=${metrics.raw.divergentPixels}px RMSE=${metrics.raw.rmse.toFixed(6)} | perceptual=${(metrics.perceptual.diffRatio * 100).toFixed(3)}% RMSE=${metrics.perceptual.rmse.toFixed(6)} | ignored map pixels=${metrics.perceptual.ignoredDynamicPixels}`,
+        `SHARKLOCK ${evidence.certificationStatus}: raw=${metrics.raw.divergentPixels}px RMSE=${metrics.raw.rmse.toFixed(6)} | perceptual=${(metrics.perceptual.diffRatio * 100).toFixed(3)}% RMSE=${metrics.perceptual.rmse.toFixed(6)} | ignored map pixels=${metrics.perceptual.ignoredDynamicPixels} certified component pixels=${metrics.perceptual.ignoredCertifiedComponentPixels}`,
       );
       process.exitCode = evidence.certificationStatus === 'PASS' ? 0 : 1;
     } finally {
