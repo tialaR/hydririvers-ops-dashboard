@@ -1,10 +1,8 @@
 'use client';
 
-import { Ship } from 'lucide-react';
-import { useTranslations } from 'next-intl';
-
 import type { OwnedCargoDesktopViewModel } from '@/features/cargo/owned/application/owned-cargo-desktop-view-model';
-import styles from '@/features/cargo/owned/screens/owned-cargo-desktop-foundation.module.sass';
+import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
+import type { StatusBadgeStatus } from '@/shared/components/status-badge';
 
 type OwnedCargoShipmentCardProps = {
   viewModel: OwnedCargoDesktopViewModel;
@@ -12,32 +10,45 @@ type OwnedCargoShipmentCardProps = {
   onSelect: () => void;
 };
 
+function mapOwnedCargoStatusTone(status: OwnedCargoDesktopViewModel['cargo']['status']): StatusBadgeStatus {
+  if (status === 'attention') return 'delayed';
+  if (status === 'inTransit') return 'inTransit';
+  if (status === 'delivered') return 'completed';
+  if (status === 'blocked') return 'blocked';
+  return 'open';
+}
+
+function normalizeStateLabel(value: string, fallbackCode: string): string {
+  const normalized = value.replace(/,+\s*$/, '').trim();
+  if (normalized) return normalized;
+  return fallbackCode || 'Estado';
+}
+
 export function OwnedCargoShipmentCard({ viewModel, selected, onSelect }: OwnedCargoShipmentCardProps) {
-  const t = useTranslations('shipperMobileFlow');
   const { cargo } = viewModel;
 
-  return <button
-    type="button"
-    data-cargo-id={cargo.id}
-    data-cargo-code={cargo.code}
-    data-status={cargo.status}
-    data-testid="page61-shipment-card"
-    aria-pressed={selected}
-    className={`${styles.card} ${selected ? styles.cardSelected : ''}`}
-    onClick={onSelect}
-  >
-    <div className={styles.cardTop}>
-      <small>{viewModel.codeLabel}</small>
-      <span data-tone={cargo.status}>{viewModel.statusLabel}</span>
-    </div>
-    <div className={styles.route}>
-      <strong><em data-flag="us"/><span><b>{viewModel.originRegion}</b><small>{viewModel.originCity}</small></span></strong>
-      <strong><span><b>{viewModel.destinationRegion}</b><small>{viewModel.destinationCity}</small></span><em data-flag="pa"/></strong>
-    </div>
-    <div className={styles.cardTransit}><span aria-hidden="true"><Ship size={22} strokeWidth={1.4}/></span></div>
-    <div className={styles.canonicalCardFacts}>
-      <div><small>{t('myCargoes.desktop.cargo')}</small><strong>{viewModel.cargoType}</strong></div>
-      <div><small>ETA</small><strong>{viewModel.cardEta} {viewModel.cardEtaDay ? <span>{viewModel.cardEtaDay}</span> : null}</strong></div>
-    </div>
-  </button>;
+  return (
+    <ShipmentCard
+      code={viewModel.codeLabel}
+      statusLabel={viewModel.statusLabel}
+      statusTone={mapOwnedCargoStatusTone(cargo.status)}
+      origin={{
+        stateCode: viewModel.originStateCode,
+        stateLabel: normalizeStateLabel(viewModel.originRegion, viewModel.originStateCode),
+        city: viewModel.originCity,
+      }}
+      destination={{
+        stateCode: viewModel.destinationStateCode,
+        stateLabel: normalizeStateLabel(viewModel.destinationRegion, viewModel.destinationStateCode),
+        city: viewModel.destinationCity,
+      }}
+      cargoLabel="Carga"
+      cargoValue={viewModel.cargoType}
+      etaValue={viewModel.cardEta}
+      etaSuffix={viewModel.cardEtaDay}
+      selected={selected}
+      onSelect={onSelect}
+      testId="page61-shipment-card"
+    />
+  );
 }
