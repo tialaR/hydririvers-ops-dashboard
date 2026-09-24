@@ -2,7 +2,7 @@
 
 import { FormEvent, useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { ClipboardEvent } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'motion/react';
 import {
   Anchor,
   ArrowLeft,
