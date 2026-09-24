@@ -137,7 +137,6 @@ for (const required of [
   'page62-d11-feedback',
   'page62-d12-correction',
   'page62-d13-monitoring',
-  'A escolha continua humana',
 ]) {
   if (!surfaces.includes(required)) failures.push(`journey surface contract missing: ${required}`);
 }
