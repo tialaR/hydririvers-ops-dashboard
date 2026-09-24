@@ -12,3 +12,5 @@ export type {
   OperationalFreshnessState,
   OperationalRiskLevel
 } from './operational-chart-types';
+
+export { OperationalTelemetryOverviewChart } from './operational-telemetry-overview-chart';
