@@ -43,8 +43,8 @@ const meta = {
     (Story) => (
       <div
         style={{
-          width: '100%',
-          maxWidth: '27.125rem',
+          width: '27.125rem',
+          maxWidth: 'none',
           boxSizing: 'border-box',
           padding: '1.5rem',
           marginInline: 'auto',
