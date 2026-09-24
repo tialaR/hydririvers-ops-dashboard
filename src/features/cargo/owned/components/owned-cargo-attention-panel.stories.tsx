@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { page61219254VisualCargoes } from '@/features/cargo/owned/fixtures/page-61-219-254.visual-fixture';
+import { page61StoryViewModels } from '@/features/cargo/owned/stories/page-61-story-data';
 import { Page61StoryFrame } from '@/features/cargo/owned/stories/page-61-story-frame';
 
 import { OwnedCargoAttentionPanel } from './owned-cargo-attention-panel';
@@ -10,20 +10,13 @@ const meta = {
   component: OwnedCargoAttentionPanel,
   tags: ['autodocs'],
   args: {
-    cargo: page61219254VisualCargoes[0]!,
-    visualFixtureEnabled: true,
-  },
-  argTypes: {
-    visualFixtureEnabled: {
-      control: false,
-      table: {
-        category: 'Internal visual contract',
-        disable: true,
+    viewModel: page61StoryViewModels[0]!,
       },
+  argTypes: {
     },
-    cargo: {
+    viewModel: {
       control: 'object',
-      description: 'Owned cargo used to resolve risk, documents and ETA context.',
+      description: 'Canonical Page 61 view-model used by the real attention surface.',
     },
   },
   decorators: [
@@ -43,8 +36,3 @@ type Story = StoryObj<typeof meta>;
 
 export const CanonicalAttention: Story = {};
 
-export const DomainDrivenCopy: Story = {
-  args: {
-    visualFixtureEnabled: false,
-  },
-};
