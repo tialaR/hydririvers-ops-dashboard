@@ -65,7 +65,7 @@ for (const required of [
   "from 'echarts/core'",
   "from 'echarts/charts'",
   'CanvasRenderer',
-  'useDirtyRect: true',
+  'useDirtyRect: false',
 ]) {
   if (!chartCore.includes(required)) failures.push(`ECharts renderer missing production anchor: ${required}`);
 }
