@@ -55,7 +55,8 @@
     "react-is": "^19.2.6",
     "recharts": "^3.8.1",
     "sass": "^1.83.0",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "echarts": "^6.1.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
