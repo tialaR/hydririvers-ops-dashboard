@@ -41,3 +41,18 @@ The committed WebP references are intentionally reduced to 50% for perceptual re
 The isolated Storybook stories are the certification surfaces:
 - `Page 62 / D04 Cargo Cockpit / Reference`
 - `Page 62 / D05 Operational Timeline / Reference`
+
+
+## D06–D07 component contract
+
+The next desktop journey bite reuses Page 62 frame 20 as the source for isolated component certification.
+
+Frozen crops:
+- D06 Documents & Evidence: frame-relative `98,302 · 600×548`
+- D07 Risk & Occurrence: frame-relative `712,302 · 660×548`
+
+Isolated Storybook certification surfaces:
+- `Page 62 / D06 Documents & Evidence / Reference`
+- `Page 62 / D07 Risk & Occurrence / Reference`
+
+These surfaces intentionally validate the reusable operational panels before the complete D06/D07 screen composition.
