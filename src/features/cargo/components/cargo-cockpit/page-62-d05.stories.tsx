@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { CargoOperationalTimeline } from './cargo-operational-timeline';
+import { Page62D05ContractSurface } from './page-62-d05-contract-surface';
 
 const meta = {
   title: 'Page 62/D05 Operational Timeline',
-  component: CargoOperationalTimeline,
+  component: Page62D05ContractSurface,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
@@ -14,7 +14,7 @@ const meta = {
       },
     },
   },
-} satisfies Meta<typeof CargoOperationalTimeline>;
+} satisfies Meta<typeof Page62D05ContractSurface>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
