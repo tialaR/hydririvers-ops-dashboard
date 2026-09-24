@@ -10,7 +10,8 @@ const meta = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'First Page 62 composition rebuilt from the exported blueprint using the canonical Shipment Card and existing operational chart pattern. This is the Storybook contract surface before wiring the production route.',
+        component:
+          'D04-D05 reference contract for the Page 62 operational workspace. It reuses the canonical Shipment Card, ECharts operational visualizations and Motion only for meaningful state transitions. Cockpit and Timeline are independent Storybook states before route wiring.',
       },
     },
   },
@@ -19,4 +20,10 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const WorkingReference: Story = {};
+export const CockpitReference: Story = {
+  args: { initialMode: 'cockpit' },
+};
+
+export const TimelineReference: Story = {
+  args: { initialMode: 'timeline' },
+};
