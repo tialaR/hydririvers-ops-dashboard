@@ -88,7 +88,7 @@ export function ProposalNegotiationSurface({
               <span>{alternativeDemurrage ? money(alternativeDemurrage) + '/h' : 'não informado'}</span>
             </div>
             <div className={styles.tradeRow}>
-              <small>Calado</small><span>{current.compatibility.draft}</span><strong>→</strong><span>{alternative.compatibility.draft}</span>
+              <small>Validade</small><span>{time(current.validityAt)}</span><strong className={styles.deltaWarn}>−15 min</strong><span>{time(alternative.validityAt)}</span>
             </div>
           </div>
 
@@ -213,8 +213,8 @@ export function ActionFeedbackSurface({ onMonitor }: { onMonitor?: () => void })
 
       <div className={styles.changeGrid}>
         <div className={styles.changeCell}><small>Contraparte</small><strong>Operador B · DEMO</strong><span>alterada</span></div>
-        <div className={styles.changeCell}><small>ETA</small><strong>22 h → 24 h</strong><span>estado atualizado</span></div>
-        <div className={styles.changeCell}><small>Demurrage</small><strong>contratual</strong><span>registrada</span></div>
+        <div className={styles.changeCell}><small>Chegada</small><strong>19:20 → 18:30</strong><span>−50 min</span></div>
+        <div className={styles.changeCell}><small>Demurrage</small><strong>R$ 950/h → R$ 820/h</strong><span>−R$ 130/h</span></div>
         <div className={styles.changeCell}><small>MDF-e</small><strong>Revalidando</strong><span>em curso</span></div>
       </div>
 
