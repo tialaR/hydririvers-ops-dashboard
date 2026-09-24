@@ -106,7 +106,7 @@ export function DocumentWeightComparisonChart({
         position: 'right',
         color: '#e5e7eb',
         fontSize: 11,
-        formatter: ({ value }: { value: unknown }) => String(value) + ' t',
+        formatter: '{c} t',
       },
     }],
   }), [evidence, submitted]);
