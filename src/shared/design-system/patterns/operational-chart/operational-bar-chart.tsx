@@ -5,6 +5,7 @@ import type { EChartsCoreOption } from './operational-echart';
 import { OperationalEChart } from './operational-echart';
 import type { OperationalChartPoint } from './operational-chart-types';
 import styles from './operational-chart-card.module.sass';
+import { buildOperationalTooltip, operationalTooltipShell } from './operational-tooltip';
 
 export type OperationalBarChartProps = {
   points: OperationalChartPoint[];
@@ -29,13 +30,18 @@ export function OperationalBarChart({
       containLabel: false,
     },
     tooltip: {
+      ...operationalTooltipShell,
       trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-      backgroundColor: '#12161b',
-      borderColor: '#2c333a',
-      borderWidth: 1,
-      textStyle: { color: '#f4f5f7', fontSize: 11 },
-      valueFormatter: (value: unknown) => `${value}${unit ? ` ${unit}` : ''}`,
+      axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ axisValue?: string; value?: number }> : [];
+        const item = items[0];
+        return buildOperationalTooltip({
+          eyebrow: 'DISTRIBUIÇÃO',
+          title: item?.axisValue ?? 'Período',
+          rows: [{ label: 'Valor', value: String(item?.value ?? '—') + (unit ? ' ' + unit : '') }],
+        });
+      },
     },
     xAxis: {
       type: 'category',
@@ -57,11 +63,11 @@ export function OperationalBarChart({
         data: points.map((point) => point.value),
         barMaxWidth: size === 'micro' ? 18 : 28,
         itemStyle: {
-          color: '#22d3ee',
+          color: '#71717a',
           borderRadius: [5, 5, 2, 2],
         },
         emphasis: {
-          itemStyle: { color: '#67e8f9' },
+          itemStyle: { color: '#d4d4d8' },
         },
       },
     ],
