@@ -554,3 +554,272 @@
 @media (max-width: 68rem)
   .documentsRiskGrid
     grid-template-columns: 1fr
+
+
+.overviewSurface
+  display: grid
+  grid-template-columns: minmax(23rem, 25rem) minmax(0, 1fr)
+  width: min(100%, 90rem)
+  min-height: 58rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  overflow: hidden
+  background: var(--hy-p62-canvas)
+  color: var(--hy-p62-text)
+
+.overviewMaster
+  min-width: 0
+  padding: var(--hy-p62-space-5)
+  border-right: 0.0625rem solid var(--hy-p62-border)
+  background: var(--hy-p62-surface)
+
+.overviewMasterHeader
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+
+.overviewMasterHeader h2
+  margin: var(--hy-p62-space-1) 0 0
+  font-size: var(--hy-p62-font-heading)
+
+.overviewSearch
+  display: flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  min-height: 2.75rem
+  margin-top: var(--hy-p62-space-4)
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.overviewSearch input
+  width: 100%
+  border: 0
+  outline: 0
+  background: transparent
+  color: var(--hy-p62-text)
+  font: inherit
+  font-size: var(--hy-p62-font-body)
+
+.overviewFilters
+  display: flex
+  flex-wrap: wrap
+  gap: var(--hy-p62-space-2)
+  margin-top: var(--hy-p62-space-3)
+
+.overviewFilters button
+  min-height: 2rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  background: transparent
+  color: var(--hy-p62-muted)
+  font: inherit
+  font-size: var(--hy-p62-font-xs)
+  cursor: pointer
+
+.overviewFilters button[aria-pressed='true']
+  border-color: var(--hy-p62-accent)
+  color: var(--hy-p62-text)
+  background: color-mix(in srgb, var(--hy-p62-accent) 10%, transparent)
+
+.overviewList
+  display: grid
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.overviewWorkspace
+  min-width: 0
+  padding: var(--hy-p62-space-5)
+  background: radial-gradient(circle at 80% 0%, color-mix(in srgb, var(--hy-p62-accent) 7%, transparent), transparent 28rem), var(--hy-p62-canvas)
+
+.overviewHeader
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  margin-bottom: var(--hy-p62-space-4)
+
+.overviewHeader h2
+  margin: var(--hy-p62-space-1) 0 0
+  font-size: var(--hy-p62-font-heading)
+
+.overviewHeader span
+  display: block
+  margin-top: var(--hy-p62-space-1)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-body)
+
+.overviewMap
+  position: relative
+  min-height: 26rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  overflow: hidden
+  background: var(--hy-p62-surface-raised)
+
+.mapFloatingSummary
+  position: absolute
+  left: var(--hy-p62-space-4)
+  bottom: var(--hy-p62-space-4)
+  z-index: 2
+  display: flex
+  flex-wrap: wrap
+  gap: var(--hy-p62-space-2)
+
+.mapFloatingSummary span
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  min-height: 2.5rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-border) 80%, transparent)
+  border-radius: var(--hy-p62-radius-pill)
+  background: color-mix(in srgb, var(--hy-p62-canvas) 90%, transparent)
+  backdrop-filter: blur(0.75rem)
+  font-size: var(--hy-p62-font-sm)
+
+.mapFloatingSummary svg
+  color: var(--hy-p62-accent)
+
+.mapSourceBadge
+  position: absolute
+  top: var(--hy-p62-space-3)
+  right: var(--hy-p62-space-3)
+  z-index: 2
+  padding: var(--hy-p62-space-2) var(--hy-p62-space-3)
+  border-radius: var(--hy-p62-radius-pill)
+  background: color-mix(in srgb, var(--hy-p62-canvas) 92%, transparent)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.overviewInsightGrid
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.overviewKpi
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 7rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.overviewKpi > div
+  display: grid
+  gap: var(--hy-p62-space-1)
+
+.overviewKpi small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  letter-spacing: 0.06em
+
+.overviewKpi strong
+  font-size: 1.2rem
+
+.overviewKpi span
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.iconBubble
+  display: grid
+  width: 2.5rem
+  height: 2.5rem
+  place-items: center
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-accent) 10%, var(--hy-p62-surface-raised))
+  color: var(--hy-p62-accent)
+
+.overviewLowerGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.6fr) minmax(20rem, .8fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.overviewHydroCard,
+.overviewActionCard
+  min-height: 17rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.overviewHydroCard header
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+
+.overviewHydroCard h3,
+.overviewActionCard h3
+  margin: var(--hy-p62-space-1) 0 0
+  font-size: var(--hy-p62-font-title)
+
+.overviewActionCard
+  background: color-mix(in srgb, var(--hy-p62-warning) 8%, var(--hy-p62-surface))
+
+.overviewActionCard p
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-body)
+  line-height: 1.5
+
+.overviewActionFacts
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: var(--hy-p62-space-2)
+  margin: var(--hy-p62-space-4) 0
+
+.overviewActionFacts span
+  display: grid
+  gap: var(--hy-p62-space-1)
+  padding: var(--hy-p62-space-3)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 22%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-warning) 5%, transparent)
+
+.overviewActionFacts strong
+  font-size: var(--hy-p62-font-title)
+
+.overviewActionFacts small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+@media (max-width: 78rem)
+  .overviewSurface
+    grid-template-columns: 21rem minmax(0, 1fr)
+
+  .overviewInsightGrid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+@media (max-width: 62rem)
+  .overviewSurface
+    grid-template-columns: 1fr
+
+  .overviewMaster
+    border-right: 0
+    border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+  .overviewLowerGrid
+    grid-template-columns: 1fr
+
+  .overviewMap
+    min-height: 22rem
+
+@media (max-width: 42rem)
+  .overviewInsightGrid,
+  .overviewActionFacts
+    grid-template-columns: 1fr
+
+  .mapFloatingSummary
+    right: var(--hy-p62-space-4)
+    align-items: stretch
+    flex-direction: column
