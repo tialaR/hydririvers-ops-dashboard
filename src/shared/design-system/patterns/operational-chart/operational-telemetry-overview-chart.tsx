@@ -14,7 +14,7 @@ type OperationalTelemetryOverviewChartProps = {
   ariaLabel: string;
 };
 
-const seriesColors = ['#e4e4e7', '#8b8b93', '#52525b'] as const;
+const seriesColors = ['#e4e4e7', '#8b8b93', '#52525b'];
 
 export function OperationalTelemetryOverviewChart({
   labels,
