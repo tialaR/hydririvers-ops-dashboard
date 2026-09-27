@@ -127,6 +127,7 @@ if (!mock.includes('arrivalAt')) failures.push('proposal arrivalAt must be expli
 if (!mock.includes('valueBRLPerHour')) failures.push('demurrage unit must be explicit and hourly for the reference scenario');
 
 for (const required of [
+  'FullFlow',
   'Overview',
   'D08D09Negotiation',
   'D10ActionReview',

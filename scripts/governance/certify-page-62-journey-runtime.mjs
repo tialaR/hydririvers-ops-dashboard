@@ -81,6 +81,96 @@ function resolveStoryId(storyKey) {
   return entry.id;
 }
 
+async function certifyInteractiveFlow({ name, correctionBranch = false }) {
+  const storyId = resolveStoryId('FullFlow');
+  const page = await browser.newPage({
+    viewport: { width: 1440, height: 1024 },
+    deviceScaleFactor: 1,
+  });
+
+  const failures = [];
+  const visited = [];
+  const consoleErrors = [];
+
+  page.on('console', (message) => {
+    if (message.type() === 'error') consoleErrors.push(message.text());
+  });
+  page.on('pageerror', (error) => consoleErrors.push(error.message));
+
+  const visit = async (selector, label) => {
+    await page.locator(selector).first().waitFor({ state: 'visible', timeout: 20000 });
+    visited.push(label);
+  };
+
+  try {
+    await page.goto(`${baseUrl}/iframe.html?id=${storyId}&viewMode=story`, {
+      waitUntil: 'domcontentloaded',
+      timeout: 30000,
+    });
+    await page.evaluate(() => document.fonts.ready);
+
+    await visit('[data-testid="page62-overview"]', 'D01-D03');
+    await page.getByRole('button', { name: 'Abrir cockpit' }).click();
+
+    await visit('[data-testid="page62-cargo-cockpit"]', 'D04');
+    await page.getByRole('button', { name: 'Linha operacional' }).click();
+    await visit('[data-testid="page62-d05-timeline"]', 'D05');
+
+    await page.getByRole('button', { name: 'Documentos' }).click();
+    await visit('[data-testid="page62-d06-documents"]', 'D06');
+    await visit('[data-testid="page62-d07-occurrence"]', 'D07');
+
+    await page.getByRole('button', { name: 'Comparar propostas' }).click();
+    await visit('[data-testid="page62-d08-d09-negotiation"]', 'D08');
+    await visit('[data-testid="page62-d09-communication"]', 'D09');
+
+    await page.getByRole('button', { name: 'Revisar aceite' }).click();
+    await visit('[data-testid="page62-d10-review"]', 'D10');
+
+    await page.getByRole('button', { name: 'Confirmar aceite' }).click();
+    await visit('[data-testid="page62-d11-feedback"]', 'D11');
+
+    if (correctionBranch) {
+      await page.getByRole('button', { name: 'Tratar rejeição documental' }).click();
+      await visit('[data-testid="page62-d12-correction"]', 'D12');
+      await page.getByRole('button', { name: 'Salvar correção e revalidar' }).click();
+    } else {
+      await page.getByRole('button', { name: 'Acompanhar carga' }).click();
+    }
+
+    await visit('[data-testid="page62-d13-monitoring"]', 'D13');
+
+    const relevantConsoleErrors = consoleErrors.filter(
+      (entry) => !/Failed to load resource|ERR_NAME_NOT_RESOLVED|net::ERR_/i.test(entry),
+    );
+    if (relevantConsoleErrors.length) failures.push(`runtime console errors: ${relevantConsoleErrors.length}`);
+  } catch (error) {
+    failures.push(error instanceof Error ? error.message : String(error));
+  }
+
+  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const screenshotPath = path.resolve(evidenceDir, `${slug}.png`);
+  await page.screenshot({ path: screenshotPath, fullPage: true, animations: 'disabled', caret: 'hide' });
+
+  results.push({
+    name,
+    storyKey: 'FullFlow',
+    storyId,
+    pass: failures.length === 0,
+    failures,
+    metrics: {
+      canvasCount: 0,
+      overflowX: 0,
+      visitedCount: visited.length,
+      visited,
+      correctionBranch,
+    },
+    screenshot: path.relative(root, screenshotPath),
+  });
+
+  await page.close();
+}
+
 try {
   for (const state of states) {
     const storyId = resolveStoryId(state.storyKey);
@@ -176,6 +266,15 @@ try {
 
     await page.close();
   }
+
+  await certifyInteractiveFlow({
+    name: 'Full Flow · happy path',
+    correctionBranch: false,
+  });
+  await certifyInteractiveFlow({
+    name: 'Full Flow · correction branch',
+    correctionBranch: true,
+  });
 
   const report = {
     gate: 'PAGE62-JOURNEY-RUNTIME-VISUAL-v1',

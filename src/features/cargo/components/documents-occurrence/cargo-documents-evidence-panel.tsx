@@ -9,7 +9,15 @@ const documents = [
   { label: 'Boletim de trecho', meta: 'Contexto hidroviário', status: 'DEMO', tone: 'demo' },
 ] as const;
 
-export function CargoDocumentsEvidencePanel() {
+type CargoDocumentsEvidencePanelProps = {
+  onPreviewEvidence?: () => void;
+  onCorrectManifest?: () => void;
+};
+
+export function CargoDocumentsEvidencePanel({
+  onPreviewEvidence,
+  onCorrectManifest,
+}: CargoDocumentsEvidencePanelProps = {}) {
   return (
     <article className={styles.documentsPanel} data-testid="page62-d06-documents">
       <h3 className={styles.panelTitle}>Documentos da carga</h3>
@@ -28,8 +36,8 @@ export function CargoDocumentsEvidencePanel() {
         ))}
       </div>
       <div className={styles.documentActions}>
-        <button type="button">Pré-visualizar evidência</button>
-        <button type="button">Corrigir manifesto →</button>
+        <button type="button" onClick={onPreviewEvidence}>Pré-visualizar evidência</button>
+        <button type="button" onClick={onCorrectManifest}>Corrigir manifesto →</button>
       </div>
     </article>
   );

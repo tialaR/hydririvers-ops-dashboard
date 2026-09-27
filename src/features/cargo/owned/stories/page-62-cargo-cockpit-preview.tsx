@@ -363,7 +363,7 @@ export function Page62CargoCockpitPreview({
                       <strong>Manifesto ainda exige validação.</strong>
                       <span>Impacto: risco de perder a janela prevista de chegada.</span>
                     </div>
-                    <button type="button">Abrir documentos</button>
+                    <button type="button" onClick={onDocuments}>Abrir documentos</button>
                   </article>
                 </div>
               </motion.div>
@@ -376,7 +376,7 @@ export function Page62CargoCockpitPreview({
                 exit={{ opacity: 0, y: -4 }}
               >
                 <div className={styles.timelineLayout}>
-                  <article className={styles.timeline}>
+                  <article className={styles.timeline} data-testid="page62-d05-timeline">
                     <header>
                       <div className={styles.metricHeading}>
                         <Activity size={15} />

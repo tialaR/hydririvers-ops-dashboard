@@ -1,6 +1,12 @@
 import styles from './documents-occurrence.module.sass';
 
-export function CargoOccurrenceSummary() {
+type CargoOccurrenceSummaryProps = {
+  onOpenCorrection?: () => void;
+};
+
+export function CargoOccurrenceSummary({
+  onOpenCorrection,
+}: CargoOccurrenceSummaryProps = {}) {
   return (
     <article className={styles.occurrencePanel} data-testid="page62-d07-occurrence">
       <h3 className={styles.panelTitle}>Ocorrência operacional</h3>
@@ -44,7 +50,7 @@ export function CargoOccurrenceSummary() {
         </div>
       </div>
 
-      <button className={styles.correctionAction} type="button">Abrir correção →</button>
+      <button className={styles.correctionAction} type="button" onClick={onOpenCorrection}>Abrir correção →</button>
     </article>
   );
 }

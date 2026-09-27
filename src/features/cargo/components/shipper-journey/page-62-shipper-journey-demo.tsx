@@ -20,7 +20,7 @@ import {
 import styles from './shipper-journey.module.sass';
 
 const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
-  { id: 'discovery', label: 'Visão geral' },
+  { id: 'discovery', label: 'D01–D03 · Carteira e rota' },
   { id: 'cockpit', label: 'D04–D05 · Cockpit' },
   { id: 'documentsRisk', label: 'D06–D07 · Evidências' },
   { id: 'negotiation', label: 'D08–D09 · Negociação' },
@@ -54,10 +54,31 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
       );
     }
     if (experience === 'documentsRisk') {
+      const openCorrection = () => setExperience(
+        resolveShipperJourneyTransition('documentsRisk', { type: 'documentRejected' }),
+      );
+      const openNegotiation = () => setExperience(
+        resolveShipperJourneyTransition('documentsRisk', { type: 'proposalSelected' }),
+      );
+
       return (
-        <div className={styles.documentsRiskGrid}>
-          <CargoDocumentsEvidencePanel />
-          <CargoOccurrenceSummary />
+        <div className={styles.journeyFlowStack}>
+          <div className={styles.documentsRiskGrid}>
+            <CargoDocumentsEvidencePanel
+              onPreviewEvidence={openCorrection}
+              onCorrectManifest={openCorrection}
+            />
+            <CargoOccurrenceSummary onOpenCorrection={openCorrection} />
+          </div>
+          <div className={styles.contextBar} data-testid="page62-d06-d07-next">
+            <span>
+              <strong>Investigação concluída</strong>
+              <small>A divergência pode ser corrigida agora ou acompanhada em paralelo enquanto você compara propostas.</small>
+            </span>
+            <button className={styles.primaryAction} type="button" onClick={openNegotiation}>
+              Comparar propostas
+            </button>
+          </div>
         </div>
       );
     }
@@ -72,7 +93,26 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
       );
     }
     if (experience === 'feedback') {
-      return <ActionFeedbackSurface onMonitor={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'monitoringOpened' }))} />;
+      return (
+        <div className={styles.journeyFlowStack}>
+          <ActionFeedbackSurface
+            onMonitor={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'monitoringOpened' }))}
+          />
+          <div className={styles.contextBar} data-testid="page62-d11-correction-branch">
+            <span>
+              <strong>Se a revalidação documental falhar</strong>
+              <small>O fluxo abre a correção sem perder a decisão comercial já aplicada.</small>
+            </span>
+            <button
+              className={styles.secondaryAction}
+              type="button"
+              onClick={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'documentRejected' }))}
+            >
+              Tratar rejeição documental
+            </button>
+          </div>
+        </div>
+      );
     }
     if (experience === 'correction' && divergentDocument) {
       return <CorrectionResubmitSurface document={divergentDocument} onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))} />;
@@ -84,7 +124,7 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
   })();
 
   return (
-    <div>
+    <div data-testid="page62-shipper-journey">
       <nav className={styles.journeyToolbar} aria-label="Page 62 journey state selector">
         {experiences.map((item) => (
           <button key={item.id} type="button" aria-pressed={experience === item.id} onClick={() => setExperience(item.id)}>

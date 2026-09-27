@@ -19,6 +19,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+export const FullFlow: Story = {
+  args: { initial: 'discovery' },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Fluxo interativo completo da Embarcadora: D01–D13, incluindo caminho feliz e ramificação de correção/reenvio.',
+      },
+    },
+  },
+};
+
 export const Overview: Story = { args: { initial: 'discovery' } };
 export const D04D05Cockpit: Story = { args: { initial: 'cockpit' } };
 export const D06D07DocumentsRisk: Story = { args: { initial: 'documentsRisk' } };
