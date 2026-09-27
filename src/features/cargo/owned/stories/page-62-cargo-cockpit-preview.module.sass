@@ -336,33 +336,33 @@
 
 .cockpitLowerGrid
   display: grid
-  grid-template-columns: minmax(0, 1.45fr) minmax(19rem, .55fr)
+  grid-template-columns: minmax(0, 1.55fr) minmax(18rem, .45fr)
   gap: 1rem
   margin-top: 1rem
 
 .routeContextCompact
   grid-column: 1 / -1
   display: grid
-  grid-template-columns: minmax(18rem, .7fr) minmax(0, 1.3fr)
+  grid-template-columns: minmax(14rem, .62fr) minmax(22rem, 1.38fr)
   align-items: center
-  gap: 2rem
-  min-height: 7.5rem
-  padding: 1.1rem 1.25rem
+  gap: 1.75rem
+  min-height: 11.5rem
+  padding: 1.15rem 1.25rem
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: 0.875rem
   background: var(--hy-p62-surface)
 
-.routeContextCompact > div:first-child
+.routeLead
   display: grid
   gap: .3rem
 
-.routeContextCompact > div:first-child > strong
-  font-size: .9rem
-  font-weight: 600
+.routeLead > strong
+  font-size: .95rem
+  font-weight: 620
 
-.routeContextCompact > div:first-child > span
+.routeLead > span
   color: var(--hy-p62-muted)
-  font-size: .72rem
+  font-size: .75rem
 
 .routeProgressCompact
   display: grid
@@ -411,13 +411,45 @@
 .routeProgressCompact > div small:last-child
   text-align: right
 
+.routeSignalGrid
+  grid-column: 1 / -1
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: .65rem
+  padding-top: .95rem
+  border-top: .0625rem solid var(--hy-p62-border)
+
+.routeSignalGrid > div
+  display: grid
+  gap: .2rem
+  min-width: 0
+  padding: .8rem .85rem
+  border-radius: .7rem
+  background: var(--hy-p62-surface-raised)
+
+.routeSignalGrid small
+  color: var(--hy-p62-muted)
+  font-size: .62rem
+  font-weight: 650
+  letter-spacing: .06em
+
+.routeSignalGrid strong
+  color: var(--hy-p62-text)
+  font-size: .92rem
+  font-weight: 620
+
+.routeSignalGrid span
+  color: var(--hy-p62-muted)
+  font-size: .66rem
+  line-height: 1.35
+
 .attention
   display: grid
-  grid-template-columns: auto minmax(0,1fr) auto
-  align-items: center
-  gap: 0.85rem
-  min-height: 7.5rem
-  padding: 1rem 1.15rem
+  grid-template-columns: auto minmax(0,1fr)
+  align-items: start
+  gap: 0.75rem
+  min-height: auto
+  padding: 1rem
   border: 0.0625rem solid var(--hy-p62-border)
   border-left: 0.1875rem solid var(--hy-p62-warning)
   border-radius: 0.875rem
@@ -446,6 +478,8 @@
   font-size: 0.8125rem
 
 .attention button
+  grid-column: 2
+  justify-self: start
   min-height: 2rem
   padding: 0 0.9rem
   border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 45%, var(--hy-p62-border))
@@ -456,8 +490,8 @@
   cursor: pointer
 
 .evidenceCard
-  min-height: 7.5rem
-  padding: 1rem 1.1rem
+  min-height: 10rem
+  padding: 1.1rem 1.2rem
 
 .evidenceCard > header
   display: flex
@@ -477,8 +511,9 @@
 
 .evidenceList
   display: grid
-  gap: 0.45rem
-  margin-top: 0.75rem
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: 0.65rem
+  margin-top: 0.9rem
 
 .evidenceList > div
   display: grid
@@ -636,6 +671,10 @@
   .timelineLayout,
   .routeContextCompact
     grid-template-columns: 1fr
+
+  .routeSignalGrid,
+  .evidenceList
+    grid-template-columns: repeat(2, minmax(0, 1fr))
 
 
 .routeContext
