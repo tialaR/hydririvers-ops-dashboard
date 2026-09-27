@@ -147,6 +147,7 @@ jobs:
           PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-visual-contract 2>&1 | tee reports/sharklock-evidence/page-62/logs/d04-d07-visual.log
           PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-journey-runtime 2>&1 | tee reports/sharklock-evidence/page-62/logs/journey-runtime.log
           PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-cockpit-composition 2>&1 | tee reports/sharklock-evidence/page-62/logs/cockpit-composition.log
+          PAGE62_STORYBOOK_URL=http://127.0.0.1:6106 npm run check:page62-overview-composition 2>&1 | tee reports/sharklock-evidence/page-62/logs/overview-composition.log
 
       - name: Build candidate runtime
         id: build

@@ -225,7 +225,7 @@ export function FollowUpHealthChart() {
 export function HydroLevelTrendChart() {
   const option = useMemo<EChartsCoreOption>(() => ({
     animation: false,
-    grid: { left: 42, right: 16, top: 18, bottom: 28 },
+    grid: { left: 52, right: 20, top: 54, bottom: 34 },
     tooltip: {
       ...operationalTooltipShell,
       trigger: 'axis',
@@ -233,51 +233,58 @@ export function HydroLevelTrendChart() {
       formatter: (raw: unknown) => {
         const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
         return buildOperationalTooltip({
-          eyebrow: 'CONTEXTO HIDROVIÁRIO',
+          eyebrow: 'AMAZONAS–SOLIMÕES · DEMO',
           title: items[0]?.axisValue ?? 'Período',
           rows: items.map((item) => ({
-            label: item.seriesName ?? 'Nível',
-            value: String(item.value ?? '—') + ' m',
-            tone: item.seriesName?.includes('atenção') ? 'warning' : 'info',
+            label: item.seriesName ?? 'Cota',
+            value: String(item.value ?? '—').replace('.', ',') + ' m',
           })),
-          footer: 'DEMO: faixa de atenção deve vir de fonte oficial/adapter em produção.',
+          footer: 'Cota fluviométrica não é profundidade navegável. Produção: ANA/Hidroweb + contexto DNIT/CHM.',
         });
       },
+    },
+    legend: {
+      top: 0,
+      right: 0,
+      textStyle: { color: '#8b8b93', fontSize: 11 },
+      itemWidth: 16,
+      itemHeight: 7,
     },
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: ['D-5', 'D-4', 'D-3', 'D-2', 'D-1', 'Hoje'],
+      data: ['22 set', '23 set', '24 set', '25 set', '26 set', '27 set'],
       axisTick: { show: false },
-      axisLine: { lineStyle: { color: '#303740' } },
-      axisLabel: { color: '#7f8994', fontSize: 9 },
+      axisLine: { lineStyle: { color: '#303033' } },
+      axisLabel: { color: '#7f7f87', fontSize: 10, margin: 12 },
     },
     yAxis: {
       type: 'value',
-      min: 13,
-      max: 16,
-      splitNumber: 3,
-      axisLabel: { color: '#7f8994', fontSize: 9, formatter: '{value} m' },
-      splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
+      min: 13.6,
+      max: 15.8,
+      splitNumber: 4,
+      axisLabel: { color: '#7f7f87', fontSize: 10, formatter: '{value} m' },
+      splitLine: { lineStyle: { color: '#242427', type: 'dashed' } },
     },
     series: [
       {
-        name: 'Nível DEMO',
+        name: 'Cota DEMO',
         type: 'line',
-        data: [15.6, 15.3, 15.0, 14.7, 14.4, 14.1],
-        smooth: 0.32,
-        symbol: 'circle',
-        symbolSize: 5,
-        lineStyle: { color: '#22d3ee', width: 2 },
-        itemStyle: { color: '#22d3ee' },
-        areaStyle: { color: 'rgba(34,211,238,.09)' },
+        data: [15.6, 15.32, 15.02, 14.71, 14.4, 14.1],
+        smooth: 0.26,
+        symbol: 'none',
+        lineStyle: { color: '#e4e4e7', width: 2.4 },
+        areaStyle: { color: 'rgba(228,228,231,.07)' },
+        emphasis: { disabled: true },
       },
       {
-        name: 'Faixa atenção DEMO',
+        name: 'Média 3d DEMO',
         type: 'line',
-        data: [13.8, 13.8, 13.8, 13.8, 13.8, 13.8],
+        data: [15.6, 15.46, 15.31, 15.02, 14.71, 14.4],
+        smooth: 0.22,
         symbol: 'none',
-        lineStyle: { color: '#f59e0b', width: 1, type: 'dashed' },
+        lineStyle: { color: '#71717a', width: 1.35, type: 'dashed' },
+        emphasis: { disabled: true },
       },
     ],
   }), []);
@@ -285,8 +292,10 @@ export function HydroLevelTrendChart() {
   return (
     <OperationalEChart
       option={option}
-      ariaLabel="Tendência demonstrativa de nível do rio nos últimos seis dias com faixa de atenção demonstrativa"
+      ariaLabel="Tendência demonstrativa da cota fluviométrica do corredor Amazonas–Solimões de 22 a 27 de setembro, com série diária e média de três dias"
       className={styles.hydro}
+      renderer="svg"
     />
   );
 }
+

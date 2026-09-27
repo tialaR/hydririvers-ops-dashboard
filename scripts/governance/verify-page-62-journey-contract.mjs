@@ -161,8 +161,48 @@ for (const required of [
   if (!tokens.includes(required)) failures.push(`Page 62 semantic token missing: ${required}`);
 }
 
-for (const required of ['ShipperOperationMap', 'HydroLevelTrendChart', 'OperationalGaugeChart', 'page62-overview']) {
+for (const required of [
+  'ShipperOperationMapFallback',
+  'HydroLevelTrendChart',
+  'page62-overview',
+  'overview-kpi-strip',
+  'overview-map-panel',
+  'overview-action-panel',
+  'overview-hydro-chart-card',
+  'ANA/Hidroweb',
+  'DNIT',
+  'CHM',
+  'ANTAQ',
+]) {
   if (!overview.includes(required)) failures.push(`overview intelligence missing: ${required}`);
+}
+
+for (const required of [
+  '.overviewMetricStrip',
+  '.overviewHeroGrid',
+  '.overviewMapViewport',
+  '.overviewActionPanel',
+  '.overviewChartCard',
+  '.overviewSourceStrip',
+]) {
+  if (!journeyCss.includes(required)) failures.push(`overview hierarchy anchor missing: ${required}`);
+}
+
+for (const forbidden of [
+  'radial-gradient(circle at 80%',
+  '.overviewInsightGrid',
+  '.overviewActionCard',
+]) {
+  if (journeyCss.includes(forbidden)) failures.push(`overview regression anchor remains: ${forbidden}`);
+}
+
+for (const required of [
+  'renderer="svg"',
+  'Média 3d DEMO',
+  'Cota fluviométrica não é profundidade navegável',
+  "emphasis: { disabled: true }",
+]) {
+  if (!decisionCharts.includes(required)) failures.push(`overview hydro chart contract missing: ${required}`);
 }
 
 if (!echartCore.includes("useDirtyRect: renderer === 'canvas' ? false : undefined")) failures.push('ECharts dirty-rect must remain disabled for Canvas while SVG stays renderer-native');
