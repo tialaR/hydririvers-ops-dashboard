@@ -57,6 +57,11 @@ for (const required of ['CargoOccurrenceSummary', 'Divergência no manifesto', '
 if (!d06Stories.includes('export const Reference')) failures.push('D06 Storybook reference missing');
 if (!d07Stories.includes('export const Reference')) failures.push('D07 Storybook reference missing');
 
+const telemetryOverview = await read('src/shared/design-system/patterns/operational-chart/operational-telemetry-overview-chart.tsx');
+for (const required of ['renderer="svg"', 'emphasis:', 'disabled: true', 'transitionDuration: 0']) {
+  if (!telemetryOverview.includes(required)) failures.push(`Cockpit telemetry stability anchor missing: ${required}`);
+}
+
 for (const required of ['OperationalGaugeChart', 'OperationalTelemetryChart', 'OperationalTelemetryOverviewChart']) {
   if (!chartIndex.includes(required)) failures.push(`operational chart DS missing export: ${required}`);
 }
@@ -65,7 +70,9 @@ for (const required of [
   "from 'echarts/core'",
   "from 'echarts/charts'",
   'CanvasRenderer',
-  'useDirtyRect: false',
+  'SVGRenderer',
+  "renderer = 'canvas'",
+  "data-echart-renderer={renderer}",
 ]) {
   if (!chartCore.includes(required)) failures.push(`ECharts renderer missing production anchor: ${required}`);
 }
