@@ -68,6 +68,21 @@ const telemetryMetrics: OperationalTelemetryMetric[] = [
   },
 ];
 
+const hydroGaugeLevelsM = [
+  7.42, 7.40, 7.38, 7.36, 7.34, 7.31, 7.29, 7.27, 7.25, 7.23,
+  7.22, 7.20, 7.18, 7.17, 7.16, 7.15, 7.13, 7.12, 7.10, 7.08,
+  7.06, 7.04, 7.03, 7.01, 7.00, 6.98, 6.96, 6.95, 6.94,
+];
+
+const hydroContext = {
+  riverGaugeLevelsM: hydroGaugeLevelsM,
+  operatingDraftM: 2.80,
+  requiredDepthM: 3.90,
+  sourceLabel: 'Fonte prevista: ANA/Hidroweb',
+  dataAgeMin: 18,
+  demo: true,
+};
+
 const cargoes = [
   { code: '#HY-247-819', label: 'Atenção', tone: 'delayed' as const, selected: true },
   { code: '#HY-319-552', label: 'Em trânsito', tone: 'inTransit' as const, selected: false },
@@ -275,7 +290,8 @@ export function Page62CargoCockpitPreview({
                     <OperationalTelemetryOverviewChart
                       labels={telemetryLabels}
                       metrics={telemetryMetrics}
-                      ariaLabel="Telemetria da carga com velocidade, combustível e temperatura"
+                      ariaLabel="Telemetria da carga com velocidade, combustível, temperatura e contexto hidroviário"
+                      hydroContext={hydroContext}
                     />
                   </article>
 
@@ -284,28 +300,42 @@ export function Page62CargoCockpitPreview({
 
                 <div className={styles.cockpitLowerGrid}>
                   <article className={styles.routeContextCompact} data-testid="cockpit-route-context">
-                    <div>
+                    <div className={styles.routeLead}>
                       <div className={styles.metricHeading}>
                         <Navigation size={17} />
-                        <small>CONTEXTO DE ROTA</small>
+                        <small>CONTEXTO HIDROVIÁRIO · DEMO</small>
                       </div>
                       <strong>Rio Madeira · trecho ativo</strong>
                       <span>Próximo marco: Parintins · 94 km</span>
                     </div>
+
                     <div className={styles.routeProgressCompact} aria-label="68% da rota concluída">
                       <span><i /></span>
                       <div><small>Manaus</small><strong>68% · posição atual</strong><small>Santarém</small></div>
                     </div>
-                  </article>
 
-                  <article className={styles.attention} data-testid="cockpit-attention">
-                    <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
-                    <div>
-                      <small>ATENÇÃO OPERACIONAL</small>
-                      <strong>Manifesto precisa ser validado antes da chegada.</strong>
-                      <span>Sem validação, a operação pode perder a janela prevista.</span>
+                    <div className={styles.routeSignalGrid}>
+                      <div>
+                        <small>COTA FLUVIOMÉTRICA</small>
+                        <strong>6,94 m</strong>
+                        <span>tendência ↓ · DEMO</span>
+                      </div>
+                      <div>
+                        <small>CALADO OPERACIONAL</small>
+                        <strong>2,80 m</strong>
+                        <span>snapshot da embarcação</span>
+                      </div>
+                      <div>
+                        <small>PROFUNDIDADE REQUERIDA</small>
+                        <strong>3,90 m</strong>
+                        <span>margem operacional +1,10 m</span>
+                      </div>
+                      <div>
+                        <small>FONTE / FRESHNESS</small>
+                        <strong>ANA/Hidroweb</strong>
+                        <span>adapter previsto · 18 min</span>
+                      </div>
                     </div>
-                    <button type="button">Abrir documentos</button>
                   </article>
 
                   <article className={styles.evidenceCard} data-testid="cockpit-evidence">
@@ -324,6 +354,16 @@ export function Page62CargoCockpitPreview({
                         </div>
                       ))}
                     </div>
+                  </article>
+
+                  <article className={styles.attention} data-testid="cockpit-attention">
+                    <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
+                    <div>
+                      <small>PENDÊNCIA</small>
+                      <strong>Manifesto ainda exige validação.</strong>
+                      <span>Impacto: risco de perder a janela prevista de chegada.</span>
+                    </div>
+                    <button type="button">Abrir documentos</button>
                   </article>
                 </div>
               </motion.div>
