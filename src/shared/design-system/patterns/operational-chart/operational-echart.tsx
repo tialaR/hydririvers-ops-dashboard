@@ -12,7 +12,7 @@ import {
   RadarComponent,
   TooltipComponent,
 } from 'echarts/components';
-import { CanvasRenderer } from 'echarts/renderers';
+import { CanvasRenderer, SVGRenderer } from 'echarts/renderers';
 
 echarts.use([
   BarChart,
@@ -26,18 +26,21 @@ echarts.use([
   RadarComponent,
   TooltipComponent,
   CanvasRenderer,
+  SVGRenderer,
 ]);
 
 type OperationalEChartProps = {
   option: EChartsCoreOption;
   ariaLabel: string;
   className?: string;
+  renderer?: 'canvas' | 'svg';
 };
 
 export function OperationalEChart({
   option,
   ariaLabel,
   className,
+  renderer = 'canvas',
 }: OperationalEChartProps) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -45,8 +48,8 @@ export function OperationalEChart({
     if (!ref.current) return;
 
     const chart = echarts.init(ref.current, undefined, {
-      renderer: 'canvas',
-      useDirtyRect: false,
+      renderer,
+      useDirtyRect: renderer === 'canvas' ? false : undefined,
     });
 
     chart.setOption(option, {
@@ -61,9 +64,17 @@ export function OperationalEChart({
       observer.disconnect();
       chart.dispose();
     };
-  }, [option]);
+  }, [option, renderer]);
 
-  return <div ref={ref} role="img" aria-label={ariaLabel} className={className} />;
+  return (
+    <div
+      ref={ref}
+      role="img"
+      aria-label={ariaLabel}
+      className={className}
+      data-echart-renderer={renderer}
+    />
+  );
 }
 
 export type { EChartsCoreOption };
