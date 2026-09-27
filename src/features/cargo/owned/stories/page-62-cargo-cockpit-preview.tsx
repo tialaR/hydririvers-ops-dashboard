@@ -31,12 +31,41 @@ type Page62CargoCockpitPreviewProps = {
   onDocuments?: () => void;
 };
 
-const telemetryLabels = ['08h', '10h', '12h', '14h', '16h', '18h', '20h', '22h'];
+const telemetryLabels = [
+  '08h', '08:30', '09h', '09:30', '10h', '10:30', '11h', '11:30',
+  '12h', '12:30', '13h', '13:30', '14h', '14:30', '15h', '15:30',
+  '16h', '16:30', '17h', '17:30', '18h', '18:30', '19h', '19:30',
+  '20h', '20:30', '21h', '21:30', '22h',
+];
 
 const telemetryMetrics: OperationalTelemetryMetric[] = [
-  { name: 'Velocidade', unit: ' km/h', values: [10.8, 11.4, 11.1, 12.2, 12.6, 12.4, 13.1, 12.9] },
-  { name: 'Combustível', unit: '%', values: [78, 76, 75, 73, 72, 69, 67, 65] },
-  { name: 'Temperatura', unit: '°C', values: [68, 69, 70, 70, 71, 72, 71, 70] },
+  {
+    name: 'Velocidade',
+    unit: ' km/h',
+    values: [
+      10.8, 11.1, 11.6, 11.9, 11.7, 11.4, 11.2, 11.0, 11.1, 11.5,
+      12.0, 12.3, 12.5, 12.7, 12.6, 12.3, 12.0, 11.8, 12.0, 12.6,
+      12.9, 13.0, 12.8, 12.7, 12.9, 13.2, 13.1, 13.0, 12.9,
+    ],
+  },
+  {
+    name: 'Combustível',
+    unit: '%',
+    values: [
+      78, 78, 77, 77, 76, 76, 75, 75, 74, 74,
+      73, 73, 72, 72, 72, 71, 71, 70, 70, 69,
+      69, 68, 68, 67, 67, 66, 66, 65, 65,
+    ],
+  },
+  {
+    name: 'Temperatura',
+    unit: '°C',
+    values: [
+      68, 68, 69, 69, 69, 70, 70, 70, 70, 70,
+      71, 71, 71, 71, 71, 71, 71, 72, 72, 72,
+      72, 72, 72, 71, 71, 71, 70, 70, 70,
+    ],
+  },
 ];
 
 const cargoes = [
@@ -121,7 +150,7 @@ export function Page62CargoCockpitPreview({
           </div>
         </aside>
 
-        <section className={styles.workspace}>
+        <section className={styles.workspace} data-testid="cockpit-workspace">
           <header className={styles.workspaceHeader}>
             <div className={styles.selectedCargo}>
               <small>CARGA SELECIONADA</small>
@@ -164,8 +193,8 @@ export function Page62CargoCockpitPreview({
             </nav>
           </header>
 
-          <div className={styles.metricGrid}>
-            <motion.article layout className={styles.progressMetric}>
+          <div className={styles.metricGrid} data-testid="cockpit-kpi-grid">
+            <motion.article layout className={styles.progressMetric} data-testid="cockpit-kpi-progress">
               <div className={styles.metricHeading}>
                 <Route size={15} />
                 <small>PROGRESSO</small>
@@ -184,7 +213,7 @@ export function Page62CargoCockpitPreview({
               </div>
             </motion.article>
 
-            <motion.article layout className={styles.etaMetric}>
+            <motion.article layout className={styles.etaMetric} data-testid="cockpit-kpi-eta">
               <div className={styles.metricHeading}>
                 <Clock3 size={15} />
                 <small>ETA</small>
@@ -194,7 +223,7 @@ export function Page62CargoCockpitPreview({
               <small>janela prevista hoje</small>
             </motion.article>
 
-            <motion.article layout className={styles.signalMetric}>
+            <motion.article layout className={styles.signalMetric} data-testid="cockpit-kpi-signal">
               <div className={styles.metricHeading}>
                 <Radio size={15} />
                 <small>SINAL</small>
@@ -207,7 +236,7 @@ export function Page62CargoCockpitPreview({
               <small>telemetria recente</small>
             </motion.article>
 
-            <motion.article layout className={styles.riskMetric}>
+            <motion.article layout className={styles.riskMetric} data-testid="cockpit-kpi-risk">
               <div className={styles.metricHeading}>
                 <ShieldAlert size={15} />
                 <small>RISCO</small>
@@ -233,7 +262,7 @@ export function Page62CargoCockpitPreview({
                 exit={{ opacity: 0, y: -4 }}
               >
                 <div className={styles.cockpitGrid}>
-                  <article className={styles.telemetryCard}>
+                  <article className={styles.telemetryCard} data-testid="cockpit-telemetry-card">
                     <header>
                       <div>
                         <small>TELEMETRIA OPERACIONAL</small>
@@ -254,7 +283,7 @@ export function Page62CargoCockpitPreview({
                 </div>
 
                 <div className={styles.cockpitLowerGrid}>
-                  <article className={styles.routeContextCompact}>
+                  <article className={styles.routeContextCompact} data-testid="cockpit-route-context">
                     <div>
                       <div className={styles.metricHeading}>
                         <Navigation size={17} />
@@ -269,7 +298,7 @@ export function Page62CargoCockpitPreview({
                     </div>
                   </article>
 
-                  <article className={styles.attention}>
+                  <article className={styles.attention} data-testid="cockpit-attention">
                     <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
                     <div>
                       <small>ATENÇÃO OPERACIONAL</small>
@@ -279,7 +308,7 @@ export function Page62CargoCockpitPreview({
                     <button type="button">Abrir documentos</button>
                   </article>
 
-                  <article className={styles.evidenceCard}>
+                  <article className={styles.evidenceCard} data-testid="cockpit-evidence">
                     <header>
                       <FileCheck2 size={15} />
                       <div>
