@@ -164,7 +164,7 @@ for (const required of ['ShipperOperationMap', 'HydroLevelTrendChart', 'Operatio
   if (!overview.includes(required)) failures.push(`overview intelligence missing: ${required}`);
 }
 
-if (!echartCore.includes('useDirtyRect: false')) failures.push('ECharts dirty-rect must remain disabled to avoid hover repaint artifacts');
+if (!echartCore.includes("useDirtyRect: renderer === 'canvas' ? false : undefined")) failures.push('ECharts dirty-rect must remain disabled for Canvas while SVG stays renderer-native');
 
 for (const required of ['ProposalTradeoffRadar', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'HydroLevelTrendChart']) {
   if (!decisionCharts.includes(`export function ${required}`)) failures.push(`decision visualization missing: ${required}`);
