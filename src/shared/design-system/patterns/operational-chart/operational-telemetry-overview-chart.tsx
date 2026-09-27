@@ -164,6 +164,7 @@ export function OperationalTelemetryOverviewChart({
       option={option}
       ariaLabel={ariaLabel}
       className={styles.chart}
+      renderer="svg"
     />
   );
 }
