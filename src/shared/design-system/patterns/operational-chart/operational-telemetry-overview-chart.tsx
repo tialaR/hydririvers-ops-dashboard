@@ -48,7 +48,7 @@ export function OperationalTelemetryOverviewChart({
       },
       formatter: (raw: unknown) => {
         const items = Array.isArray(raw)
-          ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string; seriesIndex?: number }>
+          ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string; seriesIndex?: number; dataIndex?: number }>
           : [];
         const period = items[0]?.axisValue ?? 'Agora';
         const dataIndex = items[0]?.dataIndex ?? 0;
