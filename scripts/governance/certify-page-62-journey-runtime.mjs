@@ -118,10 +118,14 @@ try {
       const headingSizes = headings
         .map((heading) => Number.parseFloat(getComputedStyle(heading).fontSize))
         .filter(Number.isFinite);
-      const canvases = Array.from(document.querySelectorAll('canvas'))
-        .map((canvas) => {
-          const box = canvas.getBoundingClientRect();
-          return { width: box.width, height: box.height };
+      const chartSurfaces = Array.from(document.querySelectorAll('[data-echart-renderer]'))
+        .map((chart) => {
+          const box = chart.getBoundingClientRect();
+          return {
+            width: box.width,
+            height: box.height,
+            renderer: chart.getAttribute('data-echart-renderer'),
+          };
         })
         .filter((box) => box.width > 16 && box.height > 16);
 
@@ -134,8 +138,8 @@ try {
         overflowX: root.scrollWidth - root.clientWidth,
         minHeadingPx: headingSizes.length ? Math.min(...headingSizes) : 0,
         maxHeadingPx: headingSizes.length ? Math.max(...headingSizes) : 0,
-        canvasCount: canvases.length,
-        canvases,
+        canvasCount: chartSurfaces.length,
+        canvases: chartSurfaces,
         mapSurfaceCount: document.querySelectorAll('[aria-label^="Mapa operacional"]').length,
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
