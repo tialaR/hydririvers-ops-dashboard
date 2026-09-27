@@ -61,7 +61,7 @@ export function OperationalTelemetryOverviewChart({
       itemGap: 18,
       textStyle: {
         color: '#a1a1aa',
-        fontSize: 11,
+        fontSize: 12,
         fontWeight: 500,
       },
       data: metrics.map((metric) => metric.name),
@@ -81,7 +81,7 @@ export function OperationalTelemetryOverviewChart({
       axisLine: { lineStyle: { color: '#2d2d31' } },
       axisLabel: {
         color: '#71717a',
-        fontSize: 10,
+        fontSize: 11,
         margin: 12,
       },
     },
