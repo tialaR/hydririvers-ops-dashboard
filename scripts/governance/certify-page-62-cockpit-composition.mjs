@@ -72,8 +72,8 @@ try {
       rectOf('[data-testid="cockpit-kpi-risk"]'),
     ];
 
-    const canvas = document.querySelector('[data-testid="cockpit-telemetry-card"] canvas');
-    const canvasRect = canvas?.getBoundingClientRect() ?? null;
+    const chart = document.querySelector('[data-testid="cockpit-telemetry-card"] [data-echart-renderer]');
+    const chartRect = chart?.getBoundingClientRect() ?? null;
 
     const overlap = (a, b) => {
       if (!a || !b) return false;
@@ -96,7 +96,11 @@ try {
       attention,
       evidence,
       kpis,
-      canvas: canvasRect ? { width: canvasRect.width, height: canvasRect.height } : null,
+      canvas: chartRect ? {
+        width: chartRect.width,
+        height: chartRect.height,
+        renderer: chart?.getAttribute('data-echart-renderer'),
+      } : null,
       telemetryTitlePx: telemetryTitle ? Number.parseFloat(getComputedStyle(telemetryTitle).fontSize) : 0,
       kpiValueSizes: kpiValues.map((node) => Number.parseFloat(getComputedStyle(node).fontSize)),
       overflowX: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -120,7 +124,7 @@ try {
   requireMetric('route', metrics.route);
   requireMetric('attention', metrics.attention);
   requireMetric('evidence', metrics.evidence);
-  requireMetric('chart canvas', metrics.canvas);
+  requireMetric('chart surface', metrics.canvas);
 
   if (metrics.workspace) {
     if (metrics.workspace.width < 900) failures.push(`workspace too narrow: ${metrics.workspace.width.toFixed(1)}px`);
@@ -144,8 +148,9 @@ try {
   }
 
   if (metrics.canvas) {
-    if (metrics.canvas.width < 820) failures.push(`telemetry canvas too narrow: ${metrics.canvas.width.toFixed(1)}px`);
-    if (metrics.canvas.height < 300) failures.push(`telemetry canvas too short: ${metrics.canvas.height.toFixed(1)}px`);
+    if (metrics.canvas.width < 820) failures.push(`telemetry surface too narrow: ${metrics.canvas.width.toFixed(1)}px`);
+    if (metrics.canvas.height < 300) failures.push(`telemetry surface too short: ${metrics.canvas.height.toFixed(1)}px`);
+    if (metrics.canvas.renderer !== 'svg') failures.push(`interactive telemetry renderer must be svg, got ${metrics.canvas.renderer}`);
   }
 
   if (metrics.route && metrics.workspace) {
@@ -155,11 +160,11 @@ try {
   }
 
   if (metrics.attention && metrics.evidence && metrics.workspace) {
-    if (metrics.attention.width / metrics.workspace.width > 0.78) {
+    if (metrics.attention.width / metrics.workspace.width > 0.38) {
       failures.push(`attention dominates too much horizontal space: ${(metrics.attention.width / metrics.workspace.width * 100).toFixed(1)}%`);
     }
-    if (metrics.evidence.width / metrics.workspace.width < 0.20) {
-      failures.push(`evidence panel too compressed: ${(metrics.evidence.width / metrics.workspace.width * 100).toFixed(1)}%`);
+    if (metrics.evidence.width / metrics.workspace.width < 0.55) {
+      failures.push(`evidence panel not dominant enough: ${(metrics.evidence.width / metrics.workspace.width * 100).toFixed(1)}%`);
     }
     if ((metrics.attentionEvidenceVerticalDelta ?? 999) > 4) {
       failures.push(`attention/evidence are not aligned on one row: delta ${metrics.attentionEvidenceVerticalDelta?.toFixed(1)}px`);
@@ -175,6 +180,24 @@ try {
   if (metrics.overlapTelemetryRoute) failures.push('telemetry overlaps route context');
   if (metrics.overlapRouteAttention) failures.push('route context overlaps attention');
   if (metrics.overlapAttentionEvidence) failures.push('attention overlaps evidence');
+
+  const telemetryBox = await page.locator('[data-testid="cockpit-telemetry-card"] [data-echart-renderer]').boundingBox();
+  if (telemetryBox) {
+    const hoverY = telemetryBox.y + telemetryBox.height * 0.58;
+    for (const ratio of [0.12, 0.28, 0.44, 0.6, 0.76, 0.9]) {
+      await page.mouse.move(telemetryBox.x + telemetryBox.width * ratio, hoverY);
+      await page.waitForTimeout(45);
+      const stable = await page.evaluate(() => {
+        const node = document.querySelector('[data-testid="cockpit-telemetry-card"] [data-echart-renderer]');
+        const svg = node?.querySelector('svg');
+        if (!node || !svg) return false;
+        const rect = node.getBoundingClientRect();
+        return rect.width > 820 && rect.height > 300 && svg.childElementCount > 0;
+      });
+      if (!stable) failures.push(`telemetry hover instability at ${Math.round(ratio * 100)}%`);
+    }
+    await page.mouse.move(10, 10);
+  }
 
   const relevantConsoleErrors = consoleErrors.filter(
     (entryText) => !/Failed to load resource|ERR_NAME_NOT_RESOLVED|net::ERR_/i.test(entryText),
