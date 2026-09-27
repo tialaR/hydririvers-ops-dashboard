@@ -44,7 +44,8 @@
     "check:page62-d04-d05-visual": "node scripts/governance/certify-page-62-d04-d05-storybook.mjs",
     "check:page62-visual-contract": "node scripts/governance/certify-page-62-d04-d05-storybook.mjs",
     "check:page62-journey": "node scripts/governance/verify-page-62-journey-contract.mjs",
-    "check:page62-journey-runtime": "node scripts/governance/certify-page-62-journey-runtime.mjs"
+    "check:page62-journey-runtime": "node scripts/governance/certify-page-62-journey-runtime.mjs",
+    "check:page62-cockpit-composition": "node scripts/governance/certify-page-62-cockpit-composition.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
