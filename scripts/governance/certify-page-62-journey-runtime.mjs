@@ -230,7 +230,9 @@ try {
         maxHeadingPx: headingSizes.length ? Math.max(...headingSizes) : 0,
         canvasCount: chartSurfaces.length,
         canvases: chartSurfaces,
-        mapSurfaceCount: document.querySelectorAll('[aria-label^="Mapa operacional"]').length,
+        mapSurfaceCount: document.querySelectorAll(
+          '[aria-label^="Mapa operacional"], [data-testid="hydroway-map-product-stage"]',
+        ).length,
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
