@@ -591,12 +591,85 @@
   font-weight: var(--hy-p62-weight-semibold)
   letter-spacing: -0.02em
 
+.overviewAttentionBadge
+  display: inline-flex
+  align-items: center
+  gap: 0.38rem
+  min-height: 2rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 42%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-pill)
+  background: color-mix(in srgb, var(--hy-p62-warning) 8%, transparent)
+  color: var(--hy-p62-warning)
+  font: inherit
+  font-size: var(--hy-p62-font-xs)
+  cursor: pointer
+  transition: border-color var(--hy-p62-motion-fast), background var(--hy-p62-motion-fast)
+
+.overviewAttentionBadge:hover,
+.overviewAttentionBadge[aria-pressed='true']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 72%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-warning) 13%, transparent)
+
+.overviewAttentionBadge strong
+  font-size: var(--hy-p62-font-sm)
+  font-variant-numeric: tabular-nums
+
+.overviewFilters
+  display: flex
+  align-items: stretch
+  width: 100%
+  margin-top: var(--hy-p62-space-4)
+  overflow-x: auto
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+  scrollbar-width: none
+
+.overviewFilters::-webkit-scrollbar
+  display: none
+
+.overviewFilters button
+  position: relative
+  display: inline-flex
+  flex: 1 0 auto
+  min-height: 2.75rem
+  align-items: center
+  justify-content: center
+  gap: 0.35rem
+  padding: 0.45rem 0.35rem
+  border: 0
+  border-bottom: 0.125rem solid transparent
+  background: transparent
+  color: var(--hy-p62-muted)
+  font: inherit
+  font-size: var(--hy-p62-font-xs)
+  white-space: nowrap
+  cursor: pointer
+  transition: color var(--hy-p62-motion-fast), border-color var(--hy-p62-motion-fast)
+
+.overviewFilters button small
+  display: inline-grid
+  min-width: 1.25rem
+  min-height: 1.25rem
+  place-items: center
+  border-radius: var(--hy-p62-radius-pill)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+
+.overviewFilters button[aria-pressed='true']
+  border-bottom-color: var(--hy-p62-text)
+  color: var(--hy-p62-text)
+
+.overviewFilters button[aria-pressed='true'] small
+  background: var(--hy-p62-text)
+  color: var(--hy-p62-canvas)
+
 .overviewSearch
   display: flex
   align-items: center
   gap: var(--hy-p62-space-2)
   min-height: 2.75rem
-  margin-top: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-3)
   padding: 0 var(--hy-p62-space-3)
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-control)
@@ -614,47 +687,6 @@
   color: var(--hy-p62-text)
   font: inherit
   font-size: var(--hy-p62-font-body)
-
-.overviewFilters
-  display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
-  gap: var(--hy-p62-space-2)
-  margin-top: var(--hy-p62-space-3)
-
-.overviewFilters button
-  display: flex
-  min-height: 2.25rem
-  align-items: center
-  justify-content: space-between
-  gap: var(--hy-p62-space-2)
-  padding: 0 var(--hy-p62-space-3)
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-  background: transparent
-  color: var(--hy-p62-muted)
-  font: inherit
-  font-size: var(--hy-p62-font-xs)
-  cursor: pointer
-  transition: border-color var(--hy-p62-motion-fast), background var(--hy-p62-motion-fast), color var(--hy-p62-motion-fast)
-
-.overviewFilters button small
-  display: grid
-  min-width: 1.35rem
-  min-height: 1.35rem
-  place-items: center
-  border-radius: var(--hy-p62-radius-pill)
-  background: var(--hy-p62-surface-raised)
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-
-.overviewFilters button[aria-pressed='true']
-  border-color: var(--hy-p62-border-strong)
-  background: var(--hy-p62-surface-raised)
-  color: var(--hy-p62-text)
-
-.overviewFilters button[aria-pressed='true'] small
-  background: var(--hy-p62-text)
-  color: var(--hy-p62-canvas)
 
 .overviewList
   display: grid
@@ -713,82 +745,6 @@
   border-color: color-mix(in srgb, var(--hy-p62-success) 28%, var(--hy-p62-border))
   color: var(--hy-p62-success)
 
-.overviewMetricStrip
-  display: grid
-  grid-template-columns: repeat(5, minmax(0, 1fr))
-  margin-top: var(--hy-p62-space-4)
-  overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-card)
-  background: var(--hy-p62-surface)
-
-.overviewMetric
-  display: grid
-  grid-template-columns: auto minmax(0, 1fr)
-  align-items: start
-  gap: var(--hy-p62-space-3)
-  min-height: 8rem
-  padding: var(--hy-p62-space-4)
-  border-left: 0.0625rem solid var(--hy-p62-border)
-
-.overviewMetric:first-child
-  border-left: 0
-
-.overviewMetricIcon
-  display: grid
-  width: 1.8rem
-  height: 1.8rem
-  place-items: center
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-  background: var(--hy-p62-surface-raised)
-  color: var(--hy-p62-muted)
-
-.overviewMetric > div
-  display: grid
-  min-width: 0
-  gap: 0.28rem
-
-.overviewMetric small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  font-weight: var(--hy-p62-weight-medium)
-
-.overviewMetric strong
-  color: var(--hy-p62-text)
-  font-size: 1.65rem
-  font-weight: var(--hy-p62-weight-medium)
-  font-variant-numeric: tabular-nums
-  letter-spacing: -0.035em
-  line-height: 1
-
-.overviewMetric > div > span
-  overflow: hidden
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  line-height: 1.35
-  text-overflow: ellipsis
-
-.overviewMetricTrack
-  height: 0.22rem
-  margin-top: var(--hy-p62-space-2)
-  overflow: hidden
-  border-radius: var(--hy-p62-radius-pill)
-  background: var(--hy-p62-surface-strong, var(--hy-p62-surface-raised))
-
-.overviewMetricTrack i
-  display: block
-  height: 100%
-  border-radius: inherit
-  background: var(--hy-p62-text)
-
-.overviewHeroGrid
-  display: grid
-  grid-template-columns: minmax(0, 1.65fr) minmax(17rem, 0.65fr)
-  gap: var(--hy-p62-space-4)
-  margin-top: var(--hy-p62-space-4)
-  align-items: stretch
-
 .overviewMapPanel,
 .overviewActionPanel,
 .overviewChartCard
@@ -797,6 +753,9 @@
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-card)
   background: var(--hy-p62-surface)
+
+.overviewMapPanel
+  margin-top: var(--hy-p62-space-4)
 
 .overviewSectionHeader
   display: flex
@@ -823,24 +782,25 @@
 
 .overviewMapViewport
   position: relative
-  min-height: 27rem
+  min-height: 34rem
   overflow: hidden
   background: var(--hy-p62-surface-raised)
 
 .mapOperationalSummary
   position: absolute
-  right: var(--hy-p62-space-4)
-  bottom: var(--hy-p62-space-4)
+  top: var(--hy-p62-space-4)
   left: var(--hy-p62-space-4)
-  z-index: 3
+  z-index: 4
   display: grid
   grid-template-columns: repeat(3, minmax(0, 1fr))
+  width: min(44rem, calc(100% - 7rem))
   overflow: hidden
   border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-border) 82%, transparent)
   border-radius: var(--hy-p62-radius-panel)
   background: color-mix(in srgb, var(--hy-p62-canvas) 92%, transparent)
   box-shadow: var(--hy-dash-shadow-float, none)
   backdrop-filter: blur(0.9rem)
+  pointer-events: none
 
 .mapOperationalSummary > span
   display: grid
@@ -883,33 +843,109 @@
   text-overflow: ellipsis
   white-space: nowrap
 
+.overviewMetricStrip
+  display: grid
+  grid-template-columns: repeat(5, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.overviewMetric
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: start
+  gap: var(--hy-p62-space-3)
+  min-height: 7.5rem
+  padding: var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.overviewMetric:first-child
+  border-left: 0
+
+.overviewMetricIcon
+  display: grid
+  width: 1.95rem
+  height: 1.95rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.overviewMetric > div
+  display: grid
+  min-width: 0
+  gap: 0.28rem
+
+.overviewMetric small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: var(--hy-p62-weight-medium)
+
+.overviewMetric strong
+  color: var(--hy-p62-text)
+  font-size: 1.7rem
+  font-weight: var(--hy-p62-weight-medium)
+  font-variant-numeric: tabular-nums
+  letter-spacing: -0.035em
+  line-height: 1
+
+.overviewMetric > div > span
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.35
+  text-overflow: ellipsis
+
+.overviewMetricTrack
+  height: 0.22rem
+  margin-top: var(--hy-p62-space-2)
+  overflow: hidden
+  border-radius: var(--hy-p62-radius-pill)
+  background: var(--hy-p62-surface-strong, var(--hy-p62-surface-raised))
+
+.overviewMetricTrack i
+  display: block
+  height: 100%
+  border-radius: inherit
+  background: var(--hy-p62-text)
+
 .overviewActionPanel
-  display: flex
-  min-height: 100%
-  flex-direction: column
+  display: grid
+  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, 0.85fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-5)
+  margin-top: var(--hy-p62-space-4)
   padding: var(--hy-p62-space-5)
 
 .overviewActionPanel[data-tone='warning']
-  border-color: color-mix(in srgb, var(--hy-p62-warning) 30%, var(--hy-p62-border))
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 34%, var(--hy-p62-border))
 
 .overviewActionPanel[data-tone='success']
   border-color: color-mix(in srgb, var(--hy-p62-success) 26%, var(--hy-p62-border))
 
-.overviewActionPanel > header
+.overviewActionLead
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: start
+  gap: var(--hy-p62-space-4)
+  min-width: 0
+
+.overviewActionMeta
   display: flex
-  align-items: flex-start
+  align-items: center
   justify-content: space-between
   gap: var(--hy-p62-space-3)
 
-.overviewActionPanel > header > div
-  display: grid
-  justify-items: end
-  gap: var(--hy-p62-space-2)
+.overviewActionMeta .eyebrow
+  margin: 0
 
 .overviewActionIcon
   display: grid
-  width: 2.5rem
-  height: 2.5rem
+  width: 2.65rem
+  height: 2.65rem
   place-items: center
   border: 0.0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-panel)
@@ -931,56 +967,67 @@
   border-radius: var(--hy-p62-radius-pill)
   color: var(--hy-p62-muted)
   font-size: var(--hy-p62-font-2xs)
+  white-space: nowrap
 
 .overviewActionHero
-  margin-top: var(--hy-p62-space-6)
+  margin-top: var(--hy-p62-space-3)
 
 .overviewActionHero h3
-  font-size: 1.35rem
+  font-size: 1.25rem
   line-height: 1.2
 
 .overviewActionHero p
-  margin: var(--hy-p62-space-3) 0 0
+  margin: var(--hy-p62-space-2) 0 0
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-body)
-  line-height: 1.55
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.5
 
 .overviewActionFacts
   display: grid
-  margin: var(--hy-p62-space-5) 0
-  border-top: 0.0625rem solid var(--hy-p62-border)
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  min-width: 0
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
 
 .overviewActionFacts > span
   display: grid
-  grid-template-columns: auto minmax(0, 1fr) auto
-  align-items: center
-  gap: var(--hy-p62-space-2)
-  min-height: 4.2rem
-  padding: var(--hy-p62-space-3) 0
-  border-bottom: 0.0625rem solid var(--hy-p62-border)
+  grid-template-columns: auto minmax(0, 1fr)
+  align-content: center
+  gap: 0.15rem var(--hy-p62-space-2)
+  min-height: 5rem
+  padding: var(--hy-p62-space-3)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.overviewActionFacts > span:first-child
+  border-left: 0
 
 .overviewActionFacts svg
+  grid-row: 1 / 4
+  align-self: center
   color: var(--hy-p62-muted)
 
 .overviewActionFacts small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
+  font-size: var(--hy-p62-font-2xs)
 
 .overviewActionFacts strong
-  justify-self: end
   color: var(--hy-p62-text)
   font-size: var(--hy-p62-font-label)
   font-variant-numeric: tabular-nums
 
 .overviewActionFacts em
-  grid-column: 2 / -1
+  overflow: hidden
   color: var(--hy-p62-muted)
   font-size: var(--hy-p62-font-2xs)
   font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
 
 .overviewActionPanel .secondaryAction
-  width: 100%
-  margin-top: auto
+  width: auto
+  min-width: 13rem
+  margin: 0
 
 .overviewChartCard
   margin-top: var(--hy-p62-space-4)
@@ -1075,8 +1122,12 @@
   .overviewMetric:nth-child(5)
     border-top: 0.0625rem solid var(--hy-p62-border)
 
-  .overviewHeroGrid
-    grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr)
+  .overviewActionPanel
+    grid-template-columns: 1fr
+    align-items: stretch
+
+  .overviewActionPanel .secondaryAction
+    width: 100%
 
   .overviewSourceStrip
     grid-template-columns: repeat(2, minmax(0, 1fr))
@@ -1096,14 +1147,8 @@
     border-right: 0
     border-bottom: 0.0625rem solid var(--hy-p62-border)
 
-  .overviewHeroGrid
-    grid-template-columns: 1fr
-
-  .overviewActionPanel
-    min-height: 25rem
-
   .overviewMapViewport
-    min-height: 23rem
+    min-height: 28rem
 
   .overviewChartHeader
     flex-direction: column
@@ -1123,8 +1168,12 @@
     align-items: flex-start
     flex-direction: column
 
+  .overviewMasterHeader
+    align-items: flex-start
+
   .overviewMetricStrip,
-  .overviewSourceStrip
+  .overviewSourceStrip,
+  .overviewActionFacts
     grid-template-columns: 1fr
 
   .overviewMetric,
@@ -1132,15 +1181,22 @@
   .overviewMetric:nth-child(5),
   .overviewSourceStrip > span,
   .overviewSourceStrip > span:nth-child(3),
-  .overviewSourceStrip > span:nth-child(4)
+  .overviewSourceStrip > span:nth-child(4),
+  .overviewActionFacts > span
     border-left: 0
     border-top: 0.0625rem solid var(--hy-p62-border)
 
   .overviewMetric:first-child,
-  .overviewSourceStrip > span:first-child
+  .overviewSourceStrip > span:first-child,
+  .overviewActionFacts > span:first-child
     border-top: 0
 
   .mapOperationalSummary
+    top: auto
+    right: var(--hy-p62-space-3)
+    bottom: var(--hy-p62-space-3)
+    left: var(--hy-p62-space-3)
+    width: auto
     grid-template-columns: 1fr
 
   .mapOperationalSummary > span
@@ -1149,9 +1205,6 @@
 
   .mapOperationalSummary > span:first-child
     border-top: 0
-
-  .overviewFilters
-    grid-template-columns: 1fr
 
 
 .decisionVisualGrid
