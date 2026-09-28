@@ -39,7 +39,6 @@ import {
   zoomHydrowayMapCameraOut,
 } from '../utils/hydro-map-style';
 import type { HydrowayMapLayerId } from '../providers/map-provider.types';
-import type { HydrowayMapSpikeMaplibreViewportHandle } from './hydroway-map-spike-maplibre-viewport';
 import { OperationalLayerModeLegend } from './operational-layer-mode-legend';
 import {
   DesktopMapFloatingControls,
@@ -178,7 +177,7 @@ export function HydrowayMapSpikeClient({
 
   const svgViewportRef = useRef<HTMLDivElement | null>(null);
   const svgProviderRef = useRef<SvgSchematicHydrowayProvider | null>(null);
-  const maplibreViewportRef = useRef<HydrowayMapSpikeMaplibreViewportHandle | null>(null);
+  const maplibreProviderRef = useRef<MapLibreHydrowayProvider | null>(null);
   const [maplibreMountFailed, setMaplibreMountFailed] = useState(false);
   const [maplibreReadyCargoId, setMaplibreReadyCargoId] = useState<string | null>(null);
   const [zoomPercent, setZoomPercent] = useState(100);
@@ -208,8 +207,8 @@ export function HydrowayMapSpikeClient({
     maplibreReady ? 'maplibre' : 'svg-schematic';
 
   const getMapLibreProvider = useCallback((): MapLibreHydrowayProvider | null => {
-    const provider = maplibreViewportRef.current?.getProvider();
-    return provider?.kind === 'maplibre' ? (provider as MapLibreHydrowayProvider) : null;
+    const provider = maplibreProviderRef.current;
+    return provider?.kind === 'maplibre' ? provider : null;
   }, []);
 
   useEffect(() => {
@@ -241,6 +240,8 @@ export function HydrowayMapSpikeClient({
       return undefined;
     }
 
+    maplibreProviderRef.current = null;
+
     const container = svgViewportRef.current;
     if (!container) return undefined;
 
@@ -262,6 +263,7 @@ export function HydrowayMapSpikeClient({
   }, [model, showMapLibre, syncZoomLabel]);
 
   const handleMaplibreReady = useCallback((mapProviderFromViewport: MapLibreHydrowayProvider) => {
+    maplibreProviderRef.current = mapProviderFromViewport;
     setMaplibreMountFailed(false);
     setMaplibreReadyCargoId(model.cargoId);
     const mapProvider = mapProviderFromViewport;
@@ -280,6 +282,7 @@ export function HydrowayMapSpikeClient({
   }, [activeOperationalLayerMode, isProductExperience, model.cargoId, syncZoomLabel]);
 
   const handleMaplibreInitError = useCallback(() => {
+    maplibreProviderRef.current = null;
     setMaplibreMountFailed(true);
     setMaplibreReadyCargoId(null);
   }, []);
@@ -661,7 +664,6 @@ export function HydrowayMapSpikeClient({
       {showMapLibre ? (
         <HydrowayMapSpikeMaplibreViewport
           key={model.cargoId}
-          ref={maplibreViewportRef}
           model={model}
           onReady={handleMaplibreReady}
           onInitError={handleMaplibreInitError}
