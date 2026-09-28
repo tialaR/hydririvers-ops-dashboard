@@ -3,11 +3,15 @@
 import { Suspense } from 'react';
 
 import type { HydrowayMapModel } from '../domain/hydroway-map-model.types';
-import { HydrowayMapSpikeClient } from './hydroway-map-spike-client';
+import {
+  HydrowayMapSpikeClient,
+  type HydrowayMapExperience,
+} from './hydroway-map-spike-client';
 import styles from './hydroway-map-product.module.scss';
 
 type HydrowayMapProductShellProps = {
   model: HydrowayMapModel;
+  experience?: Extract<HydrowayMapExperience, 'product' | 'overview'>;
 };
 
 function HydrowayMapProductFallback() {
@@ -18,11 +22,14 @@ function HydrowayMapProductFallback() {
   );
 }
 
-export function HydrowayMapProductShell({ model }: HydrowayMapProductShellProps) {
+export function HydrowayMapProductShell({
+  model,
+  experience = 'product',
+}: HydrowayMapProductShellProps) {
   return (
     <div className={styles.host} data-testid="hydroway-map-product">
       <Suspense fallback={<HydrowayMapProductFallback />}>
-        <HydrowayMapSpikeClient model={model} preferredProvider="maplibre" experience="product" />
+        <HydrowayMapSpikeClient model={model} preferredProvider="maplibre" experience={experience} />
       </Suspense>
     </div>
   );
