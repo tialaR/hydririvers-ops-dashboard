@@ -2,7 +2,6 @@
 
 import dynamic from 'next/dynamic';
 import { useTranslations } from 'next-intl';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   useCallback,
   useEffect,
@@ -164,10 +163,16 @@ export function HydrowayMapSpikeClient({
   const isProductExperience = experience === 'product' || isOverviewExperience;
   const tMap = useTranslations('operationsBoard.map');
   const tOperationalModes = useTranslations('waterwayMap.operationalModes');
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  const forceSvgFallback = searchParams.get('forceSvgFallback') === '1';
+  const locationSearch = useSyncExternalStore(
+    (onStoreChange) => {
+      if (typeof window === 'undefined') return () => {};
+      window.addEventListener('popstate', onStoreChange);
+      return () => window.removeEventListener('popstate', onStoreChange);
+    },
+    () => (typeof window === 'undefined' ? '' : window.location.search),
+    () => '',
+  );
+  const forceSvgFallback = new URLSearchParams(locationSearch).get('forceSvgFallback') === '1';
 
   const schematicScene = useMemo(() => hydrowayModelToScene(model), [model]);
 
@@ -439,16 +444,16 @@ export function HydrowayMapSpikeClient({
 
   const selectCargo = useCallback(
     (cargoId: string) => {
-      if (isProductExperience) return;
+      if (isProductExperience || typeof window === 'undefined') return;
 
-      const params = new URLSearchParams(searchParams.toString());
-      params.set('cargoId', cargoId);
+      const url = new URL(window.location.href);
+      url.searchParams.set('cargoId', cargoId);
       if (forceSvgFallback) {
-        params.set('forceSvgFallback', '1');
+        url.searchParams.set('forceSvgFallback', '1');
       }
-      router.replace(`${pathname}?${params.toString()}`);
+      window.location.assign(url.toString());
     },
-    [forceSvgFallback, isProductExperience, pathname, router, searchParams],
+    [forceSvgFallback, isProductExperience],
   );
 
   const progressPercent = Math.round(model.progress01 * 100);
