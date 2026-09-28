@@ -162,13 +162,17 @@ for (const required of [
 }
 
 for (const required of [
-  'ShipperOperationMapFallback',
+  'HydrowayMapProductShell',
+  'adaptOwnedCargoRouteToHydrowayMapModel',
+  'experience="overview"',
   'HydroLevelTrendChart',
   'page62-overview',
   'overview-kpi-strip',
   'overview-map-panel',
   'overview-action-panel',
   'overview-hydro-chart-card',
+  'overview-attention-badge',
+  'overview-filter-tabs',
   'ANA/Hidroweb',
   'DNIT',
   'CHM',
@@ -179,8 +183,9 @@ for (const required of [
 
 for (const required of [
   '.overviewMetricStrip',
-  '.overviewHeroGrid',
   '.overviewMapViewport',
+  '.overviewAttentionBadge',
+  '.overviewActionLead',
   '.overviewActionPanel',
   '.overviewChartCard',
   '.overviewSourceStrip',
