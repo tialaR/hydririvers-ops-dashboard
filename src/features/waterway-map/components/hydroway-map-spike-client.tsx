@@ -144,7 +144,7 @@ const HydrowayMapSpikeMaplibreViewport = dynamic(
 
 export type HydrowaySpikeProviderMode = 'maplibre' | 'svg-schematic';
 
-export type HydrowayMapExperience = 'spike' | 'product';
+export type HydrowayMapExperience = 'spike' | 'product' | 'overview';
 
 type HydrowayMapSpikeClientProps = {
   model: HydrowayMapModel;
@@ -160,7 +160,8 @@ export function HydrowayMapSpikeClient({
   preferredProvider,
   experience = 'spike',
 }: HydrowayMapSpikeClientProps) {
-  const isProductExperience = experience === 'product';
+  const isOverviewExperience = experience === 'overview';
+  const isProductExperience = experience === 'product' || isOverviewExperience;
   const tMap = useTranslations('operationsBoard.map');
   const tOperationalModes = useTranslations('waterwayMap.operationalModes');
   const searchParams = useSearchParams();
@@ -520,8 +521,9 @@ export function HydrowayMapSpikeClient({
 
   return (
     <section
-      className={styles.stage}
+      className={[styles.stage, isOverviewExperience ? styles.stageOverview : ''].filter(Boolean).join(' ')}
       aria-label={stageAriaLabel}
+      data-experience={experience}
       {...(stageTestId ? { 'data-testid': stageTestId } : {})}
     >
       <div className={styles.topOverlay}>
