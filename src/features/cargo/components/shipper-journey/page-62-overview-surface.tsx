@@ -18,7 +18,8 @@ import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
 
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
-import { ShipperOperationMapFallback } from '@/features/waterway-map/components/owned-cargo-operation-map/owned-cargo-operation-map-fallback';
+import { adaptOwnedCargoRouteToHydrowayMapModel } from '@/features/waterway-map/adapters/owned-cargo-route-to-hydroway-model';
+import { HydrowayMapProductShell } from '@/features/waterway-map/components/hydroway-map-product-shell';
 import type { ShipperMapRouteData } from '@/features/waterway-map/domain/owned-cargo-operation-route';
 import { HydroLevelTrendChart } from '@/shared/design-system/patterns/operational-chart';
 import styles from './shipper-journey.module.sass';
@@ -269,6 +270,27 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
   const selected = cargoes.find((cargo) => cargo.id === selectedId) ?? cargoes[0];
   const progress = Math.round(selected.route.progressRatio * 100);
   const AttentionIcon = selected.attention.tone === 'warning' ? AlertTriangle : CheckCircle2;
+  const overviewMapModel = useMemo(
+    () => adaptOwnedCargoRouteToHydrowayMapModel(selected.route),
+    [selected.route],
+  );
+
+  const selectFilter = (nextFilter: (typeof filters)[number]) => {
+    setFilter(nextFilter);
+    const nextCargo = cargoes.find((cargo) =>
+      nextFilter === 'Todas' ||
+      (nextFilter === 'Atenção' && cargo.statusLabel === 'Atenção') ||
+      (nextFilter === 'Em trânsito' && cargo.statusLabel === 'Em trânsito') ||
+      (nextFilter === 'Entregues' && cargo.statusLabel === 'Entregue'),
+    );
+    if (nextCargo) setSelectedId(nextCargo.id);
+  };
+
+  const focusAttention = () => {
+    const attentionCargo = cargoes.find((cargo) => cargo.statusLabel === 'Atenção');
+    setFilter('Atenção');
+    if (attentionCargo) setSelectedId(attentionCargo.id);
+  };
 
   const metrics = [
     {
@@ -318,22 +340,31 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
               <p className={styles.eyebrow}>CARTEIRA</p>
               <h2>Minhas Cargas</h2>
             </div>
-            <span className={styles.statusBadge}>1 exige atenção</span>
+            <button
+              type="button"
+              className={styles.overviewAttentionBadge}
+              data-testid="overview-attention-badge"
+              aria-pressed={filter === 'Atenção'}
+              onClick={focusAttention}
+            >
+              <AlertTriangle size={15} aria-hidden />
+              <span><strong>{filterCounts.Atenção}</strong> exige atenção</span>
+            </button>
+          </div>
+
+          <div className={styles.overviewFilters} role="group" aria-label="Filtros de carteira" data-testid="overview-filter-tabs">
+            {filters.map((item) => (
+              <button key={item} type="button" aria-pressed={filter === item} onClick={() => selectFilter(item)}>
+                <span>{item}</span>
+                <small>{filterCounts[item]}</small>
+              </button>
+            ))}
           </div>
 
           <label className={styles.overviewSearch}>
             <Search size={18} aria-hidden />
             <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar carga, origem ou destino" />
           </label>
-
-          <div className={styles.overviewFilters} role="group" aria-label="Filtros de carteira">
-            {filters.map((item) => (
-              <button key={item} type="button" aria-pressed={filter === item} onClick={() => setFilter(item)}>
-                <span>{item}</span>
-                <small>{filterCounts[item]}</small>
-              </button>
-            ))}
-          </div>
 
           <div className={styles.overviewList}>
             {visible.map((cargo) => (
@@ -377,12 +408,42 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             <button type="button" className={styles.primaryAction} onClick={onOpenCockpit}>Abrir cockpit</button>
           </header>
 
+          <article className={styles.overviewMapPanel} data-testid="overview-map-panel">
+            <header className={styles.overviewSectionHeader}>
+              <div>
+                <p className={styles.eyebrow}>ROTA OPERACIONAL</p>
+                <h3>Onde a carga está agora</h3>
+                <span>Mapa interativo, progresso, trecho de atenção, camadas operacionais e próximo marco.</span>
+              </div>
+              <span className={styles.demoBadge}>DEMO · MapLibre + camadas operacionais</span>
+            </header>
+
+            <div className={styles.overviewMapViewport} data-testid="overview-map-surface">
+              <HydrowayMapProductShell key={selected.id} model={overviewMapModel} experience="overview" />
+
+              <div className={styles.mapOperationalSummary}>
+                <span>
+                  <MapPin size={17} />
+                  <span><small>POSIÇÃO</small><strong>{selected.positionLabel}</strong></span>
+                </span>
+                <span>
+                  <Navigation size={17} />
+                  <span><small>ROTA</small><strong>{progress}% concluída</strong></span>
+                </span>
+                <span>
+                  <Route size={17} />
+                  <span><small>PRÓXIMO MARCO</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
+                </span>
+              </div>
+            </div>
+          </article>
+
           <div className={styles.overviewMetricStrip} data-testid="overview-kpi-strip">
             {metrics.map((metric) => {
               const Icon = metric.icon;
               return (
                 <motion.article layout key={metric.id} className={styles.overviewMetric}>
-                  <span className={styles.overviewMetricIcon}><Icon size={17} /></span>
+                  <span className={styles.overviewMetricIcon}><Icon size={18} /></span>
                   <div>
                     <small>{metric.label}</small>
                     <strong>{metric.value}</strong>
@@ -398,79 +459,44 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             })}
           </div>
 
-          <div className={styles.overviewHeroGrid}>
-            <article className={styles.overviewMapPanel} data-testid="overview-map-panel">
-              <header className={styles.overviewSectionHeader}>
-                <div>
-                  <p className={styles.eyebrow}>ROTA OPERACIONAL</p>
-                  <h3>Onde a carga está agora</h3>
-                  <span>Posição, progresso, trecho de risco e próximo marco em uma única leitura.</span>
-                </div>
-                <span className={styles.demoBadge}>DEMO · vetor determinístico</span>
-              </header>
-
-              <div className={styles.overviewMapViewport} data-testid="overview-map-surface">
-                <ShipperOperationMapFallback
-                  routeData={selected.route}
-                  ariaLabel={'Mapa operacional da carga ' + selected.code}
-                  presentation="desktop-foundation"
-                />
-
-                <div className={styles.mapOperationalSummary}>
-                  <span>
-                    <MapPin size={17} />
-                    <span><small>POSIÇÃO</small><strong>{selected.positionLabel}</strong></span>
-                  </span>
-                  <span>
-                    <Navigation size={17} />
-                    <span><small>ROTA</small><strong>{progress}% concluída</strong></span>
-                  </span>
-                  <span>
-                    <Route size={17} />
-                    <span><small>PRÓXIMO MARCO</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
-                  </span>
-                </div>
-              </div>
-            </article>
-
-            <motion.aside
-              layout
-              className={styles.overviewActionPanel}
-              data-testid="overview-action-panel"
-              data-tone={selected.attention.tone}
-            >
-              <header>
-                <span className={styles.overviewActionIcon}><AttentionIcon size={20} /></span>
-                <div>
+          <motion.aside
+            layout
+            className={styles.overviewActionPanel}
+            data-testid="overview-action-panel"
+            data-tone={selected.attention.tone}
+          >
+            <div className={styles.overviewActionLead}>
+              <span className={styles.overviewActionIcon}><AttentionIcon size={21} /></span>
+              <div>
+                <div className={styles.overviewActionMeta}>
                   <p className={styles.eyebrow}>{selected.attention.eyebrow}</p>
                   <span className={styles.overviewActionBadge}>{selected.attention.badge}</span>
                 </div>
-              </header>
-
-              <div className={styles.overviewActionHero}>
-                <h3>{selected.attention.title}</h3>
-                <p>{selected.attention.description}</p>
+                <div className={styles.overviewActionHero}>
+                  <h3>{selected.attention.title}</h3>
+                  <p>{selected.attention.description}</p>
+                </div>
               </div>
+            </div>
 
-              <div className={styles.overviewActionFacts}>
-                {selected.attention.facts.map((fact, index) => {
-                  const FactIcon = factIcons[index] ?? Activity;
-                  return (
-                    <span key={fact.label}>
-                      <FactIcon size={16} />
-                      <small>{fact.label}</small>
-                      <strong>{fact.value}</strong>
-                      <em>{fact.detail}</em>
-                    </span>
-                  );
-                })}
-              </div>
+            <div className={styles.overviewActionFacts}>
+              {selected.attention.facts.map((fact, index) => {
+                const FactIcon = factIcons[index] ?? Activity;
+                return (
+                  <span key={fact.label}>
+                    <FactIcon size={16} />
+                    <small>{fact.label}</small>
+                    <strong>{fact.value}</strong>
+                    <em>{fact.detail}</em>
+                  </span>
+                );
+              })}
+            </div>
 
-              <button type="button" className={styles.secondaryAction} onClick={onOpenCockpit}>
-                Investigar contexto completo
-              </button>
-            </motion.aside>
-          </div>
+            <button type="button" className={styles.secondaryAction} onClick={onOpenCockpit}>
+              Investigar contexto completo
+            </button>
+          </motion.aside>
 
           <article className={styles.overviewChartCard} data-testid="overview-hydro-chart-card">
             <header className={styles.overviewChartHeader}>
