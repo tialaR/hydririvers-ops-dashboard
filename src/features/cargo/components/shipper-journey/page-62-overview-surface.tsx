@@ -2,7 +2,6 @@
 
 import {
   AlertTriangle,
-  CheckCircle2,
   Clock3,
   FileCheck2,
   MapPin,
@@ -17,10 +16,11 @@ import { useMemo, useState } from 'react';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
 import { adaptOwnedCargoRouteToHydrowayMapModel } from '@/features/waterway-map/adapters/owned-cargo-route-to-hydroway-model';
 import { HydrowayMapProductShell } from '@/features/waterway-map/components/hydroway-map-product-shell';
+import { OperationalAlert, type OperationalAlertTone } from '@/shared/design-system/components/operational-alert/operational-alert';
 import type { ShipperMapRouteData } from '@/features/waterway-map/domain/owned-cargo-operation-route';
 import styles from './shipper-journey.module.sass';
 
-type OverviewAttentionTone = 'warning' | 'stable' | 'success';
+type OverviewAttentionTone = OperationalAlertTone;
 
 type OverviewActionFact = {
   label: string;
@@ -146,7 +146,7 @@ const cargoes: OverviewCargo[] = [
     nextMilestone: 'Óbidos',
     nextMilestoneMeta: 'destino operacional',
     attention: {
-      tone: 'stable',
+      tone: 'info',
       eyebrow: 'SEM BLOQUEIO CRÍTICO',
       badge: 'acompanhar ETA',
       title: 'Operação dentro da janela prevista',
@@ -264,7 +264,6 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
 
   const selected = cargoes.find((cargo) => cargo.id === selectedId) ?? cargoes[0];
   const progress = Math.round(selected.route.progressRatio * 100);
-  const AttentionIcon = selected.attention.tone === 'warning' ? AlertTriangle : CheckCircle2;
   const overviewMapModel = useMemo(
     () => adaptOwnedCargoRouteToHydrowayMapModel(selected.route),
     [selected.route],
@@ -448,25 +447,16 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             })}
           </div>
 
-          <motion.aside
-            layout
-            className={styles.overviewActionPanel}
-            data-testid="overview-action-panel"
-            data-tone={selected.attention.tone}
-          >
-            <span className={styles.overviewActionIcon}><AttentionIcon size={18} /></span>
-            <div className={styles.overviewActionHero}>
-              <div className={styles.overviewActionMeta}>
-                <p className={styles.eyebrow}>{selected.attention.eyebrow}</p>
-                <span className={styles.overviewActionBadge}>{selected.attention.badge}</span>
-              </div>
-              <strong>{selected.attention.title}</strong>
-              <span>{selected.attention.description}</span>
-            </div>
-            <button type="button" className={styles.secondaryAction} onClick={onOpenCockpit}>
-              Investigar
-            </button>
-          </motion.aside>
+          <OperationalAlert
+            tone={selected.attention.tone}
+            eyebrow={selected.attention.eyebrow}
+            badge={selected.attention.badge}
+            title={selected.attention.title}
+            description={selected.attention.description}
+            actionLabel="Investigar"
+            onAction={onOpenCockpit}
+            testId="overview-action-panel"
+          />
 
 
         </div>
