@@ -16,7 +16,7 @@ import { useMemo, useState } from 'react';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
 import { adaptOwnedCargoRouteToHydrowayMapModel } from '@/features/waterway-map/adapters/owned-cargo-route-to-hydroway-model';
 import { HydrowayMapProductShell } from '@/features/waterway-map/components/hydroway-map-product-shell';
-import { OperationalAlert, type OperationalAlertTone } from '@/shared/design-system/components/operational-alert/operational-alert';
+import { OperationalAlert, type OperationalAlertTone } from '@/shared/design-system/components/operational-alert';
 import type { ShipperMapRouteData } from '@/features/waterway-map/domain/owned-cargo-operation-route';
 import styles from './shipper-journey.module.sass';
 
