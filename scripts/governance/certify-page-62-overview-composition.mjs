@@ -43,11 +43,6 @@ try {
 
   const rootLocator = page.locator('[data-testid="page62-overview"]').first();
   await rootLocator.waitFor({ state: 'visible', timeout: 20000 });
-  await page.locator('[data-testid="overview-hydro-chart-card"] [data-echart-renderer="svg"]').first().waitFor({
-    state: 'visible',
-    timeout: 20000,
-  });
-
   const metrics = await page.evaluate(() => {
     const rect = (selector) => {
       const node = document.querySelector(selector);
@@ -69,7 +64,6 @@ try {
     const action = document.querySelector('[data-testid="overview-action-panel"]');
     const mapPanel = document.querySelector('[data-testid="overview-map-panel"]');
     const workspace = document.querySelector('[data-testid="overview-workspace"]');
-    const chart = document.querySelector('[data-testid="overview-hydro-chart-card"] [data-echart-renderer]');
     const mapStage = document.querySelector('[data-testid="overview-map-surface"] [data-testid="hydroway-map-product-stage"]');
     const mapSvg = document.querySelector('[data-testid="overview-map-surface"] .hydroway-map-spike-svg');
     const mapCanvas = document.querySelector('[data-testid="overview-map-surface"] .maplibregl-canvas');
@@ -90,17 +84,7 @@ try {
         const box = node.getBoundingClientRect();
         return { x: box.x, y: box.y, width: box.width, height: box.height };
       }),
-      chartCard: rect('[data-testid="overview-hydro-chart-card"]'),
-      chart: chart ? (() => {
-        const box = chart.getBoundingClientRect();
-        return {
-          width: box.width,
-          height: box.height,
-          renderer: chart.getAttribute('data-echart-renderer'),
-        };
-      })() : null,
       metricCells,
-      sourceCount: document.querySelectorAll('[data-testid="overview-hydro-chart-card"] footer > span').length,
       richMapStageVisible: Boolean(mapStage && mapStage.getBoundingClientRect().width > 500),
       mapRendererVisible: Boolean(
         (mapCanvas && mapCanvas.getBoundingClientRect().width > 100) ||
@@ -122,7 +106,7 @@ try {
     if (Math.max(...yValues) - Math.min(...yValues) > 4) failures.push('shipment filters regressed from one horizontal row');
   }
   if (!metrics.attentionBadge || metrics.attentionBadge.width < 110 || metrics.attentionBadge.height < 28) failures.push('attention summary lacks deliberate prominence');
-  if (!metrics.kpiStrip || metrics.metricCells.length !== 5) failures.push('five-metric operational strip missing');
+  if (!metrics.kpiStrip || metrics.metricCells.length !== 4) failures.push('four-metric overview strip missing');
   if (metrics.metricCells.some((cell) => cell.height < 88)) failures.push('metric strip cells are vertically compressed');
   if (metrics.metricCells.some((cell) => cell.valueFont < 24)) failures.push('metric values lack visual hierarchy');
   if (!metrics.mapSurface || metrics.mapSurface.width < 740 || metrics.mapSurface.height < 500) failures.push('operational map is not the dominant overview surface');
@@ -132,11 +116,8 @@ try {
   if (!metrics.actionPanel || !metrics.mapPanel) failures.push('overview action context is incomplete');
   if (metrics.mapPanel && metrics.kpiStrip && metrics.mapPanel.y >= metrics.kpiStrip.y) failures.push('map must appear before KPI strip');
   if (metrics.kpiStrip && metrics.actionPanel && metrics.kpiStrip.y >= metrics.actionPanel.y) failures.push('KPI strip must appear before attention rail');
-  if (metrics.actionPanel && metrics.chartCard && metrics.actionPanel.y >= metrics.chartCard.y) failures.push('attention rail must appear before hydro chart');
   if (metrics.actionPanel && metrics.workspace && metrics.actionPanel.width < metrics.workspace.width * 0.92) failures.push('attention context should read as a horizontal rail, not a sidebar');
-  if (!metrics.chart || metrics.chart.width < 700 || metrics.chart.height < 300) failures.push('hydro chart is not visually dominant enough');
-  if (metrics.chart?.renderer !== 'svg') failures.push('overview hydro chart must use SVG renderer');
-  if (metrics.sourceCount < 4) failures.push('operational source context is incomplete');
+  if (metrics.actionPanel && metrics.actionPanel.height > 150) failures.push('overview attention rail is too tall for summary context');
   if (metrics.workspaceBackgroundImage && metrics.workspaceBackgroundImage !== 'none') failures.push('decorative workspace gradient regressed into Overview');
   if (metrics.overflowX > 4) failures.push(`horizontal overflow ${metrics.overflowX}px`);
 
@@ -164,9 +145,7 @@ try {
   console.log(`${report.status} Page 62 Overview Composition`, {
     map: metrics.mapSurface,
     action: metrics.actionPanel,
-    chart: metrics.chart,
     metricCells: metrics.metricCells.length,
-    sources: metrics.sourceCount,
     overflowX: metrics.overflowX,
   });
   failures.forEach((failure) => console.log('- ' + failure));
