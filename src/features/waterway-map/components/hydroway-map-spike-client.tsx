@@ -149,6 +149,7 @@ type HydrowayMapSpikeClientProps = {
   preferredProvider: HydrowaySpikeProviderMode;
   /** `product` omite chrome dev (seletor de cargas demo, legenda lateral do spike). */
   experience?: HydrowayMapExperience;
+  onExpand?: () => void;
 };
 
 const MAP_CHAPTER_CONTROL_KEYS = new Set(['origin', 'current', 'destination']);
@@ -157,6 +158,7 @@ export function HydrowayMapSpikeClient({
   model,
   preferredProvider,
   experience = 'spike',
+  onExpand,
 }: HydrowayMapSpikeClientProps) {
   const isOverviewExperience = experience === 'overview';
   const isProductExperience = experience === 'product' || isOverviewExperience;
@@ -508,6 +510,9 @@ export function HydrowayMapSpikeClient({
         case 'fit-route':
           handleFitRoute();
           break;
+        case 'expand':
+          onExpand?.();
+          break;
         default:
           break;
       }
@@ -519,6 +524,7 @@ export function HydrowayMapSpikeClient({
       handleToggleLayerPresetPanel,
       handleZoomIn,
       handleZoomOut,
+      onExpand,
     ],
   );
 
@@ -823,6 +829,8 @@ export function HydrowayMapSpikeClient({
             mapLibreControlsDisabled={mapLibreControlsDisabled}
             onControlClick={handleDockControlClick}
             onStopEvent={stopFloatingControlEvent}
+            modern={isOverviewExperience}
+            showExpand={isOverviewExperience && Boolean(onExpand)}
           />
         </div>
       </nav>
