@@ -1548,21 +1548,90 @@
   letter-spacing: -.018em
 
 .documentsWorkspaceHeader span
-  max-width: 52rem
+  max-width: 56rem
   color: var(--hy-p62-muted)
   font-size: .74rem
   line-height: 1.45
 
-.documentsWorkspace .documentsRiskGrid
+.documentsPrimary,
+.occurrencePrimary
+  min-width: 0
+
+.documentsPrimary [data-testid='page62-d06-documents'],
+.occurrencePrimary [data-testid='page62-d07-occurrence']
+  width: 100%
+
+.flowContinuation
   display: grid
-  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr)
-  gap: 1rem
-  align-items: start
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: .9rem
+  min-height: 5.4rem
+  padding: .9rem 1rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .82rem
+  background: color-mix(in srgb, var(--hy-p62-text) 1.5%, var(--hy-p62-surface))
+  color: var(--hy-p62-text)
 
-.documentsWorkspace [data-testid='page62-d06-documents'],
-.documentsWorkspace [data-testid='page62-d07-occurrence']
-  min-height: 100%
+.flowContinuationIcon
+  display: grid
+  width: 2.5rem
+  height: 2.5rem
+  place-items: center
+  border-radius: .68rem
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface-raised))
+  color: color-mix(in srgb, var(--hy-p62-text) 70%, var(--hy-p62-muted))
 
-@media (max-width: 74rem)
-  .documentsWorkspace .documentsRiskGrid
-    grid-template-columns: 1fr
+.flowContinuation > div
+  display: grid
+  gap: .14rem
+  min-width: 0
+
+.flowContinuation small
+  color: var(--hy-p62-muted)
+  font-size: .63rem
+  font-weight: 700
+  letter-spacing: .075em
+
+.flowContinuation strong
+  color: var(--hy-p62-text)
+  font-size: .82rem
+  font-weight: 630
+
+.flowContinuation p
+  overflow: hidden
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+  line-height: 1.4
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.flowContinuation button
+  min-height: 2.45rem
+  padding: 0 .95rem
+  border: .0625rem solid var(--hy-p62-border-strong)
+  border-radius: .68rem
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+  font: inherit
+  font-size: .7rem
+  font-weight: 640
+  cursor: pointer
+
+.flowContinuation button:hover,
+.flowContinuation button:focus-visible
+  border-color: color-mix(in srgb, var(--hy-p62-text) 44%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-text) 6%, var(--hy-p62-surface-raised))
+
+@media (max-width: 54rem)
+  .flowContinuation
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .flowContinuation button
+    grid-column: 1 / -1
+    width: 100%
+
+  .flowContinuation p
+    white-space: normal
+
