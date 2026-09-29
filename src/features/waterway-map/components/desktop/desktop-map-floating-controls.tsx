@@ -120,9 +120,19 @@ export function DesktopMapFloatingControls({
     onControlClick(controlKey);
   };
 
+  const groupedControls = [
+    dockControls.slice(0, 2),
+    dockControls.slice(2, 4),
+    dockControls.slice(4, 5),
+    dockControls.slice(5, 8),
+    dockControls.slice(8),
+  ].filter((group) => group.length);
+
   return (
-    <div className={styles.controlStack}>
-      {dockControls.map((control) => (
+    <div className={styles.controlStack} data-modern={modern || undefined}>
+      {groupedControls.map((group, groupIndex) => (
+        <div key={groupIndex} className={modern ? styles.controlGroupModern : styles.controlGroup}>
+          {group.map((control) => (
         <HydrowayMapFloatingAction
           key={control.key}
           size="desktop"
@@ -139,6 +149,8 @@ export function DesktopMapFloatingControls({
           onDoubleClick={onStopEvent}
           onClick={handleDockControlButtonClick}
         />
+          ))}
+        </div>
       ))}
     </div>
   );
