@@ -535,7 +535,11 @@ export function HydrowayMapSpikeClient({
 
   return (
     <section
-      className={[styles.stage, isOverviewExperience ? styles.stageOverview : ''].filter(Boolean).join(' ')}
+      className={[
+        styles.stage,
+        isProductExperience ? styles.stageProduct : '',
+        isOverviewExperience ? styles.stageOverview : '',
+      ].filter(Boolean).join(' ')}
       aria-label={stageAriaLabel}
       data-experience={experience}
       {...(stageTestId ? { 'data-testid': stageTestId } : {})}
@@ -728,7 +732,7 @@ export function HydrowayMapSpikeClient({
                         itemClassName={styles.layerPresetPanelLegendItem}
                         swatchClassName={styles.layerPresetPanelLegendSwatch}
                         labelClassName={styles.layerPresetPanelLegendLabel}
-                        maxItems={4}
+                        maxItems={3}
                       />
                     </>
                   ) : null}
@@ -829,7 +833,7 @@ export function HydrowayMapSpikeClient({
             mapLibreControlsDisabled={mapLibreControlsDisabled}
             onControlClick={handleDockControlClick}
             onStopEvent={stopFloatingControlEvent}
-            modern={isOverviewExperience}
+            modern={isProductExperience}
             showExpand={isOverviewExperience && Boolean(onExpand)}
           />
         </div>
