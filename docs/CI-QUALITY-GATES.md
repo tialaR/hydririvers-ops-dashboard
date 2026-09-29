@@ -34,6 +34,7 @@ Há **cancelamento entre execuções** do mesmo fluxo (`concurrency`) para não 
 | Auditoria de documentação | `npm run audit:docs` |
 | ESLint | `npm run lint` |
 | TypeScript | `npm run typecheck` |
+| Semantic color/state visual contract | `npm run check:semantic-color-state` |
 | Consistência i18n | `npm run check:i18n` |
 | Testes (Vitest, suíte completa) | `npm run test` |
 | Regressão Mock Mode / QA | `npm run test:mock-mode` |
@@ -121,3 +122,12 @@ Mudanças Portfolio-Ready só são mergeadas com **CI**, **PR Quality** e **Visu
 ## 8. Scripts referenciados em documentação mas inexistentes
 
 No `package.json` atual **não** existem, por exemplo, `verify:qa` ou `check:mock-data`. Qualquer documentação ou workflow que os cite deve ser corrigida ou os scripts devem ser adicionados explicitamente ao `package.json` antes de usados no CI.
+
+
+## Semantic color/state visual gate
+
+The repository now treats semantic color as a cross-device contract, not decorative styling. The governing source is:
+
+`docs/governance/HYDRORIVERS-SEMANTIC-COLOR-AND-STATE-VISUAL-GATE-v1.0.md`
+
+`npm run check:semantic-color-state` verifies the static contract and reusable state anatomy. Runtime Storybook certification additionally checks representative Page 62 surfaces for selected/current differentiation, status diversity, neutral icon treatment and Documents-tab integration. Strong violations block CI/visual promotion; screenshot review still remains required for subtle visual quality judgments.
