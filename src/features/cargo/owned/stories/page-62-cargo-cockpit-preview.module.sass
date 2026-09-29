@@ -1188,3 +1188,311 @@
 
   .hydroInsightFooter span
     white-space: normal
+
+
+/* D05 Operational timeline refresh */
+.timelineLayout
+  display: grid
+  grid-template-columns: 1fr
+  gap: 1rem
+  margin-top: 1rem
+
+.timeline
+  padding: 1.25rem 1.35rem
+
+.timeline header
+  display: grid
+  gap: .28rem
+  padding-bottom: 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
+
+.timeline header > strong
+  color: var(--hy-p62-text)
+  font-size: 1.15rem
+  font-weight: 640
+  letter-spacing: -.015em
+
+.timeline header > span
+  max-width: 52rem
+  color: var(--hy-p62-muted)
+  font-size: .74rem
+  line-height: 1.45
+
+.timeline ol
+  display: grid
+  gap: 0
+  margin: 1.15rem 0 0
+  padding: 0
+  list-style: none
+
+.timeline li
+  position: relative
+  display: grid
+  grid-template-columns: 4.4rem minmax(0, 1fr)
+  gap: 1rem
+  min-height: 8.5rem
+  align-items: stretch
+
+.timeline li::after
+  position: absolute
+  top: 4.5rem
+  bottom: 0
+  left: 2.15rem
+  width: .0625rem
+  background: var(--hy-p62-border)
+  content: ''
+
+.timeline li:last-child::after
+  display: none
+
+.timelineAxis
+  position: relative
+  z-index: 1
+  display: flex
+  justify-content: center
+  align-items: flex-start
+  padding-top: .05rem
+
+.timelineDate
+  display: grid
+  width: 3.7rem
+  min-height: 4.25rem
+  overflow: hidden
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .72rem
+  background: var(--hy-p62-surface-raised)
+  text-align: center
+
+.timelineDate span
+  display: grid
+  min-height: 1.45rem
+  place-items: center
+  border-bottom: .0625rem solid var(--hy-p62-border)
+  color: var(--hy-p62-muted)
+  font-size: .66rem
+  font-weight: 650
+  letter-spacing: .05em
+
+.timelineDate strong
+  display: grid
+  place-items: center
+  color: var(--hy-p62-text)
+  font-size: 1.35rem
+  font-weight: 560
+  line-height: 1
+
+.timeline li[data-tone='success'] .timelineDate
+  border-color: color-mix(in srgb, var(--hy-p62-success) 26%, var(--hy-p62-border))
+
+.timeline li[data-tone='warning'] .timelineDate
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 34%, var(--hy-p62-border))
+
+.timeline li[data-tone='current'] .timelineDate
+  border-color: color-mix(in srgb, var(--hy-p62-info) 38%, var(--hy-p62-border))
+  box-shadow: 0 0 0 .12rem color-mix(in srgb, var(--hy-p62-info) 8%, transparent)
+
+.timelineEvent
+  align-self: start
+  display: grid
+  gap: .7rem
+  min-width: 0
+  padding: 1rem 1.05rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .82rem
+  background: var(--hy-p62-surface-raised)
+
+.timelineEventTopline
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: 1rem
+
+.timelineEventTitle
+  display: flex
+  min-width: 0
+  align-items: center
+  gap: .65rem
+
+.timelineEventTitle > strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: .95rem
+  font-weight: 620
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.timelineEventIcon
+  display: grid
+  width: 2rem
+  height: 2rem
+  flex: 0 0 auto
+  place-items: center
+  border-radius: .58rem
+  background: color-mix(in srgb, var(--hy-p62-text) 4%, var(--hy-p62-surface))
+  color: var(--hy-p62-muted)
+
+.timeline li[data-tone='success'] .timelineEventIcon
+  color: var(--hy-p62-success)
+
+.timeline li[data-tone='warning'] .timelineEventIcon
+  color: var(--hy-p62-warning)
+
+.timeline li[data-tone='info'] .timelineEventIcon,
+.timeline li[data-tone='current'] .timelineEventIcon
+  color: var(--hy-p62-info)
+
+.timelineStatus
+  display: inline-flex
+  min-height: 1.75rem
+  align-items: center
+  padding: 0 .6rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: 999rem
+  color: var(--hy-p62-muted)
+  font-size: .63rem
+  font-weight: 650
+  white-space: nowrap
+
+.timelineStatus[data-tone='success']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 28%, var(--hy-p62-border))
+  color: var(--hy-p62-success)
+
+.timelineStatus[data-tone='warning']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 36%, var(--hy-p62-border))
+  color: var(--hy-p62-warning)
+
+.timelineStatus[data-tone='info'],
+.timelineStatus[data-tone='current']
+  border-color: color-mix(in srgb, var(--hy-p62-info) 30%, var(--hy-p62-border))
+  color: var(--hy-p62-info)
+
+.timelineMeta
+  display: flex
+  flex-wrap: wrap
+  gap: .55rem 1rem
+  color: var(--hy-p62-muted)
+
+.timelineMeta span
+  display: inline-flex
+  align-items: center
+  gap: .35rem
+  font-size: .69rem
+
+.timelineEvent > p
+  max-width: 56rem
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: .72rem
+  line-height: 1.55
+
+.timelineEvent > footer
+  display: flex
+  flex-wrap: wrap
+  align-items: center
+  justify-content: space-between
+  gap: .55rem 1rem
+  padding-top: .7rem
+  border-top: .0625rem solid var(--hy-p62-border)
+
+.timelineEvent > footer span
+  color: var(--hy-p62-muted)
+  font-size: .64rem
+
+.timelineEvent > footer strong
+  color: var(--hy-p62-text)
+  font-size: .66rem
+  font-weight: 600
+
+.timelineInsight
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: 1rem
+  min-height: 6.1rem
+  padding: 1rem 1.15rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .875rem
+  background: var(--hy-p62-surface)
+
+.timelineInsightIcon
+  display: grid
+  width: 2.7rem
+  height: 2.7rem
+  place-items: center
+  border-radius: .72rem
+  background: color-mix(in srgb, var(--hy-p62-info) 7%, var(--hy-p62-surface-raised))
+  color: var(--hy-p62-info)
+
+.timelineInsightCopy
+  display: grid
+  gap: .18rem
+  min-width: 0
+
+.timelineInsightCopy small,
+.timelineInsightDecision small
+  color: var(--hy-p62-muted)
+  font-size: .64rem
+  font-weight: 700
+  letter-spacing: .07em
+
+.timelineInsightCopy > strong
+  color: var(--hy-p62-text)
+  font-size: .88rem
+  font-weight: 620
+
+.timelineInsightCopy > p
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: .7rem
+  line-height: 1.45
+
+.timelineInsightDecision
+  display: grid
+  min-width: 13rem
+  gap: .18rem
+  padding-left: 1rem
+  border-left: .0625rem solid var(--hy-p62-border)
+
+.timelineInsightDecision > strong
+  color: var(--hy-p62-text)
+  font-size: .78rem
+  font-weight: 620
+
+@media (max-width: 62rem)
+  .timeline li
+    grid-template-columns: 3.8rem minmax(0, 1fr)
+
+  .timeline li::after
+    left: 1.85rem
+
+  .timelineDate
+    width: 3.35rem
+
+  .timelineInsight
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .timelineInsightDecision
+    grid-column: 1 / -1
+    padding-top: .75rem
+    padding-left: 0
+    border-top: .0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+@media (max-width: 44rem)
+  .timeline
+    padding: 1rem
+
+  .timeline li
+    grid-template-columns: 1fr
+    min-height: 0
+    padding-bottom: 1rem
+
+  .timeline li::after
+    display: none
+
+  .timelineAxis
+    justify-content: flex-start
+
+  .timelineEventTopline
+    align-items: flex-start
+    flex-direction: column
