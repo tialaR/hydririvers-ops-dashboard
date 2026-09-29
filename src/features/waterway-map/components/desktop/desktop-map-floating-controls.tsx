@@ -16,7 +16,8 @@ export type DesktopMapFloatingControlKey =
   | 'layers'
   | 'reset'
   | 'current'
-  | 'fit-route';
+  | 'fit-route'
+  | 'expand';
 
 type DesktopMapFloatingControlsProps = {
   activeMapChapter: HydrowayCameraChapterId | null;
