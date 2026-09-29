@@ -219,6 +219,11 @@ try {
         })
         .filter((box) => box.width > 16 && box.height > 16);
 
+      const timeline = document.querySelector('[data-testid="page62-d05-timeline"]');
+      const timelineInsight = document.querySelector('[data-testid="page62-timeline-insight"]');
+      const timelineEvents = timeline ? timeline.querySelectorAll('ol > li') : [];
+      const cockpitKpis = document.querySelector('[data-testid="cockpit-kpi-grid"]');
+
       return {
         width: rect.width,
         height: rect.height,
@@ -233,6 +238,9 @@ try {
         mapSurfaceCount: document.querySelectorAll(
           '[aria-label^="Mapa operacional"], [data-testid="hydroway-map-product-stage"]',
         ).length,
+        timelineEventCount: timelineEvents.length,
+        timelineInsightVisible: Boolean(timelineInsight && timelineInsight.getBoundingClientRect().width > 0),
+        cockpitKpisVisible: Boolean(cockpitKpis && cockpitKpis.getBoundingClientRect().height > 0),
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -245,6 +253,11 @@ try {
       if (metrics.minHeadingPx > 0 && metrics.minHeadingPx < 13) failures.push(`heading too small ${metrics.minHeadingPx}px`);
       if (metrics.canvasCount < state.minCharts) failures.push(`expected at least ${state.minCharts} chart canvas, found ${metrics.canvasCount}`);
       if (state.map && metrics.mapSurfaceCount < 1) failures.push('MapLibre/fallback surface missing');
+      if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
+        if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
+        if (!metrics.timelineInsightVisible) failures.push('timeline contextual info block missing');
+        if (metrics.cockpitKpisVisible) failures.push('cockpit KPI strip must not repeat in timeline mode');
+      }
     }
 
     const relevantConsoleErrors = consoleErrors.filter(
