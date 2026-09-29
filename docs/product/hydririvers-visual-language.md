@@ -54,3 +54,18 @@ A tela de **Cargas** é a referência principal da aplicação. Ela estabelece o
 - permita crescimento vertical em mobile quando o texto ficar longo;
 - mantenha ícones e labels claros;
 - preserve acessibilidade e contraste em dark/light.
+
+
+## 6. Semantic color & state contract
+
+Canonical gate: `docs/governance/HYDRORIVERS-SEMANTIC-COLOR-AND-STATE-VISUAL-GATE-v1.0.md`.
+
+Mandatory rule for desktop and mobile:
+
+> **Color communicates state. It must not become decoration.**
+
+Neutral surfaces, chrome, title icons, separators and non-status metadata stay in the graphite/gray/white/black family. Semantic color is reserved for operational meaning such as success, attention, critical impact, contextual information and explicit current/selected state.
+
+Selected/current items must be visually distinguishable by more than color alone. Different status meanings shown together must not collapse into one identical encoding when that distinction affects understanding.
+
+Strong violations are visual regressions and block promotion.
