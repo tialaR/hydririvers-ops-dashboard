@@ -554,7 +554,7 @@ export function Page62CargoCockpitPreview({
                             <div className={styles.timelineEvent}>
                               <div className={styles.timelineEventTopline}>
                                 <div className={styles.timelineEventTitle}>
-                                  <span className={styles.timelineEventIcon} aria-hidden>
+                                  <span className={styles.timelineEventIcon} data-semantic-role="neutral-icon" aria-hidden>
                                     <EventIcon size={17} />
                                   </span>
                                   <strong>{event.title}</strong>
