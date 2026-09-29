@@ -38,6 +38,9 @@ for (const required of [
   'MotionConfig',
   'AnimatePresence',
   'ShipmentCard',
+  'OperationalAlert',
+  'cockpit-hydro-insight',
+  'evidenceFolderGrid',
   'reducedMotion="user"',
 ]) {
   if (!preview.includes(required)) failures.push(`Page 62 preview missing contract anchor: ${required}`);
@@ -90,7 +93,7 @@ for (const forbidden of [
 ]) {
   if (cockpitCss.includes(forbidden)) failures.push(`Cockpit regression anchor remains: ${forbidden}`);
 }
-for (const required of ['hydroDecisionCard', 'hydroDecisionMetrics', 'hydroChartBlock', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
+for (const required of ['hydroDecisionCard', 'hydroDecisionMetrics', 'hydroChartBlock', 'hydroInsightFooter', 'evidenceFolderGrid', 'cockpitAlertRow', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
   if (!cockpitCss.includes(required)) failures.push(`Cockpit hierarchy anchor missing: ${required}`);
 }
 for (const required of ['legend:', 'OperationalTelemetryOverviewChart', 'areaStyle']) {
