@@ -45,7 +45,7 @@ export function EvidenceFolderItem({
       onClick={onClick}
       data-testid={testId}
     >
-      <span className={styles.icon} aria-hidden>
+      <span className={styles.icon} data-semantic-role="neutral-icon" aria-hidden>
         <Icon size={variant === 'row' ? 20 : 19} strokeWidth={1.9} />
       </span>
 
