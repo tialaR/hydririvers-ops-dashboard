@@ -5,8 +5,6 @@ import { useMemo, useState } from 'react';
 
 import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-62-shipper-journey.mock';
 import { Page62CargoCockpitPreview } from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
-import { CargoDocumentsEvidencePanel } from '@/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel';
-import { CargoOccurrenceSummary } from '@/features/cargo/components/documents-occurrence/cargo-occurrence-summary';
 import { Page62OverviewSurface } from './page-62-overview-surface';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
@@ -49,7 +47,12 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
         <Page62CargoCockpitPreview
           initialMode="cockpit"
           onOverview={() => setExperience('discovery')}
-          onDocuments={() => setExperience('documentsRisk')}
+          onOpenCorrection={() => setExperience(
+            resolveShipperJourneyTransition('documentsRisk', { type: 'documentRejected' }),
+          )}
+          onOpenNegotiation={() => setExperience(
+            resolveShipperJourneyTransition('documentsRisk', { type: 'proposalSelected' }),
+          )}
         />
       );
     }
@@ -62,24 +65,12 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
       );
 
       return (
-        <div className={styles.journeyFlowStack}>
-          <div className={styles.documentsRiskGrid}>
-            <CargoDocumentsEvidencePanel
-              onPreviewEvidence={openCorrection}
-              onCorrectManifest={openCorrection}
-            />
-            <CargoOccurrenceSummary onOpenCorrection={openCorrection} />
-          </div>
-          <div className={styles.contextBar} data-testid="page62-d06-d07-next">
-            <span>
-              <strong>Investigação concluída</strong>
-              <small>A divergência pode ser corrigida agora ou acompanhada em paralelo enquanto você compara propostas.</small>
-            </span>
-            <button className={styles.primaryAction} type="button" onClick={openNegotiation}>
-              Comparar propostas
-            </button>
-          </div>
-        </div>
+        <Page62CargoCockpitPreview
+          initialMode="documents"
+          onOverview={() => setExperience('discovery')}
+          onOpenCorrection={openCorrection}
+          onOpenNegotiation={openNegotiation}
+        />
       );
     }
     if (experience === 'review' && proposals[0] && proposals[1]) {
