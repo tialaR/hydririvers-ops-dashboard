@@ -54,10 +54,10 @@ for (const required of ['CockpitReference', 'TimelineReference']) {
   }
 }
 
-for (const required of ['CargoDocumentsEvidencePanel', 'Pré-visualizar evidência', 'Corrigir manifesto']) {
+for (const required of ['CargoDocumentsEvidencePanel', 'EvidenceFolderItem', 'variant="row"', 'document-inspector', 'MDF-e']) {
   if (!documents.includes(required)) failures.push(`D06 Documents contract missing anchor: ${required}`);
 }
-for (const required of ['CargoOccurrenceSummary', 'Divergência no manifesto', 'Plano de mitigação']) {
+for (const required of ['CargoOccurrenceSummary', 'Divergência documental com impacto na janela', 'PLANO DE MITIGAÇÃO', 'OperationalAlert']) {
   if (!occurrence.includes(required)) failures.push(`D07 Occurrence contract missing anchor: ${required}`);
 }
 if (!d06Stories.includes('export const Reference')) failures.push('D06 Storybook reference missing');
