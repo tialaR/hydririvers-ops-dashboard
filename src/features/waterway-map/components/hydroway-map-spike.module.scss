@@ -1335,3 +1335,244 @@
   background: rgba(22, 22, 24, 0.88);
   box-shadow: none;
 }
+
+
+/* Page 62 / desktop map DS refresh */
+.controlGroup,
+.controlGroupModern {
+  display: grid;
+  gap: 0.34rem;
+}
+
+.controlGroupModern + .controlGroupModern {
+  margin-top: 0.24rem;
+  padding-top: 0.42rem;
+  border-top: 0.0625rem solid rgba(255, 255, 255, 0.11);
+}
+
+.stageOverview .controlStack {
+  gap: 0;
+}
+
+.stageOverview .controlActionModern {
+  width: 2.55rem;
+  height: 2.55rem;
+  min-width: 2.55rem;
+  min-height: 2.55rem;
+}
+
+.stageOverview .controlActionModern > span {
+  border: 0.0625rem solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.72rem;
+  background: rgba(22, 22, 24, 0.93);
+  color: rgba(236, 236, 239, 0.86);
+  box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.24);
+}
+
+.stageOverview .controlActionModern:hover:not(:disabled) > span,
+.stageOverview .controlActionModern:focus-visible > span {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(36, 36, 39, 0.97);
+  color: #ffffff;
+}
+
+.stageOverview .controlActionModern[aria-pressed='true'] > span,
+.stageOverview .controlActionModern[class*='active'] > span {
+  border-color: rgba(255, 255, 255, 0.46);
+  background: rgba(244, 244, 246, 0.96);
+  color: #151517;
+  box-shadow: 0 0.42rem 1rem rgba(0, 0, 0, 0.24);
+}
+
+.stageOverview .mapZoomBadge {
+  border-radius: 0.62rem;
+  border-color: rgba(255, 255, 255, 0.14);
+  background: rgba(22, 22, 24, 0.9);
+  box-shadow: none;
+}
+
+.stageOverview .layerPresetPanel,
+.stageOverview .layerPresetPanelDark {
+  width: min(18rem, calc(100vw - 6.5rem));
+  max-height: none;
+  padding: 0.7rem;
+  overflow: visible;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.95rem;
+  background: rgba(19, 19, 21, 0.97);
+  box-shadow: 0 0.85rem 2.25rem rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(16px);
+}
+
+.stageOverview .layerPresetPanelHeader {
+  gap: 0.75rem;
+  padding: 0.1rem 0.1rem 0.7rem;
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
+}
+
+.stageOverview .layerPresetPanelHeading {
+  gap: 0.24rem;
+}
+
+.stageOverview .layerPresetPanelTitle {
+  color: rgba(244, 244, 246, 0.68);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.stageOverview .layerPresetPanelCurrent {
+  color: #f5f5f6;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.stageOverview .layerPresetPanelActiveDescription {
+  max-width: 15rem;
+  color: rgba(214, 214, 218, 0.65);
+  font-size: 0.67rem;
+  line-height: 1.4;
+}
+
+.stageOverview .layerPresetPanelClose {
+  width: 2rem;
+  height: 2rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(238, 238, 241, 0.78);
+  font-size: 1rem;
+}
+
+.stageOverview .layerPresetPanelClose:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.085);
+  color: #ffffff;
+}
+
+.stageOverview .layerPresetPanelLegend {
+  gap: 0.22rem;
+  margin-top: 0.35rem;
+  padding-top: 0.45rem;
+}
+
+.stageOverview .layerPresetPanelLegendTitle {
+  color: rgba(210, 210, 214, 0.48);
+  font-size: 0.58rem;
+}
+
+.stageOverview .layerPresetPanelLegendList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem 0.55rem;
+}
+
+.stageOverview .layerPresetPanelLegendItem {
+  gap: 0.28rem;
+}
+
+.stageOverview .layerPresetPanelLegendSwatch {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999rem;
+}
+
+.stageOverview .layerPresetPanelLegendLabel {
+  color: rgba(224, 224, 227, 0.66);
+  font-size: 0.58rem;
+}
+
+.stageOverview .layerPresetList {
+  gap: 0.42rem;
+  padding-top: 0.65rem;
+}
+
+.stageOverview .layerPresetButton,
+.stageOverview .layerPresetPanelDark .layerPresetButton {
+  min-height: 3.25rem;
+  gap: 0.18rem;
+  padding: 0.55rem 0.62rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(238, 238, 241, 0.88);
+  box-shadow: none;
+}
+
+.stageOverview .layerPresetButton:hover:not(:disabled),
+.stageOverview .layerPresetPanelDark .layerPresetButton:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stageOverview .layerPresetButtonActive,
+.stageOverview .layerPresetPanelDark .layerPresetButtonActive {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.095);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.035);
+}
+
+.stageOverview .layerPresetButtonIcon {
+  display: grid;
+  width: 1.65rem;
+  height: 1.65rem;
+  place-items: center;
+  border-radius: 0.52rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(230, 230, 233, 0.72);
+}
+
+.stageOverview .layerPresetButtonActive .layerPresetButtonIcon,
+.stageOverview .layerPresetPanelDark .layerPresetButtonActive .layerPresetButtonIcon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.stageOverview .layerPresetButtonLabel,
+.stageOverview .layerPresetButtonActive .layerPresetButtonLabel,
+.stageOverview .layerPresetPanelDark .layerPresetButtonActive .layerPresetButtonLabel {
+  color: rgba(246, 246, 247, 0.93);
+  font-size: 0.72rem;
+  font-weight: 650;
+}
+
+.stageOverview .layerPresetButtonDescription,
+.stageOverview .layerPresetPanelDark .layerPresetButtonDescription {
+  color: rgba(205, 205, 210, 0.58);
+  font-size: 0.61rem;
+  line-height: 1.35;
+}
+
+.stageOverview .layerPresetButtonCheck {
+  display: grid;
+  width: 1.25rem;
+  height: 1.25rem;
+  place-items: center;
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 0.7rem;
+}
+
+@media (max-height: 48rem) {
+  .stageOverview .layerPresetPanel,
+  .stageOverview .layerPresetPanelDark {
+    width: min(17rem, calc(100vw - 6.5rem));
+    padding: 0.55rem;
+  }
+
+  .stageOverview .layerPresetPanelActiveDescription {
+    display: none;
+  }
+
+  .stageOverview .layerPresetPanelLegend {
+    margin-top: 0.18rem;
+    padding-top: 0.3rem;
+  }
+
+  .stageOverview .layerPresetButton,
+  .stageOverview .layerPresetPanelDark .layerPresetButton {
+    min-height: 2.8rem;
+    padding: 0.42rem 0.55rem;
+  }
+}
