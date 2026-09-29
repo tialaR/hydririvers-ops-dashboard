@@ -701,3 +701,313 @@
 
   .routeContext .routeTrack
     margin-top: 1.2rem
+
+
+.cockpitLowerGrid
+  grid-template-columns: minmax(0, 1.45fr) minmax(20rem, .55fr)
+  align-items: stretch
+  gap: 1rem
+
+.hydroDecisionCard
+  grid-column: 1 / -1
+  display: grid
+  gap: 1rem
+  min-width: 0
+  padding: 1.25rem 1.35rem 1rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: 0.875rem
+  background: var(--hy-p62-surface)
+
+.hydroDecisionHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: 1rem
+  padding-bottom: 1rem
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.hydroDecisionTitle
+  display: flex
+  align-items: flex-start
+  gap: .8rem
+  min-width: 0
+
+.hydroDecisionIcon
+  display: grid
+  width: 2.5rem
+  height: 2.5rem
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .75rem
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-info)
+
+.hydroDecisionTitle > div
+  display: grid
+  gap: .22rem
+
+.hydroDecisionTitle small,
+.hydroDecisionMetrics small,
+.hydroChartLead small
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+  font-weight: 650
+  letter-spacing: .07em
+
+.hydroDecisionTitle strong
+  color: var(--hy-p62-text)
+  font-size: 1.2rem
+  font-weight: 620
+  letter-spacing: -.015em
+
+.hydroDecisionTitle > div > span
+  color: var(--hy-p62-muted)
+  font-size: .76rem
+  line-height: 1.45
+
+.hydroStateBadge
+  display: inline-flex
+  min-height: 2rem
+  align-items: center
+  padding: 0 .75rem
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-warning) 36%, var(--hy-p62-border))
+  border-radius: 999rem
+  background: color-mix(in srgb, var(--hy-p62-warning) 8%, transparent)
+  color: var(--hy-p62-warning)
+  font-size: .72rem
+  font-weight: 620
+  white-space: nowrap
+
+.hydroDecisionMetrics
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .78rem
+  background: var(--hy-p62-surface-raised)
+
+.hydroDecisionMetrics > div
+  display: grid
+  gap: .22rem
+  min-height: 6.1rem
+  align-content: center
+  padding: .9rem 1rem
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.hydroDecisionMetrics > div:first-child
+  border-left: 0
+
+.hydroDecisionMetrics strong
+  color: var(--hy-p62-text)
+  font-size: 1.35rem
+  font-weight: 620
+  letter-spacing: -.025em
+
+.hydroDecisionMetrics span
+  color: var(--hy-p62-muted)
+  font-size: .7rem
+  line-height: 1.35
+
+.hydroChartBlock
+  display: grid
+  grid-template-columns: minmax(13rem, .28fr) minmax(0, 1fr)
+  gap: 1rem
+  align-items: stretch
+  min-width: 0
+  padding-top: .2rem
+
+.hydroChartLead
+  display: flex
+  flex-direction: column
+  justify-content: center
+  gap: .8rem
+  padding: 1rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .75rem
+  background: color-mix(in srgb, var(--hy-p62-surface-raised) 82%, transparent)
+
+.hydroChartLead > span
+  display: grid
+  gap: .3rem
+
+.hydroChartLead strong
+  color: var(--hy-p62-text)
+  font-size: 1rem
+  font-weight: 620
+
+.hydroChartLead p
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: .72rem
+  line-height: 1.55
+
+.hydroChartBlock > div:last-child
+  min-width: 0
+
+.evidenceCard
+  display: grid
+  align-content: start
+  min-height: 15rem
+  padding: 1.15rem 1.2rem
+
+.evidenceCard > header
+  align-items: flex-start
+
+.evidenceCard > header div
+  gap: .2rem
+
+.evidenceCard > header strong
+  font-size: 1rem
+  font-weight: 620
+
+.evidenceCard > header span
+  color: var(--hy-p62-muted)
+  font-size: .7rem
+  line-height: 1.4
+
+.evidenceList
+  grid-template-columns: 1fr
+  gap: 0
+  margin-top: .9rem
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.evidenceList > div
+  grid-template-columns: auto minmax(0, 1fr) auto
+  gap: .7rem
+  min-height: 3.65rem
+  padding: .65rem .1rem
+  border: 0
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+  border-radius: 0
+  background: transparent
+
+.evidenceStatusIcon
+  display: grid
+  width: 2rem
+  height: 2rem
+  place-items: center
+  border-radius: .62rem
+  background: var(--hy-p62-surface-raised)
+
+.evidenceList > div span:nth-child(2)
+  gap: .12rem
+
+.evidenceList > div strong
+  font-size: .8rem
+  font-weight: 600
+
+.evidenceList > div small
+  font-size: .66rem
+
+.evidenceList > div em
+  align-self: center
+  color: var(--hy-p62-muted)
+  font-size: .64rem
+  font-style: normal
+  white-space: nowrap
+
+.evidenceAction
+  justify-self: start
+  min-height: 2.2rem
+  margin-top: .85rem
+  padding: 0 .9rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .65rem
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+  font: inherit
+  font-size: .7rem
+  cursor: pointer
+
+.attention
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  grid-template-rows: auto auto
+  align-content: start
+  gap: .9rem .8rem
+  min-height: 15rem
+  padding: 1.2rem
+  border-left-width: .22rem
+
+.attentionIcon
+  width: 2.65rem
+  height: 2.65rem
+  border-radius: .78rem
+
+.attentionBody
+  display: grid !important
+  gap: .25rem
+
+.attentionBody strong
+  font-size: 1.05rem
+  font-weight: 620
+
+.attentionBody span
+  font-size: .74rem
+  line-height: 1.45
+
+.attentionDeadline
+  grid-column: 1 / -1
+  display: flex
+  align-items: center
+  gap: .6rem
+  min-height: 3.2rem
+  padding: .65rem .75rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .7rem
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.attentionDeadline > span
+  display: grid
+  gap: .08rem
+
+.attentionDeadline small
+  color: var(--hy-p62-muted)
+  font-size: .62rem
+  font-weight: 650
+  letter-spacing: .06em
+
+.attentionDeadline strong
+  color: var(--hy-p62-text)
+  font-size: .9rem
+
+.attention button
+  grid-column: 1 / -1
+  justify-self: stretch
+  min-height: 2.45rem
+  border-radius: .7rem
+  font-size: .72rem
+  font-weight: 600
+
+@media (max-width: 78rem)
+  .hydroDecisionMetrics
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .hydroDecisionMetrics > div:nth-child(3)
+    border-left: 0
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+  .hydroDecisionMetrics > div:nth-child(4)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+  .hydroChartBlock
+    grid-template-columns: 1fr
+
+@media (max-width: 68rem)
+  .cockpitLowerGrid
+    grid-template-columns: 1fr
+
+  .hydroDecisionHeader
+    flex-direction: column
+
+  .hydroDecisionMetrics
+    grid-template-columns: 1fr
+
+  .hydroDecisionMetrics > div
+    border-left: 0
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+  .hydroDecisionMetrics > div:first-child
+    border-top: 0
