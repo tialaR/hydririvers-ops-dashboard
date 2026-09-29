@@ -55,7 +55,7 @@ for (const required of [
 }
 
 for (const required of [
-  'variant="row"',
+  'variant="card"',
   'document-inspector',
   'MDF-e',
   'document-row-',
