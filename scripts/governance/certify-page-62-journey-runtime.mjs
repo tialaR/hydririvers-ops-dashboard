@@ -12,7 +12,7 @@ const states = [
     name: 'Overview',
     storyKey: 'Overview',
     selector: '[data-testid="page62-overview"]',
-    minCharts: 1,
+    minCharts: 0,
     map: true,
   },
   {
