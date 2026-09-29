@@ -1388,3 +1388,136 @@
 .segmentedReadiness
   grid-column: 1 / -1
   margin-top: var(--hy-p62-space-2)
+
+
+.overviewMetricStrip
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+
+.mapOperationalSummary
+  grid-template-columns: repeat(2, minmax(0, auto))
+  width: auto
+  max-width: min(34rem, calc(100% - 8rem))
+  background: color-mix(in srgb, var(--hy-p62-canvas) 88%, transparent)
+
+.mapOperationalSummary > span
+  min-height: 3.6rem
+  padding: var(--hy-p62-space-2) var(--hy-p62-space-3)
+
+.overviewActionPanel
+  grid-template-columns: auto minmax(0, 1fr) auto
+  gap: var(--hy-p62-space-4)
+  min-height: 4.75rem
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+
+.overviewActionPanel .overviewActionHero
+  display: grid
+  gap: 0.22rem
+  margin: 0
+
+.overviewActionPanel .overviewActionHero strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-label)
+  font-weight: var(--hy-p62-weight-semibold)
+
+.overviewActionPanel .overviewActionHero > span
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.overviewActionPanel .overviewActionMeta
+  justify-content: flex-start
+  gap: var(--hy-p62-space-2)
+
+.overviewActionPanel .overviewActionIcon
+  width: 2.25rem
+  height: 2.25rem
+
+.overviewActionPanel .secondaryAction
+  min-width: 6.5rem
+  min-height: 2.25rem
+
+.overviewMapFullscreen
+  position: fixed
+  inset: 0
+  z-index: 1000
+  display: grid
+  grid-template-rows: auto minmax(0, 1fr)
+  padding: var(--hy-p62-space-4)
+  background: var(--hy-p62-canvas)
+
+.overviewMapFullscreen > header
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-4)
+  min-height: 4rem
+  padding: 0 var(--hy-p62-space-2) var(--hy-p62-space-4)
+
+.overviewMapFullscreen > header button
+  display: inline-flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  min-height: 2.5rem
+  padding: 0 var(--hy-p62-space-3)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-text)
+  font: inherit
+  cursor: pointer
+
+.overviewMapFullscreen > header > div
+  display: grid
+  gap: 0.15rem
+
+.overviewMapFullscreen > header small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: var(--hy-p62-weight-semibold)
+  letter-spacing: 0.06em
+
+.overviewMapFullscreen > header strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-label)
+
+.overviewMapFullscreenStage
+  min-height: 0
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+
+.overviewMapFullscreenStage > div,
+.overviewMapFullscreenStage [data-testid='hydroway-map-product-stage']
+  height: 100%
+  min-height: 0 !important
+
+@media (max-width: 82rem)
+  .overviewMetricStrip
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .overviewMetric:nth-child(3)
+    border-left: 0
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+@media (max-width: 44rem)
+  .overviewMetricStrip
+    grid-template-columns: 1fr
+
+  .overviewActionPanel
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .overviewActionPanel .secondaryAction
+    grid-column: 1 / -1
+    width: 100%
+
+  .overviewMapFullscreen
+    padding: var(--hy-p62-space-2)
+
+  .overviewMapFullscreen > header
+    grid-template-columns: 1fr auto
+
+  .overviewMapFullscreen > header > div
+    grid-column: 1 / -1
+    grid-row: 2
