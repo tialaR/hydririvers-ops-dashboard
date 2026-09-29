@@ -26,7 +26,7 @@ const states = [
     storyKey: 'D06D07DocumentsRisk',
     selector: '[data-testid="page62-d06-documents"]',
     secondarySelector: '[data-testid="page62-d07-occurrence"]',
-    minCharts: 0,
+    minCharts: 1,
   },
   {
     name: 'D08-D09 Negotiation',
@@ -244,6 +244,31 @@ try {
       const unselectedStyle = unselectedEvidenceRow ? getComputedStyle(unselectedEvidenceRow) : null;
       const documentsTab = Array.from(document.querySelectorAll('nav[aria-label="Navegação da carga"] button'))
         .find((button) => button.textContent?.trim() === 'Documentos');
+      const documentCards = Array.from(document.querySelectorAll('[data-testid^="document-row-"]'));
+      const documentCardRects = documentCards.map((item) => item.getBoundingClientRect());
+      const documentsPrimary = document.querySelector('[data-testid="documents-primary-surface"]');
+      const occurrencePrimary = document.querySelector('[data-testid="occurrence-primary-surface"]');
+      const continuation = document.querySelector('[data-testid="page62-d06-d07-next"]');
+      const occurrenceSections = [
+        document.querySelector('[data-testid="occurrence-header"]'),
+        document.querySelector('[data-testid="occurrence-decision-grid"]'),
+        document.querySelector('[data-testid="occurrence-mitigation"]'),
+        document.querySelector('[data-testid="occurrence-primary-action"]'),
+      ].filter(Boolean);
+      const rectsOverlap = (a, b) =>
+        a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+      const occurrenceSectionRects = occurrenceSections.map((item) => item.getBoundingClientRect());
+      let occurrenceOverlapCount = 0;
+      for (let first = 0; first < occurrenceSectionRects.length; first += 1) {
+        for (let second = first + 1; second < occurrenceSectionRects.length; second += 1) {
+          if (rectsOverlap(occurrenceSectionRects[first], occurrenceSectionRects[second])) {
+            occurrenceOverlapCount += 1;
+          }
+        }
+      }
+      const documentsPrimaryRect = documentsPrimary?.getBoundingClientRect();
+      const occurrencePrimaryRect = occurrencePrimary?.getBoundingClientRect();
+      const continuationRect = continuation?.getBoundingClientRect();
       const eventGaps = timelineEvents.slice(1).map((item, index) => {
         const previous = timelineEvents[index].getBoundingClientRect();
         const current = item.getBoundingClientRect();
@@ -288,6 +313,22 @@ try {
           document.querySelector('[data-testid="document-inspector"]')?.getBoundingClientRect().height
         ),
         documentsTabActive: documentsTab?.getAttribute('aria-pressed') === 'true',
+        documentCardCount: documentCards.length,
+        documentCardMaxWidth: documentCardRects.length ? Math.max(...documentCardRects.map((item) => item.width)) : 0,
+        documentCardMinWidth: documentCardRects.length ? Math.min(...documentCardRects.map((item) => item.width)) : 0,
+        documentCardHeightSpread: documentCardRects.length
+          ? Math.max(...documentCardRects.map((item) => item.height)) - Math.min(...documentCardRects.map((item) => item.height))
+          : 0,
+        documentsBeforeOccurrence: Boolean(
+          documentsPrimaryRect && occurrencePrimaryRect && documentsPrimaryRect.bottom <= occurrencePrimaryRect.top
+        ),
+        documentsOccurrenceGap: documentsPrimaryRect && occurrencePrimaryRect
+          ? occurrencePrimaryRect.top - documentsPrimaryRect.bottom
+          : -1,
+        occurrenceBeforeContinuation: Boolean(
+          occurrencePrimaryRect && continuationRect && occurrencePrimaryRect.bottom <= continuationRect.top
+        ),
+        occurrenceOverlapCount,
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -303,7 +344,14 @@ try {
       if (state.storyKey === 'D06D07DocumentsRisk') {
         if (!metrics.documentsTabActive) failures.push('documents state is not integrated with the cockpit Documentos tab');
         if (!metrics.documentInspectorVisible) failures.push('selected document inspector missing');
-        if (!metrics.selectedEvidenceVisualDelta) failures.push('selected document row lacks a clear visual delta');
+        if (!metrics.selectedEvidenceVisualDelta) failures.push('selected document card lacks a clear visual delta');
+        if (metrics.documentCardCount < 5) failures.push(`document card set incomplete: ${metrics.documentCardCount}`);
+        if (metrics.documentCardMaxWidth > 320) failures.push(`document cards stretched beyond overview pattern: ${metrics.documentCardMaxWidth}px`);
+        if (metrics.documentCardHeightSpread > 8) failures.push(`document cards lost visual consistency: ${metrics.documentCardHeightSpread}px height spread`);
+        if (!metrics.documentsBeforeOccurrence) failures.push('documents and occurrence are competing side-by-side instead of following vertical hierarchy');
+        if (metrics.documentsOccurrenceGap < 12) failures.push(`documents/occurrence spacing collapsed: ${metrics.documentsOccurrenceGap}px`);
+        if (!metrics.occurrenceBeforeContinuation) failures.push('next-flow continuation is competing with the occurrence instead of following it');
+        if (metrics.occurrenceOverlapCount > 0) failures.push(`occurrence sections visually overlap: ${metrics.occurrenceOverlapCount}`);
         if (metrics.semanticStatusCount < 4) failures.push(`document/occurrence status semantics too sparse: ${metrics.semanticStatusCount}`);
         if (metrics.distinctSemanticStatusColors < 3) failures.push(`distinct operational statuses collapsed into ${metrics.distinctSemanticStatusColors} computed colors`);
         if (metrics.neutralIconCount < 3) failures.push('neutral icon contract not represented in documents/occurrence');
