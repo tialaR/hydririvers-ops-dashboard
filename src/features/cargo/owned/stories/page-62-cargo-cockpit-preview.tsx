@@ -4,6 +4,7 @@ import {
   Activity,
   Anchor,
   Clock3,
+  CheckCircle2,
   Construction,
   Info,
   MapPin,
@@ -621,23 +622,30 @@ export function Page62CargoCockpitPreview({
                     </div>
                   </header>
 
-                  <div className={styles.documentsRiskGrid}>
+                  <section className={styles.documentsPrimary} data-testid="documents-primary-surface">
                     <CargoDocumentsEvidencePanel
                       onPreviewEvidence={() => undefined}
                       onCorrectManifest={onOpenCorrection}
                     />
-                    <CargoOccurrenceSummary onOpenCorrection={onOpenCorrection} />
-                  </div>
+                  </section>
 
-                  <OperationalAlert
-                    tone="success"
-                    eyebrow="INVESTIGAÇÃO"
-                    title="Investigação concluída"
-                    description="A divergência pode ser corrigida agora ou acompanhada em paralelo enquanto você compara propostas."
-                    actionLabel="Comparar propostas"
-                    onAction={onOpenNegotiation}
-                    testId="page62-d06-d07-next"
-                  />
+                  <section className={styles.occurrencePrimary} data-testid="occurrence-primary-surface">
+                    <CargoOccurrenceSummary onOpenCorrection={onOpenCorrection} />
+                  </section>
+
+                  <section className={styles.flowContinuation} data-testid="page62-d06-d07-next">
+                    <span className={styles.flowContinuationIcon} aria-hidden>
+                      <CheckCircle2 size={20} />
+                    </span>
+                    <div>
+                      <small>INVESTIGAÇÃO CONCLUÍDA</small>
+                      <strong>Você já tem evidência suficiente para seguir.</strong>
+                      <p>A correção documental pode ser tratada agora, ou a operação pode avançar para comparação de propostas.</p>
+                    </div>
+                    <button type="button" onClick={onOpenNegotiation}>
+                      Comparar propostas
+                    </button>
+                  </section>
                 </div>
               </motion.div>
             )}
