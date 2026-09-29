@@ -2,11 +2,8 @@
 
 import {
   Activity,
-  AlertTriangle,
-  CheckCircle2,
   Clock3,
-  FileCheck2,
-  Navigation,
+  Folder,
   Waves,
   Radio,
   Route,
@@ -22,6 +19,7 @@ import {
   type OperationalTelemetryMetric,
 } from '@/shared/design-system/patterns/operational-chart';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
+import { OperationalAlert } from '@/shared/design-system/components/operational-alert/operational-alert';
 
 import styles from './page-62-cargo-cockpit-preview.module.sass';
 
@@ -113,9 +111,27 @@ const timelineEvents = [
 ];
 
 const evidence = [
-  { label: 'Manifesto', meta: 'Atualizado há 12 min', detail: 'Requer validação de peso', tone: 'warning' },
-  { label: 'CT-e', meta: 'Validado', detail: 'Sem divergências abertas', tone: 'success' },
-  { label: 'Seguro', meta: 'Cobertura ativa', detail: 'Vigência compatível com a viagem', tone: 'success' },
+  {
+    label: 'Manifesto',
+    count: '4 arquivos',
+    meta: 'Atualizado há 12 min',
+    status: 'Atenção',
+    tone: 'warning',
+  },
+  {
+    label: 'CT-e',
+    count: '2 arquivos',
+    meta: 'Atualizado há 26 min',
+    status: 'Validado',
+    tone: 'success',
+  },
+  {
+    label: 'Seguro',
+    count: '3 arquivos',
+    meta: 'Atualizado hoje',
+    status: 'Ativo',
+    tone: 'success',
+  },
 ];
 
 const tabs: Array<{ id: WorkspaceMode | 'overview' | 'documents' | 'activity'; label: string }> = [
@@ -338,56 +354,63 @@ export function Page62CargoCockpitPreview({
                     </div>
 
                     <div className={styles.hydroChartBlock} data-testid="cockpit-hydro-chart">
-                      <div className={styles.hydroChartLead}>
-                        <span>
-                          <small>TENDÊNCIA</small>
-                          <strong>Queda contínua da cota</strong>
-                        </span>
-                        <p>Cota fluviométrica não é profundidade navegável; combine tendência, calado, avisos e condições locais antes de decidir.</p>
-                      </div>
                       <HydroLevelTrendChart />
                     </div>
+
+                    <footer className={styles.hydroInsightFooter} data-testid="cockpit-hydro-insight">
+                      <Waves size={17} aria-hidden />
+                      <div>
+                        <strong>Queda contínua da cota</strong>
+                        <span>Cota fluviométrica não é profundidade navegável; combine tendência, calado, avisos e condições locais antes de decidir.</span>
+                      </div>
+                    </footer>
                   </article>
 
                   <article className={styles.evidenceCard} data-testid="cockpit-evidence">
                     <header>
-                      <FileCheck2 size={18} />
                       <div>
                         <small>EVIDÊNCIAS RÁPIDAS</small>
                         <strong>Documentos e sinais recentes</strong>
-                        <span>O suficiente para saber onde investigar, sem repetir a tela documental.</span>
                       </div>
                     </header>
-                    <div className={styles.evidenceList}>
+
+                    <div className={styles.evidenceFolderGrid}>
                       {evidence.map((item) => (
-                        <div key={item.label} data-tone={item.tone}>
-                          <span className={styles.evidenceStatusIcon}><CheckCircle2 size={16} /></span>
-                          <span>
+                        <button
+                          key={item.label}
+                          type="button"
+                          className={styles.evidenceFolder}
+                          data-tone={item.tone}
+                          onClick={onDocuments}
+                        >
+                          <span className={styles.evidenceFolderIcon}><Folder size={19} /></span>
+                          <span className={styles.evidenceFolderCopy}>
                             <strong>{item.label}</strong>
-                            <small>{item.detail}</small>
+                            <small>{item.count}</small>
                           </span>
-                          <em>{item.meta}</em>
-                        </div>
+                          <span className={styles.evidenceStatus} data-tone={item.tone}>
+                            {item.status}
+                          </span>
+                          <em><Clock3 size={13} /> {item.meta}</em>
+                        </button>
                       ))}
                     </div>
+
                     <button type="button" className={styles.evidenceAction} onClick={onDocuments}>
                       Ver todas as evidências
                     </button>
                   </article>
 
-                  <article className={styles.attention} data-testid="cockpit-attention">
-                    <div className={styles.attentionIcon}><AlertTriangle size={20} /></div>
-                    <div className={styles.attentionBody}>
-                      <small>FOCO AGORA</small>
-                      <strong>Validar manifesto</strong>
-                      <span>Evite perder a janela prevista de chegada.</span>
-                    </div>
-                    <div className={styles.attentionDeadline}>
-                      <Clock3 size={15} />
-                      <span><small>Prazo</small><strong>16:30</strong></span>
-                    </div>
-                    <button type="button" onClick={onDocuments}>Abrir documentos</button>
-                  </article>
+                  <OperationalAlert
+                    tone="warning"
+                    eyebrow="FOCO AGORA"
+                    badge="prazo 16:30"
+                    title="Validar manifesto antes da próxima janela operacional"
+                    description="O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada."
+                    actionLabel="Abrir documentos"
+                    onAction={onDocuments}
+                    testId="cockpit-attention"
+                  />
                 </div>
               </motion.div>
             ) : (
