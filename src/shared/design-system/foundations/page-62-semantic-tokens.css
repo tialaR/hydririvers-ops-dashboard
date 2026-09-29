@@ -18,6 +18,9 @@
   --hy-p62-status-delivered: #10b981;
   --hy-p62-status-attention: #f59e0b;
   --hy-p62-status-blocked: #ef4444;
+  --hy-p62-status-monitor: #72d7f5;
+  --hy-p62-status-informational: #c4b5fd;
+  --hy-p62-status-current: #93c5fd;
 
   --hy-p62-space-1: 0.25rem;
   --hy-p62-space-2: 0.5rem;
@@ -69,4 +72,7 @@
   --hy-p62-success: var(--hy-color-success);
   --hy-p62-warning: var(--hy-color-warning);
   --hy-p62-critical: var(--hy-color-critical);
+  --hy-p62-status-monitor: #087f8c;
+  --hy-p62-status-informational: #6d5ab5;
+  --hy-p62-status-current: #1a78c8;
 }
