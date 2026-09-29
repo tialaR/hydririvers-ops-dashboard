@@ -401,16 +401,18 @@ export function Page62CargoCockpitPreview({
                     </button>
                   </article>
 
-                  <OperationalAlert
-                    tone="warning"
-                    eyebrow="FOCO AGORA"
-                    badge="prazo 16:30"
-                    title="Validar manifesto antes da próxima janela operacional"
-                    description="O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada."
-                    actionLabel="Abrir documentos"
-                    onAction={onDocuments}
-                    testId="cockpit-attention"
-                  />
+                  <div className={styles.cockpitAlertRow}>
+                    <OperationalAlert
+                      tone="warning"
+                      eyebrow="FOCO AGORA"
+                      badge="prazo 16:30"
+                      title="Validar manifesto antes da próxima janela operacional"
+                      description="O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada."
+                      actionLabel="Abrir documentos"
+                      onAction={onDocuments}
+                      testId="cockpit-attention"
+                    />
+                  </div>
                 </div>
               </motion.div>
             ) : (
