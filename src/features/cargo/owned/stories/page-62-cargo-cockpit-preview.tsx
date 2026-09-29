@@ -19,7 +19,7 @@ import {
   type OperationalTelemetryMetric,
 } from '@/shared/design-system/patterns/operational-chart';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
-import { OperationalAlert } from '@/shared/design-system/components/operational-alert/operational-alert';
+import { OperationalAlert } from '@/shared/design-system/components/operational-alert';
 
 import styles from './page-62-cargo-cockpit-preview.module.sass';
 
