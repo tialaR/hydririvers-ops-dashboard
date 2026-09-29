@@ -43,6 +43,17 @@ try {
 
   const rootLocator = page.locator('[data-testid="page62-overview"]').first();
   await rootLocator.waitFor({ state: 'visible', timeout: 20000 });
+  await page.waitForFunction(
+    () => {
+      const canvas = document.querySelector('[data-testid="overview-map-surface"] .maplibregl-canvas');
+      const svg = document.querySelector('[data-testid="overview-map-surface"] .hydroway-map-spike-svg');
+      const canvasWidth = canvas?.getBoundingClientRect().width ?? 0;
+      const svgWidth = svg?.getBoundingClientRect().width ?? 0;
+      return canvasWidth > 100 || svgWidth > 100;
+    },
+    null,
+    { timeout: 20000 },
+  );
   const metrics = await page.evaluate(() => {
     const rect = (selector) => {
       const node = document.querySelector(selector);
