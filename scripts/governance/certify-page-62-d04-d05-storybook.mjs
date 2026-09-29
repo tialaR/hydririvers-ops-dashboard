@@ -88,10 +88,22 @@ try {
         const documentRows = node.querySelectorAll('[data-testid^="document-row-"]');
         const statusNodes = node.querySelectorAll('[data-semantic-status]');
         const neutralIcons = node.querySelectorAll('[data-semantic-role="neutral-icon"]');
-        const occurrenceMetrics = node.querySelectorAll('[class*="occurrenceMetric"]');
+        const documentCards = Array.from(node.querySelectorAll('[data-testid^="document-row-"]'));
+        const documentCardRects = documentCards.map((item) => item.getBoundingClientRect());
         const inspector = node.querySelector('[data-testid="document-inspector"]');
+        const occurrenceHeader = node.querySelector('[data-testid="occurrence-header"]');
+        const decisionGrid = node.querySelector('[data-testid="occurrence-decision-grid"]');
+        const weightEvidence = node.querySelector('[data-testid="occurrence-weight-evidence"]');
+        const operationalImpact = node.querySelector('[data-testid="occurrence-operational-impact"]');
         const mitigation = node.querySelector('[data-testid="occurrence-mitigation"]');
         const action = node.querySelector('[data-testid="occurrence-primary-action"]');
+        const chart = node.querySelector('[data-echart-renderer]');
+        const overlap = (first, second) => {
+          if (!first || !second) return false;
+          const a = first.getBoundingClientRect();
+          const b = second.getBoundingClientRect();
+          return a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top;
+        };
         const headings = Array.from(node.querySelectorAll('h3,h4,strong'))
           .map((item) => Number.parseFloat(getComputedStyle(item).fontSize))
           .filter(Number.isFinite);
@@ -100,10 +112,21 @@ try {
           selectedRow: Boolean(selectedRow),
           statusNodes: statusNodes.length,
           neutralIcons: neutralIcons.length,
-          occurrenceMetrics: occurrenceMetrics.length,
+          documentCardMaxWidth: documentCardRects.length ? Math.max(...documentCardRects.map((item) => item.width)) : 0,
+          documentCardHeightSpread: documentCardRects.length
+            ? Math.max(...documentCardRects.map((item) => item.height)) - Math.min(...documentCardRects.map((item) => item.height))
+            : 0,
           inspector: Boolean(inspector),
+          occurrenceHeader: Boolean(occurrenceHeader),
+          decisionGrid: Boolean(decisionGrid),
+          weightEvidence: Boolean(weightEvidence),
+          operationalImpact: Boolean(operationalImpact),
           mitigation: Boolean(mitigation),
           action: Boolean(action),
+          chart: Boolean(chart),
+          overlapHeaderDecision: overlap(occurrenceHeader, decisionGrid),
+          overlapDecisionMitigation: overlap(decisionGrid, mitigation),
+          overlapMitigationAction: overlap(mitigation, action),
           maxHeadingPx: headings.length ? Math.max(...headings) : 0,
         };
       });
@@ -113,13 +136,21 @@ try {
         if (semantic.documentRows < 5) semanticFailures.push('document list lost breadth');
         if (!semantic.selectedRow) semanticFailures.push('selected document state missing');
         if (!semantic.inspector) semanticFailures.push('document inspector missing');
+        if (semantic.documentCardMaxWidth > 320) semanticFailures.push('document cards stretched beyond overview pattern');
+        if (semantic.documentCardHeightSpread > 8) semanticFailures.push('document card heights lost consistency');
         if (semantic.statusNodes < 5) semanticFailures.push('document status semantics missing');
       }
       if (surface.name.startsWith('D07')) {
-        if (semantic.occurrenceMetrics < 3) semanticFailures.push('cause/evidence/impact comparison missing');
+        if (!semantic.occurrenceHeader) semanticFailures.push('occurrence header missing');
+        if (!semantic.decisionGrid) semanticFailures.push('decision composition missing');
+        if (!semantic.weightEvidence || !semantic.chart) semanticFailures.push('document weight visualization missing');
+        if (!semantic.operationalImpact) semanticFailures.push('operational impact summary missing');
         if (!semantic.mitigation) semanticFailures.push('mitigation progress missing');
         if (!semantic.action) semanticFailures.push('occurrence action component missing');
         if (semantic.neutralIcons < 3) semanticFailures.push('neutral icon hierarchy missing');
+        if (semantic.overlapHeaderDecision || semantic.overlapDecisionMitigation || semantic.overlapMitigationAction) {
+          semanticFailures.push('occurrence composition overlaps vertically');
+        }
       }
       if (semantic.maxHeadingPx < 16) semanticFailures.push('visual hierarchy too weak');
 
