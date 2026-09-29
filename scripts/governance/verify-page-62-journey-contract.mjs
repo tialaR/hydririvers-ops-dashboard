@@ -25,6 +25,10 @@ const [
   overview,
   echartCore,
   decisionCharts,
+  journeyDemo,
+  documentsPanel,
+  occurrencePanel,
+  semanticColorGate,
 ] = await Promise.all([
   read('docs/governance/figma-freeze/page-62/screen-delivery-manifest.json'),
   read('docs/product/PAGE-62-SHIPPER-DOMAIN-RESEARCH-AND-JOURNEY-v1.0.md'),
@@ -44,6 +48,10 @@ const [
   read('src/features/cargo/components/shipper-journey/page-62-overview-surface.tsx'),
   read('src/shared/design-system/patterns/operational-chart/operational-echart.tsx'),
   read('src/shared/design-system/patterns/operational-chart/operational-decision-charts.tsx'),
+  read('src/features/cargo/components/shipper-journey/page-62-shipper-journey-demo.tsx'),
+  read('src/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel.tsx'),
+  read('src/features/cargo/components/documents-occurrence/cargo-occurrence-summary.tsx'),
+  read('docs/governance/HYDRORIVERS-SEMANTIC-COLOR-AND-STATE-VISUAL-GATE-v1.0.md'),
 ]);
 
 const manifest = JSON.parse(manifestRaw);
@@ -92,6 +100,42 @@ for (const required of [
   'monitoring',
 ]) {
   if (!stateMachine.includes(required)) failures.push(`state machine missing: ${required}`);
+}
+
+for (const required of [
+  'initialMode="documents"',
+  'onOpenCorrection',
+  'onOpenNegotiation',
+  'Page62CargoCockpitPreview',
+]) {
+  if (!journeyDemo.includes(required)) failures.push(`documents cockpit integration missing: ${required}`);
+}
+
+for (const required of [
+  'EvidenceFolderItem',
+  'variant="row"',
+  'document-inspector',
+  'MDF-e',
+]) {
+  if (!documentsPanel.includes(required)) failures.push(`document evidence experience missing: ${required}`);
+}
+
+for (const required of [
+  'OperationalAlert',
+  'occurrence-mitigation',
+  'DECLARADO',
+  'COMPROVADO',
+  'IMPACTO',
+]) {
+  if (!occurrencePanel.includes(required)) failures.push(`occurrence decision experience missing: ${required}`);
+}
+
+for (const required of [
+  'COLOR COMMUNICATES STATE',
+  'NEUTRAL INFORMATION STAYS IN THE NEUTRAL PALETTE',
+  'desktop + mobile',
+]) {
+  if (!semanticColorGate.includes(required)) failures.push(`semantic color governance missing: ${required}`);
 }
 
 for (const required of [
