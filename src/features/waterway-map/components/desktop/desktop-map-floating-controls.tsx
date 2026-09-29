@@ -24,6 +24,8 @@ type DesktopMapFloatingControlsProps = {
   mapLibreControlsDisabled: boolean;
   onControlClick: (controlKey: DesktopMapFloatingControlKey) => void;
   onStopEvent: (event: PointerEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>) => void;
+  modern?: boolean;
+  showExpand?: boolean;
 };
 
 export function DesktopMapFloatingControls({
@@ -32,6 +34,8 @@ export function DesktopMapFloatingControls({
   mapLibreControlsDisabled,
   onControlClick,
   onStopEvent,
+  modern = false,
+  showExpand = false,
 }: DesktopMapFloatingControlsProps) {
   const tMap = useTranslations('operationsBoard.map');
 
@@ -99,6 +103,12 @@ export function DesktopMapFloatingControls({
       ariaLabel: tMap('mapRouteOverview'),
       disabled: mapLibreControlsDisabled,
     },
+    ...(showExpand ? [{
+      key: 'expand' as DesktopMapFloatingControlKey,
+      tooltip: 'Expandir mapa',
+      ariaLabel: 'Expandir mapa em tela cheia',
+      disabled: false,
+    }] : []),
   ];
 
   const handleDockControlButtonClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -122,6 +132,7 @@ export function DesktopMapFloatingControls({
           ariaPressed={control.ariaPressed}
           data-tooltip={control.tooltip}
           data-control-key={control.key}
+          className={modern ? styles.controlActionModern : undefined}
           onPointerDownCapture={onStopEvent}
           onMouseDownCapture={onStopEvent}
           onDoubleClick={onStopEvent}
