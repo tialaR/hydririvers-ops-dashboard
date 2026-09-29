@@ -1011,3 +1011,180 @@
 
   .hydroDecisionMetrics > div:first-child
     border-top: 0
+
+
+.cockpitLowerGrid
+  grid-template-columns: 1fr
+
+.evidenceCard
+  grid-column: 1 / -1
+  min-height: auto
+  padding: 1.2rem 1.25rem
+
+.evidenceCard > header
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: 1rem
+
+.evidenceCard > header > div
+  display: grid
+  gap: .2rem
+
+.evidenceCard > header small
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+  font-weight: 700
+  letter-spacing: .08em
+
+.evidenceCard > header strong
+  color: var(--hy-p62-text)
+  font-size: 1.05rem
+  font-weight: 620
+
+.evidenceFolderGrid
+  display: grid
+  grid-template-columns: repeat(auto-fit, minmax(13.5rem, 16rem))
+  justify-content: start
+  gap: .85rem
+  margin-top: 1rem
+
+.evidenceFolder
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  grid-template-rows: auto auto
+  align-items: center
+  gap: .7rem
+  min-width: 0
+  min-height: 7.25rem
+  padding: .9rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .78rem
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+  font: inherit
+  text-align: left
+  cursor: pointer
+  transition: border-color 140ms ease, background 140ms ease, transform 140ms ease
+
+.evidenceFolder:hover,
+.evidenceFolder:focus-visible
+  border-color: var(--hy-p62-border-strong)
+  background: color-mix(in srgb, var(--hy-p62-text) 3%, var(--hy-p62-surface-raised))
+  transform: translateY(-.0625rem)
+
+.evidenceFolderIcon
+  display: grid
+  width: 2.4rem
+  height: 2.4rem
+  grid-row: 1
+  place-items: center
+  border-radius: .72rem
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface))
+  color: var(--hy-p62-muted)
+
+.evidenceFolderCopy
+  display: grid
+  min-width: 0
+  gap: .12rem
+
+.evidenceFolderCopy strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: .82rem
+  font-weight: 620
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.evidenceFolderCopy small
+  color: var(--hy-p62-muted)
+  font-size: .66rem
+
+.evidenceStatus
+  display: inline-flex
+  min-height: 1.65rem
+  align-items: center
+  padding: 0 .55rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: 999rem
+  color: var(--hy-p62-muted)
+  font-size: .62rem
+  font-weight: 650
+  white-space: nowrap
+
+.evidenceStatus[data-tone='success']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 30%, var(--hy-p62-border))
+  color: var(--hy-p62-success)
+
+.evidenceStatus[data-tone='warning']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 38%, var(--hy-p62-border))
+  color: var(--hy-p62-warning)
+
+.evidenceFolder em
+  grid-column: 1 / -1
+  display: inline-flex
+  align-items: center
+  gap: .35rem
+  padding-top: .7rem
+  border-top: .0625rem solid var(--hy-p62-border)
+  color: var(--hy-p62-muted)
+  font-size: .63rem
+  font-style: normal
+
+.evidenceAction
+  min-height: 2.4rem
+  margin-top: 1rem
+  padding: 0 .95rem
+  border-radius: .68rem
+
+.cockpitAlertRow
+  grid-column: 1 / -1
+
+.hydroChartBlock
+  display: block
+  min-width: 0
+  padding-top: .2rem
+
+.hydroInsightFooter
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: .75rem
+  min-height: 3.8rem
+  padding: .75rem .9rem
+  border-top: .0625rem solid var(--hy-p62-border)
+  color: var(--hy-p62-muted)
+
+.hydroInsightFooter > svg
+  color: var(--hy-p62-info)
+
+.hydroInsightFooter > div
+  display: flex
+  align-items: baseline
+  gap: .7rem
+  min-width: 0
+
+.hydroInsightFooter strong
+  flex: 0 0 auto
+  color: var(--hy-p62-text)
+  font-size: .75rem
+  font-weight: 620
+
+.hydroInsightFooter span
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: .69rem
+  line-height: 1.4
+  text-overflow: ellipsis
+  white-space: nowrap
+
+@media (max-width: 52rem)
+  .evidenceFolderGrid
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr))
+
+  .hydroInsightFooter > div
+    display: grid
+    gap: .2rem
+
+  .hydroInsightFooter span
+    white-space: normal
