@@ -105,8 +105,36 @@ try {
       actionBackground: action ? getComputedStyle(action).backgroundColor : null,
       mapPanelBackground: mapPanel ? getComputedStyle(mapPanel).backgroundColor : null,
       overflowX: rootElement.scrollWidth - rootElement.clientWidth,
+      actionGap: (() => {
+        const kpi = document.querySelector('[data-testid="overview-kpi-strip"]')?.getBoundingClientRect();
+        const alert = document.querySelector('[data-testid="overview-action-panel"]')?.getBoundingClientRect();
+        return kpi && alert ? alert.top - kpi.bottom : null;
+      })(),
     };
   });
+
+  await page.locator('[data-control-key="layers"]').click();
+  const layerPanelLocator = page.locator('[data-testid="hydroway-layer-panel"]').first();
+  await layerPanelLocator.waitFor({ state: 'visible', timeout: 10000 });
+  const mapChrome = await page.evaluate(() => {
+    const panel = document.querySelector('[data-testid="hydroway-layer-panel"]');
+    const layerControl = document.querySelector('[data-control-key="layers"]');
+    const surface = layerControl?.querySelector('span');
+    if (!panel || !layerControl || !surface) return null;
+    const panelStyle = getComputedStyle(panel);
+    const surfaceStyle = getComputedStyle(surface);
+    const surfaceRect = surface.getBoundingClientRect();
+    return {
+      panelClientHeight: panel.clientHeight,
+      panelScrollHeight: panel.scrollHeight,
+      panelOverflowY: panelStyle.overflowY,
+      layerModeCount: panel.querySelectorAll('[data-testid^="hydroway-layer-mode-"]').length,
+      controlWidth: surfaceRect.width,
+      controlHeight: surfaceRect.height,
+      controlRadius: Number.parseFloat(surfaceStyle.borderRadius),
+    };
+  });
+  await page.locator('[data-control-key="layers"]').click();
 
   const failures = [];
   if (!metrics.root || metrics.root.width < 1180) failures.push('overview root is too narrow at desktop');
@@ -129,6 +157,21 @@ try {
   if (metrics.kpiStrip && metrics.actionPanel && metrics.kpiStrip.y >= metrics.actionPanel.y) failures.push('KPI strip must appear before attention rail');
   if (metrics.actionPanel && metrics.workspace && metrics.actionPanel.width < metrics.workspace.width * 0.92) failures.push('attention context should read as a horizontal rail, not a sidebar');
   if (metrics.actionPanel && metrics.actionPanel.height > 150) failures.push('overview attention rail is too tall for summary context');
+  if (metrics.actionGap === null || metrics.actionGap < 12) failures.push(`overview alert spacing collapsed: ${metrics.actionGap ?? 'missing'}px`);
+  if (!mapChrome) {
+    failures.push('desktop map controls/layer panel contract unavailable');
+  } else {
+    if (mapChrome.layerModeCount !== 5) failures.push(`layer panel mode count mismatch: ${mapChrome.layerModeCount}`);
+    if (mapChrome.panelScrollHeight > mapChrome.panelClientHeight + 2) {
+      failures.push(`layer panel still requires vertical scrolling: ${mapChrome.panelScrollHeight}/${mapChrome.panelClientHeight}px`);
+    }
+    if (mapChrome.panelOverflowY === 'scroll' || mapChrome.panelOverflowY === 'auto') {
+      failures.push(`layer panel retains legacy vertical overflow: ${mapChrome.panelOverflowY}`);
+    }
+    if (mapChrome.controlRadius >= mapChrome.controlWidth / 2 - 2) {
+      failures.push(`desktop map control regressed to circular shape: radius ${mapChrome.controlRadius}px`);
+    }
+  }
   if (metrics.workspaceBackgroundImage && metrics.workspaceBackgroundImage !== 'none') failures.push('decorative workspace gradient regressed into Overview');
   if (metrics.overflowX > 4) failures.push(`horizontal overflow ${metrics.overflowX}px`);
 
@@ -158,6 +201,8 @@ try {
     action: metrics.actionPanel,
     metricCells: metrics.metricCells.length,
     overflowX: metrics.overflowX,
+    actionGap: metrics.actionGap,
+    mapChrome,
   });
   failures.forEach((failure) => console.log('- ' + failure));
 
