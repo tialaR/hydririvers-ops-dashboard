@@ -26,10 +26,15 @@
   align-items: center;
   gap: 0.4rem;
   width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
   color: rgba(226, 240, 248, 0.88);
+  font: inherit;
   font-size: 0.82rem;
   font-weight: 650;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .backLink:hover {
