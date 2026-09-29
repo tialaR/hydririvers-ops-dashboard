@@ -2,185 +2,285 @@
 .occurrencePanel
   box-sizing: border-box
   width: 100%
-  height: 100%
-  border-radius: 0.75rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .875rem
   background: var(--hy-p62-surface)
   color: var(--hy-p62-text)
   font-family: Inter, system-ui, sans-serif
 
-.panelTitle
-  margin: 0
-  font-size: 0.9rem
-  font-weight: 650
-  line-height: 1.25
-
 .documentsPanel
+  display: grid
+  align-content: start
+  gap: 1rem
+  padding: 1.2rem
+
+.documentsHeader
   display: flex
-  flex-direction: column
-  padding: 0.9375rem
+  align-items: flex-end
+  justify-content: space-between
+  gap: 1rem
+  padding-bottom: 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
+
+.documentsHeader > div
+  display: grid
+  gap: .24rem
+
+.documentsHeader small,
+.occurrenceHeader small,
+.documentInspector small,
+.occurrenceMetric small,
+.occurrenceContext small,
+.mitigation small
+  color: var(--hy-p62-muted)
+  font-size: .64rem
+  font-weight: 700
+  letter-spacing: .075em
+
+.documentsHeader h3,
+.occurrenceHeader h3
+  margin: 0
+  color: var(--hy-p62-text)
+  font-size: 1.2rem
+  font-weight: 660
+  letter-spacing: -.018em
+
+.documentsHeader p,
+.occurrenceHeader p
+  max-width: 42rem
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: .72rem
+  line-height: 1.45
+
+.documentCount
+  display: inline-flex
+  min-height: 1.8rem
+  align-items: center
+  padding: 0 .62rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: 999rem
+  color: var(--hy-p62-muted)
+  font-size: .65rem
+  white-space: nowrap
 
 .documentList
   display: grid
-  margin-top: 0.7rem
+  gap: .65rem
 
-.documentRow
+.documentInspector
   display: grid
-  grid-template-columns: auto minmax(0,1fr) 8rem
+  grid-template-columns: minmax(10rem, .7fr) minmax(18rem, 1.3fr) auto
   align-items: center
-  gap: 0.85rem
-  min-height: 4.85rem
-  border-top: 0.0625rem solid var(--hy-p62-border)
-
-.documentRow:first-child
-  border-top: 0
-
-.documentIcon
-  display: grid
-  width: 1rem
-  height: 1rem
-  place-items: center
-  color: var(--hy-p62-success)
-
-.documentRow[data-tone='warning'] .documentIcon
-  color: var(--hy-p62-warning)
-
-.documentRow[data-tone='demo'] .documentIcon
-  color: var(--hy-p62-accent)
-
-.documentCopy
-  display: grid
-  gap: 0.26rem
-
-.documentCopy strong
-  font-size: 0.78rem
-  font-weight: 600
-
-.documentCopy span
-  color: var(--hy-p62-muted)
-  font-size: 0.6875rem
-
-.documentStatus
-  justify-self: start
-  font-size: 0.8rem
-  font-weight: 560
-
-.documentStatus[data-tone='success']
-  color: var(--hy-p62-success)
-
-.documentStatus[data-tone='warning']
-  color: var(--hy-p62-critical)
-
-.documentStatus[data-tone='demo']
-  color: var(--hy-p62-warning)
-
-.documentActions
-  display: flex
-  gap: 0.9rem
-  margin-top: auto
-  padding-bottom: 0.3rem
-
-.documentActions button,
-.correctionAction
-  border: 0
-  padding: 0
-  background: transparent
-  color: var(--hy-p62-accent)
-  font: inherit
-  font-size: 0.62rem
-  cursor: pointer
-
-.occurrencePanel
-  display: flex
-  flex-direction: column
-  padding: 0.9375rem
-
-.severity
-  display: inline-block
-  margin-top: 0.9rem
-  color: var(--hy-p62-warning)
-  font-size: 0.56rem
-  font-weight: 700
-  text-transform: uppercase
-
-.occurrenceTitle
-  margin: 1.55rem 0 0
-  font-size: 1.35rem
-  font-weight: 650
-
-.occurrenceLead
-  margin: 0.55rem 0 0
-  color: var(--hy-p62-muted)
-  font-size: 0.75rem
-
-.impactChain
-  display: grid
-  grid-template-columns: 1fr auto 1fr auto 1fr
-  align-items: center
-  gap: 0.6rem
-  margin-top: 1.55rem
-  padding: 0.85rem
-  min-height: 6.6rem
-  border-radius: 0.65rem
+  gap: 1rem
+  min-height: 6rem
+  padding: .9rem 1rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .78rem
   background: var(--hy-p62-surface-raised)
 
-.impactCell
+.documentInspectorLead
   display: grid
-  gap: 0.55rem
+  gap: .18rem
 
-.impactCell small,
-.metaBlock small,
-.mitigation small
-  color: var(--hy-p62-muted)
-  font-size: 0.55rem
-  font-weight: 560
-  text-transform: uppercase
-
-.impactCell strong
-  font-size: 0.8rem
+.documentInspectorLead strong
+  font-size: .9rem
   font-weight: 650
 
-.impactCell[data-tone='danger'] strong
-  color: var(--hy-p62-critical)
+.documentInspectorLead span
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+  line-height: 1.4
 
-.impactCell[data-tone='info'] strong
-  color: var(--hy-p62-accent)
+.documentInspectorFacts
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: .7rem
 
-.impactCell[data-tone='warning'] strong
+.documentInspectorFacts > span
+  display: grid
+  gap: .18rem
+  padding-left: .8rem
+  border-left: .0625rem solid var(--hy-p62-border)
+
+.documentInspectorFacts strong
+  color: var(--hy-p62-text)
+  font-size: .72rem
+  font-weight: 590
+  line-height: 1.35
+
+.documentInspector > button
+  min-height: 2.5rem
+  padding: 0 .9rem
+  border: .0625rem solid var(--hy-p62-border-strong)
+  border-radius: .68rem
+  background: color-mix(in srgb, var(--hy-p62-text) 6%, var(--hy-p62-surface-raised))
+  color: var(--hy-p62-text)
+  font: inherit
+  font-size: .7rem
+  font-weight: 640
+  cursor: pointer
+
+.documentInspector > button:hover,
+.documentInspector > button:focus-visible
+  border-color: color-mix(in srgb, var(--hy-p62-text) 42%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-text) 10%, var(--hy-p62-surface-raised))
+
+.occurrencePanel
+  display: grid
+  align-content: start
+  gap: 1rem
+  padding: 1.2rem
+
+.occurrenceHeader
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: 1rem
+  padding-bottom: 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
+
+.occurrenceHeading
+  display: flex
+  gap: .85rem
+  min-width: 0
+
+.occurrenceHeading > div
+  display: grid
+  gap: .25rem
+
+.occurrenceHeadingIcon
+  display: grid
+  width: 2.7rem
+  height: 2.7rem
+  flex: 0 0 auto
+  place-items: center
+  border-radius: .72rem
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface-raised))
+  color: color-mix(in srgb, var(--hy-p62-text) 66%, var(--hy-p62-muted))
+
+.severity
+  display: inline-flex
+  min-height: 1.8rem
+  align-items: center
+  gap: .35rem
+  padding: 0 .6rem
+  border: .0625rem solid color-mix(in srgb, var(--hy-p62-warning) 36%, var(--hy-p62-border))
+  border-radius: 999rem
+  color: var(--hy-p62-warning)
+  font-size: .64rem
+  font-weight: 680
+  white-space: nowrap
+
+.occurrenceComparison
+  display: grid
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr)
+  align-items: center
+  gap: .55rem
+
+.occurrenceMetric
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  grid-template-rows: auto auto auto
+  column-gap: .65rem
+  min-height: 7rem
+  padding: .9rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .78rem
+  background: var(--hy-p62-surface-raised)
+
+.occurrenceMetricIcon
+  display: grid
+  grid-row: 1 / 4
+  width: 2.1rem
+  height: 2.1rem
+  place-items: center
+  border-radius: .58rem
+  background: color-mix(in srgb, var(--hy-p62-text) 4%, var(--hy-p62-surface))
+  color: color-mix(in srgb, var(--hy-p62-text) 64%, var(--hy-p62-muted))
+
+.occurrenceMetric strong
+  align-self: end
+  color: var(--hy-p62-text)
+  font-size: 1.1rem
+  font-weight: 660
+
+.occurrenceMetric > span:last-child
+  color: var(--hy-p62-muted)
+  font-size: .66rem
+
+.occurrenceMetric[data-impact]
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 26%, var(--hy-p62-border))
+
+.occurrenceMetric[data-impact] strong
   color: var(--hy-p62-warning)
 
-.impactArrow
+.occurrenceFlowArrow
+  display: grid
+  place-items: center
   color: var(--hy-p62-muted)
-  font-size: 1rem
 
-.occurrenceMeta
+.occurrenceContext
   display: grid
-  gap: 1.2rem
-  margin-top: 1.75rem
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: .65rem
 
-.metaBlock
+.occurrenceContext > div
   display: grid
-  gap: 0.55rem
+  grid-template-columns: auto minmax(0, 1fr)
+  gap: .55rem
+  min-width: 0
+  padding: .8rem
+  border-top: .0625rem solid var(--hy-p62-border)
 
-.metaBlock strong
-  font-size: 0.8rem
-  font-weight: 520
+.occurrenceContext > div > span
+  display: grid
+  width: 1.85rem
+  height: 1.85rem
+  place-items: center
+  color: color-mix(in srgb, var(--hy-p62-text) 60%, var(--hy-p62-muted))
+
+.occurrenceContext > div > div
+  display: grid
+  gap: .2rem
+
+.occurrenceContext strong
+  color: var(--hy-p62-text)
+  font-size: .72rem
+  font-weight: 590
+  line-height: 1.35
 
 .mitigation
-  margin-top: 1.55rem
-  padding: 0.8rem 0.85rem
-  border-radius: 0.65rem
-  background: color-mix(in srgb, var(--hy-p62-success) 10%, var(--hy-p62-surface))
+  display: grid
+  gap: .72rem
+  padding: .9rem 1rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .78rem
+  background: var(--hy-p62-surface-raised)
 
-.mitigation small
-  color: var(--hy-p62-success)
+.mitigation > header
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: 1rem
 
-.mitigation p
-  margin: 0.65rem 0 0
-  font-size: 0.75rem
+.mitigation > header > div
+  display: grid
+  gap: .18rem
+
+.mitigation > header strong
+  color: var(--hy-p62-text)
+  font-size: .78rem
+  font-weight: 620
+
+.mitigation > header > span
+  color: var(--hy-p62-muted)
+  font-size: .72rem
+  font-weight: 650
 
 .mitigationTrack
-  height: 0.3rem
-  margin-top: 0.75rem
+  height: .35rem
+  overflow: hidden
   border-radius: 999rem
   background: var(--hy-p62-border)
 
@@ -189,18 +289,66 @@
   width: 50%
   height: 100%
   border-radius: inherit
-  background: var(--hy-p62-success)
+  background: color-mix(in srgb, var(--hy-p62-text) 68%, var(--hy-p62-muted))
 
-.correctionAction
-  align-self: flex-end
-  margin-top: auto
+.mitigationSteps
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: .45rem
+
+.mitigationSteps span
+  color: var(--hy-p62-muted)
+  font-size: .63rem
+
+.mitigationSteps span[data-done]
+  color: var(--hy-p62-text)
+  font-weight: 620
 
 .d06Surface
-  width: 37.5rem
-  height: 34.25rem
+  width: 46rem
+  min-height: 43rem
+  padding: 1rem
   background: var(--hy-p62-canvas)
 
 .d07Surface
-  width: 41.25rem
-  height: 34.25rem
+  width: 50rem
+  min-height: 43rem
+  padding: 1rem
   background: var(--hy-p62-canvas)
+
+@media (max-width: 68rem)
+  .documentInspector
+    grid-template-columns: 1fr
+
+  .documentInspectorFacts
+    grid-template-columns: 1fr 1fr
+
+  .documentInspectorFacts > span:first-child
+    padding-left: 0
+    border-left: 0
+
+  .documentInspector > button
+    width: 100%
+
+  .occurrenceComparison
+    grid-template-columns: 1fr
+
+  .occurrenceFlowArrow
+    transform: rotate(90deg)
+
+  .occurrenceContext
+    grid-template-columns: 1fr
+
+@media (max-width: 42rem)
+  .documentsHeader,
+  .occurrenceHeader
+    align-items: flex-start
+    flex-direction: column
+
+  .documentInspectorFacts,
+  .mitigationSteps
+    grid-template-columns: 1fr
+
+  .d06Surface,
+  .d07Surface
+    width: 100%
