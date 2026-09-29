@@ -5,7 +5,6 @@ import {
   Anchor,
   Clock3,
   Construction,
-  Folder,
   Info,
   MapPin,
   Navigation,
@@ -25,16 +24,20 @@ import {
   type OperationalTelemetryMetric,
 } from '@/shared/design-system/patterns/operational-chart';
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
+import { CargoDocumentsEvidencePanel } from '@/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel';
+import { CargoOccurrenceSummary } from '@/features/cargo/components/documents-occurrence/cargo-occurrence-summary';
+import { EvidenceFolderItem, type EvidenceFolderTone } from '@/shared/design-system/components/evidence-folder-item';
 import { OperationalAlert } from '@/shared/design-system/components/operational-alert';
 
 import styles from './page-62-cargo-cockpit-preview.module.sass';
 
-type WorkspaceMode = 'cockpit' | 'timeline';
+type WorkspaceMode = 'cockpit' | 'timeline' | 'documents';
 
 type Page62CargoCockpitPreviewProps = {
   initialMode?: WorkspaceMode;
   onOverview?: () => void;
-  onDocuments?: () => void;
+  onOpenCorrection?: () => void;
+  onOpenNegotiation?: () => void;
 };
 
 const telemetryLabels = [
@@ -218,25 +221,25 @@ const evidence = [
     count: '4 arquivos',
     meta: 'Atualizado há 12 min',
     status: 'Atenção',
-    tone: 'warning',
+    tone: 'warning' as EvidenceFolderTone,
   },
   {
     label: 'CT-e',
     count: '2 arquivos',
     meta: 'Atualizado há 26 min',
     status: 'Validado',
-    tone: 'success',
+    tone: 'success' as EvidenceFolderTone,
   },
   {
     label: 'Seguro',
     count: '3 arquivos',
     meta: 'Atualizado hoje',
     status: 'Ativo',
-    tone: 'success',
+    tone: 'success' as EvidenceFolderTone,
   },
 ];
 
-const tabs: Array<{ id: WorkspaceMode | 'overview' | 'documents' | 'activity'; label: string }> = [
+const tabs: Array<{ id: WorkspaceMode | 'overview' | 'activity'; label: string }> = [
   { id: 'overview', label: 'Visão geral' },
   { id: 'cockpit', label: 'Cockpit' },
   { id: 'timeline', label: 'Linha operacional' },
@@ -247,7 +250,8 @@ const tabs: Array<{ id: WorkspaceMode | 'overview' | 'documents' | 'activity'; l
 export function Page62CargoCockpitPreview({
   initialMode = 'cockpit',
   onOverview,
-  onDocuments,
+  onOpenCorrection,
+  onOpenNegotiation,
 }: Page62CargoCockpitPreviewProps) {
   const [mode, setMode] = useState<WorkspaceMode>(initialMode);
 
@@ -298,8 +302,8 @@ export function Page62CargoCockpitPreview({
                 const interactive =
                   tab.id === 'cockpit' ||
                   tab.id === 'timeline' ||
-                  (tab.id === 'overview' && Boolean(onOverview)) ||
-                  (tab.id === 'documents' && Boolean(onDocuments));
+                  tab.id === 'documents' ||
+                  (tab.id === 'overview' && Boolean(onOverview));
                 const active = tab.id === mode;
 
                 return (
@@ -313,11 +317,9 @@ export function Page62CargoCockpitPreview({
                         onOverview?.();
                         return;
                       }
-                      if (tab.id === 'documents') {
-                        onDocuments?.();
-                        return;
+                      if (tab.id === 'cockpit' || tab.id === 'timeline' || tab.id === 'documents') {
+                        setMode(tab.id);
                       }
-                      if (tab.id === 'cockpit' || tab.id === 'timeline') setMode(tab.id);
                     }}
                   >
                     {tab.label}
@@ -481,27 +483,19 @@ export function Page62CargoCockpitPreview({
 
                     <div className={styles.evidenceFolderGrid}>
                       {evidence.map((item) => (
-                        <button
+                        <EvidenceFolderItem
                           key={item.label}
-                          type="button"
-                          className={styles.evidenceFolder}
-                          data-tone={item.tone}
-                          onClick={onDocuments}
-                        >
-                          <span className={styles.evidenceFolderIcon}><Folder size={19} /></span>
-                          <span className={styles.evidenceFolderCopy}>
-                            <strong>{item.label}</strong>
-                            <small>{item.count}</small>
-                          </span>
-                          <span className={styles.evidenceStatus} data-tone={item.tone}>
-                            {item.status}
-                          </span>
-                          <em><Clock3 size={13} /> {item.meta}</em>
-                        </button>
+                          title={item.label}
+                          subtitle={item.count}
+                          meta={item.meta}
+                          statusLabel={item.status}
+                          tone={item.tone}
+                          onClick={() => setMode('documents')}
+                        />
                       ))}
                     </div>
 
-                    <button type="button" className={styles.evidenceAction} onClick={onDocuments}>
+                    <button type="button" className={styles.evidenceAction} onClick={() => setMode('documents')}>
                       Ver todas as evidências
                     </button>
                   </article>
@@ -514,13 +508,13 @@ export function Page62CargoCockpitPreview({
                       title="Validar manifesto antes da próxima janela operacional"
                       description="O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada."
                       actionLabel="Abrir documentos"
-                      onAction={onDocuments}
+                      onAction={() => setMode('documents')}
                       testId="cockpit-attention"
                     />
                   </div>
                 </div>
               </motion.div>
-            ) : (
+            ) : mode === 'timeline' ? (
               <motion.div
                 key="timeline"
                 className={styles.modeSurface}
@@ -607,6 +601,42 @@ export function Page62CargoCockpitPreview({
                       <strong>Validar manifesto até 16:30</strong>
                     </div>
                   </article>
+                </div>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="documents"
+                className={styles.modeSurface}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+              >
+                <div className={styles.documentsWorkspace} data-testid="page62-documents-workspace">
+                  <header className={styles.documentsWorkspaceHeader}>
+                    <div>
+                      <small>DOCUMENTOS & OCORRÊNCIAS</small>
+                      <strong>Investigar evidências e impacto operacional</strong>
+                      <span>Revise o documento, compare a evidência e decida a próxima ação sem sair do contexto da carga.</span>
+                    </div>
+                  </header>
+
+                  <div className={styles.documentsRiskGrid}>
+                    <CargoDocumentsEvidencePanel
+                      onPreviewEvidence={() => undefined}
+                      onCorrectManifest={onOpenCorrection}
+                    />
+                    <CargoOccurrenceSummary onOpenCorrection={onOpenCorrection} />
+                  </div>
+
+                  <OperationalAlert
+                    tone="success"
+                    eyebrow="INVESTIGAÇÃO"
+                    title="Investigação concluída"
+                    description="A divergência pode ser corrigida agora ou acompanhada em paralelo enquanto você compara propostas."
+                    actionLabel="Comparar propostas"
+                    onAction={onOpenNegotiation}
+                    testId="page62-d06-d07-next"
+                  />
                 </div>
               </motion.div>
             )}
