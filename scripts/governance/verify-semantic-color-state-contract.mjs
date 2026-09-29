@@ -58,7 +58,7 @@ for (const required of [
   'variant="row"',
   'document-inspector',
   'MDF-e',
-  'data-testid={',
+  'document-row-',
 ]) {
   if (!source.documents.includes(required)) failures.push(`documents evidence contract missing: ${required}`);
 }
