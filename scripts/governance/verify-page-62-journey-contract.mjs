@@ -113,7 +113,7 @@ for (const required of [
 
 for (const required of [
   'EvidenceFolderItem',
-  'variant="row"',
+  'variant="card"',
   'document-inspector',
   'MDF-e',
 ]) {
@@ -122,10 +122,11 @@ for (const required of [
 
 for (const required of [
   'OperationalAlert',
+  'DocumentWeightComparisonChart',
+  'occurrence-decision-grid',
   'occurrence-mitigation',
-  'DECLARADO',
-  'COMPROVADO',
-  'IMPACTO',
+  'EVIDÊNCIA DE PESO',
+  'IMPACTO OPERACIONAL',
 ]) {
   if (!occurrencePanel.includes(required)) failures.push(`occurrence decision experience missing: ${required}`);
 }
