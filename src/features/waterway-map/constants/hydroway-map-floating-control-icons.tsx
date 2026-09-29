@@ -4,6 +4,7 @@ import {
   Layers,
   List,
   MapPin,
+  Maximize2,
   Minus,
   Plus,
   RotateCcw,
@@ -31,6 +32,7 @@ export type HydrowayMapFloatingControlKey =
   | 'zoom-in'
   | 'zoom-out'
   | 'reset'
+  | 'expand'
   | 'info';
 
 const CONTROL_ICON_BY_KEY: Record<HydrowayMapFloatingControlKey, LucideIcon> = {
@@ -42,6 +44,7 @@ const CONTROL_ICON_BY_KEY: Record<HydrowayMapFloatingControlKey, LucideIcon> = {
   'zoom-in': Plus,
   'zoom-out': Minus,
   reset: RotateCcw,
+  expand: Maximize2,
   info: List,
 };
 
