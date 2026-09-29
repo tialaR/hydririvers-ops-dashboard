@@ -2,7 +2,7 @@
 
 import { ArrowLeft } from 'lucide-react';
 import { useTranslations } from 'next-intl';
-import { Link } from '@/core/i18n/navigation';
+import { useRouter } from '@/core/i18n/navigation';
 import type { Cargo, CargoStatus } from '@/features/marketplace/domain/marketplace.types';
 import { intlAppPaths } from '@/shared/routing/app-routes';
 import styles from './desktop-cargo-map.module.scss';
@@ -18,17 +18,27 @@ function statusToneClass(status: CargoStatus) {
 export function DesktopCargoMapHeader({ cargo }: DesktopCargoMapHeaderProps) {
   const tBoard = useTranslations('operationsBoard');
   const tCommon = useTranslations('common');
+  const router = useRouter();
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+    router.push(intlAppPaths.cargos.marketplace);
+  };
 
   return (
     <header className={styles.header}>
-      <Link
-        href={intlAppPaths.cargos.marketplace}
+      <button
+        type="button"
         className={styles.backLink}
         aria-label={tBoard('map.closeExpanded')}
+        onClick={handleBack}
       >
         <ArrowLeft size={18} strokeWidth={2.2} aria-hidden />
         <span>{tCommon('previous')}</span>
-      </Link>
+      </button>
 
       <div className={styles.metaRow}>
         <strong className={styles.cargoId}>{cargo.id}</strong>
