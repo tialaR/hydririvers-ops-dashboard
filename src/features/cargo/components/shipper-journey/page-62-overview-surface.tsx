@@ -1,12 +1,10 @@
 'use client';
 
 import {
-  Activity,
   AlertTriangle,
   CheckCircle2,
   Clock3,
   FileCheck2,
-  FileWarning,
   MapPin,
   Navigation,
   Route,
@@ -248,8 +246,6 @@ const filterCounts: Record<(typeof filters)[number], number> = {
   Entregues: cargoes.filter((cargo) => cargo.statusLabel === 'Entregue').length,
 };
 
-const factIcons = [FileWarning, Activity, Clock3] as const;
-
 export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () => void }) {
   const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedId, setSelectedId] = useState(cargoes[0].id);
@@ -321,6 +317,7 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
       value: selected.hydroValue,
       meta: selected.hydroDetail + ' · fonte recente: ' + selected.freshness,
     },
+  ];
 
   return (
     <MotionConfig reducedMotion="user">
