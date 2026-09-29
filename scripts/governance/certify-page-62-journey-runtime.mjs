@@ -226,6 +226,24 @@ try {
       const currentTimelineEvent = timelineEvents.find((item) => item.getAttribute('data-phase') === 'current');
       const futureTimelineEvents = timelineEvents.filter((item) => item.getAttribute('data-phase') === 'future');
       const statusTones = timelineEvents.map((item) => item.getAttribute('data-tone')).filter(Boolean);
+      const semanticStatusNodes = Array.from(document.querySelectorAll('[data-semantic-status]'));
+      const semanticStatusColors = semanticStatusNodes
+        .map((node) => getComputedStyle(node).color)
+        .filter(Boolean);
+      const neutralIconNodes = Array.from(document.querySelectorAll('[data-semantic-role="neutral-icon"]'));
+      const neutralIconColors = neutralIconNodes.map((node) => getComputedStyle(node).color);
+      const rgbSpread = (value) => {
+        const match = String(value).match(/rgba?\((\d+)[, ]+(\d+)[, ]+(\d+)/i);
+        if (!match) return 0;
+        const channels = match.slice(1, 4).map(Number);
+        return Math.max(...channels) - Math.min(...channels);
+      };
+      const selectedEvidenceRow = document.querySelector('[data-testid^="document-row-"][data-selected="true"]');
+      const unselectedEvidenceRow = document.querySelector('[data-testid^="document-row-"]:not([data-selected="true"])');
+      const selectedStyle = selectedEvidenceRow ? getComputedStyle(selectedEvidenceRow) : null;
+      const unselectedStyle = unselectedEvidenceRow ? getComputedStyle(unselectedEvidenceRow) : null;
+      const documentsTab = Array.from(document.querySelectorAll('nav[aria-label="Navegação da carga"] button'))
+        .find((button) => button.textContent?.trim() === 'Documentos');
       const eventGaps = timelineEvents.slice(1).map((item, index) => {
         const previous = timelineEvents[index].getBoundingClientRect();
         const current = item.getBoundingClientRect();
@@ -253,6 +271,23 @@ try {
         futureTimelineEventCount: futureTimelineEvents.length,
         distinctTimelineStatusTones: new Set(statusTones).size,
         minimumTimelineGap: eventGaps.length ? Math.min(...eventGaps) : 0,
+        semanticStatusCount: semanticStatusNodes.length,
+        distinctSemanticStatusColors: new Set(semanticStatusColors).size,
+        neutralIconCount: neutralIconNodes.length,
+        maxNeutralIconColorSpread: neutralIconColors.length ? Math.max(...neutralIconColors.map(rgbSpread)) : 0,
+        selectedEvidenceVisualDelta: Boolean(
+          selectedStyle &&
+          unselectedStyle &&
+          (
+            selectedStyle.backgroundColor !== unselectedStyle.backgroundColor ||
+            selectedStyle.borderColor !== unselectedStyle.borderColor ||
+            selectedStyle.boxShadow !== unselectedStyle.boxShadow
+          )
+        ),
+        documentInspectorVisible: Boolean(
+          document.querySelector('[data-testid="document-inspector"]')?.getBoundingClientRect().height
+        ),
+        documentsTabActive: documentsTab?.getAttribute('aria-pressed') === 'true',
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -265,6 +300,15 @@ try {
       if (metrics.minHeadingPx > 0 && metrics.minHeadingPx < 13) failures.push(`heading too small ${metrics.minHeadingPx}px`);
       if (metrics.canvasCount < state.minCharts) failures.push(`expected at least ${state.minCharts} chart canvas, found ${metrics.canvasCount}`);
       if (state.map && metrics.mapSurfaceCount < 1) failures.push('MapLibre/fallback surface missing');
+      if (state.storyKey === 'D06D07DocumentsRisk') {
+        if (!metrics.documentsTabActive) failures.push('documents state is not integrated with the cockpit Documentos tab');
+        if (!metrics.documentInspectorVisible) failures.push('selected document inspector missing');
+        if (!metrics.selectedEvidenceVisualDelta) failures.push('selected document row lacks a clear visual delta');
+        if (metrics.semanticStatusCount < 4) failures.push(`document/occurrence status semantics too sparse: ${metrics.semanticStatusCount}`);
+        if (metrics.distinctSemanticStatusColors < 3) failures.push(`distinct operational statuses collapsed into ${metrics.distinctSemanticStatusColors} computed colors`);
+        if (metrics.neutralIconCount < 3) failures.push('neutral icon contract not represented in documents/occurrence');
+        if (metrics.maxNeutralIconColorSpread > 42) failures.push(`neutral icons became status-colored: RGB spread ${metrics.maxNeutralIconColorSpread}`);
+      }
       if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
         if (!metrics.timelineInsightVisible) failures.push('timeline contextual info block missing');
