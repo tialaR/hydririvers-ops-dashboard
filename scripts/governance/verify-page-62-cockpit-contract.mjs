@@ -34,6 +34,7 @@ const packageJson = JSON.parse(await read('package.json'));
 for (const required of [
   'OperationalGaugeChart',
   'OperationalTelemetryOverviewChart',
+  'HydroLevelTrendChart',
   'MotionConfig',
   'AnimatePresence',
   'ShipmentCard',
@@ -89,7 +90,7 @@ for (const forbidden of [
 ]) {
   if (cockpitCss.includes(forbidden)) failures.push(`Cockpit regression anchor remains: ${forbidden}`);
 }
-for (const required of ['routeContextCompact', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
+for (const required of ['hydroDecisionCard', 'hydroDecisionMetrics', 'hydroChartBlock', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
   if (!cockpitCss.includes(required)) failures.push(`Cockpit hierarchy anchor missing: ${required}`);
 }
 for (const required of ['legend:', 'OperationalTelemetryOverviewChart', 'areaStyle']) {
