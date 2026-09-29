@@ -39,6 +39,8 @@ for (const required of [
   'AnimatePresence',
   'ShipmentCard',
   'OperationalAlert',
+  'timelineEventIcons',
+  'page62-timeline-insight',
   'cockpit-hydro-insight',
   'evidenceFolderGrid',
   'reducedMotion="user"',
@@ -93,7 +95,7 @@ for (const forbidden of [
 ]) {
   if (cockpitCss.includes(forbidden)) failures.push(`Cockpit regression anchor remains: ${forbidden}`);
 }
-for (const required of ['hydroDecisionCard', 'hydroDecisionMetrics', 'hydroChartBlock', 'hydroInsightFooter', 'evidenceFolderGrid', 'cockpitAlertRow', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
+for (const required of ['hydroDecisionCard', 'hydroDecisionMetrics', 'hydroChartBlock', 'hydroInsightFooter', 'evidenceFolderGrid', 'cockpitAlertRow', 'timelineDate', 'timelineEvent', 'timelineInsight', 'min-height: 8.75rem', 'background: var(--hy-p62-canvas)']) {
   if (!cockpitCss.includes(required)) failures.push(`Cockpit hierarchy anchor missing: ${required}`);
 }
 for (const required of ['legend:', 'OperationalTelemetryOverviewChart', 'areaStyle']) {
