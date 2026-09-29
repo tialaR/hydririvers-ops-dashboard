@@ -1,0 +1,111 @@
+.root
+  --operational-alert-tone: var(--hy-p62-info)
+
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: 1rem
+  width: 100%
+  min-width: 0
+  min-height: 5.25rem
+  padding: 1rem 1.15rem
+  border: 0.0625rem solid color-mix(in srgb, var(--operational-alert-tone) 42%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-text)
+
+.root[data-tone='warning']
+  --operational-alert-tone: var(--hy-p62-warning)
+
+.root[data-tone='danger']
+  --operational-alert-tone: #ff625f
+
+.root[data-tone='success']
+  --operational-alert-tone: var(--hy-p62-success)
+
+.icon
+  display: grid
+  width: 2.7rem
+  height: 2.7rem
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid color-mix(in srgb, var(--operational-alert-tone) 18%, var(--hy-p62-border))
+  border-radius: 0.78rem
+  background: color-mix(in srgb, var(--operational-alert-tone) 7%, var(--hy-p62-surface-raised))
+  color: var(--operational-alert-tone)
+
+.copy
+  display: grid
+  min-width: 0
+  gap: 0.2rem
+
+.meta
+  display: flex
+  align-items: center
+  gap: 0.65rem
+  min-width: 0
+
+.meta small
+  color: var(--hy-p62-muted)
+  font-size: 0.68rem
+  font-weight: 700
+  letter-spacing: 0.08em
+
+.meta span
+  display: inline-flex
+  min-height: 1.7rem
+  align-items: center
+  padding: 0 0.6rem
+  border: 0.0625rem solid color-mix(in srgb, var(--operational-alert-tone) 24%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-pill)
+  background: color-mix(in srgb, var(--operational-alert-tone) 5%, transparent)
+  color: var(--hy-p62-muted)
+  font-size: 0.68rem
+  white-space: nowrap
+
+.copy > strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: 1rem
+  font-weight: 650
+  line-height: 1.28
+  text-overflow: ellipsis
+
+.copy > p
+  overflow: hidden
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: 0.76rem
+  line-height: 1.45
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.root > button
+  min-height: 2.65rem
+  padding: 0 1.15rem
+  border: 0.0625rem solid color-mix(in srgb, var(--operational-alert-tone) 36%, var(--hy-p62-border))
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+  font: inherit
+  font-size: 0.76rem
+  font-weight: 650
+  cursor: pointer
+  transition: border-color 140ms ease, background 140ms ease, color 140ms ease
+
+.root > button:hover,
+.root > button:focus-visible
+  border-color: color-mix(in srgb, var(--operational-alert-tone) 72%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--operational-alert-tone) 8%, var(--hy-p62-surface-raised))
+  color: var(--operational-alert-tone)
+
+@media (max-width: 44rem)
+  .root
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .root > button
+    grid-column: 1 / -1
+    width: 100%
+
+  .copy > p
+    white-space: normal
