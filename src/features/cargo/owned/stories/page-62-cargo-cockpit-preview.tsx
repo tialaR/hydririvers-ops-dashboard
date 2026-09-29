@@ -311,6 +311,7 @@ export function Page62CargoCockpitPreview({
                     key={tab.id}
                     type="button"
                     className={active ? styles.activeTab : ''}
+                    aria-pressed={active}
                     disabled={!interactive}
                     onClick={() => {
                       if (tab.id === 'overview') {
