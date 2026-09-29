@@ -7,6 +7,7 @@ import {
   Clock3,
   FileCheck2,
   Navigation,
+  Waves,
   Radio,
   Route,
   ShieldAlert,
@@ -15,6 +16,7 @@ import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { useState } from 'react';
 
 import {
+  HydroLevelTrendChart,
   OperationalGaugeChart,
   OperationalTelemetryOverviewChart,
   type OperationalTelemetryMetric,
@@ -111,9 +113,9 @@ const timelineEvents = [
 ];
 
 const evidence = [
-  { label: 'Manifesto', meta: 'Atualizado há 12 min', tone: 'warning' },
-  { label: 'CT-e', meta: 'Validado', tone: 'success' },
-  { label: 'Seguro', meta: 'Cobertura ativa', tone: 'success' },
+  { label: 'Manifesto', meta: 'Atualizado há 12 min', detail: 'Requer validação de peso', tone: 'warning' },
+  { label: 'CT-e', meta: 'Validado', detail: 'Sem divergências abertas', tone: 'success' },
+  { label: 'Seguro', meta: 'Cobertura ativa', detail: 'Vigência compatível com a viagem', tone: 'success' },
 ];
 
 const tabs: Array<{ id: WorkspaceMode | 'overview' | 'documents' | 'activity'; label: string }> = [
@@ -299,26 +301,24 @@ export function Page62CargoCockpitPreview({
                 </div>
 
                 <div className={styles.cockpitLowerGrid}>
-                  <article className={styles.routeContextCompact} data-testid="cockpit-route-context">
-                    <div className={styles.routeLead}>
-                      <div className={styles.metricHeading}>
-                        <Navigation size={17} />
-                        <small>CONTEXTO HIDROVIÁRIO · DEMO</small>
+                  <article className={styles.hydroDecisionCard} data-testid="cockpit-route-context">
+                    <header className={styles.hydroDecisionHeader}>
+                      <div className={styles.hydroDecisionTitle}>
+                        <span className={styles.hydroDecisionIcon}><Waves size={19} /></span>
+                        <div>
+                          <small>CONTEXTO HIDROVIÁRIO · DEMO</small>
+                          <strong>Amazonas–Solimões · leitura operacional</strong>
+                          <span>Condição do corredor para orientar risco, janela e decisão da embarcadora.</span>
+                        </div>
                       </div>
-                      <strong>Rio Madeira · trecho ativo</strong>
-                      <span>Próximo marco: Parintins · 94 km</span>
-                    </div>
+                      <span className={styles.hydroStateBadge}>Vazante · atenção</span>
+                    </header>
 
-                    <div className={styles.routeProgressCompact} aria-label="68% da rota concluída">
-                      <span><i /></span>
-                      <div><small>Manaus</small><strong>68% · posição atual</strong><small>Santarém</small></div>
-                    </div>
-
-                    <div className={styles.routeSignalGrid}>
+                    <div className={styles.hydroDecisionMetrics}>
                       <div>
                         <small>COTA FLUVIOMÉTRICA</small>
-                        <strong>6,94 m</strong>
-                        <span>tendência ↓ · DEMO</span>
+                        <strong>14,1 m</strong>
+                        <span>−1,5 m em 5 dias</span>
                       </div>
                       <div>
                         <small>CALADO OPERACIONAL</small>
@@ -336,32 +336,55 @@ export function Page62CargoCockpitPreview({
                         <span>adapter previsto · 18 min</span>
                       </div>
                     </div>
+
+                    <div className={styles.hydroChartBlock} data-testid="cockpit-hydro-chart">
+                      <div className={styles.hydroChartLead}>
+                        <span>
+                          <small>TENDÊNCIA</small>
+                          <strong>Queda contínua da cota</strong>
+                        </span>
+                        <p>Cota fluviométrica não é profundidade navegável; combine tendência, calado, avisos e condições locais antes de decidir.</p>
+                      </div>
+                      <HydroLevelTrendChart />
+                    </div>
                   </article>
 
                   <article className={styles.evidenceCard} data-testid="cockpit-evidence">
                     <header>
-                      <FileCheck2 size={15} />
+                      <FileCheck2 size={18} />
                       <div>
                         <small>EVIDÊNCIAS RÁPIDAS</small>
-                        <strong>Documentos e sinais</strong>
+                        <strong>Documentos e sinais recentes</strong>
+                        <span>O suficiente para saber onde investigar, sem repetir a tela documental.</span>
                       </div>
                     </header>
                     <div className={styles.evidenceList}>
                       {evidence.map((item) => (
                         <div key={item.label} data-tone={item.tone}>
-                          <CheckCircle2 size={14} />
-                          <span><strong>{item.label}</strong><small>{item.meta}</small></span>
+                          <span className={styles.evidenceStatusIcon}><CheckCircle2 size={16} /></span>
+                          <span>
+                            <strong>{item.label}</strong>
+                            <small>{item.detail}</small>
+                          </span>
+                          <em>{item.meta}</em>
                         </div>
                       ))}
                     </div>
+                    <button type="button" className={styles.evidenceAction} onClick={onDocuments}>
+                      Ver todas as evidências
+                    </button>
                   </article>
 
                   <article className={styles.attention} data-testid="cockpit-attention">
-                    <div className={styles.attentionIcon}><AlertTriangle size={18} /></div>
-                    <div>
-                      <small>PENDÊNCIA</small>
-                      <strong>Manifesto ainda exige validação.</strong>
-                      <span>Impacto: risco de perder a janela prevista de chegada.</span>
+                    <div className={styles.attentionIcon}><AlertTriangle size={20} /></div>
+                    <div className={styles.attentionBody}>
+                      <small>FOCO AGORA</small>
+                      <strong>Validar manifesto</strong>
+                      <span>Evite perder a janela prevista de chegada.</span>
+                    </div>
+                    <div className={styles.attentionDeadline}>
+                      <Clock3 size={15} />
+                      <span><small>Prazo</small><strong>16:30</strong></span>
                     </div>
                     <button type="button" onClick={onDocuments}>Abrir documentos</button>
                   </article>
