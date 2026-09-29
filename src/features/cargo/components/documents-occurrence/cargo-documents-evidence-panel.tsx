@@ -18,6 +18,7 @@ const documents = [
     icon: FileText,
     owner: 'Embarcadora',
     evidence: '1 evidência vinculada',
+    relevance: 'Fiscal',
     action: 'Visualizar documento',
   },
   {
@@ -30,6 +31,7 @@ const documents = [
     icon: FileCheck2,
     owner: 'Transportador',
     evidence: '1 evidência vinculada',
+    relevance: 'Transporte',
     action: 'Visualizar documento',
   },
   {
@@ -42,6 +44,7 @@ const documents = [
     icon: FileCheck2,
     owner: 'Embarcadora',
     evidence: '2 evidências vinculadas',
+    relevance: 'Coleta',
     action: 'Visualizar evidências',
   },
   {
@@ -49,23 +52,25 @@ const documents = [
     label: 'MDF-e',
     subtitle: 'Manifesto eletrônico da operação',
     meta: 'Atualizado há 12 min',
-    status: 'Divergente',
+    status: 'Atenção',
     tone: 'warning' as EvidenceFolderTone,
     icon: Scale,
     owner: 'Transportador',
     evidence: '18,4 t enviado · 16,8 t comprovado',
+    relevance: 'Operação',
     action: 'Corrigir divergência',
   },
   {
     id: 'doc-hydro',
     label: 'Boletim de trecho',
     subtitle: 'Contexto hidroviário da viagem · DEMO',
-    meta: 'Fonte prevista: ANA/Hidroweb · 18 min',
+    meta: 'ANA/Hidroweb · 18 min',
     status: 'Informativo',
     tone: 'info' as EvidenceFolderTone,
     icon: ShieldCheck,
     owner: 'Sistema HydroRivers',
     evidence: 'Condição do corredor e freshness',
+    relevance: 'Hidrovia',
     action: 'Abrir contexto hidroviário',
   },
 ] as const;
@@ -99,12 +104,12 @@ export function CargoDocumentsEvidencePanel({
         <div>
           <small>DOCUMENTOS & EVIDÊNCIAS</small>
           <h3>Documentos da carga</h3>
-          <p>Selecione um item para revisar estado, responsabilidade e evidências vinculadas.</p>
+          <p>Mesmo padrão visual do overview, agora com contexto e ação ao selecionar cada documento.</p>
         </div>
-        <span className={styles.documentCount}>5 itens</span>
+        <span className={styles.documentCount}>5 documentos</span>
       </header>
 
-      <div className={styles.documentList} aria-label="Documentos da carga">
+      <div className={styles.documentCardGrid} aria-label="Documentos da carga">
         {documents.map((document) => (
           <EvidenceFolderItem
             key={document.id}
@@ -113,7 +118,7 @@ export function CargoDocumentsEvidencePanel({
             meta={document.meta}
             statusLabel={document.status}
             tone={document.tone}
-            variant="row"
+            variant="card"
             selected={selected.id === document.id}
             icon={document.icon}
             onClick={() => setSelectedId(document.id)}
@@ -130,6 +135,10 @@ export function CargoDocumentsEvidencePanel({
         </div>
 
         <div className={styles.documentInspectorFacts}>
+          <span>
+            <small>Contexto</small>
+            <strong>{selected.relevance}</strong>
+          </span>
           <span>
             <small>Responsável</small>
             <strong>{selected.owner}</strong>
