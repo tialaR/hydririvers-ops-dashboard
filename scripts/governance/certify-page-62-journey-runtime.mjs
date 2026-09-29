@@ -221,8 +221,16 @@ try {
 
       const timeline = document.querySelector('[data-testid="page62-d05-timeline"]');
       const timelineInsight = document.querySelector('[data-testid="page62-timeline-insight"]');
-      const timelineEvents = timeline ? timeline.querySelectorAll('ol > li') : [];
+      const timelineEvents = timeline ? Array.from(timeline.querySelectorAll('ol > li')) : [];
       const cockpitKpis = document.querySelector('[data-testid="cockpit-kpi-grid"]');
+      const currentTimelineEvent = timelineEvents.find((item) => item.getAttribute('data-phase') === 'current');
+      const futureTimelineEvents = timelineEvents.filter((item) => item.getAttribute('data-phase') === 'future');
+      const statusTones = timelineEvents.map((item) => item.getAttribute('data-tone')).filter(Boolean);
+      const eventGaps = timelineEvents.slice(1).map((item, index) => {
+        const previous = timelineEvents[index].getBoundingClientRect();
+        const current = item.getBoundingClientRect();
+        return current.top - previous.bottom;
+      });
 
       return {
         width: rect.width,
@@ -241,6 +249,10 @@ try {
         timelineEventCount: timelineEvents.length,
         timelineInsightVisible: Boolean(timelineInsight && timelineInsight.getBoundingClientRect().width > 0),
         cockpitKpisVisible: Boolean(cockpitKpis && cockpitKpis.getBoundingClientRect().height > 0),
+        currentTimelineEventVisible: Boolean(currentTimelineEvent && currentTimelineEvent.getBoundingClientRect().height > 0),
+        futureTimelineEventCount: futureTimelineEvents.length,
+        distinctTimelineStatusTones: new Set(statusTones).size,
+        minimumTimelineGap: eventGaps.length ? Math.min(...eventGaps) : 0,
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -257,6 +269,10 @@ try {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
         if (!metrics.timelineInsightVisible) failures.push('timeline contextual info block missing');
         if (metrics.cockpitKpisVisible) failures.push('cockpit KPI strip must not repeat in timeline mode');
+        if (!metrics.currentTimelineEventVisible) failures.push('current timeline event is not explicitly marked');
+        if (metrics.futureTimelineEventCount < 1) failures.push('future timeline state missing');
+        if (metrics.distinctTimelineStatusTones < 5) failures.push(`status semantics too repetitive: ${metrics.distinctTimelineStatusTones} tones`);
+        if (metrics.minimumTimelineGap < 8) failures.push(`timeline cards visually collide: ${metrics.minimumTimelineGap}px gap`);
       }
     }
 
