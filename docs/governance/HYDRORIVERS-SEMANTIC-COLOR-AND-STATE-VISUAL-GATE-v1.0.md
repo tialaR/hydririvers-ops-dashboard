@@ -131,3 +131,28 @@ Before promotion:
 **FAIL:** restore semantic hierarchy before continuing visual polish.
 
 > **COLOR IS A SIGNAL, NOT CONFETTI.**
+
+
+## 11. Composition density & responsive hierarchy
+
+The visual gate also rejects **forced composition**: a desktop surface must not keep sibling regions side-by-side merely because a two-column grid exists. The layout follows the information hierarchy, not the grid.
+
+For decision-heavy surfaces such as Documents & Occurrences:
+
+- overview-shaped reusable cards keep their familiar anatomy and practical width instead of being stretched into oversized rows;
+- selecting a card reveals richer context next to or below the collection without changing the visual identity of the card itself;
+- the most important operational consequence receives enough horizontal space to be understood without wrapped labels colliding with values;
+- charts may replace dense chains of labels when comparison is the task;
+- warning feedback sits next to the problem/action it describes;
+- completed/contextual feedback stays passive and must not visually compete with an unresolved warning;
+- related sections must be grouped with spacing and alignment, and unrelated sections must never visually overlap;
+- responsive layouts must reflow into a readable sequence before content becomes squeezed.
+
+Strong regression FAIL conditions:
+
+1. cards from an established overview pattern are stretched enough to become a different visual component;
+2. two independent experience blocks visibly compete for the same horizontal space;
+3. labels, values, icons or actions overlap or interlace at the certified desktop viewport;
+4. an unresolved warning and a completed/success message have comparable alert prominence in the same reading band;
+5. a denser layout removes context or interaction that existed before without a documented product reason;
+6. responsive behavior preserves columns after the content has become materially harder to scan.
