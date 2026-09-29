@@ -103,7 +103,8 @@ type TimelineEventKind =
   | 'position'
   | 'arrival';
 
-type TimelineEventTone = 'success' | 'info' | 'warning' | 'current' | 'neutral';
+type TimelineEventTone = 'success' | 'monitor' | 'warning' | 'info' | 'current' | 'future';
+type TimelineEventPhase = 'past' | 'current' | 'future';
 
 const timelineEventIcons: Record<TimelineEventKind, LucideIcon> = {
   departure: Route,
@@ -123,6 +124,7 @@ const timelineEvents: Array<{
   detail: string;
   status: string;
   tone: TimelineEventTone;
+  phase: TimelineEventPhase;
   kind: TimelineEventKind;
   source?: string;
   context?: string;
@@ -136,6 +138,7 @@ const timelineEvents: Array<{
     detail: 'Documentação operacional validada e carga liberada para o corredor hidroviário.',
     status: 'Concluído',
     tone: 'success',
+    phase: 'past',
     kind: 'departure',
     source: 'MDF-e + CT-e · validados',
   },
@@ -147,7 +150,8 @@ const timelineEvents: Array<{
     time: '06:20',
     detail: 'A cota apresenta tendência de queda; o efeito operacional segue dentro da margem planejada.',
     status: 'Monitorar',
-    tone: 'info',
+    tone: 'monitor',
+    phase: 'past',
     kind: 'hydro',
     source: 'DEMO · fonte prevista: ANA/Hidroweb · 18 min',
     context: 'Cota −1,5 m em 5 dias',
@@ -161,6 +165,7 @@ const timelineEvents: Array<{
     detail: 'Trecho requer atenção adicional ao calado e à sinalização antes da passagem.',
     status: 'Atenção',
     tone: 'warning',
+    phase: 'past',
     kind: 'restriction',
     source: 'DEMO · aviso operacional simulado',
     context: 'Calado operacional 2,80 m',
@@ -174,6 +179,7 @@ const timelineEvents: Array<{
     detail: 'Janela de manutenção prevista no corredor; sem bloqueio projetado para a viagem atual.',
     status: 'Informativo',
     tone: 'info',
+    phase: 'past',
     kind: 'dredging',
     source: 'DEMO · referência operacional DNIT',
   },
@@ -186,6 +192,7 @@ const timelineEvents: Array<{
     detail: 'Telemetria estável, rota ativa e nenhum bloqueio crítico confirmado no trecho atual.',
     status: 'Agora',
     tone: 'current',
+    phase: 'current',
     kind: 'position',
     source: 'GPS + AIS · 4 min',
     context: '68% da rota concluída',
@@ -198,7 +205,8 @@ const timelineEvents: Array<{
     time: '18:40',
     detail: 'Chegada permanece dentro da janela prevista, condicionada à validação final do manifesto.',
     status: 'Próximo',
-    tone: 'neutral',
+    tone: 'future',
+    phase: 'future',
     kind: 'arrival',
     source: 'Planejamento da viagem · DEMO',
   },
@@ -536,7 +544,12 @@ export function Page62CargoCockpitPreview({
                         const EventIcon = timelineEventIcons[event.kind];
 
                         return (
-                          <li key={event.title} data-tone={event.tone}>
+                          <li
+                            key={event.title}
+                            data-tone={event.tone}
+                            data-phase={event.phase}
+                            aria-current={event.phase === 'current' ? 'step' : undefined}
+                          >
                             <div className={styles.timelineAxis}>
                               <div className={styles.timelineDate} aria-label={`${event.day} de setembro`}>
                                 <span>{event.month}</span>
