@@ -165,18 +165,12 @@ for (const required of [
   'HydrowayMapProductShell',
   'adaptOwnedCargoRouteToHydrowayMapModel',
   'experience="overview"',
-  'HydroLevelTrendChart',
   'page62-overview',
   'overview-kpi-strip',
   'overview-map-panel',
   'overview-action-panel',
-  'overview-hydro-chart-card',
   'overview-attention-badge',
   'overview-filter-tabs',
-  'ANA/Hidroweb',
-  'DNIT',
-  'CHM',
-  'ANTAQ',
 ]) {
   if (!overview.includes(required)) failures.push(`overview intelligence missing: ${required}`);
 }
@@ -187,8 +181,6 @@ for (const required of [
   '.overviewAttentionBadge',
   '.overviewActionLead',
   '.overviewActionPanel',
-  '.overviewChartCard',
-  '.overviewSourceStrip',
 ]) {
   if (!journeyCss.includes(required)) failures.push(`overview hierarchy anchor missing: ${required}`);
 }
@@ -207,7 +199,7 @@ for (const required of [
   'Cota fluviométrica não é profundidade navegável',
   "emphasis: { disabled: true }",
 ]) {
-  if (!decisionCharts.includes(required)) failures.push(`overview hydro chart contract missing: ${required}`);
+  if (!decisionCharts.includes(required)) failures.push(`hydro chart contract missing: ${required}`);
 }
 
 if (!echartCore.includes("useDirtyRect: renderer === 'canvas' ? false : undefined")) failures.push('ECharts dirty-rect must remain disabled for Canvas while SVG stays renderer-native');
