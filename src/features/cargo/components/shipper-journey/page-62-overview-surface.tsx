@@ -9,7 +9,6 @@ import {
   FileWarning,
   MapPin,
   Navigation,
-  Radio,
   Route,
   Search,
   Waves,
@@ -21,7 +20,6 @@ import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment
 import { adaptOwnedCargoRouteToHydrowayMapModel } from '@/features/waterway-map/adapters/owned-cargo-route-to-hydroway-model';
 import { HydrowayMapProductShell } from '@/features/waterway-map/components/hydroway-map-product-shell';
 import type { ShipperMapRouteData } from '@/features/waterway-map/domain/owned-cargo-operation-route';
-import { HydroLevelTrendChart } from '@/shared/design-system/patterns/operational-chart';
 import styles from './shipper-journey.module.sass';
 
 type OverviewAttentionTone = 'warning' | 'stable' | 'success';
@@ -253,6 +251,7 @@ const filterCounts: Record<(typeof filters)[number], number> = {
 const factIcons = [FileWarning, Activity, Clock3] as const;
 
 export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () => void }) {
+  const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedId, setSelectedId] = useState(cargoes[0].id);
   const [filter, setFilter] = useState<(typeof filters)[number]>('Todas');
   const [query, setQuery] = useState('');
@@ -320,16 +319,8 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
       icon: Waves,
       label: 'Condição hidroviária',
       value: selected.hydroValue,
-      meta: selected.hydroDetail,
+      meta: selected.hydroDetail + ' · fonte recente: ' + selected.freshness,
     },
-    {
-      id: 'freshness',
-      icon: Radio,
-      label: 'Freshness',
-      value: selected.freshness,
-      meta: selected.freshnessDetail,
-    },
-  ];
 
   return (
     <MotionConfig reducedMotion="user">
@@ -419,20 +410,21 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             </header>
 
             <div className={styles.overviewMapViewport} data-testid="overview-map-surface">
-              <HydrowayMapProductShell key={selected.id} model={overviewMapModel} experience="overview" />
+              <HydrowayMapProductShell
+                key={selected.id}
+                model={overviewMapModel}
+                experience="overview"
+                onExpand={() => setMapExpanded(true)}
+              />
 
               <div className={styles.mapOperationalSummary}>
                 <span>
-                  <MapPin size={17} />
-                  <span><small>POSIÇÃO</small><strong>{selected.positionLabel}</strong></span>
+                  <MapPin size={16} />
+                  <span><small>Agora</small><strong>{selected.positionLabel}</strong></span>
                 </span>
                 <span>
-                  <Navigation size={17} />
-                  <span><small>ROTA</small><strong>{progress}% concluída</strong></span>
-                </span>
-                <span>
-                  <Route size={17} />
-                  <span><small>PRÓXIMO MARCO</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
+                  <Route size={16} />
+                  <span><small>Próximo</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
                 </span>
               </div>
             </div>
@@ -465,63 +457,45 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             data-testid="overview-action-panel"
             data-tone={selected.attention.tone}
           >
-            <div className={styles.overviewActionLead}>
-              <span className={styles.overviewActionIcon}><AttentionIcon size={21} /></span>
-              <div>
-                <div className={styles.overviewActionMeta}>
-                  <p className={styles.eyebrow}>{selected.attention.eyebrow}</p>
-                  <span className={styles.overviewActionBadge}>{selected.attention.badge}</span>
-                </div>
-                <div className={styles.overviewActionHero}>
-                  <h3>{selected.attention.title}</h3>
-                  <p>{selected.attention.description}</p>
-                </div>
+            <span className={styles.overviewActionIcon}><AttentionIcon size={18} /></span>
+            <div className={styles.overviewActionHero}>
+              <div className={styles.overviewActionMeta}>
+                <p className={styles.eyebrow}>{selected.attention.eyebrow}</p>
+                <span className={styles.overviewActionBadge}>{selected.attention.badge}</span>
               </div>
+              <strong>{selected.attention.title}</strong>
+              <span>{selected.attention.description}</span>
             </div>
-
-            <div className={styles.overviewActionFacts}>
-              {selected.attention.facts.map((fact, index) => {
-                const FactIcon = factIcons[index] ?? Activity;
-                return (
-                  <span key={fact.label}>
-                    <FactIcon size={16} />
-                    <small>{fact.label}</small>
-                    <strong>{fact.value}</strong>
-                    <em>{fact.detail}</em>
-                  </span>
-                );
-              })}
-            </div>
-
             <button type="button" className={styles.secondaryAction} onClick={onOpenCockpit}>
-              Investigar contexto completo
+              Investigar
             </button>
           </motion.aside>
 
-          <article className={styles.overviewChartCard} data-testid="overview-hydro-chart-card">
-            <header className={styles.overviewChartHeader}>
-              <div>
-                <p className={styles.eyebrow}>CONTEXTO HIDROVIÁRIO</p>
-                <h3>Amazonas–Solimões · cota e tendência</h3>
-                <p>Tendência hidrológica para orientar investigação. Cota fluviométrica não é profundidade navegável.</p>
-              </div>
-              <div className={styles.overviewChartHeadline}>
-                <span><small>COTA DEMO ATUAL</small><strong>14,1 m</strong></span>
-                <span><small>VARIAÇÃO · 5 DIAS</small><strong>−1,5 m</strong></span>
-              </div>
-            </header>
 
-            <HydroLevelTrendChart />
-
-            <footer className={styles.overviewSourceStrip}>
-              <span><Waves size={15}/><strong>ANA/Hidroweb</strong><small>cota e telemetria · adapter previsto</small></span>
-              <span><Navigation size={15}/><strong>DNIT</strong><small>sazonalidade, canal e manutenção</small></span>
-              <span><Route size={15}/><strong>CHM</strong><small>avisos e publicações náuticas</small></span>
-              <span><Activity size={15}/><strong>ANTAQ</strong><small>contingência e contexto regulatório</small></span>
-            </footer>
-          </article>
         </div>
       </section>
+
+      {mapExpanded ? (
+        <div className={styles.overviewMapFullscreen} data-testid="overview-map-fullscreen">
+          <header>
+            <button type="button" onClick={() => setMapExpanded(false)} aria-label="Voltar para a visão geral">
+              ← <span>Voltar</span>
+            </button>
+            <div>
+              <small>MAPA OPERACIONAL</small>
+              <strong>{selected.code} · {selected.origin.city} → {selected.destination.city}</strong>
+            </div>
+            <span className={styles.demoBadge}>DEMO</span>
+          </header>
+          <div className={styles.overviewMapFullscreenStage}>
+            <HydrowayMapProductShell
+              key={'fullscreen-' + selected.id}
+              model={overviewMapModel}
+              experience="overview"
+            />
+          </div>
+        </div>
+      ) : null}
     </MotionConfig>
   );
 }
