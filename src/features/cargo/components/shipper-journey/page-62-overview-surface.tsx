@@ -447,16 +447,18 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
             })}
           </div>
 
-          <OperationalAlert
-            tone={selected.attention.tone}
-            eyebrow={selected.attention.eyebrow}
-            badge={selected.attention.badge}
-            title={selected.attention.title}
-            description={selected.attention.description}
-            actionLabel="Investigar"
-            onAction={onOpenCockpit}
-            testId="overview-action-panel"
-          />
+          <div className={styles.overviewAlertRow}>
+            <OperationalAlert
+              tone={selected.attention.tone}
+              eyebrow={selected.attention.eyebrow}
+              badge={selected.attention.badge}
+              title={selected.attention.title}
+              description={selected.attention.description}
+              actionLabel="Investigar"
+              onAction={onOpenCockpit}
+              testId="overview-action-panel"
+            />
+          </div>
 
 
         </div>
