@@ -1519,3 +1519,50 @@
 .timeline li[data-phase='future'] .timelineEvent > p,
 .timeline li[data-phase='future'] .timelineEvent > footer
   color: color-mix(in srgb, var(--hy-p62-muted) 88%, transparent)
+
+
+/* D06-D07 documents tab experience */
+.documentsWorkspace
+  display: grid
+  gap: 1rem
+  margin-top: 1.25rem
+
+.documentsWorkspaceHeader
+  padding-bottom: 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
+
+.documentsWorkspaceHeader > div
+  display: grid
+  gap: .24rem
+
+.documentsWorkspaceHeader small
+  color: var(--hy-p62-muted)
+  font-size: .68rem
+  font-weight: 700
+  letter-spacing: .08em
+
+.documentsWorkspaceHeader strong
+  color: var(--hy-p62-text)
+  font-size: 1.18rem
+  font-weight: 660
+  letter-spacing: -.018em
+
+.documentsWorkspaceHeader span
+  max-width: 52rem
+  color: var(--hy-p62-muted)
+  font-size: .74rem
+  line-height: 1.45
+
+.documentsWorkspace .documentsRiskGrid
+  display: grid
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr)
+  gap: 1rem
+  align-items: start
+
+.documentsWorkspace [data-testid='page62-d06-documents'],
+.documentsWorkspace [data-testid='page62-d07-occurrence']
+  min-height: 100%
+
+@media (max-width: 74rem)
+  .documentsWorkspace .documentsRiskGrid
+    grid-template-columns: 1fr
