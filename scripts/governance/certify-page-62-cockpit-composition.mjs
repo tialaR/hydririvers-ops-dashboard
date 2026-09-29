@@ -107,7 +107,9 @@ try {
       overlapTelemetryRoute: overlap(telemetry, route),
       overlapRouteAttention: overlap(route, attention),
       overlapAttentionEvidence: overlap(attention, evidence),
-      attentionEvidenceVerticalDelta: attention && evidence ? Math.abs(attention.y - evidence.y) : null,
+      attentionAfterEvidence: attention && evidence ? attention.y > evidence.y : false,
+      hydroInsight: rectOf('[data-testid="cockpit-hydro-insight"]'),
+      evidenceFolders: document.querySelectorAll('[data-testid="cockpit-evidence"] button[data-tone]').length,
       bodyScrollHeight: document.documentElement.scrollHeight,
       viewportHeight: document.documentElement.clientHeight,
     };
@@ -160,16 +162,16 @@ try {
   }
 
   if (metrics.attention && metrics.evidence && metrics.workspace) {
-    if (metrics.attention.width / metrics.workspace.width > 0.38) {
-      failures.push(`attention dominates too much horizontal space: ${(metrics.attention.width / metrics.workspace.width * 100).toFixed(1)}%`);
+    if (metrics.attention.width / metrics.workspace.width < 0.88) {
+      failures.push(`shared operational alert should span workspace: ${(metrics.attention.width / metrics.workspace.width * 100).toFixed(1)}%`);
     }
-    if (metrics.evidence.width / metrics.workspace.width < 0.55) {
-      failures.push(`evidence panel not dominant enough: ${(metrics.evidence.width / metrics.workspace.width * 100).toFixed(1)}%`);
+    if (metrics.evidence.width / metrics.workspace.width < 0.88) {
+      failures.push(`evidence folders should span workspace: ${(metrics.evidence.width / metrics.workspace.width * 100).toFixed(1)}%`);
     }
-    if ((metrics.attentionEvidenceVerticalDelta ?? 999) > 4) {
-      failures.push(`attention/evidence are not aligned on one row: delta ${metrics.attentionEvidenceVerticalDelta?.toFixed(1)}px`);
-    }
+    if (!metrics.attentionAfterEvidence) failures.push('operational alert should follow evidence folders');
   }
+  if (!metrics.hydroInsight) failures.push('hydro interpretation footer missing');
+  if (metrics.evidenceFolders < 3) failures.push(`evidence folder composition incomplete: ${metrics.evidenceFolders}`);
 
   if (metrics.telemetryTitlePx < 16) failures.push(`telemetry title too small: ${metrics.telemetryTitlePx}px`);
   if (metrics.kpiValueSizes.length && Math.min(...metrics.kpiValueSizes) < 15) {
@@ -220,8 +222,9 @@ try {
       dominantTelemetry: true,
       balancedKpis: true,
       routeFullWidth: true,
-      secondaryAlertDoesNotDominate: true,
-      evidenceReadable: true,
+      reusableAlertFullWidth: true,
+      evidenceFoldersReadable: true,
+      hydroInsightFooter: true,
       noOverlap: true,
       noHorizontalOverflow: true,
     },
