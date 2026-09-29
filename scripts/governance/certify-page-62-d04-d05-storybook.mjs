@@ -34,15 +34,15 @@ const surfaces = [
     name: 'D06 Documents & Evidence',
     storyId: 'page-62-d06-documents-evidence--reference',
     selector: '[data-testid="page62-d06-contract"]',
-    referencePath: 'docs/governance/figma-freeze/page-62/d06-documents-reference.webp',
-    geometry: { width: 600, height: 548 },
+    mode: 'semantic',
+    geometry: { minWidth: 700, minHeight: 620 },
   },
   {
     name: 'D07 Risk & Occurrence',
     storyId: 'page-62-d07-risk-occurrence--reference',
     selector: '[data-testid="page62-d07-contract"]',
-    referencePath: 'docs/governance/figma-freeze/page-62/d07-occurrence-reference.webp',
-    geometry: { width: 660, height: 548 },
+    mode: 'semantic',
+    geometry: { minWidth: 760, minHeight: 620 },
   },
 ];
 
@@ -76,6 +76,71 @@ try {
       animations: 'disabled',
       caret: 'hide',
     });
+
+    if (surface.mode === 'semantic') {
+      const semantic = await target.evaluate((node) => {
+        const selectedRow = node.querySelector('[data-testid^="document-row-"][data-selected="true"]');
+        const documentRows = node.querySelectorAll('[data-testid^="document-row-"]');
+        const statusNodes = node.querySelectorAll('[data-semantic-status]');
+        const neutralIcons = node.querySelectorAll('[data-semantic-role="neutral-icon"]');
+        const occurrenceMetrics = node.querySelectorAll('[class*="occurrenceMetric"]');
+        const inspector = node.querySelector('[data-testid="document-inspector"]');
+        const mitigation = node.querySelector('[data-testid="occurrence-mitigation"]');
+        const action = node.querySelector('[data-testid="occurrence-primary-action"]');
+        const headings = Array.from(node.querySelectorAll('h3,h4,strong'))
+          .map((item) => Number.parseFloat(getComputedStyle(item).fontSize))
+          .filter(Number.isFinite);
+        return {
+          documentRows: documentRows.length,
+          selectedRow: Boolean(selectedRow),
+          statusNodes: statusNodes.length,
+          neutralIcons: neutralIcons.length,
+          occurrenceMetrics: occurrenceMetrics.length,
+          inspector: Boolean(inspector),
+          mitigation: Boolean(mitigation),
+          action: Boolean(action),
+          maxHeadingPx: headings.length ? Math.max(...headings) : 0,
+        };
+      });
+
+      const semanticFailures = [];
+      if (surface.name.startsWith('D06')) {
+        if (semantic.documentRows < 5) semanticFailures.push('document list lost breadth');
+        if (!semantic.selectedRow) semanticFailures.push('selected document state missing');
+        if (!semantic.inspector) semanticFailures.push('document inspector missing');
+        if (semantic.statusNodes < 5) semanticFailures.push('document status semantics missing');
+      }
+      if (surface.name.startsWith('D07')) {
+        if (semantic.occurrenceMetrics < 3) semanticFailures.push('cause/evidence/impact comparison missing');
+        if (!semantic.mitigation) semanticFailures.push('mitigation progress missing');
+        if (!semantic.action) semanticFailures.push('occurrence action component missing');
+        if (semantic.neutralIcons < 3) semanticFailures.push('neutral icon hierarchy missing');
+      }
+      if (semantic.maxHeadingPx < 16) semanticFailures.push('visual hierarchy too weak');
+
+      const geometryPass =
+        box.width >= surface.geometry.minWidth &&
+        box.height >= surface.geometry.minHeight;
+      if (!geometryPass) semanticFailures.push(`geometry collapsed: ${Math.round(box.width)}x${Math.round(box.height)}`);
+
+      results.push({
+        ...surface,
+        runtimeBox: box,
+        geometryPass,
+        visualPass: semanticFailures.length === 0,
+        pass: geometryPass && semanticFailures.length === 0,
+        metrics: { semantic, semanticFailures },
+        artifacts: {
+          reference: null,
+          runtime: path.relative(root, runtimePath),
+          diff: null,
+        },
+      });
+
+      await page.close();
+      continue;
+    }
+
     const reference = await readFile(path.resolve(root, surface.referencePath));
 
     const diffPage = await browser.newPage({
@@ -247,7 +312,9 @@ try {
 
   for (const result of results) {
     console.log(
-      `${result.pass ? 'PASS' : 'FAIL'} ${result.name}: geometry=${result.geometryPass ? 'PASS' : 'FAIL'} perceptual=${(result.metrics.perceptualDiffRatio * 100).toFixed(3)}% rmse=${result.metrics.perceptualRmse.toFixed(6)}`,
+      result.mode === 'semantic'
+        ? `${result.pass ? 'PASS' : 'FAIL'} ${result.name}: geometry=${result.geometryPass ? 'PASS' : 'FAIL'} semantic=${result.visualPass ? 'PASS' : 'FAIL'}`
+        : `${result.pass ? 'PASS' : 'FAIL'} ${result.name}: geometry=${result.geometryPass ? 'PASS' : 'FAIL'} perceptual=${(result.metrics.perceptualDiffRatio * 100).toFixed(3)}% rmse=${result.metrics.perceptualRmse.toFixed(6)}`,
     );
   }
 
