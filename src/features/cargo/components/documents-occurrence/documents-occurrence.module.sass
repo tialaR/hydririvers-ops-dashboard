@@ -14,22 +14,25 @@
   gap: 1rem
   padding: 1.2rem
 
-.documentsHeader
+.documentsHeader,
+.occurrenceHeader
   display: flex
-  align-items: flex-end
+  align-items: flex-start
   justify-content: space-between
-  gap: 1rem
+  gap: 1.25rem
   padding-bottom: 1rem
   border-bottom: .0625rem solid var(--hy-p62-border)
 
-.documentsHeader > div
+.documentsHeader > div,
+.occurrenceHeading > div
   display: grid
   gap: .24rem
 
 .documentsHeader small,
 .occurrenceHeader small,
 .documentInspector small,
-.occurrenceMetric small,
+.occurrenceEvidenceCard small,
+.occurrenceImpactCard small,
 .occurrenceContext small,
 .mitigation small
   color: var(--hy-p62-muted)
@@ -47,11 +50,11 @@
 
 .documentsHeader p,
 .occurrenceHeader p
-  max-width: 42rem
+  max-width: 46rem
   margin: 0
   color: var(--hy-p62-muted)
   font-size: .72rem
-  line-height: 1.45
+  line-height: 1.5
 
 .documentCount
   display: inline-flex
@@ -64,27 +67,29 @@
   font-size: .65rem
   white-space: nowrap
 
-.documentList
+.documentCardGrid
   display: grid
-  gap: .65rem
+  grid-template-columns: repeat(auto-fit, minmax(14.5rem, 16rem))
+  justify-content: start
+  gap: .8rem
 
 .documentInspector
   display: grid
-  grid-template-columns: minmax(10rem, .7fr) minmax(18rem, 1.3fr) auto
+  grid-template-columns: minmax(11rem, .72fr) minmax(24rem, 1.65fr) auto
   align-items: center
   gap: 1rem
-  min-height: 6rem
+  min-height: 6.4rem
   padding: .9rem 1rem
   border: .0625rem solid var(--hy-p62-border)
   border-radius: .78rem
-  background: var(--hy-p62-surface-raised)
+  background: color-mix(in srgb, var(--hy-p62-text) 2.5%, var(--hy-p62-surface-raised))
 
 .documentInspectorLead
   display: grid
   gap: .18rem
 
 .documentInspectorLead strong
-  font-size: .9rem
+  font-size: .92rem
   font-weight: 650
 
 .documentInspectorLead span
@@ -94,24 +99,27 @@
 
 .documentInspectorFacts
   display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
+  grid-template-columns: repeat(3, minmax(0, 1fr))
   gap: .7rem
 
 .documentInspectorFacts > span
   display: grid
+  min-width: 0
   gap: .18rem
   padding-left: .8rem
   border-left: .0625rem solid var(--hy-p62-border)
 
 .documentInspectorFacts strong
+  overflow: hidden
   color: var(--hy-p62-text)
   font-size: .72rem
   font-weight: 590
   line-height: 1.35
+  text-overflow: ellipsis
 
 .documentInspector > button
   min-height: 2.5rem
-  padding: 0 .9rem
+  padding: 0 .95rem
   border: .0625rem solid var(--hy-p62-border-strong)
   border-radius: .68rem
   background: color-mix(in srgb, var(--hy-p62-text) 6%, var(--hy-p62-surface-raised))
@@ -132,22 +140,10 @@
   gap: 1rem
   padding: 1.2rem
 
-.occurrenceHeader
-  display: flex
-  align-items: flex-start
-  justify-content: space-between
-  gap: 1rem
-  padding-bottom: 1rem
-  border-bottom: .0625rem solid var(--hy-p62-border)
-
 .occurrenceHeading
   display: flex
   gap: .85rem
   min-width: 0
-
-.occurrenceHeading > div
-  display: grid
-  gap: .25rem
 
 .occurrenceHeadingIcon
   display: grid
@@ -172,71 +168,147 @@
   font-weight: 680
   white-space: nowrap
 
-.occurrenceComparison
+.occurrenceDecisionGrid
   display: grid
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr)
-  align-items: center
-  gap: .55rem
+  grid-template-columns: minmax(0, 1.18fr) minmax(20rem, .82fr)
+  gap: 1rem
+  align-items: stretch
 
-.occurrenceMetric
-  display: grid
-  grid-template-columns: auto minmax(0, 1fr)
-  grid-template-rows: auto auto auto
-  column-gap: .65rem
-  min-height: 7rem
-  padding: .9rem
+.occurrenceEvidenceCard,
+.occurrenceImpactCard
+  min-width: 0
   border: .0625rem solid var(--hy-p62-border)
-  border-radius: .78rem
+  border-radius: .82rem
   background: var(--hy-p62-surface-raised)
 
-.occurrenceMetricIcon
+.occurrenceEvidenceCard
   display: grid
-  grid-row: 1 / 4
-  width: 2.1rem
-  height: 2.1rem
-  place-items: center
-  border-radius: .58rem
-  background: color-mix(in srgb, var(--hy-p62-text) 4%, var(--hy-p62-surface))
-  color: color-mix(in srgb, var(--hy-p62-text) 64%, var(--hy-p62-muted))
+  grid-template-rows: auto auto auto
+  overflow: hidden
 
-.occurrenceMetric strong
-  align-self: end
+.occurrenceEvidenceCard > header,
+.occurrenceImpactCard > header
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: 1rem
+  padding: .9rem 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
+
+.occurrenceEvidenceCard > header > div,
+.occurrenceImpactCard > header
+  gap: .22rem
+
+.occurrenceEvidenceCard > header > div
+  display: grid
+
+.occurrenceEvidenceCard > header strong,
+.occurrenceImpactCard > header strong
   color: var(--hy-p62-text)
-  font-size: 1.1rem
-  font-weight: 660
+  font-size: .84rem
+  font-weight: 620
+  line-height: 1.35
 
-.occurrenceMetric > span:last-child
+.occurrenceEvidenceCard > header > span
+  color: var(--hy-p62-warning)
+  font-size: .82rem
+  font-weight: 700
+
+.occurrenceEvidenceCard > div
+  min-width: 0
+  padding: .25rem .65rem .1rem
+
+.occurrenceEvidenceCard > footer
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: 0
+  border-top: .0625rem solid var(--hy-p62-border)
+
+.occurrenceEvidenceCard > footer > span
+  display: flex
+  align-items: center
+  gap: .45rem
+  min-width: 0
+  padding: .78rem .9rem
   color: var(--hy-p62-muted)
   font-size: .66rem
 
-.occurrenceMetric[data-impact]
-  border-color: color-mix(in srgb, var(--hy-p62-warning) 26%, var(--hy-p62-border))
+.occurrenceEvidenceCard > footer > span + span
+  border-left: .0625rem solid var(--hy-p62-border)
 
-.occurrenceMetric[data-impact] strong
-  color: var(--hy-p62-warning)
+.occurrenceEvidenceCard > footer strong
+  color: var(--hy-p62-text)
+  font-size: .72rem
+  font-weight: 650
 
-.occurrenceFlowArrow
+.occurrenceImpactCard
   display: grid
+  align-content: start
+
+.occurrenceImpactCard > header
+  display: grid
+  align-items: start
+  justify-content: stretch
+
+.impactHero
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: .8rem
+  margin: .9rem
+  padding: .9rem
+  border: .0625rem solid color-mix(in srgb, var(--hy-p62-warning) 26%, var(--hy-p62-border))
+  border-radius: .72rem
+  background: color-mix(in srgb, var(--hy-p62-warning) 3.5%, var(--hy-p62-surface))
+
+.impactHeroIcon
+  display: grid
+  width: 2.45rem
+  height: 2.45rem
   place-items: center
+  border-radius: .65rem
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface-raised))
+  color: color-mix(in srgb, var(--hy-p62-text) 70%, var(--hy-p62-muted))
+
+.impactHero > div
+  display: grid
+  gap: .1rem
+
+.impactHero strong
+  color: var(--hy-p62-warning)
+  font-size: 1.5rem
+  font-weight: 680
+  letter-spacing: -.025em
+
+.impactHero span
   color: var(--hy-p62-muted)
+  font-size: .67rem
+  line-height: 1.4
 
 .occurrenceContext
   display: grid
-  grid-template-columns: repeat(3, minmax(0, 1fr))
-  gap: .65rem
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  padding: 0 .9rem .9rem
 
 .occurrenceContext > div
   display: grid
   grid-template-columns: auto minmax(0, 1fr)
   gap: .55rem
   min-width: 0
-  padding: .8rem
+  padding: .78rem .25rem
   border-top: .0625rem solid var(--hy-p62-border)
+
+.occurrenceContext > div:nth-child(odd)
+  padding-right: .75rem
+
+.occurrenceContext > div:nth-child(even)
+  padding-left: .75rem
+  border-left: .0625rem solid var(--hy-p62-border)
 
 .occurrenceContext > div > span
   display: grid
-  width: 1.85rem
-  height: 1.85rem
+  width: 1.8rem
+  height: 1.8rem
   place-items: center
   color: color-mix(in srgb, var(--hy-p62-text) 60%, var(--hy-p62-muted))
 
@@ -246,16 +318,16 @@
 
 .occurrenceContext strong
   color: var(--hy-p62-text)
-  font-size: .72rem
+  font-size: .7rem
   font-weight: 590
   line-height: 1.35
 
 .mitigation
   display: grid
-  gap: .72rem
-  padding: .9rem 1rem
+  gap: .8rem
+  padding: .95rem 1rem 1rem
   border: .0625rem solid var(--hy-p62-border)
-  border-radius: .78rem
+  border-radius: .82rem
   background: var(--hy-p62-surface-raised)
 
 .mitigation > header
@@ -270,7 +342,7 @@
 
 .mitigation > header strong
   color: var(--hy-p62-text)
-  font-size: .78rem
+  font-size: .8rem
   font-weight: 620
 
 .mitigation > header > span
@@ -279,7 +351,7 @@
   font-weight: 650
 
 .mitigationTrack
-  height: .35rem
+  height: .32rem
   overflow: hidden
   border-radius: 999rem
   background: var(--hy-p62-border)
@@ -289,68 +361,124 @@
   width: 50%
   height: 100%
   border-radius: inherit
-  background: color-mix(in srgb, var(--hy-p62-text) 68%, var(--hy-p62-muted))
+  background: color-mix(in srgb, var(--hy-p62-text) 72%, var(--hy-p62-muted))
 
 .mitigationSteps
   display: grid
   grid-template-columns: repeat(4, minmax(0, 1fr))
-  gap: .45rem
+  gap: .55rem
+  margin: 0
+  padding: 0
+  list-style: none
 
-.mitigationSteps span
+.mitigationSteps li
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: .5rem
+  min-width: 0
+  padding: .55rem .6rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: .62rem
+
+.mitigationSteps li > span
+  display: grid
+  width: 1.55rem
+  height: 1.55rem
+  place-items: center
+  border-radius: 999rem
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface))
   color: var(--hy-p62-muted)
-  font-size: .63rem
+  font-size: .62rem
+  font-weight: 650
 
-.mitigationSteps span[data-done]
+.mitigationSteps li > div
+  display: grid
+  gap: .08rem
+  min-width: 0
+
+.mitigationSteps strong
+  color: var(--hy-p62-muted)
+  font-size: .66rem
+  font-weight: 600
+
+.mitigationSteps small
+  overflow: hidden
+  color: color-mix(in srgb, var(--hy-p62-muted) 82%, transparent)
+  font-size: .58rem
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.mitigationSteps li[data-done]
+  background: color-mix(in srgb, var(--hy-p62-text) 2.5%, var(--hy-p62-surface-raised))
+
+.mitigationSteps li[data-done] > span
   color: var(--hy-p62-text)
-  font-weight: 620
+
+.mitigationSteps li[data-done] strong
+  color: var(--hy-p62-text)
 
 .d06Surface
   box-sizing: border-box
-  width: 46rem
-  min-height: 43rem
+  width: 58rem
+  min-height: 39rem
   padding: 1rem
   background: var(--hy-p62-canvas)
 
 .d07Surface
   box-sizing: border-box
-  width: 50rem
-  min-height: 43rem
+  width: 62rem
+  min-height: 44rem
   padding: 1rem
   background: var(--hy-p62-canvas)
 
-@media (max-width: 68rem)
+@media (max-width: 72rem)
   .documentInspector
     grid-template-columns: 1fr
 
   .documentInspectorFacts
-    grid-template-columns: 1fr 1fr
-
-  .documentInspectorFacts > span:first-child
-    padding-left: 0
-    border-left: 0
+    grid-template-columns: repeat(3, minmax(0, 1fr))
 
   .documentInspector > button
     width: 100%
 
-  .occurrenceComparison
+  .occurrenceDecisionGrid
     grid-template-columns: 1fr
 
-  .occurrenceFlowArrow
-    transform: rotate(90deg)
-
-  .occurrenceContext
-    grid-template-columns: 1fr
-
-@media (max-width: 42rem)
+@media (max-width: 48rem)
   .documentsHeader,
   .occurrenceHeader
-    align-items: flex-start
     flex-direction: column
 
+  .documentCardGrid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
   .documentInspectorFacts,
+  .occurrenceContext,
   .mitigationSteps
     grid-template-columns: 1fr
+
+  .documentInspectorFacts > span
+    padding-left: 0
+    border-left: 0
+    border-top: .0625rem solid var(--hy-p62-border)
+    padding-top: .55rem
+
+  .occurrenceContext > div:nth-child(even)
+    padding-left: .25rem
+    border-left: 0
+
+  .occurrenceEvidenceCard > footer
+    grid-template-columns: 1fr
+
+  .occurrenceEvidenceCard > footer > span + span
+    border-top: .0625rem solid var(--hy-p62-border)
+    border-left: 0
 
   .d06Surface,
   .d07Surface
     width: 100%
+
+@media (max-width: 32rem)
+  .documentCardGrid
+    grid-template-columns: 1fr
