@@ -2,12 +2,18 @@
 
 import {
   Activity,
+  Anchor,
   Clock3,
+  Construction,
   Folder,
+  Info,
+  MapPin,
+  Navigation,
   Waves,
   Radio,
   Route,
   ShieldAlert,
+  type LucideIcon,
 } from 'lucide-react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { useState } from 'react';
@@ -89,24 +95,112 @@ const cargoes = [
   { code: '#HY-411-092', label: 'Entregue', tone: 'completed' as const, selected: false },
 ];
 
-const timelineEvents = [
+type TimelineEventKind =
+  | 'departure'
+  | 'hydro'
+  | 'restriction'
+  | 'dredging'
+  | 'position'
+  | 'arrival';
+
+type TimelineEventTone = 'success' | 'info' | 'warning' | 'current' | 'neutral';
+
+const timelineEventIcons: Record<TimelineEventKind, LucideIcon> = {
+  departure: Route,
+  hydro: Waves,
+  restriction: ShieldAlert,
+  dredging: Construction,
+  position: Navigation,
+  arrival: Anchor,
+};
+
+const timelineEvents: Array<{
+  month: string;
+  day: string;
+  title: string;
+  place: string;
+  time: string;
+  detail: string;
+  status: string;
+  tone: TimelineEventTone;
+  kind: TimelineEventKind;
+  source?: string;
+  context?: string;
+}> = [
   {
+    month: 'SET',
+    day: '22',
     title: 'Saída confirmada',
-    meta: 'Manaus · 08:10',
-    detail: 'Documentação operacional validada e carga liberada.',
-    state: 'done',
+    place: 'Manaus',
+    time: '08:10',
+    detail: 'Documentação operacional validada e carga liberada para o corredor hidroviário.',
+    status: 'Concluído',
+    tone: 'success',
+    kind: 'departure',
+    source: 'MDF-e + CT-e · validados',
   },
   {
+    month: 'SET',
+    day: '23',
+    title: 'Vazante em acompanhamento',
+    place: 'Amazonas–Solimões',
+    time: '06:20',
+    detail: 'A cota apresenta tendência de queda; o efeito operacional segue dentro da margem planejada.',
+    status: 'Monitorar',
+    tone: 'info',
+    kind: 'hydro',
+    source: 'DEMO · fonte prevista: ANA/Hidroweb · 18 min',
+    context: 'Cota −1,5 m em 5 dias',
+  },
+  {
+    month: 'SET',
+    day: '24',
+    title: 'Restrição temporária no trecho',
+    place: 'Próximo a Parintins',
+    time: '11:40',
+    detail: 'Trecho requer atenção adicional ao calado e à sinalização antes da passagem.',
+    status: 'Atenção',
+    tone: 'warning',
+    kind: 'restriction',
+    source: 'DEMO · aviso operacional simulado',
+    context: 'Calado operacional 2,80 m',
+  },
+  {
+    month: 'SET',
+    day: '25',
+    title: 'Dragagem programada',
+    place: 'Trecho crítico monitorado',
+    time: '07:30',
+    detail: 'Janela de manutenção prevista no corredor; sem bloqueio projetado para a viagem atual.',
+    status: 'Informativo',
+    tone: 'info',
+    kind: 'dredging',
+    source: 'DEMO · referência operacional DNIT',
+  },
+  {
+    month: 'SET',
+    day: '27',
     title: 'Posição atual',
-    meta: 'Rio Madeira · agora',
-    detail: 'Telemetria estável e rota sem bloqueios críticos.',
-    state: 'current',
+    place: 'Amazonas–Solimões',
+    time: 'agora',
+    detail: 'Telemetria estável, rota ativa e nenhum bloqueio crítico confirmado no trecho atual.',
+    status: 'Agora',
+    tone: 'current',
+    kind: 'position',
+    source: 'GPS + AIS · 4 min',
+    context: '68% da rota concluída',
   },
   {
+    month: 'SET',
+    day: '29',
     title: 'Janela de atracação',
-    meta: 'Santarém · 18:40',
-    detail: 'Aguardando validação do manifesto antes da chegada.',
-    state: 'next',
+    place: 'Santarém',
+    time: '18:40',
+    detail: 'Chegada permanece dentro da janela prevista, condicionada à validação final do manifesto.',
+    status: 'Próximo',
+    tone: 'neutral',
+    kind: 'arrival',
+    source: 'Planejamento da viagem · DEMO',
   },
 ];
 
@@ -226,64 +320,67 @@ export function Page62CargoCockpitPreview({
             </nav>
           </header>
 
-          <div className={styles.metricGrid} data-testid="cockpit-kpi-grid">
-            <motion.article layout className={styles.progressMetric} data-testid="cockpit-kpi-progress">
-              <div className={styles.metricHeading}>
-                <Route size={15} />
-                <small>PROGRESSO</small>
-              </div>
-              <div className={styles.progressBody}>
-                <OperationalGaugeChart
-                  value={68}
-                  label="Rota"
-                  ariaLabel="68% da rota concluída"
-                />
-                <div>
-                  <strong>642 km</strong>
-                  <span>de 944 km percorridos</span>
-                  <small>ritmo dentro da janela</small>
+          {mode === 'cockpit' ? (
+            <div className={styles.metricGrid} data-testid="cockpit-kpi-grid">
+              <motion.article layout className={styles.progressMetric} data-testid="cockpit-kpi-progress">
+                <div className={styles.metricHeading}>
+                  <Route size={15} />
+                  <small>PROGRESSO</small>
                 </div>
-              </div>
-            </motion.article>
-
-            <motion.article layout className={styles.etaMetric} data-testid="cockpit-kpi-eta">
-              <div className={styles.metricHeading}>
-                <Clock3 size={15} />
-                <small>ETA</small>
-              </div>
-              <strong>18:40</strong>
-              <span className={styles.etaDelta}>+ 22 min vs. plano</span>
-              <small>janela prevista hoje</small>
-            </motion.article>
-
-            <motion.article layout className={styles.signalMetric} data-testid="cockpit-kpi-signal">
-              <div className={styles.metricHeading}>
-                <Radio size={15} />
-                <small>SINAL</small>
-              </div>
-              <div className={styles.signalLine}>
-                <i aria-hidden />
-                <strong>Estável</strong>
-              </div>
-              <span>GPS + AIS · 4 min</span>
-              <small>telemetria recente</small>
-            </motion.article>
-
-            <motion.article layout className={styles.riskMetric} data-testid="cockpit-kpi-risk">
-              <div className={styles.metricHeading}>
-                <ShieldAlert size={15} />
-                <small>RISCO</small>
-              </div>
-              <div className={styles.riskScale} aria-label="Risco moderado">
-                <span />
-                <span />
-                <span className={styles.riskScaleActive} />
-                <span />
-              </div>
-              <strong>Moderado</strong>
-              <span>1 atenção ativa</span>
-            </motion.article>
-          </div>
+                <div className={styles.progressBody}>
+                  <OperationalGaugeChart
+                    value={68}
+                    label="Rota"
+                    ariaLabel="68% da rota concluída"
+                  />
+                  <div>
+                    <strong>642 km</strong>
+                    <span>de 944 km percorridos</span>
+                    <small>ritmo dentro da janela</small>
+                  </div>
+                </div>
+              </motion.article>
+  
+              <motion.article layout className={styles.etaMetric} data-testid="cockpit-kpi-eta">
+                <div className={styles.metricHeading}>
+                  <Clock3 size={15} />
+                  <small>ETA</small>
+                </div>
+                <strong>18:40</strong>
+                <span className={styles.etaDelta}>+ 22 min vs. plano</span>
+                <small>janela prevista hoje</small>
+              </motion.article>
+  
+              <motion.article layout className={styles.signalMetric} data-testid="cockpit-kpi-signal">
+                <div className={styles.metricHeading}>
+                  <Radio size={15} />
+                  <small>SINAL</small>
+                </div>
+                <div className={styles.signalLine}>
+                  <i aria-hidden />
+                  <strong>Estável</strong>
+                </div>
+                <span>GPS + AIS · 4 min</span>
+                <small>telemetria recente</small>
+              </motion.article>
+  
+              <motion.article layout className={styles.riskMetric} data-testid="cockpit-kpi-risk">
+                <div className={styles.metricHeading}>
+                  <ShieldAlert size={15} />
+                  <small>RISCO</small>
+                </div>
+                <div className={styles.riskScale} aria-label="Risco moderado">
+                  <span />
+                  <span />
+                  <span className={styles.riskScaleActive} />
+                  <span />
+                </div>
+                <strong>Moderado</strong>
+                <span>1 atenção ativa</span>
+              </motion.article>
+            </div>
+  
+            ) : null}
 
           <AnimatePresence mode="wait" initial={false}>
             {mode === 'cockpit' ? (
@@ -427,35 +524,74 @@ export function Page62CargoCockpitPreview({
                   <article className={styles.timeline} data-testid="page62-d05-timeline">
                     <header>
                       <div className={styles.metricHeading}>
-                        <Activity size={15} />
+                        <Activity size={17} />
                         <small>LINHA OPERACIONAL</small>
                       </div>
-                      <strong>Eventos, marcos e exceções</strong>
+                      <strong>Eventos, marcos e condições da viagem</strong>
+                      <span>Acompanhe o que aconteceu, o que está acontecendo e o que pode mudar a operação.</span>
                     </header>
+
                     <ol>
-                      {timelineEvents.map((event) => (
-                        <li key={event.title} data-state={event.state}>
-                          <i aria-hidden />
-                          <div>
-                            <strong>{event.title}</strong>
-                            <span>{event.meta}</span>
-                            <p>{event.detail}</p>
-                          </div>
-                        </li>
-                      ))}
+                      {timelineEvents.map((event) => {
+                        const EventIcon = timelineEventIcons[event.kind];
+
+                        return (
+                          <li key={event.title} data-tone={event.tone}>
+                            <div className={styles.timelineAxis}>
+                              <div className={styles.timelineDate} aria-label={`${event.day} de setembro`}>
+                                <span>{event.month}</span>
+                                <strong>{event.day}</strong>
+                              </div>
+                            </div>
+
+                            <div className={styles.timelineEvent}>
+                              <div className={styles.timelineEventTopline}>
+                                <div className={styles.timelineEventTitle}>
+                                  <span className={styles.timelineEventIcon} aria-hidden>
+                                    <EventIcon size={17} />
+                                  </span>
+                                  <strong>{event.title}</strong>
+                                </div>
+                                <span className={styles.timelineStatus} data-tone={event.tone}>
+                                  {event.status}
+                                </span>
+                              </div>
+
+                              <div className={styles.timelineMeta}>
+                                <span><MapPin size={13} /> {event.place}</span>
+                                <span><Clock3 size={13} /> {event.time}</span>
+                              </div>
+
+                              <p>{event.detail}</p>
+
+                              {(event.source || event.context) ? (
+                                <footer>
+                                  {event.source ? <span>{event.source}</span> : null}
+                                  {event.context ? <strong>{event.context}</strong> : null}
+                                </footer>
+                              ) : null}
+                            </div>
+                          </li>
+                        );
+                      })}
                     </ol>
                   </article>
 
-                  <article className={styles.timelineEvidence}>
-                    <small>LEITURA DO MOMENTO</small>
-                    <strong>Operação saudável com uma pendência documental.</strong>
-                    <p>
-                      O atraso estimado ainda é absorvível pela janela atual, mas o manifesto precisa
-                      ser validado antes do próximo marco.
-                    </p>
-                    <div className={styles.timelineDecision}>
-                      <span>Próxima decisão</span>
-                      <strong>Validar manifesto</strong>
+                  <article className={styles.timelineInsight} data-testid="page62-timeline-insight">
+                    <span className={styles.timelineInsightIcon} aria-hidden>
+                      <Info size={22} />
+                    </span>
+                    <div className={styles.timelineInsightCopy}>
+                      <small>LEITURA DO MOMENTO</small>
+                      <strong>Operação segue dentro da janela, com uma decisão documental pendente.</strong>
+                      <p>
+                        A vazante e as condições do corredor seguem monitoradas; nenhum bloqueio crítico foi
+                        confirmado para o trecho atual.
+                      </p>
+                    </div>
+                    <div className={styles.timelineInsightDecision}>
+                      <small>PRÓXIMA DECISÃO</small>
+                      <strong>Validar manifesto até 16:30</strong>
                     </div>
                   </article>
                 </div>
