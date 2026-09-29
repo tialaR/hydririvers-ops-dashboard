@@ -12,6 +12,7 @@ import styles from './hydroway-map-product.module.scss';
 type HydrowayMapProductShellProps = {
   model: HydrowayMapModel;
   experience?: Extract<HydrowayMapExperience, 'product' | 'overview'>;
+  onExpand?: () => void;
 };
 
 function HydrowayMapProductFallback() {
@@ -25,11 +26,17 @@ function HydrowayMapProductFallback() {
 export function HydrowayMapProductShell({
   model,
   experience = 'product',
+  onExpand,
 }: HydrowayMapProductShellProps) {
   return (
     <div className={styles.host} data-testid="hydroway-map-product">
       <Suspense fallback={<HydrowayMapProductFallback />}>
-        <HydrowayMapSpikeClient model={model} preferredProvider="maplibre" experience={experience} />
+        <HydrowayMapSpikeClient
+          model={model}
+          preferredProvider="maplibre"
+          experience={experience}
+          onExpand={onExpand}
+        />
       </Suspense>
     </div>
   );
