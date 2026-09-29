@@ -69,6 +69,9 @@ jobs:
       - name: Page 62 journey contract
         run: npm run check:page62-journey
 
+      - name: Semantic color and state visual contract
+        run: npm run check:semantic-color-state
+
       - name: Check i18n
         run: npm run check:i18n
 
