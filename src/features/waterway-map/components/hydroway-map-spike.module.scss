@@ -1576,3 +1576,95 @@
     padding: 0.42rem 0.55rem;
   }
 }
+
+
+.stageProduct .layerPresetPanel,
+.stageProduct .layerPresetPanelDark {
+  width: min(18rem, calc(100vw - 6.5rem));
+  max-height: none;
+  padding: 0.7rem;
+  overflow: visible;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.95rem;
+  background: rgba(19, 19, 21, 0.97);
+  box-shadow: 0 0.85rem 2.25rem rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(16px);
+}
+
+.stageProduct .layerPresetPanelHeader {
+  gap: 0.75rem;
+  padding: 0.1rem 0.1rem 0.7rem;
+  border-bottom: 0.0625rem solid rgba(255, 255, 255, 0.1);
+}
+
+.stageProduct .layerPresetPanelClose {
+  width: 2rem;
+  height: 2rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.65rem;
+  background: rgba(255, 255, 255, 0.045);
+  color: rgba(238, 238, 241, 0.78);
+}
+
+.stageProduct .layerPresetPanelLegendList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem 0.55rem;
+}
+
+.stageProduct .layerPresetList {
+  gap: 0.42rem;
+  padding-top: 0.65rem;
+}
+
+.stageProduct .layerPresetButton,
+.stageProduct .layerPresetPanelDark .layerPresetButton {
+  min-height: 3.25rem;
+  gap: 0.18rem;
+  padding: 0.55rem 0.62rem;
+  border: 0.0625rem solid rgba(255, 255, 255, 0.09);
+  border-radius: 0.72rem;
+  background: rgba(255, 255, 255, 0.025);
+  color: rgba(238, 238, 241, 0.88);
+  box-shadow: none;
+}
+
+.stageProduct .layerPresetButton:hover:not(:disabled),
+.stageProduct .layerPresetPanelDark .layerPresetButton:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.stageProduct .layerPresetButtonActive,
+.stageProduct .layerPresetPanelDark .layerPresetButtonActive {
+  border-color: rgba(255, 255, 255, 0.34);
+  background: rgba(255, 255, 255, 0.095);
+  box-shadow: inset 0 0 0 0.0625rem rgba(255, 255, 255, 0.035);
+}
+
+.stageProduct .layerPresetButtonIcon {
+  display: grid;
+  width: 1.65rem;
+  height: 1.65rem;
+  place-items: center;
+  border-radius: 0.52rem;
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(230, 230, 233, 0.72);
+}
+
+.stageProduct .layerPresetButtonActive .layerPresetButtonIcon,
+.stageProduct .layerPresetPanelDark .layerPresetButtonActive .layerPresetButtonIcon {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
+.stageProduct .layerPresetButtonLabel,
+.stageProduct .layerPresetButtonActive .layerPresetButtonLabel,
+.stageProduct .layerPresetPanelDark .layerPresetButtonActive .layerPresetButtonLabel {
+  color: rgba(246, 246, 247, 0.93);
+}
+
+.stageProduct .layerPresetButtonDescription,
+.stageProduct .layerPresetPanelDark .layerPresetButtonDescription {
+  color: rgba(205, 205, 210, 0.58);
+}
