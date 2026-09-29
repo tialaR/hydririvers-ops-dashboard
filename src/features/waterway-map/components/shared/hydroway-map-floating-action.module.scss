@@ -268,3 +268,76 @@
     transform: none;
   }
 }
+
+
+/* Desktop product controls use the dashboard DS: neutral chrome, rounded rectangles,
+   no teal glow/dot legacy treatment. Mobile keeps the immersive FAB language above. */
+.sizeDesktop .surface {
+  border-radius: 0.72rem;
+  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(22, 22, 24, 0.92);
+  color: rgba(236, 236, 239, 0.86);
+  box-shadow: 0 0.35rem 1rem rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.sizeDesktop .surface::before {
+  background: none;
+}
+
+.sizeDesktop:hover:not(:disabled):not(.active):not([aria-pressed='true']) .surface,
+.sizeDesktop:focus-visible:not(.active):not([aria-pressed='true']) .surface {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(35, 35, 38, 0.97);
+  color: #ffffff;
+  box-shadow: 0 0.45rem 1.15rem rgba(0, 0, 0, 0.28);
+}
+
+.sizeDesktop.active:not(:disabled) .surface,
+.sizeDesktop[aria-pressed='true']:not(:disabled) .surface {
+  border-color: rgba(255, 255, 255, 0.42);
+  background: rgba(242, 242, 244, 0.94);
+  color: #171719;
+  box-shadow: 0 0.45rem 1.15rem rgba(0, 0, 0, 0.25);
+}
+
+.sizeDesktop.active:not(:disabled) .surface::before,
+.sizeDesktop[aria-pressed='true']:not(:disabled) .surface::before {
+  background: none;
+  box-shadow: none;
+}
+
+.sizeDesktop.active:not(:disabled) .surface::after,
+.sizeDesktop[aria-pressed='true']:not(:disabled) .surface::after {
+  content: none;
+}
+
+.sizeDesktop.active:not(:disabled) .icon,
+.sizeDesktop[aria-pressed='true']:not(:disabled) .icon,
+.sizeDesktop.active:not(:disabled) .icon svg,
+.sizeDesktop[aria-pressed='true']:not(:disabled) .icon svg {
+  color: #171719;
+  filter: none;
+}
+
+.sizeDesktop.active:not(:disabled):hover .surface,
+.sizeDesktop[aria-pressed='true']:not(:disabled):hover .surface {
+  border-color: rgba(255, 255, 255, 0.58);
+  background: #ffffff;
+  color: #111113;
+  box-shadow: 0 0.5rem 1.2rem rgba(0, 0, 0, 0.28);
+}
+
+.sizeDesktop[data-tooltip]::after {
+  border-color: rgba(255, 255, 255, 0.14);
+  border-radius: 0.55rem;
+  background: rgba(20, 20, 22, 0.96);
+  color: rgba(248, 248, 249, 0.94);
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.3);
+}
+
+.sizeDesktop:focus-visible {
+  outline-color: rgba(255, 255, 255, 0.72);
+}
