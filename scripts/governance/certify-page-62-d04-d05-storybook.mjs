@@ -53,8 +53,13 @@ try {
   const results = [];
 
   for (const surface of surfaces) {
+    const viewportWidth = surface.geometry.width ?? surface.geometry.minWidth ?? 640;
+    const viewportHeight = surface.geometry.height ?? surface.geometry.minHeight ?? 720;
     const page = await browser.newPage({
-      viewport: { width: Math.max(surface.geometry.width + 120, 640), height: 720 },
+      viewport: {
+        width: Math.max(viewportWidth + 120, 640),
+        height: Math.max(viewportHeight + 120, 720),
+      },
       deviceScaleFactor: 1,
     });
 
