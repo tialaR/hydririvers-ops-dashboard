@@ -8,6 +8,8 @@ const files = {
   cockpit: 'src/features/cargo/owned/stories/page-62-cargo-cockpit-preview.tsx',
   documents: 'src/features/cargo/components/documents-occurrence/cargo-documents-evidence-panel.tsx',
   occurrence: 'src/features/cargo/components/documents-occurrence/cargo-occurrence-summary.tsx',
+  journey: 'src/features/cargo/components/shipper-journey/shipper-journey-surfaces.tsx',
+  assistant: 'src/features/cargo/components/shipper-journey/operational-context-chat.tsx',
   tokens: 'src/shared/design-system/foundations/page-62-semantic-tokens.css',
 };
 
@@ -71,6 +73,25 @@ for (const required of [
   'OperationalAlert',
 ]) {
   if (!source.occurrence.includes(required)) failures.push(`occurrence semantic contract missing: ${required}`);
+}
+
+for (const required of [
+  'proposal-chooser',
+  'aria-pressed={isSelected}',
+  'data-semantic-role="neutral-icon"',
+  'data-semantic-status={needsAttention',
+  'review-preconfirm-checklist',
+  'data-state="warning"',
+]) {
+  if (!source.journey.includes(required)) failures.push(`negotiation/review semantic contract missing: ${required}`);
+}
+
+for (const required of [
+  'aria-pressed={asked}',
+  'data-semantic-role="neutral-icon"',
+  'snapshot DEMO',
+]) {
+  if (!source.assistant.includes(required)) failures.push(`operational assistant semantic contract missing: ${required}`);
 }
 
 for (const required of [
