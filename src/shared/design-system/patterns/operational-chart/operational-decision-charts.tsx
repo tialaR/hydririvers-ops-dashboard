@@ -79,6 +79,87 @@ export function ProposalTradeoffRadar() {
   );
 }
 
+
+export function ProposalDecisionComparisonChart({
+  selectedLabel,
+  referenceLabel,
+  selectedScores,
+  referenceScores,
+}: {
+  selectedLabel: string;
+  referenceLabel: string;
+  selectedScores: [number, number, number, number, number, number];
+  referenceScores: [number, number, number, number, number, number];
+}) {
+  const option = useMemo<EChartsCoreOption>(() => ({
+    animation: false,
+    grid: { left: 88, right: 24, top: 34, bottom: 26 },
+    tooltip: {
+      ...operationalTooltipShell,
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
+        return buildOperationalTooltip({
+          eyebrow: 'ADEQUAÇÃO OPERACIONAL',
+          title: items[0]?.axisValue ?? 'Critério',
+          rows: items.map((item) => ({
+            label: item.seriesName ?? 'Proposta',
+            value: String(item.value ?? '—') + '/100',
+          })),
+          footer: 'Índice comparativo DEMO. Quanto maior, melhor a adequação relativa no critério.',
+        });
+      },
+    },
+    legend: {
+      top: 0,
+      right: 0,
+      textStyle: { color: '#8b949f', fontSize: 10 },
+      itemWidth: 12,
+      itemHeight: 6,
+    },
+    xAxis: {
+      type: 'value',
+      min: 0,
+      max: 100,
+      axisLabel: { color: '#6f7781', fontSize: 9, formatter: '{value}' },
+      splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
+      axisLine: { show: false },
+    },
+    yAxis: {
+      type: 'category',
+      data: ['Risco', 'Docs', 'Calado', 'Demurrage', 'Custo', 'Janela'],
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: { color: '#aab2bb', fontSize: 10, fontWeight: 600 },
+    },
+    series: [
+      {
+        name: referenceLabel,
+        type: 'bar',
+        data: referenceScores,
+        barWidth: 8,
+        itemStyle: { color: '#555b63', borderRadius: [0, 5, 5, 0] },
+      },
+      {
+        name: selectedLabel,
+        type: 'bar',
+        data: selectedScores,
+        barWidth: 8,
+        itemStyle: { color: '#d7d9dc', borderRadius: [0, 5, 5, 0] },
+      },
+    ],
+  }), [referenceLabel, referenceScores, selectedLabel, selectedScores]);
+
+  return (
+    <OperationalEChart
+      option={option}
+      ariaLabel={'Comparação de adequação operacional entre ' + selectedLabel + ' e ' + referenceLabel + ' por janela, custo, demurrage, calado, documentos e risco'}
+      className={styles.decisionBars}
+    />
+  );
+}
+
 export function DocumentWeightComparisonChart({
   submitted = 18.4,
   evidence = 16.8,
