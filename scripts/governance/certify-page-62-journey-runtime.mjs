@@ -127,7 +127,7 @@ async function certifyInteractiveFlow({ name, correctionBranch = false }) {
     await page.getByRole('button', { name: 'Revisar aceite' }).click();
     await visit('[data-testid="page62-d10-review"]', 'D10');
 
-    await page.getByRole('button', { name: 'Confirmar aceite' }).click();
+    await page.getByRole('button', { name: 'Confirmar proposta' }).click();
     await visit('[data-testid="page62-d11-feedback"]', 'D11');
 
     if (correctionBranch) {
