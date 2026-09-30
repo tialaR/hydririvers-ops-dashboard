@@ -172,6 +172,9 @@ if (!mock.includes('arrivalAt')) failures.push('proposal arrivalAt must be expli
 if (!mock.includes('valueBRLPerHour')) failures.push('demurrage unit must be explicit and hourly for the reference scenario');
 if (!mock.includes("id: 'proposal-c'")) failures.push('negotiation demo must expose at least three proposal choices');
 if (!mock.includes('draftMeters')) failures.push('proposal draft must be explicit for hydroway negotiation context');
+if (!mock.includes("corridorId: 'amazonas'")) failures.push('Manaus-Santarem demo must use the Amazonas corridor');
+if (!mock.includes("riverLabel: 'Rio Amazonas'")) failures.push('Manaus-Santarem demo river label must be Rio Amazonas');
+if (!mock.includes("id: 'src-dnit-amazonas'")) failures.push('Amazonas corridor must retain a DNIT source reference');
 
 for (const required of [
   'FullFlow',
