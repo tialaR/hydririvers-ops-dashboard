@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from 'motion/react';
 import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
-import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalDecisionComparisonChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
+import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
 import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
 import { OperationalScheduleList } from '@/shared/design-system/patterns/operational-schedule-list';
 import { OperationalContextChat } from './operational-context-chat';
