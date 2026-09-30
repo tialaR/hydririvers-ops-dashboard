@@ -39,11 +39,9 @@ function time(value: string) {
 export function OperationalContextChat({
   selectedProposal,
   referenceProposal,
-  onReview,
 }: {
   selectedProposal: ShipperProposal;
   referenceProposal: ShipperProposal;
-  onReview?: () => void;
 }) {
   const catalog = useMemo<Array<ConversationTurn>>(() => {
     const etaDeltaMinutes = Math.round(
@@ -161,9 +159,6 @@ export function OperationalContextChat({
             <Send size={17} />
           </button>
         </div>
-        <button className={styles.reviewButton} type="button" onClick={onReview}>
-          Revisar aceite
-        </button>
       </footer>
     </aside>
   );
