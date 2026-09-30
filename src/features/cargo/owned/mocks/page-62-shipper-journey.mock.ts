@@ -22,8 +22,8 @@ export const PAGE62_SHIPPER_JOURNEY_DEMO: ShipperJourneySnapshot = {
         sourceId: 'src-antaq-dry-season-2026',
       },
       {
-        id: 'hydro-mobile-sandbanks-demo',
-        type: 'sandbank',
+        id: 'hydro-amazonas-low-water-demo',
+        type: 'lowWater',
         severity: 'medium',
         title: 'Vazante altera margem operacional do corredor',
         impact: 'A profundidade varia com o ciclo hidrológico e exige leitura atualizada de calado, programação e condições de navegabilidade.',
