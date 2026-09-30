@@ -21,7 +21,7 @@ function money(value: number) {
 }
 
 function time(value: string) {
-  return new Date(value).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+  return new Date(value).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Santarem' });
 }
 
 export function ProposalNegotiationSurface({
