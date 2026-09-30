@@ -97,7 +97,7 @@ export function ProposalNegotiationSurface({
       <div className={styles.negotiationContext} data-testid="negotiation-context-strip">
         <span><small>CARGA</small><strong>#HY-247-819</strong><em>Manaus → Santarém</em></span>
         <span><small>JANELA</small><strong>18:40</strong><em>marco operacional</em></span>
-        <span><small>CONTEXTO HIDROVIÁRIO</small><strong>Rio Madeira · vazante</strong><em>DEMO · fonte ANA/DNIT prevista</em></span>
+        <span><small>CONTEXTO HIDROVIÁRIO</small><strong>Rio Amazonas · vazante</strong><em>DEMO · fonte ANA/DNIT prevista</em></span>
         <span data-semantic-status="warning"><small>ATENÇÃO</small><strong>calado + prazo</strong><em>avaliar antes do aceite</em></span>
       </div>
 
