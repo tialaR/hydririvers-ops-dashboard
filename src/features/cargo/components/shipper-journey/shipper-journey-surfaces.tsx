@@ -225,7 +225,6 @@ export function ProposalNegotiationSurface({
         <OperationalContextChat
           selectedProposal={selected}
           referenceProposal={reference}
-          onReview={() => onReview?.(selected.id)}
         />
       </div>
 
