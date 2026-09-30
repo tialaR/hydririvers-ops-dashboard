@@ -86,6 +86,7 @@ export type ShipperProposal = {
   id: string;
   counterparty: string;
   vesselLabel: string;
+  draftMeters?: number;
   priceBRL: number;
   etaHours: number;
   arrivalAt: string;
