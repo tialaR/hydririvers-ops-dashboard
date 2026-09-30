@@ -170,6 +170,8 @@ if (!mock.includes("mode: 'demo'")) failures.push('Page 62 mock must be explicit
 if (!mock.includes("kind: 'mdfe'")) failures.push('MDF-e must be typed explicitly in the mock');
 if (!mock.includes('arrivalAt')) failures.push('proposal arrivalAt must be explicit');
 if (!mock.includes('valueBRLPerHour')) failures.push('demurrage unit must be explicit and hourly for the reference scenario');
+if (!mock.includes("id: 'proposal-c'")) failures.push('negotiation demo must expose at least three proposal choices');
+if (!mock.includes('draftMeters')) failures.push('proposal draft must be explicit for hydroway negotiation context');
 
 for (const required of [
   'FullFlow',
@@ -181,6 +183,36 @@ for (const required of [
   'D13Monitoring',
 ]) {
   if (!stories.includes(`export const ${required}`)) failures.push(`Storybook journey state missing: ${required}`);
+}
+
+for (const required of [
+  'selectedProposalId',
+  'setSelectedProposalId',
+  'onBack={() => setExperience(\'documentsRisk\')}',
+]) {
+  if (!journeyDemo.includes(required)) failures.push(`negotiation flow integration missing: ${required}`);
+}
+
+for (const required of [
+  'ProposalDecisionComparisonChart',
+  'proposal-chooser',
+  'proposal-decision-dashboard',
+  'proposal-comparison-strip',
+  'Voltar para documentos e ocorrências',
+  'OperationalContextChat',
+]) {
+  if (!surfaces.includes(required)) failures.push(`D08-D09 decision experience missing: ${required}`);
+}
+
+for (const required of [
+  'review-selected-proposal',
+  'review-impact-cards',
+  'review-preconfirm-checklist',
+  'review-next-steps',
+  'Voltar à negociação',
+  'Confirmar proposta',
+]) {
+  if (!surfaces.includes(required)) failures.push(`D10 acceptance review missing: ${required}`);
 }
 
 for (const required of [
@@ -249,11 +281,11 @@ for (const required of [
 
 if (!echartCore.includes("useDirtyRect: renderer === 'canvas' ? false : undefined")) failures.push('ECharts dirty-rect must remain disabled for Canvas while SVG stays renderer-native');
 
-for (const required of ['ProposalTradeoffRadar', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'HydroLevelTrendChart']) {
+for (const required of ['ProposalTradeoffRadar', 'ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'HydroLevelTrendChart']) {
   if (!decisionCharts.includes(`export function ${required}`)) failures.push(`decision visualization missing: ${required}`);
 }
 
-for (const required of ['ProposalTradeoffRadar', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'OperationalGaugeChart']) {
+for (const required of ['ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'OperationalGaugeChart']) {
   if (!surfaces.includes(required)) failures.push(`journey surface is not using visualization: ${required}`);
 }
 
