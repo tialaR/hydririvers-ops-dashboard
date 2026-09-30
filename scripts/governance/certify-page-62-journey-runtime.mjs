@@ -38,7 +38,7 @@ const states = [
     name: 'D10 Action Review',
     storyKey: 'D10ActionReview',
     selector: '[data-testid="page62-d10-review"]',
-    minCharts: 0,
+    minCharts: 1,
   },
   {
     name: 'D11 Action Feedback',
@@ -269,6 +269,21 @@ try {
       const documentsPrimaryRect = documentsPrimary?.getBoundingClientRect();
       const occurrencePrimaryRect = occurrencePrimary?.getBoundingClientRect();
       const continuationRect = continuation?.getBoundingClientRect();
+
+      const proposalCards = Array.from(document.querySelectorAll('[data-testid="proposal-chooser"] button[aria-pressed]'));
+      const selectedProposalCards = proposalCards.filter((item) => item.getAttribute('aria-pressed') === 'true');
+      const negotiationBackButton = document.querySelector('button[aria-label="Voltar para documentos e ocorrências"]');
+      const assistant = document.querySelector('[data-testid="page62-d09-context-chat"]');
+      const assistantSuggestions = assistant ? Array.from(assistant.querySelectorAll('[aria-label="Perguntas sugeridas"] button')) : [];
+      const assistantTurns = assistant ? Array.from(assistant.querySelectorAll('[aria-live="polite"] > *')) : [];
+      const decisionDashboard = document.querySelector('[data-testid="proposal-decision-dashboard"]');
+      const comparisonStrip = document.querySelector('[data-testid="proposal-comparison-strip"]');
+      const reviewBackButton = document.querySelector('button[aria-label="Voltar à negociação"]');
+      const reviewImpactCards = document.querySelector('[data-testid="review-impact-cards"]');
+      const reviewChecklist = document.querySelector('[data-testid="review-preconfirm-checklist"]');
+      const reviewNextSteps = document.querySelector('[data-testid="review-next-steps"]');
+      const reviewSelectedProposal = document.querySelector('[data-testid="review-selected-proposal"]');
+      const reviewChecklistItems = reviewChecklist ? Array.from(reviewChecklist.querySelectorAll('li')) : [];
       const eventGaps = timelineEvents.slice(1).map((item, index) => {
         const previous = timelineEvents[index].getBoundingClientRect();
         const current = item.getBoundingClientRect();
@@ -329,6 +344,18 @@ try {
           occurrencePrimaryRect && continuationRect && occurrencePrimaryRect.bottom <= continuationRect.top
         ),
         occurrenceOverlapCount,
+        proposalCardCount: proposalCards.length,
+        selectedProposalCardCount: selectedProposalCards.length,
+        negotiationBackVisible: Boolean(negotiationBackButton && negotiationBackButton.getBoundingClientRect().width > 0),
+        assistantSuggestionCount: assistantSuggestions.length,
+        assistantTurnCount: assistantTurns.length,
+        decisionDashboardVisible: Boolean(decisionDashboard && decisionDashboard.getBoundingClientRect().height > 0),
+        comparisonStripVisible: Boolean(comparisonStrip && comparisonStrip.getBoundingClientRect().height > 0),
+        reviewBackVisible: Boolean(reviewBackButton && reviewBackButton.getBoundingClientRect().width > 0),
+        reviewImpactCardCount: reviewImpactCards ? reviewImpactCards.querySelectorAll('article').length : 0,
+        reviewChecklistCount: reviewChecklistItems.length,
+        reviewNextStepsVisible: Boolean(reviewNextSteps && reviewNextSteps.getBoundingClientRect().height > 0),
+        reviewSelectedProposalVisible: Boolean(reviewSelectedProposal && reviewSelectedProposal.getBoundingClientRect().height > 0),
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -356,6 +383,21 @@ try {
         if (metrics.distinctSemanticStatusColors < 3) failures.push(`distinct operational statuses collapsed into ${metrics.distinctSemanticStatusColors} computed colors`);
         if (metrics.neutralIconCount < 3) failures.push('neutral icon contract not represented in documents/occurrence');
         if (metrics.maxNeutralIconColorSpread > 42) failures.push(`neutral icons became status-colored: RGB spread ${metrics.maxNeutralIconColorSpread}`);
+      }
+      if (state.storyKey === 'D08D09Negotiation') {
+        if (metrics.proposalCardCount < 3) failures.push(`negotiation choice set too narrow: ${metrics.proposalCardCount}`);
+        if (metrics.selectedProposalCardCount !== 1) failures.push(`negotiation must expose exactly one selected proposal: ${metrics.selectedProposalCardCount}`);
+        if (!metrics.negotiationBackVisible) failures.push('negotiation back navigation missing');
+        if (!metrics.decisionDashboardVisible || !metrics.comparisonStripVisible) failures.push('negotiation decision hierarchy incomplete');
+        if (metrics.assistantSuggestionCount < 4) failures.push(`operational assistant suggestion breadth incomplete: ${metrics.assistantSuggestionCount}`);
+        if (metrics.assistantTurnCount < 1) failures.push('operational assistant conversation state missing');
+      }
+      if (state.storyKey === 'D10ActionReview') {
+        if (!metrics.reviewBackVisible) failures.push('review back navigation missing');
+        if (!metrics.reviewSelectedProposalVisible) failures.push('selected proposal summary missing from review');
+        if (metrics.reviewImpactCardCount < 4) failures.push(`review impact breadth incomplete: ${metrics.reviewImpactCardCount}`);
+        if (metrics.reviewChecklistCount < 4) failures.push(`pre-confirm checklist incomplete: ${metrics.reviewChecklistCount}`);
+        if (!metrics.reviewNextStepsVisible) failures.push('post-accept next steps missing');
       }
       if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
