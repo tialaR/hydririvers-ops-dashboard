@@ -1,12 +1,12 @@
 'use client';
 
-import { BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileWarning, Gauge, Radio, Route, Scale, ShieldCheck, TrendingUp } from 'lucide-react';
+import { ArrowLeft, BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileWarning, Radio, Route, Scale, ShieldCheck, ShipWheel, TrendingUp } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 
 import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
-import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
+import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalDecisionComparisonChart, ProposalTradeoffRadar } from '@/shared/design-system/patterns/operational-chart';
 import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
 import { OperationalScheduleList } from '@/shared/design-system/patterns/operational-schedule-list';
 import { OperationalContextChat } from './operational-context-chat';
@@ -26,106 +26,213 @@ function time(value: string) {
 
 export function ProposalNegotiationSurface({
   proposals,
+  selectedProposalId,
+  onSelectProposal,
   onReview,
+  onBack,
 }: {
   proposals: ShipperProposal[];
-  onReview?: () => void;
+  selectedProposalId: string;
+  onSelectProposal?: (proposalId: string) => void;
+  onReview?: (proposalId: string) => void;
+  onBack?: () => void;
 }) {
-  const current = proposals[0];
-  const alternative = proposals[1];
-  if (!current || !alternative) return null;
+  const selected = proposals.find((proposal) => proposal.id === selectedProposalId) ?? proposals[1] ?? proposals[0];
+  const reference = proposals.find((proposal) => proposal.id !== selected?.id) ?? proposals[0];
+  if (!selected || !reference) return null;
 
-  const etaDeltaMinutes = Math.round((new Date(current.arrivalAt).getTime() - new Date(alternative.arrivalAt).getTime()) / 60000);
-  const priceDelta = alternative.priceBRL - current.priceBRL;
-  const currentDemurrage = current.demurrage?.valueBRLPerHour;
-  const alternativeDemurrage = alternative.demurrage?.valueBRLPerHour;
+  const priceValues = proposals.map((proposal) => proposal.priceBRL);
+  const demurrageValues = proposals.map((proposal) => proposal.demurrage?.valueBRLPerHour ?? 0);
+  const arrivalValues = proposals.map((proposal) => new Date(proposal.arrivalAt).getTime());
+  const minPrice = Math.min(...priceValues);
+  const maxPrice = Math.max(...priceValues);
+  const minDemurrage = Math.min(...demurrageValues);
+  const maxDemurrage = Math.max(...demurrageValues);
+  const minArrival = Math.min(...arrivalValues);
+  const maxArrival = Math.max(...arrivalValues);
+
+  const normalizeLowerIsBetter = (value: number, min: number, max: number) => {
+    if (max <= min) return 88;
+    return Math.round(95 - ((value - min) / (max - min)) * 42);
+  };
+  const riskScore = (value: ShipperProposal['operationalRisk']) =>
+    ({ info: 88, low: 92, medium: 66, high: 38, critical: 16 }[value] ?? 60);
+  const docsScore = (value: ShipperProposal['compatibility']['documents']) =>
+    ({ ready: 96, attention: 62, blocked: 18 }[value]);
+  const draftScore = (value: ShipperProposal['compatibility']['draft']) =>
+    ({ compatible: 96, attention: 60, incompatible: 14, unknown: 42 }[value]);
+  const scores = (proposal: ShipperProposal): [number, number, number, number, number, number] => [
+    riskScore(proposal.operationalRisk),
+    docsScore(proposal.compatibility.documents),
+    draftScore(proposal.compatibility.draft),
+    normalizeLowerIsBetter(proposal.demurrage?.valueBRLPerHour ?? 0, minDemurrage, maxDemurrage),
+    normalizeLowerIsBetter(proposal.priceBRL, minPrice, maxPrice),
+    normalizeLowerIsBetter(new Date(proposal.arrivalAt).getTime(), minArrival, maxArrival),
+  ];
+
+  const etaDeltaMinutes = Math.round(
+    (new Date(reference.arrivalAt).getTime() - new Date(selected.arrivalAt).getTime()) / 60000,
+  );
+  const priceDelta = selected.priceBRL - reference.priceBRL;
+  const selectedDemurrage = selected.demurrage?.valueBRLPerHour ?? 0;
+  const referenceDemurrage = reference.demurrage?.valueBRLPerHour ?? 0;
+  const demurrageDelta = referenceDemurrage - selectedDemurrage;
 
   return (
-    <section className={styles.surface} data-testid="page62-d08-d09-negotiation">
+    <section className={styles.surface + ' ' + styles.negotiationSurface} data-testid="page62-d08-d09-negotiation">
       <header className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>D08–D09 · decisão comercial + coordenação</p>
-          <h2 className={styles.title}>Negociação operacional</h2>
-          <p className={styles.subtitle}>Compare preço, tempo, risco e restrições antes de confirmar a contraparte.</p>
+        <div className={styles.headerLead}>
+          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label="Voltar para documentos e ocorrências">
+            <ArrowLeft size={18} />
+          </button>
+          <div>
+            <p className={styles.eyebrow}>D08–D09 · decisão comercial + coordenação</p>
+            <h2 className={styles.title}>Negociação operacional</h2>
+            <p className={styles.subtitle}>Compare alternativas sem perder janela, restrição hidroviária ou evidência documental.</p>
+          </div>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
       </header>
 
-      <div className={styles.contextBar}>
-        <span><strong>#HY-247-819 · proposta #PN-184</strong><small>Manaus → Santarém · janela operacional 18:40</small></span>
-        <span className={styles.statusBadge}>Em negociação</span>
+      <div className={styles.negotiationContext} data-testid="negotiation-context-strip">
+        <span><small>CARGA</small><strong>#HY-247-819</strong><em>Manaus → Santarém</em></span>
+        <span><small>JANELA</small><strong>18:40</strong><em>marco operacional</em></span>
+        <span><small>CONTEXTO HIDROVIÁRIO</small><strong>Rio Madeira · vazante</strong><em>DEMO · fonte ANA/DNIT prevista</em></span>
+        <span data-semantic-status="warning"><small>ATENÇÃO</small><strong>calado + prazo</strong><em>avaliar antes do aceite</em></span>
       </div>
 
       <div className={styles.negotiationGrid}>
-        <article className={styles.panel}>
-          <div className={styles.panelHeader}>
-            <h3>Comparar proposta</h3>
-            <span className={styles.statusBadge}>2 válidas</span>
-          </div>
+        <div className={styles.negotiationMain}>
+          <article className={styles.proposalChooser} data-testid="proposal-chooser">
+            <div className={styles.sectionHeading}>
+              <div>
+                <p className={styles.eyebrow}>PROPOSTAS VÁLIDAS</p>
+                <h3>Escolha a alternativa para comparar</h3>
+                <span>A seleção muda gráfico, deltas e respostas do assistente.</span>
+              </div>
+              <span className={styles.statusBadge}>{proposals.length} opções</span>
+            </div>
 
-          <div className={styles.proposalGrid}>
-            {[current, alternative].map((proposal, index) => (
-              <div className={styles.proposalCard} data-selected={index === 1} key={proposal.id}>
-                <small>{proposal.counterparty}</small>
-                <strong>{money(proposal.priceBRL)}</strong>
-                <span className={styles.proposalMeta}>
-                  <span>Chegada {time(proposal.arrivalAt)}</span>
-                  <span>{proposal.vesselLabel}</span>
-                  <span>validade {time(proposal.validityAt)}</span>
+            <div className={styles.proposalGrid}>
+              {proposals.map((proposal) => {
+                const isSelected = proposal.id === selected.id;
+                const needsAttention =
+                  proposal.compatibility.documents !== 'ready' ||
+                  proposal.compatibility.draft !== 'compatible';
+                return (
+                  <button
+                    className={styles.proposalCard}
+                    data-selected={isSelected}
+                    aria-pressed={isSelected}
+                    type="button"
+                    key={proposal.id}
+                    onClick={() => onSelectProposal?.(proposal.id)}
+                  >
+                    <span className={styles.proposalCardTop}>
+                      <span>
+                        <small>{proposal.counterparty}</small>
+                        <strong>{money(proposal.priceBRL)}</strong>
+                      </span>
+                      <span className={styles.proposalSelection} aria-hidden>
+                        {isSelected ? <Check size={15} /> : null}
+                      </span>
+                    </span>
+                    <span className={styles.proposalCardFacts}>
+                      <span><Clock3 size={16} /><small>Chegada</small><strong>{time(proposal.arrivalAt)}</strong></span>
+                      <span><ShipWheel size={16} /><small>Calado</small><strong>{proposal.draftMeters ? proposal.draftMeters.toFixed(1).replace('.', ',') + ' m' : '—'}</strong></span>
+                      <span><FileCheck2 size={16} /><small>Docs</small><strong>{proposal.compatibility.documents === 'ready' ? 'Prontos' : 'Atenção'}</strong></span>
+                    </span>
+                    <span className={styles.proposalCardFooter}>
+                      <span>{proposal.vesselLabel}</span>
+                      <span data-semantic-status={needsAttention ? 'warning' : 'success'}>
+                        {needsAttention ? 'Requer leitura' : 'Sem bloqueio'}
+                      </span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </article>
+
+          <article className={styles.decisionDashboard} data-testid="proposal-decision-dashboard">
+            <div className={styles.sectionHeading}>
+              <div>
+                <p className={styles.eyebrow}>TRADE-OFF OPERACIONAL</p>
+                <h3>{selected.counterparty.replace(' · DEMO', '')} × {reference.counterparty.replace(' · DEMO', '')}</h3>
+                <span>Índice relativo para leitura rápida; os valores reais aparecem ao lado.</span>
+              </div>
+            </div>
+
+            <div className={styles.decisionVisualGrid}>
+              <div className={styles.visualPanel}>
+                <ProposalDecisionComparisonChart
+                  selectedLabel={selected.counterparty.replace(' · DEMO', '')}
+                  referenceLabel={reference.counterparty.replace(' · DEMO', '')}
+                  selectedScores={scores(selected)}
+                  referenceScores={scores(reference)}
+                />
+              </div>
+
+              <div className={styles.visualSummary}>
+                <span>
+                  <Clock3 size={20} data-semantic-role="neutral-icon"/>
+                  <small>CHEGADA</small>
+                  <strong>{time(selected.arrivalAt)}</strong>
+                  <em>{etaDeltaMinutes >= 0 ? etaDeltaMinutes + ' min antes' : Math.abs(etaDeltaMinutes) + ' min depois'}</em>
+                </span>
+                <span>
+                  <BadgeDollarSign size={20} data-semantic-role="neutral-icon"/>
+                  <small>PREÇO</small>
+                  <strong>{money(selected.priceBRL)}</strong>
+                  <em>{priceDelta >= 0 ? '+' : '−'}{money(Math.abs(priceDelta))}</em>
+                </span>
+                <span>
+                  <Route size={20} data-semantic-role="neutral-icon"/>
+                  <small>CALADO</small>
+                  <strong>{selected.draftMeters ? selected.draftMeters.toFixed(1).replace('.', ',') + ' m' : '—'}</strong>
+                  <em>{selected.compatibility.draft === 'compatible' ? 'compatível' : 'atenção'}</em>
+                </span>
+                <span>
+                  <FileCheck2 size={20} data-semantic-role="neutral-icon"/>
+                  <small>DOCUMENTOS</small>
+                  <strong>{selected.compatibility.documents === 'ready' ? 'Prontos' : 'Revisar'}</strong>
+                  <em>{selected.compatibility.documents === 'ready' ? 'sem bloqueio' : 'pendência ativa'}</em>
                 </span>
               </div>
-            ))}
-          </div>
+            </div>
 
-          <div className={styles.decisionVisualGrid}>
-            <div className={styles.visualPanel}>
-              <div className={styles.visualPanelHeader}>
-                <span><Gauge size={18}/><strong>Trade-off operacional</strong></span>
-                <small>interativo · custo × ETA × calado × docs × risco</small>
+            <div className={styles.comparisonStrip} data-testid="proposal-comparison-strip">
+              <span><small>Demurrage</small><strong>{money(selectedDemurrage)}/h</strong><em>{demurrageDelta >= 0 ? '−' : '+'}{money(Math.abs(demurrageDelta))}/h</em></span>
+              <span><small>Validade</small><strong>{time(selected.validityAt)}</strong><em>decisão com prazo</em></span>
+              <span><small>Risco operacional</small><strong>{selected.operationalRisk === 'low' ? 'Baixo' : 'Moderado'}</strong><em>snapshot DEMO</em></span>
+              <span><small>Embarcação</small><strong>{selected.vesselLabel}</strong><em>compatibilidade de calado</em></span>
+            </div>
+
+            <div className={styles.decisionRead}>
+              <div>
+                <small className={styles.miniLabel}>LEITURA PARA DECISÃO</small>
+                <strong>
+                  {selected.counterparty.replace(' · DEMO', '')} {etaDeltaMinutes >= 0 ? 'antecipa' : 'posterga'} a chegada em {Math.abs(etaDeltaMinutes)} min,
+                  {' '}muda o frete em {priceDelta >= 0 ? '+' : '−'}{money(Math.abs(priceDelta))}
+                  {' '}e {demurrageDelta >= 0 ? 'reduz' : 'aumenta'} a demurrage em {money(Math.abs(demurrageDelta))}/h.
+                </strong>
               </div>
-              <ProposalTradeoffRadar />
+              <span className={styles.decisionSource}>DEMO · decisão depende de fonte/freshness hidroviária em produção</span>
             </div>
-            <div className={styles.visualSummary}>
-              <span><Clock3 size={20}/><small>CHEGADA</small><strong>18:30</strong><em>−50 min</em></span>
-              <span><BadgeDollarSign size={20}/><small>PREÇO</small><strong>R$ 19.450</strong><em>+R$ 550</em></span>
-              <span><Route size={20}/><small>CALADO</small><strong>Compatível</strong><em>menor exposição</em></span>
-              <span><FileCheck2 size={20}/><small>DOCUMENTOS</small><strong>Prontos</strong><em>sem bloqueio</em></span>
-            </div>
-          </div>
+          </article>
+        </div>
 
-          <div className={styles.tradeTable}>
-            <div className={styles.tradeRow}>
-              <small>Chegada</small><span>{time(current.arrivalAt)}</span>
-              <strong className={etaDeltaMinutes > 0 ? styles.deltaGood : styles.deltaWarn}>{etaDeltaMinutes > 0 ? '−' + etaDeltaMinutes + ' min' : '+' + Math.abs(etaDeltaMinutes) + ' min'}</strong>
-              <span>{time(alternative.arrivalAt)}</span>
-            </div>
-            <div className={styles.tradeRow}>
-              <small>Preço</small><span>{money(current.priceBRL)}</span>
-              <strong className={priceDelta > 0 ? styles.deltaWarn : styles.deltaGood}>{priceDelta > 0 ? '+' : '−'} {money(Math.abs(priceDelta))}</strong>
-              <span>{money(alternative.priceBRL)}</span>
-            </div>
-            <div className={styles.tradeRow}>
-              <small>Demurrage</small><span>{currentDemurrage ? money(currentDemurrage) + '/h' : 'não informado'}</span>
-              <strong>{alternativeDemurrage && currentDemurrage ? money(Math.abs(alternativeDemurrage - currentDemurrage)) : 'contratual'}</strong>
-              <span>{alternativeDemurrage ? money(alternativeDemurrage) + '/h' : 'não informado'}</span>
-            </div>
-            <div className={styles.tradeRow}>
-              <small>Validade</small><span>{time(current.validityAt)}</span><strong className={styles.deltaWarn}>−15 min</strong><span>{time(alternative.validityAt)}</span>
-            </div>
-          </div>
+        <OperationalContextChat
+          selectedProposal={selected}
+          referenceProposal={reference}
+          onReview={() => onReview?.(selected.id)}
+        />
+      </div>
 
-          <div className={styles.decisionRead}>
-            <small className={styles.miniLabel}>LEITURA PARA DECISÃO</small>
-            <strong>A alternativa custa R$ 550 a mais, chega 50 min antes e reduz a demurrage contratual em R$ 130/h.</strong>
-          </div>
-
-          <div className={styles.recommendation}>
-            <div><small className={styles.miniLabel}>POR QUE ESTA PROPOSTA?</small><strong>Chega 50 min antes e reduz demurrage em R$ 130/h</strong></div>
-            <span className={styles.recommendationMetrics}><span>ETA −50 min</span><span>−R$ 130/h</span></span>
-          </div>
-        </article>
-
-        <OperationalContextChat onReview={onReview} />
+      <div className={styles.flowActionBar}>
+        <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar</button>
+        <span>Proposta selecionada: <strong>{selected.counterparty.replace(' · DEMO', '')}</strong></span>
+        <button className={styles.primaryAction} type="button" onClick={() => onReview?.(selected.id)}>Revisar aceite</button>
       </div>
     </section>
   );
@@ -152,67 +259,134 @@ export function OperationalCommunicationPanel({ onReview }: { onReview?: () => v
 }
 
 export function DecisionActionReviewSurface({
-  current,
-  alternative,
+  selected,
+  reference,
   onConfirm,
-  onCancel,
+  onBack,
 }: {
-  current: ShipperProposal;
-  alternative: ShipperProposal;
+  selected: ShipperProposal;
+  reference: ShipperProposal;
   onConfirm?: () => void;
-  onCancel?: () => void;
+  onBack?: () => void;
 }) {
   const etaDeltaMinutes = Math.round(
-    (new Date(current.arrivalAt).getTime() - new Date(alternative.arrivalAt).getTime()) / 60000,
+    (new Date(reference.arrivalAt).getTime() - new Date(selected.arrivalAt).getTime()) / 60000,
   );
+  const priceDelta = selected.priceBRL - reference.priceBRL;
+  const demurrageDelta =
+    (reference.demurrage?.valueBRLPerHour ?? 0) -
+    (selected.demurrage?.valueBRLPerHour ?? 0);
+
+  const selectedScores: [number, number, number, number, number, number] = [
+    selected.operationalRisk === 'low' ? 92 : 66,
+    selected.compatibility.documents === 'ready' ? 96 : 60,
+    selected.compatibility.draft === 'compatible' ? 96 : 60,
+    demurrageDelta >= 0 ? 92 : 58,
+    priceDelta <= 0 ? 92 : 72,
+    etaDeltaMinutes >= 0 ? 94 : 60,
+  ];
+  const referenceScores: [number, number, number, number, number, number] = [66, 62, 60, 64, 94, 62];
 
   return (
-    <section className={styles.surface} data-testid="page62-d10-review">
+    <section className={styles.surface + ' ' + styles.reviewSurface} data-testid="page62-d10-review">
       <header className={styles.header}>
-        <div>
-          <p className={styles.eyebrow}>D10 · ação com consequência operacional</p>
-          <h2 className={styles.title}>Revisar aceite da proposta</h2>
-          <p className={styles.subtitle}>Antes de confirmar, veja exatamente o que muda e o que permanece dependente de validação.</p>
+        <div className={styles.headerLead}>
+          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label="Voltar à negociação">
+            <ArrowLeft size={18} />
+          </button>
+          <div>
+            <p className={styles.eyebrow}>D10 · revisão antes da ação</p>
+            <h2 className={styles.title}>Revisar aceite da proposta</h2>
+            <p className={styles.subtitle}>Confirme consequência comercial, janela, calado, documentos e próximos passos antes de assumir a contraparte.</p>
+          </div>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
       </header>
 
-      <article className={styles.reviewCard}>
-        <p className={styles.eyebrow}>O QUE MUDA SE VOCÊ CONFIRMAR</p>
-        <div className={styles.reviewGrid}>
-          <div className={styles.reviewBlock}>
-            <small>ANTES</small><strong>{current.counterparty}</strong><strong>{money(current.priceBRL)}</strong>
-            <span>Chegada {time(current.arrivalAt)}</span><span>Demurrage {current.demurrage ? money(current.demurrage.valueBRLPerHour) + '/h' : 'não informado'}</span>
-          </div>
-          <div className={styles.reviewBlock + ' ' + styles.deltaBlock}>
-            <small>EFEITO OPERACIONAL</small>
-            <strong>{etaDeltaMinutes > 0 ? '−' + etaDeltaMinutes + ' min' : '+' + Math.abs(etaDeltaMinutes) + ' min'} chegada</strong>
-            <span>{money(alternative.priceBRL - current.priceBRL)} custo</span>
-            <span>calado: {alternative.compatibility.draft}</span>
-          </div>
-          <div className={styles.reviewBlock} data-after="true">
-            <small>DEPOIS</small><strong>{alternative.counterparty}</strong><strong>{money(alternative.priceBRL)}</strong>
-            <span>Chegada {time(alternative.arrivalAt)}</span><span>Demurrage {alternative.demurrage ? money(alternative.demurrage.valueBRLPerHour) + '/h' : 'não informado'}</span>
-          </div>
-        </div>
+      <div className={styles.reviewContext} data-testid="review-context-strip">
+        <span><small>CARGA</small><strong>#HY-247-819</strong><em>Manaus → Santarém</em></span>
+        <span><small>PROPOSTA</small><strong>{selected.counterparty.replace(' · DEMO', '')}</strong><em>{money(selected.priceBRL)}</em></span>
+        <span><small>VALIDADE</small><strong>{time(selected.validityAt)}</strong><em>confirmar dentro da janela</em></span>
+        <span data-semantic-status="success"><small>ESTADO</small><strong>Pronta para aceite</strong><em>sem bloqueio crítico</em></span>
+      </div>
 
-        <div className={styles.reviewSignalGrid}>
-          <span><Clock3 size={21}/><small>ETA</small><strong>−50 min</strong></span>
-          <span><BadgeDollarSign size={21}/><small>CUSTO</small><strong>+R$ 550</strong></span>
-          <span><Route size={21}/><small>CALADO</small><strong>compatível</strong></span>
-          <span><FileCheck2 size={21}/><small>DOCS</small><strong>prontos</strong></span>
+      <article className={styles.reviewHero} data-testid="review-selected-proposal">
+        <div>
+          <p className={styles.eyebrow}>PROPOSTA SELECIONADA</p>
+          <h3>{selected.counterparty}</h3>
+          <p>{selected.vesselLabel} · calado {selected.draftMeters ? selected.draftMeters.toFixed(1).replace('.', ',') + ' m' : 'não informado'} · chegada {time(selected.arrivalAt)}</p>
         </div>
-
-        <div className={styles.consequence}>
-          <span><small className={styles.miniLabel}>DECISÃO EXPIRA</small><strong> A proposta precisa ser confirmada antes da validade indicada.</strong></span>
-          <span className={styles.statusBadge}>{time(alternative.validityAt)}</span>
-        </div>
-
-        <div className={styles.actionBar}>
-          <button className={styles.secondaryAction} type="button" onClick={onCancel}>Cancelar</button>
-          <button className={styles.primaryAction} type="button" onClick={onConfirm}>Confirmar aceite</button>
-        </div>
+        <strong>{money(selected.priceBRL)}</strong>
       </article>
+
+      <div className={styles.reviewImpactCards} data-testid="review-impact-cards">
+        <article><Clock3 size={19} data-semantic-role="neutral-icon"/><span><small>ETA</small><strong>{etaDeltaMinutes >= 0 ? '−' : '+'}{Math.abs(etaDeltaMinutes)} min</strong><em>vs. {time(reference.arrivalAt)}</em></span></article>
+        <article><BadgeDollarSign size={19} data-semantic-role="neutral-icon"/><span><small>FRETE</small><strong>{priceDelta >= 0 ? '+' : '−'}{money(Math.abs(priceDelta))}</strong><em>vs. {money(reference.priceBRL)}</em></span></article>
+        <article><Scale size={19} data-semantic-role="neutral-icon"/><span><small>DEMURRAGE</small><strong>{demurrageDelta >= 0 ? '−' : '+'}{money(Math.abs(demurrageDelta))}/h</strong><em>exposição contratual</em></span></article>
+        <article><ShipWheel size={19} data-semantic-role="neutral-icon"/><span><small>CALADO</small><strong>{selected.draftMeters ? selected.draftMeters.toFixed(1).replace('.', ',') + ' m' : '—'}</strong><em>{selected.compatibility.draft === 'compatible' ? 'compatível' : 'atenção'}</em></span></article>
+      </div>
+
+      <div className={styles.reviewDecisionGrid}>
+        <article className={styles.reviewChartCard}>
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>IMPACTO DO ACEITE</p>
+              <h3>Onde a proposta ganha ou cede</h3>
+              <span>Leitura relativa, acompanhada pelos valores reais acima.</span>
+            </div>
+          </div>
+          <ProposalDecisionComparisonChart
+            selectedLabel={selected.counterparty.replace(' · DEMO', '')}
+            referenceLabel={reference.counterparty.replace(' · DEMO', '')}
+            selectedScores={selectedScores}
+            referenceScores={referenceScores}
+          />
+        </article>
+
+        <article className={styles.reviewChecklist} data-testid="review-preconfirm-checklist">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>CHECKLIST PRÉ-CONFIRMAÇÃO</p>
+              <h3>O que precisa estar verdadeiro agora</h3>
+            </div>
+          </div>
+          <ul>
+            <li data-state="success"><CheckCircle2 size={17}/><span><strong>Documentos</strong><small>Proposta sem bloqueio documental</small></span></li>
+            <li data-state="success"><CheckCircle2 size={17}/><span><strong>Calado</strong><small>Compatibilidade operacional confirmada no cenário DEMO</small></span></li>
+            <li data-state="success"><CheckCircle2 size={17}/><span><strong>Janela</strong><small>Chegada estimada dentro do marco planejado</small></span></li>
+            <li data-state="warning"><Clock3 size={17}/><span><strong>Prazo de aceite</strong><small>Confirmar até {time(selected.validityAt)}</small></span></li>
+          </ul>
+        </article>
+      </div>
+
+      <article className={styles.reviewNextSteps} data-testid="review-next-steps">
+        <div className={styles.sectionHeading}>
+          <div>
+            <p className={styles.eyebrow}>APÓS CONFIRMAR</p>
+            <h3>Próximos passos da operação</h3>
+            <span>A decisão comercial já nasce conectada à coordenação e ao acompanhamento.</span>
+          </div>
+        </div>
+        <OperationalScheduleList
+          items={[
+            { id: 'accept', time: 'agora', title: 'Registrar aceite', subtitle: 'Proposta selecionada vira condição vigente', status: '1', tone: 'neutral', icon: 'check' },
+            { id: 'notify', time: '+5 min', title: 'Notificar coordenação', subtitle: 'Contraparte e operação recebem a decisão', status: '2', tone: 'neutral', icon: 'radio' },
+            { id: 'sync', time: '+15 min', title: 'Atualizar cockpit', subtitle: 'ETA, demurrage e documentos passam ao novo estado', status: '3', tone: 'neutral', icon: 'clock' },
+            { id: 'monitor', time: 'contínuo', title: 'Monitorar embarque', subtitle: 'Janela, calado, documentos e freshness', status: '4', tone: 'neutral', icon: 'calendar' },
+          ]}
+        />
+      </article>
+
+      <div className={styles.reviewActionBar}>
+        <div>
+          <small>PRONTA PARA CONFIRMAR</small>
+          <strong>Sem bloqueio crítico no snapshot DEMO; atenção apenas ao prazo de validade.</strong>
+        </div>
+        <span>
+          <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar à negociação</button>
+          <button className={styles.primaryAction} type="button" onClick={onConfirm}>Confirmar proposta</button>
+        </span>
+      </div>
     </section>
   );
 }
