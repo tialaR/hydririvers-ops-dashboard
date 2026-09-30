@@ -31,6 +31,7 @@ const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
 export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: ShipperJourneyExperience }) {
   const reduceMotion = useReducedMotion();
   const [experience, setExperience] = useState<ShipperJourneyExperience>(initial);
+  const [selectedProposalId, setSelectedProposalId] = useState('proposal-b');
   const snapshot = PAGE62_SHIPPER_JOURNEY_DEMO;
   const proposals = snapshot.proposals;
   const divergentDocument = useMemo(
@@ -73,15 +74,22 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
         />
       );
     }
-    if (experience === 'review' && proposals[0] && proposals[1]) {
-      return (
-        <DecisionActionReviewSurface
-          current={proposals[0]}
-          alternative={proposals[1]}
-          onCancel={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewCancelled' }))}
-          onConfirm={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewConfirmed' }))}
-        />
-      );
+    if (experience === 'review' && proposals.length > 1) {
+      const selectedProposal =
+        proposals.find((proposal) => proposal.id === selectedProposalId) ?? proposals[1] ?? proposals[0];
+      const referenceProposal =
+        proposals.find((proposal) => proposal.id !== selectedProposal?.id) ?? proposals[0];
+
+      if (selectedProposal && referenceProposal) {
+        return (
+          <DecisionActionReviewSurface
+            selected={selectedProposal}
+            reference={referenceProposal}
+            onBack={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewCancelled' }))}
+            onConfirm={() => setExperience(resolveShipperJourneyTransition('review', { type: 'reviewConfirmed' }))}
+          />
+        );
+      }
     }
     if (experience === 'feedback') {
       return (
@@ -111,7 +119,18 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
     if (experience === 'monitoring') {
       return <FollowUpMonitoringSurface onReviewHydro={() => setExperience(resolveShipperJourneyTransition('monitoring', { type: 'hydroConstraintRaised' }))} />;
     }
-    return <ProposalNegotiationSurface proposals={proposals} onReview={() => setExperience(resolveShipperJourneyTransition('negotiation', { type: 'proposalSelected' }))} />;
+    return (
+      <ProposalNegotiationSurface
+        proposals={proposals}
+        selectedProposalId={selectedProposalId}
+        onSelectProposal={setSelectedProposalId}
+        onBack={() => setExperience('documentsRisk')}
+        onReview={(proposalId) => {
+          setSelectedProposalId(proposalId);
+          setExperience(resolveShipperJourneyTransition('negotiation', { type: 'proposalSelected' }));
+        }}
+      />
+    );
   })();
 
   return (
