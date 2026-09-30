@@ -1525,3 +1525,599 @@
 
 .overviewAlertRow
   margin-top: var(--hy-p62-space-4)
+
+
+/* D08-D10 negotiation and review redesign */
+.demoBadge
+  color: var(--hy-p62-muted)
+
+.headerLead
+  display: flex
+  min-width: 0
+  align-items: flex-start
+  gap: var(--hy-p62-space-3)
+
+.iconBackButton
+  display: grid
+  width: 2.45rem
+  height: 2.45rem
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface)
+  color: var(--hy-p62-muted)
+  cursor: pointer
+
+.iconBackButton:hover,
+.iconBackButton:focus-visible
+  border-color: var(--hy-p62-border-strong)
+  color: var(--hy-p62-text)
+
+.negotiationSurface,
+.reviewSurface
+  min-height: 58rem
+
+.negotiationContext,
+.reviewContext
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.negotiationContext > span,
+.reviewContext > span
+  display: grid
+  min-height: 5.25rem
+  align-content: center
+  gap: .2rem
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.negotiationContext > span:first-child,
+.reviewContext > span:first-child
+  border-left: 0
+
+.negotiationContext small,
+.reviewContext small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.negotiationContext strong,
+.reviewContext strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.negotiationContext em,
+.reviewContext em
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.negotiationContext > span[data-semantic-status='warning'] strong
+  color: var(--hy-p62-warning)
+
+.reviewContext > span[data-semantic-status='success'] strong
+  color: var(--hy-p62-success)
+
+.negotiationGrid
+  grid-template-columns: minmax(0, 1.65fr) minmax(23rem, .72fr)
+  gap: var(--hy-p62-space-4)
+
+.negotiationMain
+  display: grid
+  min-width: 0
+  gap: var(--hy-p62-space-4)
+
+.proposalChooser,
+.decisionDashboard,
+.reviewHero,
+.reviewChartCard,
+.reviewChecklist,
+.reviewNextSteps
+  min-width: 0
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.sectionHeading
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.sectionHeading > div
+  display: grid
+  gap: .2rem
+
+.sectionHeading h3
+  margin: 0
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-title)
+  font-weight: var(--hy-p62-weight-semibold)
+  letter-spacing: -.02em
+
+.sectionHeading > div > span
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.4
+
+.proposalGrid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+
+.proposalCard
+  display: grid
+  min-height: 13.25rem
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-text)
+  font: inherit
+  text-align: left
+  cursor: pointer
+  transition: border-color var(--hy-p62-motion-fast), background var(--hy-p62-motion-fast), transform var(--hy-p62-motion-fast)
+
+.proposalCard:hover,
+.proposalCard:focus-visible
+  border-color: var(--hy-p62-border-strong)
+  transform: translateY(-.0625rem)
+
+.proposalCard[data-selected='true']
+  border-color: color-mix(in srgb, var(--hy-p62-text) 40%, var(--hy-p62-border))
+  background: color-mix(in srgb, var(--hy-p62-text) 5%, var(--hy-p62-surface-raised))
+  box-shadow: inset .14rem 0 0 color-mix(in srgb, var(--hy-p62-text) 68%, transparent)
+
+.proposalCardTop
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+
+.proposalCardTop > span:first-child
+  display: grid
+  min-width: 0
+  gap: var(--hy-p62-space-2)
+
+.proposalCardTop small
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.proposalCardTop strong
+  color: var(--hy-p62-text)
+  font-size: 1.55rem
+  font-weight: var(--hy-p62-weight-medium)
+  letter-spacing: -.03em
+
+.proposalSelection
+  display: grid
+  width: 1.75rem
+  height: 1.75rem
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: 50%
+  color: var(--hy-p62-text)
+
+.proposalCard[data-selected='true'] .proposalSelection
+  background: var(--hy-p62-text)
+  color: var(--hy-p62-canvas)
+
+.proposalCardFacts
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  overflow: hidden
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.proposalCardFacts > span
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-content: center
+  gap: .12rem .38rem
+  min-height: 4.65rem
+  padding: .6rem
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.proposalCardFacts > span:first-child
+  border-left: 0
+
+.proposalCardFacts svg
+  grid-row: 1 / 3
+  align-self: center
+  color: var(--hy-p62-muted)
+
+.proposalCardFacts small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+
+.proposalCardFacts strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 650
+
+.proposalCardFooter
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-2)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.proposalCardFooter > span:first-child
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.proposalCardFooter > span:last-child
+  flex: 0 0 auto
+  font-weight: 650
+
+.proposalCardFooter > span[data-semantic-status='warning']
+  color: var(--hy-p62-warning)
+
+.proposalCardFooter > span[data-semantic-status='success']
+  color: var(--hy-p62-success)
+
+.decisionDashboard .decisionVisualGrid
+  grid-template-columns: minmax(0, 1.35fr) minmax(16rem, .65fr)
+  padding: var(--hy-p62-space-4)
+
+.decisionDashboard .visualPanel
+  background: transparent
+
+.decisionDashboard .visualSummary > span
+  min-height: 7rem
+  background: transparent
+
+.decisionDashboard .visualSummary svg,
+.reviewImpactCards svg
+  color: var(--hy-p62-muted)
+
+.decisionDashboard .visualSummary em
+  color: var(--hy-p62-muted)
+
+.comparisonStrip
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+
+.comparisonStrip > span
+  display: grid
+  min-height: 5.5rem
+  align-content: center
+  gap: .2rem
+  padding: var(--hy-p62-space-3)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.comparisonStrip > span:first-child
+  border-left: 0
+
+.comparisonStrip small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.comparisonStrip strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-label)
+
+.comparisonStrip em
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+
+.decisionRead
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  border-color: var(--hy-p62-border)
+  background: transparent
+
+.decisionRead > div
+  display: grid
+  gap: .2rem
+
+.decisionRead strong
+  max-width: 48rem
+
+.decisionSource
+  max-width: 18rem
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  line-height: 1.4
+  text-align: right
+
+.flowActionBar
+  position: sticky
+  bottom: 0
+  z-index: 5
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: color-mix(in srgb, var(--hy-p62-canvas) 92%, transparent)
+  backdrop-filter: blur(.75rem)
+
+.flowActionBar > span
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.flowActionBar > span strong
+  color: var(--hy-p62-text)
+
+.reviewContext
+  margin-bottom: var(--hy-p62-space-4)
+
+.reviewHero
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: var(--hy-p62-space-6)
+  padding: var(--hy-p62-space-5)
+
+.reviewHero > div
+  display: grid
+  gap: .2rem
+
+.reviewHero h3
+  margin: 0
+  font-size: 1.55rem
+  font-weight: var(--hy-p62-weight-semibold)
+  letter-spacing: -.025em
+
+.reviewHero p:last-child
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-sm)
+
+.reviewHero > strong
+  font-size: 2rem
+  font-weight: var(--hy-p62-weight-medium)
+  letter-spacing: -.035em
+
+.reviewImpactCards
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  gap: var(--hy-p62-space-3)
+  margin-top: var(--hy-p62-space-4)
+
+.reviewImpactCards article
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  gap: var(--hy-p62-space-3)
+  min-height: 6.5rem
+  align-content: center
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.reviewImpactCards article > span
+  display: grid
+  gap: .15rem
+
+.reviewImpactCards small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  letter-spacing: .04em
+
+.reviewImpactCards strong
+  color: var(--hy-p62-text)
+  font-size: 1.15rem
+  font-weight: 650
+
+.reviewImpactCards em
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+
+.reviewDecisionGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.35fr) minmax(22rem, .65fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.reviewChartCard
+  overflow: hidden
+
+.reviewChartCard > div:last-child
+  padding: var(--hy-p62-space-2) var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.reviewChecklist
+  overflow: hidden
+
+.reviewChecklist ul
+  display: grid
+  gap: 0
+  margin: 0
+  padding: 0
+  list-style: none
+
+.reviewChecklist li
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  gap: var(--hy-p62-space-3)
+  min-height: 4.6rem
+  align-items: center
+  padding: .75rem var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.reviewChecklist li:first-child
+  border-top: 0
+
+.reviewChecklist li > span
+  display: grid
+  gap: .12rem
+
+.reviewChecklist li strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+
+.reviewChecklist li small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.35
+
+.reviewChecklist li svg
+  color: var(--hy-p62-muted)
+
+.reviewChecklist li[data-state='success'] svg
+  color: var(--hy-p62-success)
+
+.reviewChecklist li[data-state='warning'] svg
+  color: var(--hy-p62-warning)
+
+.reviewNextSteps
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+
+.reviewNextSteps > div:last-child
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.reviewActionBar
+  display: flex
+  align-items: center
+  justify-content: space-between
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.reviewActionBar > div
+  display: grid
+  gap: .18rem
+
+.reviewActionBar small
+  color: var(--hy-p62-success)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.reviewActionBar strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+
+.reviewActionBar > span
+  display: flex
+  gap: var(--hy-p62-space-2)
+
+@media (max-width: 82rem)
+  .negotiationGrid,
+  .reviewDecisionGrid
+    grid-template-columns: 1fr
+
+  .negotiationContext,
+  .reviewContext
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .negotiationContext > span:nth-child(3),
+  .reviewContext > span:nth-child(3)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .negotiationContext > span:nth-child(4),
+  .reviewContext > span:nth-child(4)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+  .proposalGrid
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .reviewImpactCards
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+@media (max-width: 54rem)
+  .proposalGrid,
+  .reviewImpactCards,
+  .comparisonStrip
+    grid-template-columns: 1fr
+
+  .comparisonStrip > span
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .comparisonStrip > span:first-child
+    border-top: 0
+
+  .decisionDashboard .decisionVisualGrid
+    grid-template-columns: 1fr
+
+  .reviewHero,
+  .reviewActionBar
+    align-items: flex-start
+    flex-direction: column
+
+  .reviewActionBar > span
+    width: 100%
+
+  .reviewActionBar button
+    flex: 1
+
+  .flowActionBar
+    grid-template-columns: 1fr
+
+  .flowActionBar > span
+    grid-row: 1
+
+@media (max-width: 42rem)
+  .negotiationContext,
+  .reviewContext
+    grid-template-columns: 1fr
+
+  .negotiationContext > span,
+  .negotiationContext > span:nth-child(3),
+  .negotiationContext > span:nth-child(4),
+  .reviewContext > span,
+  .reviewContext > span:nth-child(3),
+  .reviewContext > span:nth-child(4)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .negotiationContext > span:first-child,
+  .reviewContext > span:first-child
+    border-top: 0
+
+  .proposalGrid
+    grid-template-columns: 1fr
+
+  .proposalCardFacts
+    grid-template-columns: 1fr
+
+  .proposalCardFacts > span
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .proposalCardFacts > span:first-child
+    border-top: 0
