@@ -864,7 +864,7 @@ export function CorrectionResubmitSurface({
                   <span><strong>Preservar NF-e + CT-e vinculados</strong><small>Os vínculos fiscais seguem no contexto da operação.</small></span>
                   <b data-semantic-status="success">Pronto</b>
                 </div>
-                <div>
+                <div data-state="pending">
                   <span className={styles.correctionTaskIcon}><ShieldCheck size={17} data-semantic-role="neutral-icon" /></span>
                   <span><strong>Enviar o documento corrigido para revalidação</strong><small>A etapa seguinte começa após salvar a correção.</small></span>
                   <b>Pendente</b>
