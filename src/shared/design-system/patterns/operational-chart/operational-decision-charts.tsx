@@ -223,7 +223,6 @@ export function ActionOutcomeLedgerChart({
       { label: 'Calado contratado', before: draftBefore, after: draftAfter, min: draftBounds.min, max: draftBounds.max },
       { label: 'Documentos', before: docValue[documentsBefore], after: docValue[documentsAfter], min: 0, max: 2.6 },
     ];
-    const titleTop = ['2%', '26%', '50%', '74%'];
     const gridTop = ['10%', '34%', '58%', '82%'];
 
     return {
@@ -254,17 +253,9 @@ export function ActionOutcomeLedgerChart({
         itemHeight: 7,
         selectedMode: false,
       },
-      title: rows.map((row, index) => ({
-        text: row.label,
-        subtext: deltaText[index],
-        left: '3%',
-        top: titleTop[index],
-        textStyle: { color: '#f0f1f2', fontSize: 13, fontWeight: 650 },
-        subtextStyle: { color: '#a6abb2', fontSize: 12, lineHeight: 18 },
-      })),
       grid: rows.map((_, index) => ({
-        left: '32%',
-        right: '10%',
+        left: '31%',
+        right: '12%',
         top: gridTop[index],
         height: '11%',
         containLabel: false,
@@ -276,11 +267,24 @@ export function ActionOutcomeLedgerChart({
         max: row.max,
         show: false,
       })),
-      yAxis: rows.map((_, index) => ({
+      yAxis: rows.map((row, index) => ({
         type: 'category',
         gridIndex: index,
-        data: [''],
-        show: false,
+        data: [row.label],
+        axisLine: { show: false },
+        axisTick: { show: false },
+        axisLabel: {
+          show: true,
+          align: 'left',
+          margin: 0,
+          width: 170,
+          overflow: 'break',
+          formatter: () => '{metric|' + row.label + '}\n{delta|' + deltaText[index] + '}',
+          rich: {
+            metric: { color: '#f0f1f2', fontSize: 13, fontWeight: 650, lineHeight: 20 },
+            delta: { color: '#a6abb2', fontSize: 12, fontWeight: 500, lineHeight: 20 },
+          },
+        },
       })),
       series: rows.flatMap((row, index) => ([
         {
@@ -289,8 +293,8 @@ export function ActionOutcomeLedgerChart({
           xAxisIndex: index,
           yAxisIndex: index,
           data: [row.before],
-          barWidth: 10,
-          barGap: '55%',
+          barWidth: 11,
+          barGap: '45%',
           itemStyle: { color: '#5d6269', borderRadius: 8 },
           showBackground: true,
           backgroundStyle: { color: '#24282d', borderRadius: 8 },
@@ -310,7 +314,7 @@ export function ActionOutcomeLedgerChart({
           xAxisIndex: index,
           yAxisIndex: index,
           data: [row.after],
-          barWidth: 10,
+          barWidth: 11,
           itemStyle: { color: '#e1e3e5', borderRadius: 8 },
           label: {
             show: true,
@@ -390,10 +394,10 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
     ],
     series: [{
       type: 'pie',
-      radius: ['60%', '86%'],
-      center: ['50%', '83%'],
+      radius: ['58%', '84%'],
+      center: ['50%', '78%'],
       startAngle: 180,
-      clockwise: true,
+      clockwise: false,
       label: { show: false },
       emphasis: { scale: false },
       itemStyle: {
