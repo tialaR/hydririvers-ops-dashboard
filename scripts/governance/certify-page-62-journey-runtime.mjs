@@ -288,6 +288,10 @@ try {
       const feedbackImpactMetrics = document.querySelector('[data-testid="action-feedback-impact-metrics"]');
       const feedbackReadiness = document.querySelector('[data-testid="action-feedback-readiness"]');
       const feedbackReadinessStates = feedbackReadiness ? Array.from(feedbackReadiness.querySelectorAll('[data-semantic-status]')) : [];
+      const feedbackImpactChart = document.querySelector('[data-testid="action-feedback-impact-chart"] [data-echart-renderer]');
+      const feedbackReadinessChart = document.querySelector('[data-testid="action-feedback-readiness-chart"] [data-echart-renderer]');
+      const feedbackNeutralIcons = feedbackReadiness ? Array.from(feedbackReadiness.querySelectorAll('[data-semantic-role="neutral-icon"]')) : [];
+      const feedbackNeutralIconColors = feedbackNeutralIcons.map((node) => getComputedStyle(node).color);
       const feedbackHydro = document.querySelector('[data-testid="action-feedback-hydro-context"]');
       const feedbackSources = Array.from(document.querySelectorAll('[data-testid="action-feedback-source"]'));
       const feedbackNextSteps = document.querySelector('[data-testid="action-feedback-next-steps"]');
@@ -370,6 +374,10 @@ try {
         feedbackImpactMetricCount: feedbackImpactMetrics ? feedbackImpactMetrics.querySelectorAll('article').length : 0,
         feedbackReadinessVisible: Boolean(feedbackReadiness && feedbackReadiness.getBoundingClientRect().height > 0),
         feedbackReadinessStateCount: feedbackReadinessStates.length,
+        feedbackImpactChartVisible: Boolean(feedbackImpactChart && feedbackImpactChart.getBoundingClientRect().height > 0),
+        feedbackReadinessChartVisible: Boolean(feedbackReadinessChart && feedbackReadinessChart.getBoundingClientRect().height > 0),
+        feedbackNeutralIconCount: feedbackNeutralIcons.length,
+        feedbackNeutralIconColorSpread: feedbackNeutralIconColors.length ? Math.max(...feedbackNeutralIconColors.map(rgbSpread)) : 0,
         feedbackHydroVisible: Boolean(feedbackHydro && feedbackHydro.getBoundingClientRect().height > 0),
         feedbackSourceCount: feedbackSources.length,
         feedbackNextStepCount: feedbackNextStepItems.length,
@@ -422,6 +430,9 @@ try {
         if (!metrics.feedbackImpactVisible) failures.push('applied-impact visualization missing');
         if (metrics.feedbackImpactMetricCount < 4) failures.push(`post-action impact breadth incomplete: ${metrics.feedbackImpactMetricCount}`);
         if (!metrics.feedbackReadinessVisible || metrics.feedbackReadinessStateCount < 4) failures.push('post-action readiness/state model incomplete');
+        if (!metrics.feedbackImpactChartVisible || !metrics.feedbackReadinessChartVisible) failures.push('D11 must expose both impact and readiness visualizations');
+        if (metrics.feedbackNeutralIconCount < 5) failures.push(`D11 neutral iconography too sparse: ${metrics.feedbackNeutralIconCount}`);
+        if (metrics.feedbackNeutralIconColorSpread > 42) failures.push(`D11 state icons became status-colored: RGB spread ${metrics.feedbackNeutralIconColorSpread}`);
         if (!metrics.feedbackHydroVisible || metrics.feedbackSourceCount < 2) failures.push('post-action hydrographic/source context incomplete');
         if (metrics.feedbackNextStepCount < 4) failures.push(`post-action continuation too shallow: ${metrics.feedbackNextStepCount}`);
         if (!metrics.feedbackCorrectionVisible) failures.push('document recovery branch missing from action feedback');
