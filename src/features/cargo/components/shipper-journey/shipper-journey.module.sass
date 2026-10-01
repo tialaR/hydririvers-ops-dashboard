@@ -2255,6 +2255,7 @@
 .actionFeedbackMainGrid
   display: grid
   grid-template-columns: minmax(0, 1.45fr) minmax(20rem, .7fr)
+  align-items: start
   gap: var(--hy-p62-space-4)
   margin-top: var(--hy-p62-space-4)
 
@@ -2311,28 +2312,12 @@
   padding: var(--hy-p62-space-4)
 
 .actionFeedbackGauge
-  position: relative
   min-height: 10rem
   display: grid
   place-items: center
 
-.actionFeedbackGauge > div:first-child
+.actionFeedbackGauge > div
   width: min(100%, 13rem)
-
-.actionFeedbackGauge > div:last-child
-  position: absolute
-  display: grid
-  justify-items: center
-  gap: .1rem
-  pointer-events: none
-
-.actionFeedbackGauge > div:last-child strong
-  font-size: 1.4rem
-  font-variant-numeric: tabular-nums
-
-.actionFeedbackGauge > div:last-child small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
 
 .actionFeedbackReadinessList
   display: grid

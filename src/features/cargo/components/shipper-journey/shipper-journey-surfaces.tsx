@@ -444,18 +444,7 @@ export function ActionFeedbackSurface({
     documentScore(selected.compatibility.documents),
   ];
 
-  const operationalRiskReadiness = (
-    { info: 84, low: 96, medium: 72, high: 48, critical: 24 } as const
-  )[selected.operationalRisk] ?? 60;
-  const readinessScore = Math.round(
-    (
-      100 +
-      (selected.compatibility.documents === 'ready' ? 100 : 66) +
-      (selected.compatibility.draft === 'compatible' ? 100 : 64) +
-      operationalRiskReadiness +
-      (pendingDocument ? 45 : 100)
-    ) / 5,
-  );
+  const readinessScore = pendingDocument ? 75 : 100;
 
   const sourceIds = new Set([hydro.sourceId, ...hydro.constraints.map((constraint) => constraint.sourceId)]);
   const operationalSources = sources.filter((source) => sourceIds.has(source.id));
@@ -594,10 +583,7 @@ export function ActionFeedbackSurface({
                 label="Prontidão"
                 ariaLabel={'Prontidão operacional pós-aceite de ' + readinessScore + '%'}
               />
-              <div>
-                <strong>{readinessScore}%</strong>
-                <small>prontidão operacional</small>
-              </div>
+
             </div>
             <ul className={styles.actionFeedbackReadinessList}>
               <li data-semantic-status="success">
