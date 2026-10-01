@@ -160,81 +160,116 @@ export function ProposalDecisionComparisonChart({
   );
 }
 
-export function ActionAppliedImpactChart({
-  beforeScores,
-  afterScores,
+function formatClockMinutes(value: number) {
+  const safe = Math.round(value);
+  const hours = Math.floor(safe / 60) % 24;
+  const minutes = safe % 60;
+  return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+}
+
+function numericBounds(a: number, b: number, minimumPadding: number) {
+  const low = Math.min(a, b);
+  const high = Math.max(a, b);
+  const spread = Math.max(high - low, minimumPadding);
+  return { min: low - (spread * 0.32), max: high + (spread * 0.32) };
+}
+
+export function ActionOutcomeSmallMultiplesChart({
+  arrivalBeforeMinutes,
+  arrivalAfterMinutes,
+  demurrageBefore,
+  demurrageAfter,
+  draftBefore,
+  draftAfter,
+  documentsBefore,
+  documentsAfter,
 }: {
-  beforeScores: [number, number, number, number];
-  afterScores: [number, number, number, number];
+  arrivalBeforeMinutes: number;
+  arrivalAfterMinutes: number;
+  demurrageBefore: number;
+  demurrageAfter: number;
+  draftBefore: number;
+  draftAfter: number;
+  documentsBefore: 'ready' | 'attention' | 'blocked';
+  documentsAfter: 'ready' | 'attention' | 'blocked';
 }) {
+  const option = useMemo<EChartsCoreOption>(() => {
+    const arrivalBounds = numericBounds(arrivalBeforeMinutes, arrivalAfterMinutes, 30);
+    const demurrageBounds = numericBounds(demurrageBefore, demurrageAfter, 120);
+    const draftBounds = numericBounds(draftBefore, draftAfter, 0.4);
+    const documentValue = { blocked: 0, attention: 1, ready: 2 } as const;
+    const documentLabel = (value: number) => value >= 1.5 ? 'Pronto' : value >= 0.5 ? 'Revisar' : 'Bloqueado';
+    const point = (name: string, value: number, after = false) => ({
+      name,
+      value,
+      symbol: after ? 'diamond' : 'circle',
+      symbolSize: after ? 12 : 9,
+      itemStyle: { color: after ? '#e3e5e7' : '#646970' },
+    });
+
+    return {
+      animation: false,
+      tooltip: { ...operationalTooltipShell, trigger: 'item' },
+      title: [
+        { text: 'Chegada', subtext: formatClockMinutes(arrivalBeforeMinutes) + ' → ' + formatClockMinutes(arrivalAfterMinutes), left: '4%', top: 0, textStyle: { color: '#e5e7eb', fontSize: 12, fontWeight: 650 }, subtextStyle: { color: '#9ca3af', fontSize: 11 } },
+        { text: 'Demurrage', subtext: 'R$ ' + Math.round(demurrageBefore).toLocaleString('pt-BR') + '/h → R$ ' + Math.round(demurrageAfter).toLocaleString('pt-BR') + '/h', left: '54%', top: 0, textStyle: { color: '#e5e7eb', fontSize: 12, fontWeight: 650 }, subtextStyle: { color: '#9ca3af', fontSize: 11 } },
+        { text: 'Calado contratado', subtext: draftBefore.toFixed(1).replace('.', ',') + ' m → ' + draftAfter.toFixed(1).replace('.', ',') + ' m', left: '4%', top: '51%', textStyle: { color: '#e5e7eb', fontSize: 12, fontWeight: 650 }, subtextStyle: { color: '#9ca3af', fontSize: 11 } },
+        { text: 'Documentos', subtext: documentLabel(documentValue[documentsBefore]) + ' → ' + documentLabel(documentValue[documentsAfter]), left: '54%', top: '51%', textStyle: { color: '#e5e7eb', fontSize: 12, fontWeight: 650 }, subtextStyle: { color: '#9ca3af', fontSize: 11 } },
+      ],
+      grid: [
+        { left: '5%', top: '17%', width: '39%', height: '26%', containLabel: true },
+        { left: '55%', top: '17%', width: '39%', height: '26%', containLabel: true },
+        { left: '5%', top: '68%', width: '39%', height: '25%', containLabel: true },
+        { left: '55%', top: '68%', width: '39%', height: '25%', containLabel: true },
+      ],
+      xAxis: [0, 1, 2, 3].map((gridIndex) => ({ type: 'category', gridIndex, data: ['Antes', 'Depois'], boundaryGap: true, axisTick: { show: false }, axisLine: { lineStyle: { color: '#343940' } }, axisLabel: { color: '#9ca3af', fontSize: 11, fontWeight: 600, margin: 9 } })),
+      yAxis: [
+        { type: 'value', gridIndex: 0, min: Math.floor(arrivalBounds.min), max: Math.ceil(arrivalBounds.max), splitNumber: 2, axisLabel: { color: '#7f8790', fontSize: 10, formatter: (value: number) => formatClockMinutes(value) }, splitLine: { lineStyle: { color: '#272c32', type: 'dashed' } } },
+        { type: 'value', gridIndex: 1, min: Math.max(0, Math.floor(demurrageBounds.min)), max: Math.ceil(demurrageBounds.max), splitNumber: 2, axisLabel: { color: '#7f8790', fontSize: 10, formatter: (value: number) => 'R$ ' + Math.round(value) }, splitLine: { lineStyle: { color: '#272c32', type: 'dashed' } } },
+        { type: 'value', gridIndex: 2, min: Math.max(0, Number(draftBounds.min.toFixed(1))), max: Number(draftBounds.max.toFixed(1)), splitNumber: 2, axisLabel: { color: '#7f8790', fontSize: 10, formatter: (value: number) => value.toFixed(1).replace('.', ',') + ' m' }, splitLine: { lineStyle: { color: '#272c32', type: 'dashed' } } },
+        { type: 'value', gridIndex: 3, min: 0, max: 2, interval: 1, axisLabel: { color: '#7f8790', fontSize: 10, formatter: (value: number) => documentLabel(value) }, splitLine: { lineStyle: { color: '#272c32', type: 'dashed' } } },
+      ],
+      series: [
+        { name: 'Chegada', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: [point('Antes', arrivalBeforeMinutes), point('Depois', arrivalAfterMinutes, true)], lineStyle: { color: '#747980', width: 2 }, label: { show: true, position: 'top', color: '#d8dadd', fontSize: 11, formatter: (item: { value?: number }) => formatClockMinutes(Number(item.value ?? 0)) } },
+        { name: 'Demurrage', type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: [point('Antes', demurrageBefore), point('Depois', demurrageAfter, true)], lineStyle: { color: '#747980', width: 2 }, label: { show: true, position: 'top', color: '#d8dadd', fontSize: 11, formatter: (item: { value?: number }) => 'R$ ' + Math.round(Number(item.value ?? 0)) } },
+        { name: 'Calado', type: 'line', xAxisIndex: 2, yAxisIndex: 2, data: [point('Antes', draftBefore), point('Depois', draftAfter, true)], lineStyle: { color: '#747980', width: 2 }, label: { show: true, position: 'top', color: '#d8dadd', fontSize: 11, formatter: (item: { value?: number }) => Number(item.value ?? 0).toFixed(1).replace('.', ',') + ' m' } },
+        { name: 'Documentos', type: 'line', xAxisIndex: 3, yAxisIndex: 3, data: [point('Antes', documentValue[documentsBefore]), point('Depois', documentValue[documentsAfter], true)], lineStyle: { color: '#747980', width: 2 }, label: { show: true, position: 'top', color: '#d8dadd', fontSize: 11, formatter: (item: { value?: number }) => documentLabel(Number(item.value ?? 0)) } },
+      ],
+    };
+  }, [arrivalAfterMinutes, arrivalBeforeMinutes, demurrageAfter, demurrageBefore, documentsAfter, documentsBefore, draftAfter, draftBefore]);
+
+  return <OperationalEChart option={option} ariaLabel="Mudanças pós-aceite em quatro painéis independentes, com escalas próprias para chegada, demurrage, calado contratado e documentos" className={styles.actionOutcome} />;
+}
+
+export function PostActionStateAllocationChart({ pendingDocument }: { pendingDocument: boolean }) {
+  const stableCount = pendingDocument ? 3 : 4;
   const option = useMemo<EChartsCoreOption>(() => ({
     animation: false,
-    grid: { left: 88, right: 24, top: 38, bottom: 28 },
-    tooltip: {
-      ...operationalTooltipShell,
-      trigger: 'axis',
-      axisPointer: { type: 'shadow' },
-      formatter: (raw: unknown) => {
-        const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
-        return buildOperationalTooltip({
-          eyebrow: 'IMPACTO APLICADO',
-          title: items[0]?.axisValue ?? 'Critério',
-          rows: items.map((item) => ({
-            label: item.seriesName ?? 'Estado',
-            value: String(item.value ?? '—') + '/100',
-          })),
-          footer: 'Índice comparativo DEMO. Valores reais permanecem visíveis acima do gráfico.',
-        });
-      },
-    },
-    legend: {
-      top: 0,
-      right: 0,
-      textStyle: { color: '#8b949f', fontSize: 10 },
-      itemWidth: 12,
-      itemHeight: 6,
-    },
-    xAxis: {
-      type: 'value',
-      min: 0,
-      max: 100,
-      axisLabel: { color: '#6f7781', fontSize: 9, formatter: '{value}' },
-      splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
-      axisLine: { show: false },
-    },
-    yAxis: {
-      type: 'category',
-      data: ['Janela', 'Demurrage', 'Calado', 'Docs'],
-      axisTick: { show: false },
-      axisLine: { show: false },
-      axisLabel: { color: '#aab2bb', fontSize: 10, fontWeight: 600 },
-    },
-    series: [
-      {
-        name: 'Antes',
-        type: 'bar',
-        data: beforeScores,
-        barWidth: 9,
-        itemStyle: { color: '#555b63', borderRadius: [0, 5, 5, 0] },
-      },
-      {
-        name: 'Depois',
-        type: 'bar',
-        data: afterScores,
-        barWidth: 9,
-        itemStyle: { color: '#d7d9dc', borderRadius: [0, 5, 5, 0] },
-      },
+    tooltip: { ...operationalTooltipShell, trigger: 'item' },
+    graphic: [
+      { type: 'text', left: 'center', top: '38%', style: { text: stableCount + '/4', fill: '#f3f4f6', fontSize: 26, fontWeight: 700, textAlign: 'center' } },
+      { type: 'text', left: 'center', top: '55%', style: { text: 'estáveis', fill: '#9ca3af', fontSize: 11, fontWeight: 600, textAlign: 'center' } },
     ],
-  }), [afterScores, beforeScores]);
+    series: [{
+      type: 'pie',
+      radius: ['60%', '84%'],
+      center: ['50%', '50%'],
+      startAngle: 90,
+      label: { show: false },
+      emphasis: { scale: false },
+      itemStyle: { borderColor: '#141416', borderWidth: 5, borderRadius: 8 },
+      data: [
+        { value: 1, name: 'Decisão', itemStyle: { color: '#d7d9dc' } },
+        { value: 1, name: 'Comercial', itemStyle: { color: '#aaadb2' } },
+        { value: 1, name: 'Documentos', itemStyle: { color: pendingDocument ? '#6d7177' : '#85898f' } },
+        { value: 1, name: 'Hidrovia', itemStyle: { color: '#51555b' } },
+      ],
+    }],
+  }), [pendingDocument, stableCount]);
 
-  return (
-    <OperationalEChart
-      option={option}
-      ariaLabel="Comparação antes e depois da decisão aplicada por janela, demurrage, calado contratado e prontidão documental"
-      className={styles.actionDelta}
-    />
-  );
+  return <OperationalEChart option={option} ariaLabel={pendingDocument ? 'Três de quatro frentes pós-aceite estabilizadas, com documentos em revalidação' : 'Quatro de quatro frentes pós-aceite estabilizadas'} className={styles.stateAllocation} />;
 }
+
 
 export function DocumentWeightComparisonChart({
   submitted = 18.4,

@@ -2123,18 +2123,39 @@
     border-top: 0
 
 
-// D11 action feedback — operational consequence workspace
+// D11 action feedback — post-action decision workspace
 .actionFeedbackSurface
   min-height: 64rem
 
+.actionFeedbackSurface .demoBadge
+  color: var(--hy-p62-muted)
+
+.actionFeedbackSurface .sectionHeading
+  padding: 1.15rem 1.25rem
+
+.actionFeedbackSurface .sectionHeading > div
+  gap: .3rem
+
+.actionFeedbackSurface .sectionHeading h3
+  font-size: 1.125rem
+  line-height: 1.3
+
+.actionFeedbackSurface .sectionHeading > div > span
+  max-width: 44rem
+  font-size: .8125rem
+  line-height: 1.5
+
+.actionFeedbackSurface .sectionHeading .eyebrow
+  font-size: .75rem
+
 .actionFeedbackHero
   display: grid
-  grid-template-columns: auto minmax(0, 1fr) auto
+  grid-template-columns: auto minmax(0, 1fr) minmax(13rem, auto)
   align-items: center
-  gap: var(--hy-p62-space-4)
-  margin-top: var(--hy-p62-space-5)
-  padding: var(--hy-p62-space-5)
-  border: 0.0625rem solid var(--hy-p62-border)
+  gap: 1.25rem
+  margin-top: 1.25rem
+  padding: 1.35rem 1.5rem
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-card)
   background: var(--hy-p62-surface)
 
@@ -2143,65 +2164,65 @@
   width: 3.75rem
   height: 3.75rem
   place-items: center
-  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-success) 42%, var(--hy-p62-border))
+  border: .0625rem solid color-mix(in srgb, var(--hy-p62-success) 42%, var(--hy-p62-border))
   border-radius: 50%
-  background: color-mix(in srgb, var(--hy-p62-success) 8%, var(--hy-p62-surface))
+  background: color-mix(in srgb, var(--hy-p62-success) 7%, var(--hy-p62-surface))
   color: var(--hy-p62-success)
 
 .actionFeedbackHeroCopy
   min-width: 0
 
 .actionFeedbackHeroCopy h3
-  margin: .3rem 0 0
-  font-size: 1.35rem
+  margin: .35rem 0 0
+  font-size: 1.4rem
   line-height: 1.25
 
 .actionFeedbackHeroCopy p
-  max-width: 48rem
-  margin: .45rem 0 0
+  max-width: 52rem
+  margin: .5rem 0 0
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-sm)
+  font-size: .875rem
   line-height: 1.55
 
 .actionFeedbackStatus
   display: inline-flex
   align-items: center
-  gap: .35rem
+  gap: .4rem
   color: var(--hy-p62-success)
-  font-size: var(--hy-p62-font-xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .06em
+  letter-spacing: .055em
   text-transform: uppercase
 
 .actionFeedbackHeroValue
   display: grid
   justify-items: end
-  min-width: 12rem
-  gap: .15rem
+  gap: .2rem
   text-align: right
 
 .actionFeedbackHeroValue small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .07em
+  letter-spacing: .065em
 
 .actionFeedbackHeroValue strong
-  font-size: 1.75rem
+  font-size: 1.9rem
+  line-height: 1.05
   font-variant-numeric: tabular-nums
 
 .actionFeedbackHeroValue span
-  max-width: 15rem
+  max-width: 16rem
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  line-height: 1.4
+  font-size: .75rem
+  line-height: 1.45
 
 .actionFeedbackMetricStrip
   display: grid
   grid-template-columns: repeat(4, minmax(0, 1fr))
-  margin-top: var(--hy-p62-space-4)
+  margin-top: 1rem
   overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-panel)
   background: var(--hy-p62-surface)
 
@@ -2209,32 +2230,33 @@
   display: grid
   grid-template-columns: auto minmax(0, 1fr)
   align-items: start
-  gap: .35rem var(--hy-p62-space-2)
-  min-height: 6.4rem
-  padding: var(--hy-p62-space-4)
-  border-left: 0.0625rem solid var(--hy-p62-border)
+  gap: .45rem .75rem
+  min-height: 7rem
+  padding: 1.05rem 1.15rem
+  border-left: .0625rem solid var(--hy-p62-border)
 
 .actionFeedbackMetricStrip article:first-child
   border-left: 0
 
 .actionFeedbackMetricStrip article > svg
-  margin-top: .15rem
+  margin-top: .16rem
   color: var(--hy-p62-muted)
 
 .actionFeedbackMetricStrip article > span
   display: grid
   min-width: 0
-  gap: .2rem
+  gap: .25rem
 
 .actionFeedbackMetricStrip small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .06em
+  letter-spacing: .055em
 
 .actionFeedbackMetricStrip strong
   overflow: hidden
-  font-size: var(--hy-p62-font-sm)
+  color: var(--hy-p62-text)
+  font-size: .875rem
   font-variant-numeric: tabular-nums
   text-overflow: ellipsis
   white-space: nowrap
@@ -2242,9 +2264,10 @@
 .actionFeedbackMetricStrip em
   grid-column: 2
   width: fit-content
-  font-size: var(--hy-p62-font-xs)
+  color: var(--hy-p62-muted)
+  font-size: .8125rem
   font-style: normal
-  font-weight: 700
+  font-weight: 650
 
 .actionFeedbackMetricStrip em[data-semantic-status='success']
   color: var(--hy-p62-success)
@@ -2254,10 +2277,10 @@
 
 .actionFeedbackMainGrid
   display: grid
-  grid-template-columns: minmax(0, 1.45fr) minmax(20rem, .7fr)
-  align-items: start
-  gap: var(--hy-p62-space-4)
-  margin-top: var(--hy-p62-space-4)
+  grid-template-columns: minmax(0, 1.45fr) minmax(27rem, .82fr)
+  align-items: stretch
+  gap: 1rem
+  margin-top: 1rem
 
 .actionFeedbackImpactCard,
 .actionFeedbackReadiness,
@@ -2265,20 +2288,29 @@
 .actionFeedbackSchedule
   min-width: 0
   overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-card)
   background: var(--hy-p62-surface)
 
+.actionFeedbackImpactCard,
+.actionFeedbackReadiness
+  display: flex
+  min-height: 35rem
+  flex-direction: column
+
 .actionFeedbackImpactChart
-  padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0
+  display: grid
+  flex: 1
+  align-items: center
+  padding: .75rem 1.1rem .2rem
 
 .actionFeedbackInterpretation
   display: flex
   align-items: flex-start
-  gap: var(--hy-p62-space-3)
-  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
-  padding: var(--hy-p62-space-4)
-  border: 0.0625rem solid var(--hy-p62-border)
+  gap: .85rem
+  margin: 0 1.1rem 1.1rem
+  padding: 1rem 1.05rem
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-panel)
   background: var(--hy-p62-surface-raised)
 
@@ -2289,39 +2321,65 @@
 
 .actionFeedbackInterpretation > span
   display: grid
-  gap: .22rem
+  gap: .28rem
 
 .actionFeedbackInterpretation small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .07em
+  letter-spacing: .06em
 
 .actionFeedbackInterpretation strong
-  font-size: var(--hy-p62-font-sm)
-  line-height: 1.5
+  font-size: .9375rem
+  line-height: 1.48
 
 .actionFeedbackInterpretation em
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
+  font-size: .8125rem
   font-style: normal
+  line-height: 1.45
 
 .actionFeedbackReadinessBody
   display: grid
-  gap: var(--hy-p62-space-4)
-  padding: var(--hy-p62-space-4)
+  flex: 1
+  align-content: start
+  gap: 1rem
+  padding: 1.15rem 1.2rem 1.2rem
 
-.actionFeedbackGauge
-  min-height: 10rem
+.actionFeedbackStateOverview
   display: grid
-  place-items: center
+  grid-template-columns: 12rem minmax(0, 1fr)
+  align-items: center
+  gap: 1.15rem
+  min-height: 13.5rem
+  padding-bottom: 1rem
+  border-bottom: .0625rem solid var(--hy-p62-border)
 
-.actionFeedbackGauge > div
-  width: min(100%, 13rem)
+.actionFeedbackStateSummary
+  display: grid
+  align-content: center
+  gap: .25rem
+
+.actionFeedbackStateSummary > strong
+  font-size: 2rem
+  line-height: 1
+  font-variant-numeric: tabular-nums
+
+.actionFeedbackStateSummary > span
+  color: var(--hy-p62-text)
+  font-size: .9375rem
+  font-weight: 650
+
+.actionFeedbackStateSummary > p
+  margin: .25rem 0 0
+  color: var(--hy-p62-muted)
+  font-size: .8125rem
+  line-height: 1.5
 
 .actionFeedbackReadinessList
   display: grid
-  gap: .55rem
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  gap: .65rem
   margin: 0
   padding: 0
   list-style: none
@@ -2330,9 +2388,10 @@
   display: grid
   grid-template-columns: auto minmax(0, 1fr)
   align-items: center
-  gap: var(--hy-p62-space-2)
-  padding: .65rem .7rem
-  border: 0.0625rem solid var(--hy-p62-border)
+  gap: .7rem
+  min-height: 5.2rem
+  padding: .8rem .85rem
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-control)
   background: var(--hy-p62-surface-raised)
 
@@ -2346,48 +2405,47 @@
   color: var(--hy-p62-warning)
 
 .actionFeedbackReadinessList li[data-semantic-status='current'] > svg
-  color: var(--hy-p62-status-current)
+  color: var(--hy-p62-info)
 
 .actionFeedbackReadinessList span
   display: grid
-  gap: .1rem
+  gap: .16rem
 
 .actionFeedbackReadinessList strong
-  font-size: var(--hy-p62-font-sm)
+  font-size: .875rem
+  line-height: 1.3
 
 .actionFeedbackReadinessList small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-
-.actionFeedbackReadinessMeter
-  padding-top: var(--hy-p62-space-2)
-  border-top: 0.0625rem solid var(--hy-p62-border)
+  font-size: .75rem
+  line-height: 1.4
 
 .actionFeedbackOperationsGrid
   display: grid
-  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, .85fr)
-  gap: var(--hy-p62-space-4)
-  margin-top: var(--hy-p62-space-4)
+  grid-template-columns: minmax(0, 1.08fr) minmax(27rem, .92fr)
+  align-items: stretch
+  gap: 1rem
+  margin-top: 1rem
 
 .actionFeedbackRoute
   display: grid
   grid-template-columns: auto minmax(3rem, 1fr) auto minmax(3rem, 1fr) auto
   align-items: center
-  gap: var(--hy-p62-space-2)
-  padding: var(--hy-p62-space-5) var(--hy-p62-space-4) var(--hy-p62-space-4)
+  gap: .75rem
+  padding: 1.35rem 1.25rem 1.15rem
 
 .actionFeedbackRoute > span
   display: inline-flex
   align-items: center
-  gap: .4rem
+  gap: .45rem
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  font-weight: 700
+  font-size: .8125rem
+  font-weight: 650
   white-space: nowrap
 
 .actionFeedbackRoute > span > i
-  width: .72rem
-  height: .72rem
+  width: .78rem
+  height: .78rem
   border: .12rem solid var(--hy-p62-border-strong)
   border-radius: 50%
   background: var(--hy-p62-surface)
@@ -2404,8 +2462,8 @@
   color: var(--hy-p62-text)
 
 .actionFeedbackRoute > span[data-state='current'] > i
-  border-color: var(--hy-p62-status-current)
-  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--hy-p62-status-current) 12%, transparent)
+  border-color: var(--hy-p62-info)
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--hy-p62-info) 12%, transparent)
 
 .actionFeedbackRoute > b
   display: block
@@ -2416,17 +2474,17 @@
 .actionFeedbackHydroFacts
   display: grid
   grid-template-columns: repeat(3, minmax(0, 1fr))
-  border-top: 0.0625rem solid var(--hy-p62-border)
-  border-bottom: 0.0625rem solid var(--hy-p62-border)
+  border-top: .0625rem solid var(--hy-p62-border)
+  border-bottom: .0625rem solid var(--hy-p62-border)
 
 .actionFeedbackHydroFacts > span
   display: grid
   grid-template-columns: auto minmax(0, 1fr)
-  gap: .18rem var(--hy-p62-space-2)
-  min-height: 8rem
   align-content: start
-  padding: var(--hy-p62-space-4)
-  border-left: 0.0625rem solid var(--hy-p62-border)
+  gap: .2rem .7rem
+  min-height: 9rem
+  padding: 1.15rem 1.2rem
+  border-left: .0625rem solid var(--hy-p62-border)
 
 .actionFeedbackHydroFacts > span:first-child
   border-left: 0
@@ -2444,138 +2502,133 @@
 
 .actionFeedbackHydroFacts small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .06em
+  letter-spacing: .055em
 
 .actionFeedbackHydroFacts strong
-  font-size: var(--hy-p62-font-sm)
+  font-size: .9375rem
+  line-height: 1.3
 
 .actionFeedbackHydroFacts em
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
+  font-size: .8125rem
   font-style: normal
-  line-height: 1.4
+  line-height: 1.45
 
 .actionFeedbackSources
   display: grid
-  grid-template-columns: minmax(10rem, .7fr) minmax(0, 1.3fr)
-  gap: var(--hy-p62-space-3)
-  padding: var(--hy-p62-space-4)
+  grid-template-columns: minmax(13rem, .72fr) minmax(0, 1.28fr)
+  gap: 1rem
+  padding: 1.15rem 1.2rem 1.25rem
 
 .actionFeedbackSources > div:first-child
   display: grid
   align-content: start
-  gap: .25rem
+  gap: .3rem
 
 .actionFeedbackSources > div:first-child small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   font-weight: 700
-  letter-spacing: .07em
+  letter-spacing: .06em
 
 .actionFeedbackSources > div:first-child strong
-  font-size: var(--hy-p62-font-sm)
+  font-size: .9375rem
   line-height: 1.4
+
+.actionFeedbackSources > div:first-child p
+  margin: .15rem 0 0
+  color: var(--hy-p62-muted)
+  font-size: .8125rem
+  line-height: 1.5
 
 .actionFeedbackSources > div:last-child
   display: grid
-  gap: .45rem
+  gap: .55rem
 
 .actionFeedbackSources > div:last-child > span
   display: grid
   grid-template-columns: auto minmax(0, 1fr) auto
   align-items: center
-  gap: .5rem
-  min-height: 2.4rem
-  padding: .45rem .6rem
-  border: 0.0625rem solid var(--hy-p62-border)
+  gap: .6rem
+  min-height: 2.85rem
+  padding: .55rem .7rem
+  border: .0625rem solid var(--hy-p62-border)
   border-radius: var(--hy-p62-radius-control)
   background: var(--hy-p62-surface-raised)
 
 .actionFeedbackSources strong
-  font-size: var(--hy-p62-font-xs)
+  font-size: .8125rem
 
 .actionFeedbackSources em
   overflow: hidden
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
+  font-size: .8125rem
   font-style: normal
   text-overflow: ellipsis
   white-space: nowrap
 
 .actionFeedbackSources > div:last-child small
   color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
+  font-size: .75rem
   white-space: nowrap
 
+.actionFeedbackSchedule
+  display: flex
+  flex-direction: column
+
 .actionFeedbackScheduleBody
-  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  flex: 1
+  padding: 0 1.2rem 1.2rem
+
+.actionFeedbackScheduleBody :global(article)
+  min-height: 5rem
+
+.actionFeedbackScheduleBody :global(strong)
+  font-size: .9375rem
+
+.actionFeedbackScheduleBody :global(small),
+.actionFeedbackScheduleBody :global([class*='time']),
+.actionFeedbackScheduleBody :global([class*='status'])
+  font-size: .8125rem
 
 .actionFeedbackFooter
   display: grid
-  grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr)
-  gap: var(--hy-p62-space-4)
-  margin-top: var(--hy-p62-space-4)
+  grid-template-columns: 1fr
+  gap: .8rem
+  margin-top: 1rem
 
-.actionFeedbackCorrectionBranch,
-.actionFeedbackPrimaryNext
-  display: grid
-  align-items: center
-  gap: var(--hy-p62-space-3)
-  min-height: 6rem
-  padding: var(--hy-p62-space-4)
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-panel)
-  background: var(--hy-p62-surface)
+.actionFeedbackFooter :global(section)
+  min-height: 6.25rem
+  padding: 1.15rem 1.25rem
 
-.actionFeedbackCorrectionBranch
-  grid-template-columns: auto minmax(0, 1fr) auto
-  box-shadow: inset .18rem 0 0 var(--hy-p62-warning)
+.actionFeedbackFooter :global(section) :global(strong)
+  font-size: 1rem
 
-.actionFeedbackCorrectionBranch > svg
-  color: var(--hy-p62-warning)
+.actionFeedbackFooter :global(section) :global(p)
+  font-size: .875rem
+  line-height: 1.5
+  white-space: normal
 
-.actionFeedbackCorrectionBranch > span,
-.actionFeedbackPrimaryNext > span
-  display: grid
-  gap: .15rem
-
-.actionFeedbackCorrectionBranch small,
-.actionFeedbackPrimaryNext small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-  font-weight: 700
-  letter-spacing: .07em
-
-.actionFeedbackCorrectionBranch strong,
-.actionFeedbackPrimaryNext strong
-  font-size: var(--hy-p62-font-sm)
-  line-height: 1.45
-
-.actionFeedbackCorrectionBranch em
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  font-style: normal
-
-.actionFeedbackPrimaryNext
-  grid-template-columns: minmax(0, 1fr) auto
-
-@media (max-width: 82rem)
+@media (max-width: 84rem)
   .actionFeedbackMainGrid,
-  .actionFeedbackOperationsGrid,
-  .actionFeedbackFooter
+  .actionFeedbackOperationsGrid
     grid-template-columns: 1fr
+
+  .actionFeedbackImpactCard,
+  .actionFeedbackReadiness
+    min-height: auto
 
   .actionFeedbackMetricStrip
     grid-template-columns: repeat(2, minmax(0, 1fr))
 
   .actionFeedbackMetricStrip article:nth-child(3)
-    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-top: .0625rem solid var(--hy-p62-border)
     border-left: 0
 
   .actionFeedbackMetricStrip article:nth-child(4)
-    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-top: .0625rem solid var(--hy-p62-border)
 
 @media (max-width: 54rem)
   .actionFeedbackHero
@@ -2584,23 +2637,28 @@
   .actionFeedbackHeroValue
     grid-column: 1 / -1
     justify-items: start
-    padding-top: var(--hy-p62-space-3)
-    border-top: 0.0625rem solid var(--hy-p62-border)
+    padding-top: 1rem
+    border-top: .0625rem solid var(--hy-p62-border)
     text-align: left
 
   .actionFeedbackMetricStrip,
-  .actionFeedbackHydroFacts
+  .actionFeedbackHydroFacts,
+  .actionFeedbackReadinessList
     grid-template-columns: 1fr
 
   .actionFeedbackMetricStrip article,
   .actionFeedbackMetricStrip article:nth-child(4),
   .actionFeedbackHydroFacts > span
-    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-top: .0625rem solid var(--hy-p62-border)
     border-left: 0
 
   .actionFeedbackMetricStrip article:first-child,
   .actionFeedbackHydroFacts > span:first-child
     border-top: 0
+
+  .actionFeedbackStateOverview
+    grid-template-columns: 1fr
+    justify-items: start
 
   .actionFeedbackRoute
     grid-template-columns: 1fr
@@ -2609,7 +2667,7 @@
   .actionFeedbackRoute > b
     width: .125rem
     height: 1.5rem
-    margin-left: .3rem
+    margin-left: .35rem
 
   .actionFeedbackSources
     grid-template-columns: 1fr
@@ -2619,15 +2677,3 @@
 
   .actionFeedbackSources > div:last-child small
     grid-column: 2
-
-  .actionFeedbackCorrectionBranch,
-  .actionFeedbackPrimaryNext
-    grid-template-columns: 1fr
-    align-items: start
-
-  .actionFeedbackCorrectionBranch > svg
-    display: none
-
-  .actionFeedbackCorrectionBranch button,
-  .actionFeedbackPrimaryNext button
-    width: 100%
