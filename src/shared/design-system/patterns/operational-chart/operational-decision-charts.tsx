@@ -447,64 +447,95 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
 export function DocumentWeightComparisonChart({
   submitted = 18.4,
   evidence = 16.8,
+  variant = 'semantic',
 }: {
   submitted?: number;
   evidence?: number;
+  variant?: 'semantic' | 'correction';
 }) {
-  const option = useMemo<EChartsCoreOption>(() => ({
-    animation: false,
-    grid: { left: 72, right: 36, top: 12, bottom: 18 },
-    tooltip: {
-      ...operationalTooltipShell,
-      trigger: 'axis',
-      axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
-      formatter: (raw: unknown) => {
-        const items = Array.isArray(raw) ? raw as Array<{ axisValue?: string; value?: number }> : [];
-        const row = items[0];
-        return buildOperationalTooltip({
-          eyebrow: 'EVIDÊNCIA',
-          title: row?.axisValue ?? 'Peso',
-          rows: [{ label: 'Valor', value: String(row?.value ?? '—') + ' t', tone: row?.axisValue === 'Enviado' ? 'critical' : 'success' }],
-        });
+  const option = useMemo<EChartsCoreOption>(() => {
+    const correctionMode = variant === 'correction';
+    const labels = correctionMode ? ['MDF-e atual', 'Evidência confirmada'] : ['Evidência', 'Enviado'];
+    const values = correctionMode ? [submitted, evidence] : [evidence, submitted];
+    const colors = correctionMode ? ['#666b72', '#e2e4e7'] : ['#10b981', '#ef4444'];
+
+    return {
+      animation: false,
+      grid: correctionMode
+        ? { left: 128, right: 34, top: 18, bottom: 32 }
+        : { left: 72, right: 36, top: 12, bottom: 18 },
+      tooltip: {
+        ...operationalTooltipShell,
+        trigger: 'axis',
+        axisPointer: { type: 'line', lineStyle: { color: '#52525b', type: 'dashed' } },
+        formatter: (raw: unknown) => {
+          const items = Array.isArray(raw) ? raw as Array<{ axisValue?: string; value?: number }> : [];
+          const row = items[0];
+          return buildOperationalTooltip({
+            eyebrow: correctionMode ? 'CORREÇÃO DOCUMENTAL' : 'EVIDÊNCIA',
+            title: row?.axisValue ?? 'Peso',
+            rows: [{ label: 'Peso', value: String(row?.value ?? '—').replace('.', ',') + ' t' }],
+            footer: correctionMode
+              ? 'A cor do gráfico permanece neutra; o estado da divergência é comunicado nos indicadores semânticos da tela.'
+              : undefined,
+          });
+        },
       },
-    },
-    xAxis: {
-      type: 'value',
-      min: Math.max(0, Math.floor(Math.min(submitted, evidence) - 2)),
-      max: Math.ceil(Math.max(submitted, evidence) + 1),
-      axisLine: { lineStyle: { color: '#303740' } },
-      splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
-      axisLabel: { color: '#7f8994', fontSize: 10, formatter: '{value} t' },
-    },
-    yAxis: {
-      type: 'category',
-      data: ['Evidência', 'Enviado'],
-      axisTick: { show: false },
-      axisLine: { show: false },
-      axisLabel: { color: '#aab2bb', fontSize: 11, fontWeight: 600 },
-    },
-    series: [{
-      type: 'bar',
-      data: [
-        { value: evidence, itemStyle: { color: '#10b981', borderRadius: [0, 6, 6, 0] } },
-        { value: submitted, itemStyle: { color: '#ef4444', borderRadius: [0, 6, 6, 0] } },
-      ],
-      barWidth: 18,
-      label: {
-        show: true,
-        position: 'right',
-        color: '#e5e7eb',
-        fontSize: 11,
-        formatter: '{c} t',
+      xAxis: {
+        type: 'value',
+        min: Math.max(0, Math.floor(Math.min(submitted, evidence) - 2)),
+        max: Math.ceil(Math.max(submitted, evidence) + 1),
+        axisLine: { lineStyle: { color: '#303740' } },
+        splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
+        axisLabel: { color: '#7f8994', fontSize: correctionMode ? 11 : 10, formatter: '{value} t' },
       },
-    }],
-  }), [evidence, submitted]);
+      yAxis: {
+        type: 'category',
+        inverse: correctionMode,
+        data: labels,
+        axisTick: { show: false },
+        axisLine: { show: false },
+        axisLabel: {
+          color: correctionMode ? '#c5c9ce' : '#aab2bb',
+          fontSize: correctionMode ? 12 : 11,
+          fontWeight: 650,
+          margin: correctionMode ? 14 : 8,
+        },
+      },
+      series: [{
+        type: 'bar',
+        data: values.map((value, index) => ({
+          value,
+          itemStyle: { color: colors[index], borderRadius: [0, 9, 9, 0] },
+          label: correctionMode && index === 1 ? { color: '#17191c' } : undefined,
+        })),
+        barWidth: correctionMode ? 24 : 18,
+        barCategoryGap: correctionMode ? '46%' : '30%',
+        showBackground: correctionMode,
+        backgroundStyle: correctionMode ? { color: '#23272c', borderRadius: 9 } : undefined,
+        emphasis: { disabled: true },
+        label: {
+          show: true,
+          position: correctionMode ? 'insideRight' : 'right',
+          distance: correctionMode ? 12 : 8,
+          color: '#e5e7eb',
+          fontSize: correctionMode ? 12 : 11,
+          fontWeight: correctionMode ? 720 : 600,
+          formatter: (raw: unknown) => {
+            const item = raw as { value?: number };
+            return String(item.value ?? '—').replace('.', ',') + ' t';
+          },
+        },
+      }],
+    };
+  }, [evidence, submitted, variant]);
 
   return (
     <OperationalEChart
       option={option}
       ariaLabel={'Comparação de peso: documento enviado ' + submitted + ' toneladas e evidência ' + evidence + ' toneladas'}
-      className={styles.comparison}
+      className={variant === 'correction' ? styles.comparisonCorrection : styles.comparison}
+      renderer={variant === 'correction' ? 'svg' : 'canvas'}
     />
   );
 }

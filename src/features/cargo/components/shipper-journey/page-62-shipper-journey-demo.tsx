@@ -112,7 +112,16 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
       }
     }
     if (experience === 'correction' && divergentDocument) {
-      return <CorrectionResubmitSurface document={divergentDocument} onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))} />;
+      return (
+        <CorrectionResubmitSurface
+          document={divergentDocument}
+          hydro={snapshot.hydro}
+          sources={snapshot.sources}
+          cargoId={snapshot.cargoId}
+          onBack={() => setExperience('feedback')}
+          onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))}
+        />
+      );
     }
     if (experience === 'monitoring') {
       return <FollowUpMonitoringSurface onReviewHydro={() => setExperience(resolveShipperJourneyTransition('monitoring', { type: 'hydroConstraintRaised' }))} />;

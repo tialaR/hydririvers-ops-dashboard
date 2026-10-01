@@ -288,65 +288,6 @@
   color: var(--hy-p62-success)
   font-size: var(--hy-p62-font-xs)
 
-.errorHero
-  margin-top: var(--hy-p62-space-6)
-  padding: var(--hy-p62-space-5)
-  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-critical) 45%, var(--hy-p62-border))
-  border-radius: var(--hy-p62-radius-panel)
-  background: color-mix(in srgb, var(--hy-p62-critical) 10%, var(--hy-p62-surface))
-
-.errorHero strong
-  color: var(--hy-p62-critical)
-  font-size: 1.6rem
-
-.compareGrid
-  display: grid
-  grid-template-columns: repeat(3, minmax(0, 1fr))
-  gap: var(--hy-p62-space-3)
-  margin-top: var(--hy-p62-space-4)
-
-.compareCard
-  min-height: 8.5rem
-  padding: var(--hy-p62-space-4)
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-panel)
-  background: var(--hy-p62-surface)
-
-.compareCard[data-tone='bad']
-  border-color: color-mix(in srgb, var(--hy-p62-critical) 35%, var(--hy-p62-border))
-
-.compareCard[data-tone='warn']
-  border-color: color-mix(in srgb, var(--hy-p62-warning) 35%, var(--hy-p62-border))
-
-.compareCard[data-tone='good']
-  border-color: color-mix(in srgb, var(--hy-p62-success) 35%, var(--hy-p62-border))
-
-.compareCard strong
-  display: block
-  margin-top: var(--hy-p62-space-2)
-  font-size: 1.55rem
-
-.stepper
-  display: grid
-  grid-template-columns: repeat(4, minmax(0, 1fr))
-  gap: var(--hy-p62-space-3)
-  margin-top: var(--hy-p62-space-4)
-  padding: var(--hy-p62-space-4)
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-panel)
-  background: var(--hy-p62-surface)
-
-.step
-  min-height: 4rem
-  padding-top: var(--hy-p62-space-3)
-  border-top: 0.18rem solid var(--hy-p62-border)
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-sm)
-
-.step[data-active='true']
-  border-color: var(--hy-p62-accent)
-  color: var(--hy-p62-text)
-
 .monitoringMetrics
   display: grid
   grid-template-columns: repeat(5, minmax(0, 1fr))
@@ -1335,22 +1276,476 @@
   font-size: var(--hy-p62-font-xs)
   line-height: 1.45
 
-.correctionVisualGrid
+.correctionSurface
+  min-height: 57rem
+
+.correctionMetricStrip
   display: grid
-  grid-template-columns: minmax(0, 1.35fr) minmax(22rem, .65fr)
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.correctionMetricStrip article
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 6.25rem
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.correctionMetricStrip article:first-child
+  border-left: 0
+
+.correctionMetricIcon,
+.correctionEvidenceIcon,
+.correctionCardHeading > span:first-child
+  display: grid
+  width: 2.55rem
+  height: 2.55rem
+  flex: 0 0 auto
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.correctionMetricStrip article > span:nth-child(2)
+  display: grid
+  min-width: 0
+  gap: .12rem
+
+.correctionMetricStrip small,
+.correctionEvidenceCopy small,
+.correctionCardHeading small,
+.correctionDecisionFacts small,
+.correctionContextGrid small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .06em
+
+.correctionMetricStrip strong
+  color: var(--hy-p62-text)
+  font-size: 1.55rem
+  font-weight: var(--hy-p62-weight-medium)
+  letter-spacing: -.03em
+
+.correctionMetricStrip em
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionMetricStrip b,
+.correctionEvidenceGrid b,
+.correctionChecklist b,
+.correctionProgress b
+  display: inline-flex
+  width: fit-content
+  min-height: 1.65rem
+  align-items: center
+  padding: 0 .55rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  white-space: nowrap
+
+.correctionMetricStrip b[data-semantic-status='critical'],
+.correctionEvidenceGrid b[data-semantic-status='critical']
+  border-color: color-mix(in srgb, var(--hy-p62-critical) 34%, var(--hy-p62-border))
+  color: var(--hy-p62-critical)
+
+.correctionMetricStrip b[data-semantic-status='success'],
+.correctionEvidenceGrid b[data-semantic-status='success'],
+.correctionChecklist b[data-semantic-status='success']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 30%, var(--hy-p62-border))
+  color: var(--hy-p62-success)
+
+.correctionMetricStrip b[data-semantic-status='warning'],
+.correctionChecklist b[data-semantic-status='warning'],
+.correctionProgress b[data-semantic-status='warning']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 32%, var(--hy-p62-border))
+  color: var(--hy-p62-warning)
+
+.correctionWorkspace
+  display: grid
+  grid-template-columns: minmax(0, 1.58fr) minmax(21.5rem, .72fr)
+  align-items: start
   gap: var(--hy-p62-space-4)
   margin-top: var(--hy-p62-space-4)
 
-.correctionChartCard
+.correctionMain,
+.correctionSide
+  display: grid
   min-width: 0
-  padding: var(--hy-p62-space-4)
+  gap: var(--hy-p62-space-4)
+
+.correctionAnalysisCard,
+.correctionDecisionCard,
+.correctionContextCard,
+.correctionChecklist
+  min-width: 0
+  overflow: hidden
   border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-panel)
+  border-radius: var(--hy-p62-radius-card)
   background: var(--hy-p62-surface)
 
-.correctionVisualGrid .compareGrid
-  grid-template-columns: 1fr
-  margin-top: 0
+.correctionChartStage
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0
+
+.correctionChartRead
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  margin: 0 var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-3) 0 var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.correctionChartRead > span
+  display: grid
+  grid-template-columns: auto auto
+  align-items: center
+  gap: .18rem .4rem
+  min-width: 9.5rem
+
+.correctionChartRead svg
+  grid-row: 1 / 3
+  color: var(--hy-p62-critical)
+
+.correctionChartRead small
+  color: var(--hy-p62-critical)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .06em
+
+.correctionChartRead strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-title)
+
+.correctionChartRead p
+  margin: 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.5
+
+.correctionEvidenceHeader
+  display: flex
+  align-items: end
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+
+.correctionEvidenceHeader > div
+  display: grid
+  gap: .2rem
+
+.correctionEvidenceHeader h3
+  margin: 0
+  font-size: var(--hy-p62-font-title)
+  font-weight: var(--hy-p62-weight-semibold)
+
+.correctionEvidenceHeader > small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.correctionEvidenceGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+
+.correctionEvidenceGrid article
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 6.4rem
+  padding: var(--hy-p62-space-3)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+  background: var(--hy-p62-surface-raised)
+
+.correctionEvidenceGrid article:nth-child(-n+2)
+  border-top: 0
+
+.correctionEvidenceGrid article:nth-child(odd)
+  border-left: 0
+
+.correctionEvidenceCopy
+  display: grid
+  min-width: 0
+  gap: .12rem
+
+.correctionEvidenceCopy strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-body)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionEvidenceCopy em
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionSide :global(section[data-tone='danger'])
+  min-height: 7.25rem
+
+.correctionCardHeading
+  display: flex
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.correctionCardHeading > div
+  display: grid
+  min-width: 0
+  gap: .18rem
+
+.correctionCardHeading strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-body)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionDecisionCard > p
+  margin: 0
+  padding: var(--hy-p62-space-4)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-body)
+  line-height: 1.5
+
+.correctionDecisionCard > p strong
+  color: var(--hy-p62-text)
+
+.correctionDecisionFacts
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+
+.correctionDecisionFacts > span
+  display: grid
+  gap: .15rem
+  min-height: 4.25rem
+  align-content: center
+  padding: var(--hy-p62-space-3)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.correctionDecisionFacts > span:first-child
+  border-left: 0
+
+.correctionDecisionFacts strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+
+.correctionContextGrid
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+
+.correctionContextGrid > span
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-content: center
+  gap: .1rem .55rem
+  min-height: 5.25rem
+  padding: var(--hy-p62-space-3)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.correctionContextGrid > span:nth-child(-n+2)
+  border-top: 0
+
+.correctionContextGrid > span:nth-child(odd)
+  border-left: 0
+
+.correctionContextGrid svg
+  grid-row: 1 / 4
+  align-self: center
+  color: var(--hy-p62-muted)
+
+.correctionContextGrid strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionContextGrid em
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionChecklist ul
+  margin: 0
+  padding: 0
+  list-style: none
+
+.correctionChecklist li
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 3.3rem
+  padding: .55rem var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.correctionChecklist li:first-child
+  border-top: 0
+
+.correctionChecklist li > span
+  display: grid
+  width: 1.65rem
+  height: 1.65rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: .35rem
+  color: var(--hy-p62-muted)
+
+.correctionChecklist li:nth-child(-n+2) > span
+  border-color: color-mix(in srgb, var(--hy-p62-success) 32%, var(--hy-p62-border))
+  color: var(--hy-p62-success)
+
+.correctionChecklist strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 620
+
+.correctionProgress
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.correctionProgress article
+  position: relative
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: .25rem var(--hy-p62-space-3)
+  min-height: 6.75rem
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.correctionProgress article:first-child
+  border-left: 0
+
+.correctionProgress article::before
+  position: absolute
+  top: 0
+  right: 0
+  left: 0
+  height: .14rem
+  background: var(--hy-p62-border)
+  content: ''
+
+.correctionProgress article[data-active='true']::before
+  background: var(--hy-p62-warning)
+
+.correctionStepNumber
+  display: grid
+  width: 2.25rem
+  height: 2.25rem
+  grid-row: 1 / 3
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border-strong)
+  border-radius: 50%
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+  font-weight: 700
+
+.correctionProgress article > span:nth-child(2)
+  display: grid
+  gap: .15rem
+
+.correctionProgress small
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+  font-weight: 700
+
+.correctionProgress strong
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 520
+  line-height: 1.35
+
+.correctionProgress b
+  grid-column: 2
+  margin-top: .25rem
+
+.correctionActionBar
+  grid-template-columns: auto minmax(0, 1fr) auto
+
+@media (max-width: 68rem)
+  .correctionWorkspace
+    grid-template-columns: 1fr
+
+  .correctionMetricStrip
+    grid-template-columns: 1fr
+
+  .correctionMetricStrip article
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .correctionMetricStrip article:first-child
+    border-top: 0
+
+  .correctionProgress
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .correctionProgress article:nth-child(3)
+    border-left: 0
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+@media (max-width: 44rem)
+  .correctionEvidenceGrid,
+  .correctionContextGrid,
+  .correctionProgress
+    grid-template-columns: 1fr
+
+  .correctionEvidenceGrid article,
+  .correctionEvidenceGrid article:nth-child(-n+2),
+  .correctionContextGrid > span,
+  .correctionContextGrid > span:nth-child(-n+2),
+  .correctionProgress article,
+  .correctionProgress article:nth-child(3)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .correctionEvidenceGrid article:first-child,
+  .correctionContextGrid > span:first-child,
+  .correctionProgress article:first-child
+    border-top: 0
+
+  .correctionActionBar
+    grid-template-columns: 1fr
+
+  .correctionActionBar > span
+    white-space: normal
 
 .followUpChartWrap
   padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0

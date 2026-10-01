@@ -219,6 +219,18 @@ for (const required of [
 }
 
 for (const required of [
+  'correction-metrics',
+  'correction-analysis',
+  'correction-evidence-list',
+  'correction-operation-context',
+  'correction-checklist',
+  'correction-progress',
+  'Salvar correção e enviar para revalidação',
+]) {
+  if (!surfaces.includes(required)) failures.push(`D12 correction experience missing: ${required}`);
+}
+
+for (const required of [
   'page62-d08-d09-negotiation',
   'page62-d09-communication',
   'page62-d10-review',

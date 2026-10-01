@@ -133,7 +133,7 @@ async function certifyInteractiveFlow({ name, correctionBranch = false }) {
     if (correctionBranch) {
       await page.getByRole('button', { name: 'Tratar rejeição documental' }).click();
       await visit('[data-testid="page62-d12-correction"]', 'D12');
-      await page.getByRole('button', { name: 'Salvar correção e revalidar' }).click();
+      await page.getByRole('button', { name: 'Salvar correção e enviar para revalidação' }).click();
     } else {
       await page.getByRole('button', { name: 'Acompanhar carga' }).click();
     }
@@ -306,6 +306,15 @@ try {
       const feedbackNextStepItems = feedbackNextSteps ? Array.from(feedbackNextSteps.querySelectorAll('article')) : [];
       const feedbackCorrectionBranch = document.querySelector('[data-testid="action-feedback-correction-branch"]');
       const feedbackMonitorButton = Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === 'Acompanhar carga');
+      const correctionMetrics = document.querySelector('[data-testid="correction-metrics"]');
+      const correctionEvidenceList = document.querySelector('[data-testid="correction-evidence-list"]');
+      const correctionOperationContext = document.querySelector('[data-testid="correction-operation-context"]');
+      const correctionChecklist = document.querySelector('[data-testid="correction-checklist"]');
+      const correctionProgress = document.querySelector('[data-testid="correction-progress"]');
+      const correctionChart = document.querySelector('[data-testid="correction-weight-chart"] [data-echart-renderer]');
+      const correctionPrimaryAction = Array.from(document.querySelectorAll('button')).find(
+        (button) => button.textContent?.trim() === 'Salvar correção e enviar para revalidação',
+      );
       const eventGaps = timelineEvents.slice(1).map((item, index) => {
         const previous = timelineEvents[index].getBoundingClientRect();
         const current = item.getBoundingClientRect();
@@ -400,6 +409,13 @@ try {
         feedbackNextStepCount: feedbackNextStepItems.length,
         feedbackCorrectionVisible: Boolean(feedbackCorrectionBranch && feedbackCorrectionBranch.getBoundingClientRect().height > 0),
         feedbackMonitorVisible: Boolean(feedbackMonitorButton && feedbackMonitorButton.getBoundingClientRect().width > 0),
+        correctionMetricCount: correctionMetrics ? correctionMetrics.querySelectorAll('article').length : 0,
+        correctionEvidenceCount: correctionEvidenceList ? correctionEvidenceList.querySelectorAll('article').length : 0,
+        correctionContextVisible: Boolean(correctionOperationContext && correctionOperationContext.getBoundingClientRect().height > 0),
+        correctionChecklistCount: correctionChecklist ? correctionChecklist.querySelectorAll('li').length : 0,
+        correctionProgressCount: correctionProgress ? correctionProgress.querySelectorAll('article').length : 0,
+        correctionChartHeight: correctionChart?.getBoundingClientRect().height ?? 0,
+        correctionPrimaryActionVisible: Boolean(correctionPrimaryAction && correctionPrimaryAction.getBoundingClientRect().width > 0),
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -459,6 +475,15 @@ try {
         if (metrics.feedbackNextStepCount < 4) failures.push(`post-action continuation too shallow: ${metrics.feedbackNextStepCount}`);
         if (!metrics.feedbackCorrectionVisible) failures.push('document recovery branch missing from action feedback');
         if (!metrics.feedbackMonitorVisible) failures.push('monitoring continuation missing from action feedback');
+      }
+      if (state.storyKey === 'D12CorrectionResubmit') {
+        if (metrics.correctionMetricCount < 3) failures.push(`D12 correction metric strip incomplete: ${metrics.correctionMetricCount}`);
+        if (metrics.correctionEvidenceCount < 4) failures.push(`D12 evidence/value support incomplete: ${metrics.correctionEvidenceCount}`);
+        if (!metrics.correctionContextVisible) failures.push('D12 operational corridor context missing');
+        if (metrics.correctionChecklistCount < 4) failures.push(`D12 revalidation checklist incomplete: ${metrics.correctionChecklistCount}`);
+        if (metrics.correctionProgressCount < 4) failures.push(`D12 correction process incomplete: ${metrics.correctionProgressCount}`);
+        if (metrics.correctionChartHeight < 220) failures.push(`D12 correction chart too shallow: ${metrics.correctionChartHeight}px`);
+        if (!metrics.correctionPrimaryActionVisible) failures.push('D12 primary revalidation action missing');
       }
       if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
