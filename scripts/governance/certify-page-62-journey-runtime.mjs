@@ -288,8 +288,12 @@ try {
       const feedbackImpactMetrics = document.querySelector('[data-testid="action-feedback-impact-metrics"]');
       const feedbackReadiness = document.querySelector('[data-testid="action-feedback-readiness"]');
       const feedbackReadinessStates = feedbackReadiness ? Array.from(feedbackReadiness.querySelectorAll('[data-semantic-status]')) : [];
+      const feedbackReadinessSummary = document.querySelector('[data-testid="action-feedback-readiness-summary"]');
       const feedbackImpactChart = document.querySelector('[data-testid="action-feedback-impact-chart"] [data-echart-renderer]');
-      const feedbackReadinessChart = document.querySelector('[data-testid="action-feedback-readiness-chart"] [data-echart-renderer]');
+      const feedbackReadinessChartShell = document.querySelector('[data-testid="action-feedback-readiness-chart"]');
+      const feedbackReadinessChart = feedbackReadinessChartShell?.querySelector('[data-echart-renderer]');
+      const feedbackReadinessRect = feedbackReadiness?.getBoundingClientRect();
+      const feedbackReadinessChartShellRect = feedbackReadinessChartShell?.getBoundingClientRect();
       const feedbackNeutralIcons = feedbackReadiness ? Array.from(feedbackReadiness.querySelectorAll('[data-semantic-role="neutral-icon"]')) : [];
       const feedbackNeutralIconColors = feedbackNeutralIcons.map((node) => getComputedStyle(node).color);
       const feedbackHydro = document.querySelector('[data-testid="action-feedback-hydro-context"]');
@@ -374,6 +378,11 @@ try {
         feedbackImpactMetricCount: feedbackImpactMetrics ? feedbackImpactMetrics.querySelectorAll('article').length : 0,
         feedbackReadinessVisible: Boolean(feedbackReadiness && feedbackReadiness.getBoundingClientRect().height > 0),
         feedbackReadinessStateCount: feedbackReadinessStates.length,
+        feedbackReadinessSummaryCount: feedbackReadinessSummary ? feedbackReadinessSummary.children.length : 0,
+        feedbackReadinessChartWidthRatio: feedbackReadinessRect && feedbackReadinessChartShellRect
+          ? feedbackReadinessChartShellRect.width / feedbackReadinessRect.width
+          : 0,
+        feedbackReadinessChartHeight: feedbackReadinessChart?.getBoundingClientRect().height ?? 0,
         feedbackImpactChartVisible: Boolean(feedbackImpactChart && feedbackImpactChart.getBoundingClientRect().height > 0),
         feedbackReadinessChartVisible: Boolean(feedbackReadinessChart && feedbackReadinessChart.getBoundingClientRect().height > 0),
         feedbackNeutralIconCount: feedbackNeutralIcons.length,
@@ -431,7 +440,10 @@ try {
         if (metrics.feedbackImpactMetricCount < 4) failures.push(`post-action impact breadth incomplete: ${metrics.feedbackImpactMetricCount}`);
         if (!metrics.feedbackReadinessVisible || metrics.feedbackReadinessStateCount < 4) failures.push('post-action readiness/state model incomplete');
         if (!metrics.feedbackImpactChartVisible || !metrics.feedbackReadinessChartVisible) failures.push('D11 must expose both impact and readiness visualizations');
-        if (metrics.feedbackNeutralIconCount < 5) failures.push(`D11 neutral iconography too sparse: ${metrics.feedbackNeutralIconCount}`);
+        if (metrics.feedbackReadinessSummaryCount < 3) failures.push(`D11 readiness summary incomplete: ${metrics.feedbackReadinessSummaryCount}`);
+        if (metrics.feedbackReadinessChartWidthRatio < 0.84) failures.push(`D11 readiness visualization is not using the available width: ${metrics.feedbackReadinessChartWidthRatio.toFixed(2)}`);
+        if (metrics.feedbackReadinessChartHeight < 280) failures.push(`D11 readiness visualization is too shallow: ${metrics.feedbackReadinessChartHeight}px`);
+        if (metrics.feedbackNeutralIconCount < 8) failures.push(`D11 neutral iconography too sparse: ${metrics.feedbackNeutralIconCount}`);
         if (metrics.feedbackNeutralIconColorSpread > 42) failures.push(`D11 state icons became status-colored: RGB spread ${metrics.feedbackNeutralIconColorSpread}`);
         if (!metrics.feedbackHydroVisible || metrics.feedbackSourceCount < 2) failures.push('post-action hydrographic/source context incomplete');
         if (metrics.feedbackNextStepCount < 4) failures.push(`post-action continuation too shallow: ${metrics.feedbackNextStepCount}`);

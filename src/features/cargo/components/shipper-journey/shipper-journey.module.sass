@@ -2387,37 +2387,67 @@
 
 .actionFeedbackReadinessChart
   display: grid
-  grid-template-columns: minmax(0, 1fr) auto
-  align-items: end
-  gap: 1rem
-  min-height: 16rem
-  padding: .2rem .15rem 1rem
+  grid-template-columns: 1fr
+  align-content: start
+  min-height: 27rem
+  padding: .2rem 1.05rem 1.05rem
   border-bottom: .0625rem solid var(--hy-p62-border)
 
 .actionFeedbackReadinessLegend
   display: grid
-  gap: .75rem
-  min-width: 7.25rem
-  padding-bottom: 1.35rem
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  overflow: hidden
+  margin-top: -.35rem
+  border-top: .0625rem solid var(--hy-p62-border)
 
 .actionFeedbackReadinessLegend > span
   display: grid
-  gap: .12rem
+  min-width: 0
+  min-height: 7.4rem
+  place-items: center
+  align-content: center
+  gap: .2rem
+  padding: .85rem .7rem
+  border-left: .0625rem solid var(--hy-p62-border)
+  text-align: center
+
+.actionFeedbackReadinessLegend > span:first-child
+  border-left: 0
+
+.actionFeedbackReadinessLegendIcon
+  display: grid
+  width: 2.55rem
+  height: 2.55rem
+  place-items: center
+  margin-bottom: .3rem
+  border: .0625rem solid var(--hy-p62-border)
+  border-radius: 50%
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.actionFeedbackReadinessLegendIcon svg
+  color: var(--hy-p62-muted)
 
 .actionFeedbackReadinessLegend strong
-  font-size: 1.5rem
+  color: var(--hy-p62-text)
+  font-size: 1.45rem
   line-height: 1
   font-variant-numeric: tabular-nums
 
 .actionFeedbackReadinessLegend small
   color: var(--hy-p62-muted)
-  font-size: .8125rem
+  font-size: .75rem
+  font-weight: 700
+  letter-spacing: .045em
+
+.actionFeedbackReadinessLegend em
+  color: var(--hy-p62-muted)
+  font-size: .75rem
+  font-style: normal
+  line-height: 1.3
 
 .actionFeedbackReadinessLegend > span[data-semantic-status='warning'] strong
   color: var(--hy-p62-warning)
-
-.actionFeedbackReadinessLegend > span[data-semantic-status='success'] strong
-  color: var(--hy-p62-success)
 
 .actionFeedbackReadinessList
   display: grid
@@ -2736,12 +2766,18 @@
     justify-self: start
 
   .actionFeedbackReadinessChart
-    grid-template-columns: 1fr
+    min-height: 24rem
+    padding-inline: .55rem
 
   .actionFeedbackReadinessLegend
-    grid-template-columns: repeat(2, minmax(0, 1fr))
-    min-width: 0
-    padding-bottom: .25rem
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+
+  .actionFeedbackReadinessLegend > span
+    min-height: 6.8rem
+    padding: .7rem .35rem
+
+  .actionFeedbackReadinessLegend em
+    font-size: .6875rem
 
   .actionFeedbackRoute
     grid-template-columns: 1fr

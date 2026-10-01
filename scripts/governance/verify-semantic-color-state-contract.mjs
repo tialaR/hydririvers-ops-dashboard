@@ -10,6 +10,8 @@ const files = {
   occurrence: 'src/features/cargo/components/documents-occurrence/cargo-occurrence-summary.tsx',
   journey: 'src/features/cargo/components/shipper-journey/shipper-journey-surfaces.tsx',
   assistant: 'src/features/cargo/components/shipper-journey/operational-context-chat.tsx',
+  schedule: 'src/shared/design-system/patterns/operational-schedule-list/operational-schedule-list.tsx',
+  scheduleStyles: 'src/shared/design-system/patterns/operational-schedule-list/operational-schedule-list.module.sass',
   tokens: 'src/shared/design-system/foundations/page-62-semantic-tokens.css',
 };
 
@@ -85,6 +87,8 @@ for (const required of [
   'page62-d11-feedback',
   'action-feedback-impact-metrics',
   'action-feedback-readiness',
+  'action-feedback-readiness-summary',
+  'data-semantic-status="current"',
   'action-feedback-hydro-context',
   'action-feedback-correction-branch',
 ]) {
@@ -97,6 +101,18 @@ for (const required of [
   'snapshot DEMO',
 ]) {
   if (!source.assistant.includes(required)) failures.push(`operational assistant semantic contract missing: ${required}`);
+}
+
+for (const required of [
+  'data-semantic-role="neutral-icon"',
+  'data-tone={item.tone}',
+  'styles.status',
+]) {
+  if (!source.schedule.includes(required)) failures.push(`operational schedule semantic contract missing: ${required}`);
+}
+
+if (/\.item\[data-tone='(?:success|warning|info)'\] \.icon/.test(source.scheduleStyles)) {
+  failures.push('operational schedule icons must remain neutral; status color belongs to the rail and status label');
 }
 
 for (const required of [

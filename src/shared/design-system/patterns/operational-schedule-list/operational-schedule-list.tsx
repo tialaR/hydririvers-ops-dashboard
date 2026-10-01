@@ -34,7 +34,7 @@ export function OperationalScheduleList({
           const Icon = iconByKind[item.icon ?? 'calendar'];
           return (
             <article className={styles.item} data-tone={item.tone} key={item.id}>
-              <span className={styles.icon}><Icon size={19} aria-hidden /></span>
+              <span className={styles.icon}><Icon size={19} aria-hidden data-semantic-role="neutral-icon" /></span>
               <span className={styles.time}>{item.time}</span>
               <span className={styles.copy}>
                 <strong>{item.title}</strong>

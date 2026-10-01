@@ -563,9 +563,25 @@ export function ActionFeedbackSurface({
           <div className={styles.actionFeedbackReadinessBody}>
             <div className={styles.actionFeedbackReadinessChart} data-testid="action-feedback-readiness-chart">
               <PostActionReadinessArcChart pendingDocument={Boolean(pendingDocument)} />
-              <div className={styles.actionFeedbackReadinessLegend}>
-                <span><strong>{stableCount}</strong><small>estáveis</small></span>
-                <span data-semantic-status={pendingDocument ? 'warning' : 'success'}><strong>{pendingDocument ? 1 : 0}</strong><small>{pendingDocument ? 'em validação' : 'pendentes'}</small></span>
+              <div className={styles.actionFeedbackReadinessLegend} data-testid="action-feedback-readiness-summary">
+                <span>
+                  <span className={styles.actionFeedbackReadinessLegendIcon} aria-hidden><CheckCircle2 size={19} data-semantic-role="neutral-icon" /></span>
+                  <small>ESTÁVEIS</small>
+                  <strong>{stableCount}</strong>
+                  <em>frentes estabilizadas</em>
+                </span>
+                <span data-semantic-status={pendingDocument ? 'warning' : undefined}>
+                  <span className={styles.actionFeedbackReadinessLegendIcon} aria-hidden><FileClock size={19} data-semantic-role="neutral-icon" /></span>
+                  <small>EM VALIDAÇÃO</small>
+                  <strong>{pendingDocument ? 1 : 0}</strong>
+                  <em>{pendingDocument ? 'ação documental necessária' : 'nenhuma frente'}</em>
+                </span>
+                <span>
+                  <span className={styles.actionFeedbackReadinessLegendIcon} aria-hidden><FileWarning size={19} data-semantic-role="neutral-icon" /></span>
+                  <small>BLOQUEADAS</small>
+                  <strong>0</strong>
+                  <em>sem trava crítica</em>
+                </span>
               </div>
             </div>
 
@@ -576,7 +592,7 @@ export function ActionFeedbackSurface({
               </li>
               <li>
                 <span className={styles.actionFeedbackStateIcon}><BadgeDollarSign size={19} data-semantic-role="neutral-icon" /></span>
-                <span><small>CONDIÇÃO COMERCIAL</small><strong>{money(selected.priceBRL)}</strong><em>{money(demurrageAfter)}/h de demurrage</em><b data-semantic-status="success">Vigente</b></span>
+                <span><small>CONDIÇÃO COMERCIAL</small><strong>{money(selected.priceBRL)}</strong><em>{money(demurrageAfter)}/h de demurrage</em><b data-semantic-status="current">Vigente</b></span>
               </li>
               <li>
                 <span className={styles.actionFeedbackStateIcon}><FileClock size={19} data-semantic-role="neutral-icon" /></span>

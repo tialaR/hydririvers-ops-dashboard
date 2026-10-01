@@ -362,28 +362,43 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
       splitNumber: 4,
       startAngle: 180,
       endAngle: 0,
-      center: ['50%', '72%'],
-      radius: '92%',
+      center: ['50%', '73%'],
+      radius: '98%',
       pointer: { show: false },
       progress: { show: false },
       axisLine: {
         lineStyle: {
-          width: 26,
-          color: [
-            [0.25, '#eceef0'],
-            [0.5, '#b8bcc1'],
-            [0.75, pendingDocument ? '#fbbf24' : '#858a90'],
-            [1, '#62676e'],
-          ],
+          width: 1,
+          color: pendingDocument
+            ? [
+                [0.52, '#646970'],
+                [0.75, '#e2e4e7'],
+                [0.90, '#858a90'],
+                [1, '#f59e0b'],
+              ]
+            : [
+                [0.52, '#646970'],
+                [0.75, '#b8bcc1'],
+                [1, '#e2e4e7'],
+              ],
         },
       },
-      axisTick: { show: false },
+      axisTick: {
+        show: true,
+        splitNumber: 8,
+        distance: -34,
+        length: 32,
+        lineStyle: {
+          color: 'auto',
+          width: 8,
+        },
+      },
       splitLine: {
         show: true,
-        distance: -27,
-        length: 28,
+        distance: -34,
+        length: 32,
         lineStyle: {
-          color: '#141416',
+          color: 'auto',
           width: 8,
         },
       },
@@ -391,21 +406,26 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
       anchor: { show: false },
       title: {
         show: true,
-        offsetCenter: [0, '23%'],
-        color: '#9ca3af',
-        fontSize: 12,
+        offsetCenter: [0, '20%'],
+        color: '#a6abb2',
+        fontSize: 13,
         fontWeight: 600,
       },
       detail: {
         show: true,
         valueAnimation: false,
-        offsetCenter: [0, '-3%'],
+        offsetCenter: [0, '-8%'],
         color: '#f3f4f6',
-        fontSize: 34,
+        fontSize: 46,
         fontWeight: 720,
         formatter: (current: number) => String(Math.round(current)) + '/4',
       },
-      data: [{ value, name: pendingDocument ? '1 frente em validação' : 'todas as frentes estáveis' }],
+      data: [{
+        value,
+        name: pendingDocument
+          ? 'frentes estáveis · 1 em validação'
+          : 'frentes estáveis · sem pendências',
+      }],
     }],
   }), [pendingDocument, value]);
 
@@ -413,9 +433,10 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
     <OperationalEChart
       option={option}
       ariaLabel={pendingDocument
-        ? 'Prontidão pós-aceite: três de quatro frentes estáveis e uma frente documental em validação'
-        : 'Prontidão pós-aceite: quatro de quatro frentes estáveis'}
+        ? 'Prontidão pós-aceite: três de quatro frentes estáveis, uma em validação e nenhuma bloqueada'
+        : 'Prontidão pós-aceite: quatro de quatro frentes estáveis e nenhuma pendência'}
       className={styles.readinessArc}
+      renderer="svg"
     />
   );
 }
