@@ -220,7 +220,7 @@ export function ActionOutcomeLedgerChart({
 
     const normalize = (value: number, min: number, max: number) => {
       if (max <= min) return 50;
-      return Math.max(7, Math.min(100, ((value - min) / (max - min)) * 100));
+      return Math.max(26, Math.min(100, 26 + (((value - min) / (max - min)) * 74)));
     };
 
     return {
@@ -275,9 +275,9 @@ export function ActionOutcomeLedgerChart({
         axisTick: { show: false },
         axisLabel: {
           show: true,
-          align: 'left',
-          margin: 0,
-          width: 175,
+          align: 'right',
+          margin: 18,
+          width: 170,
           overflow: 'break',
           formatter: () => '{metric|' + row.label + '}\n{delta|' + row.delta + '}',
           rich: {
