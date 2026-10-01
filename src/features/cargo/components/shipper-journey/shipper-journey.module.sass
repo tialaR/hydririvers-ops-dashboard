@@ -1388,6 +1388,179 @@
   min-width: 0
   gap: var(--hy-p62-space-4)
 
+.correctionWorkbench
+  display: grid
+  grid-template-columns: minmax(0, 1.45fr) minmax(13rem, .55fr)
+  gap: var(--hy-p62-space-4)
+
+.correctionTaskPanel,
+.correctionFocusCard
+  min-width: 0
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.correctionWorkbenchHeading
+  display: flex
+  align-items: flex-start
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.correctionWorkbenchHeading > div
+  display: grid
+  gap: .15rem
+
+.correctionWorkbenchHeading h3
+  margin: 0
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-label)
+  font-weight: var(--hy-p62-weight-semibold)
+
+.correctionTaskList
+  display: grid
+
+.correctionTaskList > div
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 4.55rem
+  padding: .65rem var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.correctionTaskList > div:first-child
+  border-top: 0
+
+.correctionTaskList > div[data-state='active']
+  box-shadow: inset .14rem 0 0 var(--hy-p62-warning)
+
+.correctionTaskList > div[data-state='ready']
+  box-shadow: inset .14rem 0 0 color-mix(in srgb, var(--hy-p62-success) 68%, transparent)
+
+.correctionTaskIcon
+  display: grid
+  width: 2rem
+  height: 2rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+  color: var(--hy-p62-muted)
+
+.correctionTaskList > div > span:nth-child(2)
+  display: grid
+  min-width: 0
+  gap: .14rem
+
+.correctionTaskList strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 650
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionTaskList small
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  line-height: 1.35
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionTaskList b
+  display: inline-flex
+  min-height: 1.55rem
+  align-items: center
+  padding: 0 .5rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+
+.correctionTaskList b[data-semantic-status='warning']
+  border-color: color-mix(in srgb, var(--hy-p62-warning) 34%, var(--hy-p62-border))
+  color: var(--hy-p62-warning)
+
+.correctionTaskList b[data-semantic-status='success']
+  border-color: color-mix(in srgb, var(--hy-p62-success) 30%, var(--hy-p62-border))
+  color: var(--hy-p62-success)
+
+.correctionFocusCard
+  display: grid
+  align-content: start
+  padding: var(--hy-p62-space-4)
+
+.correctionFocusHeader
+  display: flex
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  color: var(--hy-p62-muted)
+
+.correctionFocusHeader > span
+  display: grid
+  width: 2rem
+  height: 2rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+
+.correctionFocusHeader small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .06em
+
+.correctionFocusCard > strong
+  margin-top: var(--hy-p62-space-3)
+  color: var(--hy-p62-text)
+  font-size: 2rem
+  font-weight: var(--hy-p62-weight-medium)
+  letter-spacing: -.04em
+
+.correctionFocusCard > p
+  margin: .2rem 0 var(--hy-p62-space-4)
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.45
+
+.correctionFocusCard > div:last-child
+  display: grid
+  grid-template-columns: repeat(2, minmax(0, 1fr))
+  margin-top: auto
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+
+.correctionFocusCard > div:last-child > span
+  display: grid
+  gap: .1rem
+  min-height: 3.75rem
+  align-content: center
+  padding: var(--hy-p62-space-2) var(--hy-p62-space-3)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.correctionFocusCard > div:last-child > span:first-child
+  border-left: 0
+
+.correctionFocusCard > div:last-child small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .05em
+
+.correctionFocusCard > div:last-child strong
+  overflow: hidden
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-xs)
+  text-overflow: ellipsis
+  white-space: nowrap
+
 .correctionAnalysisCard,
 .correctionDecisionCard,
 .correctionContextCard,
@@ -1701,7 +1874,8 @@
   grid-template-columns: auto minmax(0, 1fr) auto
 
 @media (max-width: 68rem)
-  .correctionWorkspace
+  .correctionWorkspace,
+  .correctionWorkbench
     grid-template-columns: 1fr
 
   .correctionMetricStrip

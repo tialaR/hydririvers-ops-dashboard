@@ -842,6 +842,49 @@ export function CorrectionResubmitSurface({
               })}
             </div>
           </article>
+
+          <section className={styles.correctionWorkbench} data-testid="correction-workbench">
+            <article className={styles.correctionTaskPanel}>
+              <div className={styles.correctionWorkbenchHeading}>
+                <div>
+                  <p className={styles.eyebrow}>FILA DA CORREÇÃO</p>
+                  <h3>O que precisa acontecer agora</h3>
+                </div>
+                <span className={styles.statusBadge}>3 ações</span>
+              </div>
+
+              <div className={styles.correctionTaskList}>
+                <div data-state="active">
+                  <span className={styles.correctionTaskIcon}><FileClock size={17} data-semantic-role="neutral-icon" /></span>
+                  <span><strong>Ajustar {document.label} para {formatMetricTons(evidenceWeight)}</strong><small>Substituir o valor divergente mantendo a evidência vinculada.</small></span>
+                  <b data-semantic-status="warning">Agora</b>
+                </div>
+                <div data-state="ready">
+                  <span className={styles.correctionTaskIcon}><FileCheck2 size={17} data-semantic-role="neutral-icon" /></span>
+                  <span><strong>Preservar NF-e + CT-e vinculados</strong><small>Os vínculos fiscais seguem no contexto da operação.</small></span>
+                  <b data-semantic-status="success">Pronto</b>
+                </div>
+                <div>
+                  <span className={styles.correctionTaskIcon}><ShieldCheck size={17} data-semantic-role="neutral-icon" /></span>
+                  <span><strong>Enviar o documento corrigido para revalidação</strong><small>A etapa seguinte começa após salvar a correção.</small></span>
+                  <b>Pendente</b>
+                </div>
+              </div>
+            </article>
+
+            <article className={styles.correctionFocusCard} data-testid="correction-focus-card">
+              <div className={styles.correctionFocusHeader}>
+                <span><Clock3 size={18} data-semantic-role="neutral-icon" /></span>
+                <small>JANELA DOCUMENTAL</small>
+              </div>
+              <strong>{document.deadlineAt ? time(document.deadlineAt) : 'próximo marco'}</strong>
+              <p>Prazo registrado para concluir a correção antes da revalidação.</p>
+              <div>
+                <span><small>OBJETO</small><strong>{document.label}</strong></span>
+                <span><small>CARGA</small><strong>{cargoId}</strong></span>
+              </div>
+            </article>
+          </section>
         </div>
 
         <aside className={styles.correctionSide}>

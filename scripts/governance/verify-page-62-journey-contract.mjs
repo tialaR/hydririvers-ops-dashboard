@@ -224,6 +224,10 @@ for (const required of [
   'correction-evidence-list',
   'correction-operation-context',
   'correction-checklist',
+  'correction-workbench',
+  'correction-focus-card',
+  'FILA DA CORREÇÃO',
+  'JANELA DOCUMENTAL',
   'correction-progress',
   'Salvar correção e enviar para revalidação',
 ]) {
