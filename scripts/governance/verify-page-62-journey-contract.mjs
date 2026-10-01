@@ -288,7 +288,7 @@ for (const required of ['ProposalTradeoffRadar', 'ProposalDecisionComparisonChar
   if (!decisionCharts.includes(`export function ${required}`)) failures.push(`decision visualization missing: ${required}`);
 }
 
-for (const required of ['ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'OperationalGaugeChart']) {
+for (const required of ['ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'ActionOutcomeSmallMultiplesChart', 'PostActionStateAllocationChart']) {
   if (!surfaces.includes(required)) failures.push(`journey surface is not using visualization: ${required}`);
 }
 
