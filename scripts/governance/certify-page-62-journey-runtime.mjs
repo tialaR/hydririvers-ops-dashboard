@@ -310,9 +310,9 @@ try {
       const correctionEvidenceList = document.querySelector('[data-testid="correction-evidence-list"]');
       const correctionOperationContext = document.querySelector('[data-testid="correction-operation-context"]');
       const correctionChecklist = document.querySelector('[data-testid="correction-checklist"]');
-      const correctionWorkbench = document.querySelector('[data-testid="correction-workbench"]');
-      const correctionTaskPanel = correctionWorkbench?.querySelector('article:first-child');
-      const correctionFocusCard = document.querySelector('[data-testid="correction-focus-card"]');
+      const correctionDecisionRail = document.querySelector('[data-testid="correction-decision-rail"]');
+      const correctionResolution = document.querySelector('[data-testid="correction-next-action"]');
+      const correctionAnalysis = document.querySelector('[data-testid="correction-analysis"]');
       const correctionProgress = document.querySelector('[data-testid="correction-progress"]');
       const correctionChart = document.querySelector('[data-testid="correction-weight-chart"] [data-echart-renderer]');
       const correctionPrimaryAction = Array.from(document.querySelectorAll('button')).find(
@@ -416,9 +416,11 @@ try {
         correctionEvidenceCount: correctionEvidenceList ? correctionEvidenceList.querySelectorAll('article').length : 0,
         correctionContextVisible: Boolean(correctionOperationContext && correctionOperationContext.getBoundingClientRect().height > 0),
         correctionChecklistCount: correctionChecklist ? correctionChecklist.querySelectorAll('li').length : 0,
-        correctionWorkbenchVisible: Boolean(correctionWorkbench && correctionWorkbench.getBoundingClientRect().height > 0),
-        correctionTaskCount: correctionTaskPanel ? correctionTaskPanel.querySelectorAll('[data-state], [data-state=""], .correction-task-sentinel').length || correctionTaskPanel.querySelectorAll('b').length : 0,
-        correctionFocusVisible: Boolean(correctionFocusCard && correctionFocusCard.getBoundingClientRect().height > 0),
+        correctionResolutionVisible: Boolean(correctionResolution && correctionResolution.getBoundingClientRect().height > 0),
+        correctionDecisionRailChildCount: correctionDecisionRail ? correctionDecisionRail.children.length : 0,
+        correctionColumnHeightDelta: correctionDecisionRail && correctionAnalysis
+          ? Math.abs(correctionDecisionRail.getBoundingClientRect().height - correctionAnalysis.getBoundingClientRect().height)
+          : 9999,
         correctionProgressCount: correctionProgress ? correctionProgress.querySelectorAll('article').length : 0,
         correctionChartHeight: correctionChart?.getBoundingClientRect().height ?? 0,
         correctionPrimaryActionVisible: Boolean(correctionPrimaryAction && correctionPrimaryAction.getBoundingClientRect().width > 0),
@@ -485,11 +487,11 @@ try {
       if (state.storyKey === 'D12CorrectionResubmit') {
         if (metrics.correctionMetricCount < 3) failures.push(`D12 correction metric strip incomplete: ${metrics.correctionMetricCount}`);
         if (metrics.correctionEvidenceCount < 4) failures.push(`D12 evidence/value support incomplete: ${metrics.correctionEvidenceCount}`);
-        if (!metrics.correctionContextVisible) failures.push('D12 operational corridor context missing');
+        if (!metrics.correctionContextVisible) failures.push('D12 compact operational corridor context missing');
         if (metrics.correctionChecklistCount < 4) failures.push(`D12 revalidation checklist incomplete: ${metrics.correctionChecklistCount}`);
-        if (!metrics.correctionWorkbenchVisible) failures.push('D12 correction workbench missing below the analysis card');
-        if (metrics.correctionTaskCount < 3) failures.push(`D12 correction work queue incomplete: ${metrics.correctionTaskCount}`);
-        if (!metrics.correctionFocusVisible) failures.push('D12 correction focus/deadline card missing');
+        if (!metrics.correctionResolutionVisible) failures.push('D12 primary resolution panel missing');
+        if (metrics.correctionDecisionRailChildCount !== 2) failures.push(`D12 decision rail is competing with too many top-level components: ${metrics.correctionDecisionRailChildCount}`);
+        if (metrics.correctionColumnHeightDelta > 48) failures.push(`D12 columns are visually unbalanced: ${metrics.correctionColumnHeightDelta}px delta`);
         if (metrics.correctionProgressCount < 4) failures.push(`D12 correction process incomplete: ${metrics.correctionProgressCount}`);
         if (metrics.correctionChartHeight < 220) failures.push(`D12 correction chart too shallow: ${metrics.correctionChartHeight}px`);
         if (!metrics.correctionPrimaryActionVisible) failures.push('D12 primary revalidation action missing');

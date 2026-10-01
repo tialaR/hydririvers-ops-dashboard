@@ -723,6 +723,7 @@ export function CorrectionResubmitSurface({
     { id: 'forward', title: 'Reencaminhar', description: 'Atualizar vínculos e participantes da operação', status: 'Pendente', active: false },
     { id: 'monitor', title: 'Monitorar', description: 'Acompanhar retorno e próxima janela operacional', status: 'Pendente', active: false },
   ] as const;
+
   const evidenceItems = [
     {
       id: 'scale',
@@ -797,97 +798,52 @@ export function CorrectionResubmitSurface({
       </div>
 
       <div className={styles.correctionWorkspace}>
-        <div className={styles.correctionMain}>
-          <article className={styles.correctionAnalysisCard} data-testid="correction-analysis">
-            <div className={styles.sectionHeading}>
-              <div>
-                <p className={styles.eyebrow}>CONFRONTO DE PESO</p>
-                <h3>Documento × evidência operacional</h3>
-                <span>O gráfico prioriza a diferença real; cor fica reservada ao estado, não à decoração.</span>
-              </div>
-              <span className={styles.statusBadge}>toneladas</span>
+        <article className={styles.correctionAnalysisCard} data-testid="correction-analysis">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>CONFRONTO DE PESO</p>
+              <h3>Documento × evidência operacional</h3>
+              <span>O gráfico prioriza a diferença real; cor fica reservada ao estado, não à decoração.</span>
             </div>
+            <span className={styles.statusBadge}>toneladas</span>
+          </div>
 
-            <div className={styles.correctionChartStage} data-testid="correction-weight-chart">
-              <DocumentWeightComparisonChart submitted={submittedWeight} evidence={evidenceWeight} variant="correction" />
+          <div className={styles.correctionChartStage} data-testid="correction-weight-chart">
+            <DocumentWeightComparisonChart submitted={submittedWeight} evidence={evidenceWeight} variant="correction" />
+          </div>
+
+          <div className={styles.correctionChartRead}>
+            <span><FileWarning size={16} data-semantic-role="neutral-icon" /><small>DIVERGÊNCIA</small><strong>{formatMetricTons(difference)}</strong></span>
+            <p>O valor do manifesto precisa convergir com a evidência vinculada antes da próxima etapa de revalidação.</p>
+          </div>
+
+          <div className={styles.correctionEvidenceHeader}>
+            <div>
+              <p className={styles.eyebrow}>BASE DA CORREÇÃO</p>
+              <h3>Evidências e vínculos preservados</h3>
             </div>
+            <small>{document.evidenceIds.length} evidências diretas</small>
+          </div>
 
-            <div className={styles.correctionChartRead}>
-              <span><FileWarning size={16} data-semantic-role="neutral-icon" /><small>DIVERGÊNCIA</small><strong>{formatMetricTons(difference)}</strong></span>
-              <p>O valor do manifesto precisa convergir com a evidência vinculada antes da próxima etapa de revalidação.</p>
-            </div>
+          <div className={styles.correctionEvidenceGrid} data-testid="correction-evidence-list">
+            {evidenceItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <article key={item.id}>
+                  <span className={styles.correctionEvidenceIcon}><Icon size={18} data-semantic-role="neutral-icon" /></span>
+                  <span className={styles.correctionEvidenceCopy}>
+                    <small>{item.label}</small>
+                    <strong>{item.value}</strong>
+                    <em>{item.detail}</em>
+                  </span>
+                  <b data-semantic-status={item.tone}>{item.status}</b>
+                </article>
+              );
+            })}
+          </div>
+        </article>
 
-            <div className={styles.correctionEvidenceHeader}>
-              <div>
-                <p className={styles.eyebrow}>BASE DA CORREÇÃO</p>
-                <h3>Evidências e vínculos preservados</h3>
-              </div>
-              <small>{document.evidenceIds.length} evidências diretas</small>
-            </div>
-
-            <div className={styles.correctionEvidenceGrid} data-testid="correction-evidence-list">
-              {evidenceItems.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <article key={item.id}>
-                    <span className={styles.correctionEvidenceIcon}><Icon size={18} data-semantic-role="neutral-icon" /></span>
-                    <span className={styles.correctionEvidenceCopy}>
-                      <small>{item.label}</small>
-                      <strong>{item.value}</strong>
-                      <em>{item.detail}</em>
-                    </span>
-                    <b data-semantic-status={item.tone}>{item.status}</b>
-                  </article>
-                );
-              })}
-            </div>
-          </article>
-
-          <section className={styles.correctionWorkbench} data-testid="correction-workbench">
-            <article className={styles.correctionTaskPanel}>
-              <div className={styles.correctionWorkbenchHeading}>
-                <div>
-                  <p className={styles.eyebrow}>FILA DA CORREÇÃO</p>
-                  <h3>O que precisa acontecer agora</h3>
-                </div>
-                <span className={styles.statusBadge}>3 ações</span>
-              </div>
-
-              <div className={styles.correctionTaskList}>
-                <div data-state="active">
-                  <span className={styles.correctionTaskIcon}><FileClock size={17} data-semantic-role="neutral-icon" /></span>
-                  <span><strong>Ajustar {document.label} para {formatMetricTons(evidenceWeight)}</strong><small>Substituir o valor divergente mantendo a evidência vinculada.</small></span>
-                  <b data-semantic-status="warning">Agora</b>
-                </div>
-                <div data-state="ready">
-                  <span className={styles.correctionTaskIcon}><FileCheck2 size={17} data-semantic-role="neutral-icon" /></span>
-                  <span><strong>Preservar NF-e + CT-e vinculados</strong><small>Os vínculos fiscais seguem no contexto da operação.</small></span>
-                  <b data-semantic-status="success">Pronto</b>
-                </div>
-                <div data-state="pending">
-                  <span className={styles.correctionTaskIcon}><ShieldCheck size={17} data-semantic-role="neutral-icon" /></span>
-                  <span><strong>Enviar o documento corrigido para revalidação</strong><small>A etapa seguinte começa após salvar a correção.</small></span>
-                  <b>Pendente</b>
-                </div>
-              </div>
-            </article>
-
-            <article className={styles.correctionFocusCard} data-testid="correction-focus-card">
-              <div className={styles.correctionFocusHeader}>
-                <span><Clock3 size={18} data-semantic-role="neutral-icon" /></span>
-                <small>JANELA DOCUMENTAL</small>
-              </div>
-              <strong>{document.deadlineAt ? time(document.deadlineAt) : 'próximo marco'}</strong>
-              <p>Prazo registrado para concluir a correção antes da revalidação.</p>
-              <div>
-                <span><small>OBJETO</small><strong>{document.label}</strong></span>
-                <span><small>CARGA</small><strong>{cargoId}</strong></span>
-              </div>
-            </article>
-          </section>
-        </div>
-
-        <aside className={styles.correctionSide}>
+        <aside className={styles.correctionSide} data-testid="correction-decision-rail">
           <OperationalAlert
             tone="danger"
             eyebrow="BLOQUEIO DOCUMENTAL"
@@ -897,42 +853,65 @@ export function CorrectionResubmitSurface({
             testId="correction-blocking-alert"
           />
 
-          <article className={styles.correctionDecisionCard} data-testid="correction-next-action">
-            <div className={styles.correctionCardHeading}>
-              <span><FileClock size={18} data-semantic-role="neutral-icon" /></span>
-              <div><small>PRÓXIMA AÇÃO</small><strong>Salvar o novo valor e revalidar</strong></div>
+          <article className={styles.correctionResolutionCard} data-testid="correction-next-action">
+            <div className={styles.correctionResolutionHeader}>
+              <span className={styles.correctionResolutionIcon}><FileClock size={19} data-semantic-role="neutral-icon" /></span>
+              <div>
+                <p className={styles.eyebrow}>RESOLUÇÃO</p>
+                <h3>Salvar o novo valor e revalidar</h3>
+                <span>Uma única ação documental destrava a próxima etapa.</span>
+              </div>
             </div>
-            <p>Atualize o MDF-e para <strong>{formatMetricTons(evidenceWeight)}</strong> e preserve os vínculos fiscais antes do reenvio.</p>
-            <div className={styles.correctionDecisionFacts}>
-              <span><small>PRAZO</small><strong>{document.deadlineAt ? time(document.deadlineAt) : 'próximo marco'}</strong></span>
-              <span><small>FONTE FISCAL</small><strong>{receitaSource?.authority ?? 'RECEITA'}</strong></span>
-            </div>
-          </article>
 
-          <article className={styles.correctionContextCard} data-testid="correction-operation-context">
-            <div className={styles.correctionCardHeading}>
-              <span><Route size={18} data-semantic-role="neutral-icon" /></span>
-              <div><small>CONTEXTO OPERACIONAL</small><strong>Carga {cargoId}</strong></div>
+            <div className={styles.correctionResolutionHero}>
+              <small>NOVO PESO DOCUMENTAL</small>
+              <strong>{formatMetricTons(evidenceWeight)}</strong>
+              <p>Valor confirmado pela pesagem vinculada. O ajuste preserva os documentos fiscais e o contexto da mesma operação.</p>
             </div>
-            <div className={styles.correctionContextGrid}>
-              <span><Waves size={17} data-semantic-role="neutral-icon" /><small>CORREDOR</small><strong>{hydro.riverLabel}</strong><em>{trendLabel}</em></span>
-              <span><ShipWheel size={17} data-semantic-role="neutral-icon" /><small>NAVEGAÇÃO</small><strong>interior</strong><em>corredor amazônico</em></span>
-              <span><ShieldCheck size={17} data-semantic-role="neutral-icon" /><small>REFERÊNCIA</small><strong>{dnitSource?.authority ?? 'DNIT'}</strong><em>{dnitSource?.label ?? 'Hidrovia do Amazonas'}</em></span>
-              <span><Radio size={17} data-semantic-role="neutral-icon" /><small>LEITURA</small><strong>{anaSource?.authority ?? 'ANA'}</strong><em>{anaSource?.label ?? 'monitoramento hidrológico'}</em></span>
-            </div>
-          </article>
 
-          <article className={styles.correctionChecklist} data-testid="correction-checklist">
-            <div className={styles.correctionCardHeading}>
-              <span><CheckCircle2 size={18} data-semantic-role="neutral-icon" /></span>
-              <div><small>CHECKLIST DE REVALIDAÇÃO</small><strong>2 de 4 pré-condições prontas</strong></div>
+            <div className={styles.correctionResolutionFacts}>
+              <span><small>PRAZO</small><strong>{document.deadlineAt ? time(document.deadlineAt) : 'próximo marco'}</strong><em>para concluir a correção</em></span>
+              <span><small>FONTE FISCAL</small><strong>{receitaSource?.authority ?? 'RECEITA'}</strong><em>{document.label} + vínculos fiscais</em></span>
+              <span data-testid="correction-operation-context"><small>CORREDOR</small><strong>{hydro.riverLabel}</strong><em>{trendLabel} · {dnitSource?.authority ?? 'DNIT'} / {anaSource?.authority ?? 'ANA'}</em></span>
             </div>
-            <ul>
-              <li><span><Check size={15} /></span><strong>Evidência de peso identificada</strong><b data-semantic-status="success">Pronto</b></li>
-              <li><span><Check size={15} /></span><strong>Valor-alvo confirmado</strong><b data-semantic-status="success">Pronto</b></li>
-              <li><span><Clock3 size={15} /></span><strong>Salvar correção no MDF-e</strong><b data-semantic-status="warning">Agora</b></li>
-              <li><span><Clock3 size={15} /></span><strong>Enviar para revalidação</strong><b>Pendente</b></li>
+
+            <div className={styles.correctionResolutionDivider} />
+
+            <div className={styles.correctionChecklistHeader}>
+              <div>
+                <p className={styles.eyebrow}>ANTES DE REVALIDAR</p>
+                <strong>2 de 4 condições prontas</strong>
+              </div>
+              <span className={styles.statusBadge}>pré-condições</span>
+            </div>
+
+            <ul className={styles.correctionResolutionChecklist} data-testid="correction-checklist">
+              <li>
+                <span><Check size={15} /></span>
+                <div><strong>Evidência de peso identificada</strong><small>Pesagem vinculada ao caso</small></div>
+                <b data-semantic-status="success">Pronto</b>
+              </li>
+              <li>
+                <span><Check size={15} /></span>
+                <div><strong>Valor-alvo confirmado</strong><small>{formatMetricTons(evidenceWeight)} será o novo peso</small></div>
+                <b data-semantic-status="success">Pronto</b>
+              </li>
+              <li>
+                <span><Clock3 size={15} /></span>
+                <div><strong>Salvar correção no MDF-e</strong><small>Substituir apenas o valor divergente</small></div>
+                <b data-semantic-status="warning">Agora</b>
+              </li>
+              <li>
+                <span><Clock3 size={15} /></span>
+                <div><strong>Enviar para revalidação</strong><small>Próxima etapa após salvar</small></div>
+                <b>Pendente</b>
+              </li>
             </ul>
+
+            <div className={styles.correctionResolutionFooter}>
+              <span><Route size={17} data-semantic-role="neutral-icon" /></span>
+              <p><strong>Carga {cargoId}</strong> continua no mesmo corredor; o contexto hidroviário permanece informativo e não compete com a correção documental.</p>
+            </div>
           </article>
         </aside>
       </div>

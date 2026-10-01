@@ -1302,7 +1302,7 @@
 
 .correctionMetricIcon,
 .correctionEvidenceIcon,
-.correctionCardHeading > span:first-child
+.correctionResolutionIcon
   display: grid
   width: 2.55rem
   height: 2.55rem
@@ -1320,9 +1320,7 @@
 
 .correctionMetricStrip small,
 .correctionEvidenceCopy small,
-.correctionCardHeading small,
-.correctionDecisionFacts small,
-.correctionContextGrid small
+.correctionResolutionFacts small
   color: var(--hy-p62-muted)
   font-size: var(--hy-p62-font-2xs)
   font-weight: 700
@@ -1344,7 +1342,7 @@
 
 .correctionMetricStrip b,
 .correctionEvidenceGrid b,
-.correctionChecklist b,
+.correctionResolutionChecklist b,
 .correctionProgress b
   display: inline-flex
   width: fit-content
@@ -1365,206 +1363,25 @@
 
 .correctionMetricStrip b[data-semantic-status='success'],
 .correctionEvidenceGrid b[data-semantic-status='success'],
-.correctionChecklist b[data-semantic-status='success']
+.correctionResolutionChecklist b[data-semantic-status='success']
   border-color: color-mix(in srgb, var(--hy-p62-success) 30%, var(--hy-p62-border))
   color: var(--hy-p62-success)
 
 .correctionMetricStrip b[data-semantic-status='warning'],
-.correctionChecklist b[data-semantic-status='warning'],
+.correctionResolutionChecklist b[data-semantic-status='warning'],
 .correctionProgress b[data-semantic-status='warning']
   border-color: color-mix(in srgb, var(--hy-p62-warning) 32%, var(--hy-p62-border))
   color: var(--hy-p62-warning)
 
 .correctionWorkspace
   display: grid
-  grid-template-columns: minmax(0, 1.58fr) minmax(21.5rem, .72fr)
-  align-items: start
+  grid-template-columns: minmax(0, 1.62fr) minmax(22.5rem, .72fr)
+  align-items: stretch
   gap: var(--hy-p62-space-4)
   margin-top: var(--hy-p62-space-4)
 
-.correctionMain,
-.correctionSide
-  display: grid
-  min-width: 0
-  gap: var(--hy-p62-space-4)
-
-.correctionWorkbench
-  display: grid
-  grid-template-columns: minmax(0, 1.45fr) minmax(13rem, .55fr)
-  gap: var(--hy-p62-space-4)
-
-.correctionTaskPanel,
-.correctionFocusCard
-  min-width: 0
-  overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-card)
-  background: var(--hy-p62-surface)
-
-.correctionWorkbenchHeading
-  display: flex
-  align-items: flex-start
-  justify-content: space-between
-  gap: var(--hy-p62-space-3)
-  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
-  border-bottom: 0.0625rem solid var(--hy-p62-border)
-
-.correctionWorkbenchHeading > div
-  display: grid
-  gap: .15rem
-
-.correctionWorkbenchHeading h3
-  margin: 0
-  color: var(--hy-p62-text)
-  font-size: var(--hy-p62-font-label)
-  font-weight: var(--hy-p62-weight-semibold)
-
-.correctionTaskList
-  display: grid
-
-.correctionTaskList > div
-  display: grid
-  grid-template-columns: auto minmax(0, 1fr) auto
-  align-items: center
-  gap: var(--hy-p62-space-3)
-  min-height: 4.55rem
-  padding: .65rem var(--hy-p62-space-4)
-  border-top: 0.0625rem solid var(--hy-p62-border)
-
-.correctionTaskList > div:first-child
-  border-top: 0
-
-.correctionTaskList > div[data-state='active']
-  box-shadow: inset .14rem 0 0 var(--hy-p62-warning)
-
-.correctionTaskList > div[data-state='ready']
-  box-shadow: inset .14rem 0 0 color-mix(in srgb, var(--hy-p62-success) 68%, transparent)
-
-.correctionTaskIcon
-  display: grid
-  width: 2rem
-  height: 2rem
-  place-items: center
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-  background: var(--hy-p62-surface-raised)
-  color: var(--hy-p62-muted)
-
-.correctionTaskList > div > span:nth-child(2)
-  display: grid
-  min-width: 0
-  gap: .14rem
-
-.correctionTaskList strong
-  overflow: hidden
-  color: var(--hy-p62-text)
-  font-size: var(--hy-p62-font-xs)
-  font-weight: 650
-  text-overflow: ellipsis
-  white-space: nowrap
-
-.correctionTaskList small
-  overflow: hidden
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-  line-height: 1.35
-  text-overflow: ellipsis
-  white-space: nowrap
-
-.correctionTaskList b
-  display: inline-flex
-  min-height: 1.55rem
-  align-items: center
-  padding: 0 .5rem
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-pill)
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-  font-weight: 700
-
-.correctionTaskList b[data-semantic-status='warning']
-  border-color: color-mix(in srgb, var(--hy-p62-warning) 34%, var(--hy-p62-border))
-  color: var(--hy-p62-warning)
-
-.correctionTaskList b[data-semantic-status='success']
-  border-color: color-mix(in srgb, var(--hy-p62-success) 30%, var(--hy-p62-border))
-  color: var(--hy-p62-success)
-
-.correctionFocusCard
-  display: grid
-  align-content: start
-  padding: var(--hy-p62-space-4)
-
-.correctionFocusHeader
-  display: flex
-  align-items: center
-  gap: var(--hy-p62-space-2)
-  color: var(--hy-p62-muted)
-
-.correctionFocusHeader > span
-  display: grid
-  width: 2rem
-  height: 2rem
-  place-items: center
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-  background: var(--hy-p62-surface-raised)
-
-.correctionFocusHeader small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-  font-weight: 700
-  letter-spacing: .06em
-
-.correctionFocusCard > strong
-  margin-top: var(--hy-p62-space-3)
-  color: var(--hy-p62-text)
-  font-size: 2rem
-  font-weight: var(--hy-p62-weight-medium)
-  letter-spacing: -.04em
-
-.correctionFocusCard > p
-  margin: .2rem 0 var(--hy-p62-space-4)
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-xs)
-  line-height: 1.45
-
-.correctionFocusCard > div:last-child
-  display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
-  margin-top: auto
-  overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-
-.correctionFocusCard > div:last-child > span
-  display: grid
-  gap: .1rem
-  min-height: 3.75rem
-  align-content: center
-  padding: var(--hy-p62-space-2) var(--hy-p62-space-3)
-  border-left: 0.0625rem solid var(--hy-p62-border)
-
-.correctionFocusCard > div:last-child > span:first-child
-  border-left: 0
-
-.correctionFocusCard > div:last-child small
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-2xs)
-  font-weight: 700
-  letter-spacing: .05em
-
-.correctionFocusCard > div:last-child strong
-  overflow: hidden
-  color: var(--hy-p62-text)
-  font-size: var(--hy-p62-font-xs)
-  text-overflow: ellipsis
-  white-space: nowrap
-
 .correctionAnalysisCard,
-.correctionDecisionCard,
-.correctionContextCard,
-.correctionChecklist
+.correctionResolutionCard
   min-width: 0
   overflow: hidden
   border: 0.0625rem solid var(--hy-p62-border)
@@ -1675,135 +1492,198 @@
   text-overflow: ellipsis
   white-space: nowrap
 
+.correctionSide
+  display: grid
+  grid-template-rows: auto minmax(0, 1fr)
+  min-width: 0
+  gap: var(--hy-p62-space-4)
+
 .correctionSide :global(section[data-tone='danger'])
   min-height: 7.25rem
 
-.correctionCardHeading
+.correctionResolutionCard
   display: flex
-  align-items: center
-  gap: var(--hy-p62-space-3)
-  padding: var(--hy-p62-space-3) var(--hy-p62-space-4)
-  border-bottom: 0.0625rem solid var(--hy-p62-border)
+  min-height: 0
+  flex-direction: column
 
-.correctionCardHeading > div
-  display: grid
-  min-width: 0
-  gap: .18rem
-
-.correctionCardHeading strong
-  overflow: hidden
-  color: var(--hy-p62-text)
-  font-size: var(--hy-p62-font-body)
-  text-overflow: ellipsis
-  white-space: nowrap
-
-.correctionDecisionCard > p
-  margin: 0
-  padding: var(--hy-p62-space-4)
-  color: var(--hy-p62-muted)
-  font-size: var(--hy-p62-font-body)
-  line-height: 1.5
-
-.correctionDecisionCard > p strong
-  color: var(--hy-p62-text)
-
-.correctionDecisionFacts
-  display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
-  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
-  overflow: hidden
-  border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: var(--hy-p62-radius-control)
-
-.correctionDecisionFacts > span
-  display: grid
-  gap: .15rem
-  min-height: 4.25rem
-  align-content: center
-  padding: var(--hy-p62-space-3)
-  border-left: 0.0625rem solid var(--hy-p62-border)
-
-.correctionDecisionFacts > span:first-child
-  border-left: 0
-
-.correctionDecisionFacts strong
-  color: var(--hy-p62-text)
-  font-size: var(--hy-p62-font-sm)
-
-.correctionContextGrid
-  display: grid
-  grid-template-columns: repeat(2, minmax(0, 1fr))
-
-.correctionContextGrid > span
+.correctionResolutionHeader
   display: grid
   grid-template-columns: auto minmax(0, 1fr)
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.correctionResolutionHeader > div
+  display: grid
+  gap: .18rem
+
+.correctionResolutionHeader h3
+  margin: 0
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-title)
+  font-weight: var(--hy-p62-weight-semibold)
+
+.correctionResolutionHeader > div > span
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.45
+
+.correctionResolutionHero
+  padding: var(--hy-p62-space-5) var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.correctionResolutionHero small
+  display: block
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.correctionResolutionHero > strong
+  display: block
+  margin-top: .35rem
+  color: var(--hy-p62-text)
+  font-size: 2.35rem
+  font-weight: var(--hy-p62-weight-medium)
+  letter-spacing: -.05em
+
+.correctionResolutionHero p
+  margin: .45rem 0 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.55
+
+.correctionResolutionFacts
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  margin: 0 var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+
+.correctionResolutionFacts > span
+  display: grid
+  min-width: 0
+  gap: .15rem
+  min-height: 5.1rem
   align-content: center
-  gap: .1rem .55rem
-  min-height: 5.25rem
   padding: var(--hy-p62-space-3)
-  border-top: 0.0625rem solid var(--hy-p62-border)
   border-left: 0.0625rem solid var(--hy-p62-border)
 
-.correctionContextGrid > span:nth-child(-n+2)
-  border-top: 0
-
-.correctionContextGrid > span:nth-child(odd)
+.correctionResolutionFacts > span:first-child
   border-left: 0
 
-.correctionContextGrid svg
-  grid-row: 1 / 4
-  align-self: center
-  color: var(--hy-p62-muted)
-
-.correctionContextGrid strong
+.correctionResolutionFacts strong
   overflow: hidden
   color: var(--hy-p62-text)
   font-size: var(--hy-p62-font-sm)
   text-overflow: ellipsis
   white-space: nowrap
 
-.correctionContextGrid em
+.correctionResolutionFacts em
   overflow: hidden
   color: var(--hy-p62-muted)
   font-size: var(--hy-p62-font-2xs)
   font-style: normal
+  line-height: 1.35
   text-overflow: ellipsis
   white-space: nowrap
 
-.correctionChecklist ul
+.correctionResolutionDivider
+  height: 0.0625rem
+  margin: var(--hy-p62-space-4)
+  background: var(--hy-p62-border)
+
+.correctionChecklistHeader
+  display: flex
+  align-items: flex-end
+  justify-content: space-between
+  gap: var(--hy-p62-space-3)
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-3)
+
+.correctionChecklistHeader > div
+  display: grid
+  gap: .18rem
+
+.correctionChecklistHeader strong
+  color: var(--hy-p62-text)
+  font-size: var(--hy-p62-font-sm)
+
+.correctionResolutionChecklist
   margin: 0
-  padding: 0
+  padding: 0 var(--hy-p62-space-4)
   list-style: none
 
-.correctionChecklist li
+.correctionResolutionChecklist li
   display: grid
   grid-template-columns: auto minmax(0, 1fr) auto
   align-items: center
   gap: var(--hy-p62-space-3)
-  min-height: 3.3rem
-  padding: .55rem var(--hy-p62-space-4)
+  min-height: 4rem
+  padding: .65rem 0
   border-top: 0.0625rem solid var(--hy-p62-border)
 
-.correctionChecklist li:first-child
+.correctionResolutionChecklist li:first-child
   border-top: 0
 
-.correctionChecklist li > span
+.correctionResolutionChecklist li > span
   display: grid
-  width: 1.65rem
-  height: 1.65rem
+  width: 1.75rem
+  height: 1.75rem
   place-items: center
   border: 0.0625rem solid var(--hy-p62-border)
-  border-radius: .35rem
+  border-radius: .4rem
   color: var(--hy-p62-muted)
 
-.correctionChecklist li:nth-child(-n+2) > span
+.correctionResolutionChecklist li:nth-child(-n+2) > span
   border-color: color-mix(in srgb, var(--hy-p62-success) 32%, var(--hy-p62-border))
   color: var(--hy-p62-success)
 
-.correctionChecklist strong
+.correctionResolutionChecklist li > div
+  display: grid
+  min-width: 0
+  gap: .14rem
+
+.correctionResolutionChecklist strong
+  overflow: hidden
   color: var(--hy-p62-text)
   font-size: var(--hy-p62-font-xs)
-  font-weight: 620
+  font-weight: 650
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionResolutionChecklist small
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.correctionResolutionFooter
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  margin-top: auto
+  padding: var(--hy-p62-space-4)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  color: var(--hy-p62-muted)
+
+.correctionResolutionFooter > span
+  display: grid
+  width: 2.2rem
+  height: 2.2rem
+  place-items: center
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+
+.correctionResolutionFooter p
+  margin: 0
+  font-size: var(--hy-p62-font-2xs)
+  line-height: 1.45
+
+.correctionResolutionFooter strong
+  color: var(--hy-p62-text)
 
 .correctionProgress
   display: grid
@@ -1874,8 +1754,7 @@
   grid-template-columns: auto minmax(0, 1fr) auto
 
 @media (max-width: 68rem)
-  .correctionWorkspace,
-  .correctionWorkbench
+  .correctionWorkspace
     grid-template-columns: 1fr
 
   .correctionMetricStrip
@@ -1888,6 +1767,16 @@
   .correctionMetricStrip article:first-child
     border-top: 0
 
+  .correctionResolutionFacts
+    grid-template-columns: 1fr
+
+  .correctionResolutionFacts > span
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .correctionResolutionFacts > span:first-child
+    border-top: 0
+
   .correctionProgress
     grid-template-columns: repeat(2, minmax(0, 1fr))
 
@@ -1897,23 +1786,23 @@
 
 @media (max-width: 44rem)
   .correctionEvidenceGrid,
-  .correctionContextGrid,
   .correctionProgress
     grid-template-columns: 1fr
 
   .correctionEvidenceGrid article,
   .correctionEvidenceGrid article:nth-child(-n+2),
-  .correctionContextGrid > span,
-  .correctionContextGrid > span:nth-child(-n+2),
   .correctionProgress article,
   .correctionProgress article:nth-child(3)
     border-top: 0.0625rem solid var(--hy-p62-border)
     border-left: 0
 
   .correctionEvidenceGrid article:first-child,
-  .correctionContextGrid > span:first-child,
   .correctionProgress article:first-child
     border-top: 0
+
+  .correctionChecklistHeader
+    align-items: flex-start
+    flex-direction: column
 
   .correctionActionBar
     grid-template-columns: 1fr
