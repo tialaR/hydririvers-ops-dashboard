@@ -1,12 +1,12 @@
 'use client';
 
-import { ArrowLeft, BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileWarning, Radio, Route, Scale, ShieldCheck, ShipWheel, TrendingUp } from 'lucide-react';
+import { ArrowLeft, BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileClock, FileWarning, Navigation2, Radio, Route, Scale, ShieldCheck, ShipWheel, TrendingUp, Waves } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
 
-import type { ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
+import type { HydroCondition, OperationalSourceRef, ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
 import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
-import { DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
+import { ActionAppliedImpactChart, DocumentWeightComparisonChart, FollowUpHealthChart, OperationalGaugeChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
 import { SegmentedGoalMeter } from '@/shared/design-system/patterns/segmented-goal-meter';
 import { OperationalScheduleList } from '@/shared/design-system/patterns/operational-schedule-list';
 import { OperationalContextChat } from './operational-context-chat';
@@ -390,61 +390,357 @@ export function DecisionActionReviewSurface({
   );
 }
 
-export function ActionFeedbackSurface({ onMonitor }: { onMonitor?: () => void }) {
+export function ActionFeedbackSurface({
+  selected,
+  reference,
+  documents,
+  hydro,
+  sources,
+  onMonitor,
+  onCorrection,
+}: {
+  selected: ShipperProposal;
+  reference: ShipperProposal;
+  documents: ShipperDocumentEvidence[];
+  hydro: HydroCondition;
+  sources: OperationalSourceRef[];
+  onMonitor?: () => void;
+  onCorrection?: () => void;
+}) {
   const reduceMotion = useReducedMotion();
+  const etaDeltaMinutes = Math.round(
+    (new Date(reference.arrivalAt).getTime() - new Date(selected.arrivalAt).getTime()) / 60000,
+  );
+  const demurrageBefore = reference.demurrage?.valueBRLPerHour ?? 0;
+  const demurrageAfter = selected.demurrage?.valueBRLPerHour ?? 0;
+  const demurrageDelta = demurrageBefore - demurrageAfter;
+  const draftBefore = reference.draftMeters ?? selected.draftMeters ?? 0;
+  const draftAfter = selected.draftMeters ?? reference.draftMeters ?? 0;
+  const draftDelta = draftBefore - draftAfter;
+  const pendingDocument = documents.find((document) =>
+    ['divergent', 'review', 'pending', 'blocked'].includes(document.state),
+  );
+
+  const scorePair = (delta: number): [number, number] => {
+    if (delta > 0) return [62, 94];
+    if (delta < 0) return [94, 62];
+    return [82, 82];
+  };
+  const [windowBeforeScore, windowAfterScore] = scorePair(etaDeltaMinutes);
+  const [demurrageBeforeScore, demurrageAfterScore] = scorePair(demurrageDelta);
+  const [draftBeforeScore, draftAfterScore] = scorePair(draftDelta);
+  const documentScore = (value: ShipperProposal['compatibility']['documents']) =>
+    ({ ready: 96, attention: 62, blocked: 22 }[value]);
+  const beforeScores: [number, number, number, number] = [
+    windowBeforeScore,
+    demurrageBeforeScore,
+    draftBeforeScore,
+    documentScore(reference.compatibility.documents),
+  ];
+  const afterScores: [number, number, number, number] = [
+    windowAfterScore,
+    demurrageAfterScore,
+    draftAfterScore,
+    documentScore(selected.compatibility.documents),
+  ];
+
+  const operationalRiskReadiness = (
+    { info: 84, low: 96, medium: 72, high: 48, critical: 24 } as const
+  )[selected.operationalRisk] ?? 60;
+  const readinessScore = Math.round(
+    (
+      100 +
+      (selected.compatibility.documents === 'ready' ? 100 : 66) +
+      (selected.compatibility.draft === 'compatible' ? 100 : 64) +
+      operationalRiskReadiness +
+      (pendingDocument ? 45 : 100)
+    ) / 5,
+  );
+
+  const sourceIds = new Set([hydro.sourceId, ...hydro.constraints.map((constraint) => constraint.sourceId)]);
+  const operationalSources = sources.filter((source) => sourceIds.has(source.id));
+  const sourceSet = operationalSources.length ? operationalSources : sources.slice(0, 3);
+  const trendLabel = hydro.trend === 'falling' ? 'vazante' : hydro.trend === 'rising' ? 'enchente' : 'estável';
+  const hydroNeedsAttention = hydro.status !== 'normal';
+  const proposalName = selected.counterparty.replace(' · DEMO', '');
+  const referenceName = reference.counterparty.replace(' · DEMO', '');
+  const deltaSummary = [
+    etaDeltaMinutes === 0
+      ? 'ETA mantido'
+      : etaDeltaMinutes > 0
+        ? 'chegada antecipada em ' + etaDeltaMinutes + ' min'
+        : 'chegada postergada em ' + Math.abs(etaDeltaMinutes) + ' min',
+    demurrageDelta === 0
+      ? 'demurrage mantida'
+      : demurrageDelta > 0
+        ? 'demurrage reduzida em ' + money(demurrageDelta) + '/h'
+        : 'demurrage aumentada em ' + money(Math.abs(demurrageDelta)) + '/h',
+    draftDelta === 0
+      ? 'calado contratado mantido'
+      : draftDelta > 0
+        ? 'calado contratado reduzido em ' + draftDelta.toFixed(1).replace('.', ',') + ' m'
+        : 'calado contratado aumentado em ' + Math.abs(draftDelta).toFixed(1).replace('.', ',') + ' m',
+  ].join(' · ');
 
   return (
-    <section className={styles.surface} data-testid="page62-d11-feedback">
+    <section className={styles.surface + ' ' + styles.actionFeedbackSurface} data-testid="page62-d11-feedback">
       <header className={styles.header}>
-        <div><p className={styles.eyebrow}>D11 · feedback</p><h2 className={styles.title}>Ação concluída</h2></div>
+        <div>
+          <p className={styles.eyebrow}>D11 · consequência da decisão</p>
+          <h2 className={styles.title}>Decisão aplicada à operação</h2>
+          <p className={styles.subtitle}>O aceite deixou de ser intenção: agora a tela mostra o que mudou, o que continua pendente e a próxima leitura operacional.</p>
+        </div>
         <span className={styles.demoBadge}>DEMO</span>
       </header>
-      <motion.div
-        className={styles.feedbackHero}
+
+      <motion.article
+        className={styles.actionFeedbackHero}
+        data-semantic-status="success"
+        data-testid="action-feedback-confirmation"
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22 }}
       >
-        <div>
-          <p className={styles.eyebrow}>AÇÃO APLICADA</p>
-          <h3>Nova condição operacional confirmada</h3>
-          <p className={styles.subtitle}>A decisão virou estado do produto e agora pode ser acompanhada.</p>
+        <motion.span
+          className={styles.actionFeedbackHeroMark}
+          initial={reduceMotion ? false : { scale: 0.78 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 250, damping: 20 }}
+          aria-hidden
+        >
+          <CheckCircle2 size={27} />
+        </motion.span>
+        <div className={styles.actionFeedbackHeroCopy}>
+          <span className={styles.actionFeedbackStatus}><Check size={13} /> aceite registrado</span>
+          <h3>{proposalName} assumiu a condição vigente da carga</h3>
+          <p>
+            {selected.vesselLabel} · chegada {time(selected.arrivalAt)} · calado {draftAfter.toFixed(1).replace('.', ',')} m.
+            A rota permanece Manaus → Santarém pelo corredor do Rio Amazonas.
+          </p>
         </div>
-        <motion.span className={styles.feedbackIcon} initial={reduceMotion ? false : { scale: 0.7 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 250, damping: 20 }}><Check /></motion.span>
-      </motion.div>
+        <div className={styles.actionFeedbackHeroValue}>
+          <small>FRETE CONFIRMADO</small>
+          <strong>{money(selected.priceBRL)}</strong>
+          <span>proposta {selected.id.replace('proposal-', '').toUpperCase()} · estado persistido na jornada DEMO</span>
+        </div>
+      </motion.article>
 
-      <div className={styles.feedbackBodyGrid}>
-        <div className={styles.changeGrid}>
-          <div className={styles.changeCell}><small>Contraparte</small><strong>Rio Norte · DEMO</strong><span>alterada</span></div>
-          <div className={styles.changeCell}><small>Chegada</small><strong>19:20 → 18:30</strong><span>−50 min</span></div>
-          <div className={styles.changeCell}><small>Demurrage</small><strong>R$ 950/h → R$ 820/h</strong><span>−R$ 130/h</span></div>
-          <div className={styles.changeCell}><small>MDF-e</small><strong>Revalidando</strong><span>em curso</span></div>
-        </div>
-        <article className={styles.readinessCard}>
-          <span className={styles.iconBubble}><CheckCircle2 size={24}/></span>
-          <div><small>PRONTIDÃO OPERACIONAL</small><strong>86%</strong><p>Decisão aplicada; validação documental é o único item ainda em curso.</p></div>
-          <OperationalGaugeChart value={86} label="Prontidão" ariaLabel="Prontidão operacional de 86%" />
-          <div className={styles.segmentedReadiness}>
-            <SegmentedGoalMeter
-              value={3}
-              max={4}
-              segments={12}
-              label="Etapas concluídas"
-              valueLabel="3/4"
-              targetLabel="ação completa"
-              tone="success"
+      <div className={styles.actionFeedbackMetricStrip} data-testid="action-feedback-impact-metrics">
+        <article>
+          <Clock3 size={18} data-semantic-role="neutral-icon" />
+          <span><small>CHEGADA</small><strong>{time(reference.arrivalAt)} → {time(selected.arrivalAt)}</strong></span>
+          <em data-semantic-status={etaDeltaMinutes >= 0 ? 'success' : 'warning'}>
+            {etaDeltaMinutes >= 0 ? '−' : '+'}{Math.abs(etaDeltaMinutes)} min
+          </em>
+        </article>
+        <article>
+          <BadgeDollarSign size={18} data-semantic-role="neutral-icon" />
+          <span><small>DEMURRAGE</small><strong>{money(demurrageBefore)}/h → {money(demurrageAfter)}/h</strong></span>
+          <em data-semantic-status={demurrageDelta >= 0 ? 'success' : 'warning'}>
+            {demurrageDelta >= 0 ? '−' : '+'}{money(Math.abs(demurrageDelta))}/h
+          </em>
+        </article>
+        <article>
+          <ShipWheel size={18} data-semantic-role="neutral-icon" />
+          <span><small>CALADO CONTRATADO</small><strong>{draftBefore.toFixed(1).replace('.', ',')} → {draftAfter.toFixed(1).replace('.', ',')} m</strong></span>
+          <em data-semantic-status={selected.compatibility.draft === 'compatible' ? 'success' : 'warning'}>
+            {selected.compatibility.draft === 'compatible' ? 'compatível' : 'requer atenção'}
+          </em>
+        </article>
+        <article>
+          <FileCheck2 size={18} data-semantic-role="neutral-icon" />
+          <span><small>DOCUMENTOS DA PROPOSTA</small><strong>{reference.compatibility.documents === 'ready' ? 'Prontos' : 'Atenção'} → {selected.compatibility.documents === 'ready' ? 'Prontos' : 'Revisar'}</strong></span>
+          <em data-semantic-status={selected.compatibility.documents === 'ready' ? 'success' : 'warning'}>
+            {selected.compatibility.documents === 'ready' ? 'sem bloqueio comercial' : 'pendência ativa'}
+          </em>
+        </article>
+      </div>
+
+      <div className={styles.actionFeedbackMainGrid}>
+        <article className={styles.actionFeedbackImpactCard} data-testid="action-feedback-impact">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>ANTES × DEPOIS</p>
+              <h3>Impacto operacional materializado</h3>
+              <span>O gráfico resume a adequação relativa; os valores reais permanecem no eixo superior.</span>
+            </div>
+            <span className={styles.statusBadge}>{referenceName} → {proposalName}</span>
+          </div>
+          <div className={styles.actionFeedbackImpactChart}>
+            <ActionAppliedImpactChart beforeScores={beforeScores} afterScores={afterScores} />
+          </div>
+          <div className={styles.actionFeedbackInterpretation}>
+            <Navigation2 size={18} data-semantic-role="neutral-icon" />
+            <span>
+              <small>LEITURA DA MUDANÇA</small>
+              <strong>{deltaSummary}.</strong>
+              <em>O corredor e o destino não mudaram; mudou a condição operacional contratada.</em>
+            </span>
+          </div>
+        </article>
+
+        <article className={styles.actionFeedbackReadiness} data-testid="action-feedback-readiness">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>PRONTIDÃO PÓS-ACEITE</p>
+              <h3>O que já está de pé</h3>
+              <span>Sucesso não esconde pendência: cada estado continua explícito.</span>
+            </div>
+          </div>
+          <div className={styles.actionFeedbackReadinessBody}>
+            <div className={styles.actionFeedbackGauge}>
+              <OperationalGaugeChart
+                value={readinessScore}
+                label="Prontidão"
+                ariaLabel={'Prontidão operacional pós-aceite de ' + readinessScore + '%'}
+              />
+              <div>
+                <strong>{readinessScore}%</strong>
+                <small>prontidão operacional</small>
+              </div>
+            </div>
+            <ul className={styles.actionFeedbackReadinessList}>
+              <li data-semantic-status="success">
+                <CheckCircle2 size={17} />
+                <span><strong>Decisão aplicada</strong><small>contraparte e termos registrados</small></span>
+              </li>
+              <li data-semantic-status="success">
+                <BadgeDollarSign size={17} />
+                <span><strong>Condição comercial</strong><small>{money(selected.priceBRL)} · {money(demurrageAfter)}/h</small></span>
+              </li>
+              <li data-semantic-status={pendingDocument ? 'warning' : 'success'}>
+                <FileClock size={17} />
+                <span><strong>{pendingDocument ? pendingDocument.label + ' em revalidação' : 'Documentação operacional validada'}</strong><small>{pendingDocument ? 'a decisão comercial permanece aplicada' : 'sem correção pendente'}</small></span>
+              </li>
+              <li data-semantic-status="current">
+                <Waves size={17} />
+                <span><strong>Contexto hidroviário ativo</strong><small>{hydro.riverLabel} · {trendLabel} · monitoramento contínuo</small></span>
+              </li>
+            </ul>
+            <div className={styles.actionFeedbackReadinessMeter}>
+              <SegmentedGoalMeter
+                value={pendingDocument ? 3 : 4}
+                max={4}
+                segments={12}
+                label="Frentes estabilizadas"
+                valueLabel={pendingDocument ? '3/4' : '4/4'}
+                targetLabel={pendingDocument ? '1 em validação' : 'ação completa'}
+                tone={pendingDocument ? 'warning' : 'success'}
+              />
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div className={styles.actionFeedbackOperationsGrid}>
+        <article className={styles.actionFeedbackHydro} data-testid="action-feedback-hydro-context">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>CORREDOR HIDROVIÁRIO</p>
+              <h3>O que a decisão não pode perder de vista</h3>
+              <span>Calado contratado não substitui profundidade observada, aviso de navegação ou freshness da fonte.</span>
+            </div>
+            <span className={styles.statusBadge} data-semantic-status={hydroNeedsAttention ? 'warning' : 'success'}>
+              {hydroNeedsAttention ? 'acompanhar' : 'estável'}
+            </span>
+          </div>
+
+          <div className={styles.actionFeedbackRoute} aria-label="Rota Manaus a Santarém">
+            <span data-state="complete"><i />Manaus</span>
+            <b />
+            <span data-state="current"><i />Trecho em operação</span>
+            <b />
+            <span data-state="future"><i />Santarém</span>
+          </div>
+
+          <div className={styles.actionFeedbackHydroFacts}>
+            <span>
+              <Waves size={17} data-semantic-role="neutral-icon" />
+              <small>REGIME</small>
+              <strong>{trendLabel}</strong>
+              <em>ciclo hidrológico altera profundidade e programação</em>
+            </span>
+            <span>
+              <ShipWheel size={17} data-semantic-role="neutral-icon" />
+              <small>CALADO CONTRATADO</small>
+              <strong>{draftAfter.toFixed(1).replace('.', ',')} m</strong>
+              <em>não confundir com profundidade navegável</em>
+            </span>
+            <span data-semantic-status={hydroNeedsAttention ? 'warning' : 'success'}>
+              <ShieldCheck size={17} />
+              <small>CONDIÇÃO</small>
+              <strong>{hydroNeedsAttention ? 'monitorar trecho' : 'sem restrição no snapshot'}</strong>
+              <em>{hydro.constraints[0]?.title ?? 'sem restrição registrada'}</em>
+            </span>
+          </div>
+
+          <div className={styles.actionFeedbackSources}>
+            <div>
+              <small>FONTES DE PRODUÇÃO PREVISTAS</small>
+              <strong>Freshness deve acompanhar a decisão</strong>
+            </div>
+            <div>
+              {sourceSet.slice(0, 3).map((source) => (
+                <span data-testid="action-feedback-source" key={source.id}>
+                  <strong>{source.authority}</strong>
+                  <em>{source.label}</em>
+                  <small>{source.mode.toUpperCase()} · {source.freshnessState === 'fresh' ? 'recente' : source.freshnessState === 'offline' ? 'offline' : 'snapshot'}</small>
+                </span>
+              ))}
+            </div>
+          </div>
+        </article>
+
+        <article className={styles.actionFeedbackSchedule} data-testid="action-feedback-next-steps">
+          <div className={styles.sectionHeading}>
+            <div>
+              <p className={styles.eyebrow}>PRÓXIMOS MARCOS</p>
+              <h3>Da confirmação ao monitoramento</h3>
+              <span>A tela encerra o aceite e já prepara a continuação da operação.</span>
+            </div>
+          </div>
+          <div className={styles.actionFeedbackScheduleBody}>
+            <OperationalScheduleList
+              items={[
+                { id: 'accepted', time: 'agora', title: 'Aceite registrado', subtitle: proposalName + ' passa a ser a condição vigente', status: 'Concluído', tone: 'success', icon: 'check' },
+                { id: 'coordination', time: '+5 min', title: 'Coordenação sincronizada', subtitle: 'ETA, demurrage e embarcação entram no contexto da carga', status: 'Sequência', tone: 'neutral', icon: 'radio' },
+                { id: 'document', time: '+15 min', title: pendingDocument ? 'Revalidar ' + pendingDocument.label : 'Conferir evidências', subtitle: pendingDocument ? 'a divergência documental segue rastreável' : 'sem pendência documental ativa', status: pendingDocument ? 'Atenção' : 'Pronto', tone: pendingDocument ? 'warning' : 'success', icon: 'clock' },
+                { id: 'monitor', time: 'contínuo', title: 'Monitorar corredor', subtitle: hydro.riverLabel + ' · ' + trendLabel + ' · fonte + timestamp', status: 'Ativo', tone: 'info', icon: 'calendar' },
+              ]}
             />
           </div>
         </article>
       </div>
 
-      <div className={styles.consequence}>
-        <span><small className={styles.miniLabel}>RASTRO ATIVO</small><strong> decisão registrada → contraparte confirmada → validação documental → monitoramento</strong></span>
-        <button className={styles.primaryAction} type="button" onClick={onMonitor}>Acompanhar carga</button>
+      <div className={styles.actionFeedbackFooter}>
+        {pendingDocument ? (
+          <div
+            className={styles.actionFeedbackCorrectionBranch}
+            data-semantic-status="warning"
+            data-testid="action-feedback-correction-branch"
+          >
+            <FileWarning size={20} />
+            <span>
+              <small>RAMIFICAÇÃO DE RECUPERAÇÃO</small>
+              <strong>Se a revalidação do {pendingDocument.label} falhar, corrija a evidência sem desfazer o aceite.</strong>
+              <em>{pendingDocument.observedValue && pendingDocument.expectedValue ? pendingDocument.observedValue + ' enviado · ' + pendingDocument.expectedValue + ' esperado' : 'a divergência continua rastreável'}</em>
+            </span>
+            <button className={styles.secondaryAction} type="button" onClick={onCorrection}>Tratar rejeição documental</button>
+          </div>
+        ) : null}
+
+        <div className={styles.actionFeedbackPrimaryNext}>
+          <span>
+            <small>PRÓXIMA LEITURA</small>
+            <strong>Acompanhar ETA, documentos, sinal e condição hidroviária no estado pós-ação.</strong>
+          </span>
+          <button className={styles.primaryAction} type="button" onClick={onMonitor}>Acompanhar carga</button>
+        </div>
       </div>
     </section>
   );
 }
+
 
 export function CorrectionResubmitSurface({
   document,

@@ -82,6 +82,11 @@ for (const required of [
   'data-semantic-status={needsAttention',
   'review-preconfirm-checklist',
   'data-state="warning"',
+  'page62-d11-feedback',
+  'action-feedback-impact-metrics',
+  'action-feedback-readiness',
+  'action-feedback-hydro-context',
+  'action-feedback-correction-branch',
 ]) {
   if (!source.journey.includes(required)) failures.push(`negotiation/review semantic contract missing: ${required}`);
 }

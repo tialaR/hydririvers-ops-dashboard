@@ -2121,3 +2121,528 @@
 
   .proposalCardFacts > span:first-child
     border-top: 0
+
+
+// D11 action feedback — operational consequence workspace
+.actionFeedbackSurface
+  min-height: 64rem
+
+.actionFeedbackHero
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-5)
+  padding: var(--hy-p62-space-5)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.actionFeedbackHeroMark
+  display: grid
+  width: 3.75rem
+  height: 3.75rem
+  place-items: center
+  border: 0.0625rem solid color-mix(in srgb, var(--hy-p62-success) 42%, var(--hy-p62-border))
+  border-radius: 50%
+  background: color-mix(in srgb, var(--hy-p62-success) 8%, var(--hy-p62-surface))
+  color: var(--hy-p62-success)
+
+.actionFeedbackHeroCopy
+  min-width: 0
+
+.actionFeedbackHeroCopy h3
+  margin: .3rem 0 0
+  font-size: 1.35rem
+  line-height: 1.25
+
+.actionFeedbackHeroCopy p
+  max-width: 48rem
+  margin: .45rem 0 0
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.55
+
+.actionFeedbackStatus
+  display: inline-flex
+  align-items: center
+  gap: .35rem
+  color: var(--hy-p62-success)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  letter-spacing: .06em
+  text-transform: uppercase
+
+.actionFeedbackHeroValue
+  display: grid
+  justify-items: end
+  min-width: 12rem
+  gap: .15rem
+  text-align: right
+
+.actionFeedbackHeroValue small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.actionFeedbackHeroValue strong
+  font-size: 1.75rem
+  font-variant-numeric: tabular-nums
+
+.actionFeedbackHeroValue span
+  max-width: 15rem
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  line-height: 1.4
+
+.actionFeedbackMetricStrip
+  display: grid
+  grid-template-columns: repeat(4, minmax(0, 1fr))
+  margin-top: var(--hy-p62-space-4)
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.actionFeedbackMetricStrip article
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: start
+  gap: .35rem var(--hy-p62-space-2)
+  min-height: 6.4rem
+  padding: var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.actionFeedbackMetricStrip article:first-child
+  border-left: 0
+
+.actionFeedbackMetricStrip article > svg
+  margin-top: .15rem
+  color: var(--hy-p62-muted)
+
+.actionFeedbackMetricStrip article > span
+  display: grid
+  min-width: 0
+  gap: .2rem
+
+.actionFeedbackMetricStrip small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .06em
+
+.actionFeedbackMetricStrip strong
+  overflow: hidden
+  font-size: var(--hy-p62-font-sm)
+  font-variant-numeric: tabular-nums
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.actionFeedbackMetricStrip em
+  grid-column: 2
+  width: fit-content
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  font-weight: 700
+
+.actionFeedbackMetricStrip em[data-semantic-status='success']
+  color: var(--hy-p62-success)
+
+.actionFeedbackMetricStrip em[data-semantic-status='warning']
+  color: var(--hy-p62-warning)
+
+.actionFeedbackMainGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.45fr) minmax(20rem, .7fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.actionFeedbackImpactCard,
+.actionFeedbackReadiness,
+.actionFeedbackHydro,
+.actionFeedbackSchedule
+  min-width: 0
+  overflow: hidden
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-card)
+  background: var(--hy-p62-surface)
+
+.actionFeedbackImpactChart
+  padding: var(--hy-p62-space-3) var(--hy-p62-space-4) 0
+
+.actionFeedbackInterpretation
+  display: flex
+  align-items: flex-start
+  gap: var(--hy-p62-space-3)
+  margin: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface-raised)
+
+.actionFeedbackInterpretation > svg
+  flex: 0 0 auto
+  margin-top: .1rem
+  color: var(--hy-p62-muted)
+
+.actionFeedbackInterpretation > span
+  display: grid
+  gap: .22rem
+
+.actionFeedbackInterpretation small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.actionFeedbackInterpretation strong
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.5
+
+.actionFeedbackInterpretation em
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+
+.actionFeedbackReadinessBody
+  display: grid
+  gap: var(--hy-p62-space-4)
+  padding: var(--hy-p62-space-4)
+
+.actionFeedbackGauge
+  position: relative
+  min-height: 10rem
+  display: grid
+  place-items: center
+
+.actionFeedbackGauge > div:first-child
+  width: min(100%, 13rem)
+
+.actionFeedbackGauge > div:last-child
+  position: absolute
+  display: grid
+  justify-items: center
+  gap: .1rem
+  pointer-events: none
+
+.actionFeedbackGauge > div:last-child strong
+  font-size: 1.4rem
+  font-variant-numeric: tabular-nums
+
+.actionFeedbackGauge > div:last-child small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+
+.actionFeedbackReadinessList
+  display: grid
+  gap: .55rem
+  margin: 0
+  padding: 0
+  list-style: none
+
+.actionFeedbackReadinessList li
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  padding: .65rem .7rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+
+.actionFeedbackReadinessList li > svg
+  color: var(--hy-p62-muted)
+
+.actionFeedbackReadinessList li[data-semantic-status='success'] > svg
+  color: var(--hy-p62-success)
+
+.actionFeedbackReadinessList li[data-semantic-status='warning'] > svg
+  color: var(--hy-p62-warning)
+
+.actionFeedbackReadinessList li[data-semantic-status='current'] > svg
+  color: var(--hy-p62-status-current)
+
+.actionFeedbackReadinessList span
+  display: grid
+  gap: .1rem
+
+.actionFeedbackReadinessList strong
+  font-size: var(--hy-p62-font-sm)
+
+.actionFeedbackReadinessList small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+
+.actionFeedbackReadinessMeter
+  padding-top: var(--hy-p62-space-2)
+  border-top: 0.0625rem solid var(--hy-p62-border)
+
+.actionFeedbackOperationsGrid
+  display: grid
+  grid-template-columns: minmax(0, 1.15fr) minmax(22rem, .85fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.actionFeedbackRoute
+  display: grid
+  grid-template-columns: auto minmax(3rem, 1fr) auto minmax(3rem, 1fr) auto
+  align-items: center
+  gap: var(--hy-p62-space-2)
+  padding: var(--hy-p62-space-5) var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.actionFeedbackRoute > span
+  display: inline-flex
+  align-items: center
+  gap: .4rem
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-weight: 700
+  white-space: nowrap
+
+.actionFeedbackRoute > span > i
+  width: .72rem
+  height: .72rem
+  border: .12rem solid var(--hy-p62-border-strong)
+  border-radius: 50%
+  background: var(--hy-p62-surface)
+  font-style: normal
+
+.actionFeedbackRoute > span[data-state='complete']
+  color: var(--hy-p62-text)
+
+.actionFeedbackRoute > span[data-state='complete'] > i
+  border-color: var(--hy-p62-success)
+  background: var(--hy-p62-success)
+
+.actionFeedbackRoute > span[data-state='current']
+  color: var(--hy-p62-text)
+
+.actionFeedbackRoute > span[data-state='current'] > i
+  border-color: var(--hy-p62-status-current)
+  box-shadow: 0 0 0 .2rem color-mix(in srgb, var(--hy-p62-status-current) 12%, transparent)
+
+.actionFeedbackRoute > b
+  display: block
+  height: .125rem
+  background: var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-pill)
+
+.actionFeedbackHydroFacts
+  display: grid
+  grid-template-columns: repeat(3, minmax(0, 1fr))
+  border-top: 0.0625rem solid var(--hy-p62-border)
+  border-bottom: 0.0625rem solid var(--hy-p62-border)
+
+.actionFeedbackHydroFacts > span
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr)
+  gap: .18rem var(--hy-p62-space-2)
+  min-height: 8rem
+  align-content: start
+  padding: var(--hy-p62-space-4)
+  border-left: 0.0625rem solid var(--hy-p62-border)
+
+.actionFeedbackHydroFacts > span:first-child
+  border-left: 0
+
+.actionFeedbackHydroFacts svg
+  grid-row: 1 / span 3
+  margin-top: .12rem
+  color: var(--hy-p62-muted)
+
+.actionFeedbackHydroFacts > span[data-semantic-status='warning'] svg
+  color: var(--hy-p62-warning)
+
+.actionFeedbackHydroFacts > span[data-semantic-status='success'] svg
+  color: var(--hy-p62-success)
+
+.actionFeedbackHydroFacts small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .06em
+
+.actionFeedbackHydroFacts strong
+  font-size: var(--hy-p62-font-sm)
+
+.actionFeedbackHydroFacts em
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  line-height: 1.4
+
+.actionFeedbackSources
+  display: grid
+  grid-template-columns: minmax(10rem, .7fr) minmax(0, 1.3fr)
+  gap: var(--hy-p62-space-3)
+  padding: var(--hy-p62-space-4)
+
+.actionFeedbackSources > div:first-child
+  display: grid
+  align-content: start
+  gap: .25rem
+
+.actionFeedbackSources > div:first-child small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.actionFeedbackSources > div:first-child strong
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.4
+
+.actionFeedbackSources > div:last-child
+  display: grid
+  gap: .45rem
+
+.actionFeedbackSources > div:last-child > span
+  display: grid
+  grid-template-columns: auto minmax(0, 1fr) auto
+  align-items: center
+  gap: .5rem
+  min-height: 2.4rem
+  padding: .45rem .6rem
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-control)
+  background: var(--hy-p62-surface-raised)
+
+.actionFeedbackSources strong
+  font-size: var(--hy-p62-font-xs)
+
+.actionFeedbackSources em
+  overflow: hidden
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+  text-overflow: ellipsis
+  white-space: nowrap
+
+.actionFeedbackSources > div:last-child small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  white-space: nowrap
+
+.actionFeedbackScheduleBody
+  padding: 0 var(--hy-p62-space-4) var(--hy-p62-space-4)
+
+.actionFeedbackFooter
+  display: grid
+  grid-template-columns: minmax(0, 1.2fr) minmax(22rem, .8fr)
+  gap: var(--hy-p62-space-4)
+  margin-top: var(--hy-p62-space-4)
+
+.actionFeedbackCorrectionBranch,
+.actionFeedbackPrimaryNext
+  display: grid
+  align-items: center
+  gap: var(--hy-p62-space-3)
+  min-height: 6rem
+  padding: var(--hy-p62-space-4)
+  border: 0.0625rem solid var(--hy-p62-border)
+  border-radius: var(--hy-p62-radius-panel)
+  background: var(--hy-p62-surface)
+
+.actionFeedbackCorrectionBranch
+  grid-template-columns: auto minmax(0, 1fr) auto
+  box-shadow: inset .18rem 0 0 var(--hy-p62-warning)
+
+.actionFeedbackCorrectionBranch > svg
+  color: var(--hy-p62-warning)
+
+.actionFeedbackCorrectionBranch > span,
+.actionFeedbackPrimaryNext > span
+  display: grid
+  gap: .15rem
+
+.actionFeedbackCorrectionBranch small,
+.actionFeedbackPrimaryNext small
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-2xs)
+  font-weight: 700
+  letter-spacing: .07em
+
+.actionFeedbackCorrectionBranch strong,
+.actionFeedbackPrimaryNext strong
+  font-size: var(--hy-p62-font-sm)
+  line-height: 1.45
+
+.actionFeedbackCorrectionBranch em
+  color: var(--hy-p62-muted)
+  font-size: var(--hy-p62-font-xs)
+  font-style: normal
+
+.actionFeedbackPrimaryNext
+  grid-template-columns: minmax(0, 1fr) auto
+
+@media (max-width: 82rem)
+  .actionFeedbackMainGrid,
+  .actionFeedbackOperationsGrid,
+  .actionFeedbackFooter
+    grid-template-columns: 1fr
+
+  .actionFeedbackMetricStrip
+    grid-template-columns: repeat(2, minmax(0, 1fr))
+
+  .actionFeedbackMetricStrip article:nth-child(3)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .actionFeedbackMetricStrip article:nth-child(4)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+
+@media (max-width: 54rem)
+  .actionFeedbackHero
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .actionFeedbackHeroValue
+    grid-column: 1 / -1
+    justify-items: start
+    padding-top: var(--hy-p62-space-3)
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    text-align: left
+
+  .actionFeedbackMetricStrip,
+  .actionFeedbackHydroFacts
+    grid-template-columns: 1fr
+
+  .actionFeedbackMetricStrip article,
+  .actionFeedbackMetricStrip article:nth-child(4),
+  .actionFeedbackHydroFacts > span
+    border-top: 0.0625rem solid var(--hy-p62-border)
+    border-left: 0
+
+  .actionFeedbackMetricStrip article:first-child,
+  .actionFeedbackHydroFacts > span:first-child
+    border-top: 0
+
+  .actionFeedbackRoute
+    grid-template-columns: 1fr
+    justify-items: start
+
+  .actionFeedbackRoute > b
+    width: .125rem
+    height: 1.5rem
+    margin-left: .3rem
+
+  .actionFeedbackSources
+    grid-template-columns: 1fr
+
+  .actionFeedbackSources > div:last-child > span
+    grid-template-columns: auto minmax(0, 1fr)
+
+  .actionFeedbackSources > div:last-child small
+    grid-column: 2
+
+  .actionFeedbackCorrectionBranch,
+  .actionFeedbackPrimaryNext
+    grid-template-columns: 1fr
+    align-items: start
+
+  .actionFeedbackCorrectionBranch > svg
+    display: none
+
+  .actionFeedbackCorrectionBranch button,
+  .actionFeedbackPrimaryNext button
+    width: 100%

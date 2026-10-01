@@ -44,7 +44,7 @@ const states = [
     name: 'D11 Action Feedback',
     storyKey: 'D11ActionFeedback',
     selector: '[data-testid="page62-d11-feedback"]',
-    minCharts: 1,
+    minCharts: 2,
   },
   {
     name: 'D12 Correction Resubmit',
@@ -284,6 +284,16 @@ try {
       const reviewNextSteps = document.querySelector('[data-testid="review-next-steps"]');
       const reviewSelectedProposal = document.querySelector('[data-testid="review-selected-proposal"]');
       const reviewChecklistItems = reviewChecklist ? Array.from(reviewChecklist.querySelectorAll('li')) : [];
+      const feedbackImpact = document.querySelector('[data-testid="action-feedback-impact"]');
+      const feedbackImpactMetrics = document.querySelector('[data-testid="action-feedback-impact-metrics"]');
+      const feedbackReadiness = document.querySelector('[data-testid="action-feedback-readiness"]');
+      const feedbackReadinessStates = feedbackReadiness ? Array.from(feedbackReadiness.querySelectorAll('[data-semantic-status]')) : [];
+      const feedbackHydro = document.querySelector('[data-testid="action-feedback-hydro-context"]');
+      const feedbackSources = Array.from(document.querySelectorAll('[data-testid="action-feedback-source"]'));
+      const feedbackNextSteps = document.querySelector('[data-testid="action-feedback-next-steps"]');
+      const feedbackNextStepItems = feedbackNextSteps ? Array.from(feedbackNextSteps.querySelectorAll('article')) : [];
+      const feedbackCorrectionBranch = document.querySelector('[data-testid="action-feedback-correction-branch"]');
+      const feedbackMonitorButton = Array.from(document.querySelectorAll('button')).find((button) => button.textContent?.trim() === 'Acompanhar carga');
       const eventGaps = timelineEvents.slice(1).map((item, index) => {
         const previous = timelineEvents[index].getBoundingClientRect();
         const current = item.getBoundingClientRect();
@@ -356,6 +366,15 @@ try {
         reviewChecklistCount: reviewChecklistItems.length,
         reviewNextStepsVisible: Boolean(reviewNextSteps && reviewNextSteps.getBoundingClientRect().height > 0),
         reviewSelectedProposalVisible: Boolean(reviewSelectedProposal && reviewSelectedProposal.getBoundingClientRect().height > 0),
+        feedbackImpactVisible: Boolean(feedbackImpact && feedbackImpact.getBoundingClientRect().height > 0),
+        feedbackImpactMetricCount: feedbackImpactMetrics ? feedbackImpactMetrics.querySelectorAll('article').length : 0,
+        feedbackReadinessVisible: Boolean(feedbackReadiness && feedbackReadiness.getBoundingClientRect().height > 0),
+        feedbackReadinessStateCount: feedbackReadinessStates.length,
+        feedbackHydroVisible: Boolean(feedbackHydro && feedbackHydro.getBoundingClientRect().height > 0),
+        feedbackSourceCount: feedbackSources.length,
+        feedbackNextStepCount: feedbackNextStepItems.length,
+        feedbackCorrectionVisible: Boolean(feedbackCorrectionBranch && feedbackCorrectionBranch.getBoundingClientRect().height > 0),
+        feedbackMonitorVisible: Boolean(feedbackMonitorButton && feedbackMonitorButton.getBoundingClientRect().width > 0),
       };
     }, { selector: state.selector, secondarySelector: state.secondarySelector || null });
 
@@ -398,6 +417,15 @@ try {
         if (metrics.reviewImpactCardCount < 4) failures.push(`review impact breadth incomplete: ${metrics.reviewImpactCardCount}`);
         if (metrics.reviewChecklistCount < 4) failures.push(`pre-confirm checklist incomplete: ${metrics.reviewChecklistCount}`);
         if (!metrics.reviewNextStepsVisible) failures.push('post-accept next steps missing');
+      }
+      if (state.storyKey === 'D11ActionFeedback') {
+        if (!metrics.feedbackImpactVisible) failures.push('applied-impact visualization missing');
+        if (metrics.feedbackImpactMetricCount < 4) failures.push(`post-action impact breadth incomplete: ${metrics.feedbackImpactMetricCount}`);
+        if (!metrics.feedbackReadinessVisible || metrics.feedbackReadinessStateCount < 4) failures.push('post-action readiness/state model incomplete');
+        if (!metrics.feedbackHydroVisible || metrics.feedbackSourceCount < 2) failures.push('post-action hydrographic/source context incomplete');
+        if (metrics.feedbackNextStepCount < 4) failures.push(`post-action continuation too shallow: ${metrics.feedbackNextStepCount}`);
+        if (!metrics.feedbackCorrectionVisible) failures.push('document recovery branch missing from action feedback');
+        if (!metrics.feedbackMonitorVisible) failures.push('monitoring continuation missing from action feedback');
       }
       if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);

@@ -91,27 +91,25 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
         );
       }
     }
-    if (experience === 'feedback') {
-      return (
-        <div className={styles.journeyFlowStack}>
+    if (experience === 'feedback' && proposals.length > 1) {
+      const selectedProposal =
+        proposals.find((proposal) => proposal.id === selectedProposalId) ?? proposals[1] ?? proposals[0];
+      const referenceProposal =
+        proposals.find((proposal) => proposal.id !== selectedProposal?.id) ?? proposals[0];
+
+      if (selectedProposal && referenceProposal) {
+        return (
           <ActionFeedbackSurface
+            selected={selectedProposal}
+            reference={referenceProposal}
+            documents={snapshot.documents}
+            hydro={snapshot.hydro}
+            sources={snapshot.sources}
+            onCorrection={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'documentRejected' }))}
             onMonitor={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'monitoringOpened' }))}
           />
-          <div className={styles.contextBar} data-testid="page62-d11-correction-branch">
-            <span>
-              <strong>Se a revalidação documental falhar</strong>
-              <small>O fluxo abre a correção sem perder a decisão comercial já aplicada.</small>
-            </span>
-            <button
-              className={styles.secondaryAction}
-              type="button"
-              onClick={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'documentRejected' }))}
-            >
-              Tratar rejeição documental
-            </button>
-          </div>
-        </div>
-      );
+        );
+      }
     }
     if (experience === 'correction' && divergentDocument) {
       return <CorrectionResubmitSurface document={divergentDocument} onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))} />;

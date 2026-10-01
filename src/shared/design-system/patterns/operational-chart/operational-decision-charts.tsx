@@ -160,6 +160,82 @@ export function ProposalDecisionComparisonChart({
   );
 }
 
+export function ActionAppliedImpactChart({
+  beforeScores,
+  afterScores,
+}: {
+  beforeScores: [number, number, number, number];
+  afterScores: [number, number, number, number];
+}) {
+  const option = useMemo<EChartsCoreOption>(() => ({
+    animation: false,
+    grid: { left: 88, right: 24, top: 38, bottom: 28 },
+    tooltip: {
+      ...operationalTooltipShell,
+      trigger: 'axis',
+      axisPointer: { type: 'shadow' },
+      formatter: (raw: unknown) => {
+        const items = Array.isArray(raw) ? raw as Array<{ seriesName?: string; value?: number; axisValue?: string }> : [];
+        return buildOperationalTooltip({
+          eyebrow: 'IMPACTO APLICADO',
+          title: items[0]?.axisValue ?? 'Critério',
+          rows: items.map((item) => ({
+            label: item.seriesName ?? 'Estado',
+            value: String(item.value ?? '—') + '/100',
+          })),
+          footer: 'Índice comparativo DEMO. Valores reais permanecem visíveis acima do gráfico.',
+        });
+      },
+    },
+    legend: {
+      top: 0,
+      right: 0,
+      textStyle: { color: '#8b949f', fontSize: 10 },
+      itemWidth: 12,
+      itemHeight: 6,
+    },
+    xAxis: {
+      type: 'value',
+      min: 0,
+      max: 100,
+      axisLabel: { color: '#6f7781', fontSize: 9, formatter: '{value}' },
+      splitLine: { lineStyle: { color: '#232a31', type: 'dashed' } },
+      axisLine: { show: false },
+    },
+    yAxis: {
+      type: 'category',
+      data: ['Janela', 'Demurrage', 'Calado', 'Docs'],
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: { color: '#aab2bb', fontSize: 10, fontWeight: 600 },
+    },
+    series: [
+      {
+        name: 'Antes',
+        type: 'bar',
+        data: beforeScores,
+        barWidth: 9,
+        itemStyle: { color: '#555b63', borderRadius: [0, 5, 5, 0] },
+      },
+      {
+        name: 'Depois',
+        type: 'bar',
+        data: afterScores,
+        barWidth: 9,
+        itemStyle: { color: '#d7d9dc', borderRadius: [0, 5, 5, 0] },
+      },
+    ],
+  }), [afterScores, beforeScores]);
+
+  return (
+    <OperationalEChart
+      option={option}
+      ariaLabel="Comparação antes e depois da decisão aplicada por janela, demurrage, calado contratado e prontidão documental"
+      className={styles.actionDelta}
+    />
+  );
+}
+
 export function DocumentWeightComparisonChart({
   submitted = 18.4,
   evidence = 16.8,
