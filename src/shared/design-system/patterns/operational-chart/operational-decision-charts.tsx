@@ -216,117 +216,120 @@ export function ActionOutcomeLedgerChart({
       { label: 'Calado contratado', before: draftBefore, after: draftAfter, min: draftBounds.min, max: draftBounds.max, delta: (draftAfter - draftBefore >= 0 ? '+' : '−') + Math.abs(draftAfter - draftBefore).toFixed(1).replace('.', ',') + ' m' },
       { label: 'Documentos', before: docValue[documentsBefore], after: docValue[documentsAfter], min: 0, max: 2, delta: docLabel(docValue[documentsBefore]) + ' → ' + docLabel(docValue[documentsAfter]) },
     ];
-    const gridTop = ['10%', '34%', '58%', '82%'];
 
     const normalize = (value: number, min: number, max: number) => {
-      if (max <= min) return 50;
-      return Math.max(26, Math.min(100, 26 + (((value - min) / (max - min)) * 74)));
+      if (max <= min) return 64;
+      return Math.max(34, Math.min(100, 34 + (((value - min) / (max - min)) * 66)));
     };
+
+    const beforeData = rows.map((row) => normalize(row.before, row.min, row.max));
+    const afterData = rows.map((row) => normalize(row.after, row.min, row.max));
 
     return {
       animation: false,
       tooltip: {
         ...operationalTooltipShell,
-        trigger: 'item',
+        trigger: 'axis',
+        axisPointer: { type: 'shadow', shadowStyle: { color: 'rgba(255,255,255,.025)' } },
         formatter: (raw: unknown) => {
-          const item = raw as { seriesIndex?: number; dataIndex?: number; seriesName?: string };
-          const metricIndex = Math.floor((item.seriesIndex ?? 0) / 2);
+          const items = Array.isArray(raw) ? raw as Array<{ dataIndex?: number }> : [];
+          const metricIndex = items[0]?.dataIndex ?? 0;
           const row = rows[metricIndex];
-          const isAfter = (item.seriesIndex ?? 0) % 2 === 1;
-          const actual = isAfter ? row?.after : row?.before;
           return buildOperationalTooltip({
             eyebrow: 'EFEITO DO ACEITE',
             title: row?.label ?? 'Métrica',
-            rows: [{
-              label: item.seriesName ?? 'Estado',
-              value: formatMetric(metricIndex, Number(actual ?? 0)),
-            }],
-            footer: 'A barra usa uma escala local apenas para mostrar a variação desta métrica.',
+            rows: [
+              { label: 'Antes', value: formatMetric(metricIndex, Number(row?.before ?? 0)) },
+              { label: 'Depois', value: formatMetric(metricIndex, Number(row?.after ?? 0)) },
+              { label: 'Variação', value: row?.delta ?? '—' },
+            ],
+            footer: 'Cada linha usa uma escala local para tornar a mudança daquela métrica legível.',
           });
         },
       },
-      legend: {
-        top: 2,
-        right: 10,
-        textStyle: { color: '#a6abb2', fontSize: 11 },
-        itemWidth: 14,
-        itemHeight: 7,
-        selectedMode: false,
-      },
-      grid: rows.map((_, index) => ({
-        left: '33%',
-        right: '14%',
-        top: gridTop[index],
-        height: '11%',
+      grid: {
+        left: 154,
+        right: 24,
+        top: 26,
+        bottom: 18,
         containLabel: false,
-      })),
-      xAxis: rows.map((_, index) => ({
+      },
+      xAxis: {
         type: 'value',
-        gridIndex: index,
         min: 0,
         max: 100,
         show: false,
-      })),
-      yAxis: rows.map((row, index) => ({
+      },
+      yAxis: {
         type: 'category',
-        gridIndex: index,
-        data: [row.label],
+        inverse: true,
+        data: rows.map((row) => row.label),
         axisLine: { show: false },
         axisTick: { show: false },
         axisLabel: {
           show: true,
           align: 'right',
           margin: 18,
-          width: 170,
+          width: 126,
           overflow: 'break',
-          formatter: () => '{metric|' + row.label + '}\n{delta|' + row.delta + '}',
+          formatter: (_value: string, index: number) => {
+            const row = rows[index];
+            return '{metric|' + row.label + '}\n{delta|' + row.delta + '}';
+          },
           rich: {
-            metric: { color: '#f0f1f2', fontSize: 13, fontWeight: 650, lineHeight: 21 },
-            delta: { color: '#a6abb2', fontSize: 12, fontWeight: 500, lineHeight: 19 },
+            metric: { color: '#f0f1f2', fontSize: 13, fontWeight: 680, lineHeight: 21 },
+            delta: { color: '#9ca3ab', fontSize: 12, fontWeight: 520, lineHeight: 18 },
           },
         },
-      })),
-      series: rows.flatMap((row, index) => ([
+      },
+      series: [
         {
           name: 'Antes',
           type: 'bar',
-          xAxisIndex: index,
-          yAxisIndex: index,
-          data: [normalize(row.before, row.min, row.max)],
-          barWidth: 10,
-          barGap: '48%',
-          itemStyle: { color: '#5d6269', borderRadius: 8 },
+          data: beforeData,
+          barWidth: 20,
+          barGap: '38%',
+          barCategoryGap: '34%',
+          itemStyle: { color: '#62676e', borderRadius: 12 },
           showBackground: true,
-          backgroundStyle: { color: '#24282d', borderRadius: 8 },
+          backgroundStyle: { color: '#252a30', borderRadius: 12 },
+          emphasis: { disabled: true },
           label: {
             show: true,
-            position: 'right',
-            distance: 8,
-            color: '#aeb3b9',
-            fontSize: 11,
-            fontWeight: 600,
-            formatter: () => formatMetric(index, row.before),
+            position: 'inside',
+            color: '#f1f3f5',
+            fontSize: 12,
+            fontWeight: 650,
+            formatter: (raw: unknown) => {
+              const item = raw as { dataIndex?: number };
+              const index = item.dataIndex ?? 0;
+              return 'Antes · ' + formatMetric(index, rows[index].before);
+            },
           },
         },
         {
           name: 'Depois',
           type: 'bar',
-          xAxisIndex: index,
-          yAxisIndex: index,
-          data: [normalize(row.after, row.min, row.max)],
-          barWidth: 10,
-          itemStyle: { color: '#e1e3e5', borderRadius: 8 },
+          data: afterData,
+          barWidth: 20,
+          itemStyle: { color: '#e3e5e7', borderRadius: 12 },
+          showBackground: true,
+          backgroundStyle: { color: '#252a30', borderRadius: 12 },
+          emphasis: { disabled: true },
           label: {
             show: true,
-            position: 'right',
-            distance: 8,
-            color: '#f0f1f2',
-            fontSize: 11,
-            fontWeight: 700,
-            formatter: () => formatMetric(index, row.after),
+            position: 'inside',
+            color: '#17191c',
+            fontSize: 12,
+            fontWeight: 760,
+            formatter: (raw: unknown) => {
+              const item = raw as { dataIndex?: number };
+              const index = item.dataIndex ?? 0;
+              return 'Depois · ' + formatMetric(index, rows[index].after);
+            },
           },
         },
-      ])),
+      ],
     };
   }, [
     arrivalAfterMinutes,
@@ -342,8 +345,9 @@ export function ActionOutcomeLedgerChart({
   return (
     <OperationalEChart
       option={option}
-      ariaLabel="Comparação pós-aceite em quatro linhas independentes para chegada, demurrage, calado contratado e documentos, com valores reais antes e depois"
+      ariaLabel="Comparação pós-aceite em quatro linhas para chegada, demurrage, calado contratado e documentos, com barras espessas e valores antes e depois centralizados dentro do gráfico"
       className={styles.actionLedger}
+      renderer="svg"
     />
   );
 }
@@ -362,69 +366,68 @@ export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocume
       splitNumber: 4,
       startAngle: 180,
       endAngle: 0,
-      center: ['50%', '73%'],
-      radius: '98%',
+      center: ['50%', '75%'],
+      radius: '110%',
       pointer: { show: false },
       progress: { show: false },
       axisLine: {
         lineStyle: {
-          width: 1,
+          width: 2,
           color: pendingDocument
             ? [
-                [0.52, '#646970'],
-                [0.75, '#e2e4e7'],
-                [0.90, '#858a90'],
+                [0.50, '#62676e'],
+                [0.75, '#e1e3e5'],
+                [0.88, '#8b9096'],
                 [1, '#f59e0b'],
               ]
             : [
-                [0.52, '#646970'],
-                [0.75, '#b8bcc1'],
-                [1, '#e2e4e7'],
+                [0.50, '#62676e'],
+                [0.75, '#a8adb3'],
+                [1, '#e1e3e5'],
               ],
         },
       },
       axisTick: {
         show: true,
-        splitNumber: 8,
-        distance: -34,
-        length: 32,
+        splitNumber: 9,
+        distance: -43,
+        length: 40,
         lineStyle: {
           color: 'auto',
-          width: 8,
+          width: 12,
         },
       },
       splitLine: {
         show: true,
-        distance: -34,
-        length: 32,
+        distance: -43,
+        length: 40,
         lineStyle: {
           color: 'auto',
-          width: 8,
+          width: 12,
         },
       },
       axisLabel: { show: false },
       anchor: { show: false },
       title: {
         show: true,
-        offsetCenter: [0, '20%'],
-        color: '#a6abb2',
-        fontSize: 13,
-        fontWeight: 600,
+        offsetCenter: [0, '18%'],
+        color: '#aeb3b9',
+        fontSize: 15,
+        lineHeight: 20,
+        fontWeight: 620,
       },
       detail: {
         show: true,
         valueAnimation: false,
-        offsetCenter: [0, '-8%'],
-        color: '#f3f4f6',
-        fontSize: 46,
-        fontWeight: 720,
+        offsetCenter: [0, '-9%'],
+        color: '#f5f6f7',
+        fontSize: 56,
+        fontWeight: 760,
         formatter: (current: number) => String(Math.round(current)) + '/4',
       },
       data: [{
         value,
-        name: pendingDocument
-          ? 'frentes estáveis · 1 em validação'
-          : 'frentes estáveis · sem pendências',
+        name: pendingDocument ? '1 frente em validação' : 'sem pendências',
       }],
     }],
   }), [pendingDocument, value]);
