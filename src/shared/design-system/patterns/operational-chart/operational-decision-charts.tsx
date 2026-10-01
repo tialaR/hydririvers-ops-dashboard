@@ -210,20 +210,18 @@ export function ActionOutcomeLedgerChart({
       return docLabel(value);
     };
 
-    const deltaText = [
-      (arrivalAfterMinutes - arrivalBeforeMinutes >= 0 ? '+' : '−') + Math.abs(arrivalAfterMinutes - arrivalBeforeMinutes) + ' min',
-      (demurrageAfter - demurrageBefore >= 0 ? '+' : '−') + 'R$ ' + Math.abs(demurrageAfter - demurrageBefore).toLocaleString('pt-BR') + '/h',
-      (draftAfter - draftBefore >= 0 ? '+' : '−') + Math.abs(draftAfter - draftBefore).toFixed(1).replace('.', ',') + ' m',
-      docLabel(docValue[documentsBefore]) + ' → ' + docLabel(docValue[documentsAfter]),
-    ];
-
     const rows = [
-      { label: 'Chegada', before: arrivalBeforeMinutes, after: arrivalAfterMinutes, min: arrivalBounds.min, max: arrivalBounds.max },
-      { label: 'Demurrage', before: demurrageBefore, after: demurrageAfter, min: demurrageBounds.min, max: demurrageBounds.max },
-      { label: 'Calado contratado', before: draftBefore, after: draftAfter, min: draftBounds.min, max: draftBounds.max },
-      { label: 'Documentos', before: docValue[documentsBefore], after: docValue[documentsAfter], min: 0, max: 2.6 },
+      { label: 'Chegada', before: arrivalBeforeMinutes, after: arrivalAfterMinutes, min: arrivalBounds.min, max: arrivalBounds.max, delta: (arrivalAfterMinutes - arrivalBeforeMinutes >= 0 ? '+' : '−') + Math.abs(arrivalAfterMinutes - arrivalBeforeMinutes) + ' min' },
+      { label: 'Demurrage', before: demurrageBefore, after: demurrageAfter, min: demurrageBounds.min, max: demurrageBounds.max, delta: (demurrageAfter - demurrageBefore >= 0 ? '+' : '−') + 'R$ ' + Math.abs(demurrageAfter - demurrageBefore).toLocaleString('pt-BR') + '/h' },
+      { label: 'Calado contratado', before: draftBefore, after: draftAfter, min: draftBounds.min, max: draftBounds.max, delta: (draftAfter - draftBefore >= 0 ? '+' : '−') + Math.abs(draftAfter - draftBefore).toFixed(1).replace('.', ',') + ' m' },
+      { label: 'Documentos', before: docValue[documentsBefore], after: docValue[documentsAfter], min: 0, max: 2, delta: docLabel(docValue[documentsBefore]) + ' → ' + docLabel(docValue[documentsAfter]) },
     ];
     const gridTop = ['10%', '34%', '58%', '82%'];
+
+    const normalize = (value: number, min: number, max: number) => {
+      if (max <= min) return 50;
+      return Math.max(7, Math.min(100, ((value - min) / (max - min)) * 100));
+    };
 
     return {
       animation: false,
@@ -231,17 +229,19 @@ export function ActionOutcomeLedgerChart({
         ...operationalTooltipShell,
         trigger: 'item',
         formatter: (raw: unknown) => {
-          const item = raw as { seriesIndex?: number; value?: number; seriesName?: string };
+          const item = raw as { seriesIndex?: number; dataIndex?: number; seriesName?: string };
           const metricIndex = Math.floor((item.seriesIndex ?? 0) / 2);
           const row = rows[metricIndex];
+          const isAfter = (item.seriesIndex ?? 0) % 2 === 1;
+          const actual = isAfter ? row?.after : row?.before;
           return buildOperationalTooltip({
             eyebrow: 'EFEITO DO ACEITE',
             title: row?.label ?? 'Métrica',
             rows: [{
               label: item.seriesName ?? 'Estado',
-              value: formatMetric(metricIndex, Number(item.value ?? 0)),
+              value: formatMetric(metricIndex, Number(actual ?? 0)),
             }],
-            footer: 'A barra é comparada somente dentro da escala desta métrica.',
+            footer: 'A barra usa uma escala local apenas para mostrar a variação desta métrica.',
           });
         },
       },
@@ -254,17 +254,17 @@ export function ActionOutcomeLedgerChart({
         selectedMode: false,
       },
       grid: rows.map((_, index) => ({
-        left: '31%',
-        right: '12%',
+        left: '33%',
+        right: '14%',
         top: gridTop[index],
         height: '11%',
         containLabel: false,
       })),
-      xAxis: rows.map((row, index) => ({
+      xAxis: rows.map((_, index) => ({
         type: 'value',
         gridIndex: index,
-        min: row.min,
-        max: row.max,
+        min: 0,
+        max: 100,
         show: false,
       })),
       yAxis: rows.map((row, index) => ({
@@ -277,12 +277,12 @@ export function ActionOutcomeLedgerChart({
           show: true,
           align: 'left',
           margin: 0,
-          width: 170,
+          width: 175,
           overflow: 'break',
-          formatter: () => '{metric|' + row.label + '}\n{delta|' + deltaText[index] + '}',
+          formatter: () => '{metric|' + row.label + '}\n{delta|' + row.delta + '}',
           rich: {
-            metric: { color: '#f0f1f2', fontSize: 13, fontWeight: 650, lineHeight: 20 },
-            delta: { color: '#a6abb2', fontSize: 12, fontWeight: 500, lineHeight: 20 },
+            metric: { color: '#f0f1f2', fontSize: 13, fontWeight: 650, lineHeight: 21 },
+            delta: { color: '#a6abb2', fontSize: 12, fontWeight: 500, lineHeight: 19 },
           },
         },
       })),
@@ -292,9 +292,9 @@ export function ActionOutcomeLedgerChart({
           type: 'bar',
           xAxisIndex: index,
           yAxisIndex: index,
-          data: [row.before],
-          barWidth: 11,
-          barGap: '45%',
+          data: [normalize(row.before, row.min, row.max)],
+          barWidth: 10,
+          barGap: '48%',
           itemStyle: { color: '#5d6269', borderRadius: 8 },
           showBackground: true,
           backgroundStyle: { color: '#24282d', borderRadius: 8 },
@@ -305,7 +305,7 @@ export function ActionOutcomeLedgerChart({
             color: '#aeb3b9',
             fontSize: 11,
             fontWeight: 600,
-            formatter: (item: { value?: number }) => formatMetric(index, Number(item.value ?? 0)),
+            formatter: () => formatMetric(index, row.before),
           },
         },
         {
@@ -313,8 +313,8 @@ export function ActionOutcomeLedgerChart({
           type: 'bar',
           xAxisIndex: index,
           yAxisIndex: index,
-          data: [row.after],
-          barWidth: 11,
+          data: [normalize(row.after, row.min, row.max)],
+          barWidth: 10,
           itemStyle: { color: '#e1e3e5', borderRadius: 8 },
           label: {
             show: true,
@@ -323,7 +323,7 @@ export function ActionOutcomeLedgerChart({
             color: '#f0f1f2',
             fontSize: 11,
             fontWeight: 700,
-            formatter: (item: { value?: number }) => formatMetric(index, Number(item.value ?? 0)),
+            formatter: () => formatMetric(index, row.after),
           },
         },
       ])),
@@ -350,82 +350,75 @@ export function ActionOutcomeLedgerChart({
 
 export function PostActionReadinessArcChart({ pendingDocument }: { pendingDocument: boolean }) {
   const stableCount = pendingDocument ? 3 : 4;
+  const value = stableCount;
 
   const option = useMemo<EChartsCoreOption>(() => ({
     animation: false,
-    tooltip: {
-      ...operationalTooltipShell,
-      trigger: 'item',
-      formatter: (raw: unknown) => {
-        const item = raw as { name?: string };
-        const pending = item.name === 'Documentos' && pendingDocument;
-        return buildOperationalTooltip({
-          eyebrow: 'PRONTIDÃO PÓS-ACEITE',
-          title: item.name ?? 'Frente',
-          rows: [{ label: 'Estado', value: pending ? 'em validação' : 'estável' }],
-        });
-      },
-    },
-    graphic: [
-      {
-        type: 'text',
-        left: 'center',
-        top: '55%',
-        style: {
-          text: stableCount + '/4',
-          fill: '#f3f4f6',
-          fontSize: 32,
-          fontWeight: 720,
-          textAlign: 'center',
-        },
-      },
-      {
-        type: 'text',
-        left: 'center',
-        top: '70%',
-        style: {
-          text: 'frentes estáveis',
-          fill: '#9ca3af',
-          fontSize: 12,
-          fontWeight: 600,
-          textAlign: 'center',
-        },
-      },
-    ],
+    tooltip: { show: false },
     series: [{
-      type: 'pie',
-      radius: ['58%', '84%'],
-      center: ['50%', '78%'],
+      type: 'gauge',
+      min: 0,
+      max: 4,
+      splitNumber: 4,
       startAngle: 180,
-      clockwise: false,
-      label: { show: false },
-      emphasis: { scale: false },
-      itemStyle: {
-        borderColor: '#141416',
-        borderWidth: 7,
-        borderRadius: 9,
+      endAngle: 0,
+      center: ['50%', '72%'],
+      radius: '92%',
+      pointer: { show: false },
+      progress: { show: false },
+      axisLine: {
+        lineStyle: {
+          width: 26,
+          color: [
+            [0.25, '#eceef0'],
+            [0.5, '#b8bcc1'],
+            [0.75, pendingDocument ? '#fbbf24' : '#858a90'],
+            [1, '#62676e'],
+          ],
+        },
       },
-      data: [
-        { value: 1, name: 'Decisão', itemStyle: { color: '#eceef0' } },
-        { value: 1, name: 'Comercial', itemStyle: { color: '#b8bcc1' } },
-        { value: 1, name: 'Documentos', itemStyle: { color: pendingDocument ? '#fbbf24' : '#858a90' } },
-        { value: 1, name: 'Hidrovia', itemStyle: { color: '#62676e' } },
-        { value: 4, name: 'hidden', itemStyle: { color: 'rgba(0,0,0,0)' }, tooltip: { show: false }, emphasis: { disabled: true } },
-      ],
+      axisTick: { show: false },
+      splitLine: {
+        show: true,
+        distance: -27,
+        length: 28,
+        lineStyle: {
+          color: '#141416',
+          width: 8,
+        },
+      },
+      axisLabel: { show: false },
+      anchor: { show: false },
+      title: {
+        show: true,
+        offsetCenter: [0, '23%'],
+        color: '#9ca3af',
+        fontSize: 12,
+        fontWeight: 600,
+      },
+      detail: {
+        show: true,
+        valueAnimation: false,
+        offsetCenter: [0, '-3%'],
+        color: '#f3f4f6',
+        fontSize: 34,
+        fontWeight: 720,
+        formatter: (current: number) => String(Math.round(current)) + '/4',
+      },
+      data: [{ value, name: pendingDocument ? '1 frente em validação' : 'todas as frentes estáveis' }],
     }],
-  }), [pendingDocument, stableCount]);
+  }), [pendingDocument, value]);
 
   return (
     <OperationalEChart
       option={option}
       ariaLabel={pendingDocument
-        ? 'Prontidão pós-aceite: três de quatro frentes estáveis e documentos em validação'
+        ? 'Prontidão pós-aceite: três de quatro frentes estáveis e uma frente documental em validação'
         : 'Prontidão pós-aceite: quatro de quatro frentes estáveis'}
       className={styles.readinessArc}
     />
   );
 }
-
 
 export function DocumentWeightComparisonChart({
   submitted = 18.4,
