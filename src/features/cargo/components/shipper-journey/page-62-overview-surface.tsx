@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { ShipmentCard } from '@/features/cargo/components/shipment-card/shipment-card';
 import { adaptOwnedCargoRouteToHydrowayMapModel } from '@/features/waterway-map/adapters/owned-cargo-route-to-hydroway-model';
@@ -247,6 +248,7 @@ const filterCounts: Record<(typeof filters)[number], number> = {
 };
 
 export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () => void }) {
+  const t = useTranslations('page62Journey.overview');
   const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedId, setSelectedId] = useState(cargoes[0].id);
   const [filter, setFilter] = useState<(typeof filters)[number]>('Todas');
@@ -324,8 +326,8 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
         <aside className={styles.overviewMaster}>
           <div className={styles.overviewMasterHeader}>
             <div>
-              <p className={styles.eyebrow}>CARTEIRA</p>
-              <h2>Minhas Cargas</h2>
+              <p className={styles.eyebrow}>{t('portfolio')}</p>
+              <h2>{t('myCargoes')}</h2>
             </div>
             <button
               type="button"
@@ -335,11 +337,11 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
               onClick={focusAttention}
             >
               <AlertTriangle size={15} aria-hidden />
-              <span><strong>{filterCounts.Atenção}</strong> exige atenção</span>
+              <span><strong>{filterCounts.Atenção}</strong> {t('needsAttention')}</span>
             </button>
           </div>
 
-          <div className={styles.overviewFilters} role="group" aria-label="Filtros de carteira" data-testid="overview-filter-tabs">
+          <div className={styles.overviewFilters} role="group" aria-label={t('filtersAria')} data-testid="overview-filter-tabs">
             {filters.map((item) => (
               <button key={item} type="button" aria-pressed={filter === item} onClick={() => selectFilter(item)}>
                 <span>{item}</span>
@@ -350,7 +352,7 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
 
           <label className={styles.overviewSearch}>
             <Search size={18} aria-hidden />
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Buscar carga, origem ou destino" />
+            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('search')} />
           </label>
 
           <div className={styles.overviewList}>
@@ -384,7 +386,7 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.16 }}
               >
-                <p className={styles.eyebrow}>OPERAÇÃO SELECIONADA</p>
+                <p className={styles.eyebrow}>{t('selected')}</p>
                 <div className={styles.overviewSelectedTitle}>
                   <h2>{selected.code}</h2>
                   <span data-tone={selected.attention.tone}>{selected.statusLabel}</span>
@@ -392,15 +394,15 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
                 <p>{selected.origin.city} → {selected.destination.city} · corredor Amazonas–Solimões</p>
               </motion.div>
             </AnimatePresence>
-            <button type="button" className={styles.primaryAction} onClick={onOpenCockpit}>Abrir cockpit</button>
+            <button type="button" className={styles.primaryAction} onClick={onOpenCockpit}>{t('openCockpit')}</button>
           </header>
 
           <article className={styles.overviewMapPanel} data-testid="overview-map-panel">
             <header className={styles.overviewSectionHeader}>
               <div>
-                <p className={styles.eyebrow}>ROTA OPERACIONAL</p>
-                <h3>Onde a carga está agora</h3>
-                <span>Mapa interativo, progresso, trecho de atenção, camadas operacionais e próximo marco.</span>
+                <p className={styles.eyebrow}>{t('route')}</p>
+                <h3>{t('whereNow')}</h3>
+                <span>{t('routeHelp')}</span>
               </div>
               <span className={styles.demoBadge}>DEMO · MapLibre + camadas operacionais</span>
             </header>
@@ -416,11 +418,11 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
               <div className={styles.mapOperationalSummary}>
                 <span>
                   <MapPin size={16} />
-                  <span><small>Agora</small><strong>{selected.positionLabel}</strong></span>
+                  <span><small>{t('now')}</small><strong>{selected.positionLabel}</strong></span>
                 </span>
                 <span>
                   <Route size={16} />
-                  <span><small>Próximo</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
+                  <span><small>{t('next')}</small><strong>{selected.nextMilestone}</strong><em>{selected.nextMilestoneMeta}</em></span>
                 </span>
               </div>
             </div>
@@ -454,7 +456,7 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
               badge={selected.attention.badge}
               title={selected.attention.title}
               description={selected.attention.description}
-              actionLabel="Investigar"
+              actionLabel={t('investigate')}
               onAction={onOpenCockpit}
               testId="overview-action-panel"
             />
@@ -467,11 +469,11 @@ export function Page62OverviewSurface({ onOpenCockpit }: { onOpenCockpit?: () =>
       {mapExpanded ? (
         <div className={styles.overviewMapFullscreen} data-testid="overview-map-fullscreen">
           <header>
-            <button type="button" onClick={() => setMapExpanded(false)} aria-label="Voltar para a visão geral">
-              ← <span>Voltar</span>
+            <button type="button" onClick={() => setMapExpanded(false)} aria-label={t('backAria')}>
+              ← <span>{t('back')}</span>
             </button>
             <div>
-              <small>MAPA OPERACIONAL</small>
+              <small>{t('mapOperational')}</small>
               <strong>{selected.code} · {selected.origin.city} → {selected.destination.city}</strong>
             </div>
             <span className={styles.demoBadge}>DEMO</span>
