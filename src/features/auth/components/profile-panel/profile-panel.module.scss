@@ -521,3 +521,401 @@
   .form { grid-template-columns: 1fr; }
   .full { grid-column: auto; }
 }
+
+
+/* HydroRivers profile DS v3 — neutral product workspace */
+.shell {
+  --profile-canvas: #080808;
+  --profile-surface: #121212;
+  --profile-surface-raised: #181818;
+  --profile-border: #2b2b2b;
+  --profile-border-strong: #383838;
+  --profile-text: #f3f3f3;
+  --profile-muted: #9b9b9b;
+  --profile-muted-soft: #737373;
+
+  width: min(1180px, calc(100% - 2rem));
+  gap: 1rem;
+  padding: 1rem 0 1.5rem;
+  color: var(--profile-text);
+  background: transparent;
+}
+
+.profileIntro {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.25rem 0 0.15rem;
+}
+
+.profileIntro > div {
+  min-width: 0;
+  display: grid;
+  gap: 0.3rem;
+}
+
+.profileEyebrow {
+  margin: 0;
+  color: var(--profile-muted-soft);
+  font-size: 0.68rem;
+  font-weight: 720;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.profileIntro h1 {
+  margin: 0;
+  color: var(--profile-text);
+  font-size: clamp(1.55rem, 2.4vw, 2.15rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 690;
+}
+
+.profileIntro p:not(.profileEyebrow) {
+  margin: 0;
+  max-width: 44rem;
+  color: var(--profile-muted);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.grid {
+  grid-template-columns: minmax(17rem, 0.78fr) minmax(0, 1.5fr);
+  gap: 0.85rem;
+  margin-top: 0;
+  align-items: start;
+}
+
+.identity,
+.details,
+.formCard,
+.guidanceCard {
+  border: 1px solid var(--profile-border) !important;
+  background: var(--profile-surface) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.025) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+.identity {
+  position: sticky;
+  top: 1rem;
+  padding: 1.2rem 1rem 1.25rem;
+  gap: 0.72rem;
+  border-radius: 1rem !important;
+}
+
+.avatar {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 1rem;
+  border: 1px solid var(--profile-border-strong);
+  background: var(--profile-surface-raised);
+  color: var(--profile-text);
+}
+
+.avatarButton:hover {
+  border-color: #555;
+  transform: none;
+}
+
+.avatarButton:focus-visible,
+.uploadButton:focus-visible,
+.removeAvatar:focus-visible,
+.guidanceTrigger:focus-visible,
+.form input:focus-visible,
+.viewerClose:focus-visible {
+  outline: 2px solid rgba(255,255,255,0.28);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.identityName {
+  color: var(--profile-text);
+  font-size: 1.22rem;
+  font-weight: 680;
+}
+
+.identityCompany {
+  color: var(--profile-muted);
+  font-weight: 540;
+}
+
+.identityStatus {
+  width: 100%;
+  margin-top: 0.2rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--profile-border);
+}
+
+.identityStatusTitle {
+  color: var(--profile-text);
+  font-weight: 640;
+}
+
+.identityStatusBody {
+  color: var(--profile-muted);
+  font-weight: 500;
+}
+
+.avatarActions {
+  margin-top: 0;
+}
+
+.uploadButton,
+.removeAvatar {
+  min-height: 2.25rem;
+  border-color: var(--profile-border);
+  background: var(--profile-surface-raised);
+  color: var(--profile-text);
+  border-radius: 0.65rem;
+  font-weight: 590;
+}
+
+.uploadButton:hover,
+.removeAvatar:hover {
+  border-color: #474747;
+  background: #1d1d1d;
+  color: #fff;
+}
+
+.removeAvatar {
+  color: var(--profile-muted);
+}
+
+.details {
+  padding: 0;
+  gap: 0;
+  overflow: hidden;
+  border-radius: 1rem !important;
+}
+
+.row {
+  min-height: 5.1rem;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.85rem 1rem;
+  border: 0;
+  border-bottom: 1px solid var(--profile-border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.row:last-child {
+  border-bottom: 0;
+}
+
+.row:hover {
+  background: #151515;
+}
+
+.rowIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  color: #a5a5a5;
+}
+
+.row small {
+  color: var(--profile-muted-soft);
+  font-weight: 650;
+}
+
+.rowHint {
+  color: var(--profile-muted);
+  font-weight: 500;
+}
+
+.rowValue {
+  color: var(--profile-text);
+  font-weight: 620;
+}
+
+.formCard {
+  grid-column: 2;
+  border-radius: 1rem !important;
+  padding: 1.05rem;
+  gap: 0.9rem;
+}
+
+.formHeading {
+  color: var(--profile-text);
+  font-size: 1rem;
+  font-weight: 660;
+}
+
+.formLead {
+  color: var(--profile-muted);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.form {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem 0.75rem;
+}
+
+.fieldLabel {
+  color: var(--profile-text);
+  font-weight: 610;
+}
+
+.fieldHint {
+  color: var(--profile-muted-soft);
+  font-weight: 500;
+}
+
+.form input {
+  min-height: 2.75rem;
+  border-color: var(--profile-border);
+  border-radius: 0.62rem;
+  background: #0f0f0f;
+  color: var(--profile-text);
+  box-shadow: none;
+}
+
+.form input:hover {
+  border-color: #3d3d3d;
+}
+
+.form input:focus,
+.form input:focus-visible {
+  border-color: #555;
+  outline-color: rgba(255,255,255,0.24);
+}
+
+.full {
+  --v2-action-primary-start: #f1f1f1;
+  --v2-action-primary-end: #d7d7d7;
+  grid-column: 1 / -1;
+  min-height: 2.8rem !important;
+  border-color: #d8d8d8 !important;
+  border-radius: 0.65rem !important;
+  background: #ededed !important;
+  color: #0d0d0d !important;
+  box-shadow: none !important;
+}
+
+.full:hover {
+  background: #fff !important;
+}
+
+.guidanceCard {
+  grid-column: 1 / -1;
+  border-radius: 1rem !important;
+}
+
+.guidanceTrigger {
+  min-height: 4rem;
+  padding: 0.8rem 1rem;
+  border-radius: 1rem;
+}
+
+.guidanceTrigger:hover {
+  background: #151515;
+}
+
+.guidanceTriggerIcon,
+.guidanceChevron,
+.guidanceChevronOpen {
+  color: var(--profile-muted);
+}
+
+.guidanceTriggerTitle,
+.guidanceItemTitle {
+  color: var(--profile-text);
+  font-weight: 620;
+}
+
+.guidanceTriggerLead,
+.guidanceItemBody {
+  color: var(--profile-muted);
+  font-weight: 500;
+}
+
+.guidanceList {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+  padding: 0.85rem 1rem 1rem;
+  border-top-color: var(--profile-border);
+}
+
+.guidanceItem {
+  min-height: 5.25rem;
+  border-color: var(--profile-border);
+  border-radius: 0.75rem;
+  background: var(--profile-surface-raised);
+}
+
+.guidanceItemIcon {
+  color: #a5a5a5;
+}
+
+.viewerOverlay {
+  background: rgba(0,0,0,0.78);
+}
+
+.viewerDialog {
+  border-color: var(--profile-border-strong);
+  background: var(--profile-surface);
+  box-shadow: 0 1.5rem 4rem rgba(0,0,0,0.55);
+}
+
+.viewerClose {
+  border-color: var(--profile-border);
+  background: var(--profile-surface-raised);
+  color: var(--profile-text);
+}
+
+@media (max-width: 980px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .identity {
+    position: static;
+  }
+
+  .formCard,
+  .guidanceCard {
+    grid-column: 1;
+  }
+
+  .guidanceList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 860px) {
+  .shell {
+    width: min(100%, calc(100% - 1rem));
+    padding-top: 0.75rem;
+  }
+
+  .profileIntro {
+    padding-inline: 0.25rem;
+  }
+
+  .profileIntro > :last-child {
+    flex-shrink: 0;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+  }
+
+  .full {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 560px) {
+  .profileIntro {
+    display: grid;
+  }
+
+  .guidanceList {
+    grid-template-columns: 1fr;
+  }
+}
