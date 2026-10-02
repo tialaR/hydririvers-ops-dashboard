@@ -268,12 +268,12 @@
     "signup": "Crear cuenta",
     "logout": "Cerrar sesión",
     "profile": "Perfil",
-    "loginEyebrow": "Acceso mock",
-    "loginTitle": "Entra en la operación Hydri",
-    "loginDescription": "Accede a tus cargas, negociaciones y rastreo en entorno mock.",
-    "registerEyebrow": "Nueva cuenta mock",
+    "loginEyebrow": "Acceso seguro",
+    "loginTitle": "Entra en HydroRivers",
+    "loginDescription": "Accede a tus cargas, negociaciones y seguimiento con verificación por código.",
+    "registerEyebrow": "Nueva cuenta",
     "registerTitle": "Registra tu operación",
-    "registerDescription": "Crea tu cuenta con e-mail, contraseña y teléfono. El OTP mock valida el número en desarrollo.",
+    "registerDescription": "Crea tu cuenta con correo, contraseña y teléfono. La verificación por código confirma el número antes del acceso.",
     "name": "Nombre completo",
     "company": "Empresa o cooperativa",
     "role": "Perfil",
@@ -290,7 +290,7 @@
     "logoutRedirecting": "Redirigiendo…",
     "loading": "Procesando...",
     "error": "No fue posible completar. Inténtalo de nuevo.",
-    "sideEyebrow": "MVP operativo",
+    "sideEyebrow": "Acceso operativo",
     "sideTitle": "Del pedido a la entrega, menos papel y más río.",
     "sideOne": "Registro público para embarcadores y transportistas, con admin fuera de la UI pública.",
     "sideTwo": "Cotización, aceptación y reserva de espacio simuladas vía API/MSW.",
@@ -3637,6 +3637,94 @@
       "madeira": "Madeira",
       "tapajos": "Tapajós",
       "tocantinsAraguaia": "Tocantins-Araguaia"
+    }
+  },
+  "page62Journey": {
+    "toolbarAria": "Etapas de la jornada del embarcador",
+    "labels": {
+      "discovery": "D01–D03 · Cartera y ruta",
+      "cockpit": "D04–D05 · Cockpit",
+      "documentsRisk": "D06–D07 · Evidencias",
+      "negotiation": "D08–D09 · Negociación",
+      "review": "D10 · Revisión",
+      "feedback": "D11 · Feedback",
+      "correction": "D12 · Corrección"
+    },
+    "overview": {
+      "portfolio": "CARTERA",
+      "myCargoes": "Mis Cargas",
+      "needsAttention": "requieren atención",
+      "filtersAria": "Filtros de cartera",
+      "search": "Buscar carga, origen o destino",
+      "selected": "OPERACIÓN SELECCIONADA",
+      "openCockpit": "Abrir cockpit",
+      "route": "RUTA OPERATIVA",
+      "whereNow": "Dónde está la carga ahora",
+      "routeHelp": "Mapa interactivo, progreso, tramo de atención, capas operativas y próximo hito.",
+      "now": "Ahora",
+      "next": "Próximo",
+      "investigate": "Investigar",
+      "back": "Volver",
+      "mapOperational": "MAPA OPERATIVO",
+      "backAria": "Volver al resumen"
+    },
+    "cockpit": {
+      "portfolio": "CARTERA",
+      "myCargoes": "Mis Cargas",
+      "selectedCargo": "CARGA SELECCIONADA",
+      "tabs": {
+        "overview": "Resumen",
+        "cockpit": "Cockpit",
+        "timeline": "Línea operativa",
+        "documents": "Documentos",
+        "activity": "Actividad"
+      },
+      "navAria": "Navegación de la carga",
+      "progress": "PROGRESO",
+      "eta": "ETA",
+      "signal": "SEÑAL",
+      "risk": "RIESGO",
+      "stable": "Estable",
+      "telemetry": "TELEMETRÍA OPERATIVA",
+      "telemetryTitle": "Ritmo y condición del viaje",
+      "evidence": "EVIDENCIAS RÁPIDAS",
+      "evidenceTitle": "Documentos y señales recientes",
+      "viewEvidence": "Ver todas las evidencias",
+      "timeline": "LÍNEA OPERATIVA",
+      "timelineTitle": "Eventos, hitos y condiciones del viaje",
+      "documentsTitle": "DOCUMENTOS E INCIDENCIAS",
+      "compareProposals": "Comparar propuestas"
+    },
+    "negotiation": {
+      "backAria": "Volver a documentos e incidencias",
+      "eyebrow": "D08–D09 · decisión comercial + coordinación",
+      "title": "Negociación operativa",
+      "subtitle": "Compara alternativas sin perder ventana, restricción hidroviaria ni evidencia documental.",
+      "validProposals": "PROPUESTAS VÁLIDAS",
+      "choose": "Elige una alternativa para comparar",
+      "review": "Revisar aceptación",
+      "back": "Volver"
+    },
+    "review": {
+      "eyebrow": "D10 · revisión antes de la acción",
+      "title": "Revisar aceptación de la propuesta",
+      "subtitle": "Confirma impacto comercial, ventana, calado, documentos y próximos pasos antes de comprometer a la contraparte.",
+      "back": "Volver a negociación",
+      "confirm": "Confirmar propuesta"
+    },
+    "feedback": {
+      "eyebrow": "D11 · resultado de la decisión",
+      "title": "Decisión aplicada a la operación",
+      "subtitle": "La aceptación dejó de ser intención: ahora la pantalla muestra qué cambió, qué sigue pendiente y la próxima lectura operativa.",
+      "correction": "Corregir documento",
+      "monitor": "Continuar en cockpit"
+    },
+    "correction": {
+      "eyebrow": "D12 · corrección basada en evidencia",
+      "title": "Corregir divergencia documental",
+      "subtitle": "Ajusta el MDF-e con la evidencia confirmada sin perder el contexto operativo de la carga.",
+      "back": "Volver al feedback",
+      "submit": "Guardar corrección y enviar a revalidación"
     }
   }
 }
