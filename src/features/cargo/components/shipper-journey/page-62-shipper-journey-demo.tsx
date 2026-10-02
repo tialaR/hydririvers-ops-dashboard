@@ -2,6 +2,7 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-62-shipper-journey.mock';
 import {
@@ -19,14 +20,14 @@ import {
 } from './shipper-journey-surfaces';
 import styles from './shipper-journey.module.sass';
 
-const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
-  { id: 'discovery', label: 'D01–D03 · Carteira e rota' },
-  { id: 'cockpit', label: 'D04–D05 · Cockpit' },
-  { id: 'documentsRisk', label: 'D06–D07 · Evidências' },
-  { id: 'negotiation', label: 'D08–D09 · Negociação' },
-  { id: 'review', label: 'D10 · Revisão' },
-  { id: 'feedback', label: 'D11 · Feedback' },
-  { id: 'correction', label: 'D12 · Correção' },
+const experienceIds: ShipperJourneyExperience[] = [
+  'discovery',
+  'cockpit',
+  'documentsRisk',
+  'negotiation',
+  'review',
+  'feedback',
+  'correction',
 ];
 
 export function Page62ShipperJourneyDemo({
@@ -37,6 +38,7 @@ export function Page62ShipperJourneyDemo({
   initialPostAction?: CargoCockpitPostActionState | null;
 }) {
   const reduceMotion = useReducedMotion();
+  const t = useTranslations('page62Journey');
   const [experience, setExperience] = useState<ShipperJourneyExperience>(initial);
   const [postActionState, setPostActionState] = useState<CargoCockpitPostActionState | null>(initialPostAction);
   const [selectedProposalId, setSelectedProposalId] = useState('proposal-b');
@@ -154,10 +156,10 @@ export function Page62ShipperJourneyDemo({
 
   return (
     <div data-testid="page62-shipper-journey">
-      <nav className={styles.journeyToolbar} aria-label="Page 62 journey state selector">
-        {experiences.map((item) => (
-          <button key={item.id} type="button" aria-pressed={experience === item.id} onClick={() => setExperience(item.id)}>
-            {item.label}
+      <nav className={styles.journeyToolbar} aria-label={t('toolbarAria')}>
+        {experienceIds.map((id) => (
+          <button key={id} type="button" aria-pressed={experience === id} onClick={() => setExperience(id)}>
+            {t(`labels.${id}`)}
           </button>
         ))}
       </nav>
