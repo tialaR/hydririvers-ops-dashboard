@@ -293,7 +293,7 @@ export function ProfilePanel() {
         </Badge>
       </header>
       <section className={styles.grid}>
-        <Surface tone="glass" className={styles.identity} data-testid="profile-identity-card">
+        <Surface tone="glass" className={styles.identity}>
           <button
             type="button"
             className={`${styles.avatar} ${avatarPreviewAvailable ? styles.avatarButton : ''}`}
@@ -367,7 +367,7 @@ export function ProfilePanel() {
             value={user.approved ? t('accessAreasApproved') : t('accessAreasPending')}
           />
         </Surface>
-        <Surface tone="glass" className={styles.formCard} data-testid="profile-form-card">
+        <Surface tone="glass" className={styles.formCard}>
           <h2 className={styles.formHeading}>{t('formSectionTitle')}</h2>
           <p className={styles.formLead}>{t('formSectionLead')}</p>
           <form className={styles.form} onSubmit={onSubmit} noValidate>
