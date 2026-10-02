@@ -72,6 +72,9 @@ jobs:
       - name: Semantic color and state visual contract
         run: npm run check:semantic-color-state
 
+      - name: Profile product restoration contract
+        run: npm run check:profile-product
+
       - name: Check i18n
         run: npm run check:i18n
 
