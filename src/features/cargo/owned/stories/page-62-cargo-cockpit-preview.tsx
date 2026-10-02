@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, MotionConfig, motion } from 'motion/react';
 import { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 import {
   HydroLevelTrendChart,
@@ -245,12 +246,12 @@ const evidence = [
   },
 ];
 
-const tabs: Array<{ id: WorkspaceMode | 'overview' | 'activity'; label: string }> = [
-  { id: 'overview', label: 'Visão geral' },
-  { id: 'cockpit', label: 'Cockpit' },
-  { id: 'timeline', label: 'Linha operacional' },
-  { id: 'documents', label: 'Documentos' },
-  { id: 'activity', label: 'Atividade' },
+const tabIds: Array<WorkspaceMode | 'overview' | 'activity'> = [
+  'overview',
+  'cockpit',
+  'timeline',
+  'documents',
+  'activity',
 ];
 
 export function Page62CargoCockpitPreview({
@@ -260,6 +261,7 @@ export function Page62CargoCockpitPreview({
   onOpenCorrection,
   onOpenNegotiation,
 }: Page62CargoCockpitPreviewProps) {
+  const t = useTranslations('page62Journey.cockpit');
   const [mode, setMode] = useState<WorkspaceMode>(initialMode);
   const isPostAction = postAction !== null;
   const correctionResolved = postAction === 'documentCorrected';
@@ -302,8 +304,8 @@ export function Page62CargoCockpitPreview({
         <aside className={styles.master}>
           <div className={styles.masterHeader}>
             <div>
-              <small>CARTEIRA</small>
-              <h2>Minhas Cargas</h2>
+              <small>{t('portfolio')}</small>
+              <h2>{t('myCargoes')}</h2>
             </div>
             <span>3 exigem atenção</span>
           </div>
@@ -330,38 +332,38 @@ export function Page62CargoCockpitPreview({
         <section className={styles.workspace} data-testid="cockpit-workspace">
           <header className={styles.workspaceHeader}>
             <div className={styles.selectedCargo}>
-              <small>CARGA SELECIONADA</small>
+              <small>{t('selectedCargo')}</small>
               <strong>#HY-247-819</strong>
               <span>Manaus → Santarém</span>
             </div>
 
-            <nav aria-label="Navegação da carga">
-              {tabs.map((tab) => {
+            <nav aria-label={t('navAria')}>
+              {tabIds.map((tabId) => {
                 const interactive =
-                  tab.id === 'cockpit' ||
-                  tab.id === 'timeline' ||
-                  tab.id === 'documents' ||
-                  (tab.id === 'overview' && Boolean(onOverview));
-                const active = tab.id === mode;
+                  tabId === 'cockpit' ||
+                  tabId === 'timeline' ||
+                  tabId === 'documents' ||
+                  (tabId === 'overview' && Boolean(onOverview));
+                const active = tabId === mode;
 
                 return (
                   <button
-                    key={tab.id}
+                    key={tabId}
                     type="button"
                     className={active ? styles.activeTab : ''}
                     aria-pressed={active}
                     disabled={!interactive}
                     onClick={() => {
-                      if (tab.id === 'overview') {
+                      if (tabId === 'overview') {
                         onOverview?.();
                         return;
                       }
-                      if (tab.id === 'cockpit' || tab.id === 'timeline' || tab.id === 'documents') {
-                        setMode(tab.id);
+                      if (tabId === 'cockpit' || tabId === 'timeline' || tabId === 'documents') {
+                        setMode(tabId);
                       }
                     }}
                   >
-                    {tab.label}
+                    {t(`tabs.${tabId}`)}
                     {active ? <motion.i layoutId="page62-active-tab" /> : null}
                   </button>
                 );
@@ -406,7 +408,7 @@ export function Page62CargoCockpitPreview({
               <motion.article layout className={styles.progressMetric} data-testid="cockpit-kpi-progress">
                 <div className={styles.metricHeading}>
                   <Route size={15} />
-                  <small>PROGRESSO</small>
+                  <small>{t('progress')}</small>
                 </div>
                 <div className={styles.progressBody}>
                   <OperationalGaugeChart
@@ -425,7 +427,7 @@ export function Page62CargoCockpitPreview({
               <motion.article layout className={styles.etaMetric} data-testid="cockpit-kpi-eta">
                 <div className={styles.metricHeading}>
                   <Clock3 size={15} />
-                  <small>ETA</small>
+                  <small>{t('eta')}</small>
                 </div>
                 <strong>{eta}</strong>
                 <span className={isPostAction ? styles.etaDeltaResolved : styles.etaDelta}>
@@ -437,11 +439,11 @@ export function Page62CargoCockpitPreview({
               <motion.article layout className={styles.signalMetric} data-testid="cockpit-kpi-signal">
                 <div className={styles.metricHeading}>
                   <Radio size={15} />
-                  <small>SINAL</small>
+                  <small>{t('signal')}</small>
                 </div>
                 <div className={styles.signalLine}>
                   <i aria-hidden />
-                  <strong>Estável</strong>
+                  <strong>{t('stable')}</strong>
                 </div>
                 <span>GPS + AIS · 4 min</span>
                 <small>telemetria recente</small>
@@ -450,7 +452,7 @@ export function Page62CargoCockpitPreview({
               <motion.article layout className={styles.riskMetric} data-testid="cockpit-kpi-risk">
                 <div className={styles.metricHeading}>
                   <ShieldAlert size={15} />
-                  <small>RISCO</small>
+                  <small>{t('risk')}</small>
                 </div>
                 <div className={styles.riskScale} data-risk={isPostAction ? 'low' : 'moderate'} aria-label={isPostAction ? 'Risco baixo' : 'Risco moderado'}>
                   <span />
@@ -478,8 +480,8 @@ export function Page62CargoCockpitPreview({
                   <article className={styles.telemetryCard} data-testid="cockpit-telemetry-card">
                     <header>
                       <div>
-                        <small>TELEMETRIA OPERACIONAL</small>
-                        <strong>Ritmo e condição da viagem</strong>
+                        <small>{t('telemetry')}</small>
+                        <strong>{t('telemetryTitle')}</strong>
                         <span>Velocidade, combustível e temperatura nas últimas 14 horas</span>
                       </div>
                       <span className={styles.liveBadge}><i /> AO VIVO</span>
@@ -549,8 +551,8 @@ export function Page62CargoCockpitPreview({
                   <article className={styles.evidenceCard} data-testid="cockpit-evidence">
                     <header>
                       <div>
-                        <small>EVIDÊNCIAS RÁPIDAS</small>
-                        <strong>Documentos e sinais recentes</strong>
+                        <small>{t('evidence')}</small>
+                        <strong>{t('evidenceTitle')}</strong>
                       </div>
                     </header>
 
@@ -569,7 +571,7 @@ export function Page62CargoCockpitPreview({
                     </div>
 
                     <button type="button" className={styles.evidenceAction} onClick={() => setMode('documents')}>
-                      Ver todas as evidências
+                      {t('viewEvidence')}
                     </button>
                   </article>
 
@@ -615,9 +617,9 @@ export function Page62CargoCockpitPreview({
                     <header>
                       <div className={styles.metricHeading}>
                         <Activity size={17} />
-                        <small>LINHA OPERACIONAL</small>
+                        <small>{t('timeline')}</small>
                       </div>
-                      <strong>Eventos, marcos e condições da viagem</strong>
+                      <strong>{t('timelineTitle')}</strong>
                       <span>Acompanhe o que aconteceu, o que está acontecendo e o que pode mudar a operação.</span>
                     </header>
 
@@ -709,7 +711,7 @@ export function Page62CargoCockpitPreview({
                 <div className={styles.documentsWorkspace} data-testid="page62-documents-workspace">
                   <header className={styles.documentsWorkspaceHeader}>
                     <div>
-                      <small>DOCUMENTOS & OCORRÊNCIAS</small>
+                      <small>{t('documentsTitle')}</small>
                       <strong>Investigar evidências e impacto operacional</strong>
                       <span>Revise o documento, compare a evidência e decida a próxima ação sem sair do contexto da carga.</span>
                     </div>
@@ -736,7 +738,7 @@ export function Page62CargoCockpitPreview({
                       <p>A correção documental pode ser tratada agora, ou a operação pode avançar para comparação de propostas.</p>
                     </div>
                     <button type="button" onClick={onOpenNegotiation}>
-                      Comparar propostas
+                      {t('compareProposals')}
                     </button>
                   </section>
                 </div>
