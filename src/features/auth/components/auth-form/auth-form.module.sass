@@ -713,3 +713,154 @@
   .otpCell
     width: calc((100% - 2.25rem) / 6)
     min-width: 2.55rem
+
+
+/* HydroRivers auth DS v3 — neutral-first, semantic color only for state */
+.shell
+  --auth-bg: #080808
+  --auth-surface: #111111
+  --auth-surface-card: #121212
+  --auth-surface-soft: #181818
+  --auth-text: #f3f3f3
+  --auth-muted: #9a9a9a
+  --auth-line: #2b2b2b
+  --auth-line-strong: #3a3a3a
+  --auth-brand: #ededed
+  --auth-brand-strong: #ffffff
+  --auth-accent: #bdbdbd
+  --auth-brand-glow: transparent
+  --auth-brand-soft-line: #353535
+  --auth-shadow: none
+  --surface: #121212
+  --surface-strong: #181818
+  --surface-glass: #161616
+  --text: #f3f3f3
+  --muted: #999999
+  --brand: #ededed
+  --river: #bdbdbd
+  --line: #2b2b2b
+  --line-strong: #3a3a3a
+  --brand-soft-line: #353535
+  max-width: 36rem
+  padding-top: clamp(1.5rem, 7vh, 4.5rem)
+
+.panel
+  border: 1px solid #2b2b2b !important
+  background: #111111 !important
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.025) !important
+  backdrop-filter: none !important
+  -webkit-backdrop-filter: none !important
+
+.brandIcon
+  border-color: #303030
+  background: #181818
+  color: #f0f0f0
+  box-shadow: none
+
+.eyebrow,
+.formSectionLegend,
+.otpMockEyebrow,
+.otpDevBadge
+  color: #a7a7a7
+
+.field > div:not(.fieldRowSplit):not(.menuWrap):not(.phoneField):not(.phoneFieldRoot):not(.phoneInputWrap),
+.menuTrigger,
+.phoneField,
+.otpStageHeader,
+.otpStageCard,
+.secondaryAction,
+.copyButton,
+.mockHelp
+  border-color: #2d2d2d
+  background: #151515
+  box-shadow: none
+
+.phoneField
+  background: #151515
+
+.phoneCountryButton,
+.phoneValue
+  background: #151515
+
+.phoneCountryButton:hover,
+.menuOption:hover
+  background: #1d1d1d
+
+.menuPanel,
+.phoneDropdown
+  border-color: #353535
+  background: #141414
+  box-shadow: 0 1rem 2.5rem rgba(0,0,0,.38)
+  backdrop-filter: none
+
+.menuOptionActive,
+.phoneOptionActive
+  background: #202020
+  box-shadow: inset 0 0 0 1px #383838
+
+.field > div:focus-within,
+.phoneField:focus-within,
+.menuTrigger:focus-visible,
+.phoneCountryButton:focus-visible,
+.togglePassword:focus-visible,
+.authSwitchLink:focus-visible
+  border-color: #4a4a4a
+  outline: 2px solid rgba(255,255,255,.22)
+  outline-offset: 2px
+  box-shadow: none
+
+.otpBox
+  border-color: #323232
+  background: #151515
+
+.otpCode
+  border-color: #414141
+  background: #0e0e0e
+  color: #f5f5f5
+
+.successStage
+  border-color: color-mix(in srgb, var(--hy-color-success-text, #45d3a0) 32%, #2b2b2b)
+  background: #141414
+
+.successIcon
+  background: color-mix(in srgb, var(--hy-color-success-text, #45d3a0) 10%, #181818)
+  color: var(--hy-color-success-text, #45d3a0)
+
+.otpHero
+  border-color: #2d2d2d
+  background: #151515
+
+.otpHeroIcon
+  background: #ededed
+  color: #0c0c0c
+
+.authSwitchLink
+  border-color: #303030
+  background: #181818
+  color: #e5e5e5
+
+.authSwitchLink:hover
+  border-color: #444
+  background: #202020
+
+.submit
+  min-height: 3rem !important
+  border-color: #ededed !important
+  background: #ededed !important
+  color: #0d0d0d !important
+  box-shadow: none !important
+
+.submit:hover:not(:disabled)
+  background: #fff !important
+
+.submit:disabled
+  border-color: #2d2d2d !important
+  background: #181818 !important
+  color: #707070 !important
+
+.error,
+.fieldIssue
+  color: var(--hy-color-danger-text, #ff6b76)
+
+.success
+  color: var(--hy-color-success-text, #45d3a0)
