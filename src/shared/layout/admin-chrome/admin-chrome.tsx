@@ -569,13 +569,6 @@ export function AdminChrome({ children }: AdminChromeProps) {
 
             <div className="hx-sidebar-footer hr-sidebar-footer">
               <div className="hx-sidebar-footer-tools">
-                <div className="hx-sidebar-theme-row" role="group" aria-label={tChrome('settings.theme.toggleLabel')}>
-                  <ThemeToggle
-                    variant={sidebarCollapsed ? 'icon' : 'pill'}
-                    ariaLabel={tChrome('settings.theme.toggleLabel')}
-                  />
-                </div>
-
                 <div className={localeOpen ? 'hx-sidebar-locale is-open' : 'hx-sidebar-locale'}>
                   <button
                     type="button"
