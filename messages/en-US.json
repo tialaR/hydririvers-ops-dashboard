@@ -268,12 +268,12 @@
     "signup": "Create account",
     "logout": "Sign out",
     "profile": "Profile",
-    "loginEyebrow": "Mock access",
-    "loginTitle": "Sign in to Hydri operations",
-    "loginDescription": "Access your loads, negotiations, and tracking in the mock environment.",
-    "registerEyebrow": "New mock account",
+    "loginEyebrow": "Secure access",
+    "loginTitle": "Sign in to HydroRivers",
+    "loginDescription": "Access your cargoes, negotiations, and tracking with code verification.",
+    "registerEyebrow": "New account",
     "registerTitle": "Register your operation",
-    "registerDescription": "Create your account with email, password, and phone. The mock OTP validates the number in development.",
+    "registerDescription": "Create your account with email, password, and phone. Code verification confirms the number before access.",
     "name": "Full name",
     "company": "Company or cooperative",
     "role": "Role",
@@ -290,7 +290,7 @@
     "logoutRedirecting": "Redirecting…",
     "loading": "Processing...",
     "error": "Could not complete the action. Please try again.",
-    "sideEyebrow": "Operational MVP",
+    "sideEyebrow": "Operational access",
     "sideTitle": "From order to delivery—less paper, more river.",
     "sideOne": "Public registration for shipper and carrier, with admin outside the public UI.",
     "sideTwo": "Quoting, acceptance, and space booking simulated via API/MSW.",
@@ -3637,6 +3637,94 @@
       "madeira": "Madeira",
       "tapajos": "Tapajós",
       "tocantinsAraguaia": "Tocantins-Araguaia"
+    }
+  },
+  "page62Journey": {
+    "toolbarAria": "Shipper journey stages",
+    "labels": {
+      "discovery": "D01–D03 · Portfolio and route",
+      "cockpit": "D04–D05 · Cockpit",
+      "documentsRisk": "D06–D07 · Evidence",
+      "negotiation": "D08–D09 · Negotiation",
+      "review": "D10 · Review",
+      "feedback": "D11 · Feedback",
+      "correction": "D12 · Correction"
+    },
+    "overview": {
+      "portfolio": "PORTFOLIO",
+      "myCargoes": "My Cargoes",
+      "needsAttention": "need attention",
+      "filtersAria": "Portfolio filters",
+      "search": "Search cargo, origin, or destination",
+      "selected": "SELECTED OPERATION",
+      "openCockpit": "Open cockpit",
+      "route": "OPERATIONAL ROUTE",
+      "whereNow": "Where the cargo is now",
+      "routeHelp": "Interactive map, progress, attention segment, operational layers, and next milestone.",
+      "now": "Now",
+      "next": "Next",
+      "investigate": "Investigate",
+      "back": "Back",
+      "mapOperational": "OPERATIONAL MAP",
+      "backAria": "Back to overview"
+    },
+    "cockpit": {
+      "portfolio": "PORTFOLIO",
+      "myCargoes": "My Cargoes",
+      "selectedCargo": "SELECTED CARGO",
+      "tabs": {
+        "overview": "Overview",
+        "cockpit": "Cockpit",
+        "timeline": "Operational timeline",
+        "documents": "Documents",
+        "activity": "Activity"
+      },
+      "navAria": "Cargo navigation",
+      "progress": "PROGRESS",
+      "eta": "ETA",
+      "signal": "SIGNAL",
+      "risk": "RISK",
+      "stable": "Stable",
+      "telemetry": "OPERATIONAL TELEMETRY",
+      "telemetryTitle": "Journey pace and condition",
+      "evidence": "QUICK EVIDENCE",
+      "evidenceTitle": "Documents and recent signals",
+      "viewEvidence": "View all evidence",
+      "timeline": "OPERATIONAL TIMELINE",
+      "timelineTitle": "Events, milestones, and journey conditions",
+      "documentsTitle": "DOCUMENTS & OCCURRENCES",
+      "compareProposals": "Compare proposals"
+    },
+    "negotiation": {
+      "backAria": "Back to documents and occurrences",
+      "eyebrow": "D08–D09 · commercial decision + coordination",
+      "title": "Operational negotiation",
+      "subtitle": "Compare alternatives without losing the operational window, waterway restriction, or documentary evidence.",
+      "validProposals": "VALID PROPOSALS",
+      "choose": "Choose an alternative to compare",
+      "review": "Review acceptance",
+      "back": "Back"
+    },
+    "review": {
+      "eyebrow": "D10 · review before action",
+      "title": "Review proposal acceptance",
+      "subtitle": "Confirm commercial impact, window, draft, documents, and next steps before committing to the counterparty.",
+      "back": "Back to negotiation",
+      "confirm": "Confirm proposal"
+    },
+    "feedback": {
+      "eyebrow": "D11 · decision outcome",
+      "title": "Decision applied to the operation",
+      "subtitle": "The acceptance is no longer intent: the screen now shows what changed, what remains pending, and the next operational reading.",
+      "correction": "Correct document",
+      "monitor": "Continue in cockpit"
+    },
+    "correction": {
+      "eyebrow": "D12 · evidence-based correction",
+      "title": "Correct document divergence",
+      "subtitle": "Adjust the MDF-e using confirmed evidence without losing the cargo operational context.",
+      "back": "Back to feedback",
+      "submit": "Save correction and send for revalidation"
     }
   }
 }
