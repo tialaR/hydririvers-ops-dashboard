@@ -1,20 +1,10 @@
-import { notFound } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
-import { getPublicCargoById } from '@/features/cargo/public/application/get-public-cargo-by-id';
-
-import { PublicCargoDetailRouteClient } from './public-cargo-detail-route-client';
-
-type PublicCargoDetailPageProps = {
-  params: Promise<{ id: string }>;
-};
-
-export default async function PublicCargoDetailPage({ params }: PublicCargoDetailPageProps) {
-  const { id } = await params;
-  const cargo = await getPublicCargoById(id);
-
-  if (!cargo) {
-    notFound();
-  }
-
-  return <PublicCargoDetailRouteClient cargo={cargo} />;
+export default async function LegacyPublicCargoDetailAlias({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const { locale, id } = await params;
+  redirect(`/${locale}/cargas/${encodeURIComponent(id)}`);
 }

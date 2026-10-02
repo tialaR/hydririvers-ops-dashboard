@@ -52,6 +52,23 @@ async function readBottomNavViewportBox(page: Page) {
   return box!;
 }
 
+test.describe('Cargas públicas anônimas — rota canônica', () => {
+  test('usa /cargas como vitrine e não monta a experiência privada', async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto('/pt-BR/cargas', { waitUntil: 'domcontentloaded' });
+
+    await expect(page.locator('[data-public-cargoes-canonical="anonymous"]')).toBeVisible();
+    await expect(page.locator('[data-legacy-cargo-list="true"]')).toHaveCount(0);
+    await expect(page.getByText(/R\\$\\s*\\d/i)).toHaveCount(0);
+  });
+
+  test('alias /cargas-publicas redireciona para a rota oficial', async ({ page }) => {
+    await page.goto('/pt-BR/cargas-publicas', { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveURL(/\\/pt-BR\\/cargas$/);
+    await expect(page.locator('[data-public-cargoes-canonical="anonymous"]')).toBeVisible();
+  });
+});
+
 test.describe('Cargas público mobile — bottom sheet unificado', () => {
   test.describe.configure({ timeout: 90_000 });
 

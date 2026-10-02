@@ -1,8 +1,10 @@
-import { listPublicCargoes } from '@/features/cargo/public/application/list-public-cargoes';
+import { redirect } from 'next/navigation';
 
-import { PublicCargoesRouteClient } from './public-cargoes-route-client';
-
-export default async function PublicCargoesPage() {
-  const initialCargoes = await listPublicCargoes();
-  return <PublicCargoesRouteClient initialCargoes={initialCargoes} />;
+export default async function LegacyPublicCargoesAlias({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect(`/${locale}/cargas`);
 }

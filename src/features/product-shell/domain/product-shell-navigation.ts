@@ -1,3 +1,5 @@
+import { intlAppPaths } from '@/shared/routing/app-routes';
+
 export type ProductShellNavId = 'cockpit' | 'publicCargoes' | 'myCargoes' | 'notifications' | 'profile';
 
 export type ProductShellConfig = {
@@ -16,7 +18,7 @@ const BOTTOM_NAV_ROUTES: ProductShellNavId[] = [
 
 export function resolveBottomNavId(pathname: string): ProductShellNavId | null {
   if (pathname.includes('/cockpit')) return 'cockpit';
-  if (pathname.includes('/cargas-publicas')) return 'publicCargoes';
+  if (/\/cargas(?:\/|$)/.test(pathname)) return 'publicCargoes';
   if (pathname.match(/\/minhas-cargas\/?$/)) return 'myCargoes';
   if (pathname.includes('/notificacoes')) return 'notifications';
   if (pathname.includes('/perfil')) return 'profile';
@@ -55,10 +57,10 @@ export function resolveShellConfig(pathname: string): ProductShellConfig {
 export function bottomNavHref(navId: ProductShellNavId): string {
   const map: Record<ProductShellNavId, string> = {
     cockpit: '/cockpit',
-    publicCargoes: '/cargas-publicas',
-    myCargoes: '/minhas-cargas',
+    publicCargoes: intlAppPaths.cargos.marketplace,
+    myCargoes: intlAppPaths.cargos.myCargos,
     notifications: '/notificacoes',
-    profile: '/perfil'
+    profile: intlAppPaths.auth.profile
   };
   return map[navId];
 }

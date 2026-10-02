@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/core/i18n/navigation';
 import type { PublicCargoSafeView } from '@/features/cargo/public/domain/public-cargo-types';
 import { RiskBadge } from '@/features/cargo/components/risk-badge/risk-badge';
+import { intlAppPaths } from '@/shared/routing/app-routes';
 
 import styles from './public-cargo-card-restricted.module.sass';
 
@@ -25,7 +26,7 @@ export function PublicCargoCardRestricted({ cargo, ActionButton }: PublicCargoCa
 
   return (
     <article className={styles.card}>
-      <Link href={`/cargas-publicas/${cargo.id}`} className={styles.header}>
+      <Link href={intlAppPaths.cargos.cargoDetail(cargo.id)} className={styles.header}>
         <div>
           <p className={styles.code}>{t(`cargoTypes.${cargo.cargoTypeKey}`)}</p>
           <p className={styles.route}>
