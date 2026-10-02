@@ -239,9 +239,9 @@ Depois da ação, dizer claramente:
 Exibir divergência comparável, evidência correta e stepper explícito. Corrigir sem mostrar “enviado vs comprovado” é insuficiente.
 
 ### Grupo H · D13
-**Follow-up / Monitoring**
+**Follow-up / Monitoring — absorvido pelo Cockpit**
 
-Estado pós-ação, eventos recentes, condição atual, pendências e próxima decisão.
+D13 continua válido como referência do estado pós-ação, mas não justifica uma tela independente. ETA, progresso, telemetria, documentos, risco, condição hidroviária e próxima decisão já pertencem ao Cockpit. Após feedback ou correção, a aplicação retorna ao D04/D05 com um estado pós-ação explícito e dados atualizados.
 
 ## 7. Jornada consolidada
 
@@ -264,7 +264,7 @@ D11: ação persistida e diferenças materializadas.
 D12 somente quando uma evidência/ação é rejeitada ou divergente.
 
 **G. ACOMPANHAR**
-D13: monitorar estado e próxima decisão.
+D13: retornar ao Cockpit com o resultado da ação incorporado, mantendo estado atual, próxima decisão, telemetria, hidrovia e evidências no mesmo workspace.
 
 ## 8. Regras de UX que passam a ser contrato
 
@@ -277,7 +277,7 @@ D13: monitorar estado e próxima decisão.
 7. **Documento é tipado.** MDF-e não é um “manifesto” genérico no modelo.
 8. **Aplicabilidade é condicional.** Seguro/licença não são universais.
 9. **Proposta não tem winner mágico.** A tela mostra trade-offs; a pessoa decide.
-10. **CTA precisa fechar consequência.** Ação → feedback → correção quando necessária → monitoramento.
+10. **CTA precisa fechar consequência.** Ação → feedback → correção quando necessária → retorno ao Cockpit com monitoramento incorporado.
 11. **Desktop maximiza leitura simultânea; responsividade preserva inteligência.**
 12. **Storybook certifica componentes/estados antes da composição final.**
 
@@ -315,7 +315,7 @@ Page 62 só pode ser chamado de pronto quando:
 - nenhum CTA termina em beco;
 - todos os mocks declaram DEMO;
 - os componentes usam tokens semânticos;
-- D01–D13 estão cobertos pelos oito estados visuais reais;
+- D01–D13 estão cobertos por sete estados de experiência; D13 é um estado pós-ação do Cockpit, não uma tela autônoma;
 - Storybook, lint, typecheck, testes e gates passam.
 
 
@@ -330,7 +330,7 @@ The supplied `M01 · BLUEPRINT DESKTOP FLOW.svg` (SHA-256 `fa54c14618aff4bff3c3b
 5. action review;
 6. action feedback;
 7. rejection / correction when required;
-8. post-action monitoring.
+8. post-action monitoring state, folded back into the operational cockpit rather than exposed as a separate destination.
 
 The supplied `Negotiation + Communication.svg` (SHA-256 `2e285c2df656d172dce0db18a4b9f015bfc2017c6e4335fa31cb05e9b3ca7e6a`) is **not a new screen**. It is the 1440×980 parent composition for the D08/D09 pair:
 - left: proposal comparison / trade-offs / rationale;
@@ -341,7 +341,7 @@ The smaller `PLAY-D08.png` and `PLAY-D09.png` are byte-identical in the delivere
 
 ### Consequence
 
-The flow is implemented as **state progression over reusable components**, not thirteen independent pages. This is the fastest path to production parity and the safest path to a future API because data state, action state and visual state remain separate.
+The flow is implemented as **state progression over reusable components**, not thirteen independent pages. The D13 source frame is represented by the post-action state of the Cockpit, so follow-up does not duplicate ETA, risk, telemetry, documents or hydrographic context. This is the fastest path to production parity and the safest path to a future API because data state, action state and visual state remain separate.
 
 
 ## 13. Visão Geral — information architecture contract
