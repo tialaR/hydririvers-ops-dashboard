@@ -202,7 +202,8 @@ for (const required of [
   'proposal-chooser',
   'proposal-decision-dashboard',
   'proposal-comparison-strip',
-  'Voltar para documentos e ocorrências',
+  "useTranslations('page62Journey.negotiation')",
+  "t('backAria')",
   'OperationalContextChat',
 ]) {
   if (!surfaces.includes(required)) failures.push(`D08-D09 decision experience missing: ${required}`);
@@ -213,8 +214,9 @@ for (const required of [
   'review-impact-cards',
   'review-preconfirm-checklist',
   'review-next-steps',
-  'Voltar à negociação',
-  'Confirmar proposta',
+  "useTranslations('page62Journey.review')",
+  "t('back')",
+  "t('confirm')",
 ]) {
   if (!surfaces.includes(required)) failures.push(`D10 acceptance review missing: ${required}`);
 }
@@ -229,7 +231,8 @@ for (const required of [
   'RESOLUÇÃO',
   'ANTES DE REVALIDAR',
   'correction-progress',
-  'Salvar correção e enviar para revalidação',
+  "useTranslations('page62Journey.correction')",
+  "t('submit')",
 ]) {
   if (!surfaces.includes(required)) failures.push(`D12 correction experience missing: ${required}`);
 }
