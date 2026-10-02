@@ -2,6 +2,7 @@
 
 import { ArrowLeft, BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, FileClock, FileWarning, Navigation2, Radio, Route, Scale, ShieldCheck, ShipWheel, TrendingUp, Waves } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
+import { useTranslations } from 'next-intl';
 
 import type { HydroCondition, OperationalSourceRef, ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { ActionOutcomeLedgerChart, DocumentWeightComparisonChart, PostActionReadinessArcChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
@@ -50,6 +51,7 @@ export function ProposalNegotiationSurface({
   onReview?: (proposalId: string) => void;
   onBack?: () => void;
 }) {
+  const t = useTranslations('page62Journey.negotiation');
   const selected = proposals.find((proposal) => proposal.id === selectedProposalId) ?? proposals[1] ?? proposals[0];
   const reference = proposals.find((proposal) => proposal.id !== selected?.id) ?? proposals[0];
   if (!selected || !reference) return null;
@@ -95,13 +97,13 @@ export function ProposalNegotiationSurface({
     <section className={styles.surface + ' ' + styles.negotiationSurface} data-testid="page62-d08-d09-negotiation">
       <header className={styles.header}>
         <div className={styles.headerLead}>
-          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label="Voltar para documentos e ocorrências">
+          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label={t('backAria')}>
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className={styles.eyebrow}>D08–D09 · decisão comercial + coordenação</p>
-            <h2 className={styles.title}>Negociação operacional</h2>
-            <p className={styles.subtitle}>Compare alternativas sem perder janela, restrição hidroviária ou evidência documental.</p>
+            <p className={styles.eyebrow}>{t('eyebrow')}</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
           </div>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
@@ -119,8 +121,8 @@ export function ProposalNegotiationSurface({
           <article className={styles.proposalChooser} data-testid="proposal-chooser">
             <div className={styles.sectionHeading}>
               <div>
-                <p className={styles.eyebrow}>PROPOSTAS VÁLIDAS</p>
-                <h3>Escolha a alternativa para comparar</h3>
+                <p className={styles.eyebrow}>{t('validProposals')}</p>
+                <h3>{t('choose')}</h3>
                 <span>A seleção muda gráfico, deltas e respostas do assistente.</span>
               </div>
               <span className={styles.statusBadge}>{proposals.length} opções</span>
@@ -244,7 +246,7 @@ export function ProposalNegotiationSurface({
       <div className={styles.flowActionBar}>
         <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar</button>
         <span>Proposta selecionada: <strong>{selected.counterparty.replace(' · DEMO', '')}</strong></span>
-        <button className={styles.primaryAction} type="button" onClick={() => onReview?.(selected.id)}>Revisar aceite</button>
+        <button className={styles.primaryAction} type="button" onClick={() => onReview?.(selected.id)}>{t('review')}</button>
       </div>
     </section>
   );
@@ -281,6 +283,7 @@ export function DecisionActionReviewSurface({
   onConfirm?: () => void;
   onBack?: () => void;
 }) {
+  const t = useTranslations('page62Journey.review');
   const etaDeltaMinutes = Math.round(
     (new Date(reference.arrivalAt).getTime() - new Date(selected.arrivalAt).getTime()) / 60000,
   );
@@ -303,13 +306,13 @@ export function DecisionActionReviewSurface({
     <section className={styles.surface + ' ' + styles.reviewSurface} data-testid="page62-d10-review">
       <header className={styles.header}>
         <div className={styles.headerLead}>
-          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label="Voltar à negociação">
+          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label={t('back')}>
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className={styles.eyebrow}>D10 · revisão antes da ação</p>
-            <h2 className={styles.title}>Revisar aceite da proposta</h2>
-            <p className={styles.subtitle}>Confirme consequência comercial, janela, calado, documentos e próximos passos antes de assumir a contraparte.</p>
+            <p className={styles.eyebrow}>{t('eyebrow')}</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
           </div>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
@@ -395,8 +398,8 @@ export function DecisionActionReviewSurface({
           <strong>Sem bloqueio crítico no snapshot DEMO; atenção apenas ao prazo de validade.</strong>
         </div>
         <span>
-          <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar à negociação</button>
-          <button className={styles.primaryAction} type="button" onClick={onConfirm}>Confirmar proposta</button>
+          <button className={styles.secondaryAction} type="button" onClick={onBack}>{t('back')}</button>
+          <button className={styles.primaryAction} type="button" onClick={onConfirm}>{t('confirm')}</button>
         </span>
       </div>
     </section>
@@ -420,6 +423,7 @@ export function ActionFeedbackSurface({
   onMonitor?: () => void;
   onCorrection?: () => void;
 }) {
+  const t = useTranslations('page62Journey.feedback');
   const reduceMotion = useReducedMotion();
   const etaDeltaMinutes = Math.round(
     (new Date(reference.arrivalAt).getTime() - new Date(selected.arrivalAt).getTime()) / 60000,
@@ -464,9 +468,9 @@ export function ActionFeedbackSurface({
     <section className={styles.surface + ' ' + styles.actionFeedbackSurface} data-testid="page62-d11-feedback">
       <header className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>D11 · consequência da decisão</p>
-          <h2 className={styles.title}>Decisão aplicada à operação</h2>
-          <p className={styles.subtitle}>O aceite deixou de ser intenção: agora a tela mostra o que mudou, o que continua pendente e a próxima leitura operacional.</p>
+          <p className={styles.eyebrow}>{t('eyebrow')}</p>
+          <h2 className={styles.title}>{t('title')}</h2>
+          <p className={styles.subtitle}>{t('subtitle')}</p>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
       </header>
@@ -707,6 +711,7 @@ export function CorrectionResubmitSurface({
   onSubmit?: () => void;
   onBack?: () => void;
 }) {
+  const t = useTranslations('page62Journey.correction');
   const submittedWeight = metricNumber(document.observedValue) ?? 18.4;
   const evidenceWeight = metricNumber(document.expectedValue) ?? 16.8;
   const difference = Math.abs(submittedWeight - evidenceWeight);
@@ -765,13 +770,13 @@ export function CorrectionResubmitSurface({
     <section className={styles.surface + ' ' + styles.correctionSurface} data-testid="page62-d12-correction">
       <header className={styles.header}>
         <div className={styles.headerLead}>
-          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label="Voltar ao feedback da decisão">
+          <button className={styles.iconBackButton} type="button" onClick={onBack} aria-label={t('back')}>
             <ArrowLeft size={18} />
           </button>
           <div>
-            <p className={styles.eyebrow}>D12 · correção baseada em evidência</p>
-            <h2 className={styles.title}>Corrigir divergência documental</h2>
-            <p className={styles.subtitle}>Ajuste o MDF-e pela evidência confirmada sem perder o contexto operacional da carga.</p>
+            <p className={styles.eyebrow}>{t('eyebrow')}</p>
+            <h2 className={styles.title}>{t('title')}</h2>
+            <p className={styles.subtitle}>{t('subtitle')}</p>
           </div>
         </div>
         <span className={styles.demoBadge}>DEMO</span>
@@ -925,9 +930,9 @@ export function CorrectionResubmitSurface({
       </div>
 
       <div className={styles.flowActionBar + ' ' + styles.correctionActionBar}>
-        <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar ao feedback</button>
+        <button className={styles.secondaryAction} type="button" onClick={onBack}>{t('back')}</button>
         <span><strong>{formatMetricTons(evidenceWeight)}</strong> será o novo peso documental após salvar.</span>
-        <button className={styles.primaryAction} type="button" onClick={onSubmit}>Salvar correção e enviar para revalidação</button>
+        <button className={styles.primaryAction} type="button" onClick={onSubmit}>{t('submit')}</button>
       </div>
     </section>
   );
