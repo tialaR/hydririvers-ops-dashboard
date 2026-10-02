@@ -4,9 +4,7 @@ import { ArrowLeft, BadgeDollarSign, Check, CheckCircle2, Clock3, FileCheck2, Fi
 import { motion, useReducedMotion } from 'motion/react';
 
 import type { HydroCondition, OperationalSourceRef, ShipperDocumentEvidence, ShipperProposal } from '@/features/cargo/owned/domain/shipper-journey.types';
-import { CargoTelemetryContextPanel } from '@/features/cargo/components/cargo-cockpit/cargo-telemetry-context-panel';
-import { CargoQuickEvidencePanel } from '@/features/cargo/components/cargo-cockpit/cargo-quick-evidence-panel';
-import { ActionOutcomeLedgerChart, DocumentWeightComparisonChart, FollowUpHealthChart, PostActionReadinessArcChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
+import { ActionOutcomeLedgerChart, DocumentWeightComparisonChart, PostActionReadinessArcChart, ProposalDecisionComparisonChart } from '@/shared/design-system/patterns/operational-chart';
 import { OperationalAlert } from '@/shared/design-system/components/operational-alert';
 import { OperationalScheduleList } from '@/shared/design-system/patterns/operational-schedule-list';
 import { OperationalContextChat } from './operational-context-chat';
@@ -930,61 +928,6 @@ export function CorrectionResubmitSurface({
         <button className={styles.secondaryAction} type="button" onClick={onBack}>Voltar ao feedback</button>
         <span><strong>{formatMetricTons(evidenceWeight)}</strong> será o novo peso documental após salvar.</span>
         <button className={styles.primaryAction} type="button" onClick={onSubmit}>Salvar correção e enviar para revalidação</button>
-      </div>
-    </section>
-  );
-}
-
-export function FollowUpMonitoringSurface({ onReviewHydro }: { onReviewHydro?: () => void }) {
-  const metrics = [
-    ['ETA', '18:30', 74],
-    ['Progresso', '72%', 72],
-    ['Documentos', '8/8', 100],
-    ['Risco', 'Baixo', 28],
-    ['Ação de êxito', 'monitoramento ativo', 100],
-  ] as const;
-
-  return (
-    <section className={styles.surface} data-testid="page62-d13-monitoring">
-      <header className={styles.header}>
-        <div><p className={styles.eyebrow}>D13 · pós-ação</p><h2 className={styles.title}>Acompanhamento após ação</h2><p className={styles.subtitle}>O dashboard deixa claro o estado atual, o que já fechou e a próxima decisão.</p></div>
-        <span className={styles.demoBadge}>DEMO</span>
-      </header>
-
-      <div className={styles.monitoringMetrics}>
-        {metrics.map(([label, value, progress]) => (
-          <article className={styles.metric} key={label}><small>{label}</small><strong>{value}</strong><div className={styles.metricLine}><span style={{ width: String(progress) + '%' }} /></div></article>
-        ))}
-      </div>
-
-      <div className={styles.monitoringGrid}>
-        <article className={styles.panel}>
-          <div className={styles.panelHeader}><h3>Saúde pós-ação</h3><span className={styles.statusBadge}><TrendingUp size={14}/> melhorando</span></div>
-          <div className={styles.followUpChartWrap}>
-            <FollowUpHealthChart />
-          </div>
-          <div className={styles.recentSignals}>
-            <OperationalScheduleList
-              items={[
-                { id: 'mdfe', time: '16:26', title: 'MDF-e validado', subtitle: 'Prontidão documental restaurada', status: 'Concluído', tone: 'success', icon: 'check' },
-                { id: 'position', time: '17:10', title: 'Posição atualizada', subtitle: 'AIS + GPS · freshness recente', status: 'Recente', tone: 'info', icon: 'radio' },
-                { id: 'arrival', time: '18:30', title: 'Chegada estimada', subtitle: 'Santarém · próximo marco', status: 'Próximo', tone: 'warning', icon: 'calendar' },
-              ]}
-            />
-          </div>
-        </article>
-
-        <aside className={styles.panel + ' ' + styles.nextDecision}>
-          <small>PRÓXIMA DECISÃO</small><strong>Chegada em Santarém</strong><p className={styles.deltaGood}>18:30 · sem ação imediata</p>
-          <div className={styles.sourceBox}><ShieldCheck size={16} /> Nível atual DEMO: deve ser substituído por fonte hidrológica com timestamp antes de produção.</div>
-          <div className={styles.sourceBox}><FileWarning size={16} /> Avisos e condições de navegabilidade precisam mostrar fonte, vigência e trecho afetado.</div>
-          <div className={styles.actionBar}><button className={styles.secondaryAction} type="button" onClick={onReviewHydro}>Revisar contexto hidroviário</button></div>
-        </aside>
-      </div>
-
-      <div className={styles.monitoringCompactGrid}>
-        <CargoTelemetryContextPanel />
-        <CargoQuickEvidencePanel />
       </div>
     </section>
   );
