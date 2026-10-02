@@ -59,12 +59,12 @@ test.describe('Cargas públicas anônimas — rota canônica', () => {
 
     await expect(page.locator('[data-public-cargoes-canonical="anonymous"]')).toBeVisible();
     await expect(page.locator('[data-legacy-cargo-list="true"]')).toHaveCount(0);
-    await expect(page.getByText(/R\\$\\s*\\d/i)).toHaveCount(0);
+    await expect(page.getByText(/R\$\s*\d/i)).toHaveCount(0);
   });
 
   test('alias /cargas-publicas redireciona para a rota oficial', async ({ page }) => {
     await page.goto('/pt-BR/cargas-publicas', { waitUntil: 'domcontentloaded' });
-    await expect(page).toHaveURL(/\\/pt-BR\\/cargas$/);
+    await expect(page).toHaveURL(/\/pt-BR\/cargas$/);
     await expect(page.locator('[data-public-cargoes-canonical="anonymous"]')).toBeVisible();
   });
 });
