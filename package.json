@@ -48,7 +48,8 @@
     "check:page62-cockpit-composition": "node scripts/governance/certify-page-62-cockpit-composition.mjs",
     "check:page62-overview-composition": "node scripts/governance/certify-page-62-overview-composition.mjs",
     "check:semantic-color-state": "node scripts/governance/verify-semantic-color-state-contract.mjs",
-    "check:profile-product": "node scripts/governance/verify-profile-product-contract.mjs"
+    "check:profile-product": "node scripts/governance/verify-profile-product-contract.mjs",
+    "check:auth-i18n": "node scripts/governance/verify-auth-i18n-contract.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
