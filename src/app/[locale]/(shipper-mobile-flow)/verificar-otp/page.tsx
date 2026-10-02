@@ -1,7 +1,10 @@
-import { getMockAuthOtp } from '@/features/auth/application/get-mock-auth-otp';
-import { VerifyOtpScreen } from '@/features/auth/screens/verify-otp-screen';
+import { redirect } from 'next/navigation';
 
-export default async function VerifyOtpPage() {
-  const mockOtp = await getMockAuthOtp();
-  return <VerifyOtpScreen mockOtp={mockOtp} />;
+export default async function VerifyOtpCompatibilityPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  redirect(`/${locale}/entrar`);
 }
