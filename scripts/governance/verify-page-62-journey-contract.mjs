@@ -17,6 +17,7 @@ const [
   surfaces,
   tokens,
   preview,
+  cockpitPreview,
   shipmentCss,
   cockpitCss,
   documentsCss,
@@ -40,6 +41,7 @@ const [
   read('src/features/cargo/components/shipper-journey/shipper-journey-surfaces.tsx'),
   read('src/shared/design-system/foundations/page-62-semantic-tokens.css'),
   read('.storybook/preview.tsx'),
+  read('src/features/cargo/owned/stories/page-62-cargo-cockpit-preview.tsx'),
   read('src/features/cargo/components/shipment-card/shipment-card.module.sass'),
   read('src/features/cargo/components/cargo-cockpit/cargo-cockpit-panels.module.sass'),
   read('src/features/cargo/components/documents-occurrence/documents-occurrence.module.sass'),
@@ -97,7 +99,6 @@ for (const required of [
   'review',
   'feedback',
   'correction',
-  'monitoring',
 ]) {
   if (!stateMachine.includes(required)) failures.push(`state machine missing: ${required}`);
 }
@@ -183,7 +184,7 @@ for (const required of [
   'D10ActionReview',
   'D11ActionFeedback',
   'D12CorrectionResubmit',
-  'D13Monitoring',
+  'PostActionCockpit',
 ]) {
   if (!stories.includes(`export const ${required}`)) failures.push(`Storybook journey state missing: ${required}`);
 }
@@ -239,7 +240,6 @@ for (const required of [
   'page62-d10-review',
   'page62-d11-feedback',
   'page62-d12-correction',
-  'page62-d13-monitoring',
 ]) {
   if (!surfaces.includes(required)) failures.push(`journey surface contract missing: ${required}`);
 }
@@ -303,9 +303,21 @@ for (const required of ['ProposalTradeoffRadar', 'ProposalDecisionComparisonChar
   if (!decisionCharts.includes(`export function ${required}`)) failures.push(`decision visualization missing: ${required}`);
 }
 
-for (const required of ['ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'FollowUpHealthChart', 'ActionOutcomeLedgerChart', 'PostActionReadinessArcChart']) {
+for (const required of ['ProposalDecisionComparisonChart', 'DocumentWeightComparisonChart', 'ActionOutcomeLedgerChart', 'PostActionReadinessArcChart']) {
   if (!surfaces.includes(required)) failures.push(`journey surface is not using visualization: ${required}`);
 }
+
+for (const required of [
+  'postAction',
+  'cockpit-post-action-summary',
+  'cockpit-post-action-facts',
+  'cockpit-post-action-success',
+  'MDF-e revalidado',
+  'monitoramento segue no Cockpit',
+]) {
+  if (!cockpitPreview.includes(required)) failures.push(`post-action cockpit integration missing: ${required}`);
+}
+if (cockpitPreview.includes('page62-d13-monitoring')) failures.push('standalone D13 surface leaked into cockpit preview');
 
 if (!preview.includes("page-62-semantic-tokens.css")) {
   failures.push('Storybook does not load Page 62 semantic tokens');
@@ -332,7 +344,7 @@ if (failures.length) {
 
 console.log('PAGE 62 JOURNEY CONTRACT PASS', {
   screens: 13,
-  groupedExperiences: 8,
+  groupedExperiences: 7,
   negotiationComposite: 'D08 + D09',
   dataMode: 'DEMO / API-ready repository boundary',
   semanticTokens: true,
