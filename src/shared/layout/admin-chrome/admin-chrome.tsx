@@ -220,13 +220,22 @@ export function AdminChrome({ children }: AdminChromeProps) {
     return navigation.filter((item) => !mobileBottomHrefSet.has(item.href) && !primaryExtra.has(item.href));
   }, [navigation, mobileBottomHrefSet]);
   const activeNavItem = navigation.find((item) => item.href === activeHref) ?? navigation.find((item) => item.href === intlAppPaths.dashboard.home) ?? null;
-  const activeNavLabel = activeNavItem ? t(activeNavItem.labelKey) : tChrome('header.title');
-  const activeNavSubtitle = activeHref === intlAppPaths.home
-    ? tChrome('header.homeSubtitle')
-    : tChrome('header.subtitle');
-  const headerDescriptionText = activeHref === intlAppPaths.home
-    ? tChrome('header.homeDescription')
-    : tChrome('header.description');
+  const isProfilePath = normalizedPathname === intlAppPaths.auth.profile;
+  const activeNavLabel = isProfilePath
+    ? t('profile')
+    : activeNavItem
+      ? t(activeNavItem.labelKey)
+      : tChrome('header.title');
+  const activeNavSubtitle = isProfilePath
+    ? tChrome('header.profileSubtitle')
+    : activeHref === intlAppPaths.home
+      ? tChrome('header.homeSubtitle')
+      : tChrome('header.subtitle');
+  const headerDescriptionText = isProfilePath
+    ? tChrome('header.profileDescription')
+    : activeHref === intlAppPaths.home
+      ? tChrome('header.homeDescription')
+      : tChrome('header.description');
   const headerFullTitleLabel = `${activeNavLabel} • ${activeNavSubtitle}`;
   const hasUnreadNotifications = unreadNotificationsCount > 0;
   const showPublishCargoContext = pathname.startsWith(intlAppPaths.cargos.marketplace) || pathname.startsWith(intlAppPaths.cargos.myCargos);
