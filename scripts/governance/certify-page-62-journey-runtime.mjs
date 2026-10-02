@@ -53,10 +53,10 @@ const states = [
     minCharts: 1,
   },
   {
-    name: 'D13 Monitoring',
-    storyKey: 'D13Monitoring',
-    selector: '[data-testid="page62-d13-monitoring"]',
-    minCharts: 1,
+    name: 'Post-action Cockpit · D13 absorbed',
+    storyKey: 'PostActionCockpit',
+    selector: '[data-testid="page62-cargo-cockpit"]',
+    minCharts: 2,
   },
 ];
 
@@ -138,7 +138,14 @@ async function certifyInteractiveFlow({ name, correctionBranch = false }) {
       await page.getByRole('button', { name: 'Acompanhar carga' }).click();
     }
 
-    await visit('[data-testid="page62-d13-monitoring"]', 'D13');
+    await visit('[data-testid="page62-cargo-cockpit"]', 'Cockpit pós-ação');
+    await visit('[data-testid="cockpit-post-action-summary"]', 'D13 absorvido no Cockpit');
+    if (await page.locator('[data-testid="page62-d13-monitoring"]').count()) {
+      failures.push('standalone D13 monitoring surface still exists');
+    }
+    if (correctionBranch) {
+      await visit('[data-testid="cockpit-post-action-success"]', 'Correção refletida no Cockpit');
+    }
 
     const relevantConsoleErrors = consoleErrors.filter(
       (entry) => !/Failed to load resource|ERR_NAME_NOT_RESOLVED|net::ERR_/i.test(entry),
@@ -223,6 +230,10 @@ try {
       const timelineInsight = document.querySelector('[data-testid="page62-timeline-insight"]');
       const timelineEvents = timeline ? Array.from(timeline.querySelectorAll('ol > li')) : [];
       const cockpitKpis = document.querySelector('[data-testid="cockpit-kpi-grid"]');
+      const postActionSummary = document.querySelector('[data-testid="cockpit-post-action-summary"]');
+      const postActionFacts = document.querySelector('[data-testid="cockpit-post-action-facts"]');
+      const postActionSuccess = document.querySelector('[data-testid="cockpit-post-action-success"]');
+      const standaloneD13 = document.querySelector('[data-testid="page62-d13-monitoring"]');
       const currentTimelineEvent = timelineEvents.find((item) => item.getAttribute('data-phase') === 'current');
       const futureTimelineEvents = timelineEvents.filter((item) => item.getAttribute('data-phase') === 'future');
       const statusTones = timelineEvents.map((item) => item.getAttribute('data-tone')).filter(Boolean);
@@ -341,6 +352,10 @@ try {
         timelineEventCount: timelineEvents.length,
         timelineInsightVisible: Boolean(timelineInsight && timelineInsight.getBoundingClientRect().width > 0),
         cockpitKpisVisible: Boolean(cockpitKpis && cockpitKpis.getBoundingClientRect().height > 0),
+        postActionSummaryVisible: Boolean(postActionSummary && postActionSummary.getBoundingClientRect().height > 0),
+        postActionFactCount: postActionFacts ? postActionFacts.children.length : 0,
+        postActionSuccessVisible: Boolean(postActionSuccess && postActionSuccess.getBoundingClientRect().height > 0),
+        standaloneD13Count: standaloneD13 ? 1 : 0,
         currentTimelineEventVisible: Boolean(currentTimelineEvent && currentTimelineEvent.getBoundingClientRect().height > 0),
         futureTimelineEventCount: futureTimelineEvents.length,
         distinctTimelineStatusTones: new Set(statusTones).size,
@@ -495,6 +510,13 @@ try {
         if (metrics.correctionProgressCount < 4) failures.push(`D12 correction process incomplete: ${metrics.correctionProgressCount}`);
         if (metrics.correctionChartHeight < 220) failures.push(`D12 correction chart too shallow: ${metrics.correctionChartHeight}px`);
         if (!metrics.correctionPrimaryActionVisible) failures.push('D12 primary revalidation action missing');
+      }
+      if (state.storyKey === 'PostActionCockpit') {
+        if (!metrics.cockpitKpisVisible) failures.push('post-action cockpit lost the canonical KPI strip');
+        if (!metrics.postActionSummaryVisible) failures.push('post-action result summary missing from cockpit');
+        if (metrics.postActionFactCount < 2) failures.push(`post-action summary too shallow: ${metrics.postActionFactCount} facts`);
+        if (!metrics.postActionSuccessVisible) failures.push('corrected-document state is not reflected in the cockpit');
+        if (metrics.standaloneD13Count > 0) failures.push('standalone D13 surface must not coexist with post-action cockpit');
       }
       if (state.storyKey === 'D04D05Cockpit' && metrics.timelineEventCount > 0) {
         if (metrics.timelineEventCount < 6) failures.push(`timeline breadth incomplete: ${metrics.timelineEventCount}`);
