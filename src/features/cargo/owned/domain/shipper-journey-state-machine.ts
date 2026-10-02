@@ -3,7 +3,7 @@ import type { ShipperJourneyEvent, ShipperJourneyExperience } from './shipper-jo
 export type ShipperJourneyTransitionEvent =
   | Pick<ShipperJourneyEvent, 'type'>
   | { type: 'reviewCancelled' }
-  | { type: 'monitoringOpened' };
+  | { type: 'followUpOpened' };
 
 const transitions: Partial<Record<
   ShipperJourneyExperience,
@@ -17,6 +17,7 @@ const transitions: Partial<Record<
     documentDivergenceFound: 'documentsRisk',
     proposalSelected: 'negotiation',
     hydroConstraintRaised: 'cockpit',
+    followUpRequired: 'cockpit',
   },
   documentsRisk: {
     proposalSelected: 'negotiation',
@@ -34,17 +35,11 @@ const transitions: Partial<Record<
   },
   feedback: {
     documentRejected: 'correction',
-    followUpRequired: 'monitoring',
-    monitoringOpened: 'monitoring',
+    followUpRequired: 'cockpit',
+    followUpOpened: 'cockpit',
   },
   correction: {
-    correctionSubmitted: 'monitoring',
-  },
-  monitoring: {
-    hydroConstraintRaised: 'cockpit',
-    documentRejected: 'correction',
-    followUpRequired: 'monitoring',
-    monitoringOpened: 'monitoring',
+    correctionSubmitted: 'cockpit',
   },
 };
 

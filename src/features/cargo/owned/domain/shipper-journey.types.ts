@@ -5,8 +5,7 @@ export type ShipperJourneyExperience =
   | 'negotiation'
   | 'review'
   | 'feedback'
-  | 'correction'
-  | 'monitoring';
+  | 'correction';
 
 export type OperationalDataMode = 'live' | 'cache' | 'demo';
 export type OperationalFreshnessState = 'fresh' | 'stale' | 'offline';
