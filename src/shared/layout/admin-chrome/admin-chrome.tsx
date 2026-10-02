@@ -21,6 +21,8 @@ import {
   LogIn,
   LogOut,
   Package,
+  PanelLeftClose,
+  PanelLeftOpen,
   RadioTower,
   Route,
   Languages,
@@ -546,18 +548,6 @@ export function AdminChrome({ children }: AdminChromeProps) {
             <strong>HydroRivers</strong>
           </Link>
 
-          <div className="hx-sidebar-toggle-zone">
-            <button
-              type="button"
-              className={sidebarCollapsed ? 'hx-collapse-button is-collapsed hx-sidebar-interactive' : 'hx-collapse-button hx-sidebar-interactive'}
-              aria-label={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
-              title={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
-              onClick={() => setSidebarCollapsed((current) => !current)}
-            >
-              <ChevronDown size={18} />
-            </button>
-          </div>
-
           <nav className="hx-sidebar-nav hr-sidebar-nav">
             {navigation.map((item) => {
               const Icon = iconByKey[item.labelKey as NavIconKey] ?? Gauge;
@@ -721,6 +711,17 @@ export function AdminChrome({ children }: AdminChromeProps) {
             className={`hx-topbar hr-topbar${isDashboardHeaderScrolled ? ' hx-topbar--scrolled' : ''}`}
             data-scrolled={isDashboardHeaderScrolled ? 'true' : 'false'}
           >
+            <button
+              type="button"
+              className="hx-desktop-sidebar-toggle"
+              aria-label={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
+              title={sidebarCollapsed ? t('openMenu') : t('closeMenu')}
+              aria-pressed={sidebarCollapsed}
+              onClick={() => setSidebarCollapsed((current) => !current)}
+            >
+              {sidebarCollapsed ? <PanelLeftOpen size={18} aria-hidden /> : <PanelLeftClose size={18} aria-hidden />}
+            </button>
+
             <div className="hx-title-block">
               <h1 className="hx-title-block__heading" title={headerFullTitleLabel} aria-label={headerFullTitleLabel}>
                 <span className="hx-title-block__heading-inner">
@@ -776,6 +777,9 @@ export function AdminChrome({ children }: AdminChromeProps) {
                     document.body
                   )
                 : null}
+              <div className="hx-header-theme-control" role="group" aria-label={tChrome('settings.theme.toggleLabel')}>
+                <ThemeToggle variant="icon" ariaLabel={tChrome('settings.theme.toggleLabel')} />
+              </div>
               <div className="hx-notifications" ref={notificationsRef}>
                 <button
                   ref={notificationsButtonRef}
