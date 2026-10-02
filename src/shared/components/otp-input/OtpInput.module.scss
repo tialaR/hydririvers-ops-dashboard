@@ -52,3 +52,21 @@
     transition-duration: 1ms;
   }
 }
+
+
+/* Auth DS v3 neutral slot skin */
+.cell {
+  border-color: #343434;
+  background: #0f0f0f;
+  color: #f3f3f3;
+  box-shadow: none;
+}
+
+.cell:focus-visible {
+  border-color: #666;
+  box-shadow: 0 0 0 0.1875rem rgba(255,255,255,0.14);
+}
+
+.rowInvalid .cell {
+  border-color: var(--hy-color-danger-text, #ff6b76);
+}
