@@ -4,7 +4,10 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import { useMemo, useState } from 'react';
 
 import { PAGE62_SHIPPER_JOURNEY_DEMO } from '@/features/cargo/owned/mocks/page-62-shipper-journey.mock';
-import { Page62CargoCockpitPreview } from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
+import {
+  Page62CargoCockpitPreview,
+  type CargoCockpitPostActionState,
+} from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
 import { Page62OverviewSurface } from './page-62-overview-surface';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
@@ -12,7 +15,6 @@ import {
   ActionFeedbackSurface,
   CorrectionResubmitSurface,
   DecisionActionReviewSurface,
-  FollowUpMonitoringSurface,
   ProposalNegotiationSurface,
 } from './shipper-journey-surfaces';
 import styles from './shipper-journey.module.sass';
@@ -25,12 +27,18 @@ const experiences: Array<{ id: ShipperJourneyExperience; label: string }> = [
   { id: 'review', label: 'D10 · Revisão' },
   { id: 'feedback', label: 'D11 · Feedback' },
   { id: 'correction', label: 'D12 · Correção' },
-  { id: 'monitoring', label: 'D13 · Monitoramento' },
 ];
 
-export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: ShipperJourneyExperience }) {
+export function Page62ShipperJourneyDemo({
+  initial = 'discovery',
+  initialPostAction = null,
+}: {
+  initial?: ShipperJourneyExperience;
+  initialPostAction?: CargoCockpitPostActionState | null;
+}) {
   const reduceMotion = useReducedMotion();
   const [experience, setExperience] = useState<ShipperJourneyExperience>(initial);
+  const [postActionState, setPostActionState] = useState<CargoCockpitPostActionState | null>(initialPostAction);
   const [selectedProposalId, setSelectedProposalId] = useState('proposal-b');
   const snapshot = PAGE62_SHIPPER_JOURNEY_DEMO;
   const proposals = snapshot.proposals;
@@ -47,6 +55,7 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
       return (
         <Page62CargoCockpitPreview
           initialMode="cockpit"
+          postAction={postActionState}
           onOverview={() => setExperience('discovery')}
           onOpenCorrection={() => setExperience(
             resolveShipperJourneyTransition('documentsRisk', { type: 'documentRejected' }),
@@ -106,7 +115,10 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
             hydro={snapshot.hydro}
             sources={snapshot.sources}
             onCorrection={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'documentRejected' }))}
-            onMonitor={() => setExperience(resolveShipperJourneyTransition('feedback', { type: 'monitoringOpened' }))}
+            onMonitor={() => {
+              setPostActionState('decisionApplied');
+              setExperience(resolveShipperJourneyTransition('feedback', { type: 'followUpOpened' }));
+            }}
           />
         );
       }
@@ -119,12 +131,12 @@ export function Page62ShipperJourneyDemo({ initial = 'discovery' }: { initial?: 
           sources={snapshot.sources}
           cargoId={snapshot.cargoId}
           onBack={() => setExperience('feedback')}
-          onSubmit={() => setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }))}
+          onSubmit={() => {
+            setPostActionState('documentCorrected');
+            setExperience(resolveShipperJourneyTransition('correction', { type: 'correctionSubmitted' }));
+          }}
         />
       );
-    }
-    if (experience === 'monitoring') {
-      return <FollowUpMonitoringSurface onReviewHydro={() => setExperience(resolveShipperJourneyTransition('monitoring', { type: 'hydroConstraintRaised' }))} />;
     }
     return (
       <ProposalNegotiationSurface
