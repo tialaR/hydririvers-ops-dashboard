@@ -34,8 +34,11 @@ import styles from './page-62-cargo-cockpit-preview.module.sass';
 
 type WorkspaceMode = 'cockpit' | 'timeline' | 'documents';
 
+export type CargoCockpitPostActionState = 'decisionApplied' | 'documentCorrected';
+
 type Page62CargoCockpitPreviewProps = {
   initialMode?: WorkspaceMode;
+  postAction?: CargoCockpitPostActionState | null;
   onOverview?: () => void;
   onOpenCorrection?: () => void;
   onOpenNegotiation?: () => void;
@@ -105,6 +108,7 @@ type TimelineEventKind =
   | 'restriction'
   | 'dredging'
   | 'position'
+  | 'document'
   | 'arrival';
 
 type TimelineEventTone = 'success' | 'monitor' | 'warning' | 'info' | 'current' | 'future';
@@ -116,6 +120,7 @@ const timelineEventIcons: Record<TimelineEventKind, LucideIcon> = {
   restriction: ShieldAlert,
   dredging: Construction,
   position: Navigation,
+  document: CheckCircle2,
   arrival: Anchor,
 };
 
@@ -250,11 +255,43 @@ const tabs: Array<{ id: WorkspaceMode | 'overview' | 'activity'; label: string }
 
 export function Page62CargoCockpitPreview({
   initialMode = 'cockpit',
+  postAction = null,
   onOverview,
   onOpenCorrection,
   onOpenNegotiation,
 }: Page62CargoCockpitPreviewProps) {
   const [mode, setMode] = useState<WorkspaceMode>(initialMode);
+  const isPostAction = postAction !== null;
+  const correctionResolved = postAction === 'documentCorrected';
+  const progress = isPostAction ? 72 : 68;
+  const distanceKm = isPostAction ? 680 : 642;
+  const eta = isPostAction ? '18:30' : '18:40';
+  const visibleEvidence = correctionResolved
+    ? evidence.map((item) => item.label === 'Manifesto'
+      ? { ...item, meta: 'Revalidado às 16:26', status: 'Validado', tone: 'success' as EvidenceFolderTone }
+      : item)
+    : evidence;
+  const postActionTimelineEvent = postAction
+    ? {
+        month: 'SET',
+        day: '27',
+        title: correctionResolved ? 'MDF-e revalidado' : 'Condição comercial aplicada',
+        place: correctionResolved ? 'Documentos da carga' : 'Coordenação operacional',
+        time: correctionResolved ? '16:26' : '16:20',
+        detail: correctionResolved
+          ? 'A divergência foi corrigida e a prontidão documental foi restaurada sem sair do contexto da carga.'
+          : 'A proposta confirmada passou a orientar ETA, embarcação e condição comercial no cockpit.',
+        status: 'Concluído',
+        tone: 'success' as TimelineEventTone,
+        phase: 'past' as TimelineEventPhase,
+        kind: 'document' as TimelineEventKind,
+        source: correctionResolved ? 'MDF-e · evidência vinculada' : 'Decisão da embarcadora · DEMO',
+        context: correctionResolved ? '8/8 documentos prontos' : 'monitoramento continua no cockpit',
+      }
+    : null;
+  const visibleTimelineEvents = postActionTimelineEvent
+    ? [...timelineEvents.slice(0, 5), postActionTimelineEvent, ...timelineEvents.slice(5)]
+    : timelineEvents;
 
   return (
     <MotionConfig
@@ -332,6 +369,38 @@ export function Page62CargoCockpitPreview({
             </nav>
           </header>
 
+          {mode === 'cockpit' && postAction ? (
+            <section
+              className={styles.postActionSummary}
+              data-testid="cockpit-post-action-summary"
+              data-post-action-state={postAction}
+            >
+              <span className={styles.postActionIcon} aria-hidden><CheckCircle2 size={20} /></span>
+              <div className={styles.postActionCopy}>
+                <small>RETORNO AO COCKPIT</small>
+                <strong>{correctionResolved ? 'MDF-e revalidado · acompanhamento retomado' : 'Decisão aplicada · acompanhamento continua aqui'}</strong>
+                <p>
+                  {correctionResolved
+                    ? 'A correção fechou a divergência documental; telemetria, hidrovia e próximo marco seguem no mesmo contexto operacional.'
+                    : 'A condição comercial foi aplicada; o Cockpit assume o pós-ação sem criar uma segunda tela de monitoramento.'}
+                </p>
+              </div>
+              <div className={styles.postActionFacts} data-testid="cockpit-post-action-facts">
+                <span>
+                  <small>{correctionResolved ? 'DOCUMENTOS' : 'PRONTIDÃO'}</small>
+                  <strong>{correctionResolved ? '8/8' : '3/4'}</strong>
+                  <em>{correctionResolved ? 'validados' : 'frentes estáveis'}</em>
+                </span>
+                <span>
+                  <small>PRÓXIMO MARCO</small>
+                  <strong>18:30</strong>
+                  <em>chegada em Santarém</em>
+                </span>
+              </div>
+              <b data-semantic-status="success">{correctionResolved ? 'regularizado' : 'ação aplicada'}</b>
+            </section>
+          ) : null}
+
           {mode === 'cockpit' ? (
             <div className={styles.metricGrid} data-testid="cockpit-kpi-grid">
               <motion.article layout className={styles.progressMetric} data-testid="cockpit-kpi-progress">
@@ -341,12 +410,12 @@ export function Page62CargoCockpitPreview({
                 </div>
                 <div className={styles.progressBody}>
                   <OperationalGaugeChart
-                    value={68}
+                    value={progress}
                     label="Rota"
-                    ariaLabel="68% da rota concluída"
+                    ariaLabel={`${progress}% da rota concluída`}
                   />
                   <div>
-                    <strong>642 km</strong>
+                    <strong>{distanceKm} km</strong>
                     <span>de 944 km percorridos</span>
                     <small>ritmo dentro da janela</small>
                   </div>
@@ -358,9 +427,11 @@ export function Page62CargoCockpitPreview({
                   <Clock3 size={15} />
                   <small>ETA</small>
                 </div>
-                <strong>18:40</strong>
-                <span className={styles.etaDelta}>+ 22 min vs. plano</span>
-                <small>janela prevista hoje</small>
+                <strong>{eta}</strong>
+                <span className={isPostAction ? styles.etaDeltaResolved : styles.etaDelta}>
+                  {isPostAction ? 'dentro da janela' : '+ 22 min vs. plano'}
+                </span>
+                <small>{isPostAction ? 'próximo marco confirmado' : 'janela prevista hoje'}</small>
               </motion.article>
   
               <motion.article layout className={styles.signalMetric} data-testid="cockpit-kpi-signal">
@@ -381,14 +452,14 @@ export function Page62CargoCockpitPreview({
                   <ShieldAlert size={15} />
                   <small>RISCO</small>
                 </div>
-                <div className={styles.riskScale} aria-label="Risco moderado">
+                <div className={styles.riskScale} data-risk={isPostAction ? 'low' : 'moderate'} aria-label={isPostAction ? 'Risco baixo' : 'Risco moderado'}>
                   <span />
                   <span />
-                  <span className={styles.riskScaleActive} />
+                  <span />
                   <span />
                 </div>
-                <strong>Moderado</strong>
-                <span>1 atenção ativa</span>
+                <strong>{isPostAction ? 'Baixo' : 'Moderado'}</strong>
+                <span>{correctionResolved ? 'sem bloqueio documental' : isPostAction ? '1 validação em curso' : '1 atenção ativa'}</span>
               </motion.article>
             </div>
   
@@ -484,7 +555,7 @@ export function Page62CargoCockpitPreview({
                     </header>
 
                     <div className={styles.evidenceFolderGrid}>
-                      {evidence.map((item) => (
+                      {visibleEvidence.map((item) => (
                         <EvidenceFolderItem
                           key={item.label}
                           title={item.label}
@@ -503,16 +574,31 @@ export function Page62CargoCockpitPreview({
                   </article>
 
                   <div className={styles.cockpitAlertRow}>
-                    <OperationalAlert
-                      tone="warning"
-                      eyebrow="FOCO AGORA"
-                      badge="prazo 16:30"
-                      title="Validar manifesto antes da próxima janela operacional"
-                      description="O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada."
-                      actionLabel="Abrir documentos"
-                      onAction={() => setMode('documents')}
-                      testId="cockpit-attention"
-                    />
+                    {correctionResolved ? (
+                      <OperationalAlert
+                        tone="success"
+                        eyebrow="PÓS-AÇÃO"
+                        badge="documentação pronta"
+                        title="MDF-e revalidado; monitoramento segue no Cockpit"
+                        description="A divergência foi encerrada. A próxima decisão relevante é a chegada em Santarém às 18:30, mantendo contexto hidroviário e telemetria visíveis."
+                        actionLabel="Ver documentos"
+                        onAction={() => setMode('documents')}
+                        testId="cockpit-post-action-success"
+                      />
+                    ) : (
+                      <OperationalAlert
+                        tone="warning"
+                        eyebrow={postAction ? 'PÓS-AÇÃO' : 'FOCO AGORA'}
+                        badge={postAction ? '1 validação pendente' : 'prazo 16:30'}
+                        title={postAction ? 'Decisão aplicada; MDF-e ainda requer revalidação' : 'Validar manifesto antes da próxima janela operacional'}
+                        description={postAction
+                          ? 'A condição comercial já está vigente, mas a divergência documental continua rastreável e precisa ser fechada antes do próximo marco.'
+                          : 'O peso declarado ainda precisa ser revalidado para evitar impacto na janela prevista de chegada.'}
+                        actionLabel="Abrir documentos"
+                        onAction={() => setMode('documents')}
+                        testId={postAction ? 'cockpit-post-action-attention' : 'cockpit-attention'}
+                      />
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -536,7 +622,7 @@ export function Page62CargoCockpitPreview({
                     </header>
 
                     <ol>
-                      {timelineEvents.map((event) => {
+                      {visibleTimelineEvents.map((event) => {
                         const EventIcon = timelineEventIcons[event.kind];
 
                         return (
@@ -592,15 +678,22 @@ export function Page62CargoCockpitPreview({
                     </span>
                     <div className={styles.timelineInsightCopy}>
                       <small>LEITURA DO MOMENTO</small>
-                      <strong>Operação segue dentro da janela, com uma decisão documental pendente.</strong>
+                      <strong>
+                        {correctionResolved
+                          ? 'Correção concluída; a operação voltou ao acompanhamento normal.'
+                          : postAction
+                            ? 'Decisão aplicada; a carga continua no mesmo contexto operacional.'
+                            : 'Operação segue dentro da janela, com uma decisão documental pendente.'}
+                      </strong>
                       <p>
-                        A vazante e as condições do corredor seguem monitoradas; nenhum bloqueio crítico foi
-                        confirmado para o trecho atual.
+                        {correctionResolved
+                          ? 'MDF-e revalidado; telemetria, vazante e condições do corredor continuam acompanhadas sem abrir uma tela paralela.'
+                          : 'A vazante e as condições do corredor seguem monitoradas; nenhum bloqueio crítico foi confirmado para o trecho atual.'}
                       </p>
                     </div>
                     <div className={styles.timelineInsightDecision}>
                       <small>PRÓXIMA DECISÃO</small>
-                      <strong>Validar manifesto até 16:30</strong>
+                      <strong>{correctionResolved ? 'Chegada em Santarém · 18:30' : 'Validar manifesto até 16:30'}</strong>
                     </div>
                   </article>
                 </div>
