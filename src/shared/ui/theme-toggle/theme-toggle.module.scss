@@ -31,13 +31,13 @@
 
 .pill:hover {
   transform: translateY(-1px);
-  border-color: color-mix(in srgb, var(--hx-cyan, var(--brand)) 26%, var(--hx-line-soft, var(--line-strong)));
-  background: color-mix(in srgb, var(--hx-card-2, var(--surface-strong)) 90%, transparent);
+  border-color: color-mix(in srgb, var(--hx-text, white) 18%, var(--hx-line-soft, var(--line-strong)));
+  background: color-mix(in srgb, var(--hx-text, white) 5%, var(--hx-card-2, var(--surface-strong)));
   box-shadow: 0 10px 24px rgba(0, 0, 0, .16), inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
 }
 
 .pill:focus-visible {
-  outline: 2px solid var(--hx-cyan, var(--brand));
+  outline: 2px solid color-mix(in srgb, var(--hx-text, white) 58%, transparent);
   outline-offset: 3px;
 }
 
@@ -61,12 +61,9 @@
   opacity: .58;
 }
 
-.button[data-mode='light'] {
-  color: var(--hx-yellow, #d0a23c);
-}
-
+.button[data-mode='light'],
 .button[data-mode='dark'] {
-  color: var(--hx-blue, #5aa9ff);
+  color: var(--hx-text, var(--text));
 }
 
 .button:hover {
