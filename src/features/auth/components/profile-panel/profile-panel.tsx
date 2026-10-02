@@ -281,9 +281,19 @@ export function ProfilePanel() {
   }
 
   return (
-    <main className={styles.shell} aria-label={perfil('mainAriaLabel')}>
+    <main className={styles.shell} aria-label={perfil('mainAriaLabel')} data-testid="profile-panel">
+      <header className={styles.profileIntro}>
+        <div>
+          <p className={styles.profileEyebrow}>{t('eyebrow')}</p>
+          <h1>{t('title')}</h1>
+          <p>{t('description')}</p>
+        </div>
+        <Badge tone={user.approved ? 'success' : 'warning'}>
+          {user.approved ? t('identityAccessBadgeApproved') : t('identityAccessBadgePending')}
+        </Badge>
+      </header>
       <section className={styles.grid}>
-        <Surface tone="glass" className={styles.identity}>
+        <Surface tone="glass" className={styles.identity} data-testid="profile-identity-card">
           <button
             type="button"
             className={`${styles.avatar} ${avatarPreviewAvailable ? styles.avatarButton : ''}`}
@@ -357,7 +367,7 @@ export function ProfilePanel() {
             value={user.approved ? t('accessAreasApproved') : t('accessAreasPending')}
           />
         </Surface>
-        <Surface tone="glass" className={styles.formCard}>
+        <Surface tone="glass" className={styles.formCard} data-testid="profile-form-card">
           <h2 className={styles.formHeading}>{t('formSectionTitle')}</h2>
           <p className={styles.formLead}>{t('formSectionLead')}</p>
           <form className={styles.form} onSubmit={onSubmit} noValidate>
