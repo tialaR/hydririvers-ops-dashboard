@@ -24,7 +24,7 @@ export const FullFlow: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Fluxo interativo completo da Embarcadora: D01–D13, incluindo caminho feliz e ramificação de correção/reenvio.',
+        story: 'Fluxo interativo completo da Embarcadora: D01–D12 e retorno ao Cockpit para acompanhamento pós-ação, incluindo a ramificação de correção/reenvio.',
       },
     },
   },
@@ -37,4 +37,6 @@ export const D08D09Negotiation: Story = { args: { initial: 'negotiation' } };
 export const D10ActionReview: Story = { args: { initial: 'review' } };
 export const D11ActionFeedback: Story = { args: { initial: 'feedback' } };
 export const D12CorrectionResubmit: Story = { args: { initial: 'correction' } };
-export const D13Monitoring: Story = { args: { initial: 'monitoring' } };
+export const PostActionCockpit: Story = {
+  args: { initial: 'cockpit', initialPostAction: 'documentCorrected' },
+};
