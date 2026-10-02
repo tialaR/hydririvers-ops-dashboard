@@ -75,6 +75,9 @@ jobs:
       - name: Profile product restoration contract
         run: npm run check:profile-product
 
+      - name: Auth OTP and Page 62 i18n contract
+        run: npm run check:auth-i18n
+
       - name: Check i18n
         run: npm run check:i18n
 
