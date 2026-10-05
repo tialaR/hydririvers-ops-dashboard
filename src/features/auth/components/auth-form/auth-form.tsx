@@ -633,7 +633,7 @@ export function AuthForm({ mode, registerPrefill, loginPrefill, onComplete, onMo
   const accessStage = completedMode ? 3 : otpStage ? 2 : 1;
 
   return (
-    <section className={styles.shell} data-auth-stage={accessStage}>
+    <section className={styles.shell} data-auth-stage={accessStage} data-testid="auth-access-workspace">
       <div className={styles.authWorkspace}>
         <aside className={styles.contextRail} aria-label={t('accessFlowLabel')}>
           <div className={styles.contextBrand}>
