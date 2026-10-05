@@ -9,6 +9,12 @@ const evidenceDir = path.resolve(root, 'reports/sharklock-evidence/page-62/journ
 
 const states = [
   {
+    name: 'Auth Access',
+    storyKey: 'AuthAccess',
+    selector: '[data-testid="auth-access-workspace"]',
+    minCharts: 0,
+  },
+  {
     name: 'Overview',
     storyKey: 'Overview',
     selector: '[data-testid="page62-overview"]',
