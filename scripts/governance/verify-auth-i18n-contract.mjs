@@ -44,6 +44,17 @@ for (const token of [
 }
 
 for (const token of [
+  'data-testid="auth-access-workspace"',
+  'accessContextTitle',
+  'accessProgress',
+  'contextCapabilities',
+]) {
+  if (!files.authForm.includes(token) && !files.authStyles.includes(token)) {
+    failures.push(`contextual auth experience missing: ${token}`);
+  }
+}
+
+for (const token of [
   '--auth-bg: #080808',
   '--auth-surface: #111111',
   '--auth-text: #f3f3f3',
@@ -102,7 +113,16 @@ for (const { locale, messages } of localeFiles) {
     }
   }
 
-  for (const key of ['loginTitle', 'registerTitle', 'loginDescription', 'registerDescription']) {
+  for (const key of [
+    'loginTitle',
+    'registerTitle',
+    'loginDescription',
+    'registerDescription',
+    'accessContextTitle',
+    'accessStageCredentials',
+    'accessStageVerification',
+    'accessStageOperation',
+  ]) {
     const value = messages.auth?.[key];
     if (typeof value !== 'string' || !value.trim()) failures.push(`${locale} missing auth.${key}`);
   }
