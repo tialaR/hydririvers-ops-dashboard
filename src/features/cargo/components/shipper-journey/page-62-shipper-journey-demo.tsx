@@ -9,6 +9,7 @@ import {
   Page62CargoCockpitPreview,
   type CargoCockpitPostActionState,
 } from '@/features/cargo/owned/stories/page-62-cargo-cockpit-preview';
+import { AuthForm } from '@/features/auth/components/auth-form/auth-form';
 import { Page62OverviewSurface } from './page-62-overview-surface';
 import type { ShipperJourneyExperience } from '@/features/cargo/owned/domain/shipper-journey.types';
 import { resolveShipperJourneyTransition } from '@/features/cargo/owned/domain/shipper-journey-state-machine';
@@ -20,7 +21,10 @@ import {
 } from './shipper-journey-surfaces';
 import styles from './shipper-journey.module.sass';
 
-const experienceIds: ShipperJourneyExperience[] = [
+type JourneyExperience = 'auth' | ShipperJourneyExperience;
+
+const experienceIds: JourneyExperience[] = [
+  'auth',
   'discovery',
   'cockpit',
   'documentsRisk',
@@ -31,15 +35,16 @@ const experienceIds: ShipperJourneyExperience[] = [
 ];
 
 export function Page62ShipperJourneyDemo({
-  initial = 'discovery',
+  initial = 'auth',
   initialPostAction = null,
 }: {
-  initial?: ShipperJourneyExperience;
+  initial?: JourneyExperience;
   initialPostAction?: CargoCockpitPostActionState | null;
 }) {
   const reduceMotion = useReducedMotion();
   const t = useTranslations('page62Journey');
-  const [experience, setExperience] = useState<ShipperJourneyExperience>(initial);
+  const [experience, setExperience] = useState<JourneyExperience>(initial);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [postActionState, setPostActionState] = useState<CargoCockpitPostActionState | null>(initialPostAction);
   const [selectedProposalId, setSelectedProposalId] = useState('proposal-b');
   const snapshot = PAGE62_SHIPPER_JOURNEY_DEMO;
@@ -50,6 +55,15 @@ export function Page62ShipperJourneyDemo({
   );
 
   const content = (() => {
+    if (experience === 'auth') {
+      return (
+        <AuthForm
+          mode={authMode}
+          onModeChange={setAuthMode}
+          onComplete={() => setExperience('discovery')}
+        />
+      );
+    }
     if (experience === 'discovery') {
       return <Page62OverviewSurface onOpenCockpit={() => setExperience(resolveShipperJourneyTransition('discovery', { type: 'cargoSelected' }))} />;
     }
