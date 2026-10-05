@@ -179,6 +179,7 @@ if (!mock.includes("id: 'src-dnit-amazonas'")) failures.push('Amazonas corridor 
 
 for (const required of [
   'FullFlow',
+  'AuthAccess',
   'Overview',
   'D08D09Negotiation',
   'D10ActionReview',
@@ -187,6 +188,16 @@ for (const required of [
   'PostActionCockpit',
 ]) {
   if (!stories.includes(`export const ${required}`)) failures.push(`Storybook journey state missing: ${required}`);
+}
+
+for (const required of [
+  "type JourneyExperience = 'auth' | ShipperJourneyExperience",
+  "initial = 'auth'",
+  '<AuthForm',
+  'onModeChange={setAuthMode}',
+  "onComplete={() => setExperience('discovery')}",
+]) {
+  if (!journeyDemo.includes(required)) failures.push(`auth journey integration missing: ${required}`);
 }
 
 for (const required of [
@@ -347,7 +358,9 @@ if (failures.length) {
 
 console.log('PAGE 62 JOURNEY CONTRACT PASS', {
   screens: 13,
-  groupedExperiences: 7,
+  groupedExperiences: 8,
+  operationalExperiences: 7,
+  accessExperience: true,
   negotiationComposite: 'D08 + D09',
   dataMode: 'DEMO / API-ready repository boundary',
   semanticTokens: true,
