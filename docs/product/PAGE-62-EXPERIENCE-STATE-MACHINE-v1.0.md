@@ -2,7 +2,17 @@
 
 **Data:** 2026-10-01  
 **Persona:** embarcadora autenticada  
-**Objetivo:** transformar D01–D13 em fluxo executável sem tratar frames repetidos como telas independentes. D13 permanece como referência de estado pós-ação, mas não é destino de navegação: seu conteúdo volta ao Cockpit.
+**Objetivo:** transformar o fluxo da embarcadora em uma jornada executável completa. O acesso A01–A03 precede o domínio operacional; D01–D13 continuam sendo os estados da carga. D13 permanece como referência de estado pós-ação, mas não é destino de navegação: seu conteúdo volta ao Cockpit.
+
+## 0. Entrada da jornada · A01–A03
+
+A autenticação faz parte do fluxo de produto no Storybook e na aplicação:
+
+**credenciais → OTP → operação privada**
+
+Ela usa shell de foco próprio, explica o valor desbloqueado pelo acesso e leva diretamente à carteira. A vitrine `/cargas` continua pública; autenticação só aparece quando a pessoa entra na camada privada.
+
+> A01–A03 é entrada da jornada, não um estado da máquina de domínio da carga.
 
 ## 1. Estados de experiência
 
