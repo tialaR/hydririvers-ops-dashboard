@@ -418,7 +418,25 @@
     "otpMockBlockLead": "Código de 6 dígitos para este telefone.",
     "otpProductionHint": "Em produção, o código será enviado pelo canal configurado (SMS ou e-mail).",
     "otpMockDevNote": "Demonstração / desenvolvimento: o código mock aparece aqui só para testes locais; não representa envio real.",
-    "registerPhoneOtpHint": "O celular com DDD é obrigatório: o OTP mock é sempre gerado para este número."
+    "registerPhoneOtpHint": "O celular com DDD é obrigatório: o OTP mock é sempre gerado para este número.",
+    "accessContextTitle": "Entre para continuar a operação privada",
+    "accessContextDescription": "O acesso libera carteira, decisões, documentos e acompanhamento da carga sem transformar autenticação em uma tela isolada do produto.",
+    "accessFlowLabel": "Fluxo de acesso",
+    "accessStageCredentials": "Credenciais",
+    "accessStageCredentialsHint": "Conta e telefone",
+    "accessStageVerification": "Verificação",
+    "accessStageVerificationHint": "Código de 6 dígitos",
+    "accessStageOperation": "Operação",
+    "accessStageOperationHint": "Cockpit e cargas privadas",
+    "accessAfterLabel": "Depois do acesso",
+    "accessAreaCargo": "Carteira e cargas",
+    "accessAreaCargoHint": "Rotas, documentos e eventos",
+    "accessAreaDecision": "Decisões",
+    "accessAreaDecisionHint": "Negociação, aceite e correção",
+    "accessAreaMonitoring": "Monitoramento",
+    "accessAreaMonitoringHint": "ETA, telemetria e hidrovia",
+    "accessGuestNote": "A vitrine pública continua disponível sem conta. O login só entra quando a pessoa acessa a camada operacional.",
+    "accessStageCounter": "Etapa {current} de 3"
   },
   "pages": {
     "home": {
@@ -3648,7 +3666,8 @@
       "negotiation": "D08–D09 · Negociação",
       "review": "D10 · Revisão",
       "feedback": "D11 · Feedback",
-      "correction": "D12 · Correção"
+      "correction": "D12 · Correção",
+      "auth": "A01–A03 · Acesso"
     },
     "overview": {
       "portfolio": "CARTEIRA",
