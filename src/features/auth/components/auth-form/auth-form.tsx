@@ -57,6 +57,8 @@ type AuthFormProps = {
   registerPrefill?: string;
   /** Query `prefill` on login (digits or email), same shape as cadastro. */
   loginPrefill?: string;
+  onComplete?: (mode: Mode) => void;
+  onModeChange?: (mode: Mode) => void;
 };
 
 function isOtpChallengeResult(value: unknown): value is OtpChallengeResponse {
@@ -153,7 +155,7 @@ function FieldFeedback({
   );
 }
 
-export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps) {
+export function AuthForm({ mode, registerPrefill, loginPrefill, onComplete, onModeChange }: AuthFormProps) {
   const t = useTranslations('auth');
   const locale = useLocale();
   const router = useRouter();
@@ -355,8 +357,12 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
         : intlAppPaths.dashboard.home;
 
     completionTimeoutRef.current = window.setTimeout(() => {
+      if (onComplete) {
+        onComplete(nextMode);
+        return;
+      }
       router.push(destination);
-    }, 1600);
+    }, 900);
   }
 
   function applyRegisterValidation() {
@@ -624,10 +630,73 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
   }
 
   const primaryDisabled = completedMode !== null ? false : pending;
+  const accessStage = completedMode ? 3 : otpStage ? 2 : 1;
 
   return (
-    <section className={styles.shell}>
-      <motion.div
+    <section className={styles.shell} data-auth-stage={accessStage}>
+      <div className={styles.authWorkspace}>
+        <aside className={styles.contextRail} aria-label={t('accessFlowLabel')}>
+          <div className={styles.contextBrand}>
+            <span className={styles.contextBrandIcon} aria-hidden><Waves size={22} /></span>
+            <div>
+              <strong>HydroRivers</strong>
+              <small>{t('authShellTagline')}</small>
+            </div>
+          </div>
+
+          <div className={styles.contextIntro}>
+            <span>{t('sideEyebrow')}</span>
+            <h2>{t('accessContextTitle')}</h2>
+            <p>{t('accessContextDescription')}</p>
+          </div>
+
+          <div className={styles.accessProgress} aria-label={t('accessFlowLabel')}>
+            <div className={accessStage >= 1 ? styles.accessStepActive : styles.accessStep}>
+              <span><LockKeyhole size={16} aria-hidden /></span>
+              <div>
+                <strong>{t('accessStageCredentials')}</strong>
+                <small>{t('accessStageCredentialsHint')}</small>
+              </div>
+              <b>01</b>
+            </div>
+            <div className={accessStage >= 2 ? styles.accessStepActive : styles.accessStep}>
+              <span><CheckCircle2 size={16} aria-hidden /></span>
+              <div>
+                <strong>{t('accessStageVerification')}</strong>
+                <small>{t('accessStageVerificationHint')}</small>
+              </div>
+              <b>02</b>
+            </div>
+            <div className={accessStage >= 3 ? styles.accessStepActive : styles.accessStep}>
+              <span><ShipWheel size={16} aria-hidden /></span>
+              <div>
+                <strong>{t('accessStageOperation')}</strong>
+                <small>{t('accessStageOperationHint')}</small>
+              </div>
+              <b>03</b>
+            </div>
+          </div>
+
+          <div className={styles.contextCapabilities}>
+            <small>{t('accessAfterLabel')}</small>
+            <div>
+              <span><Anchor size={16} aria-hidden /></span>
+              <p><strong>{t('accessAreaCargo')}</strong><em>{t('accessAreaCargoHint')}</em></p>
+            </div>
+            <div>
+              <span><ShipWheel size={16} aria-hidden /></span>
+              <p><strong>{t('accessAreaDecision')}</strong><em>{t('accessAreaDecisionHint')}</em></p>
+            </div>
+            <div>
+              <span><Waves size={16} aria-hidden /></span>
+              <p><strong>{t('accessAreaMonitoring')}</strong><em>{t('accessAreaMonitoringHint')}</em></p>
+            </div>
+          </div>
+
+          <p className={styles.contextGuestNote}>{t('accessGuestNote')}</p>
+        </aside>
+
+        <motion.div
         className={styles.panel}
         initial={reduceMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -643,6 +712,7 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
           </div>
         </div>
         {!completedMode ? <p className={styles.eyebrow}>{eyebrow}</p> : null}
+        <div className={styles.stageCounter}>{t('accessStageCounter', { current: accessStage })}</div>
         <h1>{title}</h1>
         {!completedMode ? <p className={styles.lead}>{description}</p> : null}
 
@@ -999,17 +1069,30 @@ export function AuthForm({ mode, registerPrefill, loginPrefill }: AuthFormProps)
         {!completedMode ? (
           <nav className={styles.authSwitchNav} aria-label={t('authSwitchNavAria')}>
             {mode === 'login' ? (
-              <Link href={intlAppPaths.auth.register} className={styles.authSwitchLink}>
-                {t('goToRegisterCta')}
-              </Link>
+              onModeChange ? (
+                <button type="button" className={styles.authSwitchLink} onClick={() => onModeChange('register')}>
+                  {t('goToRegisterCta')}
+                </button>
+              ) : (
+                <Link href={intlAppPaths.auth.register} className={styles.authSwitchLink}>
+                  {t('goToRegisterCta')}
+                </Link>
+              )
             ) : (
-              <Link href={intlAppPaths.auth.login} className={styles.authSwitchLink}>
-                {t('goToLoginCta')}
-              </Link>
+              onModeChange ? (
+                <button type="button" className={styles.authSwitchLink} onClick={() => onModeChange('login')}>
+                  {t('goToLoginCta')}
+                </button>
+              ) : (
+                <Link href={intlAppPaths.auth.login} className={styles.authSwitchLink}>
+                  {t('goToLoginCta')}
+                </Link>
+              )
             )}
           </nav>
         ) : null}
-      </motion.div>
+        </motion.div>
+      </div>
     </section>
   );
 }
