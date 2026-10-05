@@ -418,7 +418,25 @@
     "otpMockBlockLead": "Código de 6 dígitos para este teléfono.",
     "otpProductionHint": "En producción, el código se enviará por el canal configurado (SMS o correo).",
     "otpMockDevNote": "Demostración / desarrollo: el código mock aparece aquí solo para pruebas locales; no representa un envío real.",
-    "registerPhoneOtpHint": "El móvil con prefijo es obligatorio: el OTP mock se genera siempre para este número."
+    "registerPhoneOtpHint": "El móvil con prefijo es obligatorio: el OTP mock se genera siempre para este número.",
+    "accessContextTitle": "Entra para continuar la operación privada",
+    "accessContextDescription": "El acceso habilita cartera, decisiones, documentos y seguimiento de la carga sin convertir la autenticación en una pantalla separada del producto.",
+    "accessFlowLabel": "Flujo de acceso",
+    "accessStageCredentials": "Credenciales",
+    "accessStageCredentialsHint": "Cuenta y teléfono",
+    "accessStageVerification": "Verificación",
+    "accessStageVerificationHint": "Código de 6 dígitos",
+    "accessStageOperation": "Operación",
+    "accessStageOperationHint": "Cockpit y cargas privadas",
+    "accessAfterLabel": "Después del acceso",
+    "accessAreaCargo": "Cartera y cargas",
+    "accessAreaCargoHint": "Rutas, documentos y eventos",
+    "accessAreaDecision": "Decisiones",
+    "accessAreaDecisionHint": "Negociación, aceptación y corrección",
+    "accessAreaMonitoring": "Monitoreo",
+    "accessAreaMonitoringHint": "ETA, telemetría e hidrovías",
+    "accessGuestNote": "La vitrina pública sigue disponible sin cuenta. El acceso se solicita solo al entrar en la capa operativa.",
+    "accessStageCounter": "Etapa {current} de 3"
   },
   "pages": {
     "home": {
@@ -3648,7 +3666,8 @@
       "negotiation": "D08–D09 · Negociación",
       "review": "D10 · Revisión",
       "feedback": "D11 · Feedback",
-      "correction": "D12 · Corrección"
+      "correction": "D12 · Corrección",
+      "auth": "A01–A03 · Acceso"
     },
     "overview": {
       "portfolio": "CARTERA",
