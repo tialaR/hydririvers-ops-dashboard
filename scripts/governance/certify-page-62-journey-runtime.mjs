@@ -115,6 +115,8 @@ async function certifyInteractiveFlow({ name, correctionBranch = false }) {
     });
     await page.evaluate(() => document.fonts.ready);
 
+    await visit('[data-testid="auth-access-workspace"]', 'A01-A03');
+    await page.getByRole('button', { name: 'D01–D03 · Carteira e rota' }).click();
     await visit('[data-testid="page62-overview"]', 'D01-D03');
     await page.getByRole('button', { name: 'Abrir cockpit' }).click();
 
